@@ -16,15 +16,20 @@ package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
@@ -37,9 +42,9 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
         int row = -1;
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentsStatus(), new CEnumLabel()), 25).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId(), new CLabel<String>()), 5).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber(), new CLabel<String>()), 5).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber(), new CLabel<String>()), 15).build());
+        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 5).build());
+        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber()), 15).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountName())).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 40).build());
 
@@ -48,5 +53,23 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         Tab buildingsTab = addTab(isEditable() ? new HTML() : ((MerchantAccountViewerView) getParentView()).getBuildingListerView().asWidget(),
                 i18n.tr("Buildings"));
         setTabEnabled(buildingsTab, !isEditable());
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        boolean editable = (getValue().status().getValue(MerchantAccountActivationStatus.PendindAppoval) == MerchantAccountActivationStatus.PendindAppoval)
+                && SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport);
+
+        get(proto().bankId()).setEditable(editable);
+        get(proto().branchTransitNumber()).setEditable(editable);
+        get(proto().accountNumber()).setEditable(editable);
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().accountNumber()).addComponentValidator(new EcheckAccountNumberStringValidator());
+        get(proto().branchTransitNumber()).addComponentValidator(new EcheckBranchTransitValidator());
+        get(proto().bankId()).addComponentValidator(new EcheckBankIdValidator());
     }
 }

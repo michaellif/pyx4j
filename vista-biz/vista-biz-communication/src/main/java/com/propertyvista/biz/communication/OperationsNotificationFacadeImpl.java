@@ -25,6 +25,7 @@ import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
@@ -55,6 +56,11 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
     }
 
     @Override
+    public void newMerchantAccountRequested(MerchantAccount merchantAccount) {
+        Mail.queueUofW(OperationsNotificationManager.createNewMerchantAccountRequested(merchantAccount), null, getMailConfig());
+    }
+
+    @Override
     public void invalidDirectDebitReceived(DirectDebitRecord paymentRecord) {
         Mail.queueUofW(OperationsNotificationManager.createInvalidDirectDebitReceivedEmail(paymentRecord), null, getMailConfig());
     }
@@ -69,4 +75,5 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
             throw new UserRuntimeException(i18n.tr(GENERIC_UNAVAIL_MESSAGE));
         }
     }
+
 }

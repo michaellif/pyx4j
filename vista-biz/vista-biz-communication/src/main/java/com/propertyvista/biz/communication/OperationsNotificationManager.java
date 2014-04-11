@@ -13,11 +13,15 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.concurrent.Callable;
+
 import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
@@ -26,10 +30,14 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.tenant.insurance.errors.CfcApiException;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.server.TaskRunner;
 
 public class OperationsNotificationManager {
 
@@ -72,6 +80,34 @@ public class OperationsNotificationManager {
 
         template.variable("${link}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
                 new OperationsSiteMap.FundsTransfer.DirectDebitRecord().formViewerPlace(paymentRecord.getPrimaryKey())));
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
+    public static MailMessage createNewMerchantAccountRequested(final MerchantAccount merchantAccount) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+
+        PmcMerchantAccountIndex macc = TaskRunner.runInOperationsNamespace(new Callable<PmcMerchantAccountIndex>() {
+            @Override
+            public PmcMerchantAccountIndex call() {
+                EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+                criteria.eq(criteria.proto().pmc(), pmc);
+                criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey());
+                return Persistence.service().retrieve(criteria);
+            }
+        });
+
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        email.addToList("leonard@propertyvista.com, support@propertyvista.com");
+        email.setSubject(i18n.tr("New Merchant Account requested by {0}", pmc.name()));
+
+        MessageTemplate template = new MessageTemplate();
+        template.setBodyTemplate("New Merchant Account requested. See <a href=\"${link}\">Account details</a>");
+
+        template.variable("${link}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
+                new OperationsSiteMap.Management.PmcMerchantAccount().formViewerPlace(macc.getPrimaryKey())));
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;

@@ -18,21 +18,19 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;
 import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.shared.util.EcheckFormatter;
 
 public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
@@ -70,29 +68,8 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
     @Override
     public void addValidations() {
         get(proto().accountNo()).addComponentValidator(new EcheckAccountNumberValidator());
-        get(proto().branchTransitNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-                    return ValidationUtils.isBranchTransitNumberValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(), i18n
-                            .tr("Number should consist of 5 digits"));
-                } else {
-                    return null;
-                }
-            }
-        });
-        get(proto().bankId()).addComponentValidator(new AbstractComponentValidator<String>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-                    return ValidationUtils.isBankIdNumberValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(), i18n
-                            .tr("Number should consist of 3 digits"));
-                } else {
-                    return null;
-                }
-            }
-        });
-
+        get(proto().branchTransitNumber()).addComponentValidator(new EcheckBranchTransitValidator());
+        get(proto().bankId()).addComponentValidator(new EcheckBankIdValidator());
     }
 
     @Override

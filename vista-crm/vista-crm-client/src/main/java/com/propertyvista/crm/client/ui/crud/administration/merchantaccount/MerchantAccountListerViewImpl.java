@@ -28,7 +28,7 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
     public static class MerchantAccountLister extends AbstractLister<MerchantAccount> {
 
         public MerchantAccountLister() {
-            super(MerchantAccount.class, false);
+            super(MerchantAccount.class, true);
 
             setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().bankId()).build(),

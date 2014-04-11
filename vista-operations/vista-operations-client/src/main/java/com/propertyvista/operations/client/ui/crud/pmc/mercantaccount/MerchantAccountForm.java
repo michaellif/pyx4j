@@ -33,6 +33,9 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -129,6 +132,10 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     @Override
     public void addValidations() {
         super.addValidations();
+        get(proto().merchantAccount().accountNumber()).addComponentValidator(new EcheckAccountNumberStringValidator());
+        get(proto().merchantAccount().branchTransitNumber()).addComponentValidator(new EcheckBranchTransitValidator());
+        get(proto().merchantAccount().bankId()).addComponentValidator(new EcheckBankIdValidator());
+
         get(proto().merchantTerminalIdConvenienceFee()).addValueChangeHandler(new ValueChangeHandler<String>() {
 
             @Override

@@ -34,14 +34,17 @@ public interface AbstractMerchantAccount extends IEntity {
 
     @Length(3)
     @ToString
+    @NotNull
     IPrimitive<String> bankId();
 
     @Length(5)
     @ToString
+    @NotNull
     IPrimitive<String> branchTransitNumber();
 
     @Length(12)
     @ToString
+    @NotNull
     IPrimitive<String> accountNumber();
 
     // filed editable by CRM

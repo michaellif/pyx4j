@@ -19,6 +19,9 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
+import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
 public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
@@ -41,6 +44,13 @@ public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().chargeDescription()), true).build());
 
         return panel;
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().accountNumber()).addComponentValidator(new EcheckAccountNumberStringValidator());
+        get(proto().branchTransitNumber()).addComponentValidator(new EcheckBranchTransitValidator());
+        get(proto().bankId()).addComponentValidator(new EcheckBankIdValidator());
     }
 
 }

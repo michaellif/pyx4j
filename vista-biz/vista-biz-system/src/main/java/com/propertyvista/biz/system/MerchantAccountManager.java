@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDiff;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
@@ -31,6 +32,14 @@ import com.propertyvista.server.TaskRunner;
 public class MerchantAccountManager {
 
     public void persistMerchantAccount(Pmc pmc, final MerchantAccount merchantAccount) {
+
+        EntityGraph.setDefault(merchantAccount.invalid(), Boolean.FALSE);
+        EntityGraph.setDefault(merchantAccount.status(), MerchantAccount.MerchantAccountActivationStatus.PendindAppoval);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedEcheck(), true);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedDirectBanking(), true);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedInterac(), true);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCard(), true);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCardConvenienceFee(), false);
 
         MerchantAccount orig = null;
         if (merchantAccount.getPrimaryKey() != null) {
