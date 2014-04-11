@@ -174,18 +174,22 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantIdStub.getPrimaryKey());
             Persistence.ensureRetrieve(tenant.leaseParticipant(), AttachLevel.Attached);
             if (tenant.role().getValue() == Role.Applicant /* TODO add-co applicants? (|| tenant.role().getValue() == Role.CoApplicant) */) {
+                // some tenants from yardi have some crap information in their first name and last name
+
+                String sanitizedFirstName = tenant.leaseParticipant().customer().person().name().firstName().getStringView()
+                        .replaceAll("\\([a-zA-Z\\s\\d]*\\)", "");
+                String sanitizedLastName = tenant.leaseParticipant().customer().person().name().lastName().getStringView()
+                        .replaceAll("\\([a-zA-Z\\s\\d]*\\)", "");
+
                 if (lineBuilder.length() > 0) {
                     lineBuilder.append(", ");
                 }
-                String formattedName = tenant.leaseParticipant().customer().person().name().firstName().getStringView() + " "
-                        + tenant.leaseParticipant().customer().person().name().lastName().getStringView();
+                String formattedName = sanitizedFirstName + " " + sanitizedLastName;
 
                 // reduce the first name only to initial if the name is too long
                 if (formattedName.length() > MAX_RECIPIENT_ADDRESS_BOX_LINE_LENGTH) {
-                    formattedName = tenant.leaseParticipant().customer().person().name().firstName().getStringView().length() > 0 ? tenant.leaseParticipant()
-                            .customer().person().name().firstName().getStringView().substring(0, 1)
-                            + ". " : "";
-                    formattedName += tenant.leaseParticipant().customer().person().name().lastName().getStringView();
+                    formattedName = sanitizedFirstName.length() > 0 ? sanitizedFirstName.substring(0, 1) + ". " : "";
+                    formattedName += sanitizedLastName;
                 }
                 lineBuilder.append(formattedName);
             }
