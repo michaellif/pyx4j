@@ -62,6 +62,43 @@
         <gwtDestinationWarFolder>${warFolder}</gwtDestinationWarFolder>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/logs</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/main/gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/test/gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/${gwtModule}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/${gwtModule1}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/../gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/WEB-INF/deploy/${gwtModule}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/WEB-INF/deploy/${gwtModule1}</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>gwtc</id>
