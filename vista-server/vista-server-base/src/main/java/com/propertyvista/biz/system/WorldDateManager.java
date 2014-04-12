@@ -85,7 +85,7 @@ public class WorldDateManager {
             timedelta = remoteTime.getTime() - System.currentTimeMillis();
             log.debug("RemoteTime {}, timeDelta {} msec, sync {}", remoteTime, timedelta, TimeUtils.secSince(start));
         } catch (Throwable e) {
-            log.error("Error getting remote time", e);
+            log.error("Error getting remote time from {}", rdateServer, e);
         } finally {
             client.close();
         }
