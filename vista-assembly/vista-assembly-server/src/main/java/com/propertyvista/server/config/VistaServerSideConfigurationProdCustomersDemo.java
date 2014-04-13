@@ -47,7 +47,7 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
         case resident:
             return "https://demo.my-community.co/";
         case prospect:
-            return "http://demo.prospectportalsite.com/";
+            return "https://demo.my-community.co/" + application.name();
         default:
             return super.getDefaultApplicationURL(application, pmcDnsName);
         }
