@@ -91,6 +91,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
         formatter.header("count");
         formatter.newRow();
 
+        ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
         specificNamespaceIntegrityCheck(VistaNamespace.operationsNamespace);
         specificNamespaceIntegrityCheck(VistaNamespace.expiringNamespace);
     }
