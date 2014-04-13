@@ -39,7 +39,7 @@ public class MerchantAccountManager {
         EntityGraph.setDefault(merchantAccount.setup().acceptedDirectBanking(), true);
         EntityGraph.setDefault(merchantAccount.setup().acceptedInterac(), true);
         EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCard(), true);
-        EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCardConvenienceFee(), false);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCardConvenienceFee(), true);
 
         MerchantAccount orig = null;
         if (merchantAccount.getPrimaryKey() != null) {
@@ -64,10 +64,6 @@ public class MerchantAccountManager {
         if (pmcMerchantAccountIndex == null) {
             pmcMerchantAccountIndex = EntityFactory.create(PmcMerchantAccountIndex.class);
             pmcMerchantAccountIndex.pmc().set(pmc);
-        }
-
-        if (merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
-            merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(false);
         }
 
         TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
