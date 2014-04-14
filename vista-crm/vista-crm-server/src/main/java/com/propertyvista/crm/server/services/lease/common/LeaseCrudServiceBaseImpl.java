@@ -91,7 +91,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     private void loadTenantInsurance(LeaseDTO lease, LeaseTermTenant tenant) {
         Tenant tenantId = tenant.leaseParticipant().<Tenant> createIdentityStub();
-        lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, false));
+        lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, true));
     }
 
     private void loadCommunicationLetters(LeaseDTO lease) {
