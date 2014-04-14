@@ -68,17 +68,17 @@ public class EntityCacheService implements IEntityCacheService {
         if (ent != null) {
             T entity = ent.duplicate();
             if (PersistenceTrace.traceCache) {
-                log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
             if (PersistenceTrace.traceEntity) {
                 if (PersistenceTrace.traceEntityFilter(entity)) {
-                    log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                 }
             }
             return entity;
         } else {
             if (PersistenceTrace.traceCache) {
-                log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, PersistenceTrace.getCallOrigin());
             }
             return null;
         }
@@ -99,10 +99,10 @@ public class EntityCacheService implements IEntityCacheService {
                     T entity = ((T) ent).duplicate();
                     ret.put(primaryKey, entity);
                     if (PersistenceTrace.traceCache) {
-                        log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                        log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                     }
                 } else if (PersistenceTrace.traceCache) {
-                    log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, PersistenceTrace.getCallOrigin());
                 }
             }
             return ret;
@@ -127,11 +127,11 @@ public class EntityCacheService implements IEntityCacheService {
                         IEntity entity = ((IEntity) ent).duplicate();
                         responce.put(primaryKey, entity);
                         if (PersistenceTrace.traceCache) {
-                            log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                            log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                         }
                     } else if (PersistenceTrace.traceCache) {
                         log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey,
-                                Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                                PersistenceTrace.getCallOrigin());
                     }
                 }
                 ret.put(request, responce);
@@ -148,11 +148,11 @@ public class EntityCacheService implements IEntityCacheService {
             return;
         }
         if (PersistenceTrace.traceCache) {
-            log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
         }
         if (PersistenceTrace.traceEntity) {
             if (PersistenceTrace.traceEntityFilter(entity)) {
-                log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
         }
         CacheService.put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity.duplicate());
@@ -166,11 +166,11 @@ public class EntityCacheService implements IEntityCacheService {
                 continue;
             }
             if (PersistenceTrace.traceCache) {
-                log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
             if (PersistenceTrace.traceEntity) {
                 if (PersistenceTrace.traceEntityFilter(entity)) {
-                    log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
                 }
             }
             CacheService.put(entity.getEntityMeta().getEntityClass().getSimpleName() + entity.getPrimaryKey(), entity.duplicate());

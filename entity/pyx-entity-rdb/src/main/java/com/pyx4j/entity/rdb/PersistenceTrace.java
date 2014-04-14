@@ -23,7 +23,10 @@ package com.pyx4j.entity.rdb;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 
 /**
  * Compile time trace settings.
@@ -62,6 +65,10 @@ public final class PersistenceTrace {
             }
             return false;
         }
+    }
+
+    public static String getCallOrigin() {
+        return Trace.getCallOrigin(EntityPersistenceServiceRDB.class, UnitOfWork.class, Persistence.class);
     }
 
 }

@@ -76,7 +76,7 @@ public class SQLUtils {
             warns = true;
         }
         if (warns) {
-            log.info("Called from {}", Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            log.info("Called from {}", PersistenceTrace.getCallOrigin());
             connection.clearWarnings();
         }
 

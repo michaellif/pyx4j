@@ -88,7 +88,7 @@ class TransactionContext {
     public void setUncommittedChanges() {
         this.uncommittedChanges = true;
         if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
-            this.uncommittedChangesFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
+            this.uncommittedChangesFrom = PersistenceTrace.getCallOrigin();
         } else {
             this.uncommittedChangesFrom = "n/a";
         }

@@ -123,7 +123,7 @@ public class PersistenceContext {
         if (PersistenceTrace.traceOpenSession) {
             this.contextOpenFrom = Trace.getStackTrace(new Throwable());
         } else if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
-            this.contextOpenFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
+            this.contextOpenFrom = PersistenceTrace.getCallOrigin();
         } else {
             this.contextOpenFrom = "n/a";
         }
@@ -348,7 +348,7 @@ public class PersistenceContext {
 
     void commit() {
         if (PersistenceTrace.traceTransaction) {
-            log.info("{} commit\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            log.info("{} commit\n\tfrom:{}\t", txId(), PersistenceTrace.getCallOrigin());
         }
         assertTransactionManangementCallOrigin();
         transactionContexts.peek().commit(connection, getDialect());
@@ -367,7 +367,7 @@ public class PersistenceContext {
 
     void rollback() {
         if (PersistenceTrace.traceTransaction) {
-            log.info("{} rollback\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            log.info("{} rollback\n\tfrom:{}\t", txId(), PersistenceTrace.getCallOrigin());
         }
         assertTransactionManangementCallOrigin();
         transactionContexts.peek().rollback(connection);

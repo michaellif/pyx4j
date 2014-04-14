@@ -91,7 +91,6 @@ import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.gwt.server.DateUtils;
@@ -322,7 +321,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         if (PersistenceTrace.traceTransaction) {
             log.info("{} startTransaction scope {} {}\n\tfrom:{} ", newPersistenceContext.txId(), transactionScopeOption, newConnectionTarget,
-                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class, UnitOfWork.class));
+                    PersistenceTrace.getCallOrigin());
             if (tracedSavepoint) {
                 if (PersistenceTrace.traceTransaction) {
                     log.info("{} setSavepoint SP{}", newPersistenceContext.txId(), newPersistenceContext.savepoints);
@@ -362,7 +361,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         assert (persistenceContext != null) : "Transaction Context was not started";
 
         if (PersistenceTrace.traceTransaction) {
-            log.info("{} endTransaction\n\tfrom:{}\t", persistenceContext.txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            log.info("{} endTransaction\n\tfrom:{}\t", persistenceContext.txId(), PersistenceTrace.getCallOrigin());
         }
 
         if (persistenceContext.endTransaction()) {
@@ -641,7 +640,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         if (PersistenceTrace.traceEntity) {
             if (PersistenceTrace.traceEntityFilter(entity)) {
-                log.info("Insert {} \n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("Insert {} \n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
         }
         MemberOperationsMeta createdTs = tm.operationsMeta().getCreatedTimestampMember();
@@ -678,8 +677,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     for (IEntity childEntity : iCollectionMember) {
                         if (memberMeta.isOwnedRelationships()) {
                             if (childEntity.getPrimaryKey() != null) {
-                                log.error("attempt to attach {} to different entity graphs of {}\n" + Trace.getCallOrigin(EntityPersistenceServiceRDB.class)
-                                        + "\n", childEntity.getDebugExceptionInfoString(), entity.getDebugExceptionInfoString());
+                                log.error("attempt to attach {} to different entity graphs of {}\n" + PersistenceTrace.getCallOrigin() + "\n",
+                                        childEntity.getDebugExceptionInfoString(), entity.getDebugExceptionInfoString());
                                 if (ApplicationMode.isDevelopment()) {
                                     throw new SecurityViolationException(ApplicationMode.DEV + "attempt to attach to different entity graphs "
                                             + childEntity.getDebugExceptionInfoString());
@@ -744,7 +743,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         if (PersistenceTrace.traceEntity) {
             if (PersistenceTrace.traceEntityFilter(entity)) {
-                log.info("Update {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("Update {}\n{}", entity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
         }
         try {
@@ -1162,7 +1161,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                             log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
                             log.debug("Error in member '{}' change of entity {}\n{}", member, entity.getDebugExceptionInfoString(),
-                                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                                    PersistenceTrace.getCallOrigin());
                             throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                         }
                     }
@@ -1174,7 +1173,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (!adapter.allowModifications(entity, memberMeta, null, value)) {
                             log.error("Forbidden change [null] -> [{}] by {}", value, adapterClass);
                             log.debug("Error in member '{}' change of entity {}\n{}", member, entity.getDebugExceptionInfoString(),
-                                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                                    PersistenceTrace.getCallOrigin());
                             throw new Error("Forbidden change '" + memberMeta.getCaption() + "' of '" + entity.getEntityMeta().getCaption() + "'");
                         }
                     }
@@ -1889,7 +1888,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             if (PersistenceTrace.traceWrite) {
-                log.info("DBWrite Delete {}\n{}", cascadedeleteDataEntity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.info("DBWrite Delete {}\n{}", cascadedeleteDataEntity.getDebugExceptionInfoString(), PersistenceTrace.getCallOrigin());
             }
 
             if (!tm.delete(getPersistenceContext(), primaryKey)) {

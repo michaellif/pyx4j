@@ -80,7 +80,7 @@ public class TableModelExternal {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (PersistenceTrace.traceSql) {
-                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                log.debug("{}{} {}\n\tfrom:{}\t", persistenceContext.txId(), Trace.id(), sql, PersistenceTrace.getCallOrigin());
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // Just in case, used for pooled connections 
@@ -98,7 +98,7 @@ public class TableModelExternal {
             IEntity childEntity = (IEntity) member.getMember(ownerEntity);
             if ((childEntity.getAttachLevel() != AttachLevel.Detached) && !childEntity.isNull()) {
                 log.warn("retrieving to not empty external member {}\n called from {}", member.getMemberPath(),
-                        Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                        PersistenceTrace.getCallOrigin());
             }
             if (rs.next()) {
                 Object value = member.getValueAdapter().retrieveValue(rs, member.sqlValueName());
