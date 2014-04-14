@@ -69,12 +69,6 @@ public class N4CandidateSearcher {
                 LegalNoticeCandidate candidate = n4CandidatesIterator.next();
                 n4CandidateDtos.add(makeLegalNoticeCandidateDto(candidate));
                 progressMonitor.addProcessedEvent("Load N4 candidate details");
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-
-                }
             }
         }
         if (!progressMonitor.isTerminationRequested()) {
