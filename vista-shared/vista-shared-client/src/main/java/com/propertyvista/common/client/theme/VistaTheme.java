@@ -139,15 +139,18 @@ public class VistaTheme extends Theme {
 
     protected void initProgressBarStyles() {
         Style style = new Style(".gwt-ProgressBar-shell");
-        style.addProperty("background-color", ThemeColor.object1, 0.6);
+        style.addProperty("margin", "8px 0");
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-bar");
-        style.addProperty("background-color", ThemeColor.object1, 0.8);
+        style.addProperty("background-color", "green");
+        style.addProperty("display", "inline-block");
+        style.addProperty("height", "8px");
+        style.addProperty("border", "1px solid black");
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-text");
-        style.addProperty("color", ThemeColor.object1, 0.2);
+        style.addProperty("display", "inline-block");
         addStyle(style);
     }
 

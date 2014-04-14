@@ -39,4 +39,6 @@ public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
     public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, PmcProcessType processType, LogicalDate executionDate);
 
     public void testYardiConnection(AsyncCallback<ConnectionTestResultDTO> callback, PmcYardiCredential credential);
+
+    public void testYardiConnectionDeferred(AsyncCallback<String> callback, PmcYardiCredential credential);
 }

@@ -304,4 +304,15 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         }
         callback.onSuccess(ServerSideFactory.create(YardiOperationsFacade.class).verifyInterface(credential));
     }
+
+    @Override
+    public void testYardiConnectionDeferred(AsyncCallback<String> callback, PmcYardiCredential credential) {
+        if (!credential.password().newNumber().isNull()) {
+            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(credential.password(), credential.password().newNumber().getValue());
+        } else if (credential.getPrimaryKey() != null) {
+            PmcYardiCredential orig = Persistence.service().retrieve(PmcYardiCredential.class, credential.getPrimaryKey());
+            credential.password().encrypted().setValue(orig.password().encrypted().getValue());
+        }
+        callback.onSuccess(DeferredProcessRegistry.fork(new TestYardiConnectionDeferredProcess(credential), ThreadPoolNames.IMPORTS));
+    }
 }

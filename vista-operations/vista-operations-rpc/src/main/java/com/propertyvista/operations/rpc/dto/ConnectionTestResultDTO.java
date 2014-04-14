@@ -18,9 +18,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ConnectionTestResultDTO implements Serializable {
 
-    public boolean successful;
+    private int progressPct;
 
-    public String htmlMessage = "";
+    private String progressMessage = "";
+
+    private String resultMessage = "";
 
     public static final String CR = "</br>\n";
 
@@ -37,7 +39,7 @@ public class ConnectionTestResultDTO implements Serializable {
     }
 
     public ConnectionTestResultDTO append(String message) {
-        htmlMessage += message;
+        resultMessage += message;
         return this;
     }
 
@@ -61,4 +63,24 @@ public class ConnectionTestResultDTO implements Serializable {
         return append(htmlWarn(message));
     }
 
+    public void setProgressPct(int pct) {
+        progressPct = pct;
+    }
+
+    public int getProgressPct() {
+        return progressPct;
+    }
+
+    public void setProgressMessage(String message) {
+        progressMessage = message;
+    }
+
+    public String getProgressMessage() {
+        return progressMessage;
+    }
+
+    @Override
+    public String toString() {
+        return resultMessage;
+    }
 }

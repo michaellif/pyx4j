@@ -151,6 +151,7 @@ public class CrmTheme extends VistaTheme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initMenuBarStyles();
+        initProgressBarStyles();
 
         initAddGadgetDialogStyles();
         initArrearsViewStyles();

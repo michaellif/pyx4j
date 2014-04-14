@@ -35,8 +35,20 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
 
         ConnectionTestResultDTO result = new ConnectionTestResultDTO();
 
+        verifyInterface(yc, result);
+
+        return result;
+    }
+
+    @Override
+    public void verifyInterface(PmcYardiCredential yc, ConnectionTestResultDTO result) {
+        yc.password().number().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+
+        int processed = 0;
+
         for (YardiInterfaceType yardiInterface : YardiInterfaceType.values()) {
             if (yardiInterface.ifClass == null) {
+                updateProgress(result, ++processed, null);
                 continue;
             }
 
@@ -51,6 +63,7 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
                 result.error(t.getMessage());
             }
             result.cr();
+            updateProgress(result, ++processed, yardiInterface.name() + " - checking connection...");
 
             result.sp().sp().append("Version: ");
             try {
@@ -59,6 +72,7 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
                 result.error(t.getMessage());
             }
             result.cr();
+            updateProgress(result, ++processed, yardiInterface.name() + " - checking version...");
 
             result.sp().sp().append("Credentials: ");
             try {
@@ -68,8 +82,13 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
                 result.error(t.getMessage());
             }
             result.cr();
+            updateProgress(result, ++processed, yardiInterface.name() + " - checking credentials...");
         }
+    }
 
-        return result;
+    private void updateProgress(ConnectionTestResultDTO result, int processed, String message) {
+        int total = YardiInterfaceType.values().length * 3;
+        result.setProgressPct(processed * 100 / total);
+        result.setProgressMessage(message);
     }
 }

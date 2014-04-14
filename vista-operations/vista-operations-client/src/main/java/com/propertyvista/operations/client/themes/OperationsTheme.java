@@ -111,6 +111,7 @@ public class OperationsTheme extends VistaTheme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initMenuBarStyles();
+        initProgressBarStyles();
 
         initSuggestBoxStyle();
 

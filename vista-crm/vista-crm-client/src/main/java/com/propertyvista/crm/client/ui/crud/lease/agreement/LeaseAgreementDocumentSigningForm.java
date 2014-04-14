@@ -125,14 +125,9 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
         sigingProgressPanelHolder.clear();
         sigingProgressPanelHolder.setVisible(true);
 
-        Label messageLabel = new Label(i18n.tr("Generating Signed Agreement, Please Wait..."));
-        messageLabel.setWidth("100%");
-        sigingProgressPanelHolder.add(messageLabel);
-        sigingProgressPanelHolder.setCellHorizontalAlignment(messageLabel, HasHorizontalAlignment.ALIGN_CENTER);
-
-        DeferredProgressPanel progressPanel = new DeferredProgressPanel("30em", "5em", false, callback);
+        DeferredProgressPanel progressPanel = new DeferredProgressPanel(i18n.tr("Generating Signed Agreement, Please Wait..."), false, callback);
+        progressPanel.setSize("100%", "5em");
         progressPanel.startProgress(corellationId);
-        progressPanel.setWidth("100%");
         sigingProgressPanelHolder.add(progressPanel);
 
         signDigitallyButton.setVisible(false);

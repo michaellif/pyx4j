@@ -165,6 +165,16 @@ public class ExecutionMonitor {
     protected void onEventAdded() {
     }
 
+    public List<String> getSectionNames(CompletionType type) {
+        ArrayList<String> names = new ArrayList<>();
+        for (ReportSectionId id : sections.keySet()) {
+            if (id.type.equals(type)) {
+                names.add(id.name);
+            }
+        }
+        return names;
+    }
+
     public BigDecimal getValue(String sectionName, CompletionType type) {
         ReportSectionId id = new ReportSectionId(sectionName, type);
         ReportSection section = sections.get(id);

@@ -22,4 +22,6 @@ public interface YardiOperationsFacade {
 
     public ConnectionTestResultDTO verifyInterface(PmcYardiCredential yc);
 
+    public void verifyInterface(PmcYardiCredential yc, ConnectionTestResultDTO result);
+
 }
