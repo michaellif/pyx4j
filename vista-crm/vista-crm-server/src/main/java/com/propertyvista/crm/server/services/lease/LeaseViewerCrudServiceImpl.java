@@ -383,6 +383,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
 
+        // Hack me VISTA-4525
+        lease.currentTerm().employeeSignature().set(signature);
+
         String correlationId = DeferredProcessRegistry.fork(new SignedLeaseTermAgreementDocumentCreatorDeferredProcess(lease.currentTerm()),
                 DeferredProcessRegistry.THREAD_POOL_DOWNLOADS);
         callback.onSuccess(correlationId);
