@@ -79,6 +79,10 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> electronicPaymentsActually() {
+        return EnumSet.of(Echeck, DirectBanking, CreditCard);
+    }
+
     public static EnumSet<PaymentType> transactable() {
         return EnumSet.of(Echeck, DirectBanking, CreditCard);
     }

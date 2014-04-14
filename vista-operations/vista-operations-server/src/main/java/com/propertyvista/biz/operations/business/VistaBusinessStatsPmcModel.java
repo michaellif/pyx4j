@@ -53,6 +53,12 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
 
     // Electronic payments
 
+    /**
+     * Paying tenant - tenant that we processed ELECTRONIC payments for within the last month. It could be 1-time payment, autopay, yardi-based eft payment -
+     * anything that's processed through our banking connections.
+     * 
+     * @see payingLeases();
+     */
     IPrimitive<Integer> payingTenants();
 
     IPrimitive<Integer> newPayingTenants();
@@ -118,5 +124,10 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
     IPrimitive<String> contactEmail();
 
     IPrimitive<String> contactPhone();
+
+    /**
+     * if a lease has at least 1 paying tenant count it (once, regardless of number of paying tenants in it).
+     */
+    IPrimitive<Integer> payingLeases();
 
 }

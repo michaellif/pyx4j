@@ -55,7 +55,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
@@ -64,6 +63,7 @@ import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -184,24 +184,22 @@ class VistaBusinessStatsReport {
         }
 
         {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
+            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            criteria.in(criteria.proto().lease().billingAccount().payments().$().paymentMethod().type(), PaymentType.electronicPaymentsActually());
+            criteria.ge(criteria.proto().lease().billingAccount().payments().$().finalizeDate(), monthlyPeriod);
+            criteria.eq(criteria.proto().lease().billingAccount().payments().$().leaseTermParticipant().leaseParticipant().id(), criteria.proto().id());
             data.payingTenants().setValue(Persistence.service().count(criteria));
         }
 
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CrmUser.class);
-            data.payingTenants().setValue(Persistence.service().count(criteria) + data.payingTenants().getValue());
+            criteria.in(criteria.proto().billingAccount().payments().$().paymentMethod().type(), PaymentType.electronicPaymentsActually());
+            criteria.ge(criteria.proto().billingAccount().payments().$().finalizeDate(), monthlyPeriod);
+            data.payingLeases().setValue(Persistence.service().count(criteria));
         }
 
-        {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.isNull(criteria.proto().billingAccount().payments().$().createdBy());
-            data.payingTenants().setValue(Persistence.service().count(criteria) + data.payingTenants().getValue());
-        }
-
-        {
+        // TODO 
+        if (false) {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
             criteria.ge(criteria.proto().billingAccount().payments().$().createdDate(), reportSince);
