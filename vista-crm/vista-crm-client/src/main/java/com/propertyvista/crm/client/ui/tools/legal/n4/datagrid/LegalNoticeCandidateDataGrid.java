@@ -39,8 +39,8 @@ public class LegalNoticeCandidateDataGrid extends VistaDataGrid<LegalNoticeCandi
     private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
     //@formatter:on
 
-    public LegalNoticeCandidateDataGrid(boolean createFooter) {
-        super(LegalNoticeCandidateDTO.class, true);
+    public LegalNoticeCandidateDataGrid() {
+        super(LegalNoticeCandidateDTO.class, false);
         initColumns();
     }
 

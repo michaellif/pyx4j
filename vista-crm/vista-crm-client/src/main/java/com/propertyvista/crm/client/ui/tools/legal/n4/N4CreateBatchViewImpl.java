@@ -11,12 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.legal.n4.visors;
+package com.propertyvista.crm.client.ui.tools.legal.n4;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.HasData;
@@ -26,25 +31,31 @@ import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
+import com.propertyvista.crm.client.ui.tools.common.SimpleProgressWidget;
 import com.propertyvista.crm.client.ui.tools.common.view.AbstractPrimePaneWithMessagesPopup;
-import com.propertyvista.crm.client.ui.tools.legal.n4.N4CreateBatchView;
+import com.propertyvista.crm.client.ui.tools.legal.n4.datagrid.LegalNoticeCandidateDataGrid;
 import com.propertyvista.crm.client.ui.tools.legal.n4.forms.N4CandidateSearchCriteriaForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 
+// TODO this is meant to be a replacement for N4GenenrationToolView
 public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup implements N4CreateBatchView {
 
     private static final I18n i18n = I18n.get(N4CreateBatchViewImpl.class);
 
     private final LayoutPanel viewPanel;
 
-    private N4CandidateSearchCriteriaForm searchForm;
+    private N4CandidateSearchCriteriaForm searchCriteriaForm;
 
     private LayoutPanel searchBar;
 
     private final LayoutPanel gridsHolder;
 
     private com.propertyvista.crm.client.ui.tools.legal.n4.N4CreateBatchView.Presenter presenter;
+
+    private LegalNoticeCandidateDataGrid searchCandidateDataGrid;
+
+    private SimpleProgressWidget progressWidget;
 
     public N4CreateBatchViewImpl() {
         setCaption(i18n.tr("N4: Create N4's"));
@@ -59,6 +70,38 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         viewPanel.add(gridsHolder);
         viewPanel.setWidgetTopBottom(gridsHolder, 101, Unit.PX, 0, Unit.PX);
         viewPanel.setWidgetLeftRight(gridsHolder, 0, Unit.PX, 0, Unit.PX);
+
+        {
+            LayoutPanel foundHolder = new LayoutPanel();
+            gridsHolder.add(foundHolder);
+            gridsHolder.setWidgetTopBottom(foundHolder, 0, Unit.PX, 0, Unit.PCT);
+            gridsHolder.setWidgetLeftRight(foundHolder, 0, Unit.PX, 0, Unit.PX);
+
+            foundHolder.add(searchCandidateDataGrid = new LegalNoticeCandidateDataGrid() {
+                @Override
+                protected void onSort(String memberPath, boolean isAscending) {
+                    presenter.sortFoundCandidates(memberPath, isAscending);
+                }
+            });
+            searchCandidateDataGrid.setLoadingIndicator(progressWidget = new SimpleProgressWidget());
+
+            foundHolder.setWidgetTopBottom(searchCandidateDataGrid, 0, Unit.PX, 33, Unit.PX);
+            foundHolder.setWidgetLeftRight(searchCandidateDataGrid, 0, Unit.PX, 0, Unit.PX);
+
+            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+            SimplePager searchResultsPager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+            searchResultsPager.setDisplay(searchCandidateDataGrid);
+
+            HorizontalPanel searchResultsPagerHolder = new HorizontalPanel();
+            searchResultsPagerHolder.setWidth("100%");
+            searchResultsPagerHolder.add(searchResultsPager);
+            searchResultsPagerHolder.setCellHorizontalAlignment(searchResultsPager, HasHorizontalAlignment.ALIGN_CENTER);
+
+            foundHolder.add(searchResultsPagerHolder);
+            foundHolder.setWidgetBottomHeight(searchResultsPagerHolder, 24, Unit.PX, 24, Unit.PX);
+            foundHolder.setWidgetLeftRight(searchResultsPagerHolder, 0, Unit.PX, 0, Unit.PX);
+        }
+
     }
 
     @Override
@@ -67,15 +110,20 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
     }
 
     @Override
+    public void setProgress(int progress, int maximumProgress, String message) {
+        progressWidget.setProgress(progress, maximumProgress, message);
+        searchCandidateDataGrid.setRowCount(maximumProgress);
+        searchCandidateDataGrid.setVisibleRangeAndClearData(searchCandidateDataGrid.getVisibleRange(), true);
+    }
+
+    @Override
     public HasData<LegalNoticeCandidateDTO> searchResults() {
-        // TODO Auto-generated method stub
-        return null;
+        return searchCandidateDataGrid;
     }
 
     @Override
     public N4CandidateSearchCriteriaDTO getSearchCriteria() {
-        // TODO Auto-generated method stub
-        return null;
+        return searchCriteriaForm.getValue();
     }
 
     private LayoutPanel initViewPanel() {
@@ -89,17 +137,17 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         LayoutPanel searchBar = new LayoutPanel();
         searchBar.setWidth("100%");
 
-        searchForm = new N4CandidateSearchCriteriaForm() {
+        searchCriteriaForm = new N4CandidateSearchCriteriaForm() {
             // TODO add on Resize
         };
-        searchForm.initContent();
-        searchForm.populateNew();
-        searchForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
-        searchForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);
+        searchCriteriaForm.initContent();
+        searchCriteriaForm.populateNew();
+        searchCriteriaForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
+        searchCriteriaForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);
 
-        searchBar.add(searchForm);
-        searchBar.setWidgetTopBottom(searchForm, 0, Unit.PX, 0, Unit.PX);
-        searchBar.setWidgetLeftRight(searchForm, 0, Unit.PX, 100, Unit.PX);
+        searchBar.add(searchCriteriaForm);
+        searchBar.setWidgetTopBottom(searchCriteriaForm, 0, Unit.PX, 0, Unit.PX);
+        searchBar.setWidgetLeftRight(searchCriteriaForm, 0, Unit.PX, 100, Unit.PX);
 
         Toolbar searchToolbar = new Toolbar();
         searchToolbar.getElement().getStyle().setHeight(100, Unit.PX);
