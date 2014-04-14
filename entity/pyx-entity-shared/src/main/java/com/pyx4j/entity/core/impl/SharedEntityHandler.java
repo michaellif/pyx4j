@@ -298,6 +298,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                     ownerValue.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(getOwner().getInstanceValueClass()));
                 }
             }
+        } else if ((this.data != null) && (getParent() instanceof ICollection<?, ?>)) {
+            // Replace value in Collection
+            ((AbstractCollectionHandler<?, ?>) getParent()).replaceItemValue(this.data, value);
+            this.data = value;
         } else {
             this.data = value;
         }

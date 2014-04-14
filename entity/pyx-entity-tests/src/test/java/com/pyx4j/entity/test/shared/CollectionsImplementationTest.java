@@ -34,6 +34,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
+import com.pyx4j.unit.shared.UniqueInteger;
 
 public class CollectionsImplementationTest extends InitializerTestBase {
 
@@ -120,6 +121,52 @@ public class CollectionsImplementationTest extends InitializerTestBase {
 
         ent2.references().remove(ent1);
         assertEquals("empty collection size", 0, ent2.references().size());
+    }
+
+    public void testItemModificationInList() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("Bob");
+
+        Task task1 = EntityFactory.create(Task.class);
+        task1.status().setValue(Status.ACTIVE);
+        task1.description().setValue(UniqueInteger.getInstance(this.getName()).nextAsString());
+
+        emp.tasksSorted().add(task1);
+
+        // Change the Entity value in the list.
+        Task task1mod = EntityFactory.create(Task.class);
+        task1mod.status().setValue(Status.DEACTIVATED);
+        task1mod.description().setValue(UniqueInteger.getInstance(this.getName()).nextAsString());
+
+        emp.tasksSorted().get(0).set(task1mod);
+
+        Task task1ref = emp.tasksSorted().iterator().next();
+
+        assertEquals("status", task1mod.status(), task1ref.status());
+        assertEquals("description", task1mod.description(), task1ref.description());
+    }
+
+    public void testItemModificationInSet() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("Bob");
+
+        Task task1 = EntityFactory.create(Task.class);
+        task1.status().setValue(Status.ACTIVE);
+        task1.description().setValue(UniqueInteger.getInstance(this.getName()).nextAsString());
+
+        emp.tasks().add(task1);
+
+        // Change the Entity value in the list.
+        Task task1mod = EntityFactory.create(Task.class);
+        task1mod.status().setValue(Status.DEACTIVATED);
+        task1mod.description().setValue(UniqueInteger.getInstance(this.getName()).nextAsString());
+
+        emp.tasks().iterator().next().set(task1mod);
+
+        Task task1ref = emp.tasks().iterator().next();
+
+        assertEquals("status", task1mod.status(), task1ref.status());
+        assertEquals("description", task1mod.description(), task1ref.description());
     }
 
     public void testIdOnlyCollectionPolymorphic() {

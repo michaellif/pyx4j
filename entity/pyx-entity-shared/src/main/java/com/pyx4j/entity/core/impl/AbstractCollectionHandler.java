@@ -193,6 +193,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     protected abstract VALUE_TYPE ensureValue();
 
+    abstract void replaceItemValue(Map<String, Serializable> currenValue, Map<String, Serializable> newValue);
+
     @Override
     public void set(ICollection<TYPE, VALUE_TYPE> typedCollection) {
         switch (typedCollection.getAttachLevel()) {

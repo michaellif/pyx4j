@@ -290,6 +290,14 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
+    void replaceItemValue(Map<String, Serializable> currenValue, Map<String, Serializable> newValue) {
+        assert (currenValue != this) : "ICollection structure error in " + exceptionInfo();
+        assert (newValue != this) : "ICollection structure error in " + exceptionInfo();
+        List<Map<String, Serializable>> value = getValue();
+        value.set(value.indexOf(currenValue), newValue);
+    }
+
+    @Override
     public TYPE set(int index, TYPE element) {
         List<Map<String, Serializable>> value = getValue();
         if (value != null) {

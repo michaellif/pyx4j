@@ -217,6 +217,15 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     }
 
     @Override
+    void replaceItemValue(Map<String, Serializable> currenValue, Map<String, Serializable> newValue) {
+        assert (currenValue != this) : "ICollection structure error in " + exceptionInfo();
+        assert (newValue != this) : "ICollection structure error in " + exceptionInfo();
+        Set<Map<String, Serializable>> value = getValue();
+        value.remove(currenValue);
+        value.add(newValue);
+    }
+
+    @Override
     public boolean removeAll(Collection<?> c) {
         // TODO implement this
         throw new UnsupportedOperationException();
