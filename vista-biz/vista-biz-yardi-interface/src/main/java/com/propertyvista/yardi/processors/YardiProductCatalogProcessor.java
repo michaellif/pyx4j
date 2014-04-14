@@ -454,7 +454,7 @@ public class YardiProductCatalogProcessor {
         Service originalService = updated.getB().duplicate();
 
         // disable deposit till further processing:
-        updated.getB().version().depositLMR().enabled().setValue(!units.isEmpty());
+        updated.getB().version().depositLMR().enabled().setValue(false);
         // set Yardi deposit default value/type:
         updated.getB().version().depositLMR().valueType().setValue(ValueType.Monetary);
         updated.getB().version().depositLMR().value().setValue(new BigDecimal("0.00"));
@@ -478,12 +478,12 @@ public class YardiProductCatalogProcessor {
 
             // update deposit:
             BigDecimal depositValue = depositInfo.get(unit.info().number().getValue());
-            if (depositValue != null) {
+            if (depositValue != null && depositValue.compareTo(BigDecimal.ZERO) > 0) {
                 item.depositLMR().setValue(depositValue);
                 // enable service deposit:
                 updated.getB().version().depositLMR().enabled().setValue(true);
             } else {
-                item.depositLMR().setValue(new BigDecimal("0.00"));
+                item.depositLMR().setValue(null); // no deposit set for the item...
             }
         }
 

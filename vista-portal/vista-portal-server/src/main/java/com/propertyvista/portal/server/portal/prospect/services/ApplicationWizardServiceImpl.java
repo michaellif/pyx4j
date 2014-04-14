@@ -20,6 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -806,12 +809,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         List<Deposit> deposits = new ArrayList<>();
 
         LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
-        deposits.addAll(leaseTerm.version().leaseProducts().serviceItem().deposits());
+
+        deposits.addAll(CollectionUtils.select(leaseTerm.version().leaseProducts().serviceItem().deposits(), new NonZeroDepositPredicate()));
         for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
-            deposits.addAll(feature.deposits());
+            deposits.addAll(CollectionUtils.select(feature.deposits(), new NonZeroDepositPredicate()));
         }
 
         return deposits;
+    }
+
+    private class NonZeroDepositPredicate implements Predicate<Deposit> {
+        @Override
+        public boolean evaluate(Deposit deposit) {
+            return (deposit.amount().getValue().compareTo(BigDecimal.ZERO) > 0);
+        }
     }
 
     private void savePaymentData(OnlineApplication bo, OnlineApplicationDTO to) {

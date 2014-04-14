@@ -345,6 +345,8 @@ class CreditCardProcessor {
 
     public static ConvenienceFeeCalculationResponseTO getConvenienceFee(final String merchantTerminalId, ReferenceNumberPrefix uniquePrefix,
             final CreditCardType cardType, final BigDecimal amount) {
+        Validate.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "Payment amount is required to calculate convinience fee!");
+
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 

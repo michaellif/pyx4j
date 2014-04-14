@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -53,6 +52,7 @@ import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class DepositFacadeImpl implements DepositFacade {
     private static final I18n i18n = I18n.get(DepositFacadeImpl.class);
@@ -69,7 +69,10 @@ public class DepositFacadeImpl implements DepositFacade {
         for (DepositType type : DepositType.values()) {
             ProductDeposit productDeposit = getProductDepositByType(type, billableItem.item());
             if (productDeposit.enabled().getValue(false)) {
-                deposits.add(makeDeposit(productDeposit, billableItem));
+                Deposit deposit = makeDeposit(productDeposit, billableItem);
+                if (deposit != null) {
+                    deposits.add(deposit);
+                }
             }
         }
         return deposits;
@@ -267,20 +270,25 @@ public class DepositFacadeImpl implements DepositFacade {
 
         deposit.chargeCode().set(productDeposit.chargeCode());
         deposit.type().set(productDeposit.depositType());
-        BigDecimal depositValue = getDepositValue(productDeposit, billableItem.item());
-        switch (productDeposit.valueType().getValue()) {
-        case Monetary:
-            deposit.amount().setValue(depositValue);
-            break;
-        case Percentage:
-            deposit.amount().setValue(DomainUtil.roundMoney(depositValue.multiply(billableItem.agreedPrice().getValue())));
-            break;
-        default:
-            throw new Error("Unsupported ValueType");
-        }
         deposit.isProcessed().setValue(false);
         deposit.description().set(productDeposit.description());
         deposit.billableItem().set(billableItem);
+
+        BigDecimal depositValue = getDepositValue(productDeposit, billableItem.item());
+        if (depositValue != null) {
+            switch (productDeposit.valueType().getValue()) {
+            case Monetary:
+                deposit.amount().setValue(depositValue);
+                break;
+            case Percentage:
+                deposit.amount().setValue(DomainUtil.roundMoney(depositValue.multiply(billableItem.agreedPrice().getValue())));
+                break;
+            default:
+                throw new Error("Unsupported ValueType");
+            }
+        } else {
+            deposit = null; // no deposit for null deposit value!..
+        }
 
         return deposit;
     }
@@ -314,6 +322,10 @@ public class DepositFacadeImpl implements DepositFacade {
             value = productItem.depositSecurity().getValue();
             break;
         }
-        return value == null ? productDeposit.value().getValue() : value;
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return value; // allow null deposit value here in Yardi mode...
+        } else {
+            return (value == null ? productDeposit.value().getValue() : value); // get Product value if Item not set 
+        }
     }
 }
