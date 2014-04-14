@@ -165,13 +165,17 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         return new ListHandler<T>(this, memberName, setValueClass);
     }
 
-    private String exceptionInfo(Map<String, Serializable> v) {
+    private String exceptionInfo(Map<String, Serializable> thisValue) {
         StringBuilder b = new StringBuilder();
         b.append(GWTJava5Helper.getSimpleName(getObjectClass()));
-        if (v != null) {
-            Object pk = v.get(IEntity.PRIMARY_KEY);
+        if (thisValue != null) {
+            Object pk = thisValue.get(IEntity.PRIMARY_KEY);
             if (pk != null) {
                 b.append(" id=").append(pk);
+            }
+            AttachLevel level = (AttachLevel) thisValue.get(DETACHED_ATTR);
+            if (level != null) {
+                b.append(' ').append(level);
             }
         }
         if (getOwner() != null) {

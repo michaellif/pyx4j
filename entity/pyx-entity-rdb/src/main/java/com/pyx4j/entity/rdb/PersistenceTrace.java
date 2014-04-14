@@ -23,6 +23,8 @@ package com.pyx4j.entity.rdb;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.entity.core.IEntity;
+
 /**
  * Compile time trace settings.
  */
@@ -40,11 +42,26 @@ public final class PersistenceTrace {
 
     public static final boolean traceWrite = false;
 
+    public static final boolean traceCache = false;
+
     public static final boolean traceEntity = false;
 
-    public static final List<String> traceEntities = Arrays.asList("SampleShortClassName1", "SampleShotClassName2");
+    public static final List<String> traceEntities = Arrays.asList("SampleShortClassName1", "SampleShortClassName2");
 
     private PersistenceTrace() {
+    }
+
+    public static boolean traceEntityFilter(IEntity entity) {
+        if (!traceEntity) {
+            return false;
+        } else {
+            for (String name : traceEntities) {
+                if (entity.getEntityMeta().getEntityClass().getName().endsWith("." + name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 }

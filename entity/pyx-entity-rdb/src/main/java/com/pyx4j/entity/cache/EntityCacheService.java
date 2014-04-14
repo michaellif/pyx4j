@@ -24,14 +24,22 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.Cached;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.meta.EntityMeta;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.server.EntityCollectionRequest;
 import com.pyx4j.entity.server.IEntityCacheService;
 
 public class EntityCacheService implements IEntityCacheService {
+
+    private static final Logger log = LoggerFactory.getLogger(EntityCacheService.class);
 
     private static boolean disabled = false;
 
@@ -58,8 +66,20 @@ public class EntityCacheService implements IEntityCacheService {
         }
         T ent = (T) CacheService.get(meta.getEntityClass().getName() + primaryKey);
         if (ent != null) {
-            return ent.duplicate();
+            T entity = ent.duplicate();
+            if (PersistenceTrace.traceCache) {
+                log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
+            if (PersistenceTrace.traceEntity) {
+                if (PersistenceTrace.traceEntityFilter(entity)) {
+                    log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                }
+            }
+            return entity;
         } else {
+            if (PersistenceTrace.traceCache) {
+                log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
             return null;
         }
     }
@@ -76,7 +96,13 @@ public class EntityCacheService implements IEntityCacheService {
             for (com.pyx4j.commons.Key primaryKey : primaryKeys) {
                 Object ent = CacheService.get(meta.getEntityClass().getName() + primaryKey);
                 if (ent != null) {
-                    ret.put(primaryKey, (T) ((T) ent).duplicate());
+                    T entity = ((T) ent).duplicate();
+                    ret.put(primaryKey, entity);
+                    if (PersistenceTrace.traceCache) {
+                        log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                    }
+                } else if (PersistenceTrace.traceCache) {
+                    log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                 }
             }
             return ret;
@@ -98,7 +124,14 @@ public class EntityCacheService implements IEntityCacheService {
                 for (com.pyx4j.commons.Key primaryKey : request.getPrimaryKeys()) {
                     Object ent = CacheService.get(meta.getEntityClass().getName() + primaryKey);
                     if (ent != null) {
-                        responce.put(primaryKey, ((IEntity) ent).duplicate());
+                        IEntity entity = ((IEntity) ent).duplicate();
+                        responce.put(primaryKey, entity);
+                        if (PersistenceTrace.traceCache) {
+                            log.info("Cache get {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                        }
+                    } else if (PersistenceTrace.traceCache) {
+                        log.info("Cache miss {} {}\n{}", meta.getEntityClass().getSimpleName(), primaryKey,
+                                Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                     }
                 }
                 ret.put(request, responce);
@@ -114,6 +147,14 @@ public class EntityCacheService implements IEntityCacheService {
         if ((cached == null) || (disabled)) {
             return;
         }
+        if (PersistenceTrace.traceCache) {
+            log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+        }
+        if (PersistenceTrace.traceEntity) {
+            if (PersistenceTrace.traceEntityFilter(entity)) {
+                log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
+        }
         CacheService.put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity.duplicate());
     }
 
@@ -124,7 +165,15 @@ public class EntityCacheService implements IEntityCacheService {
             if ((cached == null) || (disabled)) {
                 continue;
             }
-            CacheService.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity.duplicate());
+            if (PersistenceTrace.traceCache) {
+                log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            }
+            if (PersistenceTrace.traceEntity) {
+                if (PersistenceTrace.traceEntityFilter(entity)) {
+                    log.info("Cache put {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                }
+            }
+            CacheService.put(entity.getEntityMeta().getEntityClass().getSimpleName() + entity.getPrimaryKey(), entity.duplicate());
         }
     }
 

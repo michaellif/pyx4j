@@ -467,19 +467,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return mappings.getDatabaseType();
     }
 
-    private boolean traceEntityFilter(IEntity entity) {
-        if (!PersistenceTrace.traceEntity) {
-            return false;
-        } else {
-            for (String name : PersistenceTrace.traceEntities) {
-                if (entity.getEntityMeta().getEntityClass().getName().endsWith("." + name)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
     String getDatabaseName() {
         // Because mapping hods configuration ...
         return mappings.getDatabaseName();
@@ -653,7 +640,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             log.info("{}{}insert {}", getPersistenceContext().txId(), Trace.enter(), tm.getTableName());
         }
         if (PersistenceTrace.traceEntity) {
-            if (traceEntityFilter(entity)) {
+            if (PersistenceTrace.traceEntityFilter(entity)) {
                 log.info("Insert {} \n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
         }
@@ -756,7 +743,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             log.info("{}{}update {} id={}", getPersistenceContext().txId(), Trace.enter(), tm.getTableName(), entity.getPrimaryKey());
         }
         if (PersistenceTrace.traceEntity) {
-            if (traceEntityFilter(entity)) {
+            if (PersistenceTrace.traceEntityFilter(entity)) {
                 log.info("Update {}\n{}", entity.getDebugExceptionInfoString(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
         }
