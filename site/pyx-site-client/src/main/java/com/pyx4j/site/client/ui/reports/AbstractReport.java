@@ -361,7 +361,8 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         reportPanel.setVisible(false);
         errorPanel.setVisible(false);
 
-        progressPanel = new DeferredProgressPanel("600px", "30px", false, deferredProgressListener);
+        progressPanel = new DeferredProgressPanel(i18n.tr("Generating Report"), false, deferredProgressListener);
+        progressPanel.setSize("600px", "30px");
         progressPanel.startProgress(deferredProgressCorelationId);
         reportProgressHolderPanel.setWidget(progressPanel);
         reportProgressControlPanel.setVisible(true);

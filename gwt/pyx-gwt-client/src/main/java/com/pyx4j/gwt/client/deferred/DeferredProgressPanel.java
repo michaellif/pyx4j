@@ -24,11 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
@@ -36,7 +37,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.ProgressBar;
 
-public class DeferredProgressPanel extends FlowPanel {
+public class DeferredProgressPanel extends VerticalPanel {
 
     private static final Logger log = LoggerFactory.getLogger(DeferredProcessDialog.class);
 
@@ -53,7 +54,7 @@ public class DeferredProgressPanel extends FlowPanel {
 
     private Timer progressTimer;
 
-    private int checkProgressStatusSeconds = 3;
+    private int checkProgressStatusMilliSec = 1000;
 
     private int checkProgressErrorCount = 0;
 
@@ -65,17 +66,20 @@ public class DeferredProgressPanel extends FlowPanel {
 
     private Label messageBar;
 
-    public DeferredProgressPanel(String width, String height, boolean executeByUserRequests, DeferredProgressListener listener) {
-        this.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        service = GWT.create(DeferredProcessService.class);
+    private HTML statusBar;
+
+    public DeferredProgressPanel(boolean executeByUserRequests, DeferredProgressListener listener) {
+        this("Connecting...", executeByUserRequests, listener);
+    }
+
+    public DeferredProgressPanel(String initialMessage, boolean executeByUserRequests, DeferredProgressListener listener) {
+        this.service = GWT.create(DeferredProcessService.class);
         this.executeByUserRequests = executeByUserRequests;
         this.listener = listener;
-        this.add(messageBar = new Label());
-        this.add(progressBar = new ProgressBar());
-        progressBar.setWidth(width);
-        progressBar.setHeight(height);
-        progressBar.getElement().getStyle().setProperty("marginLeft", "auto");
-        progressBar.getElement().getStyle().setProperty("marginRight", "auto");
+
+        add(messageBar = new Label(initialMessage));
+        add(progressBar = new ProgressBar());
+        add(statusBar = new HTML());
     }
 
     public void startProgress(final String deferredCorrelationId) {
@@ -90,11 +94,11 @@ public class DeferredProgressPanel extends FlowPanel {
                 checkProgressStatus(false);
             }
         };
-        progressTimer.schedule(checkProgressStatusSeconds * 1000);
+        progressTimer.schedule(checkProgressStatusMilliSec);
     }
 
-    public void setCheckProgressStatusSeconds(int checkProgressStatusSeconds) {
-        this.checkProgressStatusSeconds = checkProgressStatusSeconds;
+    public void setCheckProgressStatusMilliSec(int checkProgressStatusMilliSec) {
+        this.checkProgressStatusMilliSec = checkProgressStatusMilliSec;
     }
 
     public void reset() {
@@ -120,7 +124,6 @@ public class DeferredProgressPanel extends FlowPanel {
 
     public void complete() {
         checkProgressStatus(true);
-        progressBar.setProgress(0);
         if (progressTimer != null) {
             progressTimer.cancel();
             progressTimer = null;
@@ -139,7 +142,7 @@ public class DeferredProgressPanel extends FlowPanel {
                         throw new UnrecoverableClientError(caught);
                     } else {
                         if (progressTimer != null) {
-                            progressTimer.schedule(checkProgressStatusSeconds * 1000);
+                            progressTimer.schedule(checkProgressStatusMilliSec);
                         }
                     }
                 }
@@ -154,10 +157,14 @@ public class DeferredProgressPanel extends FlowPanel {
                         listener.onDeferredError(result);
                         completed = true;
                     }
+                    messageBar.setHTML("Failed");
+                    statusBar.setHTML(result.getMessage());
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else if (result.isCompleted()) {
                     progressBar.setProgress(progressBar.getMaxProgress());
+                    messageBar.setHTML("Complete");
+                    statusBar.setHTML(result.getMessage());
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
                     if (!completed) {
                         listener.onDeferredSuccess(result);
@@ -166,11 +173,12 @@ public class DeferredProgressPanel extends FlowPanel {
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else {
-                    messageBar.setText(result.getMessage() != null ? result.getMessage() : "");
+                    messageBar.setHTML(CommonsStringUtils.isEmpty(result.getMessage()) ? "In Progress..." : result.getMessage());
+                    statusBar.setHTML("");
                     progressBar.setMaxProgress(result.getProgressMaximum());
                     progressBar.setProgress(result.getProgress());
                     if (progressTimer != null) {
-                        progressTimer.schedule(checkProgressStatusSeconds * 1000);
+                        progressTimer.schedule(checkProgressStatusMilliSec);
                     }
                 }
             }

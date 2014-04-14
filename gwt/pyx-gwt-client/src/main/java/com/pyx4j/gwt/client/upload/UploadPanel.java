@@ -113,7 +113,8 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
         content.add(line);
 
         line.add(upload);
-        line.add(deferredProgressPanel = new DeferredProgressPanel("70px", "20px", false, this));
+        line.add(deferredProgressPanel = new DeferredProgressPanel("Connecting...", false, this));
+        deferredProgressPanel.setSize("70px", "20px");
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
 

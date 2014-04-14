@@ -30,10 +30,8 @@ import com.google.gwt.user.client.ui.Widget;
  * <li>.gwt-ProgressBar-shell { primary style }</li>
  * <li>.gwt-ProgressBar-shell .gwt-ProgressBar-bar { the actual progress bar }</li>
  * <li>.gwt-ProgressBar-shell .gwt-ProgressBar-text { text on the bar }</li>
- * <li>.gwt-ProgressBar-shell .gwt-ProgressBar-text-firstHalf { applied to text when
- * progress is less than 50 percent }</li>
- * <li>.gwt-ProgressBar-shell .gwt-ProgressBar-text-secondHalf { applied to text when
- * progress is greater than 50 percent }</li>
+ * <li>.gwt-ProgressBar-shell .gwt-ProgressBar-text-firstHalf { applied to text when progress is less than 50 percent }</li>
+ * <li>.gwt-ProgressBar-shell .gwt-ProgressBar-text-secondHalf { applied to text when progress is greater than 50 percent }</li>
  * </ul>
  */
 public class ProgressBar extends Widget {
@@ -90,6 +88,8 @@ public class ProgressBar extends Widget {
      * The current text formatter.
      */
     private TextFormatter textFormatter;
+
+    private final int maxBarWidth = 80;
 
     /**
      * Create a progress bar with default range of 0 to 100.
@@ -156,20 +156,18 @@ public class ProgressBar extends Widget {
 
         // Create the outer shell
         setElement(DOM.createDiv());
-        DOM.setStyleAttribute(getElement(), "position", "relative");
+        DOM.setStyleAttribute(getElement(), "width", "100%");
         setStyleName("gwt-ProgressBar-shell");
 
         // Create the bar element
         barElement = DOM.createDiv();
         DOM.appendChild(getElement(), barElement);
-        DOM.setStyleAttribute(barElement, "height", "100%");
         DOM.setElementProperty(barElement, "className", "gwt-ProgressBar-bar");
+        DOM.setStyleAttribute(barElement, "width", maxBarWidth + "%");
 
         // Create the text element
         textElement = DOM.createDiv();
         DOM.appendChild(getElement(), textElement);
-        DOM.setStyleAttribute(textElement, "position", "absolute");
-        DOM.setStyleAttribute(textElement, "top", "0px");
         DOM.setElementProperty(textElement, "className", "gwt-ProgressBar-text-firstHalf");
 
         // Set the current progress
@@ -305,7 +303,8 @@ public class ProgressBar extends Widget {
 
         // Calculate percent complete
         int percent = (int) (100 * getPercent());
-        DOM.setStyleAttribute(barElement, "width", percent + "%");
+        int barWidth = (int) (maxBarWidth * getPercent());
+        DOM.setStyleAttribute(barElement, "width", barWidth + "%");
         DOM.setElementProperty(textElement, "innerHTML", generateText(curProgress));
 
         // Set the style depending on the size of the bar
@@ -387,7 +386,6 @@ public class ProgressBar extends Widget {
     @Override
     protected void onLoad() {
         // Reset the position attribute of the parent element
-        DOM.setStyleAttribute(getElement(), "position", "relative");
         redraw();
     }
 

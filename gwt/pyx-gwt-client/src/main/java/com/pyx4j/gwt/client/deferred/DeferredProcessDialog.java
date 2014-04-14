@@ -47,25 +47,27 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     private boolean canceled = false;
 
-    VerticalPanel messagePenel = new VerticalPanel();
+    VerticalPanel messagePanel = new VerticalPanel();
 
-    protected final HTML message1;
+    protected HTML message1;
 
-    protected final HTML message2;
+    protected HTML message2;
 
     private final DeferredProgressPanel deferredProgressPanel;
 
     public DeferredProcessDialog(String title, String initialMessage, boolean executeByUserRequests) {
-        this.setWidget(messagePenel = new VerticalPanel());
-        messagePenel.add(message1 = new HTML(initialMessage));
-        messagePenel.add(message2 = new HTML(""));
+        this.setWidget(messagePanel = new VerticalPanel());
+        messagePanel.setWidth("100%");
+        if (false) {
+            messagePanel.add(message1 = new HTML(initialMessage));
+            messagePanel.add(message2 = new HTML(""));
+        }
 
-        deferredProgressPanel = new DeferredProgressPanel("100px", "40px", executeByUserRequests, this);
-        deferredProgressPanel.getElement().getStyle().setProperty("marginLeft", "auto");
-        deferredProgressPanel.getElement().getStyle().setProperty("marginRight", "auto");
+        deferredProgressPanel = new DeferredProgressPanel(initialMessage, executeByUserRequests, this);
+        deferredProgressPanel.getElement().getStyle().setProperty("border", "10px solid transparent"); // set content margin
         deferredProgressPanel.setSize("100%", "100%");
         deferredProgressPanel.setVisible(false);
-        messagePenel.add(deferredProgressPanel);
+        messagePanel.add(deferredProgressPanel);
 
         dialog = new Dialog(title, this, this);
         dialog.getCloseButton().setVisible(false);
@@ -102,11 +104,13 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     @Override
     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
-        message1.setHTML(i18n.tr("Completed"));
-        if (result.getMessage() != null) {
-            message2.setHTML(result.getMessage().replace("\n", "<br/>"));
-        } else {
-            message2.setHTML("");
+        if (false) {
+            message1.setHTML(i18n.tr("Completed"));
+            if (result.getMessage() != null) {
+                message2.setHTML(result.getMessage().replace("\n", "<br/>"));
+            } else {
+                message2.setHTML("");
+            }
         }
         onDeferredCompleate();
     }
@@ -126,8 +130,10 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     }
 
     protected void onDeferredCompleate() {
-        deferredProgressPanel.reset();
-        deferredProgressPanel.setVisible(false);
+        if (false) {
+            deferredProgressPanel.reset();
+            deferredProgressPanel.setVisible(false);
+        }
         dialog.getCancelButton().setVisible(false);
         dialog.getCloseButton().setVisible(true);
         log.info("Deferred " + dialog.getTitle() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
