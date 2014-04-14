@@ -23,13 +23,11 @@ package com.pyx4j.gwt.client.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -39,8 +37,6 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     private static final Logger log = LoggerFactory.getLogger(DeferredProcessDialog.class);
 
-    private static final I18n i18n = I18n.get(DeferredProcessDialog.class);
-
     protected long deferredProcessStartTime;
 
     protected final Dialog dialog;
@@ -49,19 +45,11 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     VerticalPanel messagePanel = new VerticalPanel();
 
-    protected HTML message1;
-
-    protected HTML message2;
-
     private final DeferredProgressPanel deferredProgressPanel;
 
     public DeferredProcessDialog(String title, String initialMessage, boolean executeByUserRequests) {
         this.setWidget(messagePanel = new VerticalPanel());
         messagePanel.setWidth("100%");
-        if (false) {
-            messagePanel.add(message1 = new HTML(initialMessage));
-            messagePanel.add(message2 = new HTML(""));
-        }
 
         deferredProgressPanel = new DeferredProgressPanel(initialMessage, executeByUserRequests, this);
         deferredProgressPanel.getElement().getStyle().setProperty("border", "10px solid transparent"); // set content margin
@@ -104,14 +92,6 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     @Override
     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
-        if (false) {
-            message1.setHTML(i18n.tr("Completed"));
-            if (result.getMessage() != null) {
-                message2.setHTML(result.getMessage().replace("\n", "<br/>"));
-            } else {
-                message2.setHTML("");
-            }
-        }
         onDeferredCompleate();
     }
 
@@ -130,10 +110,6 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     }
 
     protected void onDeferredCompleate() {
-        if (false) {
-            deferredProgressPanel.reset();
-            deferredProgressPanel.setVisible(false);
-        }
         dialog.getCancelButton().setVisible(false);
         dialog.getCloseButton().setVisible(true);
         log.info("Deferred " + dialog.getTitle() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
