@@ -45,7 +45,9 @@ public class PmcLister extends AbstractLister<PmcDTO> {
             new MemberColumnDescriptor.Builder(proto().features().yardiInterfaces()).searchable(false).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build()
+            new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().equifaxInfo().status()).columnName("Equifax Status").visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build()
         );//@formatter:on
 
         addActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
