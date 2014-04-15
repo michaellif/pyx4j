@@ -50,6 +50,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -557,7 +558,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             });
         }
 
-        private class ILSProfileBuildingEditor extends CEntityForm<ILSProfileBuilding> {
+        private class ILSProfileBuildingEditor extends AccessoryEntityForm<ILSProfileBuilding> {
             public ILSProfileBuildingEditor() {
                 super(ILSProfileBuilding.class);
             }
