@@ -34,6 +34,8 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
     private String configurationId;
 
+    private File credentialsFile;
+
     static VistaSMTPMailServiceConfig getDefaultConfig(VistaServerSideConfiguration serverSideConfiguration) {
         String prefix = "mail";
 
@@ -80,6 +82,7 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
             Credentials credentials = CredentialsFileStorage.getCredentials(mailCredentialsFile);
             config.user = credentials.userName;
             config.password = credentials.password;
+            config.credentialsFile = mailCredentialsFile;
         }
         return config;
     }
@@ -87,6 +90,16 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
     @Override
     public String configurationId() {
         return configurationId;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(super.toString());
+        if (credentialsFile != null) {
+            b.append("credentialsFile                                   : ").append(this.credentialsFile.getAbsolutePath()).append("\n");
+        }
+        return b.toString();
     }
 
 }
