@@ -140,6 +140,20 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                 }
             }));
         }
+
+        addAction(new MenuItem(i18n.tr("Download Import"), new Command() {
+            @Override
+            public void execute() {
+                ((BuildingViewerView.Presenter) getPresenter()).downloadImport();
+            }
+        }));
+
+        addAction(new MenuItem(i18n.tr("Upload Import"), new Command() {
+            @Override
+            public void execute() {
+                ((BuildingViewerView.Presenter) getPresenter()).uploadImport();
+            }
+        }));
     }
 
     @Override

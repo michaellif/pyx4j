@@ -13,6 +13,26 @@
  */
 package com.propertyvista.crm.server.services.importer;
 
-public class CrmDataImporterDeferredProcess {
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.essentials.server.upload.UploadedData;
+import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
+
+@SuppressWarnings("serial")
+public class CrmDataImporterDeferredProcess extends AbstractDeferredProcess {
+
+    private final IEntity uploadInitiationData;
+
+    private final UploadedData uploadedData;
+
+    public CrmDataImporterDeferredProcess(IEntity uploadInitiationData, UploadedData uploadedData) {
+        super();
+        this.uploadInitiationData = uploadInitiationData;
+        this.uploadedData = uploadedData;
+    }
+
+    @Override
+    public void execute() {
+        // TODO Auto-generated method stub
+    }
 
 }

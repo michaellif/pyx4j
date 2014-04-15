@@ -21,10 +21,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.AbstractIFileBlob;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -32,6 +37,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -40,6 +46,7 @@ import com.propertyvista.crm.client.visor.communityevent.CommunityEventVisorCont
 import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
+import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -52,6 +59,7 @@ import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
+import com.propertyvista.crm.rpc.services.importer.ImportCrmUploadService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -70,6 +78,7 @@ import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.Presenter {
+
     private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
 
     private final Presenter<FloorplanDTO> floorplanLister;
@@ -222,6 +231,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         ((BuildingCrudService) getService()).updateFromYardi(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredCorrelationId) {
+                // --copy of the code -- start
                 DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Building Update"), i18n.tr("Updating Building..."), false) {
                     @Override
                     public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
@@ -235,7 +245,49 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                 };
                 d.show();
                 d.startProgress(deferredCorrelationId);
+                // --copy of the code -- ends
             }
         }, EntityFactory.createIdentityStub(Building.class, getEntityId()));
     }
+
+    @Override
+    public void uploadImport() {
+        UploadDialogBase<IEntity> dialog = new UploadDialogBase<IEntity>(i18n.tr("Upload Import File"),
+                GWT.<UploadService<IEntity, AbstractIFileBlob>> create(ImportCrmUploadService.class));
+
+        dialog.setUploadReciver(new UploadReceiver() {
+            @Override
+            public void onUploadComplete(IFile<?> uploadResponse) {
+
+                AbstractIFileBlob blob = uploadResponse.blob();
+
+                String deferredCorrelationId = ((DeferredProcessingStarted) uploadResponse).deferredCorrelationId().getValue();
+
+                // This is the same as in updateFromYardi
+                // --copy of the code -- start
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Processing Import"), i18n.tr("Processing Import..."), false) {
+                    @Override
+                    public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        populate();
+                        if (!CommonsStringUtils.isEmpty(result.getMessage())) {
+                            hide();
+                            MessageDialog.warn(this.dialog.getTitle(), result.getMessage());
+                        }
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
+                // --copy of the code -- ends
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void downloadImport() {
+        // TODO VladS
+    }
+
 }
