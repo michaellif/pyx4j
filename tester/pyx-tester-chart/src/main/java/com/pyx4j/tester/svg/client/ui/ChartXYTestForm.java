@@ -39,21 +39,21 @@ public class ChartXYTestForm extends CEntityForm<ChartXYTestConfiguration> {
 
         String labelWidth = "7em";
         int row = 0;
-        main.setWidget(row, 0, new WidgetDecorator.Builder(inject(proto().chartType())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 1, new WidgetDecorator.Builder(inject(proto().pointsType())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 2, new WidgetDecorator.Builder(inject(proto().points())).componentWidth("8em").labelWidth(labelWidth).build());
+        main.setWidget(row, 0, inject(proto().chartType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 1, inject(proto().pointsType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 2, inject(proto().points(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
 
         row++;
-        main.setWidget(row, 0, new WidgetDecorator.Builder(inject(proto().xValuesType())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 1, new WidgetDecorator.Builder(inject(proto().xFrom())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 2, new WidgetDecorator.Builder(inject(proto().xTo())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 3, new WidgetDecorator.Builder(inject(proto().xMultiplication())).componentWidth("8em").labelWidth(labelWidth).build());
+        main.setWidget(row, 0, inject(proto().xValuesType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 1, inject(proto().xFrom(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 2, inject(proto().xTo(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 3, inject(proto().xMultiplication(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
 
         row++;
-        main.setWidget(row, 0, new WidgetDecorator.Builder(inject(proto().yValuesType())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 1, new WidgetDecorator.Builder(inject(proto().yFrom())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 2, new WidgetDecorator.Builder(inject(proto().yTo())).componentWidth("8em").labelWidth(labelWidth).build());
-        main.setWidget(row, 3, new WidgetDecorator.Builder(inject(proto().yMultiplication())).componentWidth("8em").labelWidth(labelWidth).build());
+        main.setWidget(row, 0, inject(proto().yValuesType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 1, inject(proto().yFrom(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 2, inject(proto().yTo(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 3, inject(proto().yMultiplication(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
 
         return main;
     }
