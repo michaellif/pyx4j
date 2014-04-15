@@ -23,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.OrCriterion;
@@ -120,6 +121,11 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().retrieveMember(bo.paymentTypeInfo());
         to.paymentTypeInfo().set(bo.paymentTypeInfo());
 
+    }
+
+    @Override
+    protected void retrievedForList(Pmc bo) {
+        Persistence.ensureRetrieve(bo.equifaxInfo(), AttachLevel.Attached);
     }
 
     @Override
