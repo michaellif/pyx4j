@@ -41,6 +41,9 @@ public class PmcLister extends AbstractLister<PmcDTO> {
             new MemberColumnDescriptor.Builder(proto().created()).build(),
             new MemberColumnDescriptor.Builder(proto().updated()).build(),
             new MemberColumnDescriptor.Builder(proto().features().yardiIntegration()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().features().yardiMaintenance()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().features().yardiInterfaces()).searchable(false).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build()
         );//@formatter:on
