@@ -23,6 +23,8 @@ import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringVa
 import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
+import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
+import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount.AccountType;
 
 public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
 
@@ -53,4 +55,17 @@ public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
         get(proto().bankId()).addComponentValidator(new EcheckBankIdValidator());
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        updateVisibility();
+    }
+
+    private void updateVisibility() {
+        if ((getValue().isInstanceOf(VistaMerchantAccount.class) && (getValue().duplicate(VistaMerchantAccount.class).accountType().getValue() == AccountType.PaymentAggregation))) {
+            get(proto().merchantTerminalId()).setVisible(false);
+        } else {
+            get(proto().merchantTerminalId()).setVisible(true);
+        }
+    }
 }
