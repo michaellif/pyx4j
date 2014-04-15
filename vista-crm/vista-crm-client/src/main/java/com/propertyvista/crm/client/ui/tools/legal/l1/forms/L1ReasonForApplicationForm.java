@@ -32,21 +32,23 @@ public class L1ReasonForApplicationForm extends CEntityForm<L1ReasonForApplicati
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = 0;
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().applyingToCollectCharges())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().applyingToCollectNsf())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectCharges(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectNsf(), new FormDecoratorBuilder().build()));
         panel.setWidget(
                 ++row,
                 0,
                 1,
-                new FormDecoratorBuilder(inject(proto().isTenatStillInPossesionOfTheUnit()))
-                        .customLabel(i18n.tr("Is the tenant still in possession of the rental unit on the date this application is filed with the Board?"))
-                        .componentWidth("100px").build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().rentPaymentPeriod())).componentWidth("100px").build());
-        panel.setWidget(row, 1, 1, new FormDecoratorBuilder(inject(proto().otherRentPaymentPeriodDescription())).componentWidth("100px").contentWidth("100px")
-                .build());
+                inject(proto().isTenatStillInPossesionOfTheUnit(),
+                        new FormDecoratorBuilder()
+                                .customLabel(
+                                        i18n.tr("Is the tenant still in possession of the rental unit on the date this application is filed with the Board?"))
+                                .componentWidth("100px").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().rentPaymentPeriod(), new FormDecoratorBuilder().componentWidth("100px").build()));
+        panel.setWidget(row, 1, 1,
+                inject(proto().otherRentPaymentPeriodDescription(), new FormDecoratorBuilder().componentWidth("100px").contentWidth("100px").build()));
         panel.setWidget(++row, 0, 1, new HTML("&nbsp;"));
 
         panel.setH2(++row, 0, 2, i18n.tr("Deposit"));
@@ -54,19 +56,19 @@ public class L1ReasonForApplicationForm extends CEntityForm<L1ReasonForApplicati
                 ++row,
                 0,
                 1,
-                new FormDecoratorBuilder(inject(proto().amountOfRentOnDeposit())).customLabel(i18n.tr("The amount of rent currently on deposit"))
-                        .labelWidth("25em").build());
+                inject(proto().amountOfRentOnDeposit(),
+                        new FormDecoratorBuilder().customLabel(i18n.tr("The amount of rent currently on deposit")).labelWidth("25em").build()));
         panel.setWidget(
                 ++row,
                 0,
                 1,
-                new FormDecoratorBuilder(inject(proto().dateOfDepositCollection())).customLabel(i18n.tr("The date the rent deposit was collected"))
-                        .labelWidth("25em").build());
+                inject(proto().dateOfDepositCollection(), new FormDecoratorBuilder().customLabel(i18n.tr("The date the rent deposit was collected"))
+                        .labelWidth("25em").build()));
         panel.setH3(++row, 0, 2, i18n.tr("The last period for which interest on the rent deposit was paid:"));
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().lastPeriodInterestPaidFrom())).customLabel(i18n.tr("From"))
-                .componentWidth("150px").build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().lastPeriodInterestPaidTo())).customLabel(i18n.tr("To")).componentWidth("150px")
-                .build());
+        panel.setWidget(++row, 0, 1,
+                inject(proto().lastPeriodInterestPaidFrom(), new FormDecoratorBuilder().customLabel(i18n.tr("From")).componentWidth("150px").build()));
+        panel.setWidget(++row, 0, 1,
+                inject(proto().lastPeriodInterestPaidTo(), new FormDecoratorBuilder().customLabel(i18n.tr("To")).componentWidth("150px").build()));
         return panel;
     }
 }

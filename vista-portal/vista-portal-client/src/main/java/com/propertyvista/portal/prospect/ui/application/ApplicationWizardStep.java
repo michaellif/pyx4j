@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -73,8 +74,16 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return getWizard().inject(member);
     }
 
+    public CComponent<?> inject(IObject<?> member, IDecorator<?> decorator) {
+        return getWizard().inject(member, decorator);
+    }
+
     public <T extends CComponent<?>> T inject(IObject<?> member, T comp) {
         return getWizard().inject(member, comp);
+    }
+
+    public <T extends CComponent<?>> T inject(IObject<?> member, T comp, IDecorator<?> decorator) {
+        return getWizard().inject(member, comp, decorator);
     }
 
     public <T extends IEntity> CComponent<T> get(T member) {

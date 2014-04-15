@@ -59,7 +59,7 @@ public class PasswordResetForm extends CEntityForm<PasswordChangeRequest> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         main.setWidth("40em");
@@ -67,13 +67,13 @@ public class PasswordResetForm extends CEntityForm<PasswordChangeRequest> {
 
         int row = -1;
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityQuestion())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityAnswer())).build());
+        main.setWidget(++row, 0, inject(proto().securityQuestion(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().securityAnswer(), new FormDecoratorBuilder().build()));
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         main.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
+                inject(proto().newPassword(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
+        main.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
 
         get(proto().securityQuestion()).setVisible(false);
         get(proto().securityAnswer()).setVisible(false);

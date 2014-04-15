@@ -45,14 +45,14 @@ public class NewsFolder extends VistaBoxFolder<News> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().caption()), 20).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content()), 50).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date()), 9).build());
+            main.setWidget(++row, 0, inject(proto().locale(), new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 0, inject(proto().caption(), new FormDecoratorBuilder(20).build()));
+            main.setWidget(++row, 0, inject(proto().content(), new FormDecoratorBuilder(50).build()));
+            main.setWidget(++row, 0, inject(proto().date(), new FormDecoratorBuilder(9).build()));
 
             return main;
         }

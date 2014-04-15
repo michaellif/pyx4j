@@ -72,7 +72,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
 
             int row = -1;

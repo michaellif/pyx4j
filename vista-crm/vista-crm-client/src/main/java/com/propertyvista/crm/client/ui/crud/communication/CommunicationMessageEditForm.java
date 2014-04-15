@@ -42,15 +42,14 @@ public class CommunicationMessageEditForm extends CrmEntityForm<CommunicationMes
     public BasicFlexFormPanel createGeneralForm() {
         BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject()), 20).build());
+        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FormDecoratorBuilder(20).build()));
         mainPanel.setH1(++row, 0, 1, "To");
         mainPanel.setWidget(++row, 0, inject(proto().to(), receiverSelector));
         mainPanel.setH1(++row, 0, 1, "Message");
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().text()), 20).build());
+        mainPanel.setWidget(++row, 0, inject(proto().text(), new FormDecoratorBuilder(20).build()));
         mainPanel.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));
         mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;
     }
-
 }

@@ -130,22 +130,24 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
 
             int row = -1;
 
             contentPanel.setBR(++row, 0, 2);
 
-            CEmailField emailField = inject(proto().email(), new CEmailField());
+            CEmailField emailField = inject(proto().email(), new CEmailField(),
+                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Email Address")).build());
             emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
             emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
+            contentPanel.setWidget(++row, 0, emailField);
 
-            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
+            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(),
+                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Password")).build());
             passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
             passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build());
+            contentPanel.setWidget(++row, 0, passwordField);
 
             CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
             rememberID.getWidget().addKeyUpHandler(new EnterKeyHandler());
@@ -160,9 +162,9 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             });
             contentPanel.setWidget(++row, 0, resetPassword);
 
-            captchaField = (CCaptcha) inject(proto().captcha());
+            captchaField = (CCaptcha) inject(proto().captcha(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Enter both security words above")).build());
             captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, (new LoginWidgetDecoratorBuilder(captchaField).watermark(i18n.tr("Enter both security words above")).build()));
+            contentPanel.setWidget(++row, 0, captchaField);
             setCaptchaEnabled(false);
 
             contentPanel.setBR(++row, 0, 2);

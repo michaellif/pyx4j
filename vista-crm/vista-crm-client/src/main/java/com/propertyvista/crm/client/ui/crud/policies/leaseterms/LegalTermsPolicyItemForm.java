@@ -29,14 +29,14 @@ public class LegalTermsPolicyItemForm extends CEntityForm<LegalTermsPolicyItem> 
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enabled()), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().caption()), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().enabled(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().caption(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().content(), new FormDecoratorBuilder(true).build()));
 
         return content;
     }

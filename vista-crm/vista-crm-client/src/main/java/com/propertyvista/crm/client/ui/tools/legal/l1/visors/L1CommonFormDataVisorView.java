@@ -35,7 +35,7 @@ public class L1CommonFormDataVisorView extends AbstractVisorEditor<L1CommonField
         super(controller);
         setForm(new CEntityForm<L1CommonFieldsDTO>(L1CommonFieldsDTO.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
                 int row = -1;
                 panel.setH1(++row, 0, 2, i18n.tr("Landlords"));

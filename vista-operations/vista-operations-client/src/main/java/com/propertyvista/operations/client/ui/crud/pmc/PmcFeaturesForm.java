@@ -31,14 +31,14 @@ public class PmcFeaturesForm extends CEntityForm<PmcVistaFeatures> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().countryOfOperation()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onlineApplication()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiIntegration()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiMaintenance()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantSureIntegration()), 5).build());
+        content.setWidget(++row, 0, inject(proto().countryOfOperation(), new FormDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().onlineApplication(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().yardiIntegration(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().yardiMaintenance(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().tenantSureIntegration(), new FormDecoratorBuilder(5).build()));
 
         final CComponent<Boolean> yardiIntegrationSwitch = get(proto().yardiIntegration());
         final CComponent<Boolean> yardiMaintenanceSwitch = get(proto().yardiMaintenance());

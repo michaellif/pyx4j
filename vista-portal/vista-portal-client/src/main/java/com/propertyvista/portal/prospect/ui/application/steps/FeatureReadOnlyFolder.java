@@ -51,13 +51,13 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item().name(), new CLabel<String>())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice(), new CMoneyLabel())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>())).build());
+            content.setWidget(++row, 0, inject(proto().item().name(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
 
             return content;
         }

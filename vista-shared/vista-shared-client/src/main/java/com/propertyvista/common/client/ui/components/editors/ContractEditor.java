@@ -31,20 +31,20 @@ public class ContractEditor extends CEntityForm<Contract> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contractID()), 20).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contractor()), 20).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cost()), 10).build());
+        main.setWidget(++row, 0, inject(proto().contractID(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().contractor(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().cost(), new FormDecoratorBuilder(10).build()));
 
 // TODO : design representation for:
 //      main.setWidget(++row, 0, decorate(inject(proto.document()), 50);
 
         row = -1;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().start()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().end()), 9).build());
+        main.setWidget(++row, 1, inject(proto().start(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().end(), new FormDecoratorBuilder(9).build()));
 
         return main;
     }

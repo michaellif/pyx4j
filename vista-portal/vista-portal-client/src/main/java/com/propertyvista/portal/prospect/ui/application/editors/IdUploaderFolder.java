@@ -161,13 +161,13 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idType(), new CEntityLabel<IdentificationDocumentType>())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().idNumber())).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().notes())).build());
+            content.setWidget(++row, 0, inject(proto().idType(), new CEntityLabel<IdentificationDocumentType>(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().idNumber(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().notes(), new FormWidgetDecoratorBuilder().build()));
 
             IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
             docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {

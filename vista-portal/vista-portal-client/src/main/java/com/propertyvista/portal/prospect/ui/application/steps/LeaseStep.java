@@ -49,19 +49,19 @@ public class LeaseStep extends ApplicationWizardStep {
         int row = -1;
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().number(), new CLabel<String>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().utilities(), new CLabel<String>())).build());
+        panel.setWidget(++row, 0, inject(proto().unit().info().number(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseFrom(), new CDateLabel())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTo(), new CDateLabel())).build());
+        panel.setWidget(++row, 0, inject(proto().leaseFrom(), new CDateLabel(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().leaseTo(), new CDateLabel(), new FormWidgetDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
         panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().selectedService().agreedPrice(), new CMoneyLabel())).customLabel(i18n.tr("Unit Rent")).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().selectedService().description(), new CLabel<String>())).build());
+                inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Unit Rent")).build()));
+        panel.setWidget(++row, 0, inject(proto().selectedService().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, depositPanel);
         depositPanel.setH4(0, 0, 1, i18n.tr("Unit Deposits"));

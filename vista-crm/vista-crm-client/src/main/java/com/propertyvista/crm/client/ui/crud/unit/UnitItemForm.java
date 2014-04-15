@@ -33,24 +33,24 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("General"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 10).build());
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().conditionNotes()), true).build());
+        main.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().conditionNotes(), new FormDecoratorBuilder(true).build()));
 
         row = 3;
         main.setH1(++row, 0, 2, i18n.tr("Details"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().wallColor()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().flooringType()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().flooringValue()), 9).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().counterTopType()), 10).build());
+        main.setWidget(++row, 0, inject(proto().wallColor(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().flooringType(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().flooringInstallDate(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().flooringValue(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().counterTopType(), new FormDecoratorBuilder(10).build()));
 
         row = 4;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().counterTopValue()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().cabinetsType()), 10).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
+        main.setWidget(++row, 1, inject(proto().counterTopInstallDate(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().counterTopValue(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().cabinetsType(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 1, inject(proto().cabinetsInstallDate(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().cabinetsValue(), new FormDecoratorBuilder(9).build()));
 
         setTabBarVisible(false);
         selectTab(addTab(main));

@@ -59,17 +59,18 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel(i18n.tr("Details"));
             int row = -1;
 
+            content.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().billableItem(), new PapBillableItemLabel(), new FormWidgetDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
             content.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge"))
-                            .build());
+                    inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));
             content.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CMoneyLabel()), 100).customLabel(i18n.tr("Price")).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).customLabel(i18n.tr("Payment"))
-                    .build());
+                    inject(proto().amount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
 
             get(proto().amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 

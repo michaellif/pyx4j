@@ -47,20 +47,20 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Details"));
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().threads()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().triggerType())).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().populationType()), 10).build());
+        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder().build()));
+        main.setWidget(row, 1, inject(proto().threads(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().triggerType(), new FormDecoratorBuilder().build()));
+        main.setWidget(row, 1, inject(proto().populationType(), new FormDecoratorBuilder(10).build()));
 
         main.setWidget(++row, 0, 2, inject(proto().population(), new PopulationFolder(this)));
 
         main.setH2(++row, 0, 2, i18n.tr("Schedules"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduleSuspended()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledFireTime()), 10).build());
+        main.setWidget(++row, 0, inject(proto().scheduleSuspended(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().nextScheduledFireTime(), new FormDecoratorBuilder(10).build()));
         main.setWidget(++row, 0, 2, inject(proto().schedules(), new TriggerScheduleFolder(isEditable())));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sleepRetry()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextSleepRetryFireTime()), 10).build());
+        main.setWidget(++row, 0, inject(proto().sleepRetry(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().nextSleepRetryFireTime(), new FormDecoratorBuilder(10).build()));
 
         main.setH2(++row, 0, 2, i18n.tr("Notifications"));
         main.setWidget(++row, 0, 2, inject(proto().notifications(), new NotificationFolder(isEditable())));

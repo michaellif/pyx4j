@@ -40,7 +40,7 @@ public class AgreementForm extends CEntityForm<AgreementDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         contentPanel.setWidget(++row, 0, inject(proto().terms()));

@@ -53,7 +53,7 @@ public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
 
         for (int i = 0; i < applicationWizard.getAllSteps().size(); i++) {

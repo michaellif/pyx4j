@@ -35,7 +35,7 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 

@@ -148,41 +148,41 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
         ++row;
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 10).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().picture().file(), imageHolder)).customLabel("").build());
+        main.setWidget(row, 0, inject(proto().participantId(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().customer().picture().file(), imageHolder, new FormDecoratorBuilder().customLabel("").build()));
         main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiApplicantId()), 10).build());
+        main.setWidget(++row, 0, inject(proto().yardiApplicantId(), new FormDecoratorBuilder(10).build()));
 
         main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
         get(proto().customer().person().name()).setEditable(!VistaFeatures.instance().yardiIntegration());
 
         ++row;
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+        main.setWidget(row, 1, inject(proto().customer().person().birthDate(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(row, 0, inject(proto().customer().person().sex(), new FormDecoratorBuilder(7).build()));
 
         ++row;
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        main.setWidget(row, 0, inject(proto().customer().person().homePhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(row, 1, inject(proto().customer().person().workPhone(), new FormDecoratorBuilder(15).build()));
 
         ++row;
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().person().email()), 15).build());
+        main.setWidget(row, 0, inject(proto().customer().person().mobilePhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(row, 1, inject(proto().customer().person().email(), new FormDecoratorBuilder(15).build()));
 
         main.setBR(++row, 0, 2); // lease term / portal registration:
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 22).build());
+        main.setWidget(++row, 0, inject(proto().leaseTermV(), new CLeaseTermVHyperlink(), new FormDecoratorBuilder(22).build()));
         main.setWidget(
                 row,
                 1,
-                new FormDecoratorBuilder(inject(proto().screening(),
-                        new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 22)
-                        .build());
+                inject(proto().screening(),
+                        new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
+                        new FormDecoratorBuilder(22).build()));
 
         if (rootClass.equals(TenantDTO.class)) {
             ++row;
-            main.setWidget(row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role(), new CEnumLabel()), 10).build());
-            main.setWidget(row, 1, new FormDecoratorBuilder(inject(((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()), 2).build());
+            main.setWidget(row, 0, inject(((TenantDTO) proto()).role(), new CEnumLabel(), new FormDecoratorBuilder(10).build()));
+            main.setWidget(row, 1, inject(((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel(), new FormDecoratorBuilder(2).build()));
         }
 
         main.setHR(++row, 0, 2); // lease/application(s) info:
@@ -199,7 +199,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                     return place;
                 }
             });
-            main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().leasesOfThisCustomer(), link), 5).build());
+            main.setWidget(row, 0, inject(proto().leasesOfThisCustomer(), link, new FormDecoratorBuilder(5).build()));
         }
         {
             CEntityCollectionCrudHyperlink<IList<Lease>> link = new CEntityCollectionCrudHyperlink<IList<Lease>>(new AppPlaceBuilder<IList<Lease>>() {
@@ -212,7 +212,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                     return place;
                 }
             });
-            main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().applicationsOfThisCustomer(), link), 5).build());
+            main.setWidget(row, 1, inject(proto().applicationsOfThisCustomer(), link, new FormDecoratorBuilder(5).build()));
         }
 
         return main;

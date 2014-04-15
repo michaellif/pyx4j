@@ -103,8 +103,9 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                 }
             }
         });
+        selectPolicyScopeBox.setDecorator(new FormDecoratorBuilder(10).customLabel(i18n.tr("Scope")).labelWidth(8).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(selectPolicyScopeBox, 10).customLabel(i18n.tr("Scope")).labelWidth(8).build());
+        content.setWidget(++row, 0, selectPolicyScopeBox);
         content.setWidget(++row, 0, inject(proto().node(), new PolicyNodeEditor()));
         if (isEditable()) {
             get(proto().node()).inheritViewable(false);
@@ -208,7 +209,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
         @SuppressWarnings("unchecked")
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CComponent<?>>();
@@ -244,7 +245,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
             int row = -1;
             for (CComponent<?> nodeComponent : nodeTypeToComponentMap.values()) {
-                content.setWidget(++row, 0, new FormDecoratorBuilder(nodeComponent, 16).customLabel(i18n.tr("Applied to")).labelWidth(8).build());
+                nodeComponent.setDecorator(new FormDecoratorBuilder(16).customLabel(i18n.tr("Applied to")).labelWidth(8).build());
+                content.setWidget(++row, 0, nodeComponent);
             }
 
             addPropertyChangeHandler(new PropertyChangeHandler() {

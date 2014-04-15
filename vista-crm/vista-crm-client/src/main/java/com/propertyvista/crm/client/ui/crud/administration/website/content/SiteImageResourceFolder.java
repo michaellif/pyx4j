@@ -113,16 +113,16 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 5, 20, 20).build());
-            main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().large().file(), largeLogo), 5, 20, 20).customLabel(i18n.tr("Large Logo")).build());
+            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(5, 20, 20).build()));
+            main.setWidget(row, 1, inject(proto().large().file(), largeLogo, new FormDecoratorBuilder(5, 20, 20).customLabel(i18n.tr("Large Logo")).build()));
             main.getFlexCellFormatter().setRowSpan(row, 1, 2);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small().file(), smallLogo), 5, 20, 20).customLabel(i18n.tr("Small Logo")).build());
+            main.setWidget(++row, 0, inject(proto().small().file(), smallLogo, new FormDecoratorBuilder(5, 20, 20).customLabel(i18n.tr("Small Logo")).build()));
 
             return main;
         }

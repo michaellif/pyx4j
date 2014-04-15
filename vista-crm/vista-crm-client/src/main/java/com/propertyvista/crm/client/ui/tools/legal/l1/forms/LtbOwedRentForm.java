@@ -31,7 +31,7 @@ public class LtbOwedRentForm extends CEntityForm<LtbOwedRent> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 2, inject(proto().rentOwingBreakdown(), new LtbRentOwedBreakdownFolder() {
@@ -40,7 +40,7 @@ public class LtbOwedRentForm extends CEntityForm<LtbOwedRent> {
                 LtbOwedRentForm.this.updateTotal();
             }
         }));
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalRentOwing())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().totalRentOwing(), new FormDecoratorBuilder().build()));
         get(proto().totalRentOwing()).setViewable(true);
         return panel;
     }

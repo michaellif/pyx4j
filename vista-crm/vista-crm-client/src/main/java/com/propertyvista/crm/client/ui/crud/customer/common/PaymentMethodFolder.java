@@ -90,7 +90,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             IsWidget content = super.createContent();
 
             // tune-up:
@@ -105,7 +105,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
             return new EcheckInfoEditor() {
                 @SuppressWarnings("rawtypes")
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
                     if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {

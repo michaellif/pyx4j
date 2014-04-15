@@ -39,9 +39,9 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
+        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(GlCode.class).formViewerPlace(getValue().glCodeCategory().getPrimaryKey());
@@ -58,7 +58,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
                     }
                 };
             }
-        }), 25).build());
+        }, new FormDecoratorBuilder(25).build()));
 
         yardiIntegrationPanel = new TwoColumnFlexFormPanel();
         yardiIntegrationPanel.setH1(0, 0, 2, i18n.tr("Yardi Integration"));

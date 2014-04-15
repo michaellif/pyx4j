@@ -48,14 +48,14 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     private TwoColumnFlexFormPanel createInsuranceRequirementsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Insurance Requirements"));
         int row = -1;
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requireMinimumLiability()), 5, true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().requireMinimumLiability(), new FormDecoratorBuilder(5, true).build()));
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().minimumRequiredLiability()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), 20, true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FormDecoratorBuilder(20, true).build()));
         get(proto().minimumRequiredLiability()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public FieldValidationError isValid() {

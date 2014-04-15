@@ -53,36 +53,21 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
         }
 
         @Override
-        public IsWidget createContent() {//@formatter:off
+        protected IsWidget createContent() {
             int row = -1;
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(++row, 0, 2,
-                    new FormDecoratorBuilder(inject(proto().file(), 
-                                                    new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class),
-                                                              new VistaFileURLBuilder(LeaseApplicationDocument.class)
-                                                    )
-                                             )
-                    ).componentWidth("350px")
-                     .customLabel(i18n.tr("Agreement Document File"))                     
-                     .build()
-            );
-            panel.setWidget(++row, 0, 2,
-                    new FormDecoratorBuilder(inject(proto().isSignedByInk()))
-                        .componentWidth("350px")
-                        .build()
-            );
-            panel.setWidget(++row, 0, 2,
-                    new FormDecoratorBuilder(inject(proto().signedBy()))
-                        .componentWidth("350px")
-                        .build()            
-            );
-            panel.setWidget(++row, 0, 2,
-                    new FormDecoratorBuilder(inject(proto().uploader()))
-                        .componentWidth("350px")
-                        .build()
-            );
+            panel.setWidget(
+                    ++row,
+                    0,
+                    2,
+                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
+                            LeaseApplicationDocument.class)), new FormDecoratorBuilder().componentWidth("350px")
+                            .customLabel(i18n.tr("Agreement Document File")).build()));
+            panel.setWidget(++row, 0, 2, inject(proto().isSignedByInk(), new FormDecoratorBuilder().componentWidth("350px").build()));
+            panel.setWidget(++row, 0, 2, inject(proto().signedBy(), new FormDecoratorBuilder().componentWidth("350px").build()));
+            panel.setWidget(++row, 0, 2, inject(proto().uploader(), new FormDecoratorBuilder().componentWidth("350px").build()));
             return panel;
-        }//@formatter:on
+        }
 
         @Override
         protected void onValueSet(boolean populate) {

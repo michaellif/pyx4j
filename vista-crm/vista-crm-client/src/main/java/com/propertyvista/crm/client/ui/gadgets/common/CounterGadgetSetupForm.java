@@ -28,10 +28,10 @@ public class CounterGadgetSetupForm<E extends CounterGadgetBaseMetadata> extends
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
         return content;
     }
 

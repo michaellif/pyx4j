@@ -31,16 +31,16 @@ public class PersonalInformationForm extends CEntityForm<PersonalInformationDTO>
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = 0;
         main.setWidget(++row, 0, inject(proto().name(), new NameEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, inject(proto().dto_personalAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateOfBirth())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sin())).build());
+        main.setWidget(++row, 0, inject(proto().email(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().dateOfBirth(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().sin(), new FormDecoratorBuilder().build()));
         return main;
     }
 

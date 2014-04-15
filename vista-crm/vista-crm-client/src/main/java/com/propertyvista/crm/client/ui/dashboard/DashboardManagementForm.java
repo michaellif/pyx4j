@@ -34,12 +34,12 @@ public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("General"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 40).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isShared()), 3).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ownerUser().name(), new CLabel<String>()), 15).customLabel(i18n.tr("Owner"))
-                .build());
+        content.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(20).build()));
+        content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(40).build()));
+        content.setWidget(++row, 0, inject(proto().isShared(), new FormDecoratorBuilder(3).build()));
+        content.setWidget(++row, 0,
+                inject(proto().ownerUser().name(), new CLabel<String>(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Owner")).build()));
 
         selectTab(addTab(content));
         setTabBarVisible(false);

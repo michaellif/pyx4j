@@ -48,8 +48,8 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         panel.setWidget(++row, 0, 2, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
 
         panel.setH1(++row, 0, 2, i18n.tr("Default  Usage Limits"));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyReports()), 6, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyRequests()), 6, true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().equifaxLimit().dailyReports(), new FormDecoratorBuilder(6, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().equifaxLimit().dailyRequests(), new FormDecoratorBuilder(6, true).build()));
 
         return panel;
     }

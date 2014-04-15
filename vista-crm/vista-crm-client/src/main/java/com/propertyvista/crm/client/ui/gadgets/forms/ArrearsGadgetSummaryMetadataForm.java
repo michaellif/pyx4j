@@ -30,27 +30,27 @@ public class ArrearsGadgetSummaryMetadataForm extends CEntityForm<ArrearsSummary
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeCategory())).build());
+        content.setWidget(++row, 0, inject(proto().customizeCategory(), new FormDecoratorBuilder().build()));
         get(proto().customizeCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().category()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().category())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
+        content.setWidget(++row, 0, inject(proto().category(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().asOf()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
+        content.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
         return content;
     }
 

@@ -41,7 +41,7 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         SimplePanel panel = new SimplePanel();
         panel.addStyleName(Styles.ArrearsSummaryPanel.name());
         FlexTable content = new FlexTable();

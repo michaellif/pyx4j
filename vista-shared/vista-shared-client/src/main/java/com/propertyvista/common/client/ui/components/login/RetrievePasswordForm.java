@@ -50,16 +50,16 @@ public class RetrievePasswordForm extends CEntityForm<PasswordRetrievalRequest> 
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         HTML header = new HTML(HtmlUtils.h2(i18n.tr("Reset Password")));
         header.getElement().getStyle().setMarginBottom(3, Unit.EM);
         header.getElement().getStyle().setProperty("textAlign", "center");
 
         main.add(header);
-        main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
+        main.add(inject(proto().email(), new LoginPanelWidgetDecorator()));
         main.add(new HTML());
-        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha()), 30));
+        main.add(inject(proto().captcha(), new LoginPanelWidgetDecorator(30)));
         main.add(passwordResetFailedMessage);
         passwordResetFailedMessage.getElement().getStyle().setMarginTop(1, Unit.EM);
         passwordResetFailedMessage.setVisible(false);

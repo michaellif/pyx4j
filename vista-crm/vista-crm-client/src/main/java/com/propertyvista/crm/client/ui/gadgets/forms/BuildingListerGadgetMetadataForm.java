@@ -28,11 +28,11 @@ public class BuildingListerGadgetMetadataForm extends CEntityForm<BuildingLister
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().buildingListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().buildingListerSettings().pageSize(), new FormDecoratorBuilder().build()));
         return p;
     }
 

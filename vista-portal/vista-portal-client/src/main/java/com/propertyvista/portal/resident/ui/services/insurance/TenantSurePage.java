@@ -65,19 +65,19 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
         mainPanel.setWidget(++row, 0, 2, new TenantSureLogo());
         mainPanel.setWidget(++row, 0, 2, makeGreetingPanel());
 
         mainPanel.setH3(++row, 0, 1, i18n.tr("Coverage"));
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 300).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        mainPanel.setWidget(++row, 0, inject(proto().certificate().insuranceCertificateNumber(), new FormWidgetDecoratorBuilder(300).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().certificate().inceptionDate(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().certificate().expiryDate(), new FormWidgetDecoratorBuilder(150).build()));
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().contentsCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, inject(proto().certificate().liabilityCoverage(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().contentsCoverage(), new FormWidgetDecoratorBuilder(150).build()));
 
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
         ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormat(currencyFormat);

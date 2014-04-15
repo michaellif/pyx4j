@@ -30,11 +30,11 @@ public class UnitAvailabilitySummaryGadgetMetadataForm extends CEntityForm<UnitA
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -43,7 +43,7 @@ public class UnitAvailabilitySummaryGadgetMetadataForm extends CEntityForm<UnitA
                 }
             }
         });
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
+        p.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
         get(proto().asOf()).setVisible(false);
         return p;
     }

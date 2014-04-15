@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -30,8 +29,6 @@ import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsDTO> {
 
-    private static final I18n i18n = I18n.get(AuditRecordForm.class);
-
     public AuditRecordForm(IForm<AuditRecordOperationsDTO> view) {
         super(AuditRecordOperationsDTO.class, view);
 
@@ -39,24 +36,23 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
 
         TwoColumnFlexFormPanel detailsTab = new TwoColumnFlexFormPanel();
         int row = -1;
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().userName())).build());
-        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().remoteAddr())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().userKey(), new CLabel<Key>())).build());
-        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().sessionId())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().event())).build());
-        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().when())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().namespace())).build());
-        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().worldTime())).build());
+        detailsTab.setWidget(++row, 0, inject(proto().userName(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(row, 1, inject(proto().remoteAddr(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(++row, 0, inject(proto().userKey(), new CLabel<Key>(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(row, 1, inject(proto().sessionId(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(++row, 0, inject(proto().event(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(row, 1, inject(proto().when(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(++row, 0, inject(proto().namespace(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(row, 1, inject(proto().worldTime(), new FormDecoratorBuilder().build()));
         detailsTab.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))), 10).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().application())).build());
-        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().targetEntity())).build());
-        detailsTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().details()), true).build());
+                inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FormDecoratorBuilder(10).build()));
+        detailsTab.setWidget(++row, 0, inject(proto().application(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(row, 1, inject(proto().targetEntity(), new FormDecoratorBuilder().build()));
+        detailsTab.setWidget(++row, 0, 2, inject(proto().details(), new FormDecoratorBuilder(true).build()));
 
         selectTab(addTab(detailsTab));
 
         get(proto().details()).asWidget().setStyleName(OperationsTheme.OperationsStyles.TextFieldPreformatted.name(), true);
 
     }
-
 }

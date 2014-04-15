@@ -95,7 +95,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             content.setWidget(0, 0, 2, inject(proto().events(), new CommunityEventFolder()));
@@ -126,8 +126,8 @@ public class CommunityEventVisorView extends AbstractVisorPane {
             public IFolderItemDecorator<CommunityEvent> createItemDecorator() {
                 return new VistaBoxFolderItemDecorator<CommunityEvent>(this) {
                     @Override
-                    public void setComponent(final CEntityFolderItem<CommunityEvent> folderItem) {
-                        super.setComponent(folderItem);
+                    public void init(final CEntityFolderItem<CommunityEvent> folderItem) {
+                        super.init(folderItem);
                         final EventEditor editor = (EventEditor) getContent();
                         editor.addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -190,14 +190,14 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().caption()), 20, true).build());
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().date()), 10, true).build());
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().time()), 10, true).build());
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 50, true).build());
+                    content.setWidget(++row, 0, 2, inject(proto().caption(), new FormDecoratorBuilder(20, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().date(), new FormDecoratorBuilder(10, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().time(), new FormDecoratorBuilder(10, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(50, true).build()));
                     content.setWidget(++row, 0, 2, createLowerToolbar());
                     content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 

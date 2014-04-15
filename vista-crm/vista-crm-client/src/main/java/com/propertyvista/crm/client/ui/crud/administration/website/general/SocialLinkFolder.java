@@ -142,14 +142,14 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CLabel<String> site = new CLabel<String>();
             site.setEditable(false);
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().socialSite(), site), 10, true).build());
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().siteUrl()), 35, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().socialSite(), site, new FormDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().siteUrl(), new FormDecoratorBuilder(35, true).build()));
             get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public FieldValidationError isValid() {

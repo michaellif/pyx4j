@@ -33,7 +33,7 @@ public class MaintenanceEditor extends CEntityForm<Maintenance> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
@@ -43,8 +43,8 @@ public class MaintenanceEditor extends CEntityForm<Maintenance> {
 
         main.setH1(++row, 0, 2, i18n.tr("Schedule"));
         ++row;
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().lastService()), 9).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextService()), 9).build());
+        main.setWidget(row, 0, inject(proto().lastService(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(row, 1, inject(proto().nextService(), new FormDecoratorBuilder(9).build()));
 
         validateMaintenanceDates();
         return main;

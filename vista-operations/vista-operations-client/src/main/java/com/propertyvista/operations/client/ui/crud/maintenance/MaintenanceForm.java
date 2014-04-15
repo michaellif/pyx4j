@@ -38,15 +38,15 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systemIdentification()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().startDate()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inEffect(), new CBooleanLabel())).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().startTime()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().gracePeriod()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().externalConnections()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().duration()), 10).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().message()), true).build());
+        content.setWidget(++row, 0, inject(proto().systemIdentification(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().startDate(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().inEffect(), new CBooleanLabel(), new FormDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().startTime(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().gracePeriod(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().externalConnections(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().duration(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, 2, inject(proto().message(), new FormDecoratorBuilder(true).build()));
 
         Collection<String> opt = new ArrayList<String>();
         for (VistaSystemIdentification i : EnumSet.allOf(VistaSystemIdentification.class)) {
@@ -58,12 +58,12 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
         TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel(i18n.tr("Vista Interfaces"));
         row = -1;
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableTenantSureMaintenance()), 5, true).build());
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableFundsTransferMaintenance()), 5, true).build());
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableCreditCardMaintenance()), 5, true).build());
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableCreditCardConvenienceFeeMaintenance()), 5, true).build());
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableInteracMaintenance()), 5, true).build());
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enableEquifaxMaintenance()), 5, true).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableTenantSureMaintenance(), new FormDecoratorBuilder(5, true).build()));
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableFundsTransferMaintenance(), new FormDecoratorBuilder(5, true).build()));
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableCreditCardMaintenance(), new FormDecoratorBuilder(5, true).build()));
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableCreditCardConvenienceFeeMaintenance(), new FormDecoratorBuilder(5, true).build()));
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableInteracMaintenance(), new FormDecoratorBuilder(5, true).build()));
+        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableEquifaxMaintenance(), new FormDecoratorBuilder(5, true).build()));
 
         addTab(tenantSureMaintenanceTab);
 

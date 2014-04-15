@@ -78,12 +78,12 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel()), true).build());
-            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxDailyAds()), 10, true).build());
+            content.setWidget(++row, 0, 2, inject(proto().vendor(), new CEnumLabel(), new FormDecoratorBuilder(true).build()));
+            content.setWidget(++row, 0, 2, inject(proto().maxDailyAds(), new FormDecoratorBuilder(10, true).build()));
 
             return content;
         }

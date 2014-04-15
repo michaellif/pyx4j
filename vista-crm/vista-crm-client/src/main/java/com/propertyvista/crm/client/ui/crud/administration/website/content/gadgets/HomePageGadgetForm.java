@@ -59,9 +59,9 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
         int row = 0;
         generalPanel.setH1(row++, 0, 2, i18n.tr("General"));
-        generalPanel.setWidget(row++, 0, 2, new FormDecoratorBuilder(inject(proto().name()), 10, true).build());
-        generalPanel.setWidget(row++, 0, 2, new FormDecoratorBuilder(inject(proto().area()), 10, true).build());
-        generalPanel.setWidget(row++, 0, 2, new FormDecoratorBuilder(inject(proto().status()), 10, true).build());
+        generalPanel.setWidget(row++, 0, 2, inject(proto().name(), new FormDecoratorBuilder(10, true).build()));
+        generalPanel.setWidget(row++, 0, 2, inject(proto().area(), new FormDecoratorBuilder(10, true).build()));
+        generalPanel.setWidget(row++, 0, 2, inject(proto().status(), new FormDecoratorBuilder(10, true).build()));
         generalPanel.setWidget(row++, 0, 2, mainPanel);
 
         selectTab(addTab(generalPanel));
@@ -97,7 +97,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     private CComponent<?> getCustomContentEditor() {
         CEntityForm<CustomGadgetContent> editor = new CEntityForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 2, proto().htmlContent().getMeta().getCaption());
@@ -111,7 +111,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     private CComponent<?> getNewsContentEditor() {
         CEntityForm<NewsGadgetContent> editor = new CEntityForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 2, proto().news().getMeta().getCaption());
@@ -125,7 +125,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     private CComponent<?> getTestimContentEditor() {
         CEntityForm<TestimonialsGadgetContent> editor = new CEntityForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 2, proto().testimonials().getMeta().getCaption());
@@ -139,7 +139,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     private CComponent<?> getPromoContentEditor() {
         CEntityForm<PromoGadgetContent> editor = new CEntityForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 2, i18n.tr("Promotions"));

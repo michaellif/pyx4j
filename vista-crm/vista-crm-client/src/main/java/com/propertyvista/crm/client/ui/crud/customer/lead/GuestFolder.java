@@ -78,14 +78,14 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel right = new BasicFlexFormPanel();
             int row = -1;
 
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 22).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, inject(proto().person().email(), new FormDecoratorBuilder(22).build()));
+            right.setWidget(++row, 0, inject(proto().person().homePhone(), new FormDecoratorBuilder(15).build()));
+            right.setWidget(++row, 0, inject(proto().person().mobilePhone(), new FormDecoratorBuilder(15).build()));
+            right.setWidget(++row, 0, inject(proto().person().workPhone(), new FormDecoratorBuilder(15).build()));
 
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
             main.setWidget(0, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"), true)));

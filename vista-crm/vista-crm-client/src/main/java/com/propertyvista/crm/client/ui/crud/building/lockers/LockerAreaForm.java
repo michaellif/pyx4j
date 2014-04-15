@@ -43,16 +43,16 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().levels()), 3).build());
+        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().levels(), new FormDecoratorBuilder(3).build()));
 
         row = -1;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().totalLockers()), 3).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().regularLockers()), 3).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().largeLockers()), 3).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().smallLockers()), 3).build());
+        main.setWidget(++row, 1, inject(proto().totalLockers(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 1, inject(proto().regularLockers(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 1, inject(proto().largeLockers(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 1, inject(proto().smallLockers(), new FormDecoratorBuilder(3).build()));
 
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
         return main;
     }

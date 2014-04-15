@@ -91,11 +91,11 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
             int row = -1;
 
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
+            mainPanel.setWidget(++row, 0, inject(proto().nextAutoPayDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
             mainPanel.setBR(++row, 0, 1);
             mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder(this)));
 
@@ -161,13 +161,13 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Tenant>()), 250).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).build());
+                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Tenant>(), new FormWidgetDecoratorBuilder(250).build()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>(), new FormWidgetDecoratorBuilder(250).build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder(100).build()));
 
                 content.setWidget(++row, 0, detailsViewAnchor);
 

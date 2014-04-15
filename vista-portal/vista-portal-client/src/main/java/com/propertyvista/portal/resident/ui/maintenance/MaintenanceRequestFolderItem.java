@@ -53,15 +53,15 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().subject(), new CLabel<String>()), 180).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 180).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority().level(), new CLabel<PriorityLevel>()), 180).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastUpdated(), new CLabel<String>()), 180).build());
+        content.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().status().phase(), new CLabel<StatusPhase>(), new FormWidgetDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().priority().level(), new CLabel<PriorityLevel>(), new FormWidgetDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().lastUpdated(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
 
         content.setBR(++row, 0, 1);
 

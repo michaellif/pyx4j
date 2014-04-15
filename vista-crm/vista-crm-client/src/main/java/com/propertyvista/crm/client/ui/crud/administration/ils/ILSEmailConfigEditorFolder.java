@@ -49,13 +49,13 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().frequency()), 10, true).build());
-            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().email()), 20, true).build());
-            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxDailyAds()), 10, true).build());
+            content.setWidget(++row, 0, 2, inject(proto().frequency(), new FormDecoratorBuilder(10, true).build()));
+            content.setWidget(++row, 0, 2, inject(proto().email(), new FormDecoratorBuilder(20, true).build()));
+            content.setWidget(++row, 0, 2, inject(proto().maxDailyAds(), new FormDecoratorBuilder(10, true).build()));
 
             return content;
         }

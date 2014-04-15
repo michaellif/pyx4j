@@ -64,7 +64,7 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             main.setWidget(0, 0, inject(proto().bill(), new BillForm(true)));

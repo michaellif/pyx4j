@@ -78,8 +78,8 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
     public BasicFlexFormPanel createGeneralForm() {
         BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().thread().created(), new CLabel<String>()), 20).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject()), 20).build());
+        mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FormDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FormDecoratorBuilder(20).build()));
         mainPanel.setWidget(++row, 0, inject(proto().thread().content(), messagesFolder));
         mainPanel.setBR(++row, 0, 1);
 
@@ -137,14 +137,14 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date(), new CLabel<String>()), 20).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().text()), 20).build());
+            content.setWidget(++row, 0, inject(proto().date(), new CLabel<String>(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().text(), new FormDecoratorBuilder(20).build()));
             content.setH1(++row, 0, 1, "From");
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sender(), new SenderLabel()), 20).build());
+            content.setWidget(++row, 0, inject(proto().sender(), new SenderLabel(), new FormDecoratorBuilder(20).build()));
             content.setH1(++row, 0, 1, "To");
             content.setWidget(++row, 0, inject(proto().to(), receiverSelector));
 

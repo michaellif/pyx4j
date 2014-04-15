@@ -54,7 +54,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = (BasicFlexFormPanel) super.createContent();
         int row = content.getRowCount() + 1;
         content.setBR(row, 0, 2);

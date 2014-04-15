@@ -113,13 +113,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setWidget(
                 ++row,
                 0,
-                new FormWidgetDecoratorBuilder(inject(proto().personalDisclaimerSignature())).customLabel("").labelPosition(LabelPosition.hidden)
-                        .contentWidth("250px").componentWidth("250px").build());
+                inject(proto().personalDisclaimerSignature(), new FormWidgetDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden)
+                        .contentWidth("250px").componentWidth("250px").build()));
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantName()), 200).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantPhone()), 200).build());
+        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantName(), new FormWidgetDecoratorBuilder(200).build()));
+        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantPhone(), new FormWidgetDecoratorBuilder(200).build()));
         panel.setWidget(++row, 0, 1, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
 
         personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);

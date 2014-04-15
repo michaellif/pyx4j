@@ -91,11 +91,11 @@ public class UnitStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().building(), new CEntityLabel<Building>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().moveIn()), 120).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bedrooms(), bedroomSelector), 120).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().bathrooms(), bathroomSelector), 120).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unitSelection().selectedUnit(), selectedUnit)).build());
+        panel.setWidget(++row, 0, inject(proto().unitSelection().building(), new CEntityLabel<Building>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().moveIn(), new FormWidgetDecoratorBuilder(120).build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().bedrooms(), bedroomSelector, new FormWidgetDecoratorBuilder(120).build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().bathrooms(), bathroomSelector, new FormWidgetDecoratorBuilder(120).build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().selectedUnit(), selectedUnit, new FormWidgetDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));
         availableUnitsHeader = panel.getWidget(row, 0);
@@ -258,17 +258,17 @@ public class UnitStep extends ApplicationWizardStep {
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().number())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().floor())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bedrooms())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dens())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bathrooms())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().available())).build());
-                mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price())).build());
+                mainPanel.setWidget(++row, 0, inject(proto().number(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().floor(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().bedrooms(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().dens(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().bathrooms(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().available(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().price(), new FormWidgetDecoratorBuilder().build()));
 
                 return mainPanel;
             }

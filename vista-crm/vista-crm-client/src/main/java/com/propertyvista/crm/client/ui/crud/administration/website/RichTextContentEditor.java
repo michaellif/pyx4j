@@ -49,24 +49,24 @@ public class RichTextContentEditor extends CEntityForm<HtmlContent> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         if (selectableLocale) {
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), 10, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(10, true).build()));
         } else {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), 10, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(10, true).build()));
         }
         if (isEditable()) {
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().html(), editor), 60, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().html(), editor, new FormDecoratorBuilder(60, true).build()));
         } else {
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().html(), new CLabel<String>(), new FormDecoratorBuilder(60, true).build()));
         }
 
         return main;

@@ -29,17 +29,17 @@ public class PaymentFeesForm<E extends AbstractPaymentFees> extends CEntityForm<
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ccVisaFee())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ccMasterCardFee())).build());
+        panel.setWidget(++row, 0, inject(proto().ccVisaFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().ccMasterCardFee(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().visaDebitFee())).build());
+        panel.setWidget(++row, 0, inject(proto().visaDebitFee(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().eChequeFee(), new CMoneyField())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().directBankingFee(), new CMoneyField())).build());
+        panel.setWidget(++row, 0, inject(proto().eChequeFee(), new CMoneyField(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().directBankingFee(), new CMoneyField(), new FormDecoratorBuilder().build()));
 
         return panel;
     }

@@ -13,53 +13,43 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
 public class FormWidgetDecorator extends WidgetDecorator {
 
-    protected FormWidgetDecorator(Builder builder) {
+    private final FormWidgetDecoratorBuilder builder;
+
+    protected FormWidgetDecorator(FormWidgetDecoratorBuilder builder) {
         super(builder);
+        this.builder = builder;
     }
 
-    public static class Builder extends WidgetDecorator.Builder {
-
-        public Builder(CComponent<?> component) {
-            super(component);
+    @Override
+    protected void onLoad() {
+        if (getLabelPosition() != LabelPosition.hidden) {
+            builder.labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
+            updateLabelPosition();
         }
+    };
 
-        @Override
-        public FormWidgetDecorator build() {
-            return new FormWidgetDecorator(this) {
-                @Override
-                protected void onLoad() {
-                    if (getLabelPosition() != LabelPosition.hidden) {
-                        labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
-                        updateLabelPosition();
-                    }
-                };
-
-                @Override
-                protected void updateViewable() {
-                    if (getLabelPosition() != LabelPosition.top) {
-                        if (getComnponent().isViewable()) {
-                            labelAlignment(Alignment.left);
-                            useLabelSemicolon(false);
-                        } else {
-                            labelAlignment(Alignment.right);
-                            useLabelSemicolon(true);
-                        }
-                    }
-                    updateCaption();
-                    updateLabelAlignment();
-                    super.updateViewable();
-                }
-
-            };
+    @Override
+    protected void updateViewable() {
+        if (getLabelPosition() != LabelPosition.top) {
+            if (getComponent().isViewable()) {
+                builder.labelAlignment(Alignment.left);
+                builder.useLabelSemicolon(false);
+            } else {
+                builder.labelAlignment(Alignment.right);
+                builder.useLabelSemicolon(true);
+            }
         }
+        updateCaption();
+        updateLabelAlignment();
+        super.updateViewable();
     }
 
     public void setLabelPosition(LabelPosition layout) {

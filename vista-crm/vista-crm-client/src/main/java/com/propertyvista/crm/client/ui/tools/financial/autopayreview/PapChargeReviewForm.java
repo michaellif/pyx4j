@@ -39,7 +39,7 @@ public final class PapChargeReviewForm extends CEntityForm<PapChargeReviewDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
         panel.setStylePrimaryName(Styles.AutoPayCharge.name());
 

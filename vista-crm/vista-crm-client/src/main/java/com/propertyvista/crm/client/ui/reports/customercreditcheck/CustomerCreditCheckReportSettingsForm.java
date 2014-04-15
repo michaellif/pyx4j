@@ -28,16 +28,15 @@ public class CustomerCreditCheckReportSettingsForm extends CEntityForm<CustomerC
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().minAmountChecked())).labelWidth(10).componentWidth(10).build());
-        panel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().maxAmountChecked())).labelWidth(10).componentWidth(10).build());
+        panel.setWidget(0, 0, inject(proto().minAmountChecked(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(1, 0, inject(proto().maxAmountChecked(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
 
-        panel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().minCreditCheckDate())).labelWidth(10).componentWidth(10).build());
-        panel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().maxCreditCheckDate())).labelWidth(10).componentWidth(10).build());
+        panel.setWidget(0, 1, inject(proto().minCreditCheckDate(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(1, 1, inject(proto().maxCreditCheckDate(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
 
         return panel;
     }
-
 }

@@ -502,7 +502,7 @@ public class TableWidgetDecorator extends FlowPanel implements IDecorator<CCompo
     }
 
     @Override
-    public void setComponent(CComponent<?> component) {
+    public void init(CComponent<?> component) {
         this.component = component;
 
     }

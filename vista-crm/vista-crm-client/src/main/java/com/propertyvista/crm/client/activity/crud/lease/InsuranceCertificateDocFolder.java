@@ -54,17 +54,17 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
             content.setWidget(
                     ++row,
                     0,
-                    new FormDecoratorBuilder(inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanCrmUploadService.class),
-                            new VistaFileURLBuilder(InsuranceCertificateScan.class))), 250).build());
+                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanCrmUploadService.class), new VistaFileURLBuilder(
+                            InsuranceCertificateScan.class)), new FormDecoratorBuilder(250).build()));
 
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).componentWidth("300px").build());
+            content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder().componentWidth("300px").build()));
 
             return content;
         }

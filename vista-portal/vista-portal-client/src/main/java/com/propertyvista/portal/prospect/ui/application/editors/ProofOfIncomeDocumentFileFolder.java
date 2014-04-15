@@ -53,15 +53,15 @@ public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfInco
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfIncomeDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfIncomeDocumentFile.class));
 
-            main.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description())).build());
+            main.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FormWidgetDecoratorBuilder().customLabel("").labelWidth("0px").build()));
+            main.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder().build()));
 
             return main;
         }

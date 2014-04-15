@@ -28,22 +28,22 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().pmc().name())).customLabel("PMC:").build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentReferenceNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().customerName())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().receivedDate())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FormDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().paymentReferenceNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().customerName(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().receivedDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().operationsNotes())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().operationsNotes(), new FormDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, "Trace");
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().collectionDate())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().locationCode())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().sourceCode())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().traceNumber())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().trace().collectionDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().locationCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().sourceCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().traceNumber(), new FormDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

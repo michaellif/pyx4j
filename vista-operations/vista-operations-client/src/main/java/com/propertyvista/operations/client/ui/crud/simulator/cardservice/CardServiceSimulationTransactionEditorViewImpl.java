@@ -35,21 +35,21 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel("General Transaction Data");
             int row = -1;
 
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), // 
-                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)), 18).build());
+            tabPanel.setWidget(++row, 0, inject(proto().card(), // 
+                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class), new FormDecoratorBuilder(18).build()));
 
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchant(), //
-                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class)), 18).build());
+            tabPanel.setWidget(++row, 0, inject(proto().merchant(), //
+                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class), new FormDecoratorBuilder(18).build()));
 
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionType())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledSimulatedResponce())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().convenienceFee())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reference())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().authorizationNumber())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().voided())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionDate())).build());
+            tabPanel.setWidget(++row, 0, inject(proto().transactionType(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().scheduledSimulatedResponce(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().amount(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().convenienceFee(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().reference(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().responseCode(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().authorizationNumber(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().voided(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().transactionDate(), new FormDecoratorBuilder().build()));
 
             selectTab(addTab(tabPanel));
         }

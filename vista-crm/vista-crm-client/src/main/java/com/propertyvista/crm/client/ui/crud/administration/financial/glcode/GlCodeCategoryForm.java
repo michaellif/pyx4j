@@ -23,16 +23,14 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
 
-    private static final I18n i18n = I18n.get(GlCodeCategoryForm.class);
-
     public GlCodeCategoryForm(IForm<GlCodeCategory> view) {
         super(GlCodeCategory.class, view);
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
 
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().categoryId()), 7).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
+        content.setWidget(row++, 0, inject(proto().categoryId(), new FormDecoratorBuilder(7).build()));
+        content.setWidget(row++, 0, inject(proto().description(), new FormDecoratorBuilder(25).build()));
 
         content.setH3(row++, 0, 2, proto().glCodes().getMeta().getCaption());
         content.setWidget(row++, 0, 2, inject(proto().glCodes(), new GlCodeFolder(isEditable())));

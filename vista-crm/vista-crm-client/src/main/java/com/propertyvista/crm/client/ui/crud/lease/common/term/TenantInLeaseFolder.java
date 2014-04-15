@@ -206,11 +206,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int leftRow = -1;
-            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
+            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().participantId(), new FormDecoratorBuilder(7).build()));
             main.setWidget(++leftRow, 0, 2,
                     inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class, false) {
                         @Override
@@ -218,25 +218,25 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                             return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                         }
                     }));
-            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
-            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
+            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().customer().person().sex(), new FormDecoratorBuilder(7).build()));
+            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().customer().person().birthDate(), new FormDecoratorBuilder(9).build()));
 
-            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().role()), 15).build());
-            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
+            main.setWidget(++leftRow, 0, inject(proto().role(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++leftRow, 0, inject(proto().relationship(), new FormDecoratorBuilder(15).build()));
             main.setWidget(
                     ++leftRow,
                     0,
-                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
-                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))), 9)
-                            .build());
-            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
+                    inject(proto().effectiveScreening(),
+                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
+                            new FormDecoratorBuilder(9).build()));
+            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().customer().person().email(), new FormDecoratorBuilder(25).build()));
 
             int rightRow = -1;
-            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().yardiApplicantId()), 10).build());
+            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().yardiApplicantId(), new FormDecoratorBuilder(10).build()));
             main.setBR(++rightRow, 1, 1);
-            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
-            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
-            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
+            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().customer().person().homePhone(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().customer().person().mobilePhone(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().customer().person().workPhone(), new FormDecoratorBuilder(15).build()));
 
             preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
             preauthorizedPaymentsPanel.setWidget(1, 0, 2, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
@@ -376,16 +376,16 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+                content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(9).build()));
+                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod()), 35).build());
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new FormDecoratorBuilder(35).build()));
 
                 content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 

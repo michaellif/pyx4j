@@ -48,11 +48,14 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
-        mainPanel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
+        mainPanel.setWidget(
+                ++row,
+                0,
+                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormWidgetDecoratorBuilder(250).labelAlignment(Alignment.left)
+                        .build()));
 
         mainPanel.setHR(++row, 0, 1);
 

@@ -51,12 +51,12 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, 
 
         form = new CEntityForm<PasswordEntryDTO>(PasswordEntryDTO.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
-                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().password())).componentWidth(10).build());
+                main.setWidget(++row, 0, inject(proto().password(), new WidgetDecorator.Builder().componentWidth(10).build()));
                 return main;
             }
         };

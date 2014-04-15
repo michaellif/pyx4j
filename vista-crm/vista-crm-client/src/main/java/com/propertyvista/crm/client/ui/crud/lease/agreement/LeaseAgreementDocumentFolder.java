@@ -112,7 +112,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             panel.setWidth("100%");
 
@@ -121,28 +121,39 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                     ++row,
                     0,
                     2,
-                    new FormDecoratorBuilder(inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class),
-                            new VistaFileURLBuilder(LeaseTermAgreementDocument.class)))).labelPosition(LabelPosition.top)
-                            .customLabel(i18n.tr("Agreement Document File")).componentWidth("350px").build());
+                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class), new VistaFileURLBuilder(
+                            LeaseTermAgreementDocument.class)),
+                            new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Agreement Document File")).componentWidth("350px")
+                                    .build()));
 
             if (viewOnly) {
-                panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer()))
-                        .labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants")).componentWidth("350px").build());
+                panel.setWidget(
+                        ++row,
+                        0,
+                        2,
+                        inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer(),
+                                new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants")).componentWidth("350px")
+                                        .build()));
             } else {
                 panel.setWidget(
                         ++row,
                         0,
                         2,
-                        new FormDecoratorBuilder(inject(proto().signedParticipants(), signedParticipantsListBox = new CListBox<LeaseTermParticipant<?>>(
-                                SelectionMode.SINGLE_PANEL) {
+                        inject(proto().signedParticipants(), signedParticipantsListBox = new CListBox<LeaseTermParticipant<?>>(SelectionMode.SINGLE_PANEL) {
                             @Override
                             public String getItemName(LeaseTermParticipant<?> pariticipant) {
                                 return formatParticipant(pariticipant);
                             }
-                        })).labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participant")).componentWidth("350px").build());
+                        }, new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participant")).componentWidth("350px")
+                                .build()));
             }
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signedEmployeeUploader().name())).labelPosition(LabelPosition.top)
-                    .customLabel(i18n.tr("Signed Employee / Uploader")).componentWidth("350px").build());
+            panel.setWidget(
+                    ++row,
+                    0,
+                    2,
+                    inject(proto().signedEmployeeUploader().name(),
+                            new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Employee / Uploader"))
+                                    .componentWidth("350px").build()));
             get(proto().signedEmployeeUploader().name()).setViewable(true);
             return panel;
         }

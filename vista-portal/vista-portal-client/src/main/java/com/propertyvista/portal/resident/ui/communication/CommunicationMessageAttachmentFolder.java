@@ -52,18 +52,18 @@ public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<Commun
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
             content.setWidget(
                     ++row,
                     0,
-                    new FormWidgetDecoratorBuilder(inject(proto().file(),
+                    inject(proto().file(),
                             new CFile(GWT.<CommunicationMessageAttachmentUploadPortalService> create(CommunicationMessageAttachmentUploadPortalService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class))), 250).build());
+                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), new FormWidgetDecoratorBuilder(250).build()));
 
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).build());
+            content.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder(200).build()));
 
             return content;
         }

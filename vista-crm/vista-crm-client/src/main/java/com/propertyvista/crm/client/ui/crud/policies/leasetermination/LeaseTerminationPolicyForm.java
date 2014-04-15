@@ -37,7 +37,7 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
         TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().periodOfNotice()), 5).build());
+        general.setWidget(++row, 0, inject(proto().periodOfNotice(), new FormDecoratorBuilder(5).build()));
 
         return Arrays.asList(general);
     }

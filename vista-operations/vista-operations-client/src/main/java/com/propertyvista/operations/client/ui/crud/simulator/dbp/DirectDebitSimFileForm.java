@@ -56,10 +56,10 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         
-        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().status()), true).build());
-        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().serialNumber()), true).build());
-        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().creatationDate()), true).build());
-        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sentDate()), true).build());
+        formPanel.setWidget(++row, 0, 2, inject(proto().status(),new FormDecoratorBuilder( true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().serialNumber(), new FormDecoratorBuilder(true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().creatationDate(), new FormDecoratorBuilder( true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().sentDate(), new FormDecoratorBuilder( true).build())); 
         formPanel.setH1(++row, 0, 2, "Direct Debit Records");
         formPanel.setWidget(++row, 0, 2, inject(proto().records(), new DirectDebitSimRecordTableFolder()));
         

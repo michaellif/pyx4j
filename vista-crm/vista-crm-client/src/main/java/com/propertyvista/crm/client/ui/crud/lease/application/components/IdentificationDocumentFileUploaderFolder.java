@@ -52,7 +52,7 @@ public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<Ide
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 

@@ -66,7 +66,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     }
 
     @Override
-    public final IsWidget createContent() {
+    protected final IsWidget createContent() {
         FlowPanel mainPanel = new FlowPanel();
 
         mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

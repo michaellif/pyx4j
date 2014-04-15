@@ -72,13 +72,13 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().assetType()), 15).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percent()), 5).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().assetValue()), 10).build());
+            main.setWidget(++row, 0, inject(proto().assetType(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().percent(), new FormDecoratorBuilder(5).build()));
+            main.setWidget(++row, 0, inject(proto().assetValue(), new FormDecoratorBuilder(10).build()));
             main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
 
             return main;

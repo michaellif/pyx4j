@@ -45,8 +45,8 @@ public class CommunicationMessageWizard extends CPortalEntityWizard<Communicatio
         int row = -1;
 
         content.setH1(++row, 0, 1, "Details");
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().subject()), 250).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().text()), 250).build());
+        content.setWidget(++row, 0, inject(proto().subject(), new FormWidgetDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().text(), new FormWidgetDecoratorBuilder(250).build()));
         content.setBR(++row, 0, 1);
         content.setH1(++row, 0, 1, "Attachments");
         content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));

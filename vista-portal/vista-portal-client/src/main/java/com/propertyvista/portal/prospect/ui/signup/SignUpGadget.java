@@ -150,7 +150,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
             flexPanel.getColumnFormatter().setWidth(0, "50px");
             flexPanel.getColumnFormatter().setWidth(1, "300px");
@@ -177,28 +177,29 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
             flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().firstName())).build());
+            flexPanel.setWidget(++row, 0, inject(proto().firstName(), new LoginWidgetDecoratorBuilder().build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().middleName())).build());
+            flexPanel.setWidget(++row, 0, inject(proto().middleName(), new LoginWidgetDecoratorBuilder().build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().lastName())).build());
+            flexPanel.setWidget(++row, 0, inject(proto().lastName(), new LoginWidgetDecoratorBuilder().build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email());
+            CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email(), new LoginWidgetDecoratorBuilder().build());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
-            Widget widget = new LoginWidgetDecoratorBuilder(emailField).build();
-            flexPanel.setWidget(++row, 0, widget);
+            flexPanel.setWidget(++row, 0, emailField);
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-            flexPanel.setWidget(++row, 0,
-                    new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).componentWidth("180px")
-                            .assistantWidget(passwordStrengthWidget).build());
+            flexPanel.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().password(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Create a Password")).componentWidth("180px")
+                            .assistantWidget(passwordStrengthWidget).build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).componentWidth("180px").build());
+            flexPanel.setWidget(++row, 0, inject(proto().passwordConfirm(), new LoginWidgetDecoratorBuilder().componentWidth("180px").build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {

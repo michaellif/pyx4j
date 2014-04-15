@@ -31,31 +31,31 @@ public class FundsReconciliationDebitRecordForm extends OperationsEntityForm<Fun
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationSummary().merchantAccount().pmc().name())).customLabel("PMC:")
-                .build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationSummary().reconciliationFile())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationSummary().reconciliationFile().fundsTransferType())).build());
+        panel.setWidget(++row, 0, 1,
+                inject(proto().reconciliationSummary().merchantAccount().pmc().name(), new FormDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationSummary().reconciliationFile(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationSummary().reconciliationFile().fundsTransferType(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentDate())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().clientId())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().transactionId())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationStatus())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reasonCode())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reasonText())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fee())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().paymentDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().clientId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().transactionId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationStatus(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reasonCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reasonText(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().fee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, i18n.tr("Funds Transfer Record"));
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().bankId())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().branchTransitNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().accountNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().transactionId())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().acknowledgmentStatusCode())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().processed())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecord().processingStatus())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().bankId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().branchTransitNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().accountNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().transactionId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().acknowledgmentStatusCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().processed(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().debitRecord().processingStatus(), new FormDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

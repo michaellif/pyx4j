@@ -66,7 +66,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
         panel.add(createStatsPanel());
         panel.add(headerPanel = createHeaderPanel());

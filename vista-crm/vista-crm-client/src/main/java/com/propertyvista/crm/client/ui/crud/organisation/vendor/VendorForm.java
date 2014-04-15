@@ -37,9 +37,9 @@ public class VendorForm extends CrmEntityForm<Vendor> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), true).componentWidth("15em").build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().type()), true).componentWidth("15em").build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().website()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().name(), new FormDecoratorBuilder(true).componentWidth("15em").build()));
+        content.setWidget(++row, 0, 2, inject(proto().type(), new FormDecoratorBuilder(true).componentWidth("15em").build()));
+        content.setWidget(++row, 0, 2, inject(proto().website(), new FormDecoratorBuilder(true).build()));
         content.setH1(++row, 0, 2, i18n.tr("Phone Numbers"));
         content.setWidget(++row, 0, 2, inject(proto().phones(), new CompanyPhoneFolder(isEditable()) {
             @Override

@@ -65,12 +65,12 @@ public class CounterGadget extends CounterGadgetInstanceBase<CounterGadgetDemoDT
         }, new ZoomableViewForm<CounterGadgetDemoDTO>(CounterGadgetDemoDTO.class) {
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 FlowPanel content = new FlowPanel();
-                content.add(new FormDecoratorBuilder(inject(proto().counterValue())).build());
-                content.add(new FormDecoratorBuilder(inject(proto().strValue())).build());
-                content.add(new FormDecoratorBuilder(inject(proto().doubleValue())).build());
-                content.add(new FormDecoratorBuilder(inject(proto().moneyValue())).build());
+                content.add(inject(proto().counterValue(), new FormDecoratorBuilder().build()));
+                content.add(inject(proto().strValue(), new FormDecoratorBuilder().build()));
+                content.add(inject(proto().doubleValue(), new FormDecoratorBuilder().build()));
+                content.add(inject(proto().moneyValue(), new FormDecoratorBuilder().build()));
                 IZoomableRowEditorFactory<CounterGadgetDemoSubDataDTO> factory = new IZoomableRowEditorFactory<CounterGadgetDemoSubDataDTO>() {
                     @Override
                     public ZoomableViewEntityRowEditor<CounterGadgetDemoSubDataDTO> createEditor(ZoomableViewFolder<CounterGadgetDemoSubDataDTO> parent,

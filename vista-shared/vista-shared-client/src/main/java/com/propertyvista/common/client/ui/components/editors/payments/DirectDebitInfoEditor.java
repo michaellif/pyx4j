@@ -30,13 +30,13 @@ public class DirectDebitInfoEditor extends CEntityForm<DirectDebitInfo> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().traceNumber()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locationCode()), 20).build());
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().traceNumber(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().locationCode(), new FormDecoratorBuilder(20).build()));
 
         return panel;
     }

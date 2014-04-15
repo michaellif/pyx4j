@@ -37,13 +37,13 @@ public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChanges
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
 
         FlowPanel leftSidePanel = new FlowPanel();
 
-        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().leasesOnNoticeOnly())).build());
-        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
+        leftSidePanel.add(inject(proto().leasesOnNoticeOnly(), new FormDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().filterByExpectedMoveOut(), new FormDecoratorBuilder().build()));
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -51,11 +51,11 @@ public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChanges
                 get(proto().maximum()).setVisible(event.getValue() == true);
             }
         });
-        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().minimum())).build());
-        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().maximum())).build());
+        leftSidePanel.add(inject(proto().minimum(), new FormDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().maximum(), new FormDecoratorBuilder().build()));
 
         FlowPanel buildingFilterPanel = new FlowPanel();
-        buildingFilterPanel.add(new FormDecoratorBuilder(inject(proto().filterByBuildings())).build());
+        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FormDecoratorBuilder().build()));
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

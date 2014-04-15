@@ -52,11 +52,11 @@ public class N4GenerationQueryDialog extends OkCancelDialog {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel panel = new BasicFlexFormPanel();
-            panel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().agent())).componentWidth("200px").build());
-            panel.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().noticeDate())).componentWidth("150px").build());
-            panel.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().deliveryMethod())).componentWidth("150px").build());
+            panel.setWidget(0, 0, 2, inject(proto().agent(), new FormDecoratorBuilder().componentWidth("200px").build()));
+            panel.setWidget(1, 0, 2, inject(proto().noticeDate(), new FormDecoratorBuilder().componentWidth("150px").build()));
+            panel.setWidget(1, 0, 2, inject(proto().deliveryMethod(), new FormDecoratorBuilder().componentWidth("150px").build()));
             return panel;
         }
 

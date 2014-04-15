@@ -50,34 +50,34 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
             int row = -1;
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().clientId()), 10).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionId()), 10).build());
+            content.setWidget(++row, 0, inject(proto().amount(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, inject(proto().clientId(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, inject(proto().transactionId(), new FormDecoratorBuilder(10).build()));
 
             content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+            content.setWidget(++row, 0, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder(10).build()));
 
             content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reconciliationStatus()), 10).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reasonCode()), 10).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fee()), 10).build());
+            content.setWidget(++row, 0, inject(proto().reconciliationStatus(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, inject(proto().reasonCode(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, inject(proto().fee(), new FormDecoratorBuilder(10).build()));
 
             row = -1;
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().bankId()), 10).build());
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().accountNumber()), 10).build());
+            content.setWidget(++row, 1, inject(proto().bankId(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 1, inject(proto().accountNumber(), new FormDecoratorBuilder(10).build()));
             ++row;
             ++row;
             ++row;
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().paymentDate()), 10).build());
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().reasonText()), 10).build());
+            content.setWidget(++row, 1, inject(proto().paymentDate(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 1, inject(proto().reasonText(), new FormDecoratorBuilder(10).build()));
 
             get(proto().acknowledgmentStatusCode()).addValueChangeHandler(new ValueChangeHandler<String>() {
 

@@ -38,14 +38,14 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().repeatType()), 12).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextFireTime()), 12).build());
+        content.setWidget(++row, 0, inject(proto().repeatType(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(row, 1, inject(proto().nextFireTime(), new FormDecoratorBuilder(12).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().repeatEvery()), 12).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().time()), 12).build());
+        content.setWidget(++row, 0, inject(proto().repeatEvery(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(++row, 0, inject(proto().time(), new FormDecoratorBuilder(12).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().startsOn()), 12).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().endsOn()), 12).build());
+        content.setWidget(++row, 0, inject(proto().startsOn(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(row, 1, inject(proto().endsOn(), new FormDecoratorBuilder(12).build()));
 
         // fill ScheduleType types:
         if (get(proto().repeatType()) instanceof CComboBox) {

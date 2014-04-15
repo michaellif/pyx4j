@@ -39,17 +39,17 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date()), 9).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().time()), 7).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address()), 25).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 9).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().closeReason()), 25).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes()), 25).build());
+        main.setWidget(++row, 0, inject(proto().date(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().time(), new FormDecoratorBuilder(7).build()));
+        main.setWidget(++row, 0, inject(proto().address(), new FormDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().closeReason(), new FormDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().notes(), new FormDecoratorBuilder(25).build()));
 
         row = -1;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().agent()), 20).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().phone()), 20).customLabel(i18n.tr("Agent Phone")).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().email()), 20).customLabel(i18n.tr("Agent Email")).build());
+        main.setWidget(++row, 1, inject(proto().agent(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row, 1, inject(proto().phone(), new FormDecoratorBuilder(20).customLabel(i18n.tr("Agent Phone")).build()));
+        main.setWidget(++row, 1, inject(proto().email(), new FormDecoratorBuilder(20).customLabel(i18n.tr("Agent Email")).build()));
 
         // tweak UI:
         get(proto().status()).setEditable(false);

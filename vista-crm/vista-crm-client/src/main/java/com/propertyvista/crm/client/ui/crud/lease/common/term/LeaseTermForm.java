@@ -127,7 +127,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         int leftRow = -1; // first column:
 
         flexPanel.setH1(++leftRow, 0, 2, i18n.tr("General"));
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().building(), new CEntitySelectorHyperlink<Building>() {
+        flexPanel.setWidget(++leftRow, 0, inject(proto().building(), new CEntitySelectorHyperlink<Building>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
@@ -184,10 +184,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 };
             }
-        }), 25).build());
+        }, new FormDecoratorBuilder(25).build()));
         get(proto().building()).setMandatory(true);
 
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+        flexPanel.setWidget(++leftRow, 0, inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
@@ -237,25 +237,25 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 };
             }
-        }), 25).build());
+        }, new FormDecoratorBuilder(25).build()));
 
         flexPanel.setBR(++leftRow, 0, 1);
         if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().type()), 15).customLabel(i18n.tr("Term Type")).build());
+            flexPanel.setWidget(++leftRow, 0, inject(proto().type(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
         } else {
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Type")).build());
+            flexPanel.setWidget(++leftRow, 0, inject(proto().type(), new CEnumLabel(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
         }
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Status")).build());
+        flexPanel.setWidget(++leftRow, 0, inject(proto().status(), new CEnumLabel(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Term Status")).build()));
 
         int rightRow = 0;
 
         if (isEditable()) {
             FlowPanel idHolder = new FlowPanel();
-            idHolder.add(new FormDecoratorBuilder(inject(proto().lease().leaseId()), 15).build());
-            idHolder.add(new FormDecoratorBuilder(inject(proto().lease().leaseApplication().applicationId()), 15).build());
+            idHolder.add(inject(proto().lease().leaseId(), new FormDecoratorBuilder(15).build()));
+            idHolder.add(inject(proto().lease().leaseApplication().applicationId(), new FormDecoratorBuilder(15).build()));
             flexPanel.setWidget(++rightRow, 1, idHolder);
         } else {
-            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
+            flexPanel.setWidget(++rightRow, 1, inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
                 @Override
                 public void setNavigationCommand(Command command) {
                     super.setNavigationCommand(new Command() {
@@ -286,30 +286,30 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                         }
                     });
                 }
-            }), 15).build());
+            }, new FormDecoratorBuilder(15).build()));
         }
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().lease().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Type"))
-                .build());
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().lease().status(), new CEnumLabel()), 15)
-                .customLabel(i18n.tr("Lease Status")).build());
         flexPanel.setWidget(++rightRow, 1,
-                new FormDecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Completion")).build());
+                inject(proto().lease().type(), new CEnumLabel(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Lease Type")).build()));
+        flexPanel.setWidget(++rightRow, 1,
+                inject(proto().lease().status(), new CEnumLabel(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Lease Status")).build()));
+        flexPanel.setWidget(++rightRow, 1,
+                inject(proto().lease().completion(), new CEnumLabel(), new FormDecoratorBuilder(15).customLabel(i18n.tr("Lease Completion")).build()));
 
         // Lease dates: ---------------------------------------------------------------------------------------------------------
         TwoColumnFlexFormPanel datesPanel = new TwoColumnFlexFormPanel();
 
         // first column:
-        datesPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().termFrom()), 9).build());
-        datesPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().termTo()), 9).build());
+        datesPanel.setWidget(0, 0, inject(proto().termFrom(), new FormDecoratorBuilder(9).build()));
+        datesPanel.setWidget(1, 0, inject(proto().termTo(), new FormDecoratorBuilder(9).build()));
 
         // second column:
-        datesPanel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
+        datesPanel.setWidget(1, 1, inject(proto().creationDate(), new FormDecoratorBuilder(9).build()));
 
         leftRow = rightRow = Math.max(leftRow, rightRow);
 
         flexPanel.setBR(++leftRow, 0, 2);
         flexPanel.setWidget(++leftRow, 0, 2, datesPanel);
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 9).build());
+        flexPanel.setWidget(++leftRow, 0, inject(proto().carryforwardBalance(), new FormDecoratorBuilder(9).build()));
 
         LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
 

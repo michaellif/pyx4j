@@ -52,12 +52,12 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
             int row = -1;
 
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().event()), 10).build());
-            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().user())).build());
+            content.setWidget(++row, 0, inject(proto().event(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(row, 1, inject(proto().user(), new FormDecoratorBuilder().build()));
 
             return content;
         }

@@ -28,12 +28,12 @@ public class CollectionsSummaryForm extends ZoomableViewForm<CollectionsGadgetDa
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leasesPaidThisMonth())).componentWidth(10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fundsCollectedThisMonth())).componentWidth(10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fundsInProcessing())).componentWidth(10).build());
+        content.setWidget(++row, 0, inject(proto().leasesPaidThisMonth(), new FormDecoratorBuilder().componentWidth(10).build()));
+        content.setWidget(++row, 0, inject(proto().fundsCollectedThisMonth(), new FormDecoratorBuilder().componentWidth(10).build()));
+        content.setWidget(++row, 0, inject(proto().fundsInProcessing(), new FormDecoratorBuilder().componentWidth(10).build()));
         return content;
     }
 

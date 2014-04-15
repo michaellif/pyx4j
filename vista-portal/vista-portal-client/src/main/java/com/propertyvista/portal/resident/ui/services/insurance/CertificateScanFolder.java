@@ -54,15 +54,15 @@ public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateS
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanResidentUploadService.class), new VistaFileURLBuilder(
                     InsuranceCertificateScan.class));
 
-            content.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().file(), cfile)).customLabel("").labelWidth("0px").build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description())).build());
+            content.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FormWidgetDecoratorBuilder().customLabel("").labelWidth("0px").build()));
+            content.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder().build()));
 
             return content;
         }

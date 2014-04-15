@@ -60,14 +60,14 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
+            mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().email(), new FormWidgetDecoratorBuilder().build()));
 
             return mainPanel;
         }

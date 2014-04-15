@@ -62,7 +62,7 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
             main.setWidth("100%");
 

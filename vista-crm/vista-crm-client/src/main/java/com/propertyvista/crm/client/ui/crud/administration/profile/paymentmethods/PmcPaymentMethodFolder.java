@@ -58,7 +58,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             IsWidget content = super.createContent();
 
             // tune-up:
@@ -102,7 +102,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
             return new EcheckInfoEditor() {
                 @SuppressWarnings("rawtypes")
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
                     if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {

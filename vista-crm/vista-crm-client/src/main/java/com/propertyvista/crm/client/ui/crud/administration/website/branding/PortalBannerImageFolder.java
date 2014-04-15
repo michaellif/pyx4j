@@ -121,14 +121,14 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), true).build());
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().image().file(), imageHolder), true).build());
+            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().image().file(), imageHolder, new FormDecoratorBuilder(true).build()));
 
             return main;
         }

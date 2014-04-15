@@ -110,16 +110,16 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().created()), 10).build());
+        content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().created(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 15).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().namespace()), 15).build());
+        content.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(row, 1, inject(proto().namespace(), new FormDecoratorBuilder(15).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().dnsName()), 15).build());
+        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(row, 1, inject(proto().dnsName(), new FormDecoratorBuilder(15).build()));
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().vistaCrmUrl(), new CLabel<String>()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().vistaCrmUrl(), new CLabel<String>(), new FormDecoratorBuilder(true).build()));
         ((CField) get(proto().vistaCrmUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -136,7 +136,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().residentPortalUrl(), new CLabel<String>()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().residentPortalUrl(), new CLabel<String>(), new FormDecoratorBuilder(true).build()));
         ((CField) get(proto().residentPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -153,7 +153,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().prospectPortalUrl(), new CLabel<String>()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().prospectPortalUrl(), new CLabel<String>(), new FormDecoratorBuilder(true).build()));
         ((CField) get(proto().prospectPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -171,14 +171,14 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
+        content.setWidget(++row, 0, inject(proto().features().countryOfOperation(), new FormDecoratorBuilder(25).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
+        content.setWidget(++row, 0, inject(proto().features().onlineApplication(), new FormDecoratorBuilder(5).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
+        content.setWidget(++row, 0, inject(proto().features().yardiIntegration(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().features().yardiMaintenance(), new FormDecoratorBuilder(5).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().tenantSureIntegration()), 5).build());
+        content.setWidget(++row, 0, inject(proto().features().tenantSureIntegration(), new FormDecoratorBuilder(5).build()));
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
@@ -210,26 +210,26 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, 2, inject(proto().equifaxFee(), new EquifaxFeeQuoteForm(false)));
 
         content.setH1(++row, 0, 2, i18n.tr("Equifax"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().status())).build());
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().status(), new FormDecoratorBuilder().build()));
 
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().equifaxInfo().equifaxSignUpFee())).build());
+        content.setWidget(row, 1, inject(proto().equifaxInfo().equifaxSignUpFee(), new FormDecoratorBuilder().build()));
         get(proto().equifaxInfo().equifaxSignUpFee()).setViewable(true);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().reportType())).build());
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().reportType(), new FormDecoratorBuilder().build()));
 
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee())).build());
+        content.setWidget(row, 1, inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee(), new FormDecoratorBuilder().build()));
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
         CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         memberNumber.setFormat(new PasswordIdentityFormat(memberNumber));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().memberNumber(), memberNumber)).build());
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().memberNumber(), memberNumber, new FormDecoratorBuilder().build()));
 
         CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         securityCode.setFormat(new PasswordIdentityFormat(securityCode));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().securityCode(), securityCode)).build());
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().securityCode(), securityCode, new FormDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerCode())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerReferenceNumber())).build());
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().customerCode(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().customerReferenceNumber(), new FormDecoratorBuilder().build()));
 
         approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
         approvalLink.addClickHandler(new ClickHandler() {
@@ -243,8 +243,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         content.setH1(++row, 0, 2, i18n.tr("Equifax Usage Limits"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().limit().dailyReports())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().limit().dailyRequests())).build());
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().limit().dailyReports(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().equifaxInfo().limit().dailyRequests(), new FormDecoratorBuilder().build()));
 
         return content;
     }

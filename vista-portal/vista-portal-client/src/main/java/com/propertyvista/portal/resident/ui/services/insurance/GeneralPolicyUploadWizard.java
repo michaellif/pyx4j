@@ -58,12 +58,12 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().insuranceProvider(), new FormWidgetDecoratorBuilder(150).build()));
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().insuranceCertificateNumber(), new FormWidgetDecoratorBuilder(150).build()));
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().liabilityCoverage(), new FormWidgetDecoratorBuilder(150).build()));
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().inceptionDate(), new FormWidgetDecoratorBuilder(150).build()));
 
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().expiryDate(), new FormWidgetDecoratorBuilder(150).build()));
 
         contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate Documents");
         contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));

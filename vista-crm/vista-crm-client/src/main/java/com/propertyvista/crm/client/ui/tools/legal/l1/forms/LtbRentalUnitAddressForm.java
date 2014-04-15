@@ -28,17 +28,17 @@ public class LtbRentalUnitAddressForm extends CEntityForm<LtbRentalUnitAddress> 
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetNumber())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetName())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetType())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().direction())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().municipality())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().postalCode())).build());
+        panel.setWidget(++row, 0, inject(proto().streetNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().streetName(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().streetType(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().direction(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().municipality(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().postalCode(), new FormDecoratorBuilder().build()));
 
         return panel;
     }

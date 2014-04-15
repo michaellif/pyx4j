@@ -101,11 +101,11 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().productCode()), true).build());
+                content.setWidget(++row, 0, 2, inject(proto().productCode(), new FormDecoratorBuilder(true).build()));
                 get(proto().productCode()).setViewable(true);
 
                 content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());

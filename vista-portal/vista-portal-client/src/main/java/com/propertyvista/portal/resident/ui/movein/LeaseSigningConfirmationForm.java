@@ -38,15 +38,15 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        contentPanel.setH4(
-                ++row,
-                0,
-                1,
-                i18n.tr("Thank you. We have received your signed Lease Agreement. You can obtain a draft copy of the agreement by clicking 'Download Agreement' button here."));
+        contentPanel
+                .setH4(++row,
+                        0,
+                        1,
+                        i18n.tr("Thank you. We have received your signed Lease Agreement. You can obtain a draft copy of the agreement by clicking 'Download Agreement' button here."));
 
         contentPanel.setWidget(++row, 0, new Button(i18n.tr("Download Agreement"), new Command() {
             @Override

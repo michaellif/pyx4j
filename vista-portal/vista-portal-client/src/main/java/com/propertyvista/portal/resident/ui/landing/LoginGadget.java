@@ -26,18 +26,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.widgets.client.Anchor;
@@ -130,21 +126,23 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
 
             int row = -1;
 
             contentPanel.setBR(++row, 0, 2);
 
-            CEmailField emailField = inject(proto().email(), new CEmailField());
+            CEmailField emailField = inject(proto().email(), new CEmailField(),
+                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Email Address")).build());
             emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
+            contentPanel.setWidget(++row, 0, emailField);
             emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
 
-            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
+            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(),
+                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Password")).build());
             passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build());
+            contentPanel.setWidget(++row, 0, passwordField);
             passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
 
             CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
@@ -160,10 +158,10 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             });
             contentPanel.setWidget(++row, 0, resetPassword);
 
-            captchaField = (CCaptcha) inject(proto().captcha());
+            captchaField = (CCaptcha) inject(proto().captcha(),
+                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
             captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0,
-                    (new LoginWidgetDecoratorBuilder(captchaField).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
+            contentPanel.setWidget(++row, 0, captchaField);
             setEnableCaptcha(false);
 
             contentPanel.setBR(++row, 0, 2);

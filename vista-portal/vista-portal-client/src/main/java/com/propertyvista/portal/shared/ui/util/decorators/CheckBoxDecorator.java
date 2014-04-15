@@ -52,11 +52,11 @@ public class CheckBoxDecorator extends FlowPanel implements IDecorator<CCheckBox
         label.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
         add(label);
 
-        setComponent(component);
+        init(component);
     }
 
     @Override
-    public void setComponent(CCheckBox component) {
+    public void init(CCheckBox component) {
         this.component = component;
         component.asWidget().addStyleName(WidgetDecoratorComponent.name());
         componentHolder.setWidget(component);

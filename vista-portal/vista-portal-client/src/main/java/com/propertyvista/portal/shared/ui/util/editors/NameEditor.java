@@ -32,18 +32,16 @@ public class NameEditor extends CEntityForm<Name> {
 
     private final CComponent<Name> nameComp;
 
-    private final String customViewLabel;
-
     public NameEditor() {
         this(null);
     }
 
     public NameEditor(String customViewLabel) {
         super(Name.class);
-        this.customViewLabel = customViewLabel;
 
         nameComp = new CEntityLabel<Name>();
         nameComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+        nameComp.setDecorator(new FormWidgetDecoratorBuilder(200).customLabel(customViewLabel).build());
 
         adopt(nameComp);
     }
@@ -56,16 +54,16 @@ public class NameEditor extends CEntityForm<Name> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(nameComp, 200).customLabel(customViewLabel).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName()), 200).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName()), 200).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().middleName()), 60).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().namePrefix()), 60).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameSuffix()), 60).build());
+        main.setWidget(++row, 0, nameComp);
+        main.setWidget(++row, 0, inject(proto().firstName(), new FormWidgetDecoratorBuilder(200).build()));
+        main.setWidget(++row, 0, inject(proto().lastName(), new FormWidgetDecoratorBuilder(200).build()));
+        main.setWidget(++row, 0, inject(proto().middleName(), new FormWidgetDecoratorBuilder(60).build()));
+        main.setWidget(++row, 0, inject(proto().namePrefix(), new FormWidgetDecoratorBuilder(60).build()));
+        main.setWidget(++row, 0, inject(proto().nameSuffix(), new FormWidgetDecoratorBuilder(60).build()));
 
         calculateFieldsStatus();
 

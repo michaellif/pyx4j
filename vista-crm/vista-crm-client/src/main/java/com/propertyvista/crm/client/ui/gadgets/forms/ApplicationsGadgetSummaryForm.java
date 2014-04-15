@@ -28,15 +28,15 @@ public class ApplicationsGadgetSummaryForm extends ZoomableViewForm<Applications
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applications()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pending()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().approved()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().declined()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cancelled()), 10).build());
+        content.setWidget(++row, 0, inject(proto().applications(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().pending(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().approved(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().declined(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().cancelled(), new FormDecoratorBuilder(10).build()));
 
         return content;
     }

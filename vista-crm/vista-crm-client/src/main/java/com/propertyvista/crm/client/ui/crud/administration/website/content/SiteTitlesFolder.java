@@ -92,18 +92,18 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().crmHeader()), 35).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().prospectPortalTitle()), 35).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().residentPortalTitle()), 35).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().residentPortalPromotions()), 35).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().copyright()), 35).build());
+            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 0, inject(proto().crmHeader(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, inject(proto().prospectPortalTitle(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, inject(proto().residentPortalTitle(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, inject(proto().residentPortalPromotions(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, inject(proto().copyright(), new FormDecoratorBuilder(35).build()));
             return main;
         }
     }

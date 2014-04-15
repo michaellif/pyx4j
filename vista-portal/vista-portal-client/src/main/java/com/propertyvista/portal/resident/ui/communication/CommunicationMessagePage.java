@@ -78,11 +78,11 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().thread().created(), new CLabel<String>()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().subject(), new CLabel<String>()), 250).build());
+        mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
         mainPanel.setWidget(++row, 0, inject(proto().thread().content(), messagesFolder));
         mainPanel.setBR(++row, 0, 1);
 
@@ -135,12 +135,12 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().date(), new CLabel<String>()), 180).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().text()), 250).build());
+            content.setWidget(++row, 0, inject(proto().date(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
+            content.setWidget(++row, 0, inject(proto().text(), new FormWidgetDecoratorBuilder(250).build()));
             content.setBR(++row, 0, 1);
             content.setH1(++row, 0, 1, "Attachments");
             content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));

@@ -36,12 +36,12 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateFrom()), 9).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateTo()), 9).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().offMarket()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lease()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 50).build());
+        content.setWidget(++row, 0, inject(proto().dateFrom(), new FormDecoratorBuilder(9).build()));
+        content.setWidget(++row, 0, inject(proto().dateTo(), new FormDecoratorBuilder(9).build()));
+        content.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().offMarket(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().lease(), new FormDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(50).build()));
 
         get(proto().status()).addValueChangeHandler(new ValueChangeHandler<AptUnitOccupancySegment.Status>() {
             @Override

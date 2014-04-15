@@ -13,13 +13,12 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class RadioButtonGroupDecoratorBuilder extends WidgetDecorator.Builder {
 
-    public RadioButtonGroupDecoratorBuilder(CComponent<?> component) {
-        super(component);
+    public RadioButtonGroupDecoratorBuilder() {
+        super();
         contentWidth("100%");
         componentWidth(70 + "px");
         labelPosition(LabelPosition.top);

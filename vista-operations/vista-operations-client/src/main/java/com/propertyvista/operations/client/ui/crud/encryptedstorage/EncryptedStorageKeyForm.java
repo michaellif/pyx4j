@@ -56,7 +56,7 @@ public class EncryptedStorageKeyForm extends CEntityForm<EncryptedStorageKeyDTO>
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
         Widget statusPanel = makeStatusPanel();
         statusPanel.getElement().getStyle().setDisplay(Display.BLOCK);
@@ -87,14 +87,14 @@ public class EncryptedStorageKeyForm extends CEntityForm<EncryptedStorageKeyDTO>
     private Widget makeStatusPanel() {
         TwoColumnFlexFormPanel statusPanel = new TwoColumnFlexFormPanel();
         int row = -1;
-        statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).componentWidth(15).build());
-        statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isCurrent())).componentWidth(5).build());
-        statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().decryptionEnabled())).componentWidth(5).build());
+        statusPanel.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder().componentWidth(15).build()));
+        statusPanel.setWidget(++row, 0, inject(proto().isCurrent(), new FormDecoratorBuilder().componentWidth(5).build()));
+        statusPanel.setWidget(++row, 0, inject(proto().decryptionEnabled(), new FormDecoratorBuilder().componentWidth(5).build()));
 
         row = -1;
-        statusPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().recordsCount())).build());
-        statusPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().created())).build());
-        statusPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expired())).build());
+        statusPanel.setWidget(++row, 1, inject(proto().recordsCount(), new FormDecoratorBuilder().build()));
+        statusPanel.setWidget(++row, 1, inject(proto().created(), new FormDecoratorBuilder().build()));
+        statusPanel.setWidget(++row, 1, inject(proto().expired(), new FormDecoratorBuilder().build()));
         return statusPanel;
     }
 

@@ -120,7 +120,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
 
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), true).labelWidth("20em").build());
+        main.setWidget(++row, 0, 2, inject(proto().nextScheduledPaymentDate(), new CDateLabel(), new FormDecoratorBuilder(true).labelWidth("20em").build()));
 
         main.setH3(++row, 0, 2, proto().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
@@ -133,7 +133,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         int row = -1;
 
         tabPanel.setH1(++row, 0, 2, i18n.tr("Requirements"));
-        tabPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), true).build());
+        tabPanel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FormDecoratorBuilder(true).build()));
         get(proto().minimumRequiredLiability()).setEditable(false);
 
         noRequirementsLabel = new Label(i18n.tr("None"));
@@ -210,18 +210,18 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 15).build());
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+                content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(15).build()));
+                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 15).build());
+                content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(15).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, TenantForm.this.getValue()
@@ -233,7 +233,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                })).componentWidth("35em").build());
+                }, new FormDecoratorBuilder().componentWidth("35em").build()));
 
                 content.setBR(++row, 0, 2);
 

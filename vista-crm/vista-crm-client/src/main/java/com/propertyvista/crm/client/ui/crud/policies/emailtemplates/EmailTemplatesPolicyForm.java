@@ -73,8 +73,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Header and Footer"));
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().header()), true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().footer()), true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().header(), new FormDecoratorBuilder(true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().footer(), new FormDecoratorBuilder(true).build()));
 
         return panel;
     }
@@ -127,18 +127,18 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().type()), true).build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().subject()), true).build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().useHeader()), true).build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().useFooter()), true).build());
+                content.setWidget(++row, 0, 2, inject(proto().type(), new FormDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().subject(), new FormDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().useHeader(), new FormDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().useFooter(), new FormDecoratorBuilder(true).build()));
                 CRichTextArea editor = new CRichTextArea();
                 editor.setImageProvider(new SiteImageResourceProvider());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content(), editor), true).build());
+                content.setWidget(++row, 0, 2, inject(proto().content(), editor, new FormDecoratorBuilder(true).build()));
                 if (isEditable()) {
                     // create variable selection button
                     final PushButton pb = editor.getWidget().getEditor().getCustomButton();

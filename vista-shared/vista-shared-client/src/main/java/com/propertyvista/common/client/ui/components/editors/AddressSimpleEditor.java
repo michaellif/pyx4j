@@ -63,29 +63,32 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
 
         int row = -1;
         int col = (oneColumn ? 0 : 1);
 
-        main.setWidget(++row, 0, decorator(inject(proto().street1()), maxCompWidth).build());
-        main.setWidget(++row, 0, decorator(inject(proto().street2()), maxCompWidth).build());
-        main.setWidget(++row, 0, decorator(inject(proto().city()), maxCompWidth).build());
+        main.setWidget(++row, 0, inject(proto().street1(), decorator(maxCompWidth).build()));
+        main.setWidget(++row, 0, inject(proto().street2(), decorator(maxCompWidth).build()));
+        main.setWidget(++row, 0, inject(proto().city(), decorator(maxCompWidth).build()));
 
         row = (oneColumn ? row : -1);
 
         CComponent<Province> province = (CComponent<Province>) inject(proto().province());
-        main.setWidget(++row, col, decorator(province, maxCompWidth).build());
+        province.setDecorator(decorator(maxCompWidth).build());
+        main.setWidget(++row, col, province);
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
-        main.setWidget(++row, col, decorator(country, maxCompWidth).build());
+        country.setDecorator(decorator(maxCompWidth).build());
+        main.setWidget(++row, col, country);
 
         CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
+        postalCode.setDecorator(decorator(10).build());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-        main.setWidget(++row, col, decorator(postalCode, 10).build());
+        main.setWidget(++row, col, postalCode);
 
         attachFilters(proto(), province, country, postalCode);
 
@@ -110,7 +113,7 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
         });
     }
 
-    private FormDecoratorBuilder decorator(CComponent<?> comp, double compWidth) {
-        return new FormDecoratorBuilder(comp, labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
+    private FormDecoratorBuilder decorator(double compWidth) {
+        return new FormDecoratorBuilder(labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }

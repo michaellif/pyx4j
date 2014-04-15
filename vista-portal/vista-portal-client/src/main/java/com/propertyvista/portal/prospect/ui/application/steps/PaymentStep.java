@@ -105,7 +105,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
         panel.setH3(++row, 0, 1, i18n.tr("Fees"));
         feesHeader = panel.getWidget(row, 0);
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().applicationFee(), new CMoneyLabel())).build());
+        panel.setWidget(++row, 0, inject(proto().payment().applicationFee(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, paymentMethodHolder);
         paymentMethodPanel = createPaymentMethodPanel();
@@ -121,12 +121,12 @@ public class PaymentStep extends ApplicationWizardStep {
         panel.setWidget(
                 ++row,
                 0,
-                new FormWidgetDecoratorBuilder(inject(proto().payment().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL))).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().profiledPaymentMethod(), profiledPaymentMethodsCombo)).build());
+                inject(proto().payment().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL),
+                        new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().payment().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FormWidgetDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().payment().paymentMethod(), paymentMethodEditor));
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment().storeInProfile())).build());
+        panel.setWidget(++row, 0, inject(proto().payment().storeInProfile(), new FormWidgetDecoratorBuilder().build()));
 
         // tweaks:
 

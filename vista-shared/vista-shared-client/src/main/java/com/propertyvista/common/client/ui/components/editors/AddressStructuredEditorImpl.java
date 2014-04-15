@@ -50,11 +50,11 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         @SuppressWarnings("unchecked")
-        final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
+        final CComponent<Country> country = (CComponent<Country>) inject(proto().country(), new FormDecoratorBuilder(15).build());
         @SuppressWarnings("unchecked")
-        final CComponent<Province> province = (CComponent<Province>) inject(proto().province());
+        final CComponent<Province> province = (CComponent<Province>) inject(proto().province(), new FormDecoratorBuilder(15).build());
         @SuppressWarnings("unchecked")
-        final CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
+        final CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode(), new FormDecoratorBuilder(10).build());
         if (postalCode instanceof CTextFieldBase) {
             @SuppressWarnings("unchecked")
             CTextFieldBase<String, ?> comp = ((CTextFieldBase<String, ?>) postalCode);
@@ -63,21 +63,21 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
 
         int row = -1;
         if (showUnit) {
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().suiteNumber()), 10).build());
+            content.setWidget(++row, 0, inject(proto().suiteNumber(), new FormDecoratorBuilder(10).build()));
         }
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetNumber()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetNumberSuffix()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetName()), 16).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetType()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetDirection()), 10).build());
+        content.setWidget(++row, 0, inject(proto().streetNumber(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().streetNumberSuffix(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().streetName(), new FormDecoratorBuilder(16).build()));
+        content.setWidget(++row, 0, inject(proto().streetType(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().streetDirection(), new FormDecoratorBuilder(10).build()));
 
         row = -1;
 
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().city()), 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().county()), 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(province, 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(country, 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(postalCode, 10).build());
+        content.setWidget(++row, 1, inject(proto().city(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 1, inject(proto().county(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 1, province);
+        content.setWidget(++row, 1, country);
+        content.setWidget(++row, 1, postalCode);
 
         // tweaks:
         attachFilters(proto(), province, country, postalCode);

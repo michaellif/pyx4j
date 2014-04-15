@@ -55,12 +55,12 @@ public class L1TenantInfoFolder extends VistaBoxFolder<L1TenantInfo> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName())).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName())).build());
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().gender())).build());
+            panel.setWidget(++row, 0, inject(proto().firstName(), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, inject(proto().lastName(), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, inject(proto().gender(), new FormDecoratorBuilder().build()));
             return panel;
         }
 

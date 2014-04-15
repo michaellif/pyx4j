@@ -33,15 +33,15 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().responseDelay()), 5, true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().responseDelay(), new FormDecoratorBuilder(5, true).build()));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().responseType()), 15, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().responseCode()), 15, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().responseHttpCode()), 15, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().responseText()), 15, true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().responseType(), new FormDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseCode(), new FormDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseHttpCode(), new FormDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseText(), new FormDecoratorBuilder(15, true).build()));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().acceptCardExpiryFrom()), 15, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().acceptCardExpiryTo()), 15, true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().acceptCardExpiryFrom(), new FormDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().acceptCardExpiryTo(), new FormDecoratorBuilder(15, true).build()));
 
         get(proto().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
 

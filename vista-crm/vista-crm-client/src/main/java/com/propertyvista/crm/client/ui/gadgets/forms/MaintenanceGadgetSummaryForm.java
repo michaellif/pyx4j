@@ -31,23 +31,25 @@ public class MaintenanceGadgetSummaryForm extends ZoomableViewForm<MaintenanceGa
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setH2(++row, 0, 1, i18n.tr("Open:"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().openWorkOrders())).customLabel("").useLabelSemicolon(false).componentWidth(5).build());
+        content.setWidget(++row, 0,
+                inject(proto().openWorkOrders(), new FormDecoratorBuilder().customLabel("").useLabelSemicolon(false).componentWidth(5).build()));
 
         content.setH2(++row, 0, 1, i18n.tr("Urgent:"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().urgentWorkOrders())).customLabel("").useLabelSemicolon(false).componentWidth(5).build());
+        content.setWidget(++row, 0,
+                inject(proto().urgentWorkOrders(), new FormDecoratorBuilder().customLabel("").useLabelSemicolon(false).componentWidth(5).build()));
 
         content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingWorkOrders1to2days())).customLabel(i18n.tr("1 to 2 days")).componentWidth(5)
-                .build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingWorkOrders2to3days())).customLabel(i18n.tr("2 to 3 days")).componentWidth(5)
-                .build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingWorkOrdersMoreThan3days())).customLabel(i18n.tr("3 and more"))
-                .componentWidth(5).build());
+        content.setWidget(++row, 0,
+                inject(proto().outstandingWorkOrders1to2days(), new FormDecoratorBuilder().customLabel(i18n.tr("1 to 2 days")).componentWidth(5).build()));
+        content.setWidget(++row, 0,
+                inject(proto().outstandingWorkOrders2to3days(), new FormDecoratorBuilder().customLabel(i18n.tr("2 to 3 days")).componentWidth(5).build()));
+        content.setWidget(++row, 0,
+                inject(proto().outstandingWorkOrdersMoreThan3days(), new FormDecoratorBuilder().customLabel(i18n.tr("3 and more")).componentWidth(5).build()));
         return content;
 
     }

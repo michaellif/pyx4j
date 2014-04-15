@@ -28,15 +28,15 @@ public class LicenseEditor extends CEntityForm<License> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().number()), 15).build());
+        main.setWidget(++row, 0, inject(proto().number(), new FormDecoratorBuilder(15).build()));
 
         row = -1;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiration()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().renewal()), 9).build());
+        main.setWidget(++row, 1, inject(proto().expiration(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().renewal(), new FormDecoratorBuilder(9).build()));
 
         return main;
     }

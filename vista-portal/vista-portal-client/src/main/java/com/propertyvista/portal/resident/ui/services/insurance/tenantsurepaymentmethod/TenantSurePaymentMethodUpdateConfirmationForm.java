@@ -33,7 +33,7 @@ public class TenantSurePaymentMethodUpdateConfirmationForm extends CPortalEntity
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         mainPanel.setWidget(0, 0, new HTML(i18n.tr("Thank You!")));
         mainPanel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);

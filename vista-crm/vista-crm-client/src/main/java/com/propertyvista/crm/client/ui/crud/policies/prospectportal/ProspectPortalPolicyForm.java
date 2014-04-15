@@ -45,14 +45,14 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().unitAvailabilitySpan()), 5, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxExactMatchUnits()), 5, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxPartialMatchUnits()), 5, true).build());
+        content.setWidget(++row, 0, 2, inject(proto().unitAvailabilitySpan(), new FormDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxExactMatchUnits(), new FormDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxPartialMatchUnits(), new FormDecoratorBuilder(5, true).build()));
 
         content.setBR(++row, 0, 2);
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().feePayment()), 10, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().feeAmount()), 10, true).build());
+        content.setWidget(++row, 0, 2, inject(proto().feePayment(), new FormDecoratorBuilder(10, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().feeAmount(), new FormDecoratorBuilder(10, true).build()));
 
         get(proto().feePayment()).addValueChangeHandler(new ValueChangeHandler<FeePayment>() {
             @Override

@@ -58,7 +58,7 @@ public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreemen
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         panel.setWidth("100%");
         int row = -1;

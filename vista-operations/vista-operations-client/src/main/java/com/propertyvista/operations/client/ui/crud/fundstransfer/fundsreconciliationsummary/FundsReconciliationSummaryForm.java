@@ -32,11 +32,11 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
         super(FundsReconciliationSummaryDTO.class, view);
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int i = 0;
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().paymentDate())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().reconciliationStatus())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().paymentDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().reconciliationStatus(), new FormDecoratorBuilder().build()));
         CLabel<Object> recordsCount;
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().recordsCount(), recordsCount = new CLabel<>())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().recordsCount(), recordsCount = new CLabel<>(), new FormDecoratorBuilder().build()));
         recordsCount.setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -45,27 +45,26 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
             }
         });
 
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().grossPaymentCount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().grossPaymentAmount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().grossPaymentFee())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().grossPaymentCount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().grossPaymentAmount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().grossPaymentFee(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().rejectItemsCount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().rejectItemsAmount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().rejectItemsFee())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().rejectItemsCount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().rejectItemsAmount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().rejectItemsFee(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().returnItemsCount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().returnItemsAmount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().returnItemsFee())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().returnItemsCount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().returnItemsAmount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().returnItemsFee(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().netAmount())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().adjustments())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().previousBalance())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().merchantBalance())).build());
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().fundsReleased())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().netAmount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().adjustments(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().previousBalance(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().merchantBalance(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++i, 0, 2, inject(proto().fundsReleased(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++i, 0, 2, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+        panel.setWidget(++i, 0, 2, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
     }
-
 }

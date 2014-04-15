@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -41,12 +42,12 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentsStatus(), new CEnumLabel()), 25).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 5).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber()), 15).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountName())).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 40).build());
+        general.setWidget(++row, 0, inject(proto().paymentsStatus(), new CEnumLabel(), new FormDecoratorBuilder(25).build()));
+        general.setWidget(++row, 0, inject(proto().bankId(), new CLabel<String>(), new FormDecoratorBuilder(5).build()));
+        general.setWidget(++row, 0, inject(proto().branchTransitNumber(), new CLabel<String>(), new FormDecoratorBuilder(5).build()));
+        general.setWidget(++row, 0, inject(proto().accountNumber(), new CLabel<String>(), new FormDecoratorBuilder(15).build()));
+        general.setWidget(++row, 0, inject(proto().accountName(), new FormDecoratorBuilder().build()));
+        general.setWidget(++row, 0, inject(proto().chargeDescription(), new FormDecoratorBuilder(40).build()));
 
         selectTab(addTab(general));
 

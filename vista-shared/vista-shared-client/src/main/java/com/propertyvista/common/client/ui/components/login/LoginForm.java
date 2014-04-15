@@ -102,7 +102,7 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         HTML header = new HTML(h2(caption));
         header.getElement().getStyle().setMarginBottom(3, Unit.EM);
         header.getElement().getStyle().setProperty("textAlign", "center");
@@ -110,21 +110,21 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         FlowPanel main = new FlowPanel();
         main.add(header);
 
-        emailField = inject(proto().email(), new CTextField());
+        emailField = inject(proto().email(), new CTextField(), new LoginPanelWidgetDecorator());
         emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-        main.add(new LoginPanelWidgetDecorator(emailField));
+        main.add(emailField);
 
-        CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
+        CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(), new LoginPanelWidgetDecorator());
         passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-        main.add(new LoginPanelWidgetDecorator(passwordField));
+        main.add(passwordField);
 
-        CCaptcha captchaField = (CCaptcha) inject(proto().captcha());
+        CCaptcha captchaField = (CCaptcha) inject(proto().captcha(), new LoginPanelWidgetDecorator(30));
         captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
-        main.add(new LoginPanelWidgetDecorator(captchaField, 30));
+        main.add(captchaField);
 
-        CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
+        CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox(), new LoginPanelWidgetDecorator());
         rememberID.getWidget().addKeyUpHandler(new EnterKeyHandler());
-        main.add(new LoginPanelWidgetDecorator(rememberID));
+        main.add(rememberID);
 
         HorizontalPanel buttonPanel = new HorizontalPanel();
         buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);

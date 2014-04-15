@@ -315,7 +315,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             FlowPanel panel = new FlowPanel();
             panel.add(inject(proto().paymentFees(), new PaymentFeesFolder()));
             return panel;

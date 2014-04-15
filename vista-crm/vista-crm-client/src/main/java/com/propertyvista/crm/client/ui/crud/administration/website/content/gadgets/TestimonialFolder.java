@@ -45,13 +45,13 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content()), 50).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().author()), 20).build());
+            main.setWidget(++row, 0, inject(proto().locale(), new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 0, inject(proto().content(), new FormDecoratorBuilder(50).build()));
+            main.setWidget(++row, 0, inject(proto().author(), new FormDecoratorBuilder(20).build()));
 
             return main;
         }

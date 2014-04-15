@@ -94,7 +94,7 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             return createEditorContent(this);
         }
     }

@@ -49,23 +49,23 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         CComboBox<Skin> skinComp = new CComboBox<Skin>();
         skinComp.setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().skin(), skinComp), 10).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
+        content.setWidget(row++, 0, inject(proto().skin(), skinComp, new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, inject(proto().sitePalette().object1(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, inject(proto().sitePalette().object2(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, inject(proto().sitePalette().contrast1(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, inject(proto().sitePalette().contrast2(), new FormDecoratorBuilder(10).build()));
 
         // ---------------------------------------------------------------------------------------------------------------
 
         content.setH1(row++, 0, 2, i18n.tr("Website"));
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().enabled(), publicPortalSwitch), 10).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().disableMapView()), 10).build());
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
+        content.setWidget(row++, 0, inject(proto().enabled(), publicPortalSwitch, new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, inject(proto().disableMapView(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, inject(proto().disableBuildingDetails(), new FormDecoratorBuilder(10).build()));
 
         // --------------------------------------------------------------------------------------------------------------------
 
         content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
-        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().residentPortalEnabled()), 10).build());
+        content.setWidget(row++, 0, inject(proto().residentPortalEnabled(), new FormDecoratorBuilder(10).build()));
 
         selectTab(addTab(content));
 
@@ -93,7 +93,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         file.setImageSize(150, 100);
         file.setScaleMode(ScaleMode.Contain);
 
-        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo().file(), file), 20).build());
+        content.setWidget(0, 0, inject(proto().crmLogo().file(), file, new FormDecoratorBuilder(20).build()));
 
         return content;
     }

@@ -39,7 +39,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().version().caption()), 10, true).build());
+        main.setWidget(++row, 0, 2, inject(proto().version().caption(), new FormDecoratorBuilder(10, true).build()));
         main.setWidget(++row, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
 
         setTabBarVisible(false);
@@ -69,16 +69,16 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
             int row = -1;
             // locale
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale()), 10, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().locale(), new FormDecoratorBuilder(10, true).build()));
             // content
             CComponent<?> editor = null;
             editor = new CRichTextArea();
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content(), editor), true).build());
+            main.setWidget(++row, 0, 2, inject(proto().content(), editor, new FormDecoratorBuilder(true).build()));
 
             return main;
         }

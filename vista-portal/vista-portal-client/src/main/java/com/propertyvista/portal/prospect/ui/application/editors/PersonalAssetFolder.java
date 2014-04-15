@@ -76,13 +76,13 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetType()), 180).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().percent()), 60).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetValue()), 100).build());
+            main.setWidget(++row, 0, inject(proto().assetType(), new FormWidgetDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().percent(), new FormWidgetDecoratorBuilder(60).build()));
+            main.setWidget(++row, 0, inject(proto().assetValue(), new FormWidgetDecoratorBuilder(100).build()));
             main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
 
             return main;

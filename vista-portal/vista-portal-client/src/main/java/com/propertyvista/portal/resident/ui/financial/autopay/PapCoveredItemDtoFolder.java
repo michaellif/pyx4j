@@ -60,18 +60,19 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel(i18n.tr("Details"));
             int row = -1;
 
+            content.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().billableItem(), new PapBillableItemLabel(), new FormWidgetDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
             content.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge"))
-                            .build());
-            content.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CMoneyLabel()), 100).customLabel(i18n.tr("Price")).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().covered(), new CMoneyLabel()), 100).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).customLabel(i18n.tr("Payment")).build());
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().percent(), new CPercentageLabel()), 100).build());
+                    inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));
+            content.setWidget(++row, 0, inject(proto().covered(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
+            content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
+            content.setWidget(++row, 0, inject(proto().percent(), new CPercentageLabel(), new FormWidgetDecoratorBuilder(100).build()));
 
             // tweaks:
             get(proto().amount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {

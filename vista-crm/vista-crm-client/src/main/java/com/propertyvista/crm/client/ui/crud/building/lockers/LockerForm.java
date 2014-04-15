@@ -31,8 +31,8 @@ public class LockerForm extends CrmEntityForm<Locker> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 10).build());
+        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(10).build()));
 
         selectTab(addTab(content));
 

@@ -72,11 +72,11 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel flowPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 22).build());
+        flowPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FormDecoratorBuilder(22).build()));
         ((CEntityLabel<ProductItem>) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -96,12 +96,12 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
             }
         });
 
-        flowPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().effectiveDate()), 9).build());
-        flowPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expirationDate()), 9).build());
-        flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yardiChargeCode()), 10).build());
+        flowPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FormDecoratorBuilder(10).build()));
+        flowPanel.setWidget(++row, 0, inject(proto().effectiveDate(), new FormDecoratorBuilder(9).build()));
+        flowPanel.setWidget(row, 1, inject(proto().expirationDate(), new FormDecoratorBuilder(9).build()));
+        flowPanel.setWidget(++row, 0, inject(proto().yardiChargeCode(), new FormDecoratorBuilder(10).build()));
 
-        flowPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        flowPanel.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
         flowPanel.setWidget(++row, 0, 2, extraDataPanel);
 

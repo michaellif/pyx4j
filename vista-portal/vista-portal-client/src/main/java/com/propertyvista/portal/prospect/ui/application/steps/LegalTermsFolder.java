@@ -60,7 +60,7 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
@@ -69,8 +69,11 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
             mainPanel.setWidget(++row, 0, inject(proto().term().title(), caption));
             mainPanel.setWidget(++row, 0, inject(proto().term().body(), new CHtml()));
 
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().signature())).customLabel("").labelPosition(LabelPosition.hidden)
-                    .contentWidth("250px").componentWidth("250px").build());
+            mainPanel.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().signature(), new FormWidgetDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px")
+                            .componentWidth("250px").build()));
 
             return mainPanel;
         }

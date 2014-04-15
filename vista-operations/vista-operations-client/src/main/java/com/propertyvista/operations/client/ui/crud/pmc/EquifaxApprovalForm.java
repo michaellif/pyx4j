@@ -31,9 +31,9 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, "Credit Pricing Option");
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportType())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().setupFee())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().perApplicantFeee())).build());
+        panel.setWidget(++row, 0, inject(proto().reportType(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().setupFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().perApplicantFeee(), new FormDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 1, "Business Information");
         panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));

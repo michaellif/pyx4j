@@ -162,14 +162,14 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
             content = new CEntityForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     int row = -1;
-                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate()), 10).build());
-                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom()), 10).build());
-                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo()), 10).build());
-                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription()), 25).build());
+                    main.setWidget(++row, 0, inject(proto().scheduledDate(), new FormDecoratorBuilder(10).build()));
+                    main.setWidget(++row, 0, inject(proto().scheduledTimeFrom(), new FormDecoratorBuilder(10).build()));
+                    main.setWidget(++row, 0, inject(proto().scheduledTimeTo(), new FormDecoratorBuilder(10).build()));
+                    main.setWidget(++row, 0, inject(proto().workDescription(), new FormDecoratorBuilder(25).build()));
 
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
 
@@ -217,11 +217,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
             content = new CEntityForm<MaintenanceRequestDTO>(MaintenanceRequestDTO.class) {
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().resolvedDate()), 10).build());
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().resolution()), 25).build());
+                    main.setWidget(0, 0, inject(proto().resolvedDate(), new FormDecoratorBuilder(10).build()));
+                    main.setWidget(1, 0, inject(proto().resolution(), new FormDecoratorBuilder(25).build()));
 
                     CComponent<LogicalDate> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);
@@ -275,11 +275,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
             content = new CEntityForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().rating()), 3).build());
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 20).build());
+                    main.setWidget(0, 0, inject(proto().rating(), new FormDecoratorBuilder(3).build()));
+                    main.setWidget(1, 0, inject(proto().description(), new FormDecoratorBuilder(20).build()));
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));

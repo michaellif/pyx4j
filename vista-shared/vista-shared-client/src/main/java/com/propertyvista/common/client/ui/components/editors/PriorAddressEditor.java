@@ -36,7 +36,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = internalCreateContent();
 
         int row0 = main.getRowCount();
@@ -44,8 +44,8 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         int row1 = row0 + 1;
         main.setHR(++row0, 0, 2);
 
-        main.setWidget(++row0, 0, new FormDecoratorBuilder(inject(proto().moveInDate()), 10).build());
-        main.setWidget(++row0, 0, new FormDecoratorBuilder(inject(proto().moveOutDate()), 10).build());
+        main.setWidget(++row0, 0, inject(proto().moveInDate(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row0, 0, inject(proto().moveOutDate(), new FormDecoratorBuilder(10).build()));
 
         int col = 1;
 
@@ -57,13 +57,14 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
                 setVisibility(getValue());
             }
         });
+        rentedComponent.setDecorator(new FormDecoratorBuilder(15).build());
 
-        main.setWidget(++row1, col, new FormDecoratorBuilder(rentedComponent, 15).build());
-        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().payment()), 8).build());
-        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().propertyCompany()), 20).build());
-        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().managerName()), 20).build());
-        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().managerPhone()), 20).build());
-        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().managerEmail()), 20).build());
+        main.setWidget(++row1, col, rentedComponent);
+        main.setWidget(++row1, col, inject(proto().payment(), new FormDecoratorBuilder(8).build()));
+        main.setWidget(++row1, col, inject(proto().propertyCompany(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().managerName(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().managerPhone(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().managerEmail(), new FormDecoratorBuilder(20).build()));
 
         return main;
     }

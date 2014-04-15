@@ -36,15 +36,15 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceProvider(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceCertificateNumber(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().liabilityCoverage(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().inceptionDate(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().expiryDate(), new FormWidgetDecoratorBuilder(150).build()));
 
         mainPanel.setH1(++row, 0, 1, "Scanned Insurance Certificate Documents");
         mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));

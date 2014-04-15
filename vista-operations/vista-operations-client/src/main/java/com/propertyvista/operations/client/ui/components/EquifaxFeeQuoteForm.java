@@ -31,13 +31,13 @@ public class EquifaxFeeQuoteForm extends CEntityForm<AbstractEquifaxFee> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportSetUpFee())).build());
-        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).build());
-        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).build());
+        panel.setWidget(++row, 0, inject(proto().recommendationReportSetUpFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().fullCreditReportSetUpFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().recommendationReportPerApplicantFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().fullCreditReportPerApplicantFee(), new FormDecoratorBuilder().build()));
 
         if (makeMandatory) {
             get(proto().recommendationReportSetUpFee()).setMandatory(true);

@@ -28,10 +28,10 @@ public class ResidentInsuranceReportSettingsForm extends CEntityForm<ResidentIns
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onlyLeasesWithInsurance())).build());
+        panel.setWidget(++row, 0, inject(proto().onlyLeasesWithInsurance(), new FormDecoratorBuilder().build()));
         return panel;
     }
 

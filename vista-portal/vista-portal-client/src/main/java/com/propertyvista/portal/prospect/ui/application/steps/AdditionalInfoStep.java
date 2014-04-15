@@ -69,25 +69,25 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, previousAddress);
 
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForRent())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForDamages())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().everEvicted())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().defaultedOnLease())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().convictedOfFelony())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().legalTroubles())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
         panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
         // TODO currently removed, then rethink: 
         if (false && !SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
-            panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().refSource()), 180).build());
+            panel.setWidget(++row, 0, inject(proto().applicant().refSource(), new FormWidgetDecoratorBuilder(180).build()));
         }
 
         return panel;
@@ -138,8 +138,8 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
     class LegalQuestionWidgetDecoratorBuilder extends RadioButtonGroupDecoratorBuilder {
 
-        public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
-            super(component);
+        public LegalQuestionWidgetDecoratorBuilder() {
+            super();
             labelWidth("100%");
         }
 

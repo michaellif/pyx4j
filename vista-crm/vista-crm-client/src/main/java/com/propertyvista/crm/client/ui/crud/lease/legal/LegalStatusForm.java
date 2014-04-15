@@ -45,18 +45,18 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().status())).componentWidth("200px").build());
+        panel.setWidget(++row, 0, 2, inject(proto().status(), new FormDecoratorBuilder().componentWidth("200px").build()));
         get(proto().status()).setEditable(false);
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate())).componentWidth("200px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiry())).componentWidth("200px").build());
+        panel.setWidget(++row, 0, 2, inject(proto().expiryDate(), new FormDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().expiry(), new FormDecoratorBuilder().componentWidth("200px").build()));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().setOn())).componentWidth("200px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().setBy().name())).customLabel(i18n.tr("Set By")).componentWidth("200px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().details())).componentWidth("200px").build());
+        panel.setWidget(++row, 0, 2, inject(proto().setOn(), new FormDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().setBy().name(), new FormDecoratorBuilder().customLabel(i18n.tr("Set By")).componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().details(), new FormDecoratorBuilder().componentWidth("200px").build()));
 
         panel.setH2(++row, 0, 2, i18n.tr("Attached Letters"));
         if (uploadable) {
@@ -107,16 +107,16 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
             panel.setWidget(
                     ++row,
                     0,
                     2,
-                    new FormDecoratorBuilder(inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class),
-                            new VistaFileURLBuilder(LegalLetter.class)))).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().notes())).build());
+                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class), new VistaFileURLBuilder(
+                            LegalLetter.class)), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().notes(), new FormDecoratorBuilder().build()));
             return panel;
         }
 

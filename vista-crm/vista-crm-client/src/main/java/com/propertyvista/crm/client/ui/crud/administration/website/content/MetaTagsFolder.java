@@ -92,16 +92,16 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 35).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().keywords()), 35).build());
+            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 0, inject(proto().title(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, inject(proto().keywords(), new FormDecoratorBuilder(35).build()));
             return main;
         }
     }

@@ -55,15 +55,15 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlexTable panel = new FlexTable();
 
         FlowPanel column1 = new FlowPanel();
         final String CHECKBOX_WIDTH = "100px";
         final String INPUT_FIELD_WIDTH = "150px";
         final String CONTENT_WIDTH = "180px";
-        column1.add(new FormDecoratorBuilder(inject(proto().leasesOnNoticeOnly())).contentWidth(CONTENT_WIDTH).build());
-        column1.add(new FormDecoratorBuilder(inject(proto().forthcomingEft())).contentWidth(CONTENT_WIDTH).build());
+        column1.add(inject(proto().leasesOnNoticeOnly(), new FormDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().forthcomingEft(), new FormDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
         get(proto().forthcomingEft()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -73,13 +73,13 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
                 get(proto().onlyWithNotice()).setVisible(event.getValue() != true);
             }
         });
-        column1.add(new FormDecoratorBuilder(inject(proto().onlyWithNotice())).contentWidth(CONTENT_WIDTH).build());
-        column1.add(new FormDecoratorBuilder(inject(proto().paymentStatus())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build());
-        column1.add(new FormDecoratorBuilder(inject(proto().orderBy(), makeOrderByComboBox())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
-                .build());
+        column1.add(inject(proto().onlyWithNotice(), new FormDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().paymentStatus(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+                .build()));
 
         FlowPanel column2 = new FlowPanel();
-        column2.add(new FormDecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build());
+        column2.add(inject(proto().filterByBillingCycle(), new FormDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build()));
         get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -95,15 +95,15 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
         billingCycleFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
         billingCycleFilterPanel.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
-        billingCycleFilterPanel.add(new FormDecoratorBuilder(inject(proto().billingPeriod())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
-                .build());
+        billingCycleFilterPanel.add(inject(proto().billingPeriod(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+                .build()));
         get(proto().billingPeriod()).setEnabled(!VistaFeatures.instance().yardiIntegration());
 
-        billingCycleFilterPanel.add(new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(INPUT_FIELD_WIDTH)
-                .contentWidth(CONTENT_WIDTH).build());
+        billingCycleFilterPanel.add(inject(proto().billingCycleStartDate(),
+                new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build()));
         column2.add(billingCycleFilterPanel);
 
-        column2.add(new FormDecoratorBuilder(inject(proto().filterByExpectedMoveOut())).componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build());
+        column2.add(inject(proto().filterByExpectedMoveOut(), new FormDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build()));
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -113,14 +113,14 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
         });
         FlowPanel expectedMoveOutFilterPanel = new FlowPanel();
         expectedMoveOutFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
-        expectedMoveOutFilterPanel.add(new FormDecoratorBuilder(inject(proto().minimum())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
-                .build());
-        expectedMoveOutFilterPanel.add(new FormDecoratorBuilder(inject(proto().maximum())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
-                .build());
+        expectedMoveOutFilterPanel.add(inject(proto().minimum(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+                .build()));
+        expectedMoveOutFilterPanel.add(inject(proto().maximum(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+                .build()));
         column2.add(expectedMoveOutFilterPanel);
 
         FlowPanel buildingFilterPanel = new FlowPanel();
-        buildingFilterPanel.add(new FormDecoratorBuilder(inject(proto().filterByPortfolio())).build());
+        buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FormDecoratorBuilder().build()));
         buildingFilterPanel.add(inject(proto().selectedPortfolios(), new PortfolioFolder(parentView, isEditable())));
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -129,7 +129,7 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
             }
         });
 
-        buildingFilterPanel.add(new FormDecoratorBuilder(inject(proto().filterByBuildings())).build());
+        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FormDecoratorBuilder().build()));
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

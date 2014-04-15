@@ -38,10 +38,10 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type())).labelWidth(5).build());
+            content.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder().labelWidth(5).build()));
             if (isEditable()) {
                 content.setH4(++row, 0, 1, i18n.tr("Click 'Add' to upload document pages"));
             }

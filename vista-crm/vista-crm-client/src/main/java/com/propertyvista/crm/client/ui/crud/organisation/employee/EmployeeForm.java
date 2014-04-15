@@ -137,22 +137,22 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employeeId()), 10).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().title()), 20).build());
+        main.setWidget(++row, 0, inject(proto().employeeId(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().title(), new FormDecoratorBuilder(20).build()));
 
         main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Employee"))));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
+        main.setWidget(++row, 0, inject(proto().sex(), new FormDecoratorBuilder(7).build()));
+        main.setWidget(++row, 0, inject(proto().birthDate(), new FormDecoratorBuilder(9).build()));
 
         main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().email()), 22).build());
+        main.setWidget(++row, 0, inject(proto().homePhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(row, 1, inject(proto().mobilePhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().workPhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(row, 1, inject(proto().email(), new FormDecoratorBuilder(22).build()));
         get(proto().email()).setMandatory(true);
 
         main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
         main.setBR(++row, 0, 2);
         CImage signature = new CImage(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class), new VistaFileURLBuilder(
@@ -160,7 +160,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signature().file(), signature), true).customLabel(i18n.tr("Signature")).build());
+        main.setWidget(++row, 0, 2, inject(proto().signature().file(), signature, new FormDecoratorBuilder(true).customLabel(i18n.tr("Signature")).build()));
         return main;
     }
 
@@ -169,20 +169,24 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().password()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
+        content.setWidget(++row, 0, inject(proto().password(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().passwordConfirm(), new FormDecoratorBuilder(10).build()));
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enabled()), 5).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isSecurityQuestionSet()), 5).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
+        content.setWidget(++row, 0, inject(proto().enabled(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().requiredPasswordChangeOnNextLogIn(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().isSecurityQuestionSet(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().credentialUpdated(), new FormDecoratorBuilder(15).build()));
 
         content.setH1(++row, 0, 2, i18n.tr("Roles"));
         content.setWidget(++row, 0, 2, inject(proto().roles(), new CrmRoleFolder(this)));
 
         content.setH1(++row, 0, 2, i18n.tr("Buildings Access"));
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), 30, 5,
-                FormDecoratorBuilder.CONTENT_WIDTH_DUAL).build());
+        content.setWidget(
+                ++row,
+                0,
+                2,
+                inject(proto().restrictAccessToSelectedBuildingsAndPortfolios(),
+                        new FormDecoratorBuilder(30, 5, FormDecoratorBuilder.CONTENT_WIDTH_DUAL).build()));
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -264,11 +268,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
                 int row = -1;
 
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 22, true).build());
+                content.setWidget(++row, 0, 2, inject(proto().type(), new CEnumLabel(), new FormDecoratorBuilder(22, true).build()));
 
                 content.setH3(++row, 0, 1, proto().buildings().getMeta().getCaption());
                 content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(EmployeeForm.this)));

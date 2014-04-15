@@ -41,7 +41,7 @@ public class BusinessInformationForm extends CEntityForm<BusinessInformationDTO>
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         contentPanel.getFlexCellFormatter().setWidth(0, 0, "50%");
         contentPanel.getFlexCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
@@ -52,13 +52,13 @@ public class BusinessInformationForm extends CEntityForm<BusinessInformationDTO>
 
         TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
         int mrow = -1;
-        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
-        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().companyType())).build());
+        mainPanel.setWidget(++mrow, 0, inject(proto().companyName(), new FormDecoratorBuilder().build()));
+        mainPanel.setWidget(++mrow, 0, inject(proto().companyType(), new FormDecoratorBuilder().build()));
         mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
         mainPanel.setWidget(++mrow, 0, inject(proto().dto_businessAddress(), new AddressSimpleEditor()));
         mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
-        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().businessNumber())).build());
-        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().businessEstablishedDate())).build());
+        mainPanel.setWidget(++mrow, 0, inject(proto().businessNumber(), new FormDecoratorBuilder().build()));
+        mainPanel.setWidget(++mrow, 0, inject(proto().businessEstablishedDate(), new FormDecoratorBuilder().build()));
         contentPanel.setWidget(0, 0, mainPanel);
 
         TwoColumnFlexFormPanel documentsPanel = new TwoColumnFlexFormPanel();

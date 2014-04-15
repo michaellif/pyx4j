@@ -34,7 +34,7 @@ public class N4DownloadSettingsForm extends CEntityForm<N4DownloadSettingsDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
@@ -49,7 +49,7 @@ public class N4DownloadSettingsForm extends CEntityForm<N4DownloadSettingsDTO> {
             }
         };
         generationsBox.setMandatory(true);
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().selectedGeneration(), generationsBox)).componentWidth("300px").build());
+        panel.setWidget(++row, 0, 2, inject(proto().selectedGeneration(), generationsBox, new FormDecoratorBuilder().componentWidth("300px").build()));
 
         return panel;
     }

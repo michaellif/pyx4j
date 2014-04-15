@@ -63,8 +63,8 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         int row = -1;
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
+        mainPanel.setWidget(++row, 0, inject(proto().newPassword(), new LoginWidgetDecoratorBuilder().assistantWidget(passwordStrengthWidget).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new LoginWidgetDecoratorBuilder().build()));
 
         if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
             get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());

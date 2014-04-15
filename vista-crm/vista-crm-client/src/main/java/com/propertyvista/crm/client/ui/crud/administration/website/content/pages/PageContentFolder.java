@@ -128,22 +128,22 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._caption().caption()), 20).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._caption().secondaryCaption()), 20).build());
+            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 0, inject(proto()._caption().caption(), new FormDecoratorBuilder(20).build()));
+            main.setWidget(++row, 0, inject(proto()._caption().secondaryCaption(), new FormDecoratorBuilder(20).build()));
 
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content(), editor), 60).build());
+            main.setWidget(++row, 0, inject(proto().content(), editor, new FormDecoratorBuilder(60).build()));
 
             // TODO
-            // main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().image(), new CFileUploader()), 60).build());
+            // main.setWidget(++row, 0, inject(proto().image(), new CFileUploader(), new FormDecoratorBuilder( 60).build()));
             return main;
         }
 

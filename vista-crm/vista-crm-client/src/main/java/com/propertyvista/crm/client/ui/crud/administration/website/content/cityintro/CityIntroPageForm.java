@@ -31,8 +31,8 @@ public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = 0;
-        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().cityName()), 25).build());
-        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().province()), 25).build());
+        main.setWidget(row++, 0, inject(proto().cityName(), new FormDecoratorBuilder(25).build()));
+        main.setWidget(row++, 0, inject(proto().province(), new FormDecoratorBuilder(25).build()));
 
         main.setH1(row++, 0, 2, i18n.tr("Page Content"));
         main.setWidget(row++, 0, 2, inject(proto().content(), new RichTextContentFolder(isEditable())));

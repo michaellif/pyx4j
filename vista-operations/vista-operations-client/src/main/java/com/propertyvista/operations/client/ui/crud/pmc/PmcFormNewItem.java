@@ -35,12 +35,12 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dnsName()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().firstName()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().lastName()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().email()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().password()), 15).build());
+        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().dnsName(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().firstName(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().lastName(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().email(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().password(), new FormDecoratorBuilder(15).build()));
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().features(), new PmcFeaturesForm()));

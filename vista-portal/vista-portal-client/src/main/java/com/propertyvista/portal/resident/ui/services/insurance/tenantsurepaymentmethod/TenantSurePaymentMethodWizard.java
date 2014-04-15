@@ -63,11 +63,11 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     private BasicFlexFormPanel createDisplayCurrentPaymentMethodStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Current Payment Method"));
         int row = -1;
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().creationDate(), new CDateLabel()), 100).build());
-//        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().type(), new CEnumLabel()), 150).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
+        panel.setWidget(++row, 0, inject(proto().currentPaymentMethod().creationDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
         panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
+                inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0,
+                inject(proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FormWidgetDecoratorBuilder().build()));
 
         return panel;
     }

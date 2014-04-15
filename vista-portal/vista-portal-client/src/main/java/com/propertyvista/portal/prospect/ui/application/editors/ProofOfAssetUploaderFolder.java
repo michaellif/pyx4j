@@ -48,11 +48,11 @@ public class ProofOfAssetUploaderFolder extends PortalBoxFolder<ProofOfAssetDocu
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
+            content.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder(250).build()));
 
             content.setH3(++row, 0, 1, i18n.tr("Files"));
             content.setWidget(++row, 0, inject(proto().files(), new ProofOfAssetDocumentFileFolder()));

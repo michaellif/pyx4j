@@ -15,13 +15,8 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.DevShortcutEvent;
-import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AccountType;
@@ -29,26 +24,24 @@ import com.propertyvista.domain.payment.CheckInfo;
 
 public class CheckInfoEditor extends CEntityForm<CheckInfo> {
 
-    private static final I18n i18n = I18n.get(CheckInfoEditor.class);
-
     public CheckInfoEditor() {
         super(CheckInfo.class);
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankName()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountType()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().checkNo()), 5).build());
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().bankName(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().accountType(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 0, inject(proto().checkNo(), new FormDecoratorBuilder(5).build()));
 
         row = 0;
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transitNo()), 10).build());
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().institutionNo()), 5).build());
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().accountNo()), 15).build());
+        panel.setWidget(++row, 1, inject(proto().transitNo(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 1, inject(proto().institutionNo(), new FormDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 1, inject(proto().accountNo(), new FormDecoratorBuilder(15).build()));
 
         return panel;
     }

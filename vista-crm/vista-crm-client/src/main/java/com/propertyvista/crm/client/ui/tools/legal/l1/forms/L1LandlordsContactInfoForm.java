@@ -28,22 +28,21 @@ public class L1LandlordsContactInfoForm extends CEntityForm<L1LandlordsContactIn
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().typeOfLandlord())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().firstName())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().lastName())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().streetAddress())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().unit())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().municipality())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().province())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().postalCode())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().dayPhoneNumber())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().eveningPhoneNumber())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        panel.setWidget(++row, 0, 2, inject(proto().typeOfLandlord(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().firstName(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().lastName(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().streetAddress(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().unit(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().municipality(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().province(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().postalCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().dayPhoneNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().eveningPhoneNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().faxNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().emailAddress(), new FormDecoratorBuilder().build()));
         return panel;
     }
-
 }

@@ -496,9 +496,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().selectParticipant(), selectCombo)).componentWidth("200px").build());
+            panel.setWidget(0, 0, 2, inject(proto().selectParticipant(), selectCombo, new FormDecoratorBuilder().componentWidth("200px").build()));
             return panel;
         }
 
@@ -545,26 +545,18 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
 
         @Override
-        public IsWidget createContent() {//@formatter:off
+        protected IsWidget createContent() {
             int row = -1;
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().file(), 
-                                                    new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class),
-                                                              new VistaFileURLBuilder(LeaseApplicationDocument.class)
-                                                    )
-                                             )
-                    ).componentWidth("200px")
-                     .customLabel(i18n.tr("Agreement Document File"))                     
-                     .build()
-            );
-            panel.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().signedBy(), signedByCombo))
-                        .componentWidth("200px")
-                        .build()            
-            );
+            panel.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
+                            LeaseApplicationDocument.class)), new FormDecoratorBuilder().componentWidth("200px")
+                            .customLabel(i18n.tr("Agreement Document File")).build()));
+            panel.setWidget(++row, 0, inject(proto().signedBy(), signedByCombo, new FormDecoratorBuilder().componentWidth("200px").build()));
             return panel;
-        }//@formatter:on
+        }
 
         @Override
         public void addValidations() {

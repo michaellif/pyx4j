@@ -47,7 +47,7 @@ public class LeaseLegalStateForm extends CEntityForm<LeaseLegalStateDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Current Status"));

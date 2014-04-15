@@ -77,20 +77,20 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 7).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 25).build());
+        main.setWidget(++row, 0, inject(proto().person().sex(), new FormDecoratorBuilder(7).build()));
+        main.setWidget(++row, 0, inject(proto().person().birthDate(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().person().email(), new FormDecoratorBuilder(25).build()));
 
         row -= 3;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+        main.setWidget(++row, 1, inject(proto().person().homePhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 1, inject(proto().person().mobilePhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 1, inject(proto().person().workPhone(), new FormDecoratorBuilder(15).build()));
 
         main.setH1(++row, 0, 2, i18n.tr("Identification Documents"));
         main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload = new IdUploaderFolder()));
@@ -104,19 +104,19 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
         TwoColumnFlexFormPanel questionary = new TwoColumnFlexFormPanel();
         questionary.setH1(++row, 0, 2, proto().version().legalQuestions().getMeta().getCaption());
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForRent())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().suedForRent(), createLegalQuestionDecorator()));
         questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForDamages())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().suedForDamages(), createLegalQuestionDecorator()));
         questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().everEvicted())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().everEvicted(), createLegalQuestionDecorator()));
         questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().defaultedOnLease())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().defaultedOnLease(), createLegalQuestionDecorator()));
         questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().convictedOfFelony())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().convictedOfFelony(), createLegalQuestionDecorator()));
         questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().legalTroubles())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().legalTroubles(), createLegalQuestionDecorator()));
         questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().filedBankruptcy())));
+        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().filedBankruptcy(), createLegalQuestionDecorator()));
         main.setWidget(++row, 0, 2, questionary);
 
         if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
@@ -230,7 +230,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         });
     }
 
-    private WidgetDecorator decorateLegalQuestion(CComponent<?> comp) {
-        return new FormDecoratorBuilder(comp, 60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+    private WidgetDecorator createLegalQuestionDecorator() {
+        return new FormDecoratorBuilder(60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 }

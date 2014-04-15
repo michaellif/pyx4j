@@ -54,18 +54,18 @@ public class AboutYouStep extends ApplicationWizardStep {
                 CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().picture().file(), imageHolder)).customLabel("").build());
+        panel.setWidget(++row, 0, inject(proto().applicant().picture().file(), imageHolder, new FormWidgetDecoratorBuilder().customLabel("").build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Personal Information"));
         panel.setWidget(++row, 0, inject(proto().applicant().person().name(), new NameEditor(i18n.tr("Full Name"))));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().sex()), 100).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().birthDate()), 150).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().person().sex(), new FormWidgetDecoratorBuilder(100).build()));
+        panel.setWidget(++row, 0, inject(proto().applicant().person().birthDate(), new FormWidgetDecoratorBuilder(150).build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Contact Information"));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().homePhone()), 180).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().mobilePhone()), 180).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().workPhone()), 180).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().email()), 230).build());
+        panel.setWidget(++row, 0, inject(proto().applicant().person().homePhone(), new FormWidgetDecoratorBuilder(180).build()));
+        panel.setWidget(++row, 0, inject(proto().applicant().person().mobilePhone(), new FormWidgetDecoratorBuilder(180).build()));
+        panel.setWidget(++row, 0, inject(proto().applicant().person().workPhone(), new FormWidgetDecoratorBuilder(180).build()));
+        panel.setWidget(++row, 0, inject(proto().applicant().person().email(), new FormWidgetDecoratorBuilder(230).build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Identification Documents"));
         panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload));

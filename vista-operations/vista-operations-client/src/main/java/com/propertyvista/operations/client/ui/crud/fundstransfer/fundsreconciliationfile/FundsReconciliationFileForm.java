@@ -36,11 +36,11 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fileName())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fundsTransferType())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().created())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().remoteFileDate())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fileNameDate())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().fileName(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().fundsTransferType(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().created(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().remoteFileDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().fileNameDate(), new FormDecoratorBuilder().build()));
 
         // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
         AppPlaceBuilder<IList<FundsReconciliationRecordRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<FundsReconciliationRecordRecord>>() {
@@ -54,7 +54,7 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
             }
         };
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordsCount())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordsCount(), new FormDecoratorBuilder().build()));
 
         panel.setBR(++row, 0, 1);
 

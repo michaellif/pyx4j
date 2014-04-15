@@ -139,9 +139,9 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
                 @Override
                 public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
                     VerticalPanel infoPanel = new VerticalPanel();
-                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>())).build());
-                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
-                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description())).build());
+                    infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FormDecoratorBuilder().build()));
+                    infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FormDecoratorBuilder().build()));
+                    infoPanel.add(entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder().build()));
                     return infoPanel;
                 }
             };
@@ -158,14 +158,14 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), true).build());
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().imageSet(), imageHolder), true).build());
+            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().imageSet(), imageHolder, new FormDecoratorBuilder(true).build()));
 
             return main;
         }

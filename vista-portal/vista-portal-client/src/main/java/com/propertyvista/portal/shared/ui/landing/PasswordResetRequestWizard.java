@@ -46,8 +46,9 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
 
         mainPanel.setWidget(++row, 0, message);
         mainPanel.setBR(++row, 0, 1);
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().email())).build());
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().captcha())).watermark(i18n.tr("Enter both security words above")).build());
+        mainPanel.setWidget(++row, 0, inject(proto().email(), new LoginWidgetDecoratorBuilder().build()));
+        mainPanel.setWidget(++row, 0,
+                inject(proto().captcha(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Enter both security words above")).build()));
         mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;

@@ -127,43 +127,47 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         BasicFlexFormPanel leftPanel = new BasicFlexFormPanel();
         int leftRow = -1;
         // first column:
-        leftPanel.setWidget(++leftRow, 0,
-                new FormDecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 22)
-                        .build());
+        leftPanel.setWidget(
+                ++leftRow,
+                0,
+                inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class)),
+                        new FormDecoratorBuilder(22).build()));
 
         leftPanel.setWidget(
                 ++leftRow,
                 0,
-                new FormDecoratorBuilder(inject(proto().unit().floorplan(),
-                        new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))), 22).build());
+                inject(proto().unit().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class)),
+                        new FormDecoratorBuilder(22).build()));
 
         leftPanel.setWidget(
                 ++leftRow,
                 0,
-                new FormDecoratorBuilder(inject(proto().unit().building(),
-                        new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 22).build());
+                inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)),
+                        new FormDecoratorBuilder(22).build()));
 
-        leftPanel.setWidget(++leftRow, 0,
-                new FormDecoratorBuilder(
-                        inject(proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 22).build());
+        leftPanel.setWidget(
+                ++leftRow,
+                0,
+                inject(proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class)),
+                        new FormDecoratorBuilder(22).build()));
 
-        leftPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().isUnitReserved()), 5).build());
-        leftPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().reservedUntil()), 10).build());
-        leftPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().currentLegalStatus()), 15).build());
-        leftPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
+        leftPanel.setWidget(++leftRow, 0, inject(proto().isUnitReserved(), new FormDecoratorBuilder(5).build()));
+        leftPanel.setWidget(++leftRow, 0, inject(proto().reservedUntil(), new FormDecoratorBuilder(10).build()));
+        leftPanel.setWidget(++leftRow, 0, inject(proto().currentLegalStatus(), new FormDecoratorBuilder(15).build()));
+        leftPanel.setWidget(++leftRow, 0, inject(proto().carryforwardBalance(), new FormDecoratorBuilder(10).build()));
 
         BasicFlexFormPanel rightPanel = new BasicFlexFormPanel();
         int rightRow = -1;
         // second column:
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().applicationId()), 10).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().yardiApplicationId()), 10).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().billingAccount().billingPeriod(), new CEnumLabel()), 15).build());
-        rightPanel.setWidget(++rightRow, 0, new FormDecoratorBuilder(inject(proto().billingAccount().paymentAccepted(), new CEnumLabel()), 15).build());
+        rightPanel.setWidget(++rightRow, 0, inject(proto().leaseId(), new FormDecoratorBuilder(10).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().leaseApplication().applicationId(), new FormDecoratorBuilder(10).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().leaseApplication().yardiApplicationId(), new FormDecoratorBuilder(10).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().type(), new CEnumLabel(), new FormDecoratorBuilder(15).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().billingAccount().accountNumber(), new FormDecoratorBuilder(15).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().status(), new CEnumLabel(), new FormDecoratorBuilder(15).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().completion(), new CEnumLabel(), new FormDecoratorBuilder(15).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().billingAccount().billingPeriod(), new CEnumLabel(), new FormDecoratorBuilder(15).build()));
+        rightPanel.setWidget(++rightRow, 0, inject(proto().billingAccount().paymentAccepted(), new CEnumLabel(), new FormDecoratorBuilder(15).build()));
 
         // form columns:
         content.setWidget(row, 0, leftPanel);
@@ -174,12 +178,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         TwoColumnFlexFormPanel datesPanel = new TwoColumnFlexFormPanel();
 
         int datesRow = -1; // first column:
-        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().leaseFrom()), 10).build());
-        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().leaseTo()), 10).build());
+        datesPanel.setWidget(++datesRow, 0, inject(proto().leaseFrom(), new FormDecoratorBuilder(10).build()));
+        datesPanel.setWidget(++datesRow, 0, inject(proto().leaseTo(), new FormDecoratorBuilder(10).build()));
 
         datesRow = -1; // second column:
-        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().expectedMoveIn()), 10).build());
-        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().expectedMoveOut()), 10).build());
+        datesPanel.setWidget(++datesRow, 1, inject(proto().expectedMoveIn(), new FormDecoratorBuilder(10).build()));
+        datesPanel.setWidget(++datesRow, 1, inject(proto().expectedMoveOut(), new FormDecoratorBuilder(10).build()));
 
         content.setWidget(++row, 0, 2, datesPanel);
 
@@ -187,12 +191,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel = new TwoColumnFlexFormPanel();
 
         datesRow = -1; // first column:
-        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().terminationLeaseTo()), 10).build());
-        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().moveOutSubmissionDate()), 10).build());
+        datesPanel.setWidget(++datesRow, 0, inject(proto().terminationLeaseTo(), new FormDecoratorBuilder(10).build()));
+        datesPanel.setWidget(++datesRow, 0, inject(proto().moveOutSubmissionDate(), new FormDecoratorBuilder(10).build()));
 
         datesRow = -1; // second column:
-        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().actualMoveIn()), 10).build());
-        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().actualMoveOut()), 10).build());
+        datesPanel.setWidget(++datesRow, 1, inject(proto().actualMoveIn(), new FormDecoratorBuilder(10).build()));
+        datesPanel.setWidget(++datesRow, 1, inject(proto().actualMoveOut(), new FormDecoratorBuilder(10).build()));
 
         content.setWidget(++row, 0, 2, datesPanel);
 
@@ -201,8 +205,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         datesPanel = new TwoColumnFlexFormPanel();
 
-        datesPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 10).build());
-        datesPanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().approvalDate()), 10).build());
+        datesPanel.setWidget(0, 0, inject(proto().creationDate(), new FormDecoratorBuilder(10).build()));
+        datesPanel.setWidget(0, 1, inject(proto().approvalDate(), new FormDecoratorBuilder(10).build()));
 
         content.setWidget(++row, 0, 2, datesPanel);
 

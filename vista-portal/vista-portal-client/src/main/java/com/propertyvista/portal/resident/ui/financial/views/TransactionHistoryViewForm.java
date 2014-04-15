@@ -40,12 +40,12 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().issueDate(), new CDateLabel()), 100).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentBalanceAmount(), new CMoneyLabel()), 100).build());
+        content.setWidget(++row, 0, inject(proto().issueDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        content.setWidget(++row, 0, inject(proto().currentBalanceAmount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
 
         content.setWidget(++row, 0, inject(proto().lineItems(), new InvoiceLineItemFolder()));
 
@@ -73,13 +73,13 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().postDate(), new CDateLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
+                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().postDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
 
                 return content;
             }

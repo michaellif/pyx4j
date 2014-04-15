@@ -41,16 +41,16 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Restrictions"));
         int row = -1;
         String lbw = "220px";
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxParkingSpots()), 3, true).labelWidth(lbw).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxLockers()), 3, true).labelWidth(lbw).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxPets()), 3, true).labelWidth(lbw).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().occupantsPerBedRoom()), 3, true).labelWidth(lbw).build());
+        content.setWidget(++row, 0, 2, inject(proto().maxParkingSpots(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxLockers(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxPets(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().occupantsPerBedRoom(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().ageOfMajority()), 3, true).labelWidth(lbw).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enforceAgeOfMajority()), 3, true).labelWidth(lbw).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maturedOccupantsAreApplicants()), 3, true).labelWidth(lbw).build());
+        content.setWidget(++row, 0, 2, inject(proto().ageOfMajority(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().enforceAgeOfMajority(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maturedOccupantsAreApplicants(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
 
         return content;
     }

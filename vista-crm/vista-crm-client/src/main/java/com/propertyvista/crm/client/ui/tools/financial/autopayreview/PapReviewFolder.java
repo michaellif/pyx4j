@@ -76,7 +76,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             formPanel = new FlowPanel();
 
             FlowPanel isSelectedAndCaptionHolderPanel = new FlowPanel();

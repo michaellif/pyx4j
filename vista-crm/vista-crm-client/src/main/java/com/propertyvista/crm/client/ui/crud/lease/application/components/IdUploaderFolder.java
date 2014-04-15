@@ -151,13 +151,13 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idType())).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idNumber())).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).build());
+            content.setWidget(++row, 0, inject(proto().idType(), new FormDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().idNumber(), new FormDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().notes(), new FormDecoratorBuilder().build()));
 
             IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
             docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {

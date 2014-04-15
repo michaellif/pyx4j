@@ -28,13 +28,13 @@ public class CashInfoEditor extends CEntityForm<CashInfo> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().receivedAmount()), 15).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().changeAmount()), 5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).build());
+        panel.setWidget(++row, 0, inject(proto().receivedAmount(), new FormDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().changeAmount(), new FormDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().notes(), new FormDecoratorBuilder().build()));
 
         return panel;
     }

@@ -28,11 +28,11 @@ public class L1SignatureDataForm extends CEntityForm<L1SignatureData> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().landlordOrAgent())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());
+        panel.setWidget(++row, 0, inject(proto().landlordOrAgent(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().date(), new FormDecoratorBuilder().build()));
         return panel;
     }
 

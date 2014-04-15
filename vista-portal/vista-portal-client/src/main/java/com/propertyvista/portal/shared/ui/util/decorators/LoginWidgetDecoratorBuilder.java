@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 
 /** Sets up defaults for Landing Forms (Login, Password Reset, TenantRegsitration etc.. ), right now intended to be used not with 'editable' forms only */
@@ -23,24 +20,20 @@ public class LoginWidgetDecoratorBuilder extends FormWidgetDecoratorBuilder {
 
     private String watermark;
 
-    public LoginWidgetDecoratorBuilder(CComponent<?> component) {
-        super(component, "0", "100%", "280px");
+    public LoginWidgetDecoratorBuilder() {
+        super("0", "100%", "280px");
         labelPosition(LabelPosition.hidden);
         useLabelSemicolon(false);
         mandatoryMarker(false);
     }
 
+    String getWatermark() {
+        return watermark;
+    }
+
     @Override
-    public FormWidgetDecorator build() {
-
-        String text = watermark != null ? watermark : getComponent().getTitle();
-        if (getComponent() instanceof CTextFieldBase) {
-            ((CTextFieldBase<?, ?>) getComponent()).setWatermark(text);
-        } else if (getComponent() instanceof CCaptcha) {
-            ((CCaptcha) getComponent()).setWatermark(text);
-        }
-
-        return super.build();
+    public LoginWidgetDecorator build() {
+        return new LoginWidgetDecorator(this);
     }
 
     public Builder watermark(String watermark) {

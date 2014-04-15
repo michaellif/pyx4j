@@ -54,12 +54,12 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontSize(1.3, Unit.EM);
         contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
 
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportType())).build());
+        contentPanel.setWidget(++row, 0, inject(proto().reportType(), new FormDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().setupFee())).build());
+        contentPanel.setWidget(++row, 0, inject(proto().setupFee(), new FormDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().perApplicantFee())).build());
+        contentPanel.setWidget(++row, 0, inject(proto().perApplicantFee(), new FormDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         selectTab(addTab(contentPanel));

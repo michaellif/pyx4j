@@ -39,17 +39,17 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
 
         int row = -1;
 
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().street1())).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().street2())).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().city())).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().province())).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().country())).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().postalCode())).build());
+        main.setWidget(++row, 0, inject(proto().street1(), new FormWidgetDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().street2(), new FormWidgetDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().city(), new FormWidgetDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().province(), new FormWidgetDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().country(), new FormWidgetDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().postalCode(), new FormWidgetDecoratorBuilder().build()));
 
         return main;
     }

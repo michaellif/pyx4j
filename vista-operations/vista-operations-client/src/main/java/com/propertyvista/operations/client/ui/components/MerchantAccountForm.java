@@ -31,17 +31,17 @@ public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
-        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().bankId()), 5).build());
+        panel.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().bankId(), new FormDecoratorBuilder(5).build()));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber()), 15).build());
-        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 0, inject(proto().accountNumber(), new FormDecoratorBuilder(15).build()));
+        panel.setWidget(row, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(5).build()));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().chargeDescription()), true).build());
+        panel.setWidget(++row, 0, 2, inject(proto().chargeDescription(), new FormDecoratorBuilder(true).build()));
 
         return panel;
     }

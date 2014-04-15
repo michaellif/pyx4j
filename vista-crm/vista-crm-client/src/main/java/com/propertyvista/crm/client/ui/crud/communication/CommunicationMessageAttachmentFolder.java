@@ -52,18 +52,18 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
             content.setWidget(
                     ++row,
                     0,
-                    new FormDecoratorBuilder(inject(proto().file(),
+                    inject(proto().file(),
                             new CFile(GWT.<CommunicationMessageAttachmentUploadService> create(CommunicationMessageAttachmentUploadService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class))), 30).build());
+                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), new FormDecoratorBuilder(30).build()));
 
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 20).build());
+            content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(20).build()));
 
             return content;
         }

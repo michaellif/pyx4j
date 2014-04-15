@@ -92,11 +92,11 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
         panel.add(validationLabelHolder);
 
         initWidget(panel);
-        setComponent(component);
+        init(component);
     }
 
     @Override
-    public void setComponent(CComponent<?> component) {
+    public void init(CComponent<?> component) {
         this.component = component;
         this.component.asWidget().setWidth(componentWidth + "em");
         this.component.addPropertyChangeHandler(new PropertyChangeHandler() {

@@ -36,13 +36,16 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         if (!VistaFeatures.instance().yardiIntegration()) {
             panel.setH2(++row, 0, 1, i18n.tr("Vacancy:"));
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().vacantUnits(), new CLabel<Integer>())).customLabel(i18n.tr("Units Vacant"))
-                    .componentWidth(15).build());
+            panel.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().vacantUnits(), new CLabel<Integer>(), new FormDecoratorBuilder().customLabel(i18n.tr("Units Vacant")).componentWidth(15)
+                            .build()));
             ((CLabel<Integer>) get(proto().vacantUnits())).setFormat(new IFormat<Integer>() {
                 @Override
                 public Integer parse(String string) throws ParseException {
@@ -59,11 +62,13 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
             });
         }
         panel.setH2(++row, 0, 1, i18n.tr("Notices Leaving:"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noticesLeavingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noticesLeavingNextMonth())).customLabel(i18n.tr("Next Month")).componentWidth(5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noticesLeaving60to90Days())).customLabel(i18n.tr("60 to 90 Days")).componentWidth(5)
-                .build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noticesLeavingOver90Days())).customLabel(i18n.tr("90+")).componentWidth(5).build());
+        panel.setWidget(++row, 0,
+                inject(proto().noticesLeavingThisMonth(), new FormDecoratorBuilder().customLabel(i18n.tr("This Month")).componentWidth(5).build()));
+        panel.setWidget(++row, 0,
+                inject(proto().noticesLeavingNextMonth(), new FormDecoratorBuilder().customLabel(i18n.tr("Next Month")).componentWidth(5).build()));
+        panel.setWidget(++row, 0,
+                inject(proto().noticesLeaving60to90Days(), new FormDecoratorBuilder().customLabel(i18n.tr("60 to 90 Days")).componentWidth(5).build()));
+        panel.setWidget(++row, 0, inject(proto().noticesLeavingOver90Days(), new FormDecoratorBuilder().customLabel(i18n.tr("90+")).componentWidth(5).build()));
         return panel;
 
     }

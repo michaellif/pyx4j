@@ -26,8 +26,6 @@ import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
 public class AutoPayPolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayPolicyDTO> {
 
-    private static final I18n i18n = I18n.get(AutoPayPolicyForm.class);
-
     public AutoPayPolicyForm(IForm<AutoPayPolicyDTO> view) {
         super(AutoPayPolicyDTO.class, view);
     }
@@ -41,14 +39,14 @@ public class AutoPayPolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayPolicyD
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel("Settings");
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().onLeaseChargeChangeRule()), 15, true).labelWidth(20).build());
+        panel.setWidget(++row, 0, 2, inject(proto().onLeaseChargeChangeRule(), new FormDecoratorBuilder(15, true).labelWidth(20).build()));
 
         // TODO : excludeFirstBillingPeriodCharge not implemented yet!
-//        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().excludeFirstBillingPeriodCharge()), 5, true).labelWidth(20).build());
+//        panel.setWidget(++row, 0, 2, inject(proto().excludeFirstBillingPeriodCharge(),new FormDecoratorBuilder( 5, true).labelWidth(20).build()));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().excludeLastBillingPeriodCharge()), 5, true).labelWidth(20).build());
+        panel.setWidget(++row, 0, 2, inject(proto().excludeLastBillingPeriodCharge(), new FormDecoratorBuilder(5, true).labelWidth(20).build()));
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowCancelationByResident()), 5, true).labelWidth(20).build());
+        panel.setWidget(++row, 0, 2, inject(proto().allowCancelationByResident(), new FormDecoratorBuilder(5, true).labelWidth(20).build()));
 
         return panel;
     }

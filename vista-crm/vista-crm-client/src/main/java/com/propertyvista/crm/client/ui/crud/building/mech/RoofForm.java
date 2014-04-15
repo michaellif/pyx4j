@@ -35,8 +35,8 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 20).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().year()), 10).build());
+        main.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().year(), new FormDecoratorBuilder(10).build()));
 
         return main;
     }

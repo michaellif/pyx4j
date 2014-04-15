@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,34 +39,34 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingType())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleEndDate())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetBillExecutionDate())).build());
+        content.setWidget(++row, 0, inject(proto().billingType(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().billingCycleStartDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().billingCycleEndDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().targetBillExecutionDate(), new FormDecoratorBuilder().build()));
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().failed())).build());
+        content.setWidget(++row, 0, inject(proto().stats().failed(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Failed));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().rejected())).build());
+        content.setWidget(++row, 0, inject(proto().stats().rejected(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Rejected));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().notConfirmed())).build());
+        content.setWidget(++row, 0, inject(proto().stats().notConfirmed(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Finished));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().confirmed())).build());
+        content.setWidget(++row, 0, inject(proto().stats().confirmed(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Confirmed));
 
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total())).build());
+        content.setWidget(++row, 0, inject(proto().total(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewLeasesLink(false));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notRun())).build());
+        content.setWidget(++row, 0, inject(proto().notRun(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewLeasesLink(true));
 
         content.setH2(++row, 0, 2, i18n.tr("AutoPay"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().actualAutopayExecutionDate())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetAutopayExecutionDate())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pads())).build());
+        content.setWidget(++row, 0, inject(proto().actualAutopayExecutionDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().targetAutopayExecutionDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().pads(), new FormDecoratorBuilder().build()));
         content.setWidget(row, 1, new ViewPadLink());
 
         setTabBarVisible(false);
@@ -77,8 +76,8 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
     // builder specifically for this form (enlarge default label width)
     protected class DecoratorBuilder extends WidgetDecorator.Builder {
 
-        public DecoratorBuilder(CComponent<?> component) {
-            super(component);
+        public DecoratorBuilder() {
+            super();
             labelWidth(20);
             componentWidth(15);
         }

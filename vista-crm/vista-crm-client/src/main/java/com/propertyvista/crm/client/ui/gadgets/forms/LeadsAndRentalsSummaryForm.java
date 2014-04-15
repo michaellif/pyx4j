@@ -31,13 +31,13 @@ public class LeadsAndRentalsSummaryForm extends ZoomableViewForm<LeadsAndRentals
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leads())).componentWidth(15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().appointmentsLabel())).componentWidth(15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rentalsLabel())).componentWidth(15).build());
+        content.setWidget(++row, 0, inject(proto().leads(), new FormDecoratorBuilder().componentWidth(15).build()));
+        content.setWidget(++row, 0, inject(proto().appointmentsLabel(), new FormDecoratorBuilder().componentWidth(15).build()));
+        content.setWidget(++row, 0, inject(proto().rentalsLabel(), new FormDecoratorBuilder().componentWidth(15).build()));
 
         return content;
     }

@@ -108,17 +108,17 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         TwoColumnFlexFormPanel summary = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percentOfRentCovered()), 20, 10, 20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAccounts()), 20, 10, 20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalOutstandingBalance()), 20, 10, 20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 20, 10, 20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingCollectionsBalance()), 20, 10, 20).build());
+        summary.setWidget(++row, 0, inject(proto().percentOfRentCovered(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().totalAccounts(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().totalOutstandingBalance(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().outstandingRevolvingDebt(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().outstandingCollectionsBalance(), new FormDecoratorBuilder(20, 10, 20).build()));
 
         row = 0;
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().accountsWithNoLatePayments()), 20, 10, 20).build());
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfLegalItems()), 20, 10, 20).build());
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 20, 10, 20).build());
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().landlordCollectionsFiled()), 20, 10, 20).build());
+        summary.setWidget(++row, 1, inject(proto().accountsWithNoLatePayments(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().numberOfLegalItems(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().numberOfBancruptciesOrActs(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().landlordCollectionsFiled(), new FormDecoratorBuilder(20, 10, 20).build()));
 // Not implemented in Equifax:
 //      summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfEvictions()), 20, 10, 20).build());
 
@@ -128,9 +128,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         accounts.getWidget(0, col).setWidth("15em");
         accounts.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
-        accounts.setWidget(0, ++col, alignToCenter(inject(proto().latePayments1_30days()), 20));
-        accounts.setWidget(0, ++col, alignToCenter(inject(proto().latePayments31_60days()), 20));
-        accounts.setWidget(0, ++col, alignToCenter(inject(proto().latePayments61_90days()), 20));
+        accounts.setWidget(0, ++col, inject(proto().latePayments1_30days(), decorator(20)));
+        accounts.setWidget(0, ++col, inject(proto().latePayments31_60days(), decorator(20)));
+        accounts.setWidget(0, ++col, inject(proto().latePayments61_90days(), decorator(20)));
 
         BasicFlexFormPanel equiifax = new BasicFlexFormPanel();
         col = -1;
@@ -138,21 +138,21 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         equiifax.getWidget(0, col).setWidth("15em");
         equiifax.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
-        equiifax.setWidget(0, ++col, alignToCenter(inject(proto().equifaxCheckScore()), 20));
-        equiifax.setWidget(0, ++col, alignToCenter(inject(proto().equifaxRatingLevel()), 20));
-        equiifax.setWidget(0, ++col, alignToCenter(inject(proto().equifaxRiskLevel()), 20));
+        equiifax.setWidget(0, ++col, inject(proto().equifaxCheckScore(), decorator(20)));
+        equiifax.setWidget(0, ++col, inject(proto().equifaxRatingLevel(), decorator(20)));
+        equiifax.setWidget(0, ++col, inject(proto().equifaxRiskLevel(), decorator(20)));
 
         BasicFlexFormPanel raitings = new BasicFlexFormPanel();
         col = -1;
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating1()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating2()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating3()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating4()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating5()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating6()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating7()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating8()), 8));
-        raitings.setWidget(0, ++col, alignToCenter(inject(proto().rating9()), 8));
+        raitings.setWidget(0, ++col, inject(proto().rating1(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating2(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating3(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating4(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating5(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating6(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating7(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating8(), decorator(8)));
+        raitings.setWidget(0, ++col, inject(proto().rating9(), decorator(8)));
 
         // put all together:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -174,11 +174,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         name.setWidget(0, 0, 2, inject(proto().identity().name(), new NameEditor(i18n.tr("Name"))));
 
-        name.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().identity().SIN()), 20).build());
-        name.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().identity().maritalStatus()), 10).build());
+        name.setWidget(1, 0, inject(proto().identity().SIN(), new FormDecoratorBuilder(20).build()));
+        name.setWidget(2, 0, inject(proto().identity().maritalStatus(), new FormDecoratorBuilder(10).build()));
 
-        name.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().identity().birthDate()), 10).build());
-        name.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().identity().deathDate()), 10).build());
+        name.setWidget(1, 1, inject(proto().identity().birthDate(), new FormDecoratorBuilder(10).build()));
+        name.setWidget(2, 1, inject(proto().identity().deathDate(), new FormDecoratorBuilder(10).build()));
 
         BasicFlexFormPanel address = new BasicFlexFormPanel();
         address.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
@@ -192,13 +192,13 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         BasicFlexFormPanel employement = new BasicFlexFormPanel();
         employement.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
         employement.getWidget(0, 0).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        employement.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().identity().currentEmployer()), 20).build());
-        employement.setWidget(4, 0, new FormDecoratorBuilder(inject(proto().identity().currentOccupation()), 20).build());
+        employement.setWidget(1, 0, inject(proto().identity().currentEmployer(), new FormDecoratorBuilder(20).build()));
+        employement.setWidget(4, 0, inject(proto().identity().currentOccupation(), new FormDecoratorBuilder(20).build()));
 
         employement.setWidget(0, 1, new HTML("<i>" + i18n.tr("Former:") + "</i>"));
         employement.getWidget(0, 1).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        employement.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().identity().formerEmployer()), 20).build());
-        employement.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().identity().formerOccupation()), 20).build());
+        employement.setWidget(1, 1, inject(proto().identity().formerEmployer(), new FormDecoratorBuilder(20).build()));
+        employement.setWidget(2, 1, inject(proto().identity().formerOccupation(), new FormDecoratorBuilder(20).build()));
 
         // put all together:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -214,8 +214,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         return main;
     }
 
-    private WidgetDecorator alignToCenter(CComponent<?> comp, double width) {
-        return new FormDecoratorBuilder(comp, width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
+    private WidgetDecorator decorator(double width) {
+        return new FormDecoratorBuilder(width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
                 .componentAlignment(Alignment.center).build();
     }
 
@@ -240,25 +240,25 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 BasicFlexFormPanel table = new BasicFlexFormPanel();
-                table.setWidget(0, ++col, alignToCenter(inject(proto().name()), 20));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().number()), 15));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().creditAmount()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().balanceAmount()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().lastPayment()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().code()), 5));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().type()), 10));
+                table.setWidget(0, ++col, inject(proto().name(), decorator(20)));
+                table.setWidget(0, ++col, inject(proto().number(), decorator(15)));
+                table.setWidget(0, ++col, inject(proto().creditAmount(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().balanceAmount(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().lastPayment(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().code(), decorator(5)));
+                table.setWidget(0, ++col, inject(proto().type(), decorator(10)));
 
                 main.setWidget(0, 0, 2, table);
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().paymentRate()), 25).build());
-                main.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().paymentType()), 25).build());
+                main.setWidget(2, 0, inject(proto().paymentRate(), new FormDecoratorBuilder(25).build()));
+                main.setWidget(2, 1, inject(proto().paymentType(), new FormDecoratorBuilder(25).build()));
 
                 return main;
             }
@@ -286,24 +286,24 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 BasicFlexFormPanel table = new BasicFlexFormPanel();
-                table.setWidget(0, ++col, alignToCenter(inject(proto().caseNumber()), 15));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().customerNumber()), 15));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().customerName()), 20));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().status()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().dateFiled()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().dateSatisfied()), 10));
+                table.setWidget(0, ++col, inject(proto().caseNumber(), decorator(15)));
+                table.setWidget(0, ++col, inject(proto().customerNumber(), decorator(15)));
+                table.setWidget(0, ++col, inject(proto().customerName(), decorator(20)));
+                table.setWidget(0, ++col, inject(proto().status(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().dateFiled(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().dateSatisfied(), decorator(10)));
 
                 main.setWidget(0, 0, 2, table);
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().plaintiff()), 50, true).build());
-                main.setWidget(3, 0, 2, new FormDecoratorBuilder(inject(proto().defendants()), 50, true).build());
+                main.setWidget(2, 0, 2, inject(proto().plaintiff(), new FormDecoratorBuilder(50, true).build()));
+                main.setWidget(3, 0, 2, inject(proto().defendants(), new FormDecoratorBuilder(50, true).build()));
 
                 return main;
             }
@@ -331,24 +331,24 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 BasicFlexFormPanel table = new BasicFlexFormPanel();
-                table.setWidget(0, ++col, alignToCenter(inject(proto().caseNumber()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().customerNumber()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().customerName()), 20));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().dispositionDate()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().liabilityAmount()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().assetAmount()), 10));
+                table.setWidget(0, ++col, inject(proto().caseNumber(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().customerNumber(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().customerName(), decorator(20)));
+                table.setWidget(0, ++col, inject(proto().dispositionDate(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().liabilityAmount(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().assetAmount(), decorator(10)));
 
                 main.setWidget(0, 0, 2, table);
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().caseNumberAndTrustee()), 50, true).build());
-                main.setWidget(3, 0, 2, new FormDecoratorBuilder(inject(proto().intentOrDisposition()), 50, true).build());
+                main.setWidget(2, 0, 2, inject(proto().caseNumberAndTrustee(), new FormDecoratorBuilder(50, true).build()));
+                main.setWidget(3, 0, 2, inject(proto().intentOrDisposition(), new FormDecoratorBuilder(50, true).build()));
 
                 return main;
             }
@@ -376,24 +376,24 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 BasicFlexFormPanel table = new BasicFlexFormPanel();
-                table.setWidget(0, ++col, alignToCenter(inject(proto().caseNumber()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().customerNumber()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().customerName()), 20));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().dateFiled()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().judgementDate()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().judgment()), 10));
+                table.setWidget(0, ++col, inject(proto().caseNumber(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().customerNumber(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().customerName(), decorator(20)));
+                table.setWidget(0, ++col, inject(proto().dateFiled(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().judgementDate(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().judgment(), decorator(10)));
 
                 main.setWidget(0, 0, 2, table);
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().plaintiff()), 50, true).build());
-                main.setWidget(3, 0, 2, new FormDecoratorBuilder(inject(proto().defendants()), 50, true).build());
+                main.setWidget(2, 0, 2, inject(proto().plaintiff(), new FormDecoratorBuilder(50, true).build()));
+                main.setWidget(3, 0, 2, inject(proto().defendants(), new FormDecoratorBuilder(50, true).build()));
                 main.setWidget(4, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 return main;
@@ -422,25 +422,25 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 BasicFlexFormPanel table = new BasicFlexFormPanel();
-                table.setWidget(0, ++col, alignToCenter(inject(proto().landlord()), 20));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().rent()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().writeOffs()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().noticeGiven()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().latePayments()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().NSFChecks()), 10));
+                table.setWidget(0, ++col, inject(proto().landlord(), decorator(20)));
+                table.setWidget(0, ++col, inject(proto().rent(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().writeOffs(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().noticeGiven(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().latePayments(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().NSFChecks(), decorator(10)));
 
                 main.setWidget(0, 0, 2, table);
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().lastUpdated()), 25, true).build());
-                main.setWidget(3, 0, new FormDecoratorBuilder(inject(proto().from()), 10).build());
-                main.setWidget(3, 1, new FormDecoratorBuilder(inject(proto().to()), 10).build());
+                main.setWidget(2, 0, 2, inject(proto().lastUpdated(), new FormDecoratorBuilder(25, true).build()));
+                main.setWidget(3, 0, inject(proto().from(), new FormDecoratorBuilder(10).build()));
+                main.setWidget(3, 1, inject(proto().to(), new FormDecoratorBuilder(10).build()));
                 main.setWidget(4, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 return main;
@@ -469,16 +469,16 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel table = new BasicFlexFormPanel();
 
                 int col = -1;
-                table.setWidget(0, ++col, alignToCenter(inject(proto().onBehalf()), 20));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().date()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().lastActive()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().originalAmount()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().balance()), 10));
-                table.setWidget(0, ++col, alignToCenter(inject(proto().status()), 15));
+                table.setWidget(0, ++col, inject(proto().onBehalf(), decorator(20)));
+                table.setWidget(0, ++col, inject(proto().date(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().lastActive(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().originalAmount(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().balance(), decorator(10)));
+                table.setWidget(0, ++col, inject(proto().status(), decorator(15)));
 
                 return table;
             }

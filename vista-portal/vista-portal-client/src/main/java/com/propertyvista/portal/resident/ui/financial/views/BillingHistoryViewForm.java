@@ -44,7 +44,7 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
@@ -77,14 +77,14 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().referenceNo(), new CNumberLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().fromDate(), new CDateLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dueDate(), new CDateLabel()), 100).build());
+                content.setWidget(++row, 0, inject(proto().referenceNo(), new CNumberLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().fromDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().dueDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
 
                 content.setWidget(++row, 0, new Anchor("View Details", new Command() {
                     @Override

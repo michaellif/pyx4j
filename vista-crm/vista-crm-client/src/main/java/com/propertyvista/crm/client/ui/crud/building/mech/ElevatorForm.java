@@ -36,17 +36,17 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 15).build());
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        main.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().make(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().model(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
         main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().license(), new LicenseEditor()));
 
         row = 0;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().build()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
+        main.setWidget(++row, 1, inject(proto().build(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().isForMoveInOut(), new FormDecoratorBuilder(5).build()));
 
         return main;
     }

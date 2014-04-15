@@ -119,7 +119,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             return message = new Label();
         }
 

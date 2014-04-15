@@ -28,18 +28,18 @@ public class FundsTransferBatchForm extends OperationsEntityForm<FundsTransferBa
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().batchNumber())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().pmc().name())).customLabel("PMC:").build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FormDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankId())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().branchTransitNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().chargeDescription())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().batchAmount())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().chargeDescription(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().batchAmount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

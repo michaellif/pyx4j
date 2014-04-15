@@ -51,26 +51,28 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 22).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).build());
+        content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>(), new FormDecoratorBuilder(22).build()));
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormDecoratorBuilder(22).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().effectiveFrom(), new CDateLabel()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiredFrom(), new CDateLabel()), 10).build());
+        content.setWidget(++row, 0, inject(proto().effectiveFrom(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().expiredFrom(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 15).build());
+        content.setWidget(++row, 0, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
+        content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(15).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedByTenant()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updatedBySystem()), 10).build());
+        content.setWidget(++row, 0, inject(proto().updatedByTenant(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().updatedBySystem(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isDeleted()), 5).build());
+        content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().isDeleted(), new FormDecoratorBuilder(5).build()));
         CLabel<Key> reviewOfPapLink;
-        content.setWidget(++row, 0,
-                new FormDecoratorBuilder(reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>()), 5).customLabel(i18n.tr("Reviewed AutoPay"))
-                        .build());
+        content.setWidget(
+                ++row,
+                0,
+                reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>(), new FormDecoratorBuilder(5).customLabel(i18n.tr("Reviewed AutoPay"))
+                        .build()));
         reviewOfPapLink.setNavigationCommand(new Command() {
             @Override
             public void execute() {

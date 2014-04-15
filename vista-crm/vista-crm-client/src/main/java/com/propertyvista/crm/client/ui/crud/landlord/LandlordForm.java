@@ -56,8 +56,8 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
-        panel.setWidget(row, 0, (new FormDecoratorBuilder(inject(proto().name()))).build());
-        panel.setWidget(row, 1, (new FormDecoratorBuilder(inject(proto().website()))).build());
+        panel.setWidget(row, 0, inject(proto().name(), new FormDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().website(), new FormDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, proto().address().getMeta().getCaption());
         panel.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor(false)));
@@ -67,14 +67,14 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
         CImage logo = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));
         logo.setScaleMode(ScaleMode.Contain);
         logo.setImageSize(368, 60);
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().logo().file(), logo), true).customLabel(i18n.tr("Logo")).build());
+        panel.setWidget(++row, 0, 2, inject(proto().logo().file(), logo, new FormDecoratorBuilder(true).customLabel(i18n.tr("Logo")).build()));
 
         panel.setBR(++row, 0, 2);
         CImage signature = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signature().file(), signature), true).customLabel(i18n.tr("Signature")).build());
+        panel.setWidget(++row, 0, 2, inject(proto().signature().file(), signature, new FormDecoratorBuilder(true).customLabel(i18n.tr("Signature")).build()));
 
         return panel;
     }

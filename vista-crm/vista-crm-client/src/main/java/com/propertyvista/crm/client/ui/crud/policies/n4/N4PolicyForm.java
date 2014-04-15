@@ -98,12 +98,12 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
         TwoColumnFlexFormPanel companyNameAndPhonesPanel = new TwoColumnFlexFormPanel();
         int row = -1;
-        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
+        signaturePanel.setWidget(++row, 0, 2, inject(proto().includeSignature(), new FormDecoratorBuilder().build()));
         signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
 
         int subRow = -1;
-        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, new FormDecoratorBuilder(inject(proto().companyName())).build());
-        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, inject(proto().companyName(), new FormDecoratorBuilder().build()));
+        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, inject(proto().emailAddress(), new FormDecoratorBuilder().build()));
 
         CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
             @Override
@@ -113,7 +113,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         });
         phoneNumberField.setWatermark("(___) ___-____");
         phoneNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, new FormDecoratorBuilder(phoneNumberField).build());
+        phoneNumberField.setDecorator(new FormDecoratorBuilder().build());
+        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, phoneNumberField);
 
         CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
             @Override
@@ -123,7 +124,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         });
         faxNumberField.setWatermark("(___) ___-____");
         faxNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, new FormDecoratorBuilder(faxNumberField).build());
+        faxNumberField.setDecorator(new FormDecoratorBuilder().build());
+        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, faxNumberField);
 
         signaturePanel.setWidget(++row, 0, 1, companyNameAndPhonesPanel);
         signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
@@ -139,13 +141,13 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
         row = -1;
         deliveryPanel.setH1(++row, 0, 2, i18n.tr("Termination date calculation:"));
-        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().terminationDateAdvanceDaysLongRentPeriod())).build());
-        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().terminationDateAdvanceDaysShortRentPeriod())).build());
+        deliveryPanel.setWidget(++row, 0, 1, inject(proto().terminationDateAdvanceDaysLongRentPeriod(), new FormDecoratorBuilder().build()));
+        deliveryPanel.setWidget(++row, 0, 1, inject(proto().terminationDateAdvanceDaysShortRentPeriod(), new FormDecoratorBuilder().build()));
 
         deliveryPanel.setH1(++row, 0, 2, i18n.tr("Additional advance days based on delivery method:"));
-        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().handDeliveryAdvanceDays())).build());
-        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
-        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
+        deliveryPanel.setWidget(++row, 0, 1, inject(proto().handDeliveryAdvanceDays(), new FormDecoratorBuilder().build()));
+        deliveryPanel.setWidget(++row, 0, 1, inject(proto().mailDeliveryAdvanceDays(), new FormDecoratorBuilder().build()));
+        deliveryPanel.setWidget(++row, 0, 1, inject(proto().courierDeliveryAdvanceDays(), new FormDecoratorBuilder().build()));
 
         return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel, createAutoCancellationPanel());
     }
@@ -153,8 +155,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     private TwoColumnFlexFormPanel createAutoCancellationPanel() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Auto Cancellation"));
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cancellationThreshold())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDays())).build());
+        panel.setWidget(++row, 0, inject(proto().cancellationThreshold(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().expiryDays(), new FormDecoratorBuilder().build()));
 
         return panel;
     }
@@ -260,7 +262,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             FlowPanel panel = new FlowPanel();
             panel.add(inject(proto().arCode(), arCodeBox));
             panel.add(yardiChargeCodesLabel);

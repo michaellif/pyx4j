@@ -37,7 +37,7 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 

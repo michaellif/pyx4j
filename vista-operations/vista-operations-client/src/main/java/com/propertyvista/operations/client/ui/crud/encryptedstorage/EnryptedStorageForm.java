@@ -29,7 +29,7 @@ public class EnryptedStorageForm extends CEntityForm<EncryptedStorageDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
         panel.add(inject(proto().keys(), folder = new EnryptedStorageKeyFolder()));
         return panel;

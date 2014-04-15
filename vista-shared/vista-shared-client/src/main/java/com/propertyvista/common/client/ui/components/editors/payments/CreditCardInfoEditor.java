@@ -73,17 +73,17 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 20).build());
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().cardType(), typeSelector, new FormDecoratorBuilder(20).build()));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
+        panel.setWidget(++row, 0, inject(proto().card(), cardEditor, new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().expiryDate(), monthYearPicker, new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().securityCode(), new FormDecoratorBuilder(3).build()));
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

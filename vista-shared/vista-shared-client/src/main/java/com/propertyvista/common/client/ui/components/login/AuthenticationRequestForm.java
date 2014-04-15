@@ -29,13 +29,13 @@ public class AuthenticationRequestForm extends CEntityForm<AuthenticationRequest
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new LoginPanelWidgetDecorator(inject(proto().email())));
-        content.setWidget(++row, 0, new LoginPanelWidgetDecorator(inject(proto().password())));
-        content.setWidget(++row, 0, new LoginPanelWidgetDecorator(inject(proto().captcha())));
+        content.setWidget(++row, 0, inject(proto().email(), new LoginPanelWidgetDecorator()));
+        content.setWidget(++row, 0, inject(proto().password(), new LoginPanelWidgetDecorator()));
+        content.setWidget(++row, 0, inject(proto().captcha(), new LoginPanelWidgetDecorator()));
 
         return content;
     }

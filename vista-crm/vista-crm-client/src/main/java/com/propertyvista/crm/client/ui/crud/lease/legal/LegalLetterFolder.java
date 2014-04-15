@@ -40,14 +40,14 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
             panel.setWidget(++row, 0, 2,
-                    new FormDecoratorBuilder(inject(proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class)))).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().amountOwed())).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().terminationDate())).build());
+                    inject(proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class)), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().generatedOn(), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().amountOwed(), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().terminationDate(), new FormDecoratorBuilder().build()));
             return panel;
         }
     }
@@ -59,17 +59,17 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class)))).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().notes())).build());
+            panel.setWidget(++row, 0, 2,
+                    inject(proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class)), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().generatedOn(), new FormDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().notes(), new FormDecoratorBuilder().build()));
 
             return panel;
         }
-
     }
 
     public LegalLetterFolder() {
@@ -96,7 +96,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             panel.setWidth("100%");
             int row = -1;

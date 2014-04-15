@@ -84,7 +84,7 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
                 }
 
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     IsWidget w = super.createContent();
                     get(proto().bankCharge()).addValueChangeHandler(createTotalChargeUpdateRequiredHandler());
                     get(proto().landlordsAdministrationCharge()).addValueChangeHandler(createTotalChargeUpdateRequiredHandler());

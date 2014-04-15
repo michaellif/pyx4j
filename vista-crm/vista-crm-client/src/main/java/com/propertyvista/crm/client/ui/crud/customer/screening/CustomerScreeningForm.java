@@ -148,25 +148,25 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().suedForRent())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().suedForRent(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().suedForDamages())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().suedForDamages(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().everEvicted())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().everEvicted(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().defaultedOnLease())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().defaultedOnLease(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().convictedOfFelony())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().convictedOfFelony(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().legalTroubles())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().legalTroubles(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, decorateLegalQuestion(inject(proto().screening().version().legalQuestions().filedBankruptcy())));
+        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().filedBankruptcy(), legalQuestionDecorator()));
 
         return main;
     }
 
-    private WidgetDecorator decorateLegalQuestion(CComponent<?> comp) {
-        return new FormDecoratorBuilder(comp, 60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+    private WidgetDecorator legalQuestionDecorator() {
+        return new FormDecoratorBuilder(60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 
     private void enablePreviousAddress() {

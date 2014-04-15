@@ -28,7 +28,7 @@ public class AddressStructuredEditor extends AddressStructuredEditorImpl<Address
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         return internalCreateContent();
     }
 }

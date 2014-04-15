@@ -121,33 +121,35 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         flexPanel.setWidget(
                 ++leftRow,
                 0,
-                new FormDecoratorBuilder(inject(proto().building(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
-                        AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
+                inject(proto().building(),
+                        isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)),
+                        new FormDecoratorBuilder(20).build()));
 
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new FloorplanSelectorHyperlink()), 20).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
+        flexPanel.setWidget(++leftRow, 0, inject(proto().floorplan(), new FloorplanSelectorHyperlink(), new FormDecoratorBuilder(20).build()));
+        flexPanel.setWidget(++leftRow, 0, inject(proto().info().economicStatus(), new FormDecoratorBuilder(20).build()));
+        flexPanel.setWidget(++leftRow, 0, inject(proto().info().economicStatusDescription(), new FormDecoratorBuilder(20).build()));
 
         flexPanel.setBR(++leftRow, 0, 1);
         flexPanel.setWidget(
                 ++leftRow,
                 0,
-                new FormDecoratorBuilder(inject(proto().lease(), isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
-                        AppPlaceEntityMapper.resolvePlace(Lease.class))), 20).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().availability().availableForRent()), 9).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().reservedUntil()), 9).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
+                inject(proto().lease(),
+                        isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class)),
+                        new FormDecoratorBuilder(20).build()));
+        flexPanel.setWidget(++leftRow, 0, inject(proto().availability().availableForRent(), new FormDecoratorBuilder(9).build()));
+        flexPanel.setWidget(++leftRow, 0, inject(proto().reservedUntil(), new FormDecoratorBuilder(9).build()));
+        flexPanel.setWidget(++leftRow, 0, inject(proto().financial()._unitRent(), new FormDecoratorBuilder(7).build()));
+        flexPanel.setWidget(++leftRow, 0, inject(proto().financial()._marketRent(), new FormDecoratorBuilder(10).build()));
 
         int rightRow = -1;
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().floor()), 5).build());
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().number()), 5).build());
+        flexPanel.setWidget(++rightRow, 1, inject(proto().info().floor(), new FormDecoratorBuilder(5).build()));
+        flexPanel.setWidget(++rightRow, 1, inject(proto().info().number(), new FormDecoratorBuilder(5).build()));
 
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info()._bedrooms()), 5).build());
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info()._bathrooms()), 5).build());
+        flexPanel.setWidget(++rightRow, 1, inject(proto().info()._bedrooms(), new FormDecoratorBuilder(5).build()));
+        flexPanel.setWidget(++rightRow, 1, inject(proto().info()._bathrooms(), new FormDecoratorBuilder(5).build()));
 
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().area()), 8).build());
-        flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
+        flexPanel.setWidget(++rightRow, 1, inject(proto().info().area(), new FormDecoratorBuilder(8).build()));
+        flexPanel.setWidget(++rightRow, 1, inject(proto().info().areaUnits(), new FormDecoratorBuilder(8).build()));
 
         leftRow = Math.max(leftRow, rightRow);
 
@@ -164,7 +166,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         BasicFlexFormPanel main = new BasicFlexFormPanel(i18n.tr("Legal Address"));
 
         int row = -1;
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().info().legalAddressOverride())).labelWidth("360px").build());
+        main.setWidget(++row, 0, 2, inject(proto().info().legalAddressOverride(), new FormDecoratorBuilder().labelWidth("360px").build()));
         main.setH1(++row, 0, 2, proto().info().legalAddress().getMeta().getCaption());
         unitLegalAddressLabel = main.getWidget(row, 0);
         main.setWidget(++row, 0, inject(proto().info().legalAddress(), new AddressStructuredEditor(true)));

@@ -56,12 +56,15 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200)
-                .labelAlignment(Alignment.left).build());
+        mainPanel.setWidget(
+                ++row,
+                0,
+                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormWidgetDecoratorBuilder(200).labelAlignment(Alignment.left)
+                        .build()));
 
         mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         mainPanel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
@@ -79,8 +82,8 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
         mainPanel.setHR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().total(), new CMoneyLabel()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
+        mainPanel.setWidget(++row, 0, inject(proto().total(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
 
         get(proto().coveredItems()).setVisible(isViewable());
         get(proto().coveredItemsDTO()).setVisible(!isViewable());

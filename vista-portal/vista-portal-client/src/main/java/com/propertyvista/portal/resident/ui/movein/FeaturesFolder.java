@@ -51,13 +51,13 @@ public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().agreedPrice(), new CLabel<BigDecimal>())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>())).build());
+            mainPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().agreedPrice(), new CLabel<BigDecimal>(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
 
             return mainPanel;
         }

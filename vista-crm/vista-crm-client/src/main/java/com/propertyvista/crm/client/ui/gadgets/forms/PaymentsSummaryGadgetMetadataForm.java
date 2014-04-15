@@ -43,15 +43,15 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentsSummaryListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().paymentsSummaryListerSettings().pageSize(), new FormDecoratorBuilder().build()));
         p.setWidget(++row, 0, new HTML("&nbsp"));
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
+        p.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
         p.setWidget(++row, 0, new HTML("&nbsp"));
         get(proto().asOf()).setVisible(false);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -75,7 +75,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
                 }
             }
         });
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentStatus(), paymentStatusSelector), 50).build());
+        p.setWidget(++row, 0, inject(proto().paymentStatus(), paymentStatusSelector, new FormDecoratorBuilder(50).build()));
         return p;
     }
 

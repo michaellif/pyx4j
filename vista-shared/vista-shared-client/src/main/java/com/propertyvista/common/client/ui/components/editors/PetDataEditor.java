@@ -39,20 +39,20 @@ public class PetDataEditor extends CEntityForm<Pet> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Pet Data"));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color()), 15).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().breed()), 15).build());
+        panel.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().color(), new FormDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().breed(), new FormDecoratorBuilder(15).build()));
 
         row = 0; // skip header
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().weight()), 4).build());
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().weightUnit()), 4).build());
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
+        panel.setWidget(++row, 1, inject(proto().weight(), new FormDecoratorBuilder(4).build()));
+        panel.setWidget(++row, 1, inject(proto().weightUnit(), new FormDecoratorBuilder(4).build()));
+        panel.setWidget(++row, 1, inject(proto().birthDate(), new FormDecoratorBuilder(9).build()));
 
         removeMandatory();
         return panel;

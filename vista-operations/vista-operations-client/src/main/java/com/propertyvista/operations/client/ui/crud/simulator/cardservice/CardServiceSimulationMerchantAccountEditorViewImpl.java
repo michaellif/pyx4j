@@ -32,19 +32,18 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
             TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().terminalID())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balance())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
+            tabPanel.setWidget(++row, 0, inject(proto().terminalID(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().balance(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().responseCode(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().created(), new FormDecoratorBuilder().build()));
 
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().visaCreditConvenienceFee())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().masterCardConvenienceFee())).build());
-            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().visaDebitConvenienceFee())).build());
+            tabPanel.setWidget(++row, 0, inject(proto().visaCreditConvenienceFee(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().masterCardConvenienceFee(), new FormDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, inject(proto().visaDebitConvenienceFee(), new FormDecoratorBuilder().build()));
 
             setTabBarVisible(false);
             selectTab(addTab(tabPanel));
         }
-
     }
 
     public CardServiceSimulationMerchantAccountEditorViewImpl() {

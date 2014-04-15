@@ -58,16 +58,16 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     protected abstract Set<CreditCardType> getConvienceFeeApplicableCardTypes();
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>())).build());
+        content.setWidget(++row, 0, inject(proto().type(), new CComboBox<PaymentType>(), new FormWidgetDecoratorBuilder().build()));
         content.setWidget(++row, 0, paymentDetailsHolder);
 
         content.setH4(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().sameAsCurrent())).build());
+        content.setWidget(++row, 0, inject(proto().sameAsCurrent(), new FormWidgetDecoratorBuilder().build()));
         content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         // tweaks:
@@ -93,15 +93,15 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     protected CEntityForm<?> createEcheckInfoEditor() {
         return new EcheckInfoEditor() {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
                 int row = -1;
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameOn())).build());
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().accountNo(), accountEditor)).build());
+                panel.setWidget(++row, 0, inject(proto().nameOn(), new FormWidgetDecoratorBuilder().build()));
+                panel.setWidget(++row, 0, inject(proto().accountNo(), accountEditor, new FormWidgetDecoratorBuilder().build()));
 
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().branchTransitNumber()), 150).build());
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bankId()), 50).build());
+                panel.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FormWidgetDecoratorBuilder(150).build()));
+                panel.setWidget(++row, 0, inject(proto().bankId(), new FormWidgetDecoratorBuilder(50).build()));
 
                 if (!isViewable() && isEditable()) {
                     Image image = new Image(VistaImages.INSTANCE.eChequeGuideNarrow().getSafeUri());
@@ -119,17 +119,17 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     protected CEntityForm<?> createCreditCardInfoEditor() {
         return new CreditCardInfoEditor() {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
                 int row = -1;
                 CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameOn())).build());
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().cardType(), typeSelector)).build());
+                panel.setWidget(++row, 0, inject(proto().nameOn(), new FormWidgetDecoratorBuilder().build()));
+                panel.setWidget(++row, 0, inject(proto().cardType(), typeSelector, new FormWidgetDecoratorBuilder().build()));
 
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().card(), cardEditor)).build());
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 125).build());
-                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().securityCode()), 50).build());
+                panel.setWidget(++row, 0, inject(proto().card(), cardEditor, new FormWidgetDecoratorBuilder().build()));
+                panel.setWidget(++row, 0, inject(proto().expiryDate(), monthYearPicker, new FormWidgetDecoratorBuilder(125).build()));
+                panel.setWidget(++row, 0, inject(proto().securityCode(), new FormWidgetDecoratorBuilder(50).build()));
 
                 // tweak:
                 monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

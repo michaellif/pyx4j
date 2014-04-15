@@ -33,18 +33,19 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel main = internalCreateContent();
 
         int row = main.getRowCount();
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().moveInDate()), 120).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().moveOutDate()), 120).build());
+        main.setWidget(++row, 0, inject(proto().moveInDate(), new FormWidgetDecoratorBuilder(120).build()));
+        main.setWidget(++row, 0, inject(proto().moveOutDate(), new FormWidgetDecoratorBuilder(120).build()));
 
         @SuppressWarnings("unchecked")
         CComponent<OwnedRented> rentedComponent = (CComponent<OwnedRented>) inject(proto().rented());
+        rentedComponent.setDecorator(new FormWidgetDecoratorBuilder(150).build());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {
@@ -52,12 +53,12 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
             }
         });
 
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(rentedComponent, 150).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payment()), 100).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().propertyCompany()), 230).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().managerName()), 180).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().managerPhone()), 180).build());
-        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().managerEmail()), 230).build());
+        main.setWidget(++row, 0, rentedComponent);
+        main.setWidget(++row, 0, inject(proto().payment(), new FormWidgetDecoratorBuilder(100).build()));
+        main.setWidget(++row, 0, inject(proto().propertyCompany(), new FormWidgetDecoratorBuilder(230).build()));
+        main.setWidget(++row, 0, inject(proto().managerName(), new FormWidgetDecoratorBuilder(180).build()));
+        main.setWidget(++row, 0, inject(proto().managerPhone(), new FormWidgetDecoratorBuilder(180).build()));
+        main.setWidget(++row, 0, inject(proto().managerEmail(), new FormWidgetDecoratorBuilder(230).build()));
 
         return main;
     }

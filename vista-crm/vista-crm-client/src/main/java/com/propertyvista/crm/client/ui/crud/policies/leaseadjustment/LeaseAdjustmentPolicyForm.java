@@ -103,11 +103,11 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().code()), 20, true).build());
+                content.setWidget(++row, 0, 2, inject(proto().code(), new FormDecoratorBuilder(20, true).build()));
                 get(proto().code()).setEditable(false);
 
                 content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());

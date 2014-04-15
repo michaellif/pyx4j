@@ -50,16 +50,16 @@ public class ServiceForm extends CrmEntityForm<Service> {
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
         content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 20).build());
+                inject(proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class)), new FormDecoratorBuilder(20).build()));
+        content.setWidget(++row, 0, inject(proto().version().name(), new FormDecoratorBuilder(20).build()));
+        content.setWidget(++row, 0, inject(proto().version().description(), new FormDecoratorBuilder(20).build()));
 
         int rrow = 0;
-        content.setWidget(++rrow, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
-        content.setWidget(++rrow, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
-        content.setWidget(++rrow, 1, new FormDecoratorBuilder(inject(proto().version().availableOnline()), 4).build());
+        content.setWidget(++rrow, 1, inject(proto().expiredFrom(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++rrow, 1, inject(proto().version().price(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++rrow, 1, inject(proto().version().availableOnline(), new FormDecoratorBuilder(4).build()));
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            content.setWidget(++rrow, 0, new FormDecoratorBuilder(inject(proto().defaultCatalogItem(), new CBooleanLabel()), 4).build());
+            content.setWidget(++rrow, 0, inject(proto().defaultCatalogItem(), new CBooleanLabel(), new FormDecoratorBuilder(4).build()));
         }
 
         row = Math.max(row, rrow);

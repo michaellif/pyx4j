@@ -38,7 +38,7 @@ public class InteracInfoEditor extends CEntityForm<InteracInfo> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
 
         main.setWidget(0, 0, InteracPanelCanada());

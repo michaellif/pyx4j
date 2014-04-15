@@ -78,20 +78,20 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
             main.setWidget(++row, 0, 1, inject(proto().name(), new NameEditor(i18n.tr("Full Name"))));
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().sex()), 85).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().birthDate()), 120).build());
+            main.setWidget(++row, 0, inject(proto().sex(), new FormWidgetDecoratorBuilder(85).build()));
+            main.setWidget(++row, 0, inject(proto().birthDate(), new FormWidgetDecoratorBuilder(120).build()));
 
             main.setH3(++row, 0, 1, i18n.tr("Contact Info"));
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship())).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().homePhone()), 180).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().mobilePhone()), 180).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().workPhone()), 180).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email()), 250).build());
+            main.setWidget(++row, 0, inject(proto().relationship(), new FormWidgetDecoratorBuilder().build()));
+            main.setWidget(++row, 0, inject(proto().homePhone(), new FormWidgetDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().mobilePhone(), new FormWidgetDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().workPhone(), new FormWidgetDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().email(), new FormWidgetDecoratorBuilder(250).build()));
 
             main.setH3(++row, 0, 1, i18n.tr("Address"));
             main.setWidget(++row, 0, 1, inject(proto().address(), new AddressSimpleEditor()));

@@ -91,7 +91,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
             contentPanel.add(inject(proto().descriptors(), new GadgetDescriptorFolder()));
             contentPanel.addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionsList);
@@ -120,9 +120,9 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
             }
 
             @Override
-            public void setComponent(final CEntityFolderItem<AddGadgetGadgetDescriptor> folderItem) {
+            public void init(final CEntityFolderItem<AddGadgetGadgetDescriptor> folderItem) {
                 if (folderItem != null) {
-                    componentPanel.setWidget(folderItem.createContent());
+                    componentPanel.setWidget(folderItem.getContent());
                 } else {
                     componentPanel.clear();
                 }
@@ -157,7 +157,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 FlowPanel contentPanel = new FlowPanel();
                 contentPanel.add(inject(proto().name()));
                 contentPanel.add(inject(proto().description()));

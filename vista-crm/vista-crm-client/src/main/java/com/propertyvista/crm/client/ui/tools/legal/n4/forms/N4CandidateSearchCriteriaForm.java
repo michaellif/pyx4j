@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
@@ -42,8 +41,8 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
 
     private static class SearchCriteriaFormDecoratorBuilder extends FormDecoratorBuilder {
 
-        public SearchCriteriaFormDecoratorBuilder(CComponent<?> component) {
-            super(component);
+        public SearchCriteriaFormDecoratorBuilder() {
+            super();
             labelPosition(LabelPosition.top);
         }
 
@@ -68,7 +67,7 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         panel.getElement().getStyle().setWidth(100, Unit.PCT);
         panel.getElement().getStyle().setOverflow(Overflow.AUTO);
@@ -88,10 +87,11 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
 
         searchCriteriaPanel = new FlowPanel();
 
+        searchCriteriaPanel.add(inject(proto().portfolios(), createPortfolioSelector(), new SearchCriteriaFormDecoratorBuilder().componentWidth("300px")
+                .build()));
         searchCriteriaPanel
-                .add(new SearchCriteriaFormDecoratorBuilder(inject(proto().portfolios(), createPortfolioSelector())).componentWidth("300px").build());
-        searchCriteriaPanel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().buildings(), createBuildingSelector())).componentWidth("300px").build());
-        searchCriteriaPanel.add(new SearchCriteriaFormDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("200px").build());
+                .add(inject(proto().buildings(), createBuildingSelector(), new SearchCriteriaFormDecoratorBuilder().componentWidth("300px").build()));
+        searchCriteriaPanel.add(inject(proto().minAmountOwed(), new SearchCriteriaFormDecoratorBuilder().componentWidth("200px").build()));
 
         panel.setWidget(1, 0, 2, searchCriteriaPanel);
 

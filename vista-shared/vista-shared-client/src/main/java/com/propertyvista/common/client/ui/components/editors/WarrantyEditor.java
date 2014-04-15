@@ -39,13 +39,13 @@ public class WarrantyEditor extends CEntityForm<Warranty> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 20).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().type()), 11).build());
+        main.setWidget(++row, 0, inject(proto().title(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(row, 1, inject(proto().type(), new FormDecoratorBuilder(11).build()));
 
         main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contract(), new ContractEditor()));

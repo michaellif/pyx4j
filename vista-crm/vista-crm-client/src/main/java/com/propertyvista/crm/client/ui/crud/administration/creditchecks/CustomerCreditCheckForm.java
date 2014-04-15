@@ -38,20 +38,20 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 
         content.setH1(++row, 0, 1, i18n.tr("Details"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheckDate())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(
-                inject(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee()))).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amountChecked())).build());
+        content.setWidget(++row, 0, inject(proto().creditCheckDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0,
+                inject(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee()), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().amountChecked(), new FormDecoratorBuilder().build()));
 
         content.setH1(++row, 0, 1, i18n.tr("Results From Equifax"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().riskCode())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheckResult())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amountApproved())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reason())).build());
+        content.setWidget(++row, 0, inject(proto().riskCode(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().creditCheckResult(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().amountApproved(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().reason(), new FormDecoratorBuilder().build()));
 
         content.setH1(++row, 0, 1, i18n.tr("Fees"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transaction().amount())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionRef())).build());
+        content.setWidget(++row, 0, inject(proto().transaction().amount(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().transactionRef(), new FormDecoratorBuilder().build()));
 
         selectTab(addTab(content));
     }

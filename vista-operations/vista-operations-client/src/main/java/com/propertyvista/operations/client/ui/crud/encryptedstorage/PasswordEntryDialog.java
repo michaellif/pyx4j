@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -43,11 +42,11 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
-            contentPanel.add(new FormDecoratorBuilder(inject(proto().password())).build());
+            contentPanel.add(inject(proto().password(), new FormDecoratorBuilder().build()));
             if (requirePasswordConfirm) {
-                contentPanel.add(new FormDecoratorBuilder(inject(proto().passwordConfirm())).build());
+                contentPanel.add(inject(proto().passwordConfirm(), new FormDecoratorBuilder().build()));
                 get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                     @Override
                     public FieldValidationError isValid() {

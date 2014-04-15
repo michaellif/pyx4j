@@ -39,11 +39,11 @@ public abstract class RunForDateDialog extends OkCancelDialog {
 
         content = new CEntityForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
-//                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
+                main.setWidget(1, 0, inject(proto().date(), new FormDecoratorBuilder(10).labelWidth(7).build()));
+//                    main.setWidget(2, 0, inject(proto().time(), new DecoratorBuilder(10).labelWidth(7).build());
 
                 return main;
             }

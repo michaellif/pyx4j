@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.decorations;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
@@ -25,31 +24,31 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     public static final double CONTENT_WIDTH_DUAL = 65;
 
-    public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
-        super(component);
+    public FormDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
+        super();
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, double labelWidth, double componentWidth, double contentWidth) {
-        this(component, labelWidth + "em", componentWidth + "em", contentWidth + "em");
+    public FormDecoratorBuilder(double labelWidth, double componentWidth, double contentWidth) {
+        this(labelWidth + "em", componentWidth + "em", contentWidth + "em");
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, double componentWidth, boolean dual) {
-        this(component, LABEL_WIDTH, componentWidth, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH));
+    public FormDecoratorBuilder(double componentWidth, boolean dual) {
+        this(LABEL_WIDTH, componentWidth, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH));
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, double componentWidth) {
-        this(component, componentWidth, false);
+    public FormDecoratorBuilder(double componentWidth) {
+        this(componentWidth, false);
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, boolean dual) {
-        this(component, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH), dual);
+    public FormDecoratorBuilder(boolean dual) {
+        this(dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH, dual);
     }
 
-    public FormDecoratorBuilder(CComponent<?> component) {
-        this(component, false);
+    public FormDecoratorBuilder() {
+        this(false);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
             @Override
             protected void updateViewable() {
                 if (getLabelPosition() != LabelPosition.top) {
-                    if (getComnponent().isViewable()) {
+                    if (getComponent().isViewable()) {
                         labelAlignment(Alignment.left);
                         useLabelSemicolon(false);
                     } else {

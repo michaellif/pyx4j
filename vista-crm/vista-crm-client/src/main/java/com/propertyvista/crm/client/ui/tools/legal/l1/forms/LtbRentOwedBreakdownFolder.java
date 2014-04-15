@@ -81,7 +81,7 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
                 }
 
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     IsWidget w = super.createContent();
                     get(proto().rentCharged()).addValueChangeHandler(createOwedRentNeedsUpdateHandler());
                     get(proto().rentPaid()).addValueChangeHandler(createOwedRentNeedsUpdateHandler());

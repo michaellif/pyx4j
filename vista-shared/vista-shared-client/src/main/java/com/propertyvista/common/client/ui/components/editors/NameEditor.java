@@ -69,6 +69,8 @@ public class NameEditor extends CEntityForm<Name> {
         viewComp.setViewable(true);
         viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
+        viewComp.setDecorator(new FormDecoratorBuilder(15, !oneColumn).customLabel(customViewLabel).build());
+
         linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         if (linkPlace != null) {
             ((CField) viewComp).setNavigationCommand(new Command() {
@@ -90,7 +92,7 @@ public class NameEditor extends CEntityForm<Name> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel main = new TwoColumnFlexFormPanel();
         if (BrowserType.isIE()) {
             // IE won't set table width based on the width of colgroup.col elements
@@ -102,16 +104,16 @@ public class NameEditor extends CEntityForm<Name> {
         int span = (oneColumn ? 1 : 2);
 
         if (!isViewable()) {
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName()), 15).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName()), 15).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().middleName()), 5).build());
+            main.setWidget(++row, 0, inject(proto().firstName(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().lastName(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().middleName(), new FormDecoratorBuilder(5).build()));
 
             row = (oneColumn ? row : -1);
-            main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().namePrefix()), 5).build());
-            main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().nameSuffix()), 5).build());
-            main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().maidenName()), 15).build());
+            main.setWidget(++row, col, inject(proto().namePrefix(), new FormDecoratorBuilder(5).build()));
+            main.setWidget(++row, col, inject(proto().nameSuffix(), new FormDecoratorBuilder(5).build()));
+            main.setWidget(++row, col, inject(proto().maidenName(), new FormDecoratorBuilder(15).build()));
         } else {
-            main.setWidget(0, 0, span, new FormDecoratorBuilder(viewComp, 15, !oneColumn).customLabel(customViewLabel).build());
+            main.setWidget(0, 0, span, viewComp);
         }
 
         return main;

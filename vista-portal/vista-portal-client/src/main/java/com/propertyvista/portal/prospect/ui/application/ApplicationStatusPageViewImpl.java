@@ -241,11 +241,11 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().progress())).build());
+                main.setWidget(++row, 0, inject(proto().progress(), new FormWidgetDecoratorBuilder().build()));
                 main.setBR(++row, 0, 1);
                 main.setWidget(++row, 0, inject(proto().individualApplications(), new ApplicationStatusFolder()));
 

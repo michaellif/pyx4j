@@ -86,7 +86,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel main = new BasicFlexFormPanel();
 
             int row = -1;
@@ -144,15 +144,15 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().liabilityCoverage()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().inceptionDate()), 180).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().expiryDate()), 180).build());
+                content.setWidget(++row, 0, inject(proto().insuranceProvider(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().insuranceCertificateNumber(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().liabilityCoverage(), new FormWidgetDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().inceptionDate(), new FormWidgetDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().expiryDate(), new FormWidgetDecoratorBuilder(180).build()));
 
                 detailsAnchor = new Anchor(i18n.tr("View Details"), new Command() {
 
@@ -176,7 +176,6 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
                 return content;
             }
-
         }
 
     }

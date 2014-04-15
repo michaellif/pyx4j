@@ -87,13 +87,15 @@ public class OptionsStep extends ApplicationWizardStep {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().selectedService().agreedPrice(), new CMoneyLabel())).customLabel(i18n.tr("Unit Price"))
-                            .build());
+            content.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Unit Price"))
+                            .build()));
             depositPanel.setH3(0, 0, 1, i18n.tr("Unit Deposits"));
             depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder()));
             content.setWidget(++row, 0, depositPanel);

@@ -62,19 +62,19 @@ public class MarketingEditor extends CEntityForm<Marketing> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         main.setWidth("100%");
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 16).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().visibility()), 10).build());
+        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(16).build()));
+        main.setWidget(row, 1, inject(proto().visibility(), new FormDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
         // marketing address
         main.setH1(++row, 0, 2, proto().marketingAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().useCustomAddress()), true).build());
+        main.setWidget(++row, 0, 2, inject(proto().useCustomAddress(), new FormDecoratorBuilder(true).build()));
         main.setWidget(++row, 0, 2, inject(proto().marketingAddress(), addressEditor));
         get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -120,12 +120,12 @@ public class MarketingEditor extends CEntityForm<Marketing> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().value())).build());
-            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
+            content.setWidget(++row, 0, inject(proto().value(), new FormDecoratorBuilder().build()));
+            content.setWidget(row, 1, inject(proto().description(), new FormDecoratorBuilder().build()));
 
             return content;
         }
@@ -152,16 +152,16 @@ public class MarketingEditor extends CEntityForm<Marketing> {
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().eventDate())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().startTime())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().endTime())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().appointmentRequired())).build());
+                content.setWidget(++row, 0, inject(proto().eventDate(), new FormDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().startTime(), new FormDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().endTime(), new FormDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().appointmentRequired(), new FormDecoratorBuilder().build()));
 
-                content.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().details())).build());
+                content.setWidget(0, 1, inject(proto().details(), new FormDecoratorBuilder().build()));
                 content.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
                 content.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 

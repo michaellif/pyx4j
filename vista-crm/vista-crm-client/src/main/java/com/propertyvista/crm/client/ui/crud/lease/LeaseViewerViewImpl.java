@@ -596,17 +596,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
             content = new CEntityForm<LeaseDTO>(LeaseDTO.class) {
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0,
-                            new FormDecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))
-                                    .build());
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+                    main.setWidget(
+                            0,
+                            0,
+                            inject(proto().moveOutSubmissionDate(), new FormDecoratorBuilder(9).customLabel(action.toString() + i18n.tr(" Submission Date"))
+                                    .build()));
+                    main.setWidget(1, 0, inject(proto().expectedMoveOut(), new FormDecoratorBuilder(9).build()));
 
                     if (showTermination) {
-                        main.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().terminationLeaseTo()), 9).customLabel(i18n.tr("Lease Termination Date"))
-                                .build());
+                        main.setWidget(2, 0,
+                                inject(proto().terminationLeaseTo(), new FormDecoratorBuilder(9).customLabel(i18n.tr("Lease Termination Date")).build()));
                     }
 
                     // just for validation purpose:

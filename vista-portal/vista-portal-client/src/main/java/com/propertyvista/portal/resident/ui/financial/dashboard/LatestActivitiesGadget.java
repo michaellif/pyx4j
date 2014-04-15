@@ -60,7 +60,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
@@ -94,16 +94,16 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().id(), new CNumberLabel())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFee())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().date())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Name>())).build());
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormWidgetDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().convenienceFee(), new FormWidgetDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().date(), new FormWidgetDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().status(), new FormWidgetDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Name>(), new FormWidgetDecoratorBuilder().build()));
 
                 return content;
             }

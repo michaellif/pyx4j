@@ -41,8 +41,8 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().annualInterestRate())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityDepositRefundWindow())).build());
+        panel.setWidget(++row, 0, inject(proto().annualInterestRate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().securityDepositRefundWindow(), new FormDecoratorBuilder().build()));
 
         return panel;
     }

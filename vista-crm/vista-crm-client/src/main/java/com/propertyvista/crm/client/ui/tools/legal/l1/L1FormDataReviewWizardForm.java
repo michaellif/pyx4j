@@ -89,8 +89,8 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     private TwoColumnFlexFormPanel createRelatedFilesStep() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Related Files"));
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().formData().relatedApplicationFileNumber1())).labelWidth("20em").build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().formData().relatedApplicationFileNumber2())).labelWidth("20em").build());
+        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber1(), new FormDecoratorBuilder().labelWidth("20em").build()));
+        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber2(), new FormDecoratorBuilder().labelWidth("20em").build()));
         return panel;
     }
 
@@ -129,9 +129,9 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
             }
         }));
         panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Summary")));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().formData().owedSummary().applicationFillingFee())).build());
+        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().applicationFillingFee(), new FormDecoratorBuilder().build()));
         get(proto().formData().owedSummary().applicationFillingFee()).setViewable(true);
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().formData().owedSummary().total())).build());
+        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().total(), new FormDecoratorBuilder().build()));
         get(proto().formData().owedSummary().total()).setViewable(true);
 
         return panel;

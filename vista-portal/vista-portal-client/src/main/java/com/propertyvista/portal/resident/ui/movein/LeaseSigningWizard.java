@@ -65,18 +65,20 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
             }
         });
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().building(), buildingLabel)).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit(), new CEntityLabel<AptUnit>())).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
-
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTerm().termFrom(), new CDateLabel())).customLabel(i18n.tr("Lease From"))
-                .build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTerm().termTo(), new CDateLabel())).customLabel(i18n.tr("Lease To"))
-                .build());
+        panel.setWidget(++row, 0, inject(proto().unit().building(), buildingLabel, new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit(), new CEntityLabel<AptUnit>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FormWidgetDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>()))
-                        .customLabel(i18n.tr("Base Rent")).build());
+                inject(proto().leaseTerm().termFrom(), new CDateLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Lease From")).build()));
+        panel.setWidget(++row, 0,
+                inject(proto().leaseTerm().termTo(), new CDateLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
+
+        panel.setWidget(
+                ++row,
+                0,
+                inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>(), new FormWidgetDecoratorBuilder()
+                        .customLabel(i18n.tr("Base Rent")).build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
         panel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));

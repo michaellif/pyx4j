@@ -57,16 +57,16 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
 
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().currentPassword())).build());
-        captchaField = (CCaptcha) inject(proto().captcha());
-        mainPanel.setWidget(++row, 0, (new LoginWidgetDecoratorBuilder(captchaField).watermark(i18n.tr("Enter both security words above")).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().currentPassword(), new LoginWidgetDecoratorBuilder().build()));
+        captchaField = (CCaptcha) inject(proto().captcha(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Enter both security words above")).build());
+        mainPanel.setWidget(++row, 0, captchaField);
         setCaptchaEnabled(false);
 
         mainPanel.setBR(++row, 0, 1);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
+        mainPanel.setWidget(++row, 0, inject(proto().newPassword(), new LoginWidgetDecoratorBuilder().assistantWidget(passwordStrengthWidget).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new LoginWidgetDecoratorBuilder().build()));
 
         if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
             get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());

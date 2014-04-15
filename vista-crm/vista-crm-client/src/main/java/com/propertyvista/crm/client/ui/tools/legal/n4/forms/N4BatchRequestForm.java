@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -42,8 +41,8 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
 
     private static class MyDecoratorBuilder extends FormDecoratorBuilder {
 
-        public MyDecoratorBuilder(CComponent<?> component) {
-            super(component);
+        public MyDecoratorBuilder() {
+            super();
         }
 
         @Override
@@ -67,20 +66,20 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         FlowPanel n4FillingSettingsPanel = new FlowPanel();
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().noticeDate())).width("150px").build());
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().deliveryMethod())).width("150px").build());
-        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().agent(), createAgentComboBox())).width("150px").build());
+        n4FillingSettingsPanel.add(inject(proto().noticeDate(), new MyDecoratorBuilder().width("150px").build()));
+        n4FillingSettingsPanel.add(inject(proto().deliveryMethod(), new MyDecoratorBuilder().width("150px").build()));
+        n4FillingSettingsPanel.add(inject(proto().agent(), createAgentComboBox(), new MyDecoratorBuilder().width("150px").build()));
         panel.setWidget(++row, 0, 2, n4FillingSettingsPanel);
 
         panel.setWidget(++row, 0, 2, new HTML("&nbsp;"));
 
         panel.setH1(++row, 0, 2, i18n.tr("Agent/Company Contact Information:"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
+        panel.setWidget(++row, 0, inject(proto().companyName(), new FormDecoratorBuilder().build()));
         CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
@@ -89,7 +88,10 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
         });
         phoneNumberField.setWatermark("(___) ___-____");
         phoneNumberField.setFormat(N4PolicyForm.PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(phoneNumberField).build());
+
+        phoneNumberField.setDecorator(new FormDecoratorBuilder().build());
+
+        panel.setWidget(++row, 0, phoneNumberField);
 
         CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
             @Override
@@ -99,8 +101,10 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
         });
         faxNumberField.setWatermark("(___) ___-____");
         faxNumberField.setFormat(N4PolicyForm.PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(faxNumberField).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        faxNumberField.setDecorator(new FormDecoratorBuilder().build());
+
+        panel.setWidget(++row, 0, faxNumberField);
+        panel.setWidget(++row, 0, inject(proto().emailAddress(), new FormDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().mailingAddress(), new AddressStructuredEditor(true)));
 
         return panel;

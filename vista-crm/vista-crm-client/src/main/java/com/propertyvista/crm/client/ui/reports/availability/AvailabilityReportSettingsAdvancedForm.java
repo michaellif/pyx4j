@@ -33,10 +33,10 @@ public class AvailabilityReportSettingsAdvancedForm extends CEntityForm<Availabi
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         int row = -1;
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
+        panel.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
         panel.setWidget(
                 ++row,
                 0,

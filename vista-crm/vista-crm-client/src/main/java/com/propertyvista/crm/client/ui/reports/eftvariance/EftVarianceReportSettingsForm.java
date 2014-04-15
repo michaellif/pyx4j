@@ -28,10 +28,10 @@ public class EftVarianceReportSettingsForm extends CEntityForm<EftVarianceReport
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).build());
+        panel.setWidget(++row, 0, inject(proto().billingCycleStartDate(), new FormDecoratorBuilder().build()));
         return panel;
     }
 

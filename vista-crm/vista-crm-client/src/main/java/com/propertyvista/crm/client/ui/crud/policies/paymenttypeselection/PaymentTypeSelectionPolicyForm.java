@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
@@ -58,14 +57,14 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         accepted.setH4(0, ++col, 1, i18n.tr("Accepted:"));
         accepted.getWidget(0, col).setWidth(hdrW);
 
-        accepted.setWidget(0, ++col, aligned(proto().acceptedCash()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedCheck()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedEcheck()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedDirectBanking()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedCreditCardMasterCard()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedCreditCardVisa()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedVisaDebit()).build());
-        accepted.setWidget(0, ++col, aligned(proto().acceptedInterac()).build());
+        accepted.setWidget(0, ++col, inject(proto().acceptedCash(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedCheck(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedEcheck(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedDirectBanking(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedCreditCardMasterCard(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedCreditCardVisa(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedVisaDebit(), decorator()));
+        accepted.setWidget(0, ++col, inject(proto().acceptedInterac(), decorator()));
 
         final String convenienceMarker = " *";
 
@@ -78,22 +77,21 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.getWidget(0, col).setWidth(lblW);
         residentPortal.setWidget(0, ++col, new HTML()); // fill empty cell
         residentPortal.getWidget(0, col).setWidth(lblW);
-        residentPortal.setWidget(0, ++col, aligned(proto().residentPortalEcheck()).build());
-        residentPortal.setWidget(0, ++col, aligned(proto().residentPortalDirectBanking()).build());
+        residentPortal.setWidget(0, ++col, inject(proto().residentPortalEcheck(), decorator()));
+        residentPortal.setWidget(0, ++col, inject(proto().residentPortalDirectBanking(), decorator()));
         residentPortal.setWidget(
                 0,
                 ++col,
-                aligned(proto().residentPortalCreditCardMasterCard()).customLabel(
-                        proto().residentPortalCreditCardMasterCard().getMeta().getCaption() + convenienceMarker).build());
+                inject(proto().residentPortalCreditCardMasterCard(), decorator(proto().residentPortalCreditCardMasterCard().getMeta().getCaption()
+                        + convenienceMarker)));
         residentPortal.setWidget(0, ++col,
-                aligned(proto().residentPortalCreditCardVisa()).customLabel(proto().residentPortalCreditCardVisa().getMeta().getCaption() + convenienceMarker)
-                        .build());
+                inject(proto().residentPortalCreditCardVisa(), decorator(proto().residentPortalCreditCardVisa().getMeta().getCaption() + convenienceMarker)));
         residentPortal.setWidget(
                 0,
                 ++col,
-                aligned(proto().residentPortalVisaDebit()).customLabel(
-                        proto().residentPortalVisaDebit().getMeta().getCaption() + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : "")).build());
-        residentPortal.setWidget(0, ++col, aligned(proto().residentPortalInterac()).build());
+                inject(proto().residentPortalVisaDebit(), decorator(proto().residentPortalVisaDebit().getMeta().getCaption()
+                        + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : ""))));
+        residentPortal.setWidget(0, ++col, inject(proto().residentPortalInterac(), decorator()));
 
         BasicFlexFormPanel prospectPortal = new BasicFlexFormPanel();
         col = -1;
@@ -104,19 +102,18 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         prospectPortal.getWidget(0, col).setWidth(lblW);
         prospectPortal.setWidget(0, ++col, new HTML()); // fill empty cell
         prospectPortal.getWidget(0, col).setWidth(lblW);
-        prospectPortal.setWidget(0, ++col, aligned(proto().prospectEcheck()).build());
+        prospectPortal.setWidget(0, ++col, inject(proto().prospectEcheck(), decorator()));
         prospectPortal.setWidget(0, ++col, new HTML());
         prospectPortal.getWidget(0, col).setWidth(lblW);
         prospectPortal.setWidget(0, ++col,
-                aligned(proto().prospectCreditCardMasterCard()).customLabel(proto().prospectCreditCardMasterCard().getMeta().getCaption() + convenienceMarker)
-                        .build());
+                inject(proto().prospectCreditCardMasterCard(), decorator(proto().prospectCreditCardMasterCard().getMeta().getCaption() + convenienceMarker)));
         prospectPortal.setWidget(0, ++col,
-                aligned(proto().prospectCreditCardVisa()).customLabel(proto().prospectCreditCardVisa().getMeta().getCaption() + convenienceMarker).build());
+                inject(proto().prospectCreditCardVisa(), decorator(proto().prospectCreditCardVisa().getMeta().getCaption() + convenienceMarker)));
         prospectPortal.setWidget(
                 0,
                 ++col,
-                aligned(proto().prospectVisaDebit()).customLabel(
-                        proto().prospectVisaDebit().getMeta().getCaption() + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : "")).build());
+                inject(proto().prospectVisaDebit(), decorator(proto().prospectVisaDebit().getMeta().getCaption()
+                        + (VistaTODO.visaDebitHasConvenienceFee ? convenienceMarker : ""))));
         prospectPortal.setWidget(0, ++col, new HTML());
 
         BasicFlexFormPanel cashEquivalent = new BasicFlexFormPanel();
@@ -124,14 +121,14 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         cashEquivalent.setH4(0, ++col, 1, i18n.tr("Cash Equivalent:"));
         cashEquivalent.getWidget(0, col).setWidth(hdrW);
 
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCash()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCheck()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentEcheck()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentDirectBanking()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCreditCardMasterCard()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentCreditCardVisa()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentVisaDebit()).build());
-        cashEquivalent.setWidget(0, ++col, aligned(proto().cashEquivalentInterac()).build());
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentCash(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentCheck(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentEcheck(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentDirectBanking(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentCreditCardMasterCard(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentCreditCardVisa(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentVisaDebit(), decorator()));
+        cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentInterac(), decorator()));
 
         // put all together:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Selection"));
@@ -153,8 +150,12 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         return main;
     }
 
-    private WidgetDecorator.Builder aligned(IPrimitive<Boolean> check) {
-        return new FormDecoratorBuilder(inject(check), lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
-                .useLabelSemicolon(false).componentAlignment(Alignment.center);
+    private WidgetDecorator decorator(String customLabel) {
+        return new FormDecoratorBuilder(lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
+                .componentAlignment(Alignment.center).customLabel(customLabel).build();
+    }
+
+    private WidgetDecorator decorator() {
+        return decorator(null);
     }
 }

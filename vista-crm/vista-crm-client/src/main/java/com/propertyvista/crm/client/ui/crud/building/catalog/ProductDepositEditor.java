@@ -42,21 +42,21 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         CEntityComboBox<ARCode> chargeCodeSelector;
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enabled()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
+        content.setWidget(++row, 0, inject(proto().enabled(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().depositType(), new FormDecoratorBuilder().build()));
         content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class))).build());
+                inject(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class), new FormDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
         row = 0;
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().valueType()), 10).build());
+        content.setWidget(++row, 1, inject(proto().valueType(), new FormDecoratorBuilder(10).build()));
         content.setWidget(++row, 1, valueHolder);
 
         // tweaks:
@@ -112,7 +112,7 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
         unbind(proto().value());
 
         if (comp != null) {
-            valueHolder.setWidget(new FormDecoratorBuilder(inject(proto().value(), comp), 6).build());
+            valueHolder.setWidget(inject(proto().value(), comp, new FormDecoratorBuilder(6).build()));
 
             if (repopulatevalue) {
                 get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));

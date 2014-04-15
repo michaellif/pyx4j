@@ -59,23 +59,23 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
             int row = -1;
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().type()), 12).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().value()), 7).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().term()), 12).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().condition()), 10).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().mixable()), 5).build());
+            content.setWidget(++row, 0, inject(proto().version().type(), new FormDecoratorBuilder(12).build()));
+            content.setWidget(++row, 0, inject(proto().version().value(), new FormDecoratorBuilder(7).build()));
+            content.setWidget(++row, 0, inject(proto().version().term(), new FormDecoratorBuilder(12).build()));
+            content.setWidget(++row, 0, inject(proto().version().condition(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, inject(proto().version().mixable(), new FormDecoratorBuilder(5).build()));
 
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 60).build());
+            content.setWidget(++row, 0, inject(proto().version().description(), new FormDecoratorBuilder(60).build()));
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             row = -1;
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
-            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().updated()), 9).build());
+            content.setWidget(++row, 1, inject(proto().version().effectiveDate(), new FormDecoratorBuilder(9).build()));
+            content.setWidget(++row, 1, inject(proto().version().expirationDate(), new FormDecoratorBuilder(9).build()));
+            content.setWidget(++row, 1, inject(proto().updated(), new FormDecoratorBuilder(9).build()));
 
             return content;
         }

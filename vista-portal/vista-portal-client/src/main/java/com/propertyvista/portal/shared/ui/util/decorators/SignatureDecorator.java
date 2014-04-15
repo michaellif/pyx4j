@@ -50,11 +50,11 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
         validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
         add(validationLabel);
 
-        setComponent(component);
+        init(component);
     }
 
     @Override
-    public void setComponent(CSignature component) {
+    public void init(CSignature component) {
         this.component = component;
         component.asWidget().addStyleName(WidgetDecoratorComponent.name());
         componentHolder.setWidget(component);

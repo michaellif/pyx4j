@@ -91,14 +91,14 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().category(), new CEntityLabel<MaintenanceRequestCategory>() {
+        mainPanel.setWidget(++row, 0, inject(proto().requestId(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().reportedForOwnUnit(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().category(), new CEntityLabel<MaintenanceRequestCategory>() {
             @Override
             public String format(MaintenanceRequestCategory value) {
                 if (value == null) {
@@ -115,12 +115,12 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
                     return result.toString();
                 }
             }
-        }), 250).build());
+        }, new FormWidgetDecoratorBuilder(250).build()));
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), new CEntityLabel<MaintenanceRequestPriority>()), 250).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status().phase()), 250).build());
+        mainPanel.setWidget(++row, 0, inject(proto().summary(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().priority(), new CEntityLabel<MaintenanceRequestPriority>(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().status().phase(), new FormWidgetDecoratorBuilder(250).build()));
 
         int innerRow = -1;
         imagePanel = new TwoColumnFlexFormPanel();
@@ -135,22 +135,22 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
             @Override
             public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                main.setWidget(0, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+                main.setWidget(0, 0, 2, entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder(8, 15, 16).build()));
                 return main;
             }
         };
         imageSlider.setImageSize(250, 240);
-        imagePanel.setWidget(++innerRow, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
+        imagePanel.setWidget(++innerRow, 0, 1, inject(proto().pictures(), imageSlider, new FormWidgetDecoratorBuilder(100).build()));
         mainPanel.setWidget(++row, 0, imagePanel);
 
         scheduledPanel = new TwoColumnFlexFormPanel();
         innerRow = -1;
-        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
+        scheduledPanel.setWidget(++innerRow, 0, inject(proto().petInstructions(), new FormWidgetDecoratorBuilder(250).build()));
 
-        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 100).build());
-        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 100).build());
-        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
-        scheduledPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
+        scheduledPanel.setWidget(++innerRow, 0, inject(proto().preferredDate1(), new FormWidgetDecoratorBuilder(100).build()));
+        scheduledPanel.setWidget(++innerRow, 0, inject(proto().preferredTime1(), new FormWidgetDecoratorBuilder(100).build()));
+        scheduledPanel.setWidget(++innerRow, 0, inject(proto().preferredDate2(), new FormWidgetDecoratorBuilder(100).build()));
+        scheduledPanel.setWidget(++innerRow, 0, inject(proto().preferredTime2(), new FormWidgetDecoratorBuilder(100).build()));
         mainPanel.setWidget(++row, 0, scheduledPanel);
 
         mainPanel.setBR(++row, 0, 1);

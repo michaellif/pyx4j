@@ -50,23 +50,23 @@ public class TenantSureCoverageRequestForm extends CEntityForm<TenantSureCoverag
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().inceptionDate())).build());
+        contentPanel.setWidget(++row, 0, 1, inject(proto().inceptionDate(), new FormWidgetDecoratorBuilder().build()));
         contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage"));
-        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, 1, inject(proto().personalLiabilityCoverage(), new MoneyComboBox(), new FormWidgetDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, 1, inject(proto().contentsCoverage(), new MoneyComboBox(), new FormWidgetDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, 1, inject(proto().deductible(), new MoneyComboBox(), new FormWidgetDecoratorBuilder().build()));
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).build());
-        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().numberOfPreviousClaims())).build());
+        contentPanel.setWidget(++row, 0, 1, inject(proto().smoker(), new YesNoComboBox(), new FormWidgetDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, 1, inject(proto().numberOfPreviousClaims(), new FormWidgetDecoratorBuilder().build()));
 
         if (VistaTODO.VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED) {
             contentPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
-            contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().paymentSchedule())).build());
+            contentPanel.setWidget(++row, 0, 1, inject(proto().paymentSchedule(), new FormWidgetDecoratorBuilder().build()));
         }
 
         return contentPanel;

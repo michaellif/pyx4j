@@ -41,7 +41,7 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 

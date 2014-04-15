@@ -60,7 +60,7 @@ public class PmcSignatureForm extends CEntityForm<PmcSignature> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         HorizontalPanel contentPanel = new HorizontalPanel();
         contentPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         contentPanel.setSpacing(20);

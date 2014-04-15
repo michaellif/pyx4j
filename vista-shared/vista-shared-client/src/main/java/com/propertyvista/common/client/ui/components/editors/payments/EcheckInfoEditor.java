@@ -45,15 +45,15 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNo(), accountEditor), 20).build());
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().accountNo(), accountEditor, new FormDecoratorBuilder(20).build()));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
+        panel.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().bankId(), new FormDecoratorBuilder(3).build()));
 
         if (!isViewable() && isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());

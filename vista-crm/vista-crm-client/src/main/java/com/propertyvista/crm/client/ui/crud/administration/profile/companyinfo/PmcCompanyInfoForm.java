@@ -34,7 +34,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().companyName()), 20).build());
+        content.setWidget(++row, 0, inject(proto().companyName(), new FormDecoratorBuilder(20).build()));
 
         content.setH1(++row, 0, 2, proto().contacts().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().contacts(), new PmcCompanyInfoContactFolder()));

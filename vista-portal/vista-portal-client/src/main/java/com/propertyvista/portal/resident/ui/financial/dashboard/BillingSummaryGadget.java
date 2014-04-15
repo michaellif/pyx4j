@@ -117,11 +117,11 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
 
-            mainPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().currentBalance()), 140).build());
+            mainPanel.setWidget(0, 0, inject(proto().currentBalance(), new FormWidgetDecoratorBuilder(140).build()));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                mainPanel.setWidget(1, 0, new FormWidgetDecoratorBuilder(inject(proto().dueDate()), 140).build());
+                mainPanel.setWidget(1, 0, inject(proto().dueDate(), new FormWidgetDecoratorBuilder(140).build()));
             }
 
             return mainPanel;

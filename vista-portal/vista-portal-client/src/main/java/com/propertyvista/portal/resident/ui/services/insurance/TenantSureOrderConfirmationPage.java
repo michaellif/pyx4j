@@ -35,7 +35,7 @@ public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSur
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 

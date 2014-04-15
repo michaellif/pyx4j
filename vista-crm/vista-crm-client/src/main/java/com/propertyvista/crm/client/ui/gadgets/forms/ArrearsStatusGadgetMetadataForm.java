@@ -30,12 +30,12 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityForm<ArrearsStatusGa
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().arrearsStatusListerSettings().pageSize())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByCategory())).build());
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().arrearsStatusListerSettings().pageSize(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().filterByCategory(), new FormDecoratorBuilder().build()));
         get(proto().filterByCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -45,8 +45,8 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityForm<ArrearsStatusGa
                 }
             }
         });
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().category())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
+        p.setWidget(++row, 0, inject(proto().category(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -56,7 +56,7 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityForm<ArrearsStatusGa
                 }
             }
         });
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
+        p.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
         get(proto().category()).setVisible(false);
         get(proto().asOf()).setVisible(false);
         return p;

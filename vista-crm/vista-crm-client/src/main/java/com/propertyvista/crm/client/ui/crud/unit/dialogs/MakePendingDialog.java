@@ -45,9 +45,9 @@ public class MakePendingDialog extends OkCancelDialog {
         this.form = new CEntityForm<MakePendingDTO>(MakePendingDTO.class) {
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().pendingStartDay()), 9).build());
+                content.setWidget(0, 0, inject(proto().pendingStartDay(), new FormDecoratorBuilder(9).build()));
 
                 if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
                     get(proto().pendingStartDay()).setViewable(true);

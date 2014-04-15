@@ -31,48 +31,49 @@ public class L1ScheduleAndPaymentForm extends CEntityForm<L1ScheduleAndPayment> 
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Application Fee"));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentInfo().paymentMethod())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentInfo().creditCardNumber())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentInfo().expiryDate())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentInfo().cardholdersName())).build());
+        panel.setWidget(++row, 0, 2, inject(proto().paymentInfo().paymentMethod(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().paymentInfo().creditCardNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().paymentInfo().expiryDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().paymentInfo().cardholdersName(), new FormDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, i18n.tr("Information Required to Schedule the Hearing"));
         panel.setWidget(
                 ++row,
                 0,
                 2,
-                new FormDecoratorBuilder(inject(proto().appplicationSchedule().applicationPackageDeliveryMethodToLandlord())).customLabel(
-                        i18n.tr("How do you want the Board to give you the application package?")).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().appplicationSchedule().officeName())).customLabel(i18n.tr("Which Office?"))
-                .build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().appplicationSchedule().pickupDate())).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().appplicationSchedule().fax())).build());
+                inject(proto().appplicationSchedule().applicationPackageDeliveryMethodToLandlord(),
+                        new FormDecoratorBuilder().customLabel(i18n.tr("How do you want the Board to give you the application package?")).build()));
+        panel.setWidget(++row, 0, 2,
+                inject(proto().appplicationSchedule().officeName(), new FormDecoratorBuilder().customLabel(i18n.tr("Which Office?")).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().appplicationSchedule().pickupDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().appplicationSchedule().fax(), new FormDecoratorBuilder().build()));
 
         panel.setWidget(
                 ++row,
                 0,
                 2,
-                new FormDecoratorBuilder(inject(proto().appplicationSchedule().isSameDayDeliveryToTenant())).customLabel(
-                        i18n.tr("Will you give the application package to the tenant(s) on the date you receive the package from the Board?")).build());
+                inject(proto().appplicationSchedule().isSameDayDeliveryToTenant(),
+                        new FormDecoratorBuilder().customLabel(
+                                i18n.tr("Will you give the application package to the tenant(s) on the date you receive the package from the Board?")).build()));
         panel.setWidget(
                 ++row,
                 0,
                 2,
-                new FormDecoratorBuilder(inject(proto().appplicationSchedule().toTenantDeliveryDate())).customLabel(
-                        i18n.tr("On what date will you give the package  to tenant(s)?")).build());
+                inject(proto().appplicationSchedule().toTenantDeliveryDate(),
+                        new FormDecoratorBuilder().customLabel(i18n.tr("On what date will you give the package  to tenant(s)?")).build()));
         panel.setWidget(
                 ++row,
                 0,
                 2,
-                new FormDecoratorBuilder(inject(proto().appplicationSchedule().applicationPackageDeliveryMethodToTenant())).customLabel(
-                        i18n.tr("How will you give the application package to the tenant(s)?")).build());
+                inject(proto().appplicationSchedule().applicationPackageDeliveryMethodToTenant(),
+                        new FormDecoratorBuilder().customLabel(i18n.tr("How will you give the application package to the tenant(s)?")).build()));
 
         panel.setH1(++row, 0, 2, i18n.tr("Interpretation Services Required"));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().languageServices())).customLabel("").useLabelSemicolon(false).build());
+        panel.setWidget(++row, 0, 2, inject(proto().languageServices(), new FormDecoratorBuilder().customLabel("").useLabelSemicolon(false).build()));
         return panel;
     }
 }

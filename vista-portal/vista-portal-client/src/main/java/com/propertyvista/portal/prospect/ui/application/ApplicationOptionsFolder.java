@@ -56,14 +56,14 @@ public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
             mainPanel.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 200).customLabel(i18n.tr("Item Name")).build());
+                    inject(proto().item(), new CEntityLabel<ProductItem>(), new FormWidgetDecoratorBuilder(200).customLabel(i18n.tr("Item Name")).build()));
 
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price(), new CMoneyLabel()), 100).build());
+            mainPanel.setWidget(++row, 0, inject(proto().price(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
             return mainPanel;
         }
     }

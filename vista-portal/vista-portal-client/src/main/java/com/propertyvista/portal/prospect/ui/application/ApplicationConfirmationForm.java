@@ -36,7 +36,7 @@ public class ApplicationConfirmationForm extends CPortalEntityForm<OnlineApplica
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 

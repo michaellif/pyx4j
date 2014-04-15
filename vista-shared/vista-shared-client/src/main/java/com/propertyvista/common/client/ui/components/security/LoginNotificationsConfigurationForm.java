@@ -30,11 +30,11 @@ public class LoginNotificationsConfigurationForm extends CEntityForm<LoginNotifi
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
-        contentPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().isEmailNotificationEnabled()), 5).build());
-        contentPanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().email()), 22).build());
+        contentPanel.setWidget(0, 0, inject(proto().isEmailNotificationEnabled(), new FormDecoratorBuilder(5).build()));
+        contentPanel.setWidget(0, 1, inject(proto().email(), new FormDecoratorBuilder(22).build()));
 
         get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

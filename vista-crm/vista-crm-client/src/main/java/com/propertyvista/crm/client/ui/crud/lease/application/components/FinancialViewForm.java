@@ -44,7 +44,7 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;

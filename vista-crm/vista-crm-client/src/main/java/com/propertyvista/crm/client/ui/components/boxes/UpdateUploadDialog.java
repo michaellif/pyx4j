@@ -46,12 +46,12 @@ public class UpdateUploadDialog extends UploadDialogBase<ImportUploadDTO> {
 
         form = new CEntityForm<ImportUploadDTO>(ImportUploadDTO.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
-                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().dataFormat())).componentWidth(10).build());
+                main.setWidget(++row, 0, inject(proto().dataFormat(), new WidgetDecorator.Builder().componentWidth(10).build()));
                 return main;
             }
 

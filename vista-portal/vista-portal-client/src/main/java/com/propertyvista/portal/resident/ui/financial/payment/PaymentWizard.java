@@ -146,12 +146,14 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
 
-        panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>()), 200)
-                        .customLabel(i18n.tr("Tenant")).build());
+        panel.setWidget(
+                ++row,
+                0,
+                inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>(), new FormWidgetDecoratorBuilder(200)
+                        .customLabel(i18n.tr("Tenant")).build()));
 
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).build());
+        panel.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder(100).build()));
 
         return panel;
     }
@@ -163,16 +165,16 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                new FormWidgetDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL))).build());
+                inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL),
+                        new FormWidgetDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo)).build());
+        panel.setWidget(++row, 0, inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FormWidgetDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().storeInProfile())).build());
+        panel.setWidget(++row, 0, inject(proto().storeInProfile(), new FormWidgetDecoratorBuilder().build()));
 
         // tweaks:
 

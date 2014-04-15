@@ -33,17 +33,17 @@ public class PropertyAccountInfoForm extends CEntityForm<OnlinePaymentSetupDTO.P
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().averageMonthlyRent())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfRentedUnits())).build());
+        panel.setWidget(++row, 0, inject(proto().averageMonthlyRent(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().numberOfRentedUnits(), new FormDecoratorBuilder().build()));
         panel.setWidget(++row, 0, new HTML("&nbsp;"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transitNumber())).build());
+        panel.setWidget(++row, 0, inject(proto().transitNumber(), new FormDecoratorBuilder().build()));
 
         int irow = row; // save the row that will hold the image with the cheque guide
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().institutionNumber())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
+        panel.setWidget(++row, 0, inject(proto().institutionNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().accountNumber(), new FormDecoratorBuilder().build()));
 
         panel.setWidget(irow, 1, new Image(VistaImages.INSTANCE.eChequeGuide()));
         panel.getFlexCellFormatter().setRowSpan(irow, 1, 3);

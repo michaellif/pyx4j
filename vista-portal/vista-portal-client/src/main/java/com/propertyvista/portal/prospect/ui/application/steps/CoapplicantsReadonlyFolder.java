@@ -53,13 +53,13 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().relationship(), new CEnumLabel())).build());
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email(), new CLabel<String>())).build());
+            mainPanel.setWidget(++row, 0, inject(proto().name(), new CEntityLabel<Name>(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().relationship(), new CEnumLabel(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().email(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
 
             return mainPanel;
         }

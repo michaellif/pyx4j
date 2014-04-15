@@ -30,17 +30,17 @@ public class CompanyEditor extends CEntityForm<Company> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
 
 // TODO : design representation for:
 //      main.add(parent.inject(proto.addresses()), 15);
 
         main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().website()), 22).build());
+        main.setWidget(++row, 0, inject(proto().website(), new FormDecoratorBuilder(22).build()));
 
         main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
 

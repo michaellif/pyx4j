@@ -91,7 +91,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
@@ -152,16 +152,16 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().creationDate(), new CDateLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().type(), new CEnumLabel()), 150).build());
+                content.setWidget(++row, 0, inject(proto().paymentMethod().creationDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod().type(), new CEnumLabel(), new FormWidgetDecoratorBuilder(150).build()));
                 content.setWidget(++row, 0,
-                        new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
+                        inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FormWidgetDecoratorBuilder().build()));
                 content.setWidget(++row, 0,
-                        new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
+                        inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FormWidgetDecoratorBuilder().build()));
 
                 content.setWidget(++row, 0, new Anchor(i18n.tr("View Details"), new Command() {
                     @Override

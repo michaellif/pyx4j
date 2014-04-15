@@ -62,18 +62,18 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().email()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().name(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().email(), new FormDecoratorBuilder(true).build()));
 
         content.setH1(++row, 0, 2, i18n.tr("Security"));
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().password()), isNewUserCondition), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().passwordConfirm()), isNewUserCondition), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().enabled()), isSelfManagedUserCondition), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().role()), isSelfManagedUserCondition), true).build());
+        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().password(), new FormDecoratorBuilder(true).build()), isNewUserCondition));
+        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().passwordConfirm(), new FormDecoratorBuilder(true).build()), isNewUserCondition));
+        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().enabled(), new FormDecoratorBuilder(true).build()), isSelfManagedUserCondition));
+        content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().role(), new FormDecoratorBuilder(true).build()), isSelfManagedUserCondition));
         content.setWidget(++row, 0, 2,
-                new FormDecoratorBuilder(addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn()), isSelfManagedUserCondition), true).build());
+                addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn(), new FormDecoratorBuilder(true).build()), isSelfManagedUserCondition));
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().credentialUpdated()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().credentialUpdated(), new FormDecoratorBuilder(true).build()));
 
         setTabBarVisible(false);
         selectTab(addTab(content));

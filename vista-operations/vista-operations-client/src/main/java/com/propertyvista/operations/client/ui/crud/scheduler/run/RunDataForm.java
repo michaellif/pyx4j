@@ -41,30 +41,32 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().execution().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)))
-                        .build());
+        content.setWidget(
+                ++row,
+                0,
+                inject(proto().execution().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class),
+                        new FormDecoratorBuilder().build()));
 
         content.setWidget(row, 1,
-                new FormDecoratorBuilder(inject(proto().execution(), OperationsEditorsComponentFactory.createEntityHyperlink(Run.class))).build());
+                inject(proto().execution(), OperationsEditorsComponentFactory.createEntityHyperlink(Run.class), new FormDecoratorBuilder().build()));
 
         content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)))).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().started())).build());
+                inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FormDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().started(), new FormDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status())).build());
+        content.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder().build()));
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().total())).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().executionReport().averageDuration())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().processed())).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().executionReport().totalDuration())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().failed())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().erred())).build());
+        content.setWidget(++row, 0, inject(proto().executionReport().total(), new FormDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().executionReport().averageDuration(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().executionReport().processed(), new FormDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().executionReport().totalDuration(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().executionReport().failed(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().executionReport().erred(), new FormDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().executionReport().message()), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().errorMessage()), true).build());
+        content.setWidget(++row, 0, 2, inject(proto().executionReport().message(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().errorMessage(), new FormDecoratorBuilder(true).build()));
 
         reportSectionLister = new ExecutionReportSectionLister();
         content.setH4(++row, 0, 2, i18n.tr("Details"));

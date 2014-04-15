@@ -103,19 +103,19 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
     private Widget createGeneralTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().building())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalReceivedAmount())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfReceipts())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().postingStatus())).build());
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().batchNumber())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().building(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().totalReceivedAmount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().numberOfReceipts(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().postingStatus(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FormDecoratorBuilder().build()));
 
         row = -1;
-        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().depositSlipNumber())).build());
-        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().depositDate())).build());
-        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankAccountName())).build());
-        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankId())).build());
-        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankTransitNumber())).build());
-        panel.setWidget(++row, 1, 1, new FormDecoratorBuilder(inject(proto().bankAccountNumber())).build());
+        panel.setWidget(++row, 1, 1, inject(proto().depositSlipNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().depositDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankAccountName(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankTransitNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankAccountNumber(), new FormDecoratorBuilder().build()));
 
         ++row;
         panel.setH2(++row, 0, 2, i18n.tr("Payments"));

@@ -65,8 +65,8 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
             int row = -1;
 
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(editor.inject(proto().locale(), new CEntityLabel<AvailableLocale>()), 10, true).build());
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(editor.inject(proto().text()), 50, true).build());
+            panel.setWidget(++row, 0, 2, editor.inject(proto().locale(), new CEntityLabel<AvailableLocale>(), new FormDecoratorBuilder(10, true).build()));
+            panel.setWidget(++row, 0, 2, editor.inject(proto().text(), new FormDecoratorBuilder(50, true).build()));
 
             return panel;
         }

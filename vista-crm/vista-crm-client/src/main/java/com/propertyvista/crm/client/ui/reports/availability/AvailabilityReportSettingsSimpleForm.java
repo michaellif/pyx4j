@@ -42,25 +42,26 @@ public class AvailabilityReportSettingsSimpleForm extends CEntityForm<Availabili
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         int row = -1;
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).labelWidth("10em").componentWidth("10em").build());
+        panel.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
         panel.setWidget(
                 ++row,
                 0,
-                new FormDecoratorBuilder(inject(proto().vacancyStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.Vacancy>(
-                        UnitAvailabilityStatus.Vacancy.class, Layout.Horizontal))).labelWidth("10em").componentWidth("10em").build());
+                inject(proto().vacancyStatus(),
+                        new CEnumSubsetSelector<UnitAvailabilityStatus.Vacancy>(UnitAvailabilityStatus.Vacancy.class, Layout.Horizontal),
+                        new FormDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
 
         rentedStatusPreset = new CComboBox<RentedStatusPreset>(NotInOptionsPolicy.DISCARD);
         rentedStatusPreset.setOptions(Arrays.asList(RentedStatusPreset.values()));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rentedStatus(), rentedStatusPreset)).labelWidth("10em").componentWidth("10em")
-                .build());
+        panel.setWidget(++row, 0,
+                inject(proto().rentedStatus(), rentedStatusPreset, new FormDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
 
         rentReadinessStatusPreset = new CComboBox<RentReadinessStatusPreset>(NotInOptionsPolicy.DISCARD);
         rentReadinessStatusPreset.setOptions(Arrays.asList(RentReadinessStatusPreset.values()));
         panel.setWidget(row, 1,
-                new FormDecoratorBuilder(inject(proto().rentReadinessStatus(), rentReadinessStatusPreset)).labelWidth("10em").componentWidth("15em").build());
+                inject(proto().rentReadinessStatus(), rentReadinessStatusPreset, new FormDecoratorBuilder().labelWidth("10em").componentWidth("15em").build()));
 
         return panel;
     }

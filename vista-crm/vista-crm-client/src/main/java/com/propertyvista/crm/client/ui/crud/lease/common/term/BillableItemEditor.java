@@ -94,11 +94,11 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
+        flexPanel.setWidget(++row, 0, inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
             @Override
             protected AppPlace getTargetPlace() {
                 if (getValue().product().isInstanceOf(Service.ServiceV.class)) {
@@ -129,13 +129,13 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                 };
 
             }
-        }), 20).build());
+        }, new FormDecoratorBuilder(20).build()));
 
-        flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate()), 9).build());
-        flexPanel.setWidget(row, 1, new FormDecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate()), 9).build());
+        flexPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FormDecoratorBuilder(10).build()));
+        flexPanel.setWidget(++row, 0, itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate(), new FormDecoratorBuilder(9).build()));
+        flexPanel.setWidget(row, 1, itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate(), new FormDecoratorBuilder(9).build()));
 
-        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        flexPanel.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
         flexPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         flexPanel.setWidget(++row, 0, 2, extraDataPanel);

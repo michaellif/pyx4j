@@ -33,7 +33,7 @@ public class L1OwedNsfChargesForm extends CEntityForm<L1OwedNsfCharges> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 2, inject(proto().nsfChargesBreakdown(), new L1NsfChargesBreakdownFolder() {
@@ -42,7 +42,7 @@ public class L1OwedNsfChargesForm extends CEntityForm<L1OwedNsfCharges> {
                 updateTotalCharge();
             }
         }));
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().nsfTotalChargeOwed())).build());
+        panel.setWidget(++row, 0, 1, inject(proto().nsfTotalChargeOwed(), new FormDecoratorBuilder().build()));
         get(proto().nsfTotalChargeOwed()).setViewable(true);
         get(proto().nsfTotalChargeOwed()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
             @Override

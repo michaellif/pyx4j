@@ -30,7 +30,7 @@ public class UserAuditingConfigurationForm extends CEntityForm<UserAuditingConfi
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 

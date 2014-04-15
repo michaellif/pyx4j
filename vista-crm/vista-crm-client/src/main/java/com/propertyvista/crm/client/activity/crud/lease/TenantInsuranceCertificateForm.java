@@ -68,7 +68,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
         int row = -1;
         if (displayTenantOwner) {
@@ -83,12 +83,12 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                     }
                 });
             }
-            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insurancePolicy().tenant(), comp), 15, true).build());
+            contentPanel.setWidget(++row, 0, 2, inject(proto().insurancePolicy().tenant(), comp, new FormDecoratorBuilder(15, true).build()));
         }
 
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceProvider()), 10, true).build());
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 20, true).build());
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), 20, true).build());
+        contentPanel.setWidget(++row, 0, 2, inject(proto().insuranceProvider(), new FormDecoratorBuilder(10, true).build()));
+        contentPanel.setWidget(++row, 0, 2, inject(proto().insuranceCertificateNumber(), new FormDecoratorBuilder(20, true).build()));
+        contentPanel.setWidget(++row, 0, 2, inject(proto().liabilityCoverage(), new FormDecoratorBuilder(20, true).build()));
         get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public FieldValidationError isValid() {
@@ -108,7 +108,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().inceptionDate()), 10, true).build());
+        contentPanel.setWidget(++row, 0, 2, inject(proto().inceptionDate(), new FormDecoratorBuilder(10, true).build()));
 
         get(proto().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
@@ -119,7 +119,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate()), 10, true).build());
+        contentPanel.setWidget(++row, 0, 2, inject(proto().expiryDate(), new FormDecoratorBuilder(10, true).build()));
         get(proto().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public FieldValidationError isValid() {

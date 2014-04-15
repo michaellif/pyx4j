@@ -120,9 +120,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 250).build());
+        content.setWidget(++row, 0, inject(proto().requestId(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
         content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).build());
+        content.setWidget(++row, 0, inject(proto().reportedForOwnUnit(), new FormWidgetDecoratorBuilder(250).build()));
         content.setBR(++row, 0, 1);
 
         // category panel
@@ -132,13 +132,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         // Description
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), prioritySelector), 250).build());
+        content.setWidget(++row, 0, inject(proto().summary(), new FormWidgetDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().priority(), prioritySelector, new FormWidgetDecoratorBuilder(250).build()));
 
         // phone is mandatory
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reporterPhone()), 250).customLabel(i18n.tr("Contact Phone")).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().phoneType()), 250).build());
+        content.setWidget(++row, 0, inject(proto().reporterPhone(), new FormWidgetDecoratorBuilder(250).customLabel(i18n.tr("Contact Phone")).build()));
+        content.setWidget(++row, 0, inject(proto().phoneType(), new FormWidgetDecoratorBuilder(250).build()));
         get(proto().phoneType()).setMandatory(true);
         get(proto().reporterPhone()).setMandatory(true);
         content.setBR(++row, 0, 1);
@@ -155,28 +155,28 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             @Override
             public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                main.setWidget(0, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+                main.setWidget(0, 0, 2, entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder(8, 15, 16).build()));
                 return main;
             }
         };
         imageSlider.setImageSize(250, 240);
         imageSlider.setOrganizerWidth(600);
-        imagePanel.setWidget(0, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().pictures(), imageSlider), 100).build());
+        imagePanel.setWidget(0, 0, 1, inject(proto().pictures(), imageSlider, new FormWidgetDecoratorBuilder(100).build()));
         content.setWidget(++row, 0, imagePanel);
 
-        accessPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
+        accessPanel.setWidget(0, 0, inject(proto().petInstructions(), new FormWidgetDecoratorBuilder(250).build()));
         // schedule panel
         TwoColumnFlexFormPanel schedulePanel = new TwoColumnFlexFormPanel();
-        schedulePanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate1()), 120).build());
-        schedulePanel.setWidget(1, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime1()), 120).build());
-        schedulePanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredDate2()), 120).build());
-        schedulePanel.setWidget(3, 0, new FormWidgetDecoratorBuilder(inject(proto().preferredTime2()), 120).build());
+        schedulePanel.setWidget(0, 0, inject(proto().preferredDate1(), new FormWidgetDecoratorBuilder(120).build()));
+        schedulePanel.setWidget(1, 0, inject(proto().preferredTime1(), new FormWidgetDecoratorBuilder(120).build()));
+        schedulePanel.setWidget(2, 0, inject(proto().preferredDate2(), new FormWidgetDecoratorBuilder(120).build()));
+        schedulePanel.setWidget(3, 0, inject(proto().preferredTime2(), new FormWidgetDecoratorBuilder(120).build()));
         // past dates not allowed
         ((CDatePicker) get(proto().preferredDate1())).setPastDateSelectionAllowed(false);
         ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
         accessPanel.setWidget(1, 0, schedulePanel);
 
-        permissionPanel.setWidget(2, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).build());
+        permissionPanel.setWidget(2, 0, inject(proto().permissionToEnter(), new FormWidgetDecoratorBuilder(250).build()));
         permissionPanel.setWidget(3, 0, accessPanel);
         content.setWidget(++row, 0, permissionPanel);
         content.setBR(++row, 0, 1);
@@ -184,13 +184,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         int panelRow = -1;
         statusPanel.setH1(++panelRow, 0, 1, i18n.tr("Status"));
         statusPanel.setWidget(++panelRow, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 100).build());
-        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 100).build());
-        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 100).build());
+                inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>(), new FormWidgetDecoratorBuilder(100).build()));
+        statusPanel.setWidget(++panelRow, 0, inject(proto().updated(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        statusPanel.setWidget(++panelRow, 0, inject(proto().submitted(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
         statusPanel.setBR(++panelRow, 0, 1);
-        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 100).build());
-        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 100).build());
-        statusPanel.setWidget(++panelRow, 0, new FormWidgetDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 100).build());
+        statusPanel.setWidget(++panelRow, 0, inject(proto().scheduledDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        statusPanel.setWidget(++panelRow, 0, inject(proto().scheduledTimeFrom(), new CTimeLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        statusPanel.setWidget(++panelRow, 0, inject(proto().scheduledTimeTo(), new CTimeLabel(), new FormWidgetDecoratorBuilder(100).build()));
         content.setWidget(++row, 0, statusPanel);
 
         content.setBR(++row, 0, 1);
@@ -326,7 +326,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         categoryPanel.clear();
         int row = levels;
         for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
-            categoryPanel.setWidget(--row, 0, new FormWidgetDecoratorBuilder(choice, 250).build());
+            choice.setDecorator(new FormWidgetDecoratorBuilder(250).build());
+            categoryPanel.setWidget(--row, 0, choice);
         }
     }
 

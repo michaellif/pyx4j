@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -47,10 +46,10 @@ public class ScopeDialog extends OkCancelDialog {
 
         form = new CEntityForm<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scopingResult()), 10).build());
+                content.setWidget(++row, 0, inject(proto().scopingResult(), new FormDecoratorBuilder(10).build()));
                 get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ScopingResult> event) {
@@ -72,7 +71,7 @@ public class ScopeDialog extends OkCancelDialog {
                 }
                 combo.setOptions(options);
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().renovationEndsOn()), 10).build());
+                content.setWidget(++row, 0, inject(proto().renovationEndsOn(), new FormDecoratorBuilder(10).build()));
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
@@ -84,7 +83,7 @@ public class ScopeDialog extends OkCancelDialog {
                         }
                     }
                 });
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().offMarketType()), 10).build());
+                content.setWidget(++row, 0, inject(proto().offMarketType(), new FormDecoratorBuilder(10).build()));
                 get(proto().offMarketType()).setVisible(false);
 
                 return content;

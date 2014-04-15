@@ -58,19 +58,19 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person())).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email())).build());
+            main.setWidget(++row, 0, inject(proto().person(), new FormDecoratorBuilder().build()));
+            main.setWidget(++row, 0, inject(proto().person().email(), new FormDecoratorBuilder().build()));
 
             row = -1;
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().workPhone())).build());
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().mobilePhone())).build());
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().homePhone())).build());
+            main.setWidget(++row, 1, inject(proto().person().workPhone(), new FormDecoratorBuilder().build()));
+            main.setWidget(++row, 1, inject(proto().person().mobilePhone(), new FormDecoratorBuilder().build()));
+            main.setWidget(++row, 1, inject(proto().person().homePhone(), new FormDecoratorBuilder().build()));
 
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+            main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
 
             // repopulate related fields from selected employee:
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {

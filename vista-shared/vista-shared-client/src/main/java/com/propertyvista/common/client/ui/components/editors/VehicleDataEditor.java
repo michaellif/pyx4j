@@ -44,23 +44,23 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Vehicle Data"));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().year()), 5).build());
+        panel.setWidget(++row, 0, inject(proto().make(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 0, inject(proto().model(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 0, inject(proto().color(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 0, inject(proto().year(), new FormDecoratorBuilder(5).build()));
 
         row = 0; // skip header
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().plateNumber()), 10).build());
+        panel.setWidget(++row, 1, inject(proto().plateNumber(), new FormDecoratorBuilder(10).build()));
         CComponent<Province> province;
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(province = (CComponent<Province>) inject(proto().province()), 17).build());
+        panel.setWidget(++row, 1, province = (CComponent<Province>) inject(proto().province(), new FormDecoratorBuilder(17).build()));
         CComponent<Country> country;
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(country = (CComponent<Country>) inject(proto().country()), 13).build());
+        panel.setWidget(++row, 1, country = (CComponent<Country>) inject(proto().country(), new FormDecoratorBuilder(13).build()));
 
         ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
             @Override

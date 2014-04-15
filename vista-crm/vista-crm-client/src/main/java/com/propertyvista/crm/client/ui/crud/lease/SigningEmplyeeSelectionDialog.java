@@ -72,11 +72,14 @@ public abstract class SigningEmplyeeSelectionDialog extends OkCancelDialog {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employee(), createAgentComboBox())).componentWidth("150px").labelWidth("150px")
-                    .contentWidth("150px").build());
+            panel.setWidget(
+                    ++row,
+                    0,
+                    inject(proto().employee(), createAgentComboBox(),
+                            new FormDecoratorBuilder().componentWidth("150px").labelWidth("150px").contentWidth("150px").build()));
             return panel;
         }
 

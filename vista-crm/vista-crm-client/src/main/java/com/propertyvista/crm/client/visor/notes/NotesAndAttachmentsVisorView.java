@@ -108,7 +108,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             content.setWidget(0, 0, 2, inject(proto().notes(), new NotesAndAttachmentsFolder()));
@@ -139,8 +139,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             public IFolderItemDecorator<NotesAndAttachments> createItemDecorator() {
                 return new VistaBoxFolderItemDecorator<NotesAndAttachments>(this) {
                     @Override
-                    public void setComponent(final CEntityFolderItem<NotesAndAttachments> folderItem) {
-                        super.setComponent(folderItem);
+                    public void init(final CEntityFolderItem<NotesAndAttachments> folderItem) {
+                        super.init(folderItem);
                         final NoteEditor editor = (NoteEditor) getContent();
                         editor.addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -206,17 +206,17 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public IsWidget createContent() {
+                protected IsWidget createContent() {
                     TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().subject()), 50, true).build());
-                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().note()), 50, true).build());
+                    content.setWidget(++row, 0, 2, inject(proto().subject(), new FormDecoratorBuilder(50, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().note(), new FormDecoratorBuilder(50, true).build()));
 
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created(), new CDateLabel()), 10).build());
-                    content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+                    content.setWidget(++row, 0, inject(proto().created(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
+                    content.setWidget(row, 1, inject(proto().updated(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
 
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user(), new CEntityLabel<CrmUser>()), 25).build());
+                    content.setWidget(++row, 0, inject(proto().user(), new CEntityLabel<CrmUser>(), new FormDecoratorBuilder(25).build()));
 
                     content.setH3(++row, 0, 2, i18n.tr("Attachments"));
                     content.setWidget(++row, 0, 2, inject(proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder()));
@@ -361,13 +361,13 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     }
 
                     @Override
-                    public IsWidget createContent() {
+                    protected IsWidget createContent() {
                         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                         int row = -1;
 
                         CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(NoteAttachmentUploadService.class), new VistaFileURLBuilder(
                                 NoteAttachment.class));
-                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file(), cfile), 40, true).build());
+                        content.setWidget(++row, 0, 2, inject(proto().file(), cfile, new FormDecoratorBuilder(40, true).build()));
 
                         return content;
                     }

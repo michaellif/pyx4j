@@ -38,55 +38,57 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
         content.setH1(++row, 0, 1, i18n.tr("Batch Details"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().padFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))),
-                        35).build());
+        content.setWidget(
+                ++row,
+                0,
+                inject(proto().padFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class)), new FormDecoratorBuilder(
+                        35).build()));
 
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().batchNumber()), 10).build());
+        content.setWidget(row, 1, inject(proto().batchNumber(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().terminalId()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().bankId()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().accountNumber()), 10).build());
+        content.setWidget(++row, 0, inject(proto().terminalId(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().bankId(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().accountNumber(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().batchAmount()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().recordsCount()), 10).build());
+        content.setWidget(++row, 0, inject(proto().chargeDescription(), new FormDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().batchAmount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().recordsCount(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated())).build());
+        content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder().build()));
 
         content.setH1(++row, 0, 1, i18n.tr("Acknowledgment"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        content.setWidget(++row, 0, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder(10).build()));
 
         content.setH1(++row, 0, 1, i18n.tr("Reconciliation"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reconciliationStatus()), 10).build());
+        content.setWidget(++row, 0, inject(proto().reconciliationStatus(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentAmount()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().grossPaymentFee()), 10).build());
+        content.setWidget(++row, 0, inject(proto().grossPaymentAmount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().grossPaymentFee(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentCount()), 10).build());
+        content.setWidget(++row, 0, inject(proto().grossPaymentCount(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
+        content.setWidget(++row, 0, inject(proto().rejectItemsAmount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().rejectItemsFee(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectItemsCount()), 10).build());
+        content.setWidget(++row, 0, inject(proto().rejectItemsCount(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
+        content.setWidget(++row, 0, inject(proto().returnItemsAmount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().returnItemsFee(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().returnItemsCount()), 10).build());
+        content.setWidget(++row, 0, inject(proto().returnItemsCount(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().netAmount()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().adjustments()), 10).build());
+        content.setWidget(++row, 0, inject(proto().netAmount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().adjustments(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().previousBalance()), 10).build());
+        content.setWidget(++row, 0, inject(proto().previousBalance(), new FormDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantBalance()), 10).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().fundsReleased()), 10).build());
+        content.setWidget(++row, 0, inject(proto().merchantBalance(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().fundsReleased(), new FormDecoratorBuilder(10).build()));
 
         content.setH1(++row, 0, 1, i18n.tr("Detail Debit Records"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);

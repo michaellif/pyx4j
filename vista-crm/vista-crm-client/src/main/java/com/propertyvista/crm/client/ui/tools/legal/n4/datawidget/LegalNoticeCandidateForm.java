@@ -36,7 +36,7 @@ public class LegalNoticeCandidateForm extends BulkEditableEntityForm<LegalNotice
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(Styles.LegalNoticeCandidate.name());
 

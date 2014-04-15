@@ -34,11 +34,11 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityForm<ArrearsYOY
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yearsToCompare())).build());
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().yearsToCompare(), new FormDecoratorBuilder().build()));
         get(proto().yearsToCompare()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
             public FieldValidationError isValid() {
@@ -55,5 +55,4 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityForm<ArrearsYOY
         });
         return p;
     }
-
 }

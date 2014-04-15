@@ -40,14 +40,14 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recoveryEmail())).build());
+        content.setWidget(++row, 0, inject(proto().recoveryEmail(), new FormDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().useSecurityQuestionChallengeForPasswordReset())).build());
+        content.setWidget(++row, 0, inject(proto().useSecurityQuestionChallengeForPasswordReset(), new FormDecoratorBuilder().build()));
         get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
         get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -57,9 +57,9 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
             }
         });
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityQuestion())).build());
+        content.setWidget(++row, 0, inject(proto().securityQuestion(), new FormDecoratorBuilder().build()));
         get(proto().securityQuestion()).setVisible(false);
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
+        content.setWidget(++row, 0, inject(proto().securityAnswer(), new CPasswordTextField(), new FormDecoratorBuilder().build()));
         get(proto().securityAnswer()).setVisible(false);
 
         return content;

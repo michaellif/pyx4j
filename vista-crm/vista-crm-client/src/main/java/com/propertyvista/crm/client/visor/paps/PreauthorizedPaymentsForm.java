@@ -54,7 +54,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
@@ -64,7 +64,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
         main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
         main.getWidget(row, 0).setWidth("25em");
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel())).labelWidth(20).build());
+        main.setWidget(row, 1, inject(proto().nextPaymentDate(), new CDateLabel(), new FormDecoratorBuilder().labelWidth(20).build()));
 
         main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -121,18 +121,18 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
             }
 
             @Override
-            public IsWidget createContent() {
+            protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 15).build());
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+                content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(15).build()));
+                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 15).build());
+                content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(15).build()));
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, PreauthorizedPaymentsForm.this
@@ -144,7 +144,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
                             }
                         };
                     }
-                }), 35).build());
+                }, new FormDecoratorBuilder(35).build()));
 
                 content.setBR(++row, 0, 2);
 
