@@ -31,7 +31,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -56,7 +55,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         BasicFlexFormPanel left = new BasicFlexFormPanel();
         int row = -1;
 
-        left.setWidget(++row, 0, inject(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
+        left.setWidget(++row, 0, injectAndDecorate(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(ARCode.class, getValue().getPrimaryKey());
@@ -74,22 +73,22 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                     }
                 };
             }
-        }, new FormDecoratorBuilder(25).build()));
-        left.setWidget(++row, 0, inject(proto().amount(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().executionType(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().targetDate(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().receivedDate(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(25).build()));
+        }, 25));
+        left.setWidget(++row, 0, injectAndDecorate(proto().amount(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().executionType(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().targetDate(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().receivedDate(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().description(), 25));
 
         BasicFlexFormPanel right = new BasicFlexFormPanel();
         row = -1;
-        right.setWidget(++row, 0, inject(proto().overwriteDefaultTax(), new FormDecoratorBuilder(5).build()));
+        right.setWidget(++row, 0, injectAndDecorate(proto().overwriteDefaultTax(), 5));
         right.setWidget(++row, 0, taxHolder);
-        right.setWidget(++row, 0, inject(proto().taxType(), new FormDecoratorBuilder(10).build()));
+        right.setWidget(++row, 0, injectAndDecorate(proto().taxType(), 10));
         if (!isEditable()) {
             right.setBR(++row, 0, 1);
             right.setBR(++row, 0, 1);
-            right.setWidget(++row, 0, inject(proto()._total(), new FormDecoratorBuilder(10).build()));
+            right.setWidget(++row, 0, injectAndDecorate(proto()._total(), 10));
         }
 
         // tweak:
@@ -129,11 +128,11 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         if (!isEditable()) {
             row = 0;
             content.setHR(++row, 0, 2);
-            content.setWidget(++row, 0, inject(proto().created(), new FormDecoratorBuilder(10).build()));
-            content.setWidget(row, 1, inject(proto().updated(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().created(), 10));
+            content.setWidget(row, 1, injectAndDecorate(proto().updated(), 10));
 
-            content.setWidget(++row, 0, inject(proto().createdBy(), new FormDecoratorBuilder(25).build()));
-            content.setWidget(row, 1, inject(proto().status(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().createdBy(), 25));
+            content.setWidget(row, 1, injectAndDecorate(proto().status(), 10));
         }
 
         selectTab(addTab(content));
@@ -171,7 +170,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         unbind(proto().tax());
 
         if (comp != null) {
-            taxHolder.setWidget(inject(proto().tax(), comp, new FormDecoratorBuilder(10).build()));
+            taxHolder.setWidget(injectAndDecorate(proto().tax(), comp, 10));
 
             if (repopulate) {
                 get(proto().tax()).populate(getValue().tax().getValue(BigDecimal.ZERO));

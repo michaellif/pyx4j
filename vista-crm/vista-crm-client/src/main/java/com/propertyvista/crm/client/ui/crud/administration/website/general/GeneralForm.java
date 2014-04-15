@@ -22,7 +22,6 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
@@ -49,23 +48,23 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         CComboBox<Skin> skinComp = new CComboBox<Skin>();
         skinComp.setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
-        content.setWidget(row++, 0, inject(proto().skin(), skinComp, new FormDecoratorBuilder(10).build()));
-        content.setWidget(row++, 0, inject(proto().sitePalette().object1(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row++, 0, inject(proto().sitePalette().object2(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row++, 0, inject(proto().sitePalette().contrast1(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row++, 0, inject(proto().sitePalette().contrast2(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, injectAndDecorate(proto().skin(), skinComp, 10));
+        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().object1(), 10));
+        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().object2(), 10));
+        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().contrast1(), 10));
+        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().contrast2(), 10));
 
         // ---------------------------------------------------------------------------------------------------------------
 
         content.setH1(row++, 0, 2, i18n.tr("Website"));
-        content.setWidget(row++, 0, inject(proto().enabled(), publicPortalSwitch, new FormDecoratorBuilder(10).build()));
-        content.setWidget(row++, 0, inject(proto().disableMapView(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row++, 0, inject(proto().disableBuildingDetails(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, injectAndDecorate(proto().enabled(), publicPortalSwitch, 10));
+        content.setWidget(row++, 0, injectAndDecorate(proto().disableMapView(), 10));
+        content.setWidget(row++, 0, injectAndDecorate(proto().disableBuildingDetails(), 10));
 
         // --------------------------------------------------------------------------------------------------------------------
 
         content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
-        content.setWidget(row++, 0, inject(proto().residentPortalEnabled(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(row++, 0, injectAndDecorate(proto().residentPortalEnabled(), 10));
 
         selectTab(addTab(content));
 
@@ -93,7 +92,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         file.setImageSize(150, 100);
         file.setScaleMode(ScaleMode.Contain);
 
-        content.setWidget(0, 0, inject(proto().crmLogo().file(), file, new FormDecoratorBuilder(20).build()));
+        content.setWidget(0, 0, injectAndDecorate(proto().crmLogo().file(), file, 20));
 
         return content;
     }

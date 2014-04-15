@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
@@ -121,7 +121,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         callback.onSuccess(newEntity);
     }
 
-    class PageContentEditor extends CEntityForm<PageContent> {
+    class PageContentEditor extends AccessoryEntityForm<PageContent> {
 
         public PageContentEditor() {
             super(PageContent.class);
@@ -134,13 +134,13 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(10).build()));
-            main.setWidget(++row, 0, inject(proto()._caption().caption(), new FormDecoratorBuilder(20).build()));
-            main.setWidget(++row, 0, inject(proto()._caption().secondaryCaption(), new FormDecoratorBuilder(20).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 10));
+            main.setWidget(++row, 0, injectAndDecorate(proto()._caption().caption(), 20));
+            main.setWidget(++row, 0, injectAndDecorate(proto()._caption().secondaryCaption(), 20));
 
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, inject(proto().content(), editor, new FormDecoratorBuilder(60).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().content(), editor, 60));
 
             // TODO
             // main.setWidget(++row, 0, inject(proto().image(), new CFileUploader(), new FormDecoratorBuilder( 60).build()));

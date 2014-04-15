@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -31,8 +30,8 @@ public class LockerForm extends CrmEntityForm<Locker> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().name(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().type(), 10));
 
         selectTab(addTab(content));
 

@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -35,8 +34,8 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 0, inject(proto().year(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().type(), 20));
+        main.setWidget(++row, 0, injectAndDecorate(proto().year(), 10));
 
         return main;
     }

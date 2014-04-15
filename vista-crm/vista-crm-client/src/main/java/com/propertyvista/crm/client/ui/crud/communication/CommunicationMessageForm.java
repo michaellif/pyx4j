@@ -31,7 +31,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
@@ -78,8 +77,8 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
     public BasicFlexFormPanel createGeneralForm() {
         BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FormDecoratorBuilder(20).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FormDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().thread().created(), new CLabel<String>(), 20));
+        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().subject(), 20));
         mainPanel.setWidget(++row, 0, inject(proto().thread().content(), messagesFolder));
         mainPanel.setBR(++row, 0, 1);
 
@@ -141,10 +140,10 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, inject(proto().date(), new CLabel<String>(), new FormDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, inject(proto().text(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().date(), new CLabel<String>(), 20));
+            content.setWidget(++row, 0, injectAndDecorate(proto().text(), 20));
             content.setH1(++row, 0, 1, "From");
-            content.setWidget(++row, 0, inject(proto().sender(), new SenderLabel(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().sender(), new SenderLabel(), 20));
             content.setH1(++row, 0, 1, "To");
             content.setWidget(++row, 0, inject(proto().to(), receiverSelector));
 

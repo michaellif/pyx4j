@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSOpenHouse;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class MarketingEditor extends CEntityForm<Marketing> {
+public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
     private final CEntityForm<? extends Building> parentForm;
 
@@ -67,14 +67,14 @@ public class MarketingEditor extends CEntityForm<Marketing> {
         main.setWidth("100%");
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(16).build()));
-        main.setWidget(row, 1, inject(proto().visibility(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 16));
+        main.setWidget(row, 1, injectAndDecorate(proto().visibility(), 10));
 
-        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
 
         // marketing address
         main.setH1(++row, 0, 2, proto().marketingAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().useCustomAddress(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().useCustomAddress(), true));
         main.setWidget(++row, 0, 2, inject(proto().marketingAddress(), addressEditor));
         get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -114,7 +114,7 @@ public class MarketingEditor extends CEntityForm<Marketing> {
         super.setEditorValue(value);
     }
 
-    public static class MarketingContactEditor<T extends MarketingContact> extends CEntityForm<T> {
+    public static class MarketingContactEditor<T extends MarketingContact> extends AccessoryEntityForm<T> {
         public MarketingContactEditor(Class<T> valueClass) {
             super(valueClass);
         }
@@ -124,8 +124,8 @@ public class MarketingEditor extends CEntityForm<Marketing> {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, inject(proto().value(), new FormDecoratorBuilder().build()));
-            content.setWidget(row, 1, inject(proto().description(), new FormDecoratorBuilder().build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().value()));
+            content.setWidget(row, 1, injectAndDecorate(proto().description()));
 
             return content;
         }
@@ -156,12 +156,12 @@ public class MarketingEditor extends CEntityForm<Marketing> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().eventDate(), new FormDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().startTime(), new FormDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().endTime(), new FormDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().appointmentRequired(), new FormDecoratorBuilder().build()));
+                content.setWidget(++row, 0, injectAndDecorate(proto().eventDate()));
+                content.setWidget(++row, 0, injectAndDecorate(proto().startTime()));
+                content.setWidget(++row, 0, injectAndDecorate(proto().endTime()));
+                content.setWidget(++row, 0, injectAndDecorate(proto().appointmentRequired()));
 
-                content.setWidget(0, 1, inject(proto().details(), new FormDecoratorBuilder().build()));
+                content.setWidget(0, 1, injectAndDecorate(proto().details()));
                 content.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
                 content.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 

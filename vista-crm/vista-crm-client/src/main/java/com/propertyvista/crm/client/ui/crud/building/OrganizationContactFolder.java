@@ -19,10 +19,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView.Presenter;
@@ -51,7 +50,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         return (Presenter) parent.getParentView().getPresenter();
     }
 
-    private class OrganizationContactEditor extends CEntityForm<OrganizationContact> {
+    private class OrganizationContactEditor extends AccessoryEntityForm<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);
@@ -62,15 +61,15 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().person(), new FormDecoratorBuilder().build()));
-            main.setWidget(++row, 0, inject(proto().person().email(), new FormDecoratorBuilder().build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().person()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().person().email()));
 
             row = -1;
-            main.setWidget(++row, 1, inject(proto().person().workPhone(), new FormDecoratorBuilder().build()));
-            main.setWidget(++row, 1, inject(proto().person().mobilePhone(), new FormDecoratorBuilder().build()));
-            main.setWidget(++row, 1, inject(proto().person().homePhone(), new FormDecoratorBuilder().build()));
+            main.setWidget(++row, 1, injectAndDecorate(proto().person().workPhone()));
+            main.setWidget(++row, 1, injectAndDecorate(proto().person().mobilePhone()));
+            main.setWidget(++row, 1, injectAndDecorate(proto().person().homePhone()));
 
-            main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
 
             // repopulate related fields from selected employee:
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {

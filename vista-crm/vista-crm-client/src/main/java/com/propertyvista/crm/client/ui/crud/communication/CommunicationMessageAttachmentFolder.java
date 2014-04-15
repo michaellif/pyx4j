@@ -18,11 +18,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -45,7 +44,7 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
         return super.create(member);
     }
 
-    private class CommunicationMessageAttachmentViewer extends CEntityForm<CommunicationMessageAttachment> {
+    private class CommunicationMessageAttachmentViewer extends AccessoryEntityForm<CommunicationMessageAttachment> {
 
         public CommunicationMessageAttachmentViewer() {
             super(CommunicationMessageAttachment.class);
@@ -59,11 +58,11 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
             content.setWidget(
                     ++row,
                     0,
-                    inject(proto().file(),
+                    injectAndDecorate(proto().file(),
                             new CFile(GWT.<CommunicationMessageAttachmentUploadService> create(CommunicationMessageAttachmentUploadService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), new FormDecoratorBuilder(30).build()));
+                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), 30));
 
-            content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().description(), 20));
 
             return content;
         }

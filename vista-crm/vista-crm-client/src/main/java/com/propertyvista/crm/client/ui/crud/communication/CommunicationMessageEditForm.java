@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.communication;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -42,11 +41,11 @@ public class CommunicationMessageEditForm extends CrmEntityForm<CommunicationMes
     public BasicFlexFormPanel createGeneralForm() {
         BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FormDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().subject(), 20));
         mainPanel.setH1(++row, 0, 1, "To");
         mainPanel.setWidget(++row, 0, inject(proto().to(), receiverSelector));
         mainPanel.setH1(++row, 0, 1, "Message");
-        mainPanel.setWidget(++row, 0, inject(proto().text(), new FormDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().text(), 20));
         mainPanel.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));
         mainPanel.setBR(++row, 0, 1);
 

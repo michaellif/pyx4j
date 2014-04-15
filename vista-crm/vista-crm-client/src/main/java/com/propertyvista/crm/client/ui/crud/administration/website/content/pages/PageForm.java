@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.administration.website.content.pages;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -28,7 +27,7 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
 
         content.setH1(++row, 0, 2, proto().content().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().content(), new PageContentFolder(this)));

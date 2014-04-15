@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -31,7 +30,6 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
     public LockerAreaForm(IForm<LockerAreaDTO> view) {
         super(LockerAreaDTO.class, view);
 
-//        tabPanel.add(isEditable() ? new HTML() : ((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
         Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
         selectTab(tab);
 
@@ -43,16 +41,16 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().levels(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
+        main.setWidget(++row, 0, injectAndDecorate(proto().levels(), 3));
 
         row = -1;
-        main.setWidget(++row, 1, inject(proto().totalLockers(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().regularLockers(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().largeLockers(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().smallLockers(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 1, injectAndDecorate(proto().totalLockers(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().regularLockers(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().largeLockers(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().smallLockers(), 3));
 
-        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
 
         return main;
     }

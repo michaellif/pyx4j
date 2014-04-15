@@ -17,9 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.Testimonial;
@@ -38,7 +37,7 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
         return super.create(member);
     }
 
-    class TestimonialEditor extends CEntityForm<Testimonial> {
+    class TestimonialEditor extends AccessoryEntityForm<Testimonial> {
 
         public TestimonialEditor() {
             super(Testimonial.class);
@@ -49,9 +48,9 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().locale(), new FormDecoratorBuilder(10).build()));
-            main.setWidget(++row, 0, inject(proto().content(), new FormDecoratorBuilder(50).build()));
-            main.setWidget(++row, 0, inject(proto().author(), new FormDecoratorBuilder(20).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), 10));
+            main.setWidget(++row, 0, injectAndDecorate(proto().content(), 50));
+            main.setWidget(++row, 0, injectAndDecorate(proto().author(), 20));
 
             return main;
         }

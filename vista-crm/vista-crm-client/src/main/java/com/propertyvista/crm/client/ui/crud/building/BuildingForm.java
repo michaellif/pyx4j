@@ -182,39 +182,33 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = 0;
         flexPanel.setH1(row++, 0, 2, i18n.tr("Building Summary"));
-        flexPanel.setWidget(row, 0, inject(proto().propertyCode(), new FormDecoratorBuilder(12).build()));
+        flexPanel.setWidget(row, 0, injectAndDecorate(proto().propertyCode(), 12));
 
-        flexPanel.setWidget(row++, 1, inject(proto().info().shape(), new FormDecoratorBuilder(7).build()));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().info().shape(), 7));
 
-        flexPanel.setWidget(row, 0, inject(proto().info().name(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(row++, 1, inject(proto().info().totalStoreys(), new FormDecoratorBuilder(5).build()));
+        flexPanel.setWidget(row, 0, injectAndDecorate(proto().info().name(), 15));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().info().totalStoreys(), 5));
 
-        flexPanel.setWidget(row, 0, inject(proto().info().type(), new FormDecoratorBuilder(12).build()));
-        flexPanel.setWidget(row++, 1, inject(proto().info().residentialStoreys(), new FormDecoratorBuilder(5).build()));
+        flexPanel.setWidget(row, 0, injectAndDecorate(proto().info().type(), 12));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().info().residentialStoreys(), 5));
 
-        flexPanel.setWidget(row, 0, inject(proto().propertyManager(), new FormDecoratorBuilder(16).build()));
-        flexPanel.setWidget(row++, 1, inject(proto().externalId(), new FormDecoratorBuilder(15).build()));
+        flexPanel.setWidget(row, 0, injectAndDecorate(proto().propertyManager(), 16));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().externalId(), 15));
 
         if (isEditable()) {
-            flexPanel.setWidget(row, 0, inject(proto().complex(), new CEntityLabel<Complex>(), new FormDecoratorBuilder(15).build()));
+            flexPanel.setWidget(row, 0, injectAndDecorate(proto().complex(), new CEntityLabel<Complex>(), 15));
         } else {
-            flexPanel.setWidget(
-                    row,
-                    0,
-                    inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class)),
-                            new FormDecoratorBuilder(15).build()));
+            flexPanel.setWidget(row, 0,
+                    injectAndDecorate(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class)), 15));
         }
 
-        flexPanel.setWidget(
-                row++,
-                0,
-                inject(proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class)),
-                        new FormDecoratorBuilder(15).build()));
+        flexPanel.setWidget(row++, 0,
+                injectAndDecorate(proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class)), 15));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            flexPanel.setWidget(row++, 1, inject(proto().defaultProductCatalog(), new FormDecoratorBuilder(5).build()));
+            flexPanel.setWidget(row++, 1, injectAndDecorate(proto().defaultProductCatalog(), 5));
         }
-        flexPanel.setWidget(row++, 1, inject(proto().suspended(), new FormDecoratorBuilder(5).build()));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().suspended(), 5));
 
         flexPanel.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         flexPanel.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
@@ -239,21 +233,21 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Information"));
-        flexPanel.setWidget(++row, 0, inject(proto().info().structureType(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 0, inject(proto().info().structureBuildYear(), new FormDecoratorBuilder(10).build()));
-        flexPanel.setWidget(++row, 0, inject(proto().info().constructionType(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 0, inject(proto().info().foundationType(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 0, inject(proto().info().floorType(), new FormDecoratorBuilder(15).build()));
+        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().structureType(), 15));
+        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().structureBuildYear(), 10));
+        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().constructionType(), 15));
+        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().foundationType(), 15));
+        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().floorType(), 15));
 
         row = 0;
-        flexPanel.setWidget(++row, 1, inject(proto().info().landArea(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 1, inject(proto().info().waterSupply(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 1, inject(proto().info().centralAir(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 1, inject(proto().info().centralHeat(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 1, inject(proto().info().hasSprinklers(), new FormDecoratorBuilder(15).build()));
-        flexPanel.setWidget(++row, 1, inject(proto().info().hasFireAlarm(), new FormDecoratorBuilder(15).build()));
+        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().landArea(), 15));
+        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().waterSupply(), 15));
+        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().centralAir(), 15));
+        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().centralHeat(), 15));
+        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().hasSprinklers(), 15));
+        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().hasFireAlarm(), 15));
 
-        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().website(), new FormDecoratorBuilder(true).build()));
+        flexPanel.setWidget(++row, 0, 2, injectAndDecorate(proto().contacts().website(), true));
         get(proto().contacts().website()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
@@ -323,15 +317,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = 0;
         flexPanel.setBR(row++, 0, 2);
-        flexPanel.setWidget(row++, 0, inject(proto().financial().dateAcquired(), new FormDecoratorBuilder(9).build()));
-        flexPanel.setWidget(row++, 0, inject(proto().financial().purchasePrice(), new FormDecoratorBuilder(10).build()));
-        flexPanel.setWidget(row++, 0, inject(proto().financial().marketPrice(), new FormDecoratorBuilder(10).build()));
+        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().financial().dateAcquired(), 9));
+        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().financial().purchasePrice(), 10));
+        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().financial().marketPrice(), 10));
         flexPanel.setBR(row++, 0, 1);
-        flexPanel.setWidget(row++, 0, inject(proto().merchantAccount(), new FormDecoratorBuilder(15).build()));
+        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().merchantAccount(), 15));
 
         row = 1;
-        flexPanel.setWidget(row++, 1, inject(proto().financial().lastAppraisalDate(), new FormDecoratorBuilder(9).build()));
-        flexPanel.setWidget(row++, 1, inject(proto().financial().lastAppraisalValue(), new FormDecoratorBuilder(10).build()));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalDate(), 9));
+        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalValue(), 10));
         flexPanel
                 .setWidget(row++, 1, inject(proto().financial().currency().name(), new FormDecoratorBuilder(10).customLabel(i18n.tr("Currency Name")).build()));
 
@@ -499,8 +493,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 frontImage.setImageSize(240, 160);
 
                 content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
-                content.setWidget(0, 1, inject(proto().title(), new FormDecoratorBuilder(10, 50, 55).build()));
-                content.setWidget(1, 0, inject(proto().description(), new FormDecoratorBuilder(10, 50, 55).build()));
+                content.setWidget(0, 1, injectAndDecorate(proto().title(), 10, 50, 55));
+                content.setWidget(1, 0, injectAndDecorate(proto().description(), 10, 50, 55));
                 content.getFlexCellFormatter().setRowSpan(0, 0, 2);
 
                 return content;
@@ -513,8 +507,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("ILS Email Profile"));
-        panel.setWidget(++row, 0, inject(proto().ilsEmail().maxAds(), new FormDecoratorBuilder(5).build()));
-        panel.setWidget(row, 1, inject(proto().ilsEmail().disabled(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().ilsEmail().maxAds(), 5));
+        panel.setWidget(row, 1, injectAndDecorate(proto().ilsEmail().disabled()));
         return panel;
     }
 
@@ -573,9 +567,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, 2, inject(proto().vendor(), new CEnumLabel(), new FormDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, inject(proto().maxAds(), new FormDecoratorBuilder(5).build()));
-                content.setWidget(row, 1, inject(proto().disabled(), new FormDecoratorBuilder().build()));
+                content.setWidget(++row, 0, 2, injectAndDecorate(proto().vendor(), new CEnumLabel(), true));
+                content.setWidget(++row, 0, injectAndDecorate(proto().maxAds(), 5));
+                content.setWidget(row, 1, injectAndDecorate(proto().disabled()));
 
                 content.setH1(++row, 0, 2, proto().preferredContacts().getMeta().getCaption());
                 content.setWidget(++row, 0, 2,

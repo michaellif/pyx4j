@@ -23,17 +23,16 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 
-public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
+public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
 
     private final SimplePanel valueHolder = new SimplePanel();
 
@@ -48,15 +47,14 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
         CEntityComboBox<ARCode> chargeCodeSelector;
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().enabled(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().depositType(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0,
-                inject(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().enabled(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().depositType()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)));
 
-        content.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
 
         row = 0;
-        content.setWidget(++row, 1, inject(proto().valueType(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 1, injectAndDecorate(proto().valueType(), 10));
         content.setWidget(++row, 1, valueHolder);
 
         // tweaks:
@@ -112,8 +110,7 @@ public class ProductDepositEditor extends CEntityForm<ProductDeposit> {
         unbind(proto().value());
 
         if (comp != null) {
-            valueHolder.setWidget(inject(proto().value(), comp, new FormDecoratorBuilder(6).build()));
-
+            valueHolder.setWidget(injectAndDecorate(proto().value(), comp, 6));
             if (repopulatevalue) {
                 get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
             }

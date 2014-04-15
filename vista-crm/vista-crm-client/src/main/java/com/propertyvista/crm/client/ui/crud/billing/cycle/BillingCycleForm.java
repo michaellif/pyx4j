@@ -20,7 +20,6 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
@@ -39,34 +38,34 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().billingType(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().billingCycleStartDate(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().billingCycleEndDate(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().targetBillExecutionDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().billingType()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().billingCycleStartDate()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().billingCycleEndDate()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().targetBillExecutionDate()));
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        content.setWidget(++row, 0, inject(proto().stats().failed(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().stats().failed()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Failed));
 
-        content.setWidget(++row, 0, inject(proto().stats().rejected(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().stats().rejected()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Rejected));
 
-        content.setWidget(++row, 0, inject(proto().stats().notConfirmed(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().stats().notConfirmed()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Finished));
 
-        content.setWidget(++row, 0, inject(proto().stats().confirmed(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().stats().confirmed()));
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Confirmed));
 
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, inject(proto().total(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().total()));
         content.setWidget(row, 1, new ViewLeasesLink(false));
-        content.setWidget(++row, 0, inject(proto().notRun(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().notRun()));
         content.setWidget(row, 1, new ViewLeasesLink(true));
 
         content.setH2(++row, 0, 2, i18n.tr("AutoPay"));
-        content.setWidget(++row, 0, inject(proto().actualAutopayExecutionDate(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().targetAutopayExecutionDate(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().pads(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().actualAutopayExecutionDate()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().targetAutopayExecutionDate()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().pads()));
         content.setWidget(row, 1, new ViewPadLink());
 
         setTabBarVisible(false);

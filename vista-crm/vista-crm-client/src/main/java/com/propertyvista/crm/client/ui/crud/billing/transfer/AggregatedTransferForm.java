@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -34,29 +33,29 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().paymentDate(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().merchantAccount(), new FormDecoratorBuilder(20).build()));
-        content.setWidget(++row, 0, inject(proto().fundsTransferType(), new FormDecoratorBuilder(20).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().paymentDate(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().status(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().merchantAccount(), 20));
+        content.setWidget(++row, 0, injectAndDecorate(proto().fundsTransferType(), 20));
 
-        content.setWidget(++row, 0, inject(proto().netAmount(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().adjustments(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().previousBalance(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().merchantBalance(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().fundsReleased(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().netAmount(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().adjustments(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().previousBalance(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().merchantBalance(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().fundsReleased(), 10));
 
-        content.setWidget(++row, 0, inject(proto().grossPaymentAmount(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().grossPaymentFee(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().grossPaymentCount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().grossPaymentAmount(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().grossPaymentFee(), 10));
+        content.setWidget(++row, 0, injectAndDecorate(proto().grossPaymentCount(), 10));
 
-        content.setWidget(++row, 0, inject(proto().rejectItemsAmount(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().returnItemsAmount(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().rejectItemsAmount(), 10));
+        content.setWidget(row, 1, injectAndDecorate(proto().returnItemsAmount(), 10));
 
-        content.setWidget(++row, 0, inject(proto().rejectItemsFee(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().returnItemsFee(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().rejectItemsFee(), 10));
+        content.setWidget(row, 1, injectAndDecorate(proto().returnItemsFee(), 10));
 
-        content.setWidget(++row, 0, inject(proto().rejectItemsCount(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().returnItemsCount(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().rejectItemsCount(), 5));
+        content.setWidget(row, 1, injectAndDecorate(proto().returnItemsCount(), 5));
 
         content.setH3(++row, 0, 1, proto().payments().getMeta().getCaption());
         content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());

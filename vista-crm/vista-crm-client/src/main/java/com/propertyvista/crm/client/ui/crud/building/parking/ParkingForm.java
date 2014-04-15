@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -42,18 +41,18 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().type(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().levels(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
+        main.setWidget(++row, 0, injectAndDecorate(proto().type(), 10));
+        main.setWidget(++row, 0, injectAndDecorate(proto().levels(), 3));
 
         row = -1;
-        main.setWidget(++row, 1, inject(proto().totalSpaces(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().regularSpaces(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().disabledSpaces(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().wideSpaces(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++row, 1, inject(proto().narrowSpaces(), new FormDecoratorBuilder(3).build()));
+        main.setWidget(++row, 1, injectAndDecorate(proto().totalSpaces(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().regularSpaces(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().disabledSpaces(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().wideSpaces(), 3));
+        main.setWidget(++row, 1, injectAndDecorate(proto().narrowSpaces(), 3));
 
-        main.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
 
         return main;
     }

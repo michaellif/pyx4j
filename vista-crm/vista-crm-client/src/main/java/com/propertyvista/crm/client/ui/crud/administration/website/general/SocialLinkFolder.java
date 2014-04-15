@@ -32,13 +32,12 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -135,7 +134,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
         }
     }
 
-    class SocialLinkEditor extends CEntityForm<SocialLink> {
+    class SocialLinkEditor extends AccessoryEntityForm<SocialLink> {
 
         public SocialLinkEditor() {
             super(SocialLink.class);
@@ -148,8 +147,8 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             int row = -1;
             CLabel<String> site = new CLabel<String>();
             site.setEditable(false);
-            main.setWidget(++row, 0, 2, inject(proto().socialSite(), site, new FormDecoratorBuilder(10, true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().siteUrl(), new FormDecoratorBuilder(35, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().socialSite(), site, 10, true));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().siteUrl(), 35, true));
             get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public FieldValidationError isValid() {

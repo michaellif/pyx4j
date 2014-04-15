@@ -17,9 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.News;
@@ -38,7 +37,7 @@ public class NewsFolder extends VistaBoxFolder<News> {
         return super.create(member);
     }
 
-    class NewsEditor extends CEntityForm<News> {
+    class NewsEditor extends AccessoryEntityForm<News> {
 
         public NewsEditor() {
             super(News.class);
@@ -49,10 +48,10 @@ public class NewsFolder extends VistaBoxFolder<News> {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().locale(), new FormDecoratorBuilder(10).build()));
-            main.setWidget(++row, 0, inject(proto().caption(), new FormDecoratorBuilder(20).build()));
-            main.setWidget(++row, 0, inject(proto().content(), new FormDecoratorBuilder(50).build()));
-            main.setWidget(++row, 0, inject(proto().date(), new FormDecoratorBuilder(9).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), 10));
+            main.setWidget(++row, 0, injectAndDecorate(proto().caption(), 20));
+            main.setWidget(++row, 0, injectAndDecorate(proto().content(), 50));
+            main.setWidget(++row, 0, injectAndDecorate(proto().date(), 9));
 
             return main;
         }

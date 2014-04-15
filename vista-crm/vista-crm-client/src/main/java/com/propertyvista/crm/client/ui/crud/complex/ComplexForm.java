@@ -22,7 +22,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -46,8 +45,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
     private TwoColumnFlexFormPanel createGeneralPanel(String title) {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
 
-        panel.setWidget(0, 0, inject(proto().name(), new FormDecoratorBuilder().build()));
-        panel.setWidget(0, 1, inject(proto().website(), new FormDecoratorBuilder().build()));
+        panel.setWidget(0, 0, injectAndDecorate(proto().name()));
+        panel.setWidget(0, 1, injectAndDecorate(proto().website()));
         get(proto().website()).addComponentValidator(new AbstractComponentValidator<String>() {
 
             @Override

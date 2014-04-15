@@ -50,7 +50,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -189,66 +188,67 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        left.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().propertyCode(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().unitNumber(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().leaseId(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().leaseStatus(), new FormDecoratorBuilder(10).build()));
-        left.setWidget(++row, 0, inject(proto().billingAccount().accountNumber(), new CLabel<String>(), new FormDecoratorBuilder(10).build()));
+        left.setWidget(++row, 0, injectAndDecorate(proto().id(), new CNumberLabel(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().propertyCode(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().unitNumber(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().leaseId(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().leaseStatus(), 10));
+        left.setWidget(++row, 0, injectAndDecorate(proto().billingAccount().accountNumber(), new CLabel<String>(), 10));
 
-        left.setWidget(++row, 0, inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
-            @Override
-            protected AppPlace getTargetPlace() {
-                if (getValue().isInstanceOf(LeaseTermTenant.class)) {
-                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
-                } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
-                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
-                } else {
-                    throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
-                }
-            }
-
-            @Override
-            protected IShowable getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"), false,
-                        PaymentForm.this.getValue().participants()) {
+        left.setWidget(++row, 0,
+                injectAndDecorate(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                     @Override
-                    public boolean onClickOk() {
-                        CComponent<?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
-                        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp).setValue(getSelectedItems().get(0));
-                        return true;
+                    protected AppPlace getTargetPlace() {
+                        if (getValue().isInstanceOf(LeaseTermTenant.class)) {
+                            return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
+                        } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
+                            return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
+                        } else {
+                            throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
+                        }
                     }
-                };
-            }
-        }, new FormDecoratorBuilder(22).build()));
+
+                    @Override
+                    protected IShowable getSelectorDialog() {
+                        return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"), false,
+                                PaymentForm.this.getValue().participants()) {
+                            @Override
+                            public boolean onClickOk() {
+                                CComponent<?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
+                                ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp).setValue(getSelectedItems().get(0));
+                                return true;
+                            }
+                        };
+                    }
+                }, 22));
 
         left.setWidget(
                 ++row,
                 0,
-                inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL), new FormDecoratorBuilder().build()));
+                injectAndDecorate(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class,
+                        RadioGroup.Layout.HORISONTAL)));
 
-        left.setWidget(++row, 0, inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FormDecoratorBuilder(30).build()));
-        left.setWidget(++row, 0, inject(proto().storeInProfile(), new FormDecoratorBuilder(3).build()));
-        left.setWidget(++row, 0, inject(proto().convenienceFee(), new CMoneyLabel(), new FormDecoratorBuilder(10).build()));
+        left.setWidget(++row, 0, injectAndDecorate(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, 30));
+        left.setWidget(++row, 0, injectAndDecorate(proto().storeInProfile(), 3));
+        left.setWidget(++row, 0, injectAndDecorate(proto().convenienceFee(), new CMoneyLabel(), 10));
 
         TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         row = -1;
 
-        right.setWidget(++row, 1, inject(proto().amount(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().createdDate(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().updated(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().receivedDate(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().targetDate(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().finalizeDate(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().paymentStatus(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().rejectedWithNSF(), new FormDecoratorBuilder(5).build()));
-        right.setWidget(++row, 1, inject(proto().lastStatusChangeDate(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().transactionAuthorizationNumber(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().convenienceFeeTransactionAuthorizationNumber(), new FormDecoratorBuilder(10).build()));
-        right.setWidget(++row, 1, inject(proto().transactionErrorMessage(), new FormDecoratorBuilder(22).build()));
-        right.setWidget(++row, 1, inject(proto().notes(), new FormDecoratorBuilder(22).build()));
+        right.setWidget(++row, 1, injectAndDecorate(proto().amount(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().createdDate(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().updated(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().receivedDate(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().targetDate(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().finalizeDate(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().paymentStatus(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().rejectedWithNSF(), 5));
+        right.setWidget(++row, 1, injectAndDecorate(proto().lastStatusChangeDate(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().transactionAuthorizationNumber(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().convenienceFeeTransactionAuthorizationNumber(), 10));
+        right.setWidget(++row, 1, injectAndDecorate(proto().transactionErrorMessage(), 22));
+        right.setWidget(++row, 1, injectAndDecorate(proto().notes(), 22));
 
         // tweak UI:
         CComponent<?> comp = get(proto().leaseTermParticipant());
@@ -549,7 +549,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             int row = -1;
 
             CNumberLabel comp;
-            content.setWidget(++row, 0, inject(proto().id(), comp = new CNumberLabel(), new FormDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().id(), comp = new CNumberLabel(), 10));
             comp.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
@@ -559,10 +559,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 }
             });
 
-            content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(9).build()));
-            content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().creationDate(), 9));
+            content.setWidget(row, 1, injectAndDecorate(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), 22));
 
-            content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormDecoratorBuilder(22).build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), 22));
 
             content.setBR(++row, 0, 2);
 
