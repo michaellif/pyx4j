@@ -17,15 +17,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
-    public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
-        super(component);
+    public FormDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
+        super();
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
@@ -34,24 +33,24 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, String componentWidth) {
-        this(component, "150px", componentWidth, "220px");
+    public FormDecoratorBuilder(String componentWidth) {
+        this("150px", componentWidth, "220px");
     }
 
-    public FormDecoratorBuilder(CComponent<?> component) {
-        this(component, "200px");
+    public FormDecoratorBuilder() {
+        this("200px");
     }
 
     @Override
     public WidgetDecorator build() {
-        WidgetDecorator decorator = super.build();
+        final WidgetDecorator decorator = super.build();
         decorator.sinkEvents(Event.ONCLICK);
 
         decorator.addHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(getComponent()));
+                TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(decorator.getComponent()));
             }
         }, ClickEvent.getType());
 

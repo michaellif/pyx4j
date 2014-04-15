@@ -32,14 +32,18 @@ public class NViewer<DATA> extends SimplePanel implements INativeComponent<DATA>
 
     private final CViewer<DATA> cComponent;
 
+    private final SimplePanel contentPanel;
+
     public NViewer(CViewer<DATA> cComponent) {
         this.cComponent = cComponent;
+        contentPanel = new SimplePanel();
+        setWidget(contentPanel);
     }
 
     @Override
     public void setNativeValue(DATA value) {
         IsWidget widget = getCComponent().createContent(value);
-        setWidget(widget);
+        contentPanel.setWidget(widget);
     }
 
     @Override
@@ -93,4 +97,13 @@ public class NViewer<DATA> extends SimplePanel implements INativeComponent<DATA>
 
     }
 
+    @Override
+    public SimplePanel getContentHolder() {
+        return this;
+    }
+
+    @Override
+    public IsWidget getContent() {
+        return contentPanel;
+    }
 }

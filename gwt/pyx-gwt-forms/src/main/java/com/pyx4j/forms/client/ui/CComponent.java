@@ -702,7 +702,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public void setDecorator(IDecorator decorator) {
         this.decorator = decorator;
-        decorator.setComponent(this);
+        decorator.init(this);
     }
 
     public void generateMockData() {

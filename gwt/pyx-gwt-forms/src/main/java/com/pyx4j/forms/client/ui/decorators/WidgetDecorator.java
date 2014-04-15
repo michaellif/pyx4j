@@ -53,13 +53,14 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.Cursor;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 
-public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<?>> {
+public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?>> {
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
@@ -70,7 +71,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         }
     }
 
-    private CComponent<?> component;
+    private CField<?, ?> component;
 
     private final Label label;
 
@@ -96,39 +97,20 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     private final Builder builder;
 
-    public WidgetDecorator(CComponent<?> component) {
-        this(new Builder(component));
+    public WidgetDecorator() {
+        this(new Builder());
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected WidgetDecorator(final Builder builder) {
         this.builder = builder;
 
         setStyleName(WidgetDecorator.name());
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        builder.component.setDecorator(this);
-        final Widget nativeComponent = component.asWidget();
-        nativeComponent.addStyleName(WidgetDecoratorComponent.name());
-        nativeComponent.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
-        nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
         label = new Label();
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.setStyleName(WidgetDecoratorLabel.name());
-
         Cursor.setDefault(label.getElement());
-
-        if (nativeComponent instanceof Focusable) {
-            label.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    ((Focusable) nativeComponent).setFocus(true);
-                }
-            });
-        }
-
-        label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
         infoImageHolder = new SimplePanel();
         infoImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -136,8 +118,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
-
-        renderMandatoryStar();
 
         FlowPanel labelContent = new FlowPanel();
         labelContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -158,7 +138,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
         componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         componentHolder.setWidth(builder.componentWidth);
-        componentHolder.add(nativeComponent);
 
         validationLabel = new HTML();
         validationLabel.setVisible(false);
@@ -195,13 +174,48 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         add(labelHolder);
         add(containerPanel);
 
-        updateLabelPosition();
-        updateLabelAlignment();
-        updateNote();
-        updateCaption();
-        updateViewable();
-        updateTooltip();
-        updateVisibility();
+        HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
+                : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
+
+        containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
+        containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
+        containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public void init(CField<?, ?> component) {
+        this.component = component;
+
+        label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
+
+        final INativeComponent<?> nativeComponent = component.getWidget();
+
+        nativeComponent.getContentHolder().setWidget(this);
+
+        Widget content = nativeComponent.getContent().asWidget();
+        componentHolder.setWidget(content);
+
+        content.addStyleName(WidgetDecoratorComponent.name());
+        content.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        content.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
+        if (nativeComponent instanceof Focusable) {
+            label.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    ((Focusable) nativeComponent).setFocus(true);
+                }
+            });
+        }
+
+        component.addValueChangeHandler(new ValueChangeHandler() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent event) {
+                renderMandatoryStar();
+            }
+        });
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -226,20 +240,15 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             }
         });
 
-        component.addValueChangeHandler(new ValueChangeHandler() {
+        renderMandatoryStar();
+        updateLabelPosition();
+        updateLabelAlignment();
+        updateNote();
+        updateCaption();
+        updateViewable();
+        updateTooltip();
+        updateVisibility();
 
-            @Override
-            public void onValueChange(ValueChangeEvent event) {
-                renderMandatoryStar();
-            }
-        });
-
-        HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
-                : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
-
-        containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
-        containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
-        containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
     }
 
     @Override
@@ -254,7 +263,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         return label;
     }
 
-    public CComponent<?> getComnponent() {
+    public CField<?, ?> getComponent() {
         return component;
     }
 
@@ -392,12 +401,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     }
 
     @Override
-    public void setComponent(CComponent<?> component) {
-        this.component = component;
-
-    }
-
-    @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
 
@@ -416,8 +419,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         public enum LabelPosition {
             left, top, hidden
         }
-
-        private final CComponent<?> component;
 
         private String labelWidth;
 
@@ -439,8 +440,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         private LabelPosition labelPosition = LabelPosition.left;
 
-        public Builder(final CComponent<?> component) {
-            this.component = component;
+        public Builder() {
             labelWidth = "15em";
             componentWidth = "25em";
             contentWidth = "auto";
@@ -448,10 +448,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         public WidgetDecorator build() {
             return new WidgetDecorator(this);
-        }
-
-        public CComponent<?> getComponent() {
-            return component;
         }
 
         @Deprecated

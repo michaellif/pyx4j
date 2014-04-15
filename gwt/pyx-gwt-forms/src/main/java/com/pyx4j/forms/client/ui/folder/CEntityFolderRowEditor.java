@@ -57,7 +57,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?> component = createCell(column);
@@ -98,7 +98,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         }
 
         @Override
-        public void setComponent(final CComponent<?> component) {
+        public void init(final CComponent<?> component) {
             this.component = component;
             setWidget(component);
             final Widget nativeComponent = component.asWidget();

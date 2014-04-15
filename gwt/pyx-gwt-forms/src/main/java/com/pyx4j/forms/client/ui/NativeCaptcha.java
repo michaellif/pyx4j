@@ -28,6 +28,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Pair;
@@ -36,17 +38,21 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public class NativeCaptcha extends CaptchaComposite implements INativeFocusComponent<Pair<String, String>>, WatermarkComponent {
+public class NativeCaptcha extends SimplePanel implements INativeFocusComponent<Pair<String, String>>, WatermarkComponent {
 
     public static enum StyleDependent implements IStyleDependent {
         invalid
     }
 
+    private final CaptchaComposite captchaComposite;
+
     private final CCaptcha component;
 
     public NativeCaptcha(final CCaptcha component) {
         this.component = component;
-        addResponseValueChangeHandler(new ValueChangeHandler<String>() {
+        captchaComposite = new CaptchaComposite();
+
+        captchaComposite.addResponseValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 component.stopEditing();
@@ -56,7 +62,7 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
 
     @Override
     public void setWatermark(String text) {
-        getResponseTextBox().setWatermark(text);
+        captchaComposite.getResponseTextBox().setWatermark(text);
     }
 
     @Override
@@ -83,16 +89,16 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
     @Override
     public void setNativeValue(Pair<String, String> value) {
         if (value == null) {
-            super.createNewChallenge();
+            captchaComposite.createNewChallenge();
         }
     }
 
     @Override
     public Pair<String, String> getNativeValue() {
         if (ApplicationMode.offlineDevelopment) {
-            return new Pair<String, String>("off", super.getValueResponse());
+            return new Pair<String, String>("off", captchaComposite.getValueResponse());
         } else {
-            return new Pair<String, String>(super.getValueChallenge(), super.getValueResponse());
+            return new Pair<String, String>(captchaComposite.getValueChallenge(), captchaComposite.getValueResponse());
         }
     }
 
@@ -164,6 +170,29 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
     public void init() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public SimplePanel getContentHolder() {
+        return this;
+    }
+
+    @Override
+    public IsWidget getContent() {
+        return captchaComposite;
+    }
+
+    @Override
+    public void setFocus(boolean focused) {
+        captchaComposite.setFocus(focused);
+    }
+
+    public String getValueResponse() {
+        return captchaComposite.getValueResponse();
+    }
+
+    public void createNewChallenge() {
+        captchaComposite.createNewChallenge();
     }
 
 }

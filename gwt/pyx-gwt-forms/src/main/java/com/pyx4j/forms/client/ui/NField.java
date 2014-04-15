@@ -40,11 +40,13 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
@@ -56,6 +58,8 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     private EDITOR editor;
 
     private VIEWER viewer;
+
+    private final SimplePanel contentPanel;
 
     private boolean viewable;
 
@@ -77,6 +81,18 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         super();
         setStyleName(CComponentTheme.StyleName.FieldPanel.name());
         this.cComponent = cComponent;
+        contentPanel = new SimplePanel();
+        setWidget(contentPanel);
+    }
+
+    @Override
+    public SimplePanel getContentHolder() {
+        return this;
+    }
+
+    @Override
+    public IsWidget getContent() {
+        return contentPanel;
     }
 
     public final EDITOR getEditor() {
@@ -156,7 +172,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                 viewerPanel = new ViewerPanel();
             }
             onViewerInit();
-            setWidget(viewerPanel);
+            contentPanel.setWidget(viewerPanel);
         } else {
             if (editor == null) {
                 editor = createEditor();
@@ -164,7 +180,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                 editorPanel = new EditorPanel();
             }
             onEditorInit();
-            setWidget(editorPanel);
+            contentPanel.setWidget(editorPanel);
         }
     }
 

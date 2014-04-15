@@ -161,4 +161,5 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         info.append("value").append("=").append(getValue()).append(";");
         return info.toString();
     }
+
 }

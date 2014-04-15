@@ -53,7 +53,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IComponentWidget;
-import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;

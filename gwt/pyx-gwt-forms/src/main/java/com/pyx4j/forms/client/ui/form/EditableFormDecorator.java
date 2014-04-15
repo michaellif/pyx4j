@@ -71,8 +71,8 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E, C
     }
 
     @Override
-    public void setComponent(CEntityForm<E> component) {
-        super.setComponent(component);
+    public void init(CEntityForm<E> component) {
+        super.init(component);
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
 
             @Override

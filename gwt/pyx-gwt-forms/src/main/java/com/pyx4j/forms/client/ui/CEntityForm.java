@@ -48,6 +48,7 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E> {
@@ -97,9 +98,20 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         return comp;
     }
 
+    public final CComponent<?> inject(IObject<?> member, IDecorator<?> decorator) {
+        CComponent<?> comp = inject(member);
+        comp.setDecorator(decorator);
+        return comp;
+    }
+
     public final <T extends CComponent<?>> T inject(IObject<?> member, T comp) {
         bind(comp, member);
         return comp;
+    }
+
+    public final <T extends CComponent<?>> T inject(IObject<?> member, T comp, IDecorator<?> decorator) {
+        comp.setDecorator(decorator);
+        return inject(member, comp);
     }
 
     @SuppressWarnings("unchecked")

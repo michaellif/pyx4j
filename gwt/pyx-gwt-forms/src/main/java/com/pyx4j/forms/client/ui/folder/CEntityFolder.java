@@ -156,7 +156,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.add(noDataNotificationHolder);
         contentPanel.add(container);

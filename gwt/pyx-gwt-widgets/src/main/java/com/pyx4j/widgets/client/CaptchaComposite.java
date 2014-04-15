@@ -335,7 +335,7 @@ public class CaptchaComposite extends SimplePanel {
         }
     }
 
-    protected TextBox getResponseTextBox() {
+    public TextBox getResponseTextBox() {
         return response;
     }
 

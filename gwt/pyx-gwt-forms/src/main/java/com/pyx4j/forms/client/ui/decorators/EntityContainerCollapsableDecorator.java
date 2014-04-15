@@ -83,8 +83,8 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
     }
 
     @Override
-    public void setComponent(final CEntityContainer<E> entityContainer) {
-        contentHolder.setWidget(entityContainer.createContent());
+    public void init(final CEntityContainer<E> entityContainer) {
+        contentHolder.setWidget(entityContainer.getContent());
         toolbar.setEntityContainer(entityContainer);
 
         entityContainer.addPropertyChangeHandler(new PropertyChangeHandler() {

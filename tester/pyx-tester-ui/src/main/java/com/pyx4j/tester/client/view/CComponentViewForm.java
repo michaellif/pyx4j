@@ -45,23 +45,21 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("CComponent Properties"));
 
-        int labelWidth = 10;
-
-        main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().title())).labelWidth(labelWidth).build());
+        main.setWidget(++row, 0, inject(proto().title(), new WidgetDecorator.Builder().labelWidth("10em").build()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().componentValue())).labelWidth(labelWidth).build());
+        main.setWidget(++row, 0, inject(proto().componentValue(), new WidgetDecorator.Builder().labelWidth("10em").build()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        WidgetDecorator decorator = new WidgetDecorator.Builder(inject(proto().mandatory())).labelWidth(labelWidth).build();
-        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+        WidgetDecorator decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -70,10 +68,10 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
             }
 
         });
-        main.setWidget(++row, 0, decorator);
+        main.setWidget(++row, 0, inject(proto().mandatory(), decorator));
 
-        decorator = new WidgetDecorator.Builder(inject(proto().enabled())).labelWidth(labelWidth).build();
-        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -82,10 +80,10 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
             }
 
         });
-        main.setWidget(++row, 0, decorator);
+        main.setWidget(++row, 0, inject(proto().enabled(), decorator));
 
-        decorator = new WidgetDecorator.Builder(inject(proto().editable())).labelWidth(labelWidth).build();
-        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -94,10 +92,10 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
             }
 
         });
-        main.setWidget(++row, 0, decorator);
+        main.setWidget(++row, 0, inject(proto().editable(), decorator));
 
-        decorator = new WidgetDecorator.Builder(inject(proto().visible())).labelWidth(labelWidth).build();
-        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -106,10 +104,10 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
             }
 
         });
-        main.setWidget(++row, 0, decorator);
+        main.setWidget(++row, 0, inject(proto().visible(), decorator));
 
-        decorator = new WidgetDecorator.Builder(inject(proto().viewable())).labelWidth(labelWidth).build();
-        decorator.getComnponent().addValueChangeHandler(new ValueChangeHandler() {
+        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -118,13 +116,13 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
             }
 
         });
-        main.setWidget(++row, 0, decorator);
+        main.setWidget(++row, 0, inject(proto().viewable(), decorator));
 
-        decorator = new WidgetDecorator.Builder(inject(proto().valid())).labelWidth(labelWidth).build();
-        decorator.getComnponent().setViewable(true);
-        main.setWidget(++row, 0, decorator);
+        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator.getComponent().setViewable(true);
+        main.setWidget(++row, 0, inject(proto().valid(), decorator));
 
-        main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().toolTip())).labelWidth(labelWidth).build());
+        main.setWidget(++row, 0, inject(proto().toolTip(), new WidgetDecorator.Builder().labelWidth("10em").build()));
 
         return main;
     }

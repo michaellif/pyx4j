@@ -83,10 +83,10 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
     }
 
     @Override
-    public void setComponent(T component) {
+    public void init(T component) {
         assert this.component == null;
         this.component = component;
-        setContent(component.createContent());
+        setContent(component.getContent());
     }
 
     public T getComponent() {

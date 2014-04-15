@@ -69,7 +69,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
@@ -90,19 +90,19 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         e3.integerMember().setValue(3);
         listBox.setOptions(Arrays.asList(e1, e2, e3));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList(), listBox)).build());
+        main.setWidget(++row, 0, inject(proto().entityIIIList(), listBox, new FormDecoratorBuilder().build()));
 
         CEntityListBox<EntityIII> setBox = new CEntityListBox<EntityIII>(SelectionMode.TWO_PANEL);
         setBox.setOptions(Arrays.asList(e1, e2, e3));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList2(), setBox)).build());
+        main.setWidget(++row, 0, inject(proto().entityIIIList2(), setBox, new FormDecoratorBuilder().build()));
 
         // Personal Identity
         main.setWidget(
                 ++row,
                 0,
-                new FormDecoratorBuilder(inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class,
-                        new PersonalIdentityFormatter("XXX-XXX-xxx;XX-XX-xxxx")))).build());
+                inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class, new PersonalIdentityFormatter(
+                        "XXX-XXX-xxx;XX-XX-xxxx")), new FormDecoratorBuilder().build()));
 
         Anchor anchor = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
 
@@ -113,15 +113,15 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
             }
         });
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature1(), new CSignature(anchor))).build());
+        main.setWidget(++row, 0, inject(proto().signature1(), new CSignature(anchor), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().hue())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color())).build());
+        main.setWidget(++row, 0, inject(proto().hue(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().color(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().textBox())).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().integerBox())).build());
+        main.setWidget(++row, 0, inject(proto().textBox(), new FormDecoratorBuilder().build()));
+        main.setWidget(row, 1, inject(proto().integerBox(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enumBox())).build());
+        main.setWidget(++row, 0, inject(proto().enumBox(), new FormDecoratorBuilder().build()));
 
         Collection<String> options = new ArrayList<String>();
         for (int i = 0; i < 200; i++) {
@@ -130,32 +130,32 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
 
         CAbstractSuggestBox<String> box = new CSuggestStringBox();
         box.setOptions(options);
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().suggest(), box)).build());
+        main.setWidget(row, 1, inject(proto().suggest(), box, new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().datePicker())).build());
+        main.setWidget(++row, 0, inject(proto().datePicker(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().monthPicker())).build());
+        main.setWidget(row, 1, inject(proto().monthPicker(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTimePicker())).build());
+        main.setWidget(++row, 0, inject(proto().optionalTimePicker(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().phone())).build());
+        main.setWidget(row, 1, inject(proto().phone(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email())).build());
+        main.setWidget(++row, 0, inject(proto().email(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().money())).build());
+        main.setWidget(row, 1, inject(proto().money(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percent1())).build());
+        main.setWidget(++row, 0, inject(proto().percent1(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().percent2())).build());
+        main.setWidget(row, 1, inject(proto().percent2(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().booleanRadioGroupHorizontal())).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().enumRadioGroupHorizontal())).build());
+        main.setWidget(++row, 0, inject(proto().booleanRadioGroupHorizontal(), new FormDecoratorBuilder().build()));
+        main.setWidget(row, 1, inject(proto().enumRadioGroupHorizontal(), new FormDecoratorBuilder().build()));
 
         CRadioGroupBoolean rgb = new CRadioGroupBoolean(Layout.VERTICAL);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().booleanRadioGroupVertical(), rgb)).build());
+        main.setWidget(++row, 0, inject(proto().booleanRadioGroupVertical(), rgb, new FormDecoratorBuilder().build()));
 
         CRadioGroupEnum<Enum1> rge = new CRadioGroupEnum<Enum1>(Enum1.class, Layout.VERTICAL);
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().enumRadioGroupVertical(), rge)).build());
+        main.setWidget(row, 1, inject(proto().enumRadioGroupVertical(), rge, new FormDecoratorBuilder().build()));
 
         HashMap<Integer, String> rbgoptions = new HashMap<Integer, String>();
         for (int i = 0; i < 4; i++) {
@@ -163,10 +163,10 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         }
 
         CRadioGroupInteger rgi = new CRadioGroupInteger(Layout.HORISONTAL, rbgoptions);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().intRadioGroupHorizontal(), rgi)).build());
+        main.setWidget(++row, 0, inject(proto().intRadioGroupHorizontal(), rgi, new FormDecoratorBuilder().build()));
 
         rgi = new CRadioGroupInteger(Layout.VERTICAL, rbgoptions);
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().intRadioGroupVertical(), rgi)).build());
+        main.setWidget(row, 1, inject(proto().intRadioGroupVertical(), rgi, new FormDecoratorBuilder().build()));
 
         CEntityComboBox<EntityV> cmbEntity = new CEntityComboBox<EntityV>(EntityV.class);
         Collection<EntityV> entityoptions = new ArrayList<EntityV>();
@@ -180,9 +180,9 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         }
 
         cmbEntity.setOptions(entityoptions);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityComboBox(), cmbEntity)).build());
+        main.setWidget(++row, 0, inject(proto().entityComboBox(), cmbEntity, new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entitySelectorBox(), new CEntitySelectorHyperlink<EntityV>() {
+        main.setWidget(++row, 0, inject(proto().entitySelectorBox(), new CEntitySelectorHyperlink<EntityV>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return null;
@@ -192,21 +192,21 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
             protected EntitySelectorTableDialog<EntityV> getSelectorDialog() {
                 return null;
             }
-        })).build());
+        }, new FormDecoratorBuilder().build()));
 
         CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
         cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().booleanComboBox(), cmbBoolean)).build());
+        main.setWidget(row, 1, inject(proto().booleanComboBox(), cmbBoolean, new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().checkBox())).build());
+        main.setWidget(++row, 0, inject(proto().checkBox(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enterPassword())).build());
+        main.setWidget(++row, 0, inject(proto().enterPassword(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().confirmPassword())).build());
+        main.setWidget(++row, 0, inject(proto().confirmPassword(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().textArea())).build());
+        main.setWidget(++row, 0, inject(proto().textArea(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().richTextArea())).build());
+        main.setWidget(++row, 0, inject(proto().richTextArea(), new FormDecoratorBuilder().build()));
 
         return main;
     }

@@ -138,9 +138,9 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     }
 
     @Override
-    public void setComponent(final CEntityFolder<E> folder) {
+    public void init(final CEntityFolder<E> folder) {
         this.folder = folder;
-        super.setComponent(folder);
+        super.init(folder);
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
 
             @Override

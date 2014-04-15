@@ -115,8 +115,8 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void setComponent(final CEntityFolderItem<E> folderItem) {
-        super.setComponent(folderItem);
+    public void init(final CEntityFolderItem<E> folderItem) {
+        super.init(folderItem);
         contentHolder.setWidget(getContent());
         toolbar.setEntityContainer(folderItem);
 

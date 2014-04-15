@@ -102,7 +102,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         wizardPanel.setSize("100%", "100%");
         return wizardPanel;
     }

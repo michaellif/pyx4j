@@ -70,16 +70,16 @@ public class EntityIForm extends CEntityForm<EntityI> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().textBox())).build());
+        main.setWidget(++row, 0, inject(proto().textBox(), new FormDecoratorBuilder().build()));
         //main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().integerBox())).build());
+        main.setWidget(++row, 0, inject(proto().integerBox(), new FormDecoratorBuilder().build()));
 
         main.setH2(++row, 0, 1, i18n.tr("Box Folder"));
         main.setWidget(++row, 0, inject(proto().entityIIList(), new EntityIIFolder()));
@@ -124,21 +124,20 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
 
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTextI())).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalInteger())).build());
+            main.setWidget(++row, 0, inject(proto().optionalTextI(), new FormDecoratorBuilder().build()));
+            main.setWidget(++row, 0, inject(proto().optionalInteger(), new FormDecoratorBuilder().build()));
             main.setH3(++row, 0, 1, i18n.tr("Box Folder"));
             main.setWidget(++row, 0, inject(proto().entityIIIList(), new EntityIIIFolder()));
             main.setH3(++row, 0, 1, i18n.tr("Table Folder"));
             main.setWidget(++row, 0, inject(proto().entityIVList(), new EntityIVFolder()));
             return main;
         }
-
     }
 
     static class EntityIIIFolder extends CEntityFolder<EntityIII> {
@@ -167,13 +166,12 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        public IsWidget createContent() {
+        protected IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new FormDecoratorBuilder(inject(proto().stringMember())).build());
-            main.add(new FormDecoratorBuilder(inject(proto().integerMember())).build());
+            main.add(inject(proto().stringMember(), new FormDecoratorBuilder().build()));
+            main.add(inject(proto().integerMember(), new FormDecoratorBuilder().build()));
             return main;
         }
-
     }
 
     static class EntityIVFolder extends CEntityFolder<EntityIV> {

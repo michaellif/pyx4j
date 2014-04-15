@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface IWidget extends IsWidget {
@@ -42,8 +43,12 @@ public interface IWidget extends IsWidget {
 
     void addStyleDependentName(String styleSuffix);
 
+    void addStyleName(String styleName);
+
     void removeStyleDependentName(String styleSuffix);
 
     void ensureDebugId(String id);
+
+    Element getElement();
 
 }

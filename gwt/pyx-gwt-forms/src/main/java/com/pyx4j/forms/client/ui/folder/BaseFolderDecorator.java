@@ -92,8 +92,8 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
-    public void setComponent(final CEntityFolder<E> folder) {
-        container.setWidget(folder.createContent());
+    public void init(final CEntityFolder<E> folder) {
+        container.setWidget(folder.getContent());
 
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

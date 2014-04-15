@@ -73,8 +73,8 @@ public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implem
     }
 
     @Override
-    public void setComponent(CEntityForm<E> viewer) {
-        componentHolder.setWidget(viewer.createContent().asWidget());
+    public void init(CEntityForm<E> viewer) {
+        componentHolder.setWidget(viewer.getContent().asWidget());
     }
 
     @Override

@@ -67,6 +67,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     private final ContainerPanel containerPanel;
 
+    private IsWidget content;
+
     @SuppressWarnings("unchecked")
     public CEntityContainer() {
         containerPanel = new ContainerPanel();
@@ -249,7 +251,11 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         return containerPanel;
     }
 
-    public abstract IsWidget createContent();
+    protected abstract IsWidget createContent();
+
+    public IsWidget getContent() {
+        return content;
+    }
 
     protected IDecorator<?> createDecorator() {
         return null;
@@ -257,18 +263,24 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     @Override
     public void setDecorator(IDecorator decorator) {
-        throw new Error("Use createDecorator() instead");
+        if (initiated == true) {
+            throw new Error("Decorator should be set before container initiated");
+        }
+        super.setDecorator(decorator);
     }
 
     public final void initContent() {
         assert initiated == false;
         if (!initiated) {
             asWidget();
+
+            content = createContent();
+
             IDecorator<?> decorator = createDecorator();
             if (decorator == null) {
-                contentHolder.setWidget(createContent());
+                contentHolder.setWidget(content);
             } else {
-                super.setDecorator(decorator);
+                setDecorator(decorator);
                 contentHolder.setWidget(getDecorator());
             }
             addValidations();

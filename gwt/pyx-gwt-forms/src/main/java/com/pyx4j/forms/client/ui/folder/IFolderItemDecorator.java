@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItem<E>> {
 
     @Override
-    void setComponent(CEntityFolderItem<E> folderItem);
+    void init(CEntityFolderItem<E> folderItem);
 
     void setActionsState(boolean remove, boolean up, boolean down);
 

@@ -99,7 +99,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
         return tabPanel;
     }
 

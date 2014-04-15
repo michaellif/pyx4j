@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.images.ButtonImages;
@@ -119,11 +120,16 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public IsWidget createContent() {
-        ((IFolderItemDecorator) getDecorator()).adoptItemActionsBar();
+    protected IsWidget createContent() {
         editor = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
         adopt(editor);
         return editor;
+    }
+
+    @Override
+    public void setDecorator(IDecorator decorator) {
+        super.setDecorator(decorator);
+        ((IFolderItemDecorator) decorator).adoptItemActionsBar();
     }
 
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {

@@ -206,7 +206,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
                     private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
 
                     @Override
-                    public IsWidget createContent() {
+                    protected IsWidget createContent() {
                         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                         thumb.setImage(getCComponent().getThumbnailPlaceholder());
@@ -297,8 +297,8 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
             }
 
             @Override
-            public void setComponent(CEntityFolder<T> folder) {
-                scrollPanel.setWidget(folder.createContent());
+            public void init(CEntityFolder<T> folder) {
+                scrollPanel.setWidget(folder.getContent());
             }
 
             @Override

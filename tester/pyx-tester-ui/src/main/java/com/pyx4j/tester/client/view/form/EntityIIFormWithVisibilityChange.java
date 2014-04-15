@@ -40,23 +40,23 @@ public class EntityIIFormWithVisibilityChange extends CEntityForm<EntityII> {
     }
 
     @Override
-    public IsWidget createContent() {
+    protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Form component Visibility Test"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalEnum())).build());
+        main.setWidget(++row, 0, inject(proto().optionalEnum(), new FormDecoratorBuilder().build()));
         main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTextI())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTextII())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mandatoryTextI())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mandatoryTextII())).build());
+        main.setWidget(++row, 0, inject(proto().optionalTextI(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().optionalTextII(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().mandatoryTextI(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().mandatoryTextII(), new FormDecoratorBuilder().build()));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().checkBox())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalPassword())).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mandatoryPassword())).build());
+        main.setWidget(++row, 0, inject(proto().checkBox(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().optionalPassword(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().mandatoryPassword(), new FormDecoratorBuilder().build()));
 
         return main;
     }
