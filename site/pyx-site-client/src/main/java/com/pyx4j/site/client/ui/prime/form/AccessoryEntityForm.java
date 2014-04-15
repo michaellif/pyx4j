@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-07-29
- * @author Vlad
+ * Created on Apr 15, 2014
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.site.client.ui.prime.form;
@@ -23,31 +23,17 @@ package com.pyx4j.site.client.ui.prime.form;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CTabbedEntityForm;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
-public abstract class PrimeEntityForm<E extends IEntity> extends CTabbedEntityForm<E> {
+public abstract class AccessoryEntityForm<E extends IEntity> extends CEntityForm<E> {
 
-    private IForm<? extends IEntity> view;
-
-    public PrimeEntityForm(Class<E> rootClass, IForm<? extends IEntity> view) {
-        this(rootClass, null, view);
+    public AccessoryEntityForm(Class<E> clazz) {
+        super(clazz);
     }
 
-    public PrimeEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IForm<? extends IEntity> view) {
-        super(rootClass, factory);
-        this.view = view;
-
-        if (view instanceof IViewer) {
-            setEditable(false);
-            setViewable(true);
-        }
-
-    }
-
-    public IForm<? extends IEntity> getParentView() {
-        assert (view != null);
-        return view;
+    public AccessoryEntityForm(Class<E> clazz, IEditableComponentFactory factory) {
+        super(clazz, factory);
     }
 
     public final CComponent<?> injectAndDecorate(IObject<?> member) {
