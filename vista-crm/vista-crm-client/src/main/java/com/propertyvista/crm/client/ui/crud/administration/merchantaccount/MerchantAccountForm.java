@@ -23,7 +23,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;
@@ -42,12 +41,12 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        general.setWidget(++row, 0, inject(proto().paymentsStatus(), new CEnumLabel(), new FormDecoratorBuilder(25).build()));
-        general.setWidget(++row, 0, inject(proto().bankId(), new CLabel<String>(), new FormDecoratorBuilder(5).build()));
-        general.setWidget(++row, 0, inject(proto().branchTransitNumber(), new CLabel<String>(), new FormDecoratorBuilder(5).build()));
-        general.setWidget(++row, 0, inject(proto().accountNumber(), new CLabel<String>(), new FormDecoratorBuilder(15).build()));
-        general.setWidget(++row, 0, inject(proto().accountName(), new FormDecoratorBuilder().build()));
-        general.setWidget(++row, 0, inject(proto().chargeDescription(), new FormDecoratorBuilder(40).build()));
+        general.setWidget(++row, 0, injectAndDecorate(proto().paymentsStatus(), new CEnumLabel(), 25));
+        general.setWidget(++row, 0, injectAndDecorate(proto().bankId(), new CLabel<String>(), 5));
+        general.setWidget(++row, 0, injectAndDecorate(proto().branchTransitNumber(), new CLabel<String>(), 5));
+        general.setWidget(++row, 0, injectAndDecorate(proto().accountNumber(), new CLabel<String>(), 15));
+        general.setWidget(++row, 0, injectAndDecorate(proto().accountName()));
+        general.setWidget(++row, 0, injectAndDecorate(proto().chargeDescription(), 40));
 
         selectTab(addTab(general));
 

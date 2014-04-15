@@ -24,10 +24,10 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.legal.LegalLetterUploadService;
 import com.propertyvista.domain.legal.GenericLegalLetter;
 import com.propertyvista.domain.legal.LegalLetter;

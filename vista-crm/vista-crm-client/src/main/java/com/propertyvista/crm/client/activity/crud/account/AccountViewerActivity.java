@@ -28,10 +28,10 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsDialog;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.account.AccountRecoveryOptionsDialog;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;

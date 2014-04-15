@@ -32,7 +32,6 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.security.CrmRole;
@@ -51,9 +50,9 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(20).build()));
-        content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(40).build()));
-        content.setWidget(++row, 0, inject(proto().requireTwoStepVerificationOnLogin(), new FormDecoratorBuilder(3).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().name(), 20));
+        content.setWidget(++row, 0, injectAndDecorate(proto().description(), 40));
+        content.setWidget(++row, 0, injectAndDecorate(proto().requireTwoStepVerificationOnLogin(), 3));
 
         content.setH1(++row, 0, 2, proto().permissions().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().permissions(), new CrmRolePermissionsFolder()));

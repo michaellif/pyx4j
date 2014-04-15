@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.security;
+package com.propertyvista.crm.client.ui.crud.account;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;

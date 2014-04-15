@@ -21,7 +21,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.domain.settings.PmcCompanyInfoContact;
@@ -34,7 +33,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().companyName(), new FormDecoratorBuilder(20).build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().companyName(), 20));
 
         content.setH1(++row, 0, 2, proto().contacts().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().contacts(), new PmcCompanyInfoContactFolder()));

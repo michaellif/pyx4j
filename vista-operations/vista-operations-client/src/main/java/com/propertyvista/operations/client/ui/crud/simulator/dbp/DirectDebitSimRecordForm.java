@@ -17,9 +17,9 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;

@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;

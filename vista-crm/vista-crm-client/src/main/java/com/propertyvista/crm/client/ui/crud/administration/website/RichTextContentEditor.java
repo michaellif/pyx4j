@@ -16,22 +16,18 @@ package com.propertyvista.crm.client.ui.crud.administration.website;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 
-public class RichTextContentEditor extends CEntityForm<HtmlContent> {
-
-    private static final I18n i18n = I18n.get(RichTextContentEditor.class);
+public class RichTextContentEditor extends AccessoryEntityForm<HtmlContent> {
 
     private boolean selectableLocale;
 
@@ -55,18 +51,18 @@ public class RichTextContentEditor extends CEntityForm<HtmlContent> {
         int row = -1;
         if (selectableLocale) {
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, 10, true));
         } else {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, 10, true));
         }
         if (isEditable()) {
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, 2, inject(proto().html(), editor, new FormDecoratorBuilder(60, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().html(), editor, 60, true));
         } else {
-            main.setWidget(++row, 0, 2, inject(proto().html(), new CLabel<String>(), new FormDecoratorBuilder(60, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().html(), new CLabel<String>(), 60, true));
         }
 
         return main;

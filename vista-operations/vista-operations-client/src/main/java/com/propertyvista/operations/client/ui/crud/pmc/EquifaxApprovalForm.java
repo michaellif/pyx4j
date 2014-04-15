@@ -14,11 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 

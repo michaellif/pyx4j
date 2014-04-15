@@ -24,11 +24,11 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.PmcBusinessInformationDocumentFolder;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
 // TODO add document requirements label and validator

@@ -36,6 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -46,7 +47,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.YesNoOption;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;

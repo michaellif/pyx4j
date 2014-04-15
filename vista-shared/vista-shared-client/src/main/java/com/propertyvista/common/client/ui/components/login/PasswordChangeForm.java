@@ -38,9 +38,9 @@ import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 
 public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
 

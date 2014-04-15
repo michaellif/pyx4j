@@ -23,9 +23,9 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBranchTransitValidator;

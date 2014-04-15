@@ -25,16 +25,16 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -94,7 +94,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
         return super.create(member);
     }
 
-    class PortalImageResourceEditor extends CEntityForm<SiteLogoImageResource> {
+    class PortalImageResourceEditor extends AccessoryEntityForm<SiteLogoImageResource> {
 
         private final CImage smallLogo;
 
@@ -119,7 +119,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(5, 20, 20).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 5, 20, 20));
             main.setWidget(row, 1, inject(proto().large().file(), largeLogo, new FormDecoratorBuilder(5, 20, 20).customLabel(i18n.tr("Large Logo")).build()));
             main.getFlexCellFormatter().setRowSpan(row, 1, 2);
             main.setWidget(++row, 0, inject(proto().small().file(), smallLogo, new FormDecoratorBuilder(5, 20, 20).customLabel(i18n.tr("Small Logo")).build()));

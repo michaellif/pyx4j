@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentEditor;
 import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
@@ -59,9 +58,9 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
         int row = 0;
         generalPanel.setH1(row++, 0, 2, i18n.tr("General"));
-        generalPanel.setWidget(row++, 0, 2, inject(proto().name(), new FormDecoratorBuilder(10, true).build()));
-        generalPanel.setWidget(row++, 0, 2, inject(proto().area(), new FormDecoratorBuilder(10, true).build()));
-        generalPanel.setWidget(row++, 0, 2, inject(proto().status(), new FormDecoratorBuilder(10, true).build()));
+        generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().name(), 10, true));
+        generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().area(), 10, true));
+        generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().status(), 10, true));
         generalPanel.setWidget(row++, 0, 2, mainPanel);
 
         selectTab(addTab(generalPanel));

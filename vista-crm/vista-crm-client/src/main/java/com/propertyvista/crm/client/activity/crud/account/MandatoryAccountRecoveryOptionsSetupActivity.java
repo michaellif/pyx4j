@@ -31,7 +31,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
-import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsDialog;
+import com.propertyvista.crm.client.ui.crud.account.AccountRecoveryOptionsDialog;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;

@@ -19,7 +19,6 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
@@ -38,20 +37,19 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 
         content.setH1(++row, 0, 1, i18n.tr("Details"));
-        content.setWidget(++row, 0, inject(proto().creditCheckDate(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0,
-                inject(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee()), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().amountChecked(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().creditCheckDate()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())));
+        content.setWidget(++row, 0, injectAndDecorate(proto().amountChecked()));
 
         content.setH1(++row, 0, 1, i18n.tr("Results From Equifax"));
-        content.setWidget(++row, 0, inject(proto().riskCode(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().creditCheckResult(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().amountApproved(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().reason(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().riskCode()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().creditCheckResult()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().amountApproved()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().reason()));
 
         content.setH1(++row, 0, 1, i18n.tr("Fees"));
-        content.setWidget(++row, 0, inject(proto().transaction().amount(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().transactionRef(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().transaction().amount()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().transactionRef()));
 
         selectTab(addTab(content));
     }

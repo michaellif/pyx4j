@@ -24,12 +24,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteTitles;
@@ -85,7 +84,7 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
         return super.create(member);
     }
 
-    class SiteTitlesEditor extends CEntityForm<SiteTitles> {
+    class SiteTitlesEditor extends AccessoryEntityForm<SiteTitles> {
 
         public SiteTitlesEditor() {
             super(SiteTitles.class);
@@ -98,12 +97,12 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(10).build()));
-            main.setWidget(++row, 0, inject(proto().crmHeader(), new FormDecoratorBuilder(35).build()));
-            main.setWidget(++row, 0, inject(proto().prospectPortalTitle(), new FormDecoratorBuilder(35).build()));
-            main.setWidget(++row, 0, inject(proto().residentPortalTitle(), new FormDecoratorBuilder(35).build()));
-            main.setWidget(++row, 0, inject(proto().residentPortalPromotions(), new FormDecoratorBuilder(35).build()));
-            main.setWidget(++row, 0, inject(proto().copyright(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 10));
+            main.setWidget(++row, 0, injectAndDecorate(proto().crmHeader(), 35));
+            main.setWidget(++row, 0, injectAndDecorate(proto().prospectPortalTitle(), 35));
+            main.setWidget(++row, 0, injectAndDecorate(proto().residentPortalTitle(), 35));
+            main.setWidget(++row, 0, injectAndDecorate(proto().residentPortalPromotions(), 35));
+            main.setWidget(++row, 0, injectAndDecorate(proto().copyright(), 35));
             return main;
         }
     }

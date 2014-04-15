@@ -14,10 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
@@ -29,8 +27,8 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
 
-        content.setWidget(row++, 0, inject(proto().categoryId(), new FormDecoratorBuilder(7).build()));
-        content.setWidget(row++, 0, inject(proto().description(), new FormDecoratorBuilder(25).build()));
+        content.setWidget(row++, 0, injectAndDecorate(proto().categoryId(), 7));
+        content.setWidget(row++, 0, injectAndDecorate(proto().description(), 25));
 
         content.setH3(row++, 0, 2, proto().glCodes().getMeta().getCaption());
         content.setWidget(row++, 0, 2, inject(proto().glCodes(), new GlCodeFolder(isEditable())));

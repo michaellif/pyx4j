@@ -24,12 +24,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageMetaTags;
@@ -85,7 +84,7 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
         return super.create(member);
     }
 
-    class PageMetaTagsEditor extends CEntityForm<PageMetaTags> {
+    class PageMetaTagsEditor extends AccessoryEntityForm<PageMetaTags> {
 
         public PageMetaTagsEditor() {
             super(PageMetaTags.class);
@@ -98,10 +97,10 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, inject(proto().locale(), locale, new FormDecoratorBuilder(10).build()));
-            main.setWidget(++row, 0, inject(proto().title(), new FormDecoratorBuilder(35).build()));
-            main.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(35).build()));
-            main.setWidget(++row, 0, inject(proto().keywords(), new FormDecoratorBuilder(35).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 10));
+            main.setWidget(++row, 0, injectAndDecorate(proto().title(), 35));
+            main.setWidget(++row, 0, injectAndDecorate(proto().description(), 35));
+            main.setWidget(++row, 0, injectAndDecorate(proto().keywords(), 35));
             return main;
         }
     }

@@ -25,17 +25,16 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -107,7 +106,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
         return super.create(member);
     }
 
-    class PortalBannerImageEditor extends CEntityForm<PortalBannerImage> {
+    class PortalBannerImageEditor extends AccessoryEntityForm<PortalBannerImage> {
         private final CImage imageHolder;
 
         public PortalBannerImageEditor() {
@@ -127,8 +126,8 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().image().file(), imageHolder, new FormDecoratorBuilder(true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, true));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().image().file(), imageHolder, true));
 
             return main;
         }

@@ -20,11 +20,11 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.L1LandlordsContactInfoFolder;
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.L1OwedNsfChargesForm;
 import com.propertyvista.crm.client.ui.tools.legal.l1.forms.L1ReasonForApplicationForm;

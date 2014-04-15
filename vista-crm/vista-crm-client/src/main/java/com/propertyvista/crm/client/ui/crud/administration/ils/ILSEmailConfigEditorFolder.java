@@ -17,17 +17,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.settings.ILSEmailConfig;
 
 public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
-
-    private final static I18n i18n = I18n.get(ILSEmailConfigEditorFolder.class);
 
     public ILSEmailConfigEditorFolder() {
         super(ILSEmailConfig.class);
@@ -42,7 +38,7 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
         }
     }
 
-    class ILSEmailConfigEditor extends CEntityForm<ILSEmailConfig> {
+    class ILSEmailConfigEditor extends AccessoryEntityForm<ILSEmailConfig> {
 
         public ILSEmailConfigEditor() {
             super(ILSEmailConfig.class);
@@ -53,9 +49,9 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, 2, inject(proto().frequency(), new FormDecoratorBuilder(10, true).build()));
-            content.setWidget(++row, 0, 2, inject(proto().email(), new FormDecoratorBuilder(20, true).build()));
-            content.setWidget(++row, 0, 2, inject(proto().maxDailyAds(), new FormDecoratorBuilder(10, true).build()));
+            content.setWidget(++row, 0, 2, injectAndDecorate(proto().frequency(), 10, true));
+            content.setWidget(++row, 0, 2, injectAndDecorate(proto().email(), 20, true));
+            content.setWidget(++row, 0, 2, injectAndDecorate(proto().maxDailyAds(), 10, true));
 
             return content;
         }

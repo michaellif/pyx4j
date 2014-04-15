@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;

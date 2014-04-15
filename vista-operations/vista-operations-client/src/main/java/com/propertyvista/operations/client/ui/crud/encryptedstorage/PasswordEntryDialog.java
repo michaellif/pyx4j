@@ -19,9 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
-
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 
 public abstract class PasswordEntryDialog extends OkCancelDialog {
 

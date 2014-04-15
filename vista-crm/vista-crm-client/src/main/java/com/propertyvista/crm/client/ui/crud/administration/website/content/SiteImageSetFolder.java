@@ -36,11 +36,12 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -123,7 +124,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
         return super.create(member);
     }
 
-    class PortalImageSetEditor extends CEntityForm<SiteImageSet> {
+    class PortalImageSetEditor extends AccessoryEntityForm<SiteImageSet> {
 
         private final CImageSlider<SiteImageResource> imageHolder;
 
@@ -164,8 +165,8 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, inject(proto().locale(), locale, new FormDecoratorBuilder(true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().imageSet(), imageHolder, new FormDecoratorBuilder(true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, true));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().imageSet(), imageHolder, true));
 
             return main;
         }

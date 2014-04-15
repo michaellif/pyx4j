@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.security;
+package com.propertyvista.crm.client.ui.crud.account;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +21,15 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
-public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptionsDTO> {
+public class AccountRecoveryOptionsForm extends AccessoryEntityForm<AccountRecoveryOptionsDTO> {
 
     private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
 
@@ -45,9 +44,9 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().recoveryEmail(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().recoveryEmail()));
 
-        content.setWidget(++row, 0, inject(proto().useSecurityQuestionChallengeForPasswordReset(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().useSecurityQuestionChallengeForPasswordReset()));
         get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
         get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -57,9 +56,9 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
             }
         });
 
-        content.setWidget(++row, 0, inject(proto().securityQuestion(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().securityQuestion()));
         get(proto().securityQuestion()).setVisible(false);
-        content.setWidget(++row, 0, inject(proto().securityAnswer(), new CPasswordTextField(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, injectAndDecorate(proto().securityAnswer(), new CPasswordTextField()));
         get(proto().securityAnswer()).setVisible(false);
 
         return content;
@@ -93,4 +92,5 @@ public class AccountRecoveryOptionsForm extends CEntityForm<AccountRecoveryOptio
             get(proto().securityAnswer()).setValue("");
         }
     }
+
 }

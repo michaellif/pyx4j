@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.lease;
+package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,10 +23,10 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 
@@ -62,10 +62,8 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
                     ++row,
                     0,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanCrmUploadService.class), new VistaFileURLBuilder(
-                            InsuranceCertificateScan.class)), new FormDecoratorBuilder(250).build()));
-
+                            InsuranceCertificateScan.class)), new FormDecoratorBuilder().componentWidth("250px").build()));
             content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder().componentWidth("300px").build()));
-
             return content;
         }
     }

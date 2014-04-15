@@ -22,14 +22,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.domain.settings.ILSVendorConfig;
 
@@ -71,7 +70,7 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
         }
     }
 
-    class ILSVendorConfigEditor extends CEntityForm<ILSVendorConfig> {
+    class ILSVendorConfigEditor extends AccessoryEntityForm<ILSVendorConfig> {
 
         public ILSVendorConfigEditor() {
             super(ILSVendorConfig.class);
@@ -82,8 +81,8 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, 2, inject(proto().vendor(), new CEnumLabel(), new FormDecoratorBuilder(true).build()));
-            content.setWidget(++row, 0, 2, inject(proto().maxDailyAds(), new FormDecoratorBuilder(10, true).build()));
+            content.setWidget(++row, 0, 2, injectAndDecorate(proto().vendor(), new CEnumLabel(), true));
+            content.setWidget(++row, 0, 2, injectAndDecorate(proto().maxDailyAds(), 10, true));
 
             return content;
         }
