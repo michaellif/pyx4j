@@ -431,11 +431,14 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseViewerCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationViewerCrudService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ProofOfIncomeDocumentCrmUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ProofOfAssetDocumentCrmUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(IdentificationDocumentCrmUploadService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermAgreementDocumentUploadService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationDocumentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BlankApplicationDocumentDownloadService.class));
 

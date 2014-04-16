@@ -220,6 +220,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationWizardService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
@@ -228,13 +229,20 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(IdentificationDocumentProspectUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfIncomeDocumentProspectUploadService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ProofOfAssetDocumentProspectUploadService.class));
+
         grant(PortalProspectBehavior.Prospect, new EntityPermission(IdentificationDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfIncomeDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(ProofOfAssetDocumentFile.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(LeasePaymentMethod.class, CRUD));
         grant(PortalProspectBehavior.Prospect, new EntityPermission(CustomerPicture.class, CRUD));
 
-        //=======================================
+        //========================= Resident Portal
+
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CreditCardValidationService.class));
 
         // Tenant Insurance and TenantSure        
         grant(PortalResidentBehavior.Resident, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
@@ -257,6 +265,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.ResidentPrimary, PortalResidentBehavior.Resident);
         grant(PortalResidentBehavior.ResidentSecondary, PortalResidentBehavior.Resident);
+
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
+        grant(PortalResidentBehavior.Guarantor, new IServiceExecutePermission(DeferredProcessService.class));
 
         // Dev
         if (ApplicationMode.isDevelopment()) {
