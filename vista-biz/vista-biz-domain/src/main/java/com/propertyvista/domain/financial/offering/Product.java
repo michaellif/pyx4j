@@ -67,8 +67,8 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
      */
     IPrimitive<LogicalDate> expiredFrom();
 
-    @ToString(index = 0)
     @NotNull
+    @ToString(index = 0)
     @MemberColumn(notNull = true)
     ARCode code();
 
@@ -95,7 +95,6 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         IPrimitive<String> description();
 
         @NotNull
-        @ToString(index = 2)
         @Format("#,##0.00")
         @Caption(name = "Market Price")
         @Editor(type = EditorType.money)
