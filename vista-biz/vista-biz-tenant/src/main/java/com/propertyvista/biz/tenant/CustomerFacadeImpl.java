@@ -298,4 +298,15 @@ public class CustomerFacadeImpl implements CustomerFacade {
         Persistence.service().persist(credential);
     }
 
+    @Override
+    public void setCustomerPasswordHash(Customer customer, String passwordHash) {
+        CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, customer.user().getPrimaryKey());
+        credential.accessKey().setValue(null);
+        credential.credential().setValue(passwordHash);
+        credential.passwordUpdated().setValue(new Date());
+        credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
+        Persistence.service().persist(credential);
+    }
+
 }

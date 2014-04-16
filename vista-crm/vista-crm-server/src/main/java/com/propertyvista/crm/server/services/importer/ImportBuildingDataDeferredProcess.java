@@ -14,12 +14,28 @@
 package com.propertyvista.crm.server.services.importer;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.server.upload.UploadedData;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
+import com.pyx4j.gwt.shared.DownloadFormat;
+
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.interfaces.importer.ImportBuildingDataProcessor;
+import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.parser.VistaXMLImportParser;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 
 @SuppressWarnings("serial")
 public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
 
+    private final ExecutionMonitor monitor;
+
+    //TODO this should identify what to import and what building
     private final IEntity uploadInitiationData;
 
     private final UploadedData uploadedData;
@@ -28,11 +44,50 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
         super();
         this.uploadInitiationData = uploadInitiationData;
         this.uploadedData = uploadedData;
+        monitor = new ExecutionMonitor();
+    }
+
+    @Override
+    public void cancel() {
+        monitor.requestTermination();
+        super.cancel();
+    }
+
+    @Override
+    public DeferredProcessProgressResponse status() {
+        DeferredProcessProgressResponse r = super.status();
+        if (!r.isCompleted() && !r.isCanceled()) {
+            r.setMessage("Errors: " + monitor.getErred());
+        } else if (monitor.getErred() > 0) {
+            r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
+        } else {
+            r.setMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
+        }
+        return r;
     }
 
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
+        final ImportIO importIO = new VistaXMLImportParser().parse(uploadedData.binaryContent, DownloadFormat.XML);
+
+        for (BuildingIO buildingIO : importIO.buildings()) {
+            progress.progressMaximum.addAndGet(buildingIO.units().size());
+        }
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+
+                for (BuildingIO buildingIO : importIO.buildings()) {
+                    new ImportBuildingDataProcessor().importModel(buildingIO, progress, monitor);
+                    if (status().isCanceled()) {
+                        break;
+                    }
+                }
+                return null;
+            }
+        });
+        completed = true;
     }
 
 }

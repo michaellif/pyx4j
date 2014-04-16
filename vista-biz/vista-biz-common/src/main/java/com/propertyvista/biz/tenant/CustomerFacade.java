@@ -40,4 +40,6 @@ public interface CustomerFacade {
 
     void setCustomerPassword(Customer customer, String password);
 
+    void setCustomerPasswordHash(Customer customer, String passwordHash);
+
 }

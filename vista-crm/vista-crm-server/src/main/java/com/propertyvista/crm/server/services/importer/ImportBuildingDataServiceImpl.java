@@ -56,7 +56,7 @@ public class ImportBuildingDataServiceImpl extends AbstractUploadServiceImpl<IEn
     @Override
     protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<DeferredProcessingStarted> response) {
 
-        boolean mock = true;
+        boolean mock = false;
 
         IDeferredProcess process;
         if (mock) {
