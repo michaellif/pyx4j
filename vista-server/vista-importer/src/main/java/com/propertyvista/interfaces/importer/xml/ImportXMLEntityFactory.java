@@ -24,16 +24,21 @@ import com.propertyvista.interfaces.importer.model.AddressIO;
 import com.propertyvista.interfaces.importer.model.AdvertisingBlurbIO;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
+import com.propertyvista.interfaces.importer.model.AutoPayAgreementCoveredItemIO;
+import com.propertyvista.interfaces.importer.model.AutoPayAgreementIO;
 import com.propertyvista.interfaces.importer.model.BuildingAmenityIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ContactIO;
 import com.propertyvista.interfaces.importer.model.FloorplanAmenityIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.model.LeaseIO;
 import com.propertyvista.interfaces.importer.model.MarketingIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
+import com.propertyvista.interfaces.importer.model.PaymentMethodIO;
 import com.propertyvista.interfaces.importer.model.PropertyPhoneIO;
+import com.propertyvista.interfaces.importer.model.TenantIO;
 import com.propertyvista.interfaces.importer.model.UtilityIO;
 
 public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
@@ -59,6 +64,12 @@ public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(UtilityIO.class);
         bind(AptUnitOccupancyIO.class);
         bind(PropertyPhoneIO.class);
+
+        bind(LeaseIO.class);
+        bind(TenantIO.class);
+        bind(PaymentMethodIO.class);
+        bind(AutoPayAgreementIO.class);
+        bind(AutoPayAgreementCoveredItemIO.class);
 
         // Taken from domain directly
         bind(Elevator.class);

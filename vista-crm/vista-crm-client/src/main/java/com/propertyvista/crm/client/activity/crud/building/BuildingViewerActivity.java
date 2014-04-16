@@ -22,6 +22,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
@@ -33,6 +34,7 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -59,6 +61,7 @@ import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
+import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -285,7 +288,10 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public void exportBuildingData() {
-        // TODO VladS
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().id(), getEntityId());
+        new ReportDialog("Data Export", "Creating Building Data Export...").start(
+                GWT.<ExportBuildingDataDownloadService> create(ExportBuildingDataDownloadService.class), criteria);
     }
 
 }

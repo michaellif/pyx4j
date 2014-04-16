@@ -61,4 +61,6 @@ public interface AptUnitIO extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitOccupancyIO> AptUnitOccupancySegment();
 
+    LeaseIO lease();
+
 }
