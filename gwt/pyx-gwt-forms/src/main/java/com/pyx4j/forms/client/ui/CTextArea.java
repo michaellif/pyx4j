@@ -40,12 +40,12 @@ public class CTextArea extends CTextComponent<String, NTextArea> {
     }
 
     public void scrollToBottom() {
-        getWidget().scrollToBottom();
+        getNativeWidget().scrollToBottom();
     }
 
     public void setRows(int rows) {
         this.rows = rows;
-        getWidget().setVisibleLines(rows);
+        getNativeWidget().setVisibleLines(rows);
     }
 
     public int getRows() {

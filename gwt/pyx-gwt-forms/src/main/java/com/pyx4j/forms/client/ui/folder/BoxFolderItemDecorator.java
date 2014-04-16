@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -117,7 +118,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     @Override
     public void init(final CEntityFolderItem<E> folderItem) {
         super.init(folderItem);
-        contentHolder.setWidget(getContent());
+
         toolbar.setEntityContainer(folderItem);
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -139,6 +140,11 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 toolbar.update(collapsablePanel.isExpended());
             }
         });
+    }
+
+    @Override
+    public void setContent(IsWidget content) {
+        contentHolder.setWidget(content);
     }
 
     public void setExpended(boolean expended) {
@@ -195,4 +201,5 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
         toolbar.setActionsBar(actionsBar);
     }
+
 }

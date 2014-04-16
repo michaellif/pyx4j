@@ -51,7 +51,7 @@ public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestB
     public void setOptions(Collection<E> opt) {
         this.options = new ArrayList<E>();
         this.options.addAll(opt);
-        getWidget().refreshOptions();
+        getNativeWidget().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 

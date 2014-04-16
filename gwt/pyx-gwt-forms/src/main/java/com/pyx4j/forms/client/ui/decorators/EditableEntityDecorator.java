@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui.decorators;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -74,12 +75,17 @@ public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implem
 
     @Override
     public void init(CEntityForm<E> viewer) {
-        componentHolder.setWidget(viewer.getContent().asWidget());
+
     }
 
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void setContent(IsWidget content) {
+        componentHolder.setWidget(content);
     }
 
 }

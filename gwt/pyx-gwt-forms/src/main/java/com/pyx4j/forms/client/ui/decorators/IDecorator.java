@@ -31,4 +31,6 @@ public interface IDecorator<E extends CComponent<?>> extends IsWidget {
 
     void onSetDebugId(IDebugId parentDebugId);
 
+    void setContent(IsWidget content);
+
 }

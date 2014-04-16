@@ -298,7 +298,11 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
 
             @Override
             public void init(CEntityFolder<T> folder) {
-                scrollPanel.setWidget(folder.getContent());
+            }
+
+            @Override
+            public void setContent(IsWidget content) {
+                scrollPanel.setWidget(content);
             }
 
             @Override
@@ -344,6 +348,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
                 // TODO Auto-generated method stub
                 return null;
             }
+
         }
     }
 

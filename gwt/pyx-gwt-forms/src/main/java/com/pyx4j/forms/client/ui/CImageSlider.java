@@ -50,7 +50,7 @@ public abstract class CImageSlider<E extends IHasFile<?>> extends CField<IList<E
 
     public void setThumbnailPlaceholder(Image placeholder) {
         this.placeholder = placeholder;
-        getWidget().reset();
+        getNativeWidget().reset();
     }
 
     public Image getThumbnailPlaceholder() {
@@ -58,12 +58,12 @@ public abstract class CImageSlider<E extends IHasFile<?>> extends CField<IList<E
     }
 
     public void setScaleMode(ScaleMode scaleMode) {
-        getWidget().setScaleMode(scaleMode);
+        getNativeWidget().setScaleMode(scaleMode);
     }
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        getWidget().resizeToFit();
+        getNativeWidget().resizeToFit();
     }
 
     public Dimension getImageSize() {
@@ -75,7 +75,7 @@ public abstract class CImageSlider<E extends IHasFile<?>> extends CField<IList<E
     }
 
     public void setOrganizerWidth(int width) {
-        getWidget().setOrganizerWidth(width);
+        getNativeWidget().setOrganizerWidth(width);
     }
 
     public Dimension getThumbSize() {

@@ -38,6 +38,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
@@ -696,13 +697,21 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     protected abstract DATA_TYPE getEditorValue() throws ParseException;
 
+    public abstract IComponentWidget<DATA_TYPE> getNativeWidget();
+
     public IDecorator getDecorator() {
         return decorator;
     }
 
     public void setDecorator(IDecorator decorator) {
         this.decorator = decorator;
-        decorator.init(this);
+        if (decorator == null) {
+            getNativeWidget().getContentHolder().setWidget(getNativeWidget().getContent());
+        } else {
+            getNativeWidget().getContentHolder().setWidget(decorator);
+            decorator.setContent(getNativeWidget().getContent());
+            decorator.init(this);
+        }
     }
 
     public void generateMockData() {

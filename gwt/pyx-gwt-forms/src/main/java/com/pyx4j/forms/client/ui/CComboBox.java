@@ -122,7 +122,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         if (opt != null) {
             options.addAll(opt);
         }
-        getWidget().refreshOptions();
+        getNativeWidget().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 
@@ -144,7 +144,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     public void removeOption(E opt) {
         if (options.contains(opt)) {
-            getWidget().removeOption(opt);
+            getNativeWidget().removeOption(opt);
         }
         options.remove(opt);
         if (isValuesEquals(getValue(), opt)) {
@@ -157,15 +157,15 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             options = createOptionsImpl();
         }
         if (options.contains(opt)) {
-            getWidget().refreshOption(opt);
+            getNativeWidget().refreshOption(opt);
         } else {
             options.add(opt);
-            getWidget().refreshOptions();
+            getNativeWidget().refreshOptions();
         }
     }
 
     public void refreshOption(E opt) {
-        getWidget().refreshOption(opt);
+        getNativeWidget().refreshOption(opt);
     }
 
     public String getItemName(E o) {
@@ -175,14 +175,14 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     public void setFormat(IFormat<E> format) {
         this.format = format;
         setValue(getValue(), false);
-        getWidget().refreshOptions();
+        getNativeWidget().refreshOptions();
     }
 
     @Override
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
-            getWidget().refreshOptions();
+            getNativeWidget().refreshOptions();
         }
     }
 
@@ -194,7 +194,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
         super.onValuePropagation(value, fireEvent, populate);
         if (populate) {
-            getWidget().setPopulatedValue(value);
+            getNativeWidget().setPopulatedValue(value);
         }
     }
 

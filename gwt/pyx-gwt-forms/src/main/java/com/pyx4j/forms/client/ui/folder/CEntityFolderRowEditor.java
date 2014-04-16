@@ -98,9 +98,13 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         }
 
         @Override
+        public void setContent(IsWidget content) {
+            setWidget(content);
+        }
+
+        @Override
         public void init(final CComponent<?> component) {
             this.component = component;
-            setWidget(component);
             final Widget nativeComponent = component.asWidget();
             nativeComponent.addStyleName(WidgetDecoratorComponent.name());
 

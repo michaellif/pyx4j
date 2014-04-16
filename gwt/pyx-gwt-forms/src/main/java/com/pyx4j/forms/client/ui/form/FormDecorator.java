@@ -93,12 +93,8 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         return component;
     }
 
-    protected IsWidget getContent() {
-        return mainPanel.getWidget();
-    }
-
-    protected void setContent(IsWidget widget) {
-        mainPanel.clear();
+    @Override
+    public void setContent(IsWidget widget) {
         mainPanel.setWidget(widget);
     }
 

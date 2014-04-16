@@ -34,7 +34,7 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
     }
 
     public void scrollToBottom() {
-        getWidget().scrollToBottom();
+        getNativeWidget().scrollToBottom();
     }
 
     public void setTidy(IRichTextTidy tidy) {
@@ -47,8 +47,8 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
 
     public void setImageProvider(RichTextImageProvider imageProvider) {
         this.imageProvider = imageProvider;
-        if (getWidget() != null) {
-            getWidget().setImageProvider(imageProvider);
+        if (getNativeWidget() != null) {
+            getNativeWidget().setImageProvider(imageProvider);
         }
     }
 

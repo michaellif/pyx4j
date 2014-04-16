@@ -128,7 +128,7 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
             }
             options.addAll(opt);
         }
-        getWidget().refreshOptions();
+        getNativeWidget().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 

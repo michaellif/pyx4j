@@ -100,7 +100,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         }
     }
 
-    public final WIDGET_TYPE getWidget() {
+    public final WIDGET_TYPE getNativeWidget() {
         return nativeWidget;
     }
 

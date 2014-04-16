@@ -157,7 +157,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public void refreshOptions() {
         resetOptions();
         retriveOptions(null);
-        getWidget().refreshOptions();
+        getNativeWidget().refreshOptions();
     }
 
     private class TerminableHandlingCallback implements AsyncCallback<List<E>> {

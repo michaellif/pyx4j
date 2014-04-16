@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityContainer;
@@ -33,13 +35,17 @@ public class BasicCollapsableDecorator<E extends IEntity> extends CollapsablePan
     }
 
     @Override
-    public void init(CEntityContainer<E> viewer) {
-        setWidget(viewer.getContent().asWidget());
-    }
-
-    @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
     }
 
+    @Override
+    public void setContent(IsWidget content) {
+        setWidget(content);
+    }
+
+    @Override
+    public void init(CEntityContainer<E> viewer) {
+
+    }
 }

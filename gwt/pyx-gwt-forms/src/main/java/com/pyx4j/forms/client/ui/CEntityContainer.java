@@ -63,8 +63,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     private boolean initiated = false;
 
-    private final SimplePanel contentHolder;
-
     private final ContainerPanel containerPanel;
 
     private IsWidget content;
@@ -86,10 +84,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
             containerPanel.getElement().getStyle().setProperty("border", "red solid 1px");
         }
 
-        contentHolder = new SimplePanel();
-        contentHolder.setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
-
-        containerPanel.add(contentHolder);
         applyAccessibilityRules();
 
         addComponentValidator(new EntityContainerValidator());
@@ -275,13 +269,11 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
             asWidget();
 
             content = createContent();
+            containerPanel.contentHolder.setWidget(content);
 
             IDecorator<?> decorator = createDecorator();
-            if (decorator == null) {
-                contentHolder.setWidget(content);
-            } else {
+            if (decorator != null) {
                 setDecorator(decorator);
-                contentHolder.setWidget(getDecorator());
             }
             addValidations();
             if (ApplicationMode.isDevelopment()) {
@@ -326,9 +318,19 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         return addHandler(handler, DevShortcutEvent.getType());
     }
 
-    class ContainerPanel extends FlowPanel implements RequiresResize, ProvidesResize, IComponentWidget<E> {
+    @Override
+    public final IComponentWidget<E> getNativeWidget() {
+        return containerPanel;
+    }
+
+    class ContainerPanel extends SimplePanel implements RequiresResize, ProvidesResize, IComponentWidget<E> {
+
+        private final SimplePanel contentHolder;
 
         public ContainerPanel() {
+            contentHolder = new SimplePanel();
+            contentHolder.setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
+            setWidget(contentHolder);
         }
 
         @Override
@@ -341,6 +343,17 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         @Override
         public CComponent<E> getCComponent() {
             return CEntityContainer.this;
+        }
+
+        @Override
+        public SimplePanel getContentHolder() {
+            return this;
+        }
+
+        @Override
+        public IsWidget getContent() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 

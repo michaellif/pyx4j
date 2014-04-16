@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.folder;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IEntity;

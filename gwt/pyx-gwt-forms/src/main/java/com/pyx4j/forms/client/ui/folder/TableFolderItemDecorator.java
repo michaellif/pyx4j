@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -87,9 +88,15 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     @Override
+    public void setContent(IsWidget content) {
+        contentHolder.setWidget(content);
+        super.setContent(content);
+    }
+
+    @Override
     public void init(final CEntityFolderItem<E> folderItem) {
         super.init(folderItem);
-        contentHolder.setWidget(getContent());
+
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {

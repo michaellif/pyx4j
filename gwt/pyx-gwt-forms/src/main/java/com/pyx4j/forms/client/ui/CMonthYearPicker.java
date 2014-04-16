@@ -44,7 +44,7 @@ public class CMonthYearPicker extends CFocusComponent<LogicalDate, NMonthYearPic
 
     public void setYearRange(Range yearRange) {
         this.yearRange = yearRange;
-        getWidget().setYearRange(yearRange);
+        getNativeWidget().setYearRange(yearRange);
     }
 
     public Range getYearRange() {

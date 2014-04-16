@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -84,7 +85,6 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
 
     @Override
     public void init(final CEntityContainer<E> entityContainer) {
-        contentHolder.setWidget(entityContainer.getContent());
         toolbar.setEntityContainer(entityContainer);
 
         entityContainer.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -111,6 +111,11 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void setContent(IsWidget content) {
+        contentHolder.setWidget(content);
     }
 
 }

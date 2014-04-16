@@ -94,7 +94,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     @Override
     public void onEditingStop() {
-        if (!getWidget().getEditor().getText().isEmpty() && getValue() != null) {
+        if (!getNativeWidget().getEditor().getText().isEmpty() && getValue() != null) {
             // clear obfuscated value to indicate user input
             getValue().obfuscatedNumber().setValue(null);
         }
@@ -117,7 +117,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     public void clear(boolean clearNative) {
         if (clearNative) {
-            getWidget().getEditor().setText("");
+            getNativeWidget().getEditor().setText("");
         }
         if (getValue() != null) {
             getValue().newNumber().setValue(null);

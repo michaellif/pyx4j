@@ -39,21 +39,21 @@ public class CCaptcha extends CField<Pair<String, String>, NativeCaptcha> {
     public void retrieveValue() {
         //TODO validate if that code is needed
         if (isVisible()) {
-            setValue(getWidget().getNativeValue());
+            setValue(getNativeWidget().getNativeValue());
         }
     }
 
     @Override
     public boolean isValueEmpty() {
         if (isVisible()) {
-            return CommonsStringUtils.isEmpty(getWidget().getValueResponse());
+            return CommonsStringUtils.isEmpty(getNativeWidget().getValueResponse());
         } else {
             return true;
         }
     }
 
     public void createNewChallenge() {
-        getWidget().createNewChallenge();
+        getNativeWidget().createNewChallenge();
     }
 
     public void setWatermark(String watermark) {

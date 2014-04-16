@@ -21,9 +21,13 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public interface IComponentWidget<E> extends IsWidget {
 
     CComponent<E> getCComponent();
 
+    SimplePanel getContentHolder();
+
+    IsWidget getContent();
 }

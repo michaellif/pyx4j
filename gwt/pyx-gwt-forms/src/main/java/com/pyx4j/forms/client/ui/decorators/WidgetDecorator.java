@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -182,6 +183,11 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?
         containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
     }
 
+    @Override
+    public void setContent(IsWidget content) {
+        componentHolder.setWidget(content);
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void init(CField<?, ?> component) {
@@ -189,12 +195,9 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
-        final INativeComponent<?> nativeComponent = component.getWidget();
-
-        nativeComponent.getContentHolder().setWidget(this);
+        final INativeComponent<?> nativeComponent = component.getNativeWidget();
 
         Widget content = nativeComponent.getContent().asWidget();
-        componentHolder.setWidget(content);
 
         content.addStyleName(WidgetDecoratorComponent.name());
         content.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());

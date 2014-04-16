@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -93,7 +94,6 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     @Override
     public void init(final CEntityFolder<E> folder) {
-        container.setWidget(folder.getContent());
 
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -109,6 +109,11 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         });
 
         onSetDebugId(folder.getDebugId());
+    }
+
+    @Override
+    public void setContent(IsWidget content) {
+        container.setWidget(content);
     }
 
     @Override

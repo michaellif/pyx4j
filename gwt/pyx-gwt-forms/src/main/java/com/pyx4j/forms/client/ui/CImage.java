@@ -30,7 +30,7 @@ public class CImage extends CField<IFile<?>, NImage> {
 
     public void setThumbnailPlaceholder(Image placeholder) {
         this.placeholder = placeholder;
-        getWidget().reset();
+        getNativeWidget().reset();
     }
 
     public Image getThumbnailPlaceholder() {
@@ -38,12 +38,12 @@ public class CImage extends CField<IFile<?>, NImage> {
     }
 
     public void setScaleMode(ScaleMode scaleMode) {
-        getWidget().setScaleMode(scaleMode);
+        getNativeWidget().setScaleMode(scaleMode);
     }
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        getWidget().resizeToFit();
+        getNativeWidget().resizeToFit();
     }
 
     public Dimension getImageSize() {

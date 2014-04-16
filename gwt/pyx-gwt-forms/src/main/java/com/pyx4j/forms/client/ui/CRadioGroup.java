@@ -83,7 +83,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
         if (opt != null) {
             options.addAll(opt);
         }
-        getWidget().setOptions(getOptions());
+        getNativeWidget().setOptions(getOptions());
         this.enabledOptions = new HashSet<E>(getOptions());
         OptionsChangeEvent.fire(this, getOptions());
     }
@@ -96,7 +96,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
     }
 
     public void setOptionEnabled(E optionValue, boolean enabled) {
-        getWidget().setOptionEnabled(optionValue, enabled);
+        getNativeWidget().setOptionEnabled(optionValue, enabled);
         if (enabledOptions == null) {
             this.enabledOptions = new HashSet<E>(getOptions());
         }

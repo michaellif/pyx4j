@@ -34,11 +34,11 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
 
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
-        getWidget().setTabIndex(tabIndex);
+        getNativeWidget().setTabIndex(tabIndex);
     }
 
     public void setFocus(boolean focused) {
-        getWidget().setFocus(focused);
+        getNativeWidget().setFocus(focused);
     }
 
     @Override

@@ -44,7 +44,6 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     @Override
     public void init(final CEntityFolderItem<E> folderItem) {
         this.folderItem = folderItem;
-        content = folderItem.getContent();
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -58,12 +57,17 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
         onSetDebugId(folderItem.getDebugId());
     }
 
-    public CEntityFolderItem<E> getFolderItem() {
-        return folderItem;
+    @Override
+    public void setContent(IsWidget content) {
+        this.content = content;
     }
 
     public IsWidget getContent() {
         return content;
+    }
+
+    public CEntityFolderItem<E> getFolderItem() {
+        return folderItem;
     }
 
     @Override

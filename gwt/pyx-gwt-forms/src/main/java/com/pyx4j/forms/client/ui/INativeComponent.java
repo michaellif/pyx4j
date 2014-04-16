@@ -23,8 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.IWidget;
@@ -44,9 +42,5 @@ public interface INativeComponent<E> extends IComponentWidget<E>, IWidget {
     void setDebugId(IDebugId debugId);
 
     void init();
-
-    SimplePanel getContentHolder();
-
-    IsWidget getContent();
 
 }
