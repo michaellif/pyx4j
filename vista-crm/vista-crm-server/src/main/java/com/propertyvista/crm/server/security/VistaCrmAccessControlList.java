@@ -119,6 +119,7 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrint
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
+import com.propertyvista.crm.rpc.services.importer.ExportBuildingDataDownloadService;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
@@ -385,6 +386,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(ImportBuildingDataService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportBuildingDataService.class));
+
+        grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
+        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
 
 // - Unit-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnit.class, EntityPermission.ALL));

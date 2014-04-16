@@ -25,6 +25,8 @@ public interface TenantIO extends IEntity {
 
     IPrimitive<String> email();
 
+    IPrimitive<String> participantId();
+
     IPrimitive<String> vistaPasswordHash();
 
     IPrimitive<String> firstName();

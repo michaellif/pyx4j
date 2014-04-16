@@ -79,6 +79,7 @@ import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.BuildingViewerPresenter {
 
@@ -290,8 +291,9 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     public void exportBuildingData() {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().id(), getEntityId());
-        new ReportDialog("Data Export", "Creating Building Data Export...").start(
-                GWT.<ExportBuildingDataDownloadService> create(ExportBuildingDataDownloadService.class), criteria);
+        ReportDialog d = new ReportDialog("Data Export", "Creating Building Data Export...");
+        d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+        d.start(GWT.<ExportBuildingDataDownloadService> create(ExportBuildingDataDownloadService.class), criteria);
     }
 
 }

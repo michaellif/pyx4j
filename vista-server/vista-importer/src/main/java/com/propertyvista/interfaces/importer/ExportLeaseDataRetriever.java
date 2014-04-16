@@ -1,0 +1,52 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Apr 16, 2014
+ * @author vlads
+ * @version $Id$
+ */
+package com.propertyvista.interfaces.importer;
+
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.interfaces.importer.converter.LeaseConverter;
+import com.propertyvista.interfaces.importer.model.LeaseIO;
+
+public class ExportLeaseDataRetriever {
+
+    private Lease retriveLease(AptUnit unit) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().unit(), unit);
+        criteria.in(criteria.proto().status(), Lease.Status.present());
+        // set sorting by 'from date' to get last active lease first:
+        criteria.desc(criteria.proto().leaseFrom());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public LeaseIO getModel(AptUnit unit) {
+        return getModel(retriveLease(unit));
+    }
+
+    public LeaseIO getModel(Lease lease) {
+        if (lease == null) {
+            return null;
+        }
+        LeaseIO leaseIO = new LeaseConverter().createTO(lease);
+
+        for (LeaseTermTenant leaseTermTenant : lease.currentTerm().version().tenants()) {
+            leaseIO.tenants().add(new ExportTenantDataRetriever().getModel(leaseTermTenant));
+        }
+
+        return leaseIO;
+    }
+}

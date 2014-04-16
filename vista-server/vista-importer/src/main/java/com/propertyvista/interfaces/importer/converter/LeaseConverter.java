@@ -7,12 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 14, 2014
+ * Created on Apr 16, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.importer;
+package com.propertyvista.interfaces.importer.converter;
 
-public class CrmDataExportDownloadDeferredProcess {
+import com.pyx4j.entity.shared.utils.EntityBinder;
+
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.interfaces.importer.model.LeaseIO;
+
+public class LeaseConverter extends EntityBinder<Lease, LeaseIO> {
+
+    public LeaseConverter() {
+        super(Lease.class, LeaseIO.class, false);
+    }
+
+    @Override
+    protected void bind() {
+        bind(toProto.leaseId(), boProto.leaseId());
+    }
 
 }
