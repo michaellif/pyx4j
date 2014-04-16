@@ -258,10 +258,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         dialog.setUploadReciver(new UploadReceiver() {
             @Override
             public void onUploadComplete(IFile<?> uploadResponse) {
-
-                AbstractIFileBlob blob = uploadResponse.blob();
-
-                String deferredCorrelationId = ((DeferredProcessingStarted) uploadResponse).deferredCorrelationId().getValue();
+                DeferredProcessingStarted blob = uploadResponse.blob().cast();
+                String deferredCorrelationId = blob.deferredCorrelationId().getValue();
 
                 // This is the same as in updateFromYardi
                 // --copy of the code -- start

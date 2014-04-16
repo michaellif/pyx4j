@@ -39,7 +39,6 @@ public class CrmDataImporterDeferredProcessMock extends AbstractDeferredProcess 
         DeferredProcessProgressResponse r = super.status();
         if (!r.isCompleted() && !r.isCanceled()) {
             r.setMessage("Errors: " + monitor.getErred());
-            r.setProgress(0);
         } else if (monitor.getErred() > 0) {
             r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
         } else {
@@ -50,17 +49,22 @@ public class CrmDataImporterDeferredProcessMock extends AbstractDeferredProcess 
 
     @Override
     public void execute() {
-
-        for (int b = 1; b <= 100; b++) {
-            for (int u = 1; u <= 100; u++) {
+        progress.progressMaximum.set(100 * 100);
+        for (int b = 1; b <= 100 && !monitor.isTerminationRequested(); b++) {
+            for (int u = 1; u <= 100 && !monitor.isTerminationRequested(); u++) {
                 monitor.addProcessedEvent("Unit", "bCode" + b + ", " + "uCode" + u);
                 if (u % 10 == 0) {
                     monitor.addErredEvent("Unit", "Some error #" + u + "x");
                 }
+                progress.progress.set(b * u);
             }
             monitor.addProcessedEvent("Building", "bCode" + b);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                break;
+            }
         }
-
         completed = true;
     }
 
