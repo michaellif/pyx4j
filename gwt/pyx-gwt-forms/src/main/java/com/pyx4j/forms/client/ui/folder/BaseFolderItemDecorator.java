@@ -46,6 +46,10 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
         this.content = content;
     }
 
+    public IsWidget getContent() {
+        return content;
+    }
+
     @Override
     public void init(final CEntityFolderItem<E> folderItem) {
         this.folderItem = folderItem;
@@ -60,10 +64,6 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
         });
 
         onSetDebugId(folderItem.getDebugId());
-    }
-
-    public IsWidget getContent() {
-        return content;
     }
 
     public CEntityFolderItem<E> getFolderItem() {

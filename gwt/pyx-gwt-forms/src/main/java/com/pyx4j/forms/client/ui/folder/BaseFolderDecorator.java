@@ -93,6 +93,11 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
+    public void setContent(IsWidget content) {
+        container.setWidget(content);
+    }
+
+    @Override
     public void init(final CEntityFolder<E> folder) {
 
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -109,11 +114,6 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         });
 
         onSetDebugId(folder.getDebugId());
-    }
-
-    @Override
-    public void setContent(IsWidget content) {
-        container.setWidget(content);
     }
 
     @Override

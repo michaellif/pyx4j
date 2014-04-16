@@ -352,8 +352,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
         @Override
         public IsWidget getContent() {
-            // TODO Auto-generated method stub
-            return null;
+            return contentHolder;
         }
     }
 
