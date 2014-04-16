@@ -223,7 +223,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
                 resizeSearch();
             }
         };
-        searchForm.initContent();
+        searchForm.init();
         searchForm.populateNew();
         searchForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
         searchForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);

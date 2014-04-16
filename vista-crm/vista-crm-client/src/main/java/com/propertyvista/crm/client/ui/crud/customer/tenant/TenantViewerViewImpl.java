@@ -165,7 +165,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                     return panel;
                 }
             };
-            portalRegistrationInfoForm.initContent();
+            portalRegistrationInfoForm.init();
             portalRegistrationInfoForm.setViewable(true);
             portalRegistrationInfoForm.populate(info);
             setBody(portalRegistrationInfoForm);

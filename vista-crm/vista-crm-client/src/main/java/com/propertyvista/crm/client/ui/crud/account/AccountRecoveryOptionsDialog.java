@@ -50,7 +50,7 @@ public class AccountRecoveryOptionsDialog extends Composite {
         this.service = accountRecoveryOptionsService;
         this.password = password;
         this.recoveryOptionsForm = new AccountRecoveryOptionsForm(true);
-        this.recoveryOptionsForm.initContent();
+        this.recoveryOptionsForm.init();
         this.recoveryOptionsForm.setSecurityQuestionRequired(isSecurityQuestionRequired);
         this.recoveryOptionsForm.populate(recoveryOptions);
         this.cancellationTimer = new Timer() {

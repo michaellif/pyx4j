@@ -71,7 +71,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         loginForm = new LoginForm(this);
-        loginForm.initContent();
+        loginForm.init();
         contentPanel.add(loginForm);
 
         contentPanel.add(new TermsLinkPanel(i18n.tr("LOGIN"), TermsAndPoliciesType.PVResidentPortalTermsAndConditions,

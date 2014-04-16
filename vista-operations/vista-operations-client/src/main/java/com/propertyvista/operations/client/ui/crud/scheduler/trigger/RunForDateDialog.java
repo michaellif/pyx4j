@@ -55,7 +55,7 @@ public abstract class RunForDateDialog extends OkCancelDialog {
             }
         };
 
-        content.initContent();
+        content.init();
         content.populate(EntityFactory.create(ScheduleDataDTO.class));
         return content.asWidget();
     }

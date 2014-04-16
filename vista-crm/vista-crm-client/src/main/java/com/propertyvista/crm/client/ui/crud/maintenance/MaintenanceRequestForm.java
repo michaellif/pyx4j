@@ -668,7 +668,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                                     }
                                 };
 
-                                content.initContent();
+                                content.init();
                                 content.populate(item.getValue());
 
                                 setBody(content.asWidget());

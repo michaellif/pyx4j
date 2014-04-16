@@ -40,7 +40,7 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
 
         closedMaintenanceRequestsViewer = new ClosedMaintenanceRequestsViewer();
         closedMaintenanceRequestsViewer.setViewable(true);
-        closedMaintenanceRequestsViewer.initContent();
+        closedMaintenanceRequestsViewer.init();
 
         setContent(closedMaintenanceRequestsViewer);
 

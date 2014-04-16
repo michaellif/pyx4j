@@ -183,7 +183,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }
             };
 
-            content.initContent();
+            content.init();
             content.populate(EntityFactory.create(MaintenanceRequestScheduleDTO.class));
             return content.asWidget();
         }
@@ -237,7 +237,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }
             };
 
-            content.initContent();
+            content.init();
             // default date is today
             if (mr != null && mr.resolvedDate().isNull()) {
                 mr.resolvedDate().setValue(new LogicalDate());
@@ -296,7 +296,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }
             };
 
-            content.initContent();
+            content.init();
             content.populate(currentRate);
             return content.asWidget();
         }

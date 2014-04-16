@@ -76,7 +76,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         signupForm = new SignUpForm();
-        signupForm.initContent();
+        signupForm.init();
         contentPanel.add(signupForm);
 
         TermsLinkPanel termsLinkPanel = new TermsLinkPanel(i18n.tr("REGISTER"), TermsAndPoliciesType.PVResidentPortalTermsAndConditions,

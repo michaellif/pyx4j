@@ -61,7 +61,7 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, 
             }
         };
 
-        form.initContent();
+        form.init();
         form.populateNew();
 
         return form.asWidget();

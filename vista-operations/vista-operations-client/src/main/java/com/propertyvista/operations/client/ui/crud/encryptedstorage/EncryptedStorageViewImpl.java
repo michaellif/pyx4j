@@ -35,7 +35,7 @@ public class EncryptedStorageViewImpl extends AbstractPrimePane implements Encry
 
     public EncryptedStorageViewImpl() {
         form = new EnryptedStorageForm();
-        form.initContent();
+        form.init();
 
         setContentPane(form);
         setSize("100%", "100%");

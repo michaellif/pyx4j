@@ -122,7 +122,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
                 switchToDisplayMode(member.getPath().toString());
             }
         }, zoomableMembers);
-        this.summaryForm.initContent();
+        this.summaryForm.init();
 
         setDefaultPopulator(new Populator() {
 

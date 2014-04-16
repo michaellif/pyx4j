@@ -85,7 +85,7 @@ public class MakePendingDialog extends OkCancelDialog {
                 return content;
             }
         };
-        form.initContent();
+        form.init();
         MakePendingDTO defaultValue = EntityFactory.create(MakePendingDTO.class);
         defaultValue.pendingStartDay().setValue(minMakeVacantStartDay);
         form.populate(defaultValue);

@@ -38,7 +38,7 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
         setWidth("100%");
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         form = new PasswordResetForm();
-        form.initContent();
+        form.init();
         add(form);
 
         final Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {

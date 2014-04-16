@@ -62,7 +62,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         super(controller);
 
         form = new CommunityEventForm();
-        form.initContent();
+        form.init();
         SimplePanel contentPane = new SimplePanel();
         contentPane.getElement().getStyle().setMargin(6, Unit.PX);
         contentPane.setWidget(form.asWidget());

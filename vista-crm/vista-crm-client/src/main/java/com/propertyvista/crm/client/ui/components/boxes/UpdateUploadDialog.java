@@ -64,7 +64,7 @@ public class UpdateUploadDialog extends UploadDialogBase<ImportUploadDTO> {
         ImportUploadDTO defaultSettings = EntityFactory.create(ImportUploadDTO.class);
         defaultSettings.dataFormat().setValue(ImportDataFormatType.unitAvailability);
 
-        form.initContent();
+        form.init();
         form.populate(defaultSettings);
 
         return form.asWidget();

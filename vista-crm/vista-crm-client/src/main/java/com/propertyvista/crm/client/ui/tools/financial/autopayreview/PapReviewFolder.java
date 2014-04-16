@@ -107,7 +107,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
             formPanel.add(isSelectedAndCaptionHolderPanel);
 
             chargeTotals = new PapChargeReviewForm();
-            chargeTotals.initContent();
+            chargeTotals.init();
             chargeTotals.setViewable(true);
             folderHolderPanel.add(chargeTotals);
             formPanel.add(folderHolderPanel);

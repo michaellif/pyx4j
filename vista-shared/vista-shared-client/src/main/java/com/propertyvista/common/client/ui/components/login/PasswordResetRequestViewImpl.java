@@ -35,7 +35,7 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
                 presenter.requestPasswordReset(form.getValue());
             }
         });
-        form.initContent();
+        form.init();
         add(form);
     }
 

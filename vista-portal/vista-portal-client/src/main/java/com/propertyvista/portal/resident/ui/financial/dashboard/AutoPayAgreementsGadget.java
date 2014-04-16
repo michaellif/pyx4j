@@ -58,7 +58,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         view = new AutoPaysView();
         view.setViewable(true);
-        view.initContent();
+        view.init();
 
         asWidget().setWidth("100%");
         setContent(view);

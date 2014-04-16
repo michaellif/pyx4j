@@ -45,7 +45,7 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityForm<E>
     }
 
     /**
-     * Sets up zoom in callback and defines which members should support it, must be called before {@link ZoomableViewForm#initContent()} to have any effect
+     * Sets up zoom in callback and defines which members should support it, must be called before {@link ZoomableViewForm#init()} to have any effect
      */
     public void initZoomIn(ZoominRequestHandler zoomInHandler, IObject<?>... zoomableMembers) {
         this.zoomableMembers = new IObject<?>[zoomableMembers.length];

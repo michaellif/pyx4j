@@ -47,7 +47,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);
-        insuranceViewer.initContent();
+        insuranceViewer.init();
 
         setContent(insuranceViewer);
 

@@ -32,7 +32,7 @@ public class SummaryStep extends ApplicationWizardStep {
     @Override
     public Widget createStepContent() {
         form = new SummaryForm(getWizard());
-        form.initContent();
+        form.init();
         return form.asWidget();
     }
 

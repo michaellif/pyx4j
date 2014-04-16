@@ -89,7 +89,7 @@ public class ScopeDialog extends OkCancelDialog {
                 return content;
             }
         };
-        form.initContent();
+        form.init();
         form.populateNew();
         form.asWidget().setSize("100%", "100%");
         setBody(form);

@@ -33,7 +33,7 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
         if (form == null) {
             setWidget(null);
         } else {
-            form.initContent();
+            form.init();
             setWidget(form.asWidget());
         }
     }

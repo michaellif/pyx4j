@@ -68,7 +68,7 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
         messageHolder = new HTML();
         messageHolder.setStyleName(OnboardingStyles.OnboardingMessage.name());
 
-        form.initContent();
+        form.init();
         form.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         form.asWidget().getElement().getStyle().setWidth(300, Unit.PX);
 

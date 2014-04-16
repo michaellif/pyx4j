@@ -217,7 +217,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         public N4PolicyDTOARCodeHolderFormDialog(List<ARCode> codeOptions) {
             super(i18n.tr("Select AR Code"));
             form = new N4PolicyDTOARCodeHolderForm(codeOptions, true);
-            form.initContent();
+            form.init();
             form.populateNew();
             setBody(form);
         }

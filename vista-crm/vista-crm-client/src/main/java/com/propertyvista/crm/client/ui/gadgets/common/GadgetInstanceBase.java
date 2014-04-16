@@ -74,7 +74,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         this.metadata = (T) metadata;
         this.setupForm = setupForm;
         if (setupForm != null) {
-            this.setupForm.initContent();
+            this.setupForm.init();
         }
 
         this.isRunning = false;

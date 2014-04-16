@@ -248,7 +248,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         feesPanel.add(feesCaption);
 
         paymentFeesForm = new PaymentFeesForm();
-        paymentFeesForm.initContent();
+        paymentFeesForm.init();
 
         feesPanel.add(paymentFeesForm);
         feesPanel.setCellHorizontalAlignment(paymentFeesForm, HasHorizontalAlignment.ALIGN_CENTER);

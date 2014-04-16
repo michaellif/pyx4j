@@ -455,7 +455,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         public DownloadApplicationDocumentDialog(List<LeaseTermParticipant<?>> participants) {
             super(i18n.tr("Download Blank Application Document "));
             form = new SelectParticipantForm(participants);
-            form.initContent();
+            form.init();
             form.populateNew();
             setBody(form);
         }
@@ -511,7 +511,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         public UploadApplicationDocumentDialog(List<LeaseTermParticipant<?>> signerOptions) {
             super(i18n.tr("Upload Application Document"));
             form = new LeaseApplicationDocumentUploadForm(signerOptions);
-            form.initContent();
+            form.init();
             form.populateNew();
             setBody(form);
         }

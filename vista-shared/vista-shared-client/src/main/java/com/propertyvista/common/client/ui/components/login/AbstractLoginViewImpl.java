@@ -49,7 +49,7 @@ public abstract class AbstractLoginViewImpl extends TwoColumnFlexFormPanel imple
             }
         }, devLoginValues());
 
-        form.initContent();
+        form.init();
         createContent();
     }
 

@@ -109,7 +109,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
             super.onValueSet(populate);
             if (getValue().getInstanceValueClass().equals(N4LegalLetter.class)) {
                 N4LegalLetterForm form = new N4LegalLetterForm();
-                form.initContent();
+                form.init();
                 form.setEditable(isEditable());
                 form.setViewable(isViewable());
                 form.populate(getValue().duplicate(N4LegalLetter.class));
@@ -117,7 +117,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
             } else {
                 LegalLetterForm form = new LegalLetterForm();
-                form.initContent();
+                form.init();
                 form.setEditable(isEditable());
                 form.setViewable(isViewable());
                 form.populate(getValue().duplicate(LegalLetter.class));

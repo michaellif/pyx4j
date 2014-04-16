@@ -28,7 +28,7 @@ public class LegalStatusDialog extends OkCancelDialog {
     public LegalStatusDialog(LegalStatusDTO initialValue) {
         super(i18n.tr("Set Legal Status"));
         form = new LegalStatusForm(true);
-        form.initContent();
+        form.init();
         form.populate(initialValue);
         setBody(form);
         setDialogPixelWidth(600);

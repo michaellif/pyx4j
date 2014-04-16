@@ -28,8 +28,6 @@ public interface SignUpView extends IsView {
 
     void setPresenter(SignUpPresenter presenter);
 
-    void init();
-
     void showError(String message);
 
     void showValidationError(EntityValidationException caught);

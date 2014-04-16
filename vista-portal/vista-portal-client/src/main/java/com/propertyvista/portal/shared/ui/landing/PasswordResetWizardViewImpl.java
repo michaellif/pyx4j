@@ -39,7 +39,7 @@ public class PasswordResetWizardViewImpl extends VerticalPanel implements Passwo
         setWidth("100%");
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         form = new PasswordResetForm();
-        form.initContent();
+        form.init();
         add(form);
 
         final Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {

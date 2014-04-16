@@ -37,7 +37,7 @@ public abstract class SigningEmplyeeSelectionDialog extends OkCancelDialog {
     public SigningEmplyeeSelectionDialog(List<Employee> agents) {
         super(i18n.tr("Choose Employee to Sign the Lease Agreement"));
         form = new SigningEmployeeSelectionForm();
-        form.initContent();
+        form.init();
         form.populateNew();
         form.setAgents(agents);
 

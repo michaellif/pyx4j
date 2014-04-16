@@ -42,7 +42,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
         openMaintenanceRequestsViewer = new OpenMaintenanceRequestsViewer();
         openMaintenanceRequestsViewer.setViewable(true);
-        openMaintenanceRequestsViewer.initContent();
+        openMaintenanceRequestsViewer.init();
 
         setContent(openMaintenanceRequestsViewer);
 

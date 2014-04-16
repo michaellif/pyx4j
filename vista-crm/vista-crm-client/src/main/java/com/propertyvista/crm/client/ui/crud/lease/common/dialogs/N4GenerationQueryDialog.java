@@ -29,7 +29,7 @@ public class N4GenerationQueryDialog extends OkCancelDialog {
     public N4GenerationQueryDialog() {
         super("");
         form = new N4GenerationQueryForm();
-        form.initContent();
+        form.init();
         form.populateNew();
         setBody(form);
     }

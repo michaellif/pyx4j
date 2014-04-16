@@ -34,7 +34,7 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
         this.wizardForm = wizardForm;
         setWidget(wizardForm);
         if (wizardForm != null) {
-            wizardForm.initContent();
+            wizardForm.init();
         }
     }
 

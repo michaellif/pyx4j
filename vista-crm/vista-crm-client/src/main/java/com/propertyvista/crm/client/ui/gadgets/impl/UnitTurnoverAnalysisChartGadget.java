@@ -257,7 +257,7 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
             }
 
         };
-        form.initContent();
+        form.init();
         return new SetupFormWrapper(form);
     }
 

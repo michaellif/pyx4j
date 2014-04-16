@@ -52,7 +52,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
         billingViewer = new BillingViewer();
         billingViewer.setViewable(true);
-        billingViewer.initContent();
+        billingViewer.init();
 
         setContent(billingViewer);
         setNavigationBar(new NavigationBar());

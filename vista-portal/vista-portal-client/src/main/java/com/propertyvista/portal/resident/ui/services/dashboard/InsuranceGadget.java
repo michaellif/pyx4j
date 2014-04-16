@@ -52,7 +52,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);
-        insuranceViewer.initContent();
+        insuranceViewer.init();
 
         setContent(insuranceViewer);
 

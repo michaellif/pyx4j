@@ -212,7 +212,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         public LeaseAgreementDocumentUploadDialog() {
             super(i18n.tr("Upload Agreement Document"));
             form = new LeaseAgreementDocumentForm(false);
-            form.initContent();
+            form.init();
 
             LeaseTermAgreementDocument newDoc = EntityFactory.create(LeaseTermAgreementDocument.class);
             newDoc.signedEmployeeUploader().set(uploader);

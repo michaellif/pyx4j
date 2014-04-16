@@ -663,7 +663,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             };
 
-            content.initContent();
+            content.init();
             content.populate((LeaseDTO) getForm().getValue().duplicate());
             return content.asWidget();
         }

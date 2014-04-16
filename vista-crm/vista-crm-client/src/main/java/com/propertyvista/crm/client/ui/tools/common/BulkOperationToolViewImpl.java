@@ -100,7 +100,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
                 BulkOperationToolViewImpl.this.showMore();
             }
         });
-        itemsHolderForm.initContent();
+        itemsHolderForm.init();
 
         viewPanel.add(itemsHolderForm);
 
@@ -120,7 +120,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     public void setSettingsForm(CEntityForm<Settings> settingsForm) {
         this.settingsForm = settingsForm;
-        this.settingsForm.initContent();
+        this.settingsForm.init();
         this.settingsForm.populateNew();
         settingsFormPanel.add(settingsForm);
     }

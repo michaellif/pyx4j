@@ -140,7 +140,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         searchCriteriaForm = new N4CandidateSearchCriteriaForm() {
             // TODO add on Resize
         };
-        searchCriteriaForm.initContent();
+        searchCriteriaForm.init();
         searchCriteriaForm.populateNew();
         searchCriteriaForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
         searchCriteriaForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);

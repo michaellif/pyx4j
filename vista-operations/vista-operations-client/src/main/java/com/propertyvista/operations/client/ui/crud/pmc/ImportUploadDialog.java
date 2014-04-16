@@ -64,7 +64,7 @@ public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO> {
         defaultSettings.type().setValue(ImportUploadDTO.ImportType.newData);
         defaultSettings.dataFormat().setValue(ImportDataFormatType.vista);
 
-        form.initContent();
+        form.init();
         form.populate(defaultSettings);
 
         return form.asWidget();

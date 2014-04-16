@@ -71,7 +71,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         signupForm = new SignUpForm();
-        signupForm.initContent();
+        signupForm.init();
         contentPanel.add(signupForm);
 
         TermsLinkPanel termsLinkPanel = new TermsLinkPanel(i18n.tr("CREATE ACCOUNT"), TermsAndPoliciesType.PVProspectPortalTermsAndConditions,
@@ -89,7 +89,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
     }
 
     public void init() {
-        signupForm.init();
+        signupForm.populateNew();
     }
 
     public void doLayout(LayoutType layoutType) {
@@ -229,10 +229,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             get(proto().email()).setMockValue(email);
             get(proto().password()).setMockValue(email);
             get(proto().passwordConfirm()).setMockValue(email);
-        }
-
-        public void init() {
-            populateNew();
         }
 
         public void setEntityValidationError(EntityValidationException caught) {

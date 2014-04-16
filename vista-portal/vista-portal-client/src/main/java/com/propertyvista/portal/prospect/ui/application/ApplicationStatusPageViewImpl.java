@@ -203,7 +203,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
             progressForm = new ApplicationProgressForm();
             progressForm.setEditable(false);
-            progressForm.initContent();
+            progressForm.init();
             setContent(progressForm);
 
             setActionsToolbar(new ApplicationProgressToolbar());
