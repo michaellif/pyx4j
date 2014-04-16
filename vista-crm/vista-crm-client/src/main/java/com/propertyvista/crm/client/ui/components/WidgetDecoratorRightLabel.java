@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -96,6 +97,11 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
     }
 
     @Override
+    public void setContent(IsWidget content) {
+        componentHolder.setWidget(content);
+    }
+
+    @Override
     public void init(CComponent<?> component) {
         this.component = component;
         this.component.asWidget().setWidth(componentWidth + "em");
@@ -117,7 +123,6 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
             }
 
         });
-        this.componentHolder.setWidget(component);
 
         if (this.component.asWidget() instanceof Focusable) {
             label.addClickHandler(new ClickHandler() {

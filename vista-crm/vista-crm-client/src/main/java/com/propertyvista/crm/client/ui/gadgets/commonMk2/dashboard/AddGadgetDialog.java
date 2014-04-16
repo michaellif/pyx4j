@@ -121,11 +121,11 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
 
             @Override
             public void init(final CEntityFolderItem<AddGadgetGadgetDescriptor> folderItem) {
-                if (folderItem != null) {
-                    componentPanel.setWidget(folderItem.getContent());
-                } else {
-                    componentPanel.clear();
-                }
+            }
+
+            @Override
+            public void setContent(IsWidget content) {
+                componentPanel.setWidget(content);
             }
 
             @Override

@@ -141,12 +141,12 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 content.setWidget(++row, 0, 2, inject(proto().content(), editor, new FormDecoratorBuilder(true).build()));
                 if (isEditable()) {
                     // create variable selection button
-                    final PushButton pb = editor.getWidget().getEditor().getCustomButton();
+                    final PushButton pb = editor.getNativeWidget().getEditor().getCustomButton();
                     pb.setText(i18n.tr("MERGE"));
                     pb.getElement().getStyle().setColor("black");
                     pb.setVisible(true);
                     final TemplateVarSelector vm = new TemplateVarSelector();
-                    editor.getWidget().getEditor().setCustomAction(new RichTextAction() {
+                    editor.getNativeWidget().getEditor().setCustomAction(new RichTextAction() {
                         @Override
                         public void perform(final Formatter formatter, final Command onComplete) {
                             if (vm.isShowing()) {

@@ -268,9 +268,9 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
         HTMLPanel headerPanel = new HTMLPanel(headerPanelBuilder.toSafeHtml());
 
         receiptDate = new CDatePicker();
-        receiptDate.getWidget().getElement().getStyle().setWidth(100, Unit.PX);
-        receiptDate.getWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        receiptDate.getWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        receiptDate.getNativeWidget().getElement().getStyle().setWidth(100, Unit.PX);
+        receiptDate.getNativeWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        receiptDate.getNativeWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         Button createBatchButton = new Button(i18n.tr("Create Batch"), new Command() {
             @Override

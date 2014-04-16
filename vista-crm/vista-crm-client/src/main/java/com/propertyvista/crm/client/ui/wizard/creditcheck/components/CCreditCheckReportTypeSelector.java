@@ -29,7 +29,7 @@ public class CCreditCheckReportTypeSelector extends CFocusComponent<CreditCheckR
     }
 
     public void setFees(CreditCheckReportType reportType, BigDecimal setupFee, BigDecimal perApplicantFee) {
-        getWidget().setFees(reportType, setupFee, perApplicantFee);
+        getNativeWidget().setFees(reportType, setupFee, perApplicantFee);
     }
 
 }

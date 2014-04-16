@@ -29,7 +29,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.decorators.BasicCollapsableDecorator;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
@@ -56,13 +55,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private SimplePanel expandedPanel;
 
     public LineItemCollapsibleViewer() {
-    }
-
-    @Override
-    protected IDecorator<?> createDecorator() {
         BasicCollapsableDecorator<?> decorator = new BasicCollapsableDecorator<InvoiceLineItemGroupDTO>(VistaImages.INSTANCE);
         decorator.addToggleHandler(this);
-        return decorator;
+        setDecorator(decorator);
     }
 
     @Override

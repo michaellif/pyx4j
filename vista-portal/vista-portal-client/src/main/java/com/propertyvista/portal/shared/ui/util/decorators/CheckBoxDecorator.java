@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -59,14 +60,18 @@ public class CheckBoxDecorator extends FlowPanel implements IDecorator<CCheckBox
     public void init(CCheckBox component) {
         this.component = component;
         component.asWidget().addStyleName(WidgetDecoratorComponent.name());
-        componentHolder.setWidget(component);
         label.setText(component.getTitle());
         label.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                CheckBoxDecorator.this.component.getWidget().setFocus(true);
+                CheckBoxDecorator.this.component.getNativeWidget().setFocus(true);
             }
         });
+    }
+
+    @Override
+    public void setContent(IsWidget content) {
+        componentHolder.setWidget(content);
     }
 
     @Override

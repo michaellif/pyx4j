@@ -135,18 +135,18 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             CEmailField emailField = inject(proto().email(), new CEmailField(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Email Address")).build());
-            emailField.getWidget().addKeyUpHandler(new EnterKeyHandler());
+            emailField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, emailField);
             emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
 
             CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Password")).build());
-            passwordField.getWidget().addKeyUpHandler(new EnterKeyHandler());
+            passwordField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, passwordField);
             passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
 
             CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
-            rememberID.getWidget().addKeyUpHandler(new EnterKeyHandler());
+            rememberID.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new CheckBoxDecorator(rememberID));
 
             Anchor resetPassword = new Anchor(i18n.tr("Forgot your password?"));
@@ -160,7 +160,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             captchaField = (CCaptcha) inject(proto().captcha(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
-            captchaField.getWidget().addKeyUpHandler(new EnterKeyHandler());
+            captchaField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, captchaField);
             setEnableCaptcha(false);
 

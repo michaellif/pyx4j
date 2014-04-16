@@ -17,6 +17,7 @@ import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.S
 
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -54,10 +55,14 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
     }
 
     @Override
+    public void setContent(IsWidget content) {
+        componentHolder.setWidget(content);
+    }
+
+    @Override
     public void init(CSignature component) {
         this.component = component;
         component.asWidget().addStyleName(WidgetDecoratorComponent.name());
-        componentHolder.setWidget(component);
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

@@ -81,7 +81,7 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
             });
         }
 
-        NSuggestBox<SelfRegistrationBuildingDTO> w = getWidget();
+        NSuggestBox<SelfRegistrationBuildingDTO> w = getNativeWidget();
         if (w != null) {
             ((MultiWordSuggestOracle) w.getEditor().getSuggestOracle()).setDefaultSuggestions(defaultSuggestions);
         }
