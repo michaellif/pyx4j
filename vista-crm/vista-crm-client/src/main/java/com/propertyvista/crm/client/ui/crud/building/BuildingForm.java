@@ -481,7 +481,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             }
         }
 
-        private class ILSSummaryEditor extends CEntityForm<ILSSummaryBuilding> {
+        private class ILSSummaryEditor extends AccessoryEntityForm<ILSSummaryBuilding> {
             public ILSSummaryEditor() {
                 super(ILSSummaryBuilding.class);
             }
