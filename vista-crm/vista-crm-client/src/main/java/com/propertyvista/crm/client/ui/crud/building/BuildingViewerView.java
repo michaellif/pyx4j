@@ -38,7 +38,7 @@ import com.propertyvista.dto.RoofDTO;
 
 public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
-    interface Presenter extends BuildingPresenterCommon, IViewer.Presenter {
+    public interface BuildingViewerPresenter extends BuildingPresenterCommon, IViewer.Presenter {
 
         MaintenanceRequestVisorController getMaintenanceRequestVisorController();
 
@@ -48,9 +48,9 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
         void updateFromYardi();
 
-        void uploadImport();
+        void importBuildingData();
 
-        void downloadImport();
+        void exportBuildingData();
     }
 
     ILister<FloorplanDTO> getFloorplanListerView();

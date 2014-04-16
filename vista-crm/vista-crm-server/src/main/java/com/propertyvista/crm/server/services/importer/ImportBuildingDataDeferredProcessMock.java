@@ -20,11 +20,11 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 
 @SuppressWarnings("serial")
-public class CrmDataImporterDeferredProcessMock extends AbstractDeferredProcess {
+public class ImportBuildingDataDeferredProcessMock extends AbstractDeferredProcess {
 
     private final ExecutionMonitor monitor;
 
-    CrmDataImporterDeferredProcessMock() {
+    ImportBuildingDataDeferredProcessMock() {
         monitor = new ExecutionMonitor();
     }
 

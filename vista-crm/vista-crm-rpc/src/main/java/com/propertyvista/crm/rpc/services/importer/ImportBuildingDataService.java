@@ -18,6 +18,6 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
 
-public interface ImportCrmUploadService extends UploadService<IEntity, DeferredProcessingStarted> {
+public interface ImportBuildingDataService extends UploadService<IEntity, DeferredProcessingStarted> {
 
 }

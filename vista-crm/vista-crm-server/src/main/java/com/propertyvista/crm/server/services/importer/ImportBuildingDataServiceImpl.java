@@ -28,13 +28,13 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
-import com.propertyvista.crm.rpc.services.importer.ImportCrmUploadService;
+import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 
-public class ImportCrmUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, DeferredProcessingStarted> implements ImportCrmUploadService {
+public class ImportBuildingDataServiceImpl extends AbstractUploadServiceImpl<IEntity, DeferredProcessingStarted> implements ImportBuildingDataService {
 
     private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML);
 
-    public ImportCrmUploadServiceImpl() {
+    public ImportBuildingDataServiceImpl() {
 
     }
 
@@ -60,9 +60,9 @@ public class ImportCrmUploadServiceImpl extends AbstractUploadServiceImpl<IEntit
 
         IDeferredProcess process;
         if (mock) {
-            process = new CrmDataImporterDeferredProcessMock();
+            process = new ImportBuildingDataDeferredProcessMock();
         } else {
-            process = new CrmDataImporterDeferredProcess(uploadInitiationData, uploadedData);
+            process = new ImportBuildingDataDeferredProcess(uploadInitiationData, uploadedData);
         }
 
         String deferredCorrelationId = DeferredProcessRegistry.fork(process, ThreadPoolNames.IMPORTS);

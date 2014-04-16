@@ -59,7 +59,7 @@ import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
-import com.propertyvista.crm.rpc.services.importer.ImportCrmUploadService;
+import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -77,7 +77,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
-public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.Presenter {
+public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.BuildingViewerPresenter {
 
     private static final I18n i18n = I18n.get(BuildingViewerActivity.class);
 
@@ -251,9 +251,9 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public void uploadImport() {
-        UploadDialogBase<IEntity> dialog = new UploadDialogBase<IEntity>(i18n.tr("Upload Import File"),
-                GWT.<UploadService<IEntity, AbstractIFileBlob>> create(ImportCrmUploadService.class));
+    public void importBuildingData() {
+        UploadDialogBase<IEntity> dialog = new UploadDialogBase<IEntity>(i18n.tr("Import Building Data"),
+                GWT.<UploadService<IEntity, AbstractIFileBlob>> create(ImportBuildingDataService.class));
 
         dialog.setUploadReciver(new UploadReceiver() {
             @Override
@@ -284,7 +284,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public void downloadImport() {
+    public void exportBuildingData() {
         // TODO VladS
     }
 

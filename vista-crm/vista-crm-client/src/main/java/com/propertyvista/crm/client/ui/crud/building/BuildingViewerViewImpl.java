@@ -118,7 +118,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             @Override
             public void execute() {
                 if (!isVisorShown()) {
-                    ((BuildingViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
+                    ((BuildingViewerPresenter) getPresenter()).getMaintenanceRequestVisorController().show();
                 }
             }
         }));
@@ -127,7 +127,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             @Override
             public void execute() {
                 if (!isVisorShown()) {
-                    ((BuildingViewerView.Presenter) getPresenter()).getCommunityEventVisorController().show();
+                    ((BuildingViewerPresenter) getPresenter()).getCommunityEventVisorController().show();
                 }
             }
         }));
@@ -136,24 +136,25 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             addAction(new MenuItem(i18n.tr("Update From Yardi"), new Command() {
                 @Override
                 public void execute() {
-                    ((BuildingViewerView.Presenter) getPresenter()).updateFromYardi();
+                    ((BuildingViewerPresenter) getPresenter()).updateFromYardi();
                 }
             }));
         }
 
-        addAction(new MenuItem(i18n.tr("Download Import"), new Command() {
+        addAction(new MenuItem(i18n.tr("Import Building Data"), new Command() {
             @Override
             public void execute() {
-                ((BuildingViewerView.Presenter) getPresenter()).downloadImport();
+                ((BuildingViewerPresenter) getPresenter()).importBuildingData();
             }
         }));
 
-        addAction(new MenuItem(i18n.tr("Upload Import"), new Command() {
+        addAction(new MenuItem(i18n.tr("Export Building Data"), new Command() {
             @Override
             public void execute() {
-                ((BuildingViewerView.Presenter) getPresenter()).uploadImport();
+                ((BuildingViewerPresenter) getPresenter()).exportBuildingData();
             }
         }));
+
     }
 
     @Override
@@ -240,7 +241,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                     List<Building> buildingsFilter = new ArrayList<Building>();
                     buildingsFilter.add(getForm().getValue());
                     if (!isVisorShown()) {
-                        ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show();
+                        ((BuildingViewerView.BuildingViewerPresenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show();
                     }
                 }
 

@@ -27,7 +27,7 @@ import com.propertyvista.crm.server.services.building.LandlordMediaUploadService
 import com.propertyvista.crm.server.services.customer.CustomerPictureCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.InsuranceCertificateScanCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
-import com.propertyvista.crm.server.services.importer.ImportCrmUploadServiceImpl;
+import com.propertyvista.crm.server.services.importer.ImportBuildingDataServiceImpl;
 import com.propertyvista.crm.server.services.lease.IdentificationDocumentCrmUploadServiceImpl;
 import com.propertyvista.crm.server.services.lease.LeaseApplicationDocumentUploadServiceImpl;
 import com.propertyvista.crm.server.services.lease.LeaseTermAgreementDocumentUploadServiceImpl;
@@ -52,7 +52,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
     public VistaUploadServlet() {
         register(ImportUploadServiceImpl.class);
         register(UpdateUploadServiceImpl.class);
-        register(ImportCrmUploadServiceImpl.class);
+        register(ImportBuildingDataServiceImpl.class);
         register(MediaUploadFloorplanServiceImpl.class);
         register(MediaUploadBuildingServiceImpl.class);
         register(MaintenanceRequestPictureUploadServiceImpl.class);

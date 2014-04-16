@@ -119,7 +119,7 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrint
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
-import com.propertyvista.crm.rpc.services.importer.ImportCrmUploadService;
+import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.IdentificationDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
@@ -383,8 +383,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(UpdateUploadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
 
-        grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(ImportCrmUploadService.class));
-        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportCrmUploadService.class));
+        grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(ImportBuildingDataService.class));
+        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportBuildingDataService.class));
 
 // - Unit-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(AptUnit.class, EntityPermission.ALL));

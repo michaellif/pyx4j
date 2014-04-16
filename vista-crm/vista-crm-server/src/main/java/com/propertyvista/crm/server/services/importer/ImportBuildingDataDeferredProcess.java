@@ -18,13 +18,13 @@ import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 @SuppressWarnings("serial")
-public class CrmDataImporterDeferredProcess extends AbstractDeferredProcess {
+public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
 
     private final IEntity uploadInitiationData;
 
     private final UploadedData uploadedData;
 
-    public CrmDataImporterDeferredProcess(IEntity uploadInitiationData, UploadedData uploadedData) {
+    public ImportBuildingDataDeferredProcess(IEntity uploadInitiationData, UploadedData uploadedData) {
         super();
         this.uploadInitiationData = uploadInitiationData;
         this.uploadedData = uploadedData;
