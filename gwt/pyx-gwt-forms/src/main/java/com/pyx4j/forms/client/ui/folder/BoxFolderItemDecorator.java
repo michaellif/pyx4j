@@ -116,6 +116,12 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
+    public void setContent(IsWidget content) {
+        super.setContent(content);
+        contentHolder.setWidget(content);
+    }
+
+    @Override
     public void init(final CEntityFolderItem<E> folderItem) {
         super.init(folderItem);
 
@@ -140,11 +146,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 toolbar.update(collapsablePanel.isExpended());
             }
         });
-    }
-
-    @Override
-    public void setContent(IsWidget content) {
-        contentHolder.setWidget(content);
     }
 
     public void setExpended(boolean expended) {

@@ -89,8 +89,8 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     @Override
     public void setContent(IsWidget content) {
-        contentHolder.setWidget(content);
         super.setContent(content);
+        contentHolder.setWidget(content);
     }
 
     @Override
