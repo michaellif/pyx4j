@@ -42,7 +42,7 @@ public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisor
     protected void setForm(CEntityForm<E> form) {
 
         this.form = form;
-        this.form.initContent();
+        this.form.init();
 
         super.setContentPane(new ScrollPanel(form.asWidget()));
 

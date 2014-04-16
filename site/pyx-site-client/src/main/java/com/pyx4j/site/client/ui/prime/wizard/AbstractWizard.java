@@ -91,7 +91,7 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
         }
 
         this.form = form;
-        this.form.initContent();
+        this.form.init();
 
         LayoutPanel center = (LayoutPanel) getContentPane();
         center.clear(); // remove current form...

@@ -36,7 +36,7 @@ public class CComponentViewImpl extends ScrollPanel implements CComponentView {
         setSize("100%", "100%");
 
         form = new CComponentViewForm();
-        form.initContent();
+        form.init();
 
         setWidget(form);
     }

@@ -79,7 +79,7 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
 
         this.form = form;
 
-        this.form.initContent();
+        this.form.init();
 
         LayoutPanel center = (LayoutPanel) getContentPane();
         center.clear(); // remove current form...

@@ -157,10 +157,10 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
         this.reportWidget = reportWidget;
         this.simpleSettingsForm = simpleSettingsForm;
-        this.simpleSettingsForm.initContent();
+        this.simpleSettingsForm.init();
         this.advancedSettingsForm = advancedSettingsForm;
         if (this.advancedSettingsForm != null) {
-            this.advancedSettingsForm.initContent();
+            this.advancedSettingsForm.init();
         }
 
         this.activeSettingsForm = null;

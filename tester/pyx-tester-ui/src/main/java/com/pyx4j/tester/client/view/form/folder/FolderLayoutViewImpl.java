@@ -30,7 +30,7 @@ public class FolderLayoutViewImpl extends ScrollPanel implements FolderLayoutVie
         setSize("100%", "100%");
 
         EntityIForm mainForm = new EntityIForm();
-        mainForm.initContent();
+        mainForm.init();
 
         setWidget(mainForm);
 

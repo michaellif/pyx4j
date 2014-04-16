@@ -156,7 +156,7 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
             }
 
             if (currentForm != null) {
-                currentForm.initContent();
+                currentForm.init();
                 currentForm.populateNew();
                 map.put(formType, currentForm);
             }

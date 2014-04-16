@@ -32,7 +32,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
@@ -263,7 +262,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         super.setDecorator(decorator);
     }
 
-    public final void initContent() {
+    public final void init() {
         assert initiated == false;
         if (!initiated) {
             asWidget();
@@ -301,7 +300,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     public void onAdopt(CEntityContainer<?> parent) {
         super.onAdopt(parent);
         if (!initiated) {
-            initContent();
+            init();
         }
     }
 

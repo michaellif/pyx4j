@@ -180,7 +180,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
             super(imgClass);
             this.imgClass = imgClass;
             this.folderIcons = folderIcons;
-            initContent();
+            init();
         }
 
         public void addNewImage() {
