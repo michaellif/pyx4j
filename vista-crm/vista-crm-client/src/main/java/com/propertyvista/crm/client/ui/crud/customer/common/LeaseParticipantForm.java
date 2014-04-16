@@ -103,7 +103,11 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             }
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
 
-            get(proto().customer().person().birthDate()).setMandatory(!getValue().ageOfMajority().isNull());
+            if (VistaFeatures.instance().yardiIntegration()) {
+                get(proto().customer().person().birthDate()).setMandatory(false);
+            } else {
+                get(proto().customer().person().birthDate()).setMandatory(!getValue().ageOfMajority().isNull());
+            }
         }
 
         if (rootClass.equals(TenantDTO.class)) {
