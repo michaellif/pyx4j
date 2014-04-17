@@ -50,7 +50,8 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<CEntityContainer<E>, E> implements IEditableComponentFactory {
+public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE>, DATA_TYPE extends IObject<?>> extends
+        CComponent<SELF_TYPE, DATA_TYPE> implements IEditableComponentFactory {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityContainer.class);
 
@@ -88,21 +89,21 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     public abstract Collection<? extends CComponent<?, ?>> getComponents();
 
-    protected abstract void setComponentsValue(E value, boolean fireEvent, boolean populate);
+    protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
     @Override
-    protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
+    protected void onValuePropagation(DATA_TYPE value, boolean fireEvent, boolean populate) {
         super.onValuePropagation(value, fireEvent, populate);
         setComponentsValue(value, fireEvent, populate);
     }
 
     @Override
-    protected void setEditorValue(E value) {
+    protected void setEditorValue(DATA_TYPE value) {
 
     }
 
     @Override
-    protected E getEditorValue() throws ParseException {
+    protected DATA_TYPE getEditorValue() throws ParseException {
         return null;
     }
 
@@ -153,7 +154,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                 if (ccomponent instanceof CField) {
                     ((CField<?, ?>) ccomponent).setVisited(true);
                 } else if (ccomponent instanceof CEntityContainer) {
-                    ((CEntityContainer<?>) ccomponent).setVisitedRecursive();
+                    ((CEntityContainer<?, ?>) ccomponent).setVisitedRecursive();
                 }
             }
         }
@@ -248,7 +249,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     /**
      * @deprecated use {@link setDecorator(IDecorator decorator)}
      */
-    protected IDecorator<?> createDecorator() {
+    protected IDecorator<? super SELF_TYPE> createDecorator() {
         return null;
     }
 
@@ -259,7 +260,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
             nativeComponent.setContent(createContent());
 
-            IDecorator<?> decorator = createDecorator();
+            IDecorator<? super SELF_TYPE> decorator = createDecorator();
             if (decorator != null) {
                 setDecorator(decorator);
             }
@@ -275,13 +276,13 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
-        return ((CEntityContainer<?>) getParent()).create(member);
+        return ((CEntityContainer<?, ?>) getParent()).create(member);
     }
 
     @Override
-    public void onAdopt(CEntityContainer<?> parent) {
+    public void onAdopt(CEntityContainer<?, ?> parent) {
         super.onAdopt(parent);
         if (!initiated) {
             init();
@@ -302,7 +303,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public final INativeComponent<E> getNativeComponent() {
+    public final INativeComponent<DATA_TYPE> getNativeComponent() {
         return nativeComponent;
     }
 
@@ -314,7 +315,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         return icon;
     }
 
-    class NEntityContainer extends SimplePanel implements RequiresResize, ProvidesResize, INativeComponent<E> {
+    class NEntityContainer extends SimplePanel implements RequiresResize, ProvidesResize, INativeComponent<DATA_TYPE> {
 
         private IsWidget content;
 
@@ -331,8 +332,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
             this.content = content;
             content.asWidget().setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
             if (getWidget() instanceof IDecorator) {
-                ((IDecorator<CEntityContainer<E>>) getWidget()).setContent(content);
-                ((IDecorator<CEntityContainer<E>>) getWidget()).init(CEntityContainer.this);
+                ((IDecorator) getWidget()).setContent(content);
+                ((IDecorator) getWidget()).init(CEntityContainer.this);
             } else {
                 setWidget(content);
             }

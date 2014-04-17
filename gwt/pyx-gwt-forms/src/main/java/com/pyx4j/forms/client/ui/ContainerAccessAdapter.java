@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 public class ContainerAccessAdapter implements IAccessAdapter {
 
-    private CEntityContainer<?> container;
+    private CEntityContainer<?, ?> container;
 
     private boolean inheritEnabled = true;
 
@@ -35,7 +35,7 @@ public class ContainerAccessAdapter implements IAccessAdapter {
     public ContainerAccessAdapter() {
     }
 
-    public void setContainer(CEntityContainer<?> container) {
+    public void setContainer(CEntityContainer<?, ?> container) {
         this.container = container;
     }
 

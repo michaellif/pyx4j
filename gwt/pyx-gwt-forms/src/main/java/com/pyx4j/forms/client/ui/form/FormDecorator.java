@@ -33,9 +33,9 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends FlowPanel implements IDecorator<T> {
+public class FormDecorator<E extends IEntity> extends FlowPanel implements IDecorator<CEntityForm<E>> {
 
-    private T component;
+    private CEntityForm<E> component;
 
     private final Toolbar headerToolbar;
 
@@ -83,12 +83,12 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
     }
 
     @Override
-    public void init(T component) {
+    public void init(CEntityForm<E> component) {
         assert this.component == null;
         this.component = component;
     }
 
-    public T getComponent() {
+    public CEntityForm<E> getComponent() {
         return component;
     }
 

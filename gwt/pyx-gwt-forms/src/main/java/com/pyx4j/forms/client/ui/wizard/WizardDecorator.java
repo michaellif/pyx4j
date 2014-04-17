@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntityWizard<E>> {
+public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
 
     private static final I18n i18n = I18n.get(WizardDecorator.class);
 
@@ -41,6 +41,11 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
 
     public WizardDecorator() {
         this(i18n.tr("Finish"));
+    }
+
+    @Override
+    public CEntityWizard<E> getComponent() {
+        return (CEntityWizard<E>) super.getComponent();
     }
 
     public WizardDecorator(String endButtonCaption) {

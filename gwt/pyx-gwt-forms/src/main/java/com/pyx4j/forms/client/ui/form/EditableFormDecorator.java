@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E, CEntityForm<E>> {
+public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E> {
 
     private static final I18n i18n = I18n.get(WizardDecorator.class);
 

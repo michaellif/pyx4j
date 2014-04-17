@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.prime.form;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTabbedEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
@@ -50,43 +50,43 @@ public abstract class PrimeEntityForm<E extends IEntity> extends CTabbedEntityFo
         return view;
     }
 
-    public final CComponent<?, ?> injectAndDecorate(IObject<?> member) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member) {
         return inject(member, new FieldDecoratorBuilder().build());
     }
 
-    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth, double contentWidth) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth, double contentWidth) {
         return inject(member, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
     }
 
-    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, double componentWidth, boolean dual) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, double componentWidth, boolean dual) {
         return inject(member, new FieldDecoratorBuilder(componentWidth, dual).build());
     }
 
-    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, double componentWidth) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, double componentWidth) {
         return inject(member, new FieldDecoratorBuilder(componentWidth).build());
     }
 
-    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, boolean dual) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, boolean dual) {
         return inject(member, new FieldDecoratorBuilder(dual).build());
     }
 
-    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp) {
         return inject(member, comp, new FieldDecoratorBuilder().build());
     }
 
-    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double labelWidth, double componentWidth, double contentWidth) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, double labelWidth, double componentWidth, double contentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
     }
 
-    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth, boolean dual) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, double componentWidth, boolean dual) {
         return inject(member, comp, new FieldDecoratorBuilder(componentWidth, dual).build());
     }
 
-    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, double componentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(componentWidth).build());
     }
 
-    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, boolean dual) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, boolean dual) {
         return inject(member, comp, new FieldDecoratorBuilder(dual).build());
     }
 }

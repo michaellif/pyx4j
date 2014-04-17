@@ -24,11 +24,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class BasicCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityContainer<E>> {
+public class BasicCollapsableDecorator<COMP_TYPE extends CComponent<? extends COMP_TYPE, DATA_TYPE>, DATA_TYPE extends IEntity> extends CollapsablePanel
+        implements IDecorator<COMP_TYPE> {
 
     public BasicCollapsableDecorator(WidgetsImages images) {
         super(images);
@@ -45,7 +46,7 @@ public class BasicCollapsableDecorator<E extends IEntity> extends CollapsablePan
     }
 
     @Override
-    public void init(CEntityContainer<E> viewer) {
+    public void init(COMP_TYPE viewer) {
 
     }
 }

@@ -42,7 +42,7 @@ import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
+public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<CEntityFolderItem<E>, E> {
 
     private static final I18n i18n = I18n.get(CEntityFolderItem.class);
 
@@ -116,7 +116,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     protected IsWidget createContent() {
-        entityForm = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
+        entityForm = create(EntityFactory.getEntityPrototype(clazz));
         adopt(entityForm);
         return entityForm;
     }
@@ -154,7 +154,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onAdopt(final CEntityContainer<?> parent) {
+    public void onAdopt(final CEntityContainer<?, ?> parent) {
         super.onAdopt(parent);
 
         final CEntityFolder<E> folder = (CEntityFolder<E>) parent;

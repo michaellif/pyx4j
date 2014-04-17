@@ -52,7 +52,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<IList<E>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<CEntityFolder<E>, IList<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 

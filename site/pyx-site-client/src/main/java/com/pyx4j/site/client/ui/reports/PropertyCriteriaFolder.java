@@ -58,9 +58,9 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof PropertyCriterionEntity) {
-            return new PropertyCriterionEditor(EntityFactory.getEntityPrototype(tableEntityClass));
+            return (T) new PropertyCriterionEditor(EntityFactory.getEntityPrototype(tableEntityClass));
         } else {
             return super.create(member);
         }

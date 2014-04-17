@@ -51,7 +51,7 @@ import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
-public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E> {
+public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CEntityForm<E>, E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
@@ -84,7 +84,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (isAttached()) {
             return super.create(member);
         } else {
@@ -92,14 +92,14 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         }
     }
 
-    public final CComponent<?, ?> inject(IObject<?> member) {
-        CComponent<?, ?> comp = create(member);
+    public final <T extends CComponent<T, ?>> T inject(IObject<?> member) {
+        T comp = create(member);
         bind(comp, member);
         return comp;
     }
 
-    public final CComponent<?, ?> inject(IObject<?> member, IDecorator<?> decorator) {
-        CComponent<?, ?> comp = inject(member);
+    public final <T extends CComponent<T, ?>> T inject(IObject<?> member, IDecorator<T> decorator) {
+        T comp = inject(member);
         comp.setDecorator(decorator);
         return comp;
     }
@@ -109,7 +109,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         return comp;
     }
 
-    public final <T extends CComponent<?, ?>> T inject(IObject<?> member, T comp, IDecorator<?> decorator) {
+    public final <T extends CComponent<T, ?>> T inject(IObject<?> member, T comp, IDecorator<T> decorator) {
         comp.setDecorator(decorator);
         return inject(member, comp);
     }

@@ -60,11 +60,11 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageSlider, CImageSlider<T>, ImageSlider> {
+public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageSlider, CImageSlider<E>, ImageSlider> {
 
     private static final I18n i18n = I18n.get(NImageSlider.class);
 
-    private final List<T> imageFiles;
+    private final List<E> imageFiles;
 
     private final List<String> imageUrls;
 
@@ -74,9 +74,9 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
 
     protected IEditableComponentFactory factory = new BaseEditableComponentFactory();
 
-    public NImageSlider(CImageSlider<T> cComponent) {
+    public NImageSlider(CImageSlider<E> cComponent) {
         super(cComponent);
-        imageFiles = new ArrayList<T>();
+        imageFiles = new ArrayList<E>();
         imageUrls = new ArrayList<String>();
 
         imageSlider = new ImageSlider(getCComponent().getImageSize(), new ImageSliderDataProvider() {
@@ -107,11 +107,11 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
     }
 
     @Override
-    public void setNativeValue(IList<T> values) {
+    public void setNativeValue(IList<E> values) {
         imageFiles.clear();
         imageUrls.clear();
         if (values != null) {
-            for (T value : values) {
+            for (E value : values) {
                 imageFiles.add(value);
                 imageUrls.add(getCComponent().getImageUrl(value));
             }
@@ -128,7 +128,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
     }
 
     @Override
-    public IList<T> getNativeValue() {
+    public IList<E> getNativeValue() {
         return null;
     }
 
@@ -170,13 +170,13 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
         organizerWidth = width;
     }
 
-    class ImageOrganizer extends CEntityFolder<T> {
+    class ImageOrganizer extends CEntityFolder<E> {
 
-        private final Class<T> imgClass;
+        private final Class<E> imgClass;
 
         private final EntityFolderImages folderIcons;
 
-        public ImageOrganizer(Class<T> imgClass, EntityFolderImages folderIcons) {
+        public ImageOrganizer(Class<E> imgClass, EntityFolderImages folderIcons) {
             super(imgClass);
             this.imgClass = imgClass;
             this.folderIcons = folderIcons;
@@ -190,7 +190,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
         @SuppressWarnings("unchecked")
         public void clear() {
             for (CComponent<?, ?> item : new ArrayList<CComponent<?, ?>>(getComponents())) {
-                removeItem((CEntityFolderItem<T>) item);
+                removeItem((CEntityFolderItem<E>) item);
             }
         }
 
@@ -200,9 +200,9 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
-                return new CEntityForm<T>(imgClass) {
+                return (T) new CEntityForm<E>(imgClass) {
                     private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
 
                     @Override
@@ -232,12 +232,12 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected void createNewEntity(final AsyncCallback<T> callback) {
+        protected void createNewEntity(final AsyncCallback<E> callback) {
             UploadService<?, ?> service = getCComponent().getUploadService();
             new FileUploadDialog(i18n.tr("Upload Image File"), null, service, new UploadReceiver() {
                 @Override
                 public void onUploadComplete(IFile<?> uploadResponse) {
-                    T t = EntityFactory.create(imgClass);
+                    E t = EntityFactory.create(imgClass);
                     t.file().set(uploadResponse);
                     callback.onSuccess(t);
                 }
@@ -245,16 +245,16 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
         }
 
         @Override
-        protected IFolderItemDecorator<T> createItemDecorator() {
-            return new BoxFolderItemDecorator<T>(folderIcons);
+        protected IFolderItemDecorator<E> createItemDecorator() {
+            return new BoxFolderItemDecorator<E>(folderIcons);
         }
 
         @Override
-        protected IFolderDecorator<T> createFolderDecorator() {
+        protected IFolderDecorator<E> createFolderDecorator() {
             return new Decorator();
         }
 
-        class Decorator extends Dialog implements IFolderDecorator<T>, Custom1Option, Custom2Option, CancelOption {
+        class Decorator extends Dialog implements IFolderDecorator<E>, Custom1Option, Custom2Option, CancelOption {
             ScrollPanel scrollPanel = new ScrollPanel();
 
             public Decorator() {
@@ -281,7 +281,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
             }
 
             @Override
-            public void onValueChange(ValueChangeEvent<IList<T>> event) {
+            public void onValueChange(ValueChangeEvent<IList<E>> event) {
                 layout();
             }
 
@@ -297,7 +297,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
             }
 
             @Override
-            public void init(CEntityFolder<T> folder) {
+            public void init(CEntityFolder<E> folder) {
             }
 
             @Override

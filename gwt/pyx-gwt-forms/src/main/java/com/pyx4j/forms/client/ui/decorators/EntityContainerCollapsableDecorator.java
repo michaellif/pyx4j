@@ -35,13 +35,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class EntityContainerCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityContainer<E>> {
+public class EntityContainerCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityForm<E>> {
 
     private final EntityContainerDecoratorToolbar toolbar;
 
@@ -84,7 +84,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
     }
 
     @Override
-    public void init(final CEntityContainer<E> entityContainer) {
+    public void init(final CEntityForm<E> entityContainer) {
         toolbar.setEntityContainer(entityContainer);
 
         entityContainer.addPropertyChangeHandler(new PropertyChangeHandler() {

@@ -41,9 +41,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -190,7 +190,7 @@ public class FieldDecorator extends FlowPanel implements IDecorator<CField<?, ?>
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public void init(CField<?, ?> component) {
+    public void init(CField component) {
         this.component = component;
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));

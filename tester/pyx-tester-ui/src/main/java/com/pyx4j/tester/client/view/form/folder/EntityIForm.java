@@ -57,13 +57,13 @@ public class EntityIForm extends CEntityForm<EntityI> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof EntityIII) {
-            return new EntityIIIEditor();
+            return (T) new EntityIIIEditor();
         } else if (member instanceof EntityII) {
-            return new EntityIIFormWithVisibilityChange();
+            return (T) new EntityIIFormWithVisibilityChange();
         } else if (member instanceof EntityIV) {
-            return new EntityIVEditor();
+            return (T) new EntityIVEditor();
         } else {
             return super.create(member);
         }
@@ -107,9 +107,9 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof EntityII) {
-                return new EntityIIEditor();
+                return (T) new EntityIIEditor();
             } else {
                 return super.create(member);
             }
