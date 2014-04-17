@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -124,22 +125,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
             @Override
             public IFolderItemDecorator<CommunityEvent> createItemDecorator() {
-                return new VistaBoxFolderItemDecorator<CommunityEvent>(this) {
-                    @Override
-                    public void init(final CEntityFolderItem<CommunityEvent> folderItem) {
-                        super.init(folderItem);
-                        final EventEditor editor = (EventEditor) getContent();
-                        editor.addPropertyChangeHandler(new PropertyChangeHandler() {
-
-                            @Override
-                            public void onPropertyChange(PropertyChangeEvent event) {
-                                if (event.getPropertyName() == PropertyName.viewable) {
-                                    folderItem.getItemActionsBar().setVisible(editor.isViewable());
-                                }
-                            }
-                        });
-                    }
-                };
+                return new VistaBoxFolderItemDecorator<CommunityEvent>(this);
             }
 
             @Override
@@ -251,6 +237,20 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                     tb.addItem(btnCancel);
                     btnCancel.setVisible(false);
                     return tb;
+                }
+
+                @Override
+                public void onAdopt(final CEntityContainer<?> parent) {
+                    super.onAdopt(parent);
+                    addPropertyChangeHandler(new PropertyChangeHandler() {
+
+                        @Override
+                        public void onPropertyChange(PropertyChangeEvent event) {
+                            if (event.getPropertyName() == PropertyName.viewable) {
+                                ((CEntityFolderItem<CommunityEvent>) parent).getItemActionsBar().setVisible(isViewable());
+                            }
+                        }
+                    });
                 }
 
                 @Override
