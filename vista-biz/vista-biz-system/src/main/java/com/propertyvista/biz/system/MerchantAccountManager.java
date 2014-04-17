@@ -41,14 +41,14 @@ public class MerchantAccountManager {
         EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCard(), true);
         EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCardConvenienceFee(), true);
 
-        MerchantAccount orig = null;
+        final MerchantAccount orig = EntityFactory.create(MerchantAccount.class);
         if (merchantAccount.getPrimaryKey() != null) {
-            orig = TaskRunner.runInTargetNamespace(pmc, new Callable<MerchantAccount>() {
+            orig.set(TaskRunner.runInTargetNamespace(pmc, new Callable<MerchantAccount>() {
                 @Override
                 public MerchantAccount call() {
                     return Persistence.service().retrieve(MerchantAccount.class, merchantAccount.getPrimaryKey());
                 }
-            });
+            }));
         }
 
         PmcMerchantAccountIndex pmcMerchantAccountIndex = null;
@@ -70,11 +70,18 @@ public class MerchantAccountManager {
             @Override
             public Void call() {
                 Persistence.service().persist(merchantAccount);
+
+                if (orig.isNull()) {
+                    ServerSideFactory.create(AuditFacade.class).created(merchantAccount);
+                } else {
+                    ServerSideFactory.create(AuditFacade.class).updated(merchantAccount, EntityDiff.getChanges(orig, merchantAccount));
+                }
+
                 return null;
             }
         });
 
-        if (orig == null) {
+        if (orig.isNull()) {
             ServerSideFactory.create(AuditFacade.class).created(pmcMerchantAccountIndex);
         } else {
             ServerSideFactory.create(AuditFacade.class).updated(pmcMerchantAccountIndex, EntityDiff.getChanges(orig, merchantAccount));

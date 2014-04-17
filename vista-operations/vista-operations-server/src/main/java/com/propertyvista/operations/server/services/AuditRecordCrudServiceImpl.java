@@ -68,7 +68,7 @@ public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Audit
                         return null;
                     }
                 });
-            } else {
+            } else if (!entity.pmc().isNull()) {
                 TaskRunner.runInTargetNamespace(entity.pmc(), new Callable<Void>() {
                     @Override
                     public Void call() {

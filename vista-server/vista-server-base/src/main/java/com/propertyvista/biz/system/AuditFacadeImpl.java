@@ -16,6 +16,7 @@ package com.propertyvista.biz.system;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -154,7 +155,7 @@ public class AuditFacadeImpl implements AuditFacade {
                     NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                     EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), record.namespace()));
-                    record.pmc().set(Persistence.service().retrieve(criteria));
+                    record.pmc().set(Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
                 }
 
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, RuntimeException>() {
