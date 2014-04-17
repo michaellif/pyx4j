@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.administration.tenantsecurity;
 
 import com.pyx4j.site.client.ui.IPane;
 
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 
 public interface TenantSecurityView extends IPane {
@@ -23,6 +24,7 @@ public interface TenantSecurityView extends IPane {
 
         void generatePortalSecurityCodes(PortalAccessSecutiryCodeReportType type);
 
+        void sendMail(EmailTemplateType emailType);
     }
 
     void setPresenter(Presenter presenter);

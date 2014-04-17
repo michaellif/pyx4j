@@ -22,14 +22,22 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ReportDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.administration.tenantsecurity.TenantSecurityView;
+import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
+import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class TenantSecurityViewerActivity extends AbstractActivity implements TenantSecurityView.Presenter {
@@ -59,13 +67,43 @@ public class TenantSecurityViewerActivity extends AbstractActivity implements Te
     }
 
     @Override
+    public void sendMail(EmailTemplateType emailType) {
+
+        @SuppressWarnings("rawtypes")
+        EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
+        criteria.eq(criteria.proto().leaseParticipant().customer().registeredInPortal(), false);
+        criteria.isNotNull(criteria.proto().leaseParticipant().customer().person().email());
+
+        GWT.<EmailToTenantsService> create(EmailToTenantsService.class).sendEmail(new DefaultAsyncCallback<String>() {
+
+            @Override
+            public void onSuccess(String result) {
+                showSendingDeferredProcess(result);
+            }
+
+        }, emailType, criteria);
+
+    }
+
+    private void showSendingDeferredProcess(String deferredCorrelationId) {
+        DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Processing"), i18n.tr("Preparing and sending E-mails..."), false) {
+            @Override
+            public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                super.onDeferredSuccess(result);
+                hide();
+                MessageDialog.info(result.getMessage());
+            }
+        };
+        d.show();
+        d.startProgress(deferredCorrelationId);
+    }
+
+    @Override
     public void populate() {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void refresh() {
-        // TODO Auto-generated method stub
     }
 
 }
