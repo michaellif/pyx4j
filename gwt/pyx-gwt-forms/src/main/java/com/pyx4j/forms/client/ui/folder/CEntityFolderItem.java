@@ -26,6 +26,7 @@ import java.util.Collection;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -55,7 +56,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private HandlerRegistration folderHandlerRegistration;
 
-    private CEntityForm<E> editor;
+    private CEntityForm<E> entityForm;
 
     private final Class<E> clazz;
 
@@ -73,27 +74,21 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
         actionsBar = new ItemActionsBar(removable);
 
-        addAction(ActionType.Remove, i18n.tr("Delete Item"), null, null);
-        addAction(ActionType.Up, i18n.tr("Move up"), null, null);
-        addAction(ActionType.Down, i18n.tr("Move down"), null, null);
-
-    }
-
-    protected abstract IFolderItemDecorator<E> createItemDecorator();
-
-    @Override
-    protected final IFolderItemDecorator<E> createDecorator() {
         IFolderItemDecorator<E> decorator = createItemDecorator();
 
         EntityFolderImages images = decorator.getImages();
 
-        setActionImage(ActionType.Remove, images.delButton());
-        setActionImage(ActionType.Up, images.moveUpButton());
-        setActionImage(ActionType.Down, images.moveDownButton());
+        addAction(ActionType.Remove, i18n.tr("Delete Item"), images.delButton(), null);
+        addAction(ActionType.Up, i18n.tr("Move up"), images.moveUpButton(), null);
+        addAction(ActionType.Down, i18n.tr("Move down"), images.moveDownButton(), null);
 
-        actionsBar.init(decorator);
-        return decorator;
+        setDecorator(decorator);
+
+        initActionBar();
+
     }
+
+    protected abstract IFolderItemDecorator<E> createItemDecorator();
 
     public boolean isFirst() {
         return first;
@@ -121,9 +116,9 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     protected IsWidget createContent() {
-        editor = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
-        adopt(editor);
-        return editor;
+        entityForm = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
+        adopt(entityForm);
+        return entityForm;
     }
 
     @Override
@@ -134,14 +129,15 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {
         actionsBar.addAction(action, title, images, command);
+        initActionBar();
+    }
+
+    private void initActionBar() {
+        actionsBar.init(getDecorator() instanceof BoxFolderItemDecorator ? Direction.RTL : Direction.LTR);
     }
 
     private void setActionCommand(ActionType type, Command command) {
         actionsBar.setActionCommand(type, command);
-    }
-
-    private void setActionImage(ActionType type, ButtonImages images) {
-        actionsBar.setActionImage(type, images);
     }
 
     public ItemActionsBar getItemActionsBar() {
@@ -218,15 +214,15 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     protected void setComponentsValue(E entity, boolean fireEvent, boolean populate) {
-        editor.setValue(entity, fireEvent, populate);
+        entityForm.setValue(entity, fireEvent, populate);
     }
 
     @Override
     public Collection<CComponent<?>> getComponents() {
-        if (editor == null) {
+        if (entityForm == null) {
             return null;
         }
-        return Arrays.asList(new CComponent<?>[] { editor });
+        return Arrays.asList(new CComponent<?>[] { entityForm });
     }
 
 }

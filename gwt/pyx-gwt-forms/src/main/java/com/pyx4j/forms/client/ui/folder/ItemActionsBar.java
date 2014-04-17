@@ -25,6 +25,7 @@ import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleNam
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.i18n.client.HasDirection.Direction;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
@@ -57,9 +58,9 @@ public class ItemActionsBar extends HorizontalPanel {
 
     }
 
-    public void init(IFolderItemDecorator<?> decorator) {
+    public void init(Direction direction) {
         clear();
-        if (decorator instanceof BoxFolderItemDecorator) {
+        if (direction == Direction.RTL) {
             for (int i = ActionType.values().length - 1; i >= 0; --i) {
                 placeAction(ActionType.values()[i]);
             }
@@ -85,11 +86,6 @@ public class ItemActionsBar extends HorizontalPanel {
     public void setActionCommand(ActionType type, Command command) {
         assert actions.containsKey(type) : "Command is not added";
         actions.get(type).setCommand(command);
-    }
-
-    public void setActionImage(ActionType type, ButtonImages images) {
-        assert actions.containsKey(type) : "Command is not added";
-        actions.get(type).setImages(images);
     }
 
     public void setSortingState(SortingState state) {
