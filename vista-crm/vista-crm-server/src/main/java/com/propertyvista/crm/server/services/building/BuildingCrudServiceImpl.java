@@ -30,6 +30,7 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -157,13 +158,23 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     protected boolean persist(Building bo, BuildingDTO to) {
 
         {
+            MerchantAccount origAccount = null;
+
             Persistence.service().retrieveMember(bo.merchantAccounts());
-            bo.merchantAccounts().clear();
-            if (!to.merchantAccount().isNull()) {
-                BuildingMerchantAccount bma = bo.merchantAccounts().$();
-                bma.merchantAccount().set(to.merchantAccount());
-                bo.merchantAccounts().add(bma);
+            if (!bo.merchantAccounts().isEmpty()) {
+                bo.merchantAccounts().iterator().next().merchantAccount();
             }
+
+            if (!to.merchantAccount().equals(origAccount)) {
+                bo.merchantAccounts().clear();
+                if (!to.merchantAccount().isNull()) {
+                    BuildingMerchantAccount bma = bo.merchantAccounts().$();
+                    bma.merchantAccount().set(to.merchantAccount());
+                    bo.merchantAccounts().add(bma);
+                }
+                ServerSideFactory.create(AuditFacade.class).updated(bo, "MerchantAccount assigned " + to.merchantAccount().getStringView());
+            }
+
         }
 
         saveGeotagging(bo, to);
