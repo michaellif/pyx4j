@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -73,7 +73,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
     }
 
     // builder specifically for this form (enlarge default label width)
-    protected class DecoratorBuilder extends WidgetDecorator.Builder {
+    protected class DecoratorBuilder extends FieldDecorator.Builder {
 
         public DecoratorBuilder() {
             super();

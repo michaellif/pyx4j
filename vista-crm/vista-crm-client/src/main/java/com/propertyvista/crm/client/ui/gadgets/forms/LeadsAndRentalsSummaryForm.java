@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
@@ -35,9 +35,9 @@ public class LeadsAndRentalsSummaryForm extends ZoomableViewForm<LeadsAndRentals
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().leads(), new FormDecoratorBuilder().componentWidth(15).build()));
-        content.setWidget(++row, 0, inject(proto().appointmentsLabel(), new FormDecoratorBuilder().componentWidth(15).build()));
-        content.setWidget(++row, 0, inject(proto().rentalsLabel(), new FormDecoratorBuilder().componentWidth(15).build()));
+        content.setWidget(++row, 0, inject(proto().leads(), new FieldDecoratorBuilder().componentWidth(15).build()));
+        content.setWidget(++row, 0, inject(proto().appointmentsLabel(), new FieldDecoratorBuilder().componentWidth(15).build()));
+        content.setWidget(++row, 0, inject(proto().rentalsLabel(), new FieldDecoratorBuilder().componentWidth(15).build()));
 
         return content;
     }

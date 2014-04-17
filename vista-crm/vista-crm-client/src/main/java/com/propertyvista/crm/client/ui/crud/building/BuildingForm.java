@@ -51,7 +51,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -328,7 +328,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalDate(), 9));
         flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalValue(), 10));
         flexPanel
-                .setWidget(row++, 1, inject(proto().financial().currency().name(), new FormDecoratorBuilder(10).customLabel(i18n.tr("Currency Name")).build()));
+                .setWidget(row++, 1, inject(proto().financial().currency().name(), new FieldDecoratorBuilder(10).customLabel(i18n.tr("Currency Name")).build()));
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
@@ -366,9 +366,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().caption(), new FormDecoratorBuilder(8, 15, 16).build()));
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder(8, 15, 16).build()));
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().visibility(), new FormDecoratorBuilder(8, 7, 16).build()));
+                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().caption(), new FieldDecoratorBuilder(8, 15, 16).build()));
+                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(8, 15, 16).build()));
+                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().visibility(), new FieldDecoratorBuilder(8, 7, 16).build()));
 
                 return main;
             }

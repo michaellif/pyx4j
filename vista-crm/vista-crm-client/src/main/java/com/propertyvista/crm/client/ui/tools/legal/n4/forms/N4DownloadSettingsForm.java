@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
@@ -49,7 +49,7 @@ public class N4DownloadSettingsForm extends CEntityForm<N4DownloadSettingsDTO> {
             }
         };
         generationsBox.setMandatory(true);
-        panel.setWidget(++row, 0, 2, inject(proto().selectedGeneration(), generationsBox, new FormDecoratorBuilder().componentWidth("300px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().selectedGeneration(), generationsBox, new FieldDecoratorBuilder().componentWidth("300px").build()));
 
         return panel;
     }

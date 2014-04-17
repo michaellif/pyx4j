@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
@@ -49,7 +49,7 @@ public class ScopeDialog extends OkCancelDialog {
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-                content.setWidget(++row, 0, inject(proto().scopingResult(), new FormDecoratorBuilder(10).build()));
+                content.setWidget(++row, 0, inject(proto().scopingResult(), new FieldDecoratorBuilder(10).build()));
                 get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ScopingResult> event) {
@@ -71,7 +71,7 @@ public class ScopeDialog extends OkCancelDialog {
                 }
                 combo.setOptions(options);
 
-                content.setWidget(++row, 0, inject(proto().renovationEndsOn(), new FormDecoratorBuilder(10).build()));
+                content.setWidget(++row, 0, inject(proto().renovationEndsOn(), new FieldDecoratorBuilder(10).build()));
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
@@ -83,7 +83,7 @@ public class ScopeDialog extends OkCancelDialog {
                         }
                     }
                 });
-                content.setWidget(++row, 0, inject(proto().offMarketType(), new FormDecoratorBuilder(10).build()));
+                content.setWidget(++row, 0, inject(proto().offMarketType(), new FieldDecoratorBuilder(10).build()));
                 get(proto().offMarketType()).setVisible(false);
 
                 return content;

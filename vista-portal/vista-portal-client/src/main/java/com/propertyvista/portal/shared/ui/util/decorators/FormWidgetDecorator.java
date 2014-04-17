@@ -13,17 +13,17 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
-public class FormWidgetDecorator extends WidgetDecorator {
+public class FormWidgetDecorator extends FieldDecorator {
 
-    private final FormWidgetDecoratorBuilder builder;
+    private final FieldDecoratorBuilder builder;
 
-    protected FormWidgetDecorator(FormWidgetDecoratorBuilder builder) {
+    protected FormWidgetDecorator(FieldDecoratorBuilder builder) {
         super(builder);
         this.builder = builder;
     }

@@ -29,7 +29,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
@@ -65,19 +65,19 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
             }
         });
 
-        panel.setWidget(++row, 0, inject(proto().unit().building(), buildingLabel, new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit(), new CEntityLabel<AptUnit>(), new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().building(), buildingLabel, new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit(), new CEntityLabel<AptUnit>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0,
-                inject(proto().leaseTerm().termFrom(), new CDateLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Lease From")).build()));
+                inject(proto().leaseTerm().termFrom(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease From")).build()));
         panel.setWidget(++row, 0,
-                inject(proto().leaseTerm().termTo(), new CDateLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
+                inject(proto().leaseTerm().termTo(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
 
         panel.setWidget(
                 ++row,
                 0,
-                inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>(), new FormWidgetDecoratorBuilder()
+                inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>(), new FieldDecoratorBuilder()
                         .customLabel(i18n.tr("Base Rent")).build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));

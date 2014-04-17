@@ -39,7 +39,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.AddressSimpleEditor;
 
 public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
@@ -64,7 +64,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, inject(proto().incomeSource(), new CEnumLabel(), new FormWidgetDecoratorBuilder(250).build()));
+        main.setWidget(++row, 0, inject(proto().incomeSource(), new CEnumLabel(), new FieldDecoratorBuilder(250).build()));
         main.setWidget(++row, 0, detailsHolder);
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload));
 
@@ -138,19 +138,19 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().employedForYears(), new FormWidgetDecoratorBuilder(60).build()));
+                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().employedForYears(), new FieldDecoratorBuilder(60).build()));
 
-                main.setWidget(++row, 0, inject(proto().supervisorName(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FormWidgetDecoratorBuilder(180).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorName(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(180).build()));
 
                 main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().ends(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().ends(), new FieldDecoratorBuilder(120).build()));
 
                 return main;
             }
@@ -179,18 +179,18 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FormWidgetDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(250).build()));
 
-                main.setWidget(++row, 0, inject(proto().supervisorName(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FormWidgetDecoratorBuilder(180).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorName(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(180).build()));
 
                 main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().ends(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().ends(), new FieldDecoratorBuilder(120).build()));
 
                 return main;
             }
@@ -210,20 +210,20 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FormWidgetDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(250).build()));
 
                 main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
                 main.setH3(++row, 0, 1, i18n.tr("Program Info"));
-                main.setWidget(++row, 0, inject(proto().program(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().fieldOfStudy(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().fundingChoices(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().program(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().fieldOfStudy(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().fundingChoices(), new FieldDecoratorBuilder(120).build()));
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().ends(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().ends(), new FieldDecoratorBuilder(120).build()));
 
-                main.setWidget(++row, 0, inject(proto().monthlyAmount(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().monthlyAmount(), new FieldDecoratorBuilder(120).build()));
 
                 return main;
             }
@@ -243,23 +243,23 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().employedForYears(), new FormWidgetDecoratorBuilder(60).build()));
+                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().employedForYears(), new FieldDecoratorBuilder(60).build()));
 
-                main.setWidget(++row, 0, inject(proto().supervisorName(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FormWidgetDecoratorBuilder(180).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorName(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(180).build()));
 
                 main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, inject(proto().fullyOwned(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().monthlyRevenue(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().numberOfEmployees(), new FormWidgetDecoratorBuilder(60).build()));
+                main.setWidget(++row, 0, inject(proto().fullyOwned(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().monthlyRevenue(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().numberOfEmployees(), new FieldDecoratorBuilder(60).build()));
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().ends(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().ends(), new FieldDecoratorBuilder(120).build()));
 
                 return main;
             }
@@ -279,17 +279,17 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().supervisorName(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FormWidgetDecoratorBuilder(180).build()));
+                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorName(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(180).build()));
 
                 main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
                 main.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, inject(proto().ends(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, inject(proto().ends(), new FieldDecoratorBuilder(120).build()));
 
                 return main;
             }
@@ -312,9 +312,9 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 CComponent<?> name, ends;
 
                 int row = -1;
-                main.setWidget(++row, 0, name = inject(proto().name(), new FormWidgetDecoratorBuilder(250).build()));
-                main.setWidget(++row, 0, inject(proto().monthlyAmount(), new FormWidgetDecoratorBuilder(120).build()));
-                main.setWidget(++row, 0, ends = inject(proto().ends(), new FormWidgetDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, name = inject(proto().name(), new FieldDecoratorBuilder(250).build()));
+                main.setWidget(++row, 0, inject(proto().monthlyAmount(), new FieldDecoratorBuilder(120).build()));
+                main.setWidget(++row, 0, ends = inject(proto().ends(), new FieldDecoratorBuilder(120).build()));
 
                 // some tune-up:
                 switch (incomeSource) {
@@ -342,8 +342,8 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
     private static int injectIEmploymentInfo(BasicFlexFormPanel main, int row, CEntityForm<? extends IEmploymentInfo> parent) {
         main.setH3(++row, 0, 1, i18n.tr("Employment Info"));
-        main.setWidget(++row, 0, parent.inject(parent.proto().monthlyAmount(), new FormWidgetDecoratorBuilder(120).build()));
-        main.setWidget(++row, 0, parent.inject(parent.proto().position(), new FormWidgetDecoratorBuilder(250).build()));
+        main.setWidget(++row, 0, parent.inject(parent.proto().monthlyAmount(), new FieldDecoratorBuilder(120).build()));
+        main.setWidget(++row, 0, parent.inject(parent.proto().position(), new FieldDecoratorBuilder(250).build()));
         return row;
     }
 }

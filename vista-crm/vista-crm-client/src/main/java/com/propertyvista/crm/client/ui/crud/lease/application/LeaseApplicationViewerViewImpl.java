@@ -36,7 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -498,7 +498,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         @Override
         protected IsWidget createContent() {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(0, 0, 2, inject(proto().selectParticipant(), selectCombo, new FormDecoratorBuilder().componentWidth("200px").build()));
+            panel.setWidget(0, 0, 2, inject(proto().selectParticipant(), selectCombo, new FieldDecoratorBuilder().componentWidth("200px").build()));
             return panel;
         }
 
@@ -552,9 +552,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     ++row,
                     0,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseApplicationDocument.class)), new FormDecoratorBuilder().componentWidth("200px")
+                            LeaseApplicationDocument.class)), new FieldDecoratorBuilder().componentWidth("200px")
                             .customLabel(i18n.tr("Agreement Document File")).build()));
-            panel.setWidget(++row, 0, inject(proto().signedBy(), signedByCombo, new FormDecoratorBuilder().componentWidth("200px").build()));
+            panel.setWidget(++row, 0, inject(proto().signedBy(), signedByCombo, new FieldDecoratorBuilder().componentWidth("200px").build()));
             return panel;
         }
 

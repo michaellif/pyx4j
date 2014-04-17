@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
@@ -76,7 +76,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         TwoColumnFlexFormPanel flowPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        flowPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FormDecoratorBuilder(22).build()));
+        flowPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FieldDecoratorBuilder(22).build()));
         ((CEntityLabel<ProductItem>) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -96,12 +96,12 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
             }
         });
 
-        flowPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FormDecoratorBuilder(10).build()));
-        flowPanel.setWidget(++row, 0, inject(proto().effectiveDate(), new FormDecoratorBuilder(9).build()));
-        flowPanel.setWidget(row, 1, inject(proto().expirationDate(), new FormDecoratorBuilder(9).build()));
-        flowPanel.setWidget(++row, 0, inject(proto().yardiChargeCode(), new FormDecoratorBuilder(10).build()));
+        flowPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FieldDecoratorBuilder(10).build()));
+        flowPanel.setWidget(++row, 0, inject(proto().effectiveDate(), new FieldDecoratorBuilder(9).build()));
+        flowPanel.setWidget(row, 1, inject(proto().expirationDate(), new FieldDecoratorBuilder(9).build()));
+        flowPanel.setWidget(++row, 0, inject(proto().yardiChargeCode(), new FieldDecoratorBuilder(10).build()));
 
-        flowPanel.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        flowPanel.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
 
         flowPanel.setWidget(++row, 0, 2, extraDataPanel);
 

@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
@@ -44,8 +44,8 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         int row1 = row0 + 1;
         main.setHR(++row0, 0, 2);
 
-        main.setWidget(++row0, 0, inject(proto().moveInDate(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(++row0, 0, inject(proto().moveOutDate(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row0, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(++row0, 0, inject(proto().moveOutDate(), new FieldDecoratorBuilder(10).build()));
 
         int col = 1;
 
@@ -57,14 +57,14 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
                 setVisibility(getValue());
             }
         });
-        rentedComponent.setDecorator(new FormDecoratorBuilder(15).build());
+        rentedComponent.setDecorator(new FieldDecoratorBuilder(15).build());
 
         main.setWidget(++row1, col, rentedComponent);
-        main.setWidget(++row1, col, inject(proto().payment(), new FormDecoratorBuilder(8).build()));
-        main.setWidget(++row1, col, inject(proto().propertyCompany(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row1, col, inject(proto().managerName(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row1, col, inject(proto().managerPhone(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row1, col, inject(proto().managerEmail(), new FormDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().payment(), new FieldDecoratorBuilder(8).build()));
+        main.setWidget(++row1, col, inject(proto().propertyCompany(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().managerName(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().managerPhone(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row1, col, inject(proto().managerEmail(), new FieldDecoratorBuilder(20).build()));
 
         return main;
     }

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -36,7 +36,7 @@ public class AvailabilityReportSettingsAdvancedForm extends CEntityForm<Availabi
     protected IsWidget createContent() {
         int row = -1;
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
         panel.setWidget(
                 ++row,
                 0,

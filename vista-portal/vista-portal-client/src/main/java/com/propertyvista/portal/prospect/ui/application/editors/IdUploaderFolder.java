@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -40,8 +39,8 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
+import com.propertyvista.portal.prospect.ui.application.AccessoryEntityForm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {
 
@@ -154,7 +153,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
         };
     }
 
-    private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocumentFolder> {
+    private class IdentificationDocumentEditor extends AccessoryEntityForm<IdentificationDocumentFolder> {
 
         public IdentificationDocumentEditor() {
             super(IdentificationDocumentFolder.class);
@@ -165,9 +164,9 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, inject(proto().idType(), new CEntityLabel<IdentificationDocumentType>(), new FormWidgetDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().idNumber(), new FormWidgetDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().notes(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().idType(), new CEntityLabel<IdentificationDocumentType>()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().idNumber()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().notes()));
 
             IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
             docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
@@ -181,8 +180,8 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                 }
             });
 
-            content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().files(), docPagesFolder));
+            content.setH3(++row, 0, 1, i18n.tr("Files"));
+            content.setWidget(++row, 0, 1, inject(proto().files(), docPagesFolder));
             return content;
         }
 

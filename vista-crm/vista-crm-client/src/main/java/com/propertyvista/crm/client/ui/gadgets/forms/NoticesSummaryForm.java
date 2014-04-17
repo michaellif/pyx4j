@@ -21,7 +21,7 @@ import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
@@ -44,7 +44,7 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
             panel.setWidget(
                     ++row,
                     0,
-                    inject(proto().vacantUnits(), new CLabel<Integer>(), new FormDecoratorBuilder().customLabel(i18n.tr("Units Vacant")).componentWidth(15)
+                    inject(proto().vacantUnits(), new CLabel<Integer>(), new FieldDecoratorBuilder().customLabel(i18n.tr("Units Vacant")).componentWidth(15)
                             .build()));
             ((CLabel<Integer>) get(proto().vacantUnits())).setFormat(new IFormat<Integer>() {
                 @Override
@@ -63,12 +63,12 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
         }
         panel.setH2(++row, 0, 1, i18n.tr("Notices Leaving:"));
         panel.setWidget(++row, 0,
-                inject(proto().noticesLeavingThisMonth(), new FormDecoratorBuilder().customLabel(i18n.tr("This Month")).componentWidth(5).build()));
+                inject(proto().noticesLeavingThisMonth(), new FieldDecoratorBuilder().customLabel(i18n.tr("This Month")).componentWidth(5).build()));
         panel.setWidget(++row, 0,
-                inject(proto().noticesLeavingNextMonth(), new FormDecoratorBuilder().customLabel(i18n.tr("Next Month")).componentWidth(5).build()));
+                inject(proto().noticesLeavingNextMonth(), new FieldDecoratorBuilder().customLabel(i18n.tr("Next Month")).componentWidth(5).build()));
         panel.setWidget(++row, 0,
-                inject(proto().noticesLeaving60to90Days(), new FormDecoratorBuilder().customLabel(i18n.tr("60 to 90 Days")).componentWidth(5).build()));
-        panel.setWidget(++row, 0, inject(proto().noticesLeavingOver90Days(), new FormDecoratorBuilder().customLabel(i18n.tr("90+")).componentWidth(5).build()));
+                inject(proto().noticesLeaving60to90Days(), new FieldDecoratorBuilder().customLabel(i18n.tr("60 to 90 Days")).componentWidth(5).build()));
+        panel.setWidget(++row, 0, inject(proto().noticesLeavingOver90Days(), new FieldDecoratorBuilder().customLabel(i18n.tr("90+")).componentWidth(5).build()));
         return panel;
 
     }

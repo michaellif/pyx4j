@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -107,7 +107,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, 2, inject(proto().code(), new FormDecoratorBuilder(20, true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().code(), new FieldDecoratorBuilder(20, true).build()));
                 get(proto().code()).setEditable(false);
 
                 content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());

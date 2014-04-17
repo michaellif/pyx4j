@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -49,7 +49,7 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
     }
 
     public AddressSimpleEditor(boolean oneColumn) {
-        this(oneColumn, FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
+        this(oneColumn, FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
     }
 
     public AddressSimpleEditor(boolean oneColumn, double labelWidth, double maxCompWidth, double contentWidth) {
@@ -113,7 +113,7 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
         });
     }
 
-    private FormDecoratorBuilder decorator(double compWidth) {
-        return new FormDecoratorBuilder(labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
+    private FieldDecoratorBuilder decorator(double compWidth) {
+        return new FieldDecoratorBuilder(labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }

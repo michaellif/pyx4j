@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
@@ -47,11 +47,11 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, inject(proto().latitude(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().latitudeType(), new FormDecoratorBuilder(6).customLabel("Latitude Direction").build()));
+        main.setWidget(++row, 0, inject(proto().latitude(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().latitudeType(), new FieldDecoratorBuilder(6).customLabel("Latitude Direction").build()));
 
-        main.setWidget(++row, 0, inject(proto().longitude(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().longitudeType(), new FormDecoratorBuilder(6).customLabel("Longitude Direction").build()));
+        main.setWidget(++row, 0, inject(proto().longitude(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().longitudeType(), new FieldDecoratorBuilder(6).customLabel("Longitude Direction").build()));
 
         return main;
     }

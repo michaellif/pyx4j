@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -32,10 +32,10 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        formPanel.setWidget(++row, 0, 2, inject(proto().accountNumber(), new FormDecoratorBuilder(20, true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().amount(), new FormDecoratorBuilder(20, true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().paymentReferenceNumber(), new FormDecoratorBuilder(20, true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().customerName(), new FormDecoratorBuilder(20, true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().accountNumber(), new FieldDecoratorBuilder(20, true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().amount(), new FieldDecoratorBuilder(20, true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().paymentReferenceNumber(), new FieldDecoratorBuilder(20, true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().customerName(), new FieldDecoratorBuilder(20, true).build()));
 
         CEntityLabel<DirectDebitSimFile> fileLink = new CEntityLabel<DirectDebitSimFile>();
         fileLink.setNavigationCommand(new Command() {
@@ -44,7 +44,7 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
                 onGoToFile();
             }
         });
-        formPanel.setWidget(++row, 0, 2, inject(proto().file(), fileLink, new FormDecoratorBuilder(true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().file(), fileLink, new FieldDecoratorBuilder(true).build()));
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel));

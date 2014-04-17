@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.PmcBusinessInformationDocumentFolder;
@@ -52,13 +52,13 @@ public class BusinessInformationForm extends CEntityForm<BusinessInformationDTO>
 
         TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
         int mrow = -1;
-        mainPanel.setWidget(++mrow, 0, inject(proto().companyName(), new FormDecoratorBuilder().build()));
-        mainPanel.setWidget(++mrow, 0, inject(proto().companyType(), new FormDecoratorBuilder().build()));
+        mainPanel.setWidget(++mrow, 0, inject(proto().companyName(), new FieldDecoratorBuilder().build()));
+        mainPanel.setWidget(++mrow, 0, inject(proto().companyType(), new FieldDecoratorBuilder().build()));
         mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
         mainPanel.setWidget(++mrow, 0, inject(proto().dto_businessAddress(), new AddressSimpleEditor()));
         mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
-        mainPanel.setWidget(++mrow, 0, inject(proto().businessNumber(), new FormDecoratorBuilder().build()));
-        mainPanel.setWidget(++mrow, 0, inject(proto().businessEstablishedDate(), new FormDecoratorBuilder().build()));
+        mainPanel.setWidget(++mrow, 0, inject(proto().businessNumber(), new FieldDecoratorBuilder().build()));
+        mainPanel.setWidget(++mrow, 0, inject(proto().businessEstablishedDate(), new FieldDecoratorBuilder().build()));
         contentPanel.setWidget(0, 0, mainPanel);
 
         TwoColumnFlexFormPanel documentsPanel = new TwoColumnFlexFormPanel();

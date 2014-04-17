@@ -43,7 +43,7 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -156,12 +156,12 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().paymentMethod().creationDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().paymentMethod().type(), new CEnumLabel(), new FormWidgetDecoratorBuilder(150).build()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod().creationDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod().type(), new CEnumLabel(), new FieldDecoratorBuilder(150).build()));
                 content.setWidget(++row, 0,
-                        inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FormWidgetDecoratorBuilder().build()));
+                        inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
                 content.setWidget(++row, 0,
-                        inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FormWidgetDecoratorBuilder().build()));
+                        inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FieldDecoratorBuilder().build()));
 
                 content.setWidget(++row, 0, new Anchor(i18n.tr("View Details"), new Command() {
                     @Override

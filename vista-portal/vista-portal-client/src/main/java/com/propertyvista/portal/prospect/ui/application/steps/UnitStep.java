@@ -49,7 +49,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.Bedroom
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class UnitStep extends ApplicationWizardStep {
 
@@ -91,11 +91,11 @@ public class UnitStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().unitSelection().building(), new CEntityLabel<Building>(), new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().moveIn(), new FormWidgetDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().bedrooms(), bedroomSelector, new FormWidgetDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().bathrooms(), bathroomSelector, new FormWidgetDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().selectedUnit(), selectedUnit, new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().moveIn(), new FieldDecoratorBuilder(120).build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().bedrooms(), bedroomSelector, new FieldDecoratorBuilder(120).build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().bathrooms(), bathroomSelector, new FieldDecoratorBuilder(120).build()));
+        panel.setWidget(++row, 0, inject(proto().unitSelection().selectedUnit(), selectedUnit, new FieldDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));
         availableUnitsHeader = panel.getWidget(row, 0);
@@ -262,13 +262,13 @@ public class UnitStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().number(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().floor(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().bedrooms(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().dens(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().bathrooms(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().available(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().price(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().number(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().floor(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().bedrooms(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().dens(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().bathrooms(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().available(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().price(), new FieldDecoratorBuilder().build()));
 
                 return mainPanel;
             }

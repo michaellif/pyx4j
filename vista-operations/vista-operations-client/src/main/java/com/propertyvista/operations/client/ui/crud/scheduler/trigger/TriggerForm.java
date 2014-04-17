@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -47,20 +47,20 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Details"));
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder().build()));
-        main.setWidget(row, 1, inject(proto().threads(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().triggerType(), new FormDecoratorBuilder().build()));
-        main.setWidget(row, 1, inject(proto().populationType(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));
+        main.setWidget(row, 1, inject(proto().threads(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().triggerType(), new FieldDecoratorBuilder().build()));
+        main.setWidget(row, 1, inject(proto().populationType(), new FieldDecoratorBuilder(10).build()));
 
         main.setWidget(++row, 0, 2, inject(proto().population(), new PopulationFolder(this)));
 
         main.setH2(++row, 0, 2, i18n.tr("Schedules"));
-        main.setWidget(++row, 0, inject(proto().scheduleSuspended(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().nextScheduledFireTime(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().scheduleSuspended(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().nextScheduledFireTime(), new FieldDecoratorBuilder(10).build()));
         main.setWidget(++row, 0, 2, inject(proto().schedules(), new TriggerScheduleFolder(isEditable())));
 
-        main.setWidget(++row, 0, inject(proto().sleepRetry(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().nextSleepRetryFireTime(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().sleepRetry(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().nextSleepRetryFireTime(), new FieldDecoratorBuilder(10).build()));
 
         main.setH2(++row, 0, 2, i18n.tr("Notifications"));
         main.setWidget(++row, 0, 2, inject(proto().notifications(), new NotificationFolder(isEditable())));

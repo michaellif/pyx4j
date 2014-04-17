@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -37,7 +37,7 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
         TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        general.setWidget(++row, 0, inject(proto().periodOfNotice(), new FormDecoratorBuilder(5).build()));
+        general.setWidget(++row, 0, inject(proto().periodOfNotice(), new FieldDecoratorBuilder(5).build()));
 
         return Arrays.asList(general);
     }

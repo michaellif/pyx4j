@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.svg.gwt.basic.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -235,8 +235,8 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
                 int row = -1;
-                p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
-                p.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
+                p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+                p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
                 get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -245,7 +245,7 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
                         }
                     }
                 });
-                p.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
+                p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
                 get(proto().asOf()).setVisible(false);
                 return p;
             }

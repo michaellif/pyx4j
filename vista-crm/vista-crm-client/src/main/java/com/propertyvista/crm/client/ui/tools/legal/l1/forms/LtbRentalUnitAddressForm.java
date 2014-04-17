@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
 
@@ -32,13 +32,13 @@ public class LtbRentalUnitAddressForm extends CEntityForm<LtbRentalUnitAddress> 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().streetNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().streetName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().streetType(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().direction(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().municipality(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().postalCode(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().streetNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().streetName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().streetType(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().direction(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().municipality(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
 
         return panel;
     }

@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewFolder;
@@ -67,10 +67,10 @@ public class CounterGadget extends CounterGadgetInstanceBase<CounterGadgetDemoDT
             @Override
             protected IsWidget createContent() {
                 FlowPanel content = new FlowPanel();
-                content.add(inject(proto().counterValue(), new FormDecoratorBuilder().build()));
-                content.add(inject(proto().strValue(), new FormDecoratorBuilder().build()));
-                content.add(inject(proto().doubleValue(), new FormDecoratorBuilder().build()));
-                content.add(inject(proto().moneyValue(), new FormDecoratorBuilder().build()));
+                content.add(inject(proto().counterValue(), new FieldDecoratorBuilder().build()));
+                content.add(inject(proto().strValue(), new FieldDecoratorBuilder().build()));
+                content.add(inject(proto().doubleValue(), new FieldDecoratorBuilder().build()));
+                content.add(inject(proto().moneyValue(), new FieldDecoratorBuilder().build()));
                 IZoomableRowEditorFactory<CounterGadgetDemoSubDataDTO> factory = new IZoomableRowEditorFactory<CounterGadgetDemoSubDataDTO>() {
                     @Override
                     public ZoomableViewEntityRowEditor<CounterGadgetDemoSubDataDTO> createEditor(ZoomableViewFolder<CounterGadgetDemoSubDataDTO> parent,

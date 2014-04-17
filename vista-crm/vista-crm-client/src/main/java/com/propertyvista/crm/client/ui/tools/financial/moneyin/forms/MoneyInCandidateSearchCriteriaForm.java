@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
@@ -32,7 +32,7 @@ import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
 public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateSearchCriteriaModel> {
 
-    private static class SearchCriteriaFormDecoratorBuilder extends FormDecoratorBuilder {
+    private static class SearchCriteriaFormDecoratorBuilder extends FieldDecoratorBuilder {
 
         public SearchCriteriaFormDecoratorBuilder() {
             super();

@@ -46,7 +46,7 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -210,13 +210,13 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, 2, inject(proto().subject(), new FormDecoratorBuilder(50, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().note(), new FormDecoratorBuilder(50, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().subject(), new FieldDecoratorBuilder(50, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().note(), new FieldDecoratorBuilder(50, true).build()));
 
-                    content.setWidget(++row, 0, inject(proto().created(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
-                    content.setWidget(row, 1, inject(proto().updated(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
+                    content.setWidget(++row, 0, inject(proto().created(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
+                    content.setWidget(row, 1, inject(proto().updated(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
 
-                    content.setWidget(++row, 0, inject(proto().user(), new CEntityLabel<CrmUser>(), new FormDecoratorBuilder(25).build()));
+                    content.setWidget(++row, 0, inject(proto().user(), new CEntityLabel<CrmUser>(), new FieldDecoratorBuilder(25).build()));
 
                     content.setH3(++row, 0, 2, i18n.tr("Attachments"));
                     content.setWidget(++row, 0, 2, inject(proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder()));
@@ -367,7 +367,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                         CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(NoteAttachmentUploadService.class), new VistaFileURLBuilder(
                                 NoteAttachment.class));
-                        content.setWidget(++row, 0, 2, inject(proto().file(), cfile, new FormDecoratorBuilder(40, true).build()));
+                        content.setWidget(++row, 0, 2, inject(proto().file(), cfile, new FieldDecoratorBuilder(40, true).build()));
 
                         return content;
                     }

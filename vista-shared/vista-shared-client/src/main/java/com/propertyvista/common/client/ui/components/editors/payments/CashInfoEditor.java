@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.payment.CashInfo;
 
@@ -32,9 +32,9 @@ public class CashInfoEditor extends CEntityForm<CashInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().receivedAmount(), new FormDecoratorBuilder(15).build()));
-        panel.setWidget(++row, 0, inject(proto().changeAmount(), new FormDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().notes(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().receivedAmount(), new FieldDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().changeAmount(), new FieldDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().notes(), new FieldDecoratorBuilder().build()));
 
         return panel;
     }

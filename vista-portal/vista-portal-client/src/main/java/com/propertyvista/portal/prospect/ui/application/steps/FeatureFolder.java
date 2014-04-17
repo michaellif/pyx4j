@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.prospect.ui.application.editors.PetDataEditor;
 import com.propertyvista.portal.prospect.ui.application.editors.VehicleDataEditor;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
@@ -100,9 +100,9 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, inject(proto().item().name(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().item().name(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
             content.setWidget(++row, 0, extraDataPanel);
             content.setWidget(++row, 0, depositPanel);
 

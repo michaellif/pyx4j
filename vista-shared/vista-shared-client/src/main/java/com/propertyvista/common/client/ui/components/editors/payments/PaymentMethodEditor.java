@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
@@ -82,13 +82,13 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().creationDate(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().creationDate(), new FieldDecoratorBuilder(10).build()));
 
         main.setWidget(++row, 0,
-                inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL), new FormDecoratorBuilder(22).build()));
+                inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL), new FieldDecoratorBuilder(22).build()));
         if (proto() instanceof PaymentMethod) {
-            main.setWidget(row, 1, inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
+            main.setWidget(row, 1, inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
         }
 
         main.setH3(++row, 0, 2, proto().details().getMeta().getCaption());
@@ -97,12 +97,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
         main.setH3(++row, 0, 2, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
-        main.setWidget(++row, 0, 2, inject(proto().sameAsCurrent(), new FormDecoratorBuilder(5, true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().sameAsCurrent(), new FieldDecoratorBuilder(5, true).build()));
         main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressSimpleEditor(false)));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 2);
-            main.setWidget(++row, 0, 2, inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments(), new FormDecoratorBuilder(5, true).build()));
+            main.setWidget(++row, 0, 2, inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments(), new FieldDecoratorBuilder(5, true).build()));
             get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(false);
         }
 

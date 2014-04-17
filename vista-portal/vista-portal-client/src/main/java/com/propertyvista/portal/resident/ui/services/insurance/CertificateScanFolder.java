@@ -28,7 +28,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateScan> {
 
@@ -61,8 +61,8 @@ public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateS
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanResidentUploadService.class), new VistaFileURLBuilder(
                     InsuranceCertificateScan.class));
 
-            content.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FormWidgetDecoratorBuilder().customLabel("").labelWidth("0px").build()));
-            content.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FieldDecoratorBuilder().customLabel("").labelWidth("0px").build()));
+            content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder().build()));
 
             return content;
         }

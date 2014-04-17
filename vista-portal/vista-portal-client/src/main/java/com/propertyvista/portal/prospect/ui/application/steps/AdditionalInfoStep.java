@@ -21,7 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.PriorAddressEditor;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 
 public class AdditionalInfoStep extends ApplicationWizardStep {
@@ -87,7 +87,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         // TODO currently removed, then rethink: 
         if (false && !SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
-            panel.setWidget(++row, 0, inject(proto().applicant().refSource(), new FormWidgetDecoratorBuilder(180).build()));
+            panel.setWidget(++row, 0, inject(proto().applicant().refSource(), new FieldDecoratorBuilder(180).build()));
         }
 
         return panel;
@@ -144,8 +144,8 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         }
 
         @Override
-        public WidgetDecorator build() {
-            WidgetDecorator decorator = super.build();
+        public FieldDecorator build() {
+            FieldDecorator decorator = super.build();
             decorator.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             return decorator;
         }

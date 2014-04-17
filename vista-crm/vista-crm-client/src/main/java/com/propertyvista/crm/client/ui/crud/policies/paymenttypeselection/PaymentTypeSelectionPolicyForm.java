@@ -18,13 +18,13 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -150,12 +150,12 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         return main;
     }
 
-    private WidgetDecorator decorator(String customLabel) {
-        return new FormDecoratorBuilder(lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
+    private FieldDecorator decorator(String customLabel) {
+        return new FieldDecoratorBuilder(lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
                 .componentAlignment(Alignment.center).customLabel(customLabel).build();
     }
 
-    private WidgetDecorator decorator() {
+    private FieldDecorator decorator() {
         return decorator(null);
     }
 }

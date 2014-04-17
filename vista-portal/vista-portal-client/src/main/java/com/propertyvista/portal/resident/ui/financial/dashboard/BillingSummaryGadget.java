@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -119,9 +119,9 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         @Override
         protected IsWidget createContent() {
 
-            mainPanel.setWidget(0, 0, inject(proto().currentBalance(), new FormWidgetDecoratorBuilder(140).build()));
+            mainPanel.setWidget(0, 0, inject(proto().currentBalance(), new FieldDecoratorBuilder(140).build()));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                mainPanel.setWidget(1, 0, inject(proto().dueDate(), new FormWidgetDecoratorBuilder(140).build()));
+                mainPanel.setWidget(1, 0, inject(proto().dueDate(), new FieldDecoratorBuilder(140).build()));
             }
 
             return mainPanel;

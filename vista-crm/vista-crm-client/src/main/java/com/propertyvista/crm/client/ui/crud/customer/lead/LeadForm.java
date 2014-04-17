@@ -34,7 +34,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -103,8 +103,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         flexPanel.setBR(++row, 0, 2);
 
-        flexPanel.setWidget(++row, 0, 2, inject(proto().refSource(), new FormDecoratorBuilder(15, true).build()));
-        flexPanel.setWidget(++row, 0, 2, inject(proto().comments(), new FormDecoratorBuilder(55, true).build()));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().refSource(), new FieldDecoratorBuilder(15, true).build()));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().comments(), new FieldDecoratorBuilder(55, true).build()));
 
         return flexPanel;
     }
@@ -113,18 +113,18 @@ public class LeadForm extends CrmEntityForm<Lead> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().leadId(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 0, inject(proto().leaseType(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 0, inject(proto().moveInDate(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 0, inject(proto().leaseTerm(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().leadId(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().leaseType(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().leaseTerm(), new FieldDecoratorBuilder(9).build()));
         if (isEditable()) {
-            main.setWidget(++row, 0, inject(proto().floorplan().building(), new CEntityLabel<Building>(), new FormDecoratorBuilder(20).build()));
+            main.setWidget(++row, 0, inject(proto().floorplan().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder(20).build()));
         } else {
             main.setWidget(
                     ++row,
                     0,
                     inject(proto().floorplan().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)),
-                            new FormDecoratorBuilder(20).build()));
+                            new FieldDecoratorBuilder(20).build()));
         }
         main.setWidget(++row, 0, inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
             @Override
@@ -136,30 +136,30 @@ public class LeadForm extends CrmEntityForm<Lead> {
             protected IShowable getSelectorDialog() {
                 return new FloorplanSelectorDialogDialog(getParentView());
             }
-        }, new FormDecoratorBuilder(20).build()));
+        }, new FieldDecoratorBuilder(20).build()));
 
-        main.setWidget(++row, 0, inject(proto().agent(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 0, inject(proto().createDate(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().agent(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().createDate(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(10).build()));
 
         if (isEditable()) {
-            main.setWidget(++row, 0, inject(proto().lease(), new CEntityLabel<Lease>(), new FormDecoratorBuilder(40).build()));
+            main.setWidget(++row, 0, inject(proto().lease(), new CEntityLabel<Lease>(), new FieldDecoratorBuilder(40).build()));
         } else {
             main.setWidget(
                     ++row,
                     0,
                     inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class)),
-                            new FormDecoratorBuilder(40).build()));
+                            new FieldDecoratorBuilder(40).build()));
             main.getFlexCellFormatter().setColSpan(row, 0, 2);
         }
 
         row = -1;
         main.setH4(++row, 1, 1, i18n.tr("Preferred Appointment Times") + ":");
-        main.setWidget(++row, 1, inject(proto().appointmentDate1(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 1, inject(proto().appointmentTime1(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().appointmentDate1(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().appointmentTime1(), new FieldDecoratorBuilder(9).build()));
         main.setBR(++row, 1, 1);
-        main.setWidget(++row, 1, inject(proto().appointmentDate2(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 1, inject(proto().appointmentTime2(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().appointmentDate2(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().appointmentTime2(), new FieldDecoratorBuilder(9).build()));
 
         get(proto().status()).setEditable(false);
         get(proto().createDate()).setEditable(false);

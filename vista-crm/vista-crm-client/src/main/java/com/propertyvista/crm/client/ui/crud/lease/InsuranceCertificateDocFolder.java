@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -62,8 +62,8 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
                     ++row,
                     0,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanCrmUploadService.class), new VistaFileURLBuilder(
-                            InsuranceCertificateScan.class)), new FormDecoratorBuilder().componentWidth("250px").build()));
-            content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder().componentWidth("300px").build()));
+                            InsuranceCertificateScan.class)), new FieldDecoratorBuilder().componentWidth("250px").build()));
+            content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder().componentWidth("300px").build()));
             return content;
         }
     }

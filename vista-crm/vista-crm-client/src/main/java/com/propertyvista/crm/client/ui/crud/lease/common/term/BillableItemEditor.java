@@ -42,7 +42,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -129,13 +129,13 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                 };
 
             }
-        }, new FormDecoratorBuilder(20).build()));
+        }, new FieldDecoratorBuilder(20).build()));
 
-        flexPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FormDecoratorBuilder(10).build()));
-        flexPanel.setWidget(++row, 0, itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate(), new FormDecoratorBuilder(9).build()));
-        flexPanel.setWidget(row, 1, itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate(), new FormDecoratorBuilder(9).build()));
+        flexPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FieldDecoratorBuilder(10).build()));
+        flexPanel.setWidget(++row, 0, itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate(), new FieldDecoratorBuilder(9).build()));
+        flexPanel.setWidget(row, 1, itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate(), new FieldDecoratorBuilder(9).build()));
 
-        flexPanel.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
         flexPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         flexPanel.setWidget(++row, 0, 2, extraDataPanel);

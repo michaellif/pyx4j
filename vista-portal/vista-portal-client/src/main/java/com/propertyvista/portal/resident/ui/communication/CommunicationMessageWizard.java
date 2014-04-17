@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CommunicationMessageWizard extends CPortalEntityWizard<CommunicationMessageDTO> {
 
@@ -45,8 +45,8 @@ public class CommunicationMessageWizard extends CPortalEntityWizard<Communicatio
         int row = -1;
 
         content.setH1(++row, 0, 1, "Details");
-        content.setWidget(++row, 0, inject(proto().subject(), new FormWidgetDecoratorBuilder(250).build()));
-        content.setWidget(++row, 0, inject(proto().text(), new FormWidgetDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(250).build()));
         content.setBR(++row, 0, 1);
         content.setH1(++row, 0, 1, "Attachments");
         content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));

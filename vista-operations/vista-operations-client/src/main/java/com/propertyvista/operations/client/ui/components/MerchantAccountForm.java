@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberStringValidator;
 import com.propertyvista.common.client.ui.validators.EcheckBankIdValidator;
@@ -37,13 +37,13 @@ public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
-        panel.setWidget(row, 1, inject(proto().bankId(), new FormDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().bankId(), new FieldDecoratorBuilder(5).build()));
 
-        panel.setWidget(++row, 0, inject(proto().accountNumber(), new FormDecoratorBuilder(15).build()));
-        panel.setWidget(row, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().accountNumber(), new FieldDecoratorBuilder(15).build()));
+        panel.setWidget(row, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(5).build()));
 
-        panel.setWidget(++row, 0, 2, inject(proto().chargeDescription(), new FormDecoratorBuilder(true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().chargeDescription(), new FieldDecoratorBuilder(true).build()));
 
         return panel;
     }

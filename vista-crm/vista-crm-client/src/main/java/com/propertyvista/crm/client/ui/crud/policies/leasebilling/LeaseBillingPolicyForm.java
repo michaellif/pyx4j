@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -97,8 +97,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, inject(proto().prorationMethod(), new FormDecoratorBuilder(10, true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().confirmationMethod(), new FormDecoratorBuilder(10, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().prorationMethod(), new FieldDecoratorBuilder(10, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().confirmationMethod(), new FieldDecoratorBuilder(10, true).build()));
 
         panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
         panel.setWidget(++row, 0, 2, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
@@ -115,7 +115,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Late Fee"));
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().lateFee().baseFeeType(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 0, inject(proto().lateFee().baseFeeType(), new FieldDecoratorBuilder(10).build()));
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.BaseFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
@@ -125,7 +125,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         panel.setWidget(++row, 0, baseFeeHolder);
 
         row = -1;
-        panel.setWidget(++row, 1, inject(proto().lateFee().maxTotalFeeType(), new FormDecoratorBuilder(10).build()));
+        panel.setWidget(++row, 1, inject(proto().lateFee().maxTotalFeeType(), new FieldDecoratorBuilder(10).build()));
         get(proto().lateFee().maxTotalFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.MaxTotalFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<MaxTotalFeeType> event) {
@@ -173,7 +173,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         unbind(proto().lateFee().baseFee());
 
         if (comp != null) {
-            baseFeeHolder.setWidget(inject(proto().lateFee().baseFee(), comp, new FormDecoratorBuilder(6).build()));
+            baseFeeHolder.setWidget(inject(proto().lateFee().baseFee(), comp, new FieldDecoratorBuilder(6).build()));
 
             if (repopulatevalue) {
                 get(proto().lateFee().baseFee()).populate(getValue().lateFee().baseFee().getValue(BigDecimal.ZERO));
@@ -201,7 +201,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         unbind(proto().lateFee().maxTotalFee());
 
         if (comp != null) {
-            maxFeeHolder.setWidget(inject(proto().lateFee().maxTotalFee(), comp, new FormDecoratorBuilder(6).build()));
+            maxFeeHolder.setWidget(inject(proto().lateFee().maxTotalFee(), comp, new FieldDecoratorBuilder(6).build()));
 
             if (repopulatevalue) {
                 get(proto().lateFee().maxTotalFee()).populate(getValue().lateFee().maxTotalFee().getValue(BigDecimal.ZERO));
@@ -325,13 +325,13 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-                content.setWidget(++row, 0, inject(proto().billingPeriod(), new CLabel<BillingPeriod>(), new FormDecoratorBuilder(15).labelWidth(20).build()));
+                content.setWidget(++row, 0, inject(proto().billingPeriod(), new CLabel<BillingPeriod>(), new FieldDecoratorBuilder(15).labelWidth(20).build()));
 
-                content.setWidget(++row, 0, inject(proto().billingCycleStartDay(), startDay, new FormDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().paymentDueDayOffset(), dueDayOffset, new FormDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().finalDueDayOffset(), finalDueDayOffset, new FormDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().billExecutionDayOffset(), billDayOffset, new FormDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().autopayExecutionDayOffset(), padExecDayOffset, new FormDecoratorBuilder(15).labelWidth(20).build()));
+                content.setWidget(++row, 0, inject(proto().billingCycleStartDay(), startDay, new FieldDecoratorBuilder(15).labelWidth(20).build()));
+                content.setWidget(++row, 0, inject(proto().paymentDueDayOffset(), dueDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
+                content.setWidget(++row, 0, inject(proto().finalDueDayOffset(), finalDueDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
+                content.setWidget(++row, 0, inject(proto().billExecutionDayOffset(), billDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
+                content.setWidget(++row, 0, inject(proto().autopayExecutionDayOffset(), padExecDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
                     get(proto().finalDueDayOffset()).setVisible(false);

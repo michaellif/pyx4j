@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
@@ -155,9 +155,9 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, inject(proto().idType(), new FormDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().idNumber(), new FormDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().notes(), new FormDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().idType(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().idNumber(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().notes(), new FieldDecoratorBuilder().build()));
 
             IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
             docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {

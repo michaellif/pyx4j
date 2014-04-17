@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 
@@ -34,9 +34,9 @@ public class LegalTermsPolicyItemForm extends CEntityForm<LegalTermsPolicyItem> 
 
         int row = -1;
 
-        content.setWidget(++row, 0, 2, inject(proto().enabled(), new FormDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().caption(), new FormDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().content(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().enabled(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().caption(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().content(), new FieldDecoratorBuilder(true).build()));
 
         return content;
     }

@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmat
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplicationConfirmationTerm> {
 
@@ -75,7 +75,7 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplica
             mainPanel.setWidget(
                     ++row,
                     0,
-                    inject(proto().signature(), new FormWidgetDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px")
+                    inject(proto().signature(), new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px")
                             .componentWidth("250px").build()));
 
             return mainPanel;

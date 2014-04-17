@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
 
@@ -55,9 +55,9 @@ public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FormWidgetDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().agreedPrice(), new CLabel<BigDecimal>(), new FormWidgetDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FieldDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().agreedPrice(), new CLabel<BigDecimal>(), new FieldDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
             return mainPanel;
         }

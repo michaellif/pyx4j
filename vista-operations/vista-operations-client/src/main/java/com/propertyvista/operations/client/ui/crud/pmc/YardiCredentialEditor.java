@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
 import com.propertyvista.domain.security.PasswordIdentity;
@@ -52,20 +52,20 @@ class YardiCredentialEditor extends CEntityForm<PmcYardiCredential> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
-        content.setWidget(++row, 0, 2, inject(proto().serviceURLBase(), new FormDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().residentTransactionsServiceURL(), new FormDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().sysBatchServiceURL(), new FormDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maintenanceRequestsServiceURL(), new FormDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().propertyListCodes(), new FormDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().serviceURLBase(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().residentTransactionsServiceURL(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().sysBatchServiceURL(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maintenanceRequestsServiceURL(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().propertyListCodes(), new FieldDecoratorBuilder(true).build()));
 
-        content.setWidget(++row, 0, 2, inject(proto().username(), new FormDecoratorBuilder(30, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().username(), new FieldDecoratorBuilder(30, true).build()));
 
         CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         password.setFormat(new PasswordIdentityFormat(password));
-        content.setWidget(++row, 0, 2, inject(proto().password(), password, new FormDecoratorBuilder(30, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().serverName(), new FormDecoratorBuilder(30, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().database(), new FormDecoratorBuilder(30, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().platform(), new FormDecoratorBuilder(15, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().password(), password, new FieldDecoratorBuilder(30, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().serverName(), new FieldDecoratorBuilder(30, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().database(), new FieldDecoratorBuilder(30, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().platform(), new FieldDecoratorBuilder(15, true).build()));
 
         return content;
     }

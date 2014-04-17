@@ -40,7 +40,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
 
 public class PeopleStep extends ApplicationWizardStep {
@@ -104,10 +104,10 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().email(), new FormWidgetDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder().build()));
 
                 return mainPanel;
             }
@@ -186,10 +186,10 @@ public class PeopleStep extends ApplicationWizardStep {
                 BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
                 int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FormWidgetDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().birthDate(), new FormWidgetDecoratorBuilder(150).build()));
+                mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
+                mainPanel.setWidget(++row, 0, inject(proto().birthDate(), new FieldDecoratorBuilder(150).build()));
 
                 return mainPanel;
             }

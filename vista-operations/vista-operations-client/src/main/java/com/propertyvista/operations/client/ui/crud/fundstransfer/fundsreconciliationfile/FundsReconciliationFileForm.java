@@ -17,7 +17,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
 import com.pyx4j.site.rpc.AppPlace;
@@ -36,11 +36,11 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, inject(proto().fileName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().fundsTransferType(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().created(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().remoteFileDate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().fileNameDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().fileName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().fundsTransferType(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().remoteFileDate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().fileNameDate(), new FieldDecoratorBuilder().build()));
 
         // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
         AppPlaceBuilder<IList<FundsReconciliationRecordRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<FundsReconciliationRecordRecord>>() {
@@ -54,7 +54,7 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
             }
         };
 
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordsCount(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordsCount(), new FieldDecoratorBuilder().build()));
 
         panel.setBR(++row, 0, 1);
 

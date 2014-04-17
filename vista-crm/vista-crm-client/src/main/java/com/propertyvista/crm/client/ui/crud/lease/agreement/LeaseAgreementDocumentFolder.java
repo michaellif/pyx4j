@@ -29,14 +29,14 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -123,7 +123,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                     2,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class), new VistaFileURLBuilder(
                             LeaseTermAgreementDocument.class)),
-                            new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Agreement Document File")).componentWidth("350px")
+                            new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Agreement Document File")).componentWidth("350px")
                                     .build()));
 
             if (viewOnly) {
@@ -132,7 +132,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                         0,
                         2,
                         inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer(),
-                                new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants")).componentWidth("350px")
+                                new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants")).componentWidth("350px")
                                         .build()));
             } else {
                 panel.setWidget(
@@ -144,7 +144,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                             public String getItemName(LeaseTermParticipant<?> pariticipant) {
                                 return formatParticipant(pariticipant);
                             }
-                        }, new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participant")).componentWidth("350px")
+                        }, new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participant")).componentWidth("350px")
                                 .build()));
             }
             panel.setWidget(
@@ -152,7 +152,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                     0,
                     2,
                     inject(proto().signedEmployeeUploader().name(),
-                            new FormDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Employee / Uploader"))
+                            new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Employee / Uploader"))
                                     .componentWidth("350px").build()));
             get(proto().signedEmployeeUploader().name()).setViewable(true);
             return panel;

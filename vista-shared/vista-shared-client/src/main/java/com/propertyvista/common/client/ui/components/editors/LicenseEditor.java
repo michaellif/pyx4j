@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.property.vendor.License;
 
@@ -32,11 +32,11 @@ public class LicenseEditor extends CEntityForm<License> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().number(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().number(), new FieldDecoratorBuilder(15).build()));
 
         row = -1;
-        main.setWidget(++row, 1, inject(proto().expiration(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 1, inject(proto().renewal(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().expiration(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().renewal(), new FieldDecoratorBuilder(9).build()));
 
         return main;
     }

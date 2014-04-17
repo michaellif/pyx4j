@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -143,22 +143,22 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Approval"));
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().status(), new CEnumLabel(), new FormDecoratorBuilder(15, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decidedBy(), new FormDecoratorBuilder(25, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decisionDate(), new FormDecoratorBuilder(10, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decisionReason(), new FormDecoratorBuilder(50, true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().status(), new CEnumLabel(), new FieldDecoratorBuilder(15, true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decidedBy(), new FieldDecoratorBuilder(25, true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decisionDate(), new FieldDecoratorBuilder(10, true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decisionReason(), new FieldDecoratorBuilder(50, true).build()));
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             main.setBR(++row, 0, 2);
 
             main.setH1(++row, 0, 2, i18n.tr("Credit Check"));
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().percenrtageApproved(), new FormDecoratorBuilder(5, true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().totalAmountApproved(), new FormDecoratorBuilder(10, true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().rentAmount(), new FormDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().percenrtageApproved(), new FieldDecoratorBuilder(5, true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().totalAmountApproved(), new FieldDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().rentAmount(), new FieldDecoratorBuilder(10, true).build()));
 
             main.setBR(++row, 0, 2);
 
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().suggestedDecision(), new FormDecoratorBuilder(50, true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().suggestedDecision(), new FieldDecoratorBuilder(50, true).build()));
         }
 
         main.setBR(++row, 0, 2);
@@ -173,8 +173,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Online Status Details"));
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().onlineApplication().status(), new FormDecoratorBuilder(20, 15, 20).build()));
-        main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().progress(), new FormDecoratorBuilder(20, 5, 20).build()));
+        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().onlineApplication().status(), new FieldDecoratorBuilder(20, 15, 20).build()));
+        main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().progress(), new FieldDecoratorBuilder(20, 5, 20).build()));
 
         main.setBR(++row, 0, 2);
         main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));

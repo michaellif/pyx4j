@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication;
 
@@ -35,20 +35,20 @@ public class L1ReasonForApplicationForm extends CEntityForm<L1ReasonForApplicati
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = 0;
-        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectCharges(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectNsf(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectCharges(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectNsf(), new FieldDecoratorBuilder().build()));
         panel.setWidget(
                 ++row,
                 0,
                 1,
                 inject(proto().isTenatStillInPossesionOfTheUnit(),
-                        new FormDecoratorBuilder()
+                        new FieldDecoratorBuilder()
                                 .customLabel(
                                         i18n.tr("Is the tenant still in possession of the rental unit on the date this application is filed with the Board?"))
                                 .componentWidth("100px").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().rentPaymentPeriod(), new FormDecoratorBuilder().componentWidth("100px").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().rentPaymentPeriod(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         panel.setWidget(row, 1, 1,
-                inject(proto().otherRentPaymentPeriodDescription(), new FormDecoratorBuilder().componentWidth("100px").contentWidth("100px").build()));
+                inject(proto().otherRentPaymentPeriodDescription(), new FieldDecoratorBuilder().componentWidth("100px").contentWidth("100px").build()));
         panel.setWidget(++row, 0, 1, new HTML("&nbsp;"));
 
         panel.setH2(++row, 0, 2, i18n.tr("Deposit"));
@@ -57,18 +57,18 @@ public class L1ReasonForApplicationForm extends CEntityForm<L1ReasonForApplicati
                 0,
                 1,
                 inject(proto().amountOfRentOnDeposit(),
-                        new FormDecoratorBuilder().customLabel(i18n.tr("The amount of rent currently on deposit")).labelWidth("25em").build()));
+                        new FieldDecoratorBuilder().customLabel(i18n.tr("The amount of rent currently on deposit")).labelWidth("25em").build()));
         panel.setWidget(
                 ++row,
                 0,
                 1,
-                inject(proto().dateOfDepositCollection(), new FormDecoratorBuilder().customLabel(i18n.tr("The date the rent deposit was collected"))
+                inject(proto().dateOfDepositCollection(), new FieldDecoratorBuilder().customLabel(i18n.tr("The date the rent deposit was collected"))
                         .labelWidth("25em").build()));
         panel.setH3(++row, 0, 2, i18n.tr("The last period for which interest on the rent deposit was paid:"));
         panel.setWidget(++row, 0, 1,
-                inject(proto().lastPeriodInterestPaidFrom(), new FormDecoratorBuilder().customLabel(i18n.tr("From")).componentWidth("150px").build()));
+                inject(proto().lastPeriodInterestPaidFrom(), new FieldDecoratorBuilder().customLabel(i18n.tr("From")).componentWidth("150px").build()));
         panel.setWidget(++row, 0, 1,
-                inject(proto().lastPeriodInterestPaidTo(), new FormDecoratorBuilder().customLabel(i18n.tr("To")).componentWidth("150px").build()));
+                inject(proto().lastPeriodInterestPaidTo(), new FieldDecoratorBuilder().customLabel(i18n.tr("To")).componentWidth("150px").build()));
         return panel;
     }
 }

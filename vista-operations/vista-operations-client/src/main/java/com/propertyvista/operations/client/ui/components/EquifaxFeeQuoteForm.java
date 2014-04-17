@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 
@@ -34,10 +34,10 @@ public class EquifaxFeeQuoteForm extends CEntityForm<AbstractEquifaxFee> {
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().recommendationReportSetUpFee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(row, 1, inject(proto().fullCreditReportSetUpFee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().recommendationReportPerApplicantFee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(row, 1, inject(proto().fullCreditReportPerApplicantFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().recommendationReportSetUpFee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().fullCreditReportSetUpFee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().recommendationReportPerApplicantFee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(row, 1, inject(proto().fullCreditReportPerApplicantFee(), new FieldDecoratorBuilder().build()));
 
         if (makeMandatory) {
             get(proto().recommendationReportSetUpFee()).setMandatory(true);

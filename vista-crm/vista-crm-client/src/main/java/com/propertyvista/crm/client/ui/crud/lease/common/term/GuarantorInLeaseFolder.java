@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -141,7 +141,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         protected IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().participantId(), new FormDecoratorBuilder(7).build()));
+            main.setWidget(++row, 0, inject(proto().leaseParticipant().participantId(), new FieldDecoratorBuilder(7).build()));
             main.setWidget(++row, 0, 2,
                     inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class, false) {
                         @Override
@@ -149,33 +149,33 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                             return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                         }
                     }));
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().sex(), new FormDecoratorBuilder(7).build()));
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().birthDate(), new FormDecoratorBuilder(9).build()));
+            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().sex(), new FieldDecoratorBuilder(7).build()));
+            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().birthDate(), new FieldDecoratorBuilder(9).build()));
             if (isEditable()) {
-                main.setWidget(++row, 0, inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>(), new FormDecoratorBuilder(25).build()));
+                main.setWidget(++row, 0, inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>(), new FieldDecoratorBuilder(25).build()));
             } else {
                 main.setWidget(
                         ++row,
                         0,
                         inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)),
-                                new FormDecoratorBuilder().build()));
+                                new FieldDecoratorBuilder().build()));
             }
 
-            main.setWidget(++row, 0, inject(proto().relationship(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder(15).build()));
             main.setWidget(
                     ++row,
                     0,
                     inject(proto().effectiveScreening(),
                             new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
-                            new FormDecoratorBuilder(9).build()));
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().email(), new FormDecoratorBuilder(25).build()));
+                            new FieldDecoratorBuilder(9).build()));
+            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().email(), new FieldDecoratorBuilder(25).build()));
 
             row = -1;
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().yardiApplicantId(), new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 1, inject(proto().leaseParticipant().yardiApplicantId(), new FieldDecoratorBuilder(10).build()));
             main.setBR(++row, 1, 1);
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().homePhone(), new FormDecoratorBuilder(15).build()));
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().mobilePhone(), new FormDecoratorBuilder(15).build()));
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().workPhone(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().homePhone(), new FieldDecoratorBuilder(15).build()));
+            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().mobilePhone(), new FieldDecoratorBuilder(15).build()));
+            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().workPhone(), new FieldDecoratorBuilder(15).build()));
 
             return main;
         }

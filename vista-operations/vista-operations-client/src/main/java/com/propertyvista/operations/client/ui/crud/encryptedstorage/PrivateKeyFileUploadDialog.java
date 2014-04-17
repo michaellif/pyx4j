@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.UploadPanel;
@@ -56,7 +56,7 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, 
 
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
-                main.setWidget(++row, 0, inject(proto().password(), new WidgetDecorator.Builder().componentWidth(10).build()));
+                main.setWidget(++row, 0, inject(proto().password(), new FieldDecorator.Builder().componentWidth(10).build()));
                 return main;
             }
         };

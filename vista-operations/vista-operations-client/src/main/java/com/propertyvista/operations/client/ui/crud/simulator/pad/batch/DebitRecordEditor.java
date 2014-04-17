@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -31,26 +31,26 @@ public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().amount(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().clientId(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().transactionId(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().clientId(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().transactionId(), new FieldDecoratorBuilder(10).build()));
         content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().reconciliationStatus(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().reasonCode(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().fee(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().reconciliationStatus(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().reasonCode(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().fee(), new FieldDecoratorBuilder(10).build()));
 
         row = -1;
-        content.setWidget(++row, 1, inject(proto().bankId(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 1, inject(proto().accountNumber(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 1, inject(proto().bankId(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder(10).build()));
         ++row;
         ++row;
-        content.setWidget(++row, 1, inject(proto().paymentDate(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 1, inject(proto().reasonText(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 1, inject(proto().paymentDate(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 1, inject(proto().reasonText(), new FieldDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder().build()));
 
         selectTab(addTab(content));
     }

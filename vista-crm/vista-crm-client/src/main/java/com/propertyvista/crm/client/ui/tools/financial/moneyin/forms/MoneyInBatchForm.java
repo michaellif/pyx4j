@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -103,19 +103,19 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
     private Widget createGeneralTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 1, inject(proto().building(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().totalReceivedAmount(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().numberOfReceipts(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().postingStatus(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().building(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().totalReceivedAmount(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().numberOfReceipts(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().postingStatus(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FieldDecoratorBuilder().build()));
 
         row = -1;
-        panel.setWidget(++row, 1, 1, inject(proto().depositSlipNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().depositDate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankAccountName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankId(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankTransitNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankAccountNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().depositSlipNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().depositDate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankAccountName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankId(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankTransitNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 1, 1, inject(proto().bankAccountNumber(), new FieldDecoratorBuilder().build()));
 
         ++row;
         panel.setH2(++row, 0, 2, i18n.tr("Payments"));

@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -166,10 +166,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     int row = -1;
-                    main.setWidget(++row, 0, inject(proto().scheduledDate(), new FormDecoratorBuilder(10).build()));
-                    main.setWidget(++row, 0, inject(proto().scheduledTimeFrom(), new FormDecoratorBuilder(10).build()));
-                    main.setWidget(++row, 0, inject(proto().scheduledTimeTo(), new FormDecoratorBuilder(10).build()));
-                    main.setWidget(++row, 0, inject(proto().workDescription(), new FormDecoratorBuilder(25).build()));
+                    main.setWidget(++row, 0, inject(proto().scheduledDate(), new FieldDecoratorBuilder(10).build()));
+                    main.setWidget(++row, 0, inject(proto().scheduledTimeFrom(), new FieldDecoratorBuilder(10).build()));
+                    main.setWidget(++row, 0, inject(proto().scheduledTimeTo(), new FieldDecoratorBuilder(10).build()));
+                    main.setWidget(++row, 0, inject(proto().workDescription(), new FieldDecoratorBuilder(25).build()));
 
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
 
@@ -220,8 +220,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0, inject(proto().resolvedDate(), new FormDecoratorBuilder(10).build()));
-                    main.setWidget(1, 0, inject(proto().resolution(), new FormDecoratorBuilder(25).build()));
+                    main.setWidget(0, 0, inject(proto().resolvedDate(), new FieldDecoratorBuilder(10).build()));
+                    main.setWidget(1, 0, inject(proto().resolution(), new FieldDecoratorBuilder(25).build()));
 
                     CComponent<LogicalDate> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);
@@ -278,8 +278,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0, inject(proto().rating(), new FormDecoratorBuilder(3).build()));
-                    main.setWidget(1, 0, inject(proto().description(), new FormDecoratorBuilder(20).build()));
+                    main.setWidget(0, 0, inject(proto().rating(), new FieldDecoratorBuilder(3).build()));
+                    main.setWidget(1, 0, inject(proto().description(), new FieldDecoratorBuilder(20).build()));
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));

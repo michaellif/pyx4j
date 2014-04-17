@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -48,17 +48,17 @@ public class LegalStatusN4Form extends CEntityForm<LegalStatusN4DTO> {
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().status(), new FormDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().status(), new FieldDecoratorBuilder().componentWidth("200px").build()));
         get(proto().status()).setEditable(false);
 
-        panel.setWidget(++row, 0, 2, inject(proto().expiryDate(), new FormDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().expiry(), new FormDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().cancellationThreshold(), new FormDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().terminationDate(), new FormDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().expiryDate(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().expiry(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().cancellationThreshold(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().terminationDate(), new FieldDecoratorBuilder().componentWidth("200px").build()));
 
-        panel.setWidget(++row, 0, 2, inject(proto().setOn(), new FormDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().setBy().name(), new FormDecoratorBuilder().customLabel(i18n.tr("Set By")).componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().details(), new FormDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().setOn(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().setBy().name(), new FieldDecoratorBuilder().customLabel(i18n.tr("Set By")).componentWidth("200px").build()));
+        panel.setWidget(++row, 0, 2, inject(proto().details(), new FieldDecoratorBuilder().componentWidth("200px").build()));
 
         panel.setH2(++row, 0, 2, i18n.tr("Attached Letters"));
         if (uploadable) {
@@ -117,8 +117,8 @@ public class LegalStatusN4Form extends CEntityForm<LegalStatusN4DTO> {
                     0,
                     2,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class), new VistaFileURLBuilder(
-                            LegalLetter.class)), new FormDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().notes(), new FormDecoratorBuilder().build()));
+                            LegalLetter.class)), new FieldDecoratorBuilder().build()));
+            panel.setWidget(++row, 0, 2, inject(proto().notes(), new FieldDecoratorBuilder().build()));
             return panel;
         }
 

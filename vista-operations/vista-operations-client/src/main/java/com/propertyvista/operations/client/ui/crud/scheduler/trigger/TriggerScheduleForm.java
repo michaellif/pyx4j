@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -38,14 +38,14 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().repeatType(), new FormDecoratorBuilder(12).build()));
-        content.setWidget(row, 1, inject(proto().nextFireTime(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(++row, 0, inject(proto().repeatType(), new FieldDecoratorBuilder(12).build()));
+        content.setWidget(row, 1, inject(proto().nextFireTime(), new FieldDecoratorBuilder(12).build()));
 
-        content.setWidget(++row, 0, inject(proto().repeatEvery(), new FormDecoratorBuilder(12).build()));
-        content.setWidget(++row, 0, inject(proto().time(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(++row, 0, inject(proto().repeatEvery(), new FieldDecoratorBuilder(12).build()));
+        content.setWidget(++row, 0, inject(proto().time(), new FieldDecoratorBuilder(12).build()));
 
-        content.setWidget(++row, 0, inject(proto().startsOn(), new FormDecoratorBuilder(12).build()));
-        content.setWidget(row, 1, inject(proto().endsOn(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(++row, 0, inject(proto().startsOn(), new FieldDecoratorBuilder(12).build()));
+        content.setWidget(row, 1, inject(proto().endsOn(), new FieldDecoratorBuilder(12).build()));
 
         // fill ScheduleType types:
         if (get(proto().repeatType()) instanceof CComboBox) {

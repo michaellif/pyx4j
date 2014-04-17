@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.person.Name;
@@ -69,7 +69,7 @@ public class NameEditor extends CEntityForm<Name> {
         viewComp.setViewable(true);
         viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
-        viewComp.setDecorator(new FormDecoratorBuilder(15, !oneColumn).customLabel(customViewLabel).build());
+        viewComp.setDecorator(new FieldDecoratorBuilder(15, !oneColumn).customLabel(customViewLabel).build());
 
         linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         if (linkPlace != null) {
@@ -104,14 +104,14 @@ public class NameEditor extends CEntityForm<Name> {
         int span = (oneColumn ? 1 : 2);
 
         if (!isViewable()) {
-            main.setWidget(++row, 0, inject(proto().firstName(), new FormDecoratorBuilder(15).build()));
-            main.setWidget(++row, 0, inject(proto().lastName(), new FormDecoratorBuilder(15).build()));
-            main.setWidget(++row, 0, inject(proto().middleName(), new FormDecoratorBuilder(5).build()));
+            main.setWidget(++row, 0, inject(proto().firstName(), new FieldDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().lastName(), new FieldDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().middleName(), new FieldDecoratorBuilder(5).build()));
 
             row = (oneColumn ? row : -1);
-            main.setWidget(++row, col, inject(proto().namePrefix(), new FormDecoratorBuilder(5).build()));
-            main.setWidget(++row, col, inject(proto().nameSuffix(), new FormDecoratorBuilder(5).build()));
-            main.setWidget(++row, col, inject(proto().maidenName(), new FormDecoratorBuilder(15).build()));
+            main.setWidget(++row, col, inject(proto().namePrefix(), new FieldDecoratorBuilder(5).build()));
+            main.setWidget(++row, col, inject(proto().nameSuffix(), new FieldDecoratorBuilder(5).build()));
+            main.setWidget(++row, col, inject(proto().maidenName(), new FieldDecoratorBuilder(15).build()));
         } else {
             main.setWidget(0, 0, span, viewComp);
         }

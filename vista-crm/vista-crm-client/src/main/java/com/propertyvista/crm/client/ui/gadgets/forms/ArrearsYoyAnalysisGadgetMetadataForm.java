@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
@@ -37,8 +37,8 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityForm<ArrearsYOY
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().yearsToCompare(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().yearsToCompare(), new FieldDecoratorBuilder().build()));
         get(proto().yearsToCompare()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
             public FieldValidationError isValid() {

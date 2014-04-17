@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.AddressStructuredEditor;
 
 public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
@@ -40,12 +40,12 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, inject(proto().moveInDate(), new FormWidgetDecoratorBuilder(120).build()));
-        main.setWidget(++row, 0, inject(proto().moveOutDate(), new FormWidgetDecoratorBuilder(120).build()));
+        main.setWidget(++row, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(120).build()));
+        main.setWidget(++row, 0, inject(proto().moveOutDate(), new FieldDecoratorBuilder(120).build()));
 
         @SuppressWarnings("unchecked")
         CComponent<OwnedRented> rentedComponent = (CComponent<OwnedRented>) inject(proto().rented());
-        rentedComponent.setDecorator(new FormWidgetDecoratorBuilder(150).build());
+        rentedComponent.setDecorator(new FieldDecoratorBuilder(150).build());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {
@@ -54,11 +54,11 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
         });
 
         main.setWidget(++row, 0, rentedComponent);
-        main.setWidget(++row, 0, inject(proto().payment(), new FormWidgetDecoratorBuilder(100).build()));
-        main.setWidget(++row, 0, inject(proto().propertyCompany(), new FormWidgetDecoratorBuilder(230).build()));
-        main.setWidget(++row, 0, inject(proto().managerName(), new FormWidgetDecoratorBuilder(180).build()));
-        main.setWidget(++row, 0, inject(proto().managerPhone(), new FormWidgetDecoratorBuilder(180).build()));
-        main.setWidget(++row, 0, inject(proto().managerEmail(), new FormWidgetDecoratorBuilder(230).build()));
+        main.setWidget(++row, 0, inject(proto().payment(), new FieldDecoratorBuilder(100).build()));
+        main.setWidget(++row, 0, inject(proto().propertyCompany(), new FieldDecoratorBuilder(230).build()));
+        main.setWidget(++row, 0, inject(proto().managerName(), new FieldDecoratorBuilder(180).build()));
+        main.setWidget(++row, 0, inject(proto().managerPhone(), new FieldDecoratorBuilder(180).build()));
+        main.setWidget(++row, 0, inject(proto().managerEmail(), new FieldDecoratorBuilder(230).build()));
 
         return main;
     }

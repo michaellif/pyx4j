@@ -34,7 +34,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class OptionsStep extends ApplicationWizardStep {
 
@@ -94,7 +94,7 @@ public class OptionsStep extends ApplicationWizardStep {
             content.setWidget(
                     ++row,
                     0,
-                    inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Unit Price"))
+                    inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Unit Price"))
                             .build()));
             depositPanel.setH3(0, 0, 1, i18n.tr("Unit Deposits"));
             depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder()));

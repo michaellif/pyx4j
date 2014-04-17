@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -119,17 +119,17 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
             TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
             int row = 0;
-            contentPanel.setWidget(row++, 1, inject(proto().created(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 1, inject(proto().updated(), new FormDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 1, inject(proto().updated(), new FieldDecoratorBuilder().build()));
 
             row = 0;
-            contentPanel.setWidget(row++, 0, inject(proto().cardType(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().number(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().expiryDate(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().creditLimit(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().balance(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().reserved(), new FormDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().responseCode(), new FormDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().cardType(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().number(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().expiryDate(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().creditLimit(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().balance(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().reserved(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, inject(proto().responseCode(), new FieldDecoratorBuilder().build()));
 
             contentPanel.setH2(row++, 0, 2, "Tokens");
             contentPanel.setWidget(row++, 0, 2, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));

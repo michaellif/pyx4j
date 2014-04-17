@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
@@ -78,12 +78,12 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().cardType(), typeSelector, new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().cardType(), typeSelector, new FieldDecoratorBuilder(20).build()));
 
-        panel.setWidget(++row, 0, inject(proto().card(), cardEditor, new FormDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().expiryDate(), monthYearPicker, new FormDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().securityCode(), new FormDecoratorBuilder(3).build()));
+        panel.setWidget(++row, 0, inject(proto().card(), cardEditor, new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().expiryDate(), monthYearPicker, new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().securityCode(), new FieldDecoratorBuilder(3).build()));
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

@@ -37,7 +37,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.TenantS
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
@@ -148,11 +148,11 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().insuranceProvider(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().insuranceCertificateNumber(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().liabilityCoverage(), new FormWidgetDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().inceptionDate(), new FormWidgetDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().expiryDate(), new FormWidgetDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().insuranceProvider(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().insuranceCertificateNumber(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().liabilityCoverage(), new FieldDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().inceptionDate(), new FieldDecoratorBuilder(180).build()));
+                content.setWidget(++row, 0, inject(proto().expiryDate(), new FieldDecoratorBuilder(180).build()));
 
                 detailsAnchor = new Anchor(i18n.tr("View Details"), new Command() {
 

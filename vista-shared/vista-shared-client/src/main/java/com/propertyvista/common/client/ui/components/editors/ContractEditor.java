@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
@@ -35,16 +35,16 @@ public class ContractEditor extends CEntityForm<Contract> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().contractID(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 0, inject(proto().contractor(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 0, inject(proto().cost(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().contractID(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().contractor(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row, 0, inject(proto().cost(), new FieldDecoratorBuilder(10).build()));
 
 // TODO : design representation for:
 //      main.setWidget(++row, 0, decorate(inject(proto.document()), 50);
 
         row = -1;
-        main.setWidget(++row, 1, inject(proto().start(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 1, inject(proto().end(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().start(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 1, inject(proto().end(), new FieldDecoratorBuilder(9).build()));
 
         return main;
     }

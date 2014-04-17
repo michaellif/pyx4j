@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
@@ -85,7 +85,7 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(50, true).build()));
+            content.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(50, true).build()));
             content.setH3(++row, 0, 2, i18n.tr("Files"));
             content.setWidget(++row, 0, 2, inject(proto().files(), new ProofOfIncomeDocumentFileFolder()));
 

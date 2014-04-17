@@ -30,7 +30,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActiviti
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -98,12 +98,12 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormWidgetDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().convenienceFee(), new FormWidgetDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().date(), new FormWidgetDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().status(), new FormWidgetDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Name>(), new FormWidgetDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().convenienceFee(), new FieldDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Name>(), new FieldDecoratorBuilder().build()));
 
                 return content;
             }

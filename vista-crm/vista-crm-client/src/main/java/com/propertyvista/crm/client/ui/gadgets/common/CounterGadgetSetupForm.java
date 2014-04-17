@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
@@ -31,7 +31,7 @@ public class CounterGadgetSetupForm<E extends CounterGadgetBaseMetadata> extends
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
         return content;
     }
 

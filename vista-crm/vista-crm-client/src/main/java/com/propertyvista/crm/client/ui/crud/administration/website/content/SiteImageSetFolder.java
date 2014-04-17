@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
@@ -140,9 +140,9 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
                 @Override
                 public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
                     VerticalPanel infoPanel = new VerticalPanel();
-                    infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FormDecoratorBuilder().build()));
-                    infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FormDecoratorBuilder().build()));
-                    infoPanel.add(entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder().build()));
+                    infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+                    infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FieldDecoratorBuilder().build()));
+                    infoPanel.add(entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder().build()));
                     return infoPanel;
                 }
             };

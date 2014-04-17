@@ -14,9 +14,9 @@
 package com.propertyvista.common.client.ui.components.login;
 
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-public class LoginPanelWidgetDecorator extends WidgetDecorator {
+public class LoginPanelWidgetDecorator extends FieldDecorator {
 
     public LoginPanelWidgetDecorator() {
         this(16);

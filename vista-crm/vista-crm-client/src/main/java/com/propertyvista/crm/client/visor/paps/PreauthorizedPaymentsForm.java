@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -64,7 +64,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
         main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
         main.getWidget(row, 0).setWidth("25em");
 
-        main.setWidget(row, 1, inject(proto().nextPaymentDate(), new CDateLabel(), new FormDecoratorBuilder().labelWidth(20).build()));
+        main.setWidget(row, 1, inject(proto().nextPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder().labelWidth(20).build()));
 
         main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -125,12 +125,12 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
 
-                content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(15).build()));
-                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
+                content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(15).build()));
+                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
 
-                content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(15).build()));
+                content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(15).build()));
 
                 content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
@@ -144,7 +144,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
                             }
                         };
                     }
-                }, new FormDecoratorBuilder(35).build()));
+                }, new FieldDecoratorBuilder(35).build()));
 
                 content.setBR(++row, 0, 2);
 

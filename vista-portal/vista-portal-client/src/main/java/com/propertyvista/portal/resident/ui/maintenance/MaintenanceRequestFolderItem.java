@@ -34,7 +34,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequestStatusDTO> {
 
@@ -57,11 +57,11 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
-        content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
-        content.setWidget(++row, 0, inject(proto().status().phase(), new CLabel<StatusPhase>(), new FormWidgetDecoratorBuilder(180).build()));
-        content.setWidget(++row, 0, inject(proto().priority().level(), new CLabel<PriorityLevel>(), new FormWidgetDecoratorBuilder(180).build()));
-        content.setWidget(++row, 0, inject(proto().lastUpdated(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().status().phase(), new CLabel<StatusPhase>(), new FieldDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().priority().level(), new CLabel<PriorityLevel>(), new FieldDecoratorBuilder(180).build()));
+        content.setWidget(++row, 0, inject(proto().lastUpdated(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
 
         content.setBR(++row, 0, 1);
 

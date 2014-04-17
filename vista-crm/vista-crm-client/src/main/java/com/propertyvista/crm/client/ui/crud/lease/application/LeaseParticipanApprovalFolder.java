@@ -35,7 +35,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -100,11 +100,11 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
             int row = -1;
-            panel.setWidget(++row, 0, inject(proto().leaseParticipant().leaseParticipant().participantId(), new FormDecoratorBuilder(15, 15, 20).build()));
+            panel.setWidget(++row, 0, inject(proto().leaseParticipant().leaseParticipant().participantId(), new FieldDecoratorBuilder(15, 15, 20).build()));
             panel.setWidget(
                     ++row,
                     0,
-                    inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(), new FormDecoratorBuilder(15, 20,
+                    inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder(15, 20,
                             20).build()));
             ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
@@ -121,7 +121,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
             });
 
-            panel.setWidget(++row, 0, inject(proto().leaseParticipant().role(), new FormDecoratorBuilder(15, 15, 20).build()));
+            panel.setWidget(++row, 0, inject(proto().leaseParticipant().role(), new FieldDecoratorBuilder(15, 15, 20).build()));
 
             panel.setBR(++row, 0, 1);
 
@@ -130,7 +130,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     0,
                     inject(proto().screening(),
                             new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
-                            new FormDecoratorBuilder(15, 15, 20).build()));
+                            new FieldDecoratorBuilder(15, 15, 20).build()));
             return panel;
         }
 
@@ -138,13 +138,13 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             BasicFlexFormPanel left = new BasicFlexFormPanel();
 
             int row = -1;
-            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckResult(), new FormDecoratorBuilder(15, 10, 10).build()));
-            left.setWidget(++row, 0, inject(proto().creditCheck().reason(), new FormDecoratorBuilder(15, 10, 10).build()));
-            left.setWidget(++row, 0, inject(proto().creditCheck().amountApproved(), new FormDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckResult(), new FieldDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().reason(), new FieldDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().amountApproved(), new FieldDecoratorBuilder(15, 10, 10).build()));
 
             left.setHR(++row, 0, 1);
 
-            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckDate(), new FormDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckDate(), new FieldDecoratorBuilder(15, 10, 10).build()));
 
             CLabel<Key> creditCheckReport = new CLabel<Key>();
             creditCheckReport.setTitle(i18n.tr("View Full Report"));
@@ -178,7 +178,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                             });
                 }
             });
-            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckReport(), creditCheckReport, new FormDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckReport(), creditCheckReport, new FieldDecoratorBuilder(15, 10, 10).build()));
 
             BasicFlexFormPanel right = new BasicFlexFormPanel();
             row = -1;
@@ -187,10 +187,10 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             right.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.NORMAL);
             right.getWidget(row, 0).getElement().getStyle().setMarginLeft(2, Unit.EM);
 
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy(), new FormDecoratorBuilder(10, 5, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().judgment(), new FormDecoratorBuilder(10, 5, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().collection(), new FormDecoratorBuilder(10, 5, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().chargeOff(), new FormDecoratorBuilder(10, 5, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy(), new FieldDecoratorBuilder(10, 5, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().judgment(), new FieldDecoratorBuilder(10, 5, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().collection(), new FieldDecoratorBuilder(10, 5, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().chargeOff(), new FieldDecoratorBuilder(10, 5, 5).build()));
 
             // assemble main panel:
             BasicFlexFormPanel panel = new BasicFlexFormPanel();

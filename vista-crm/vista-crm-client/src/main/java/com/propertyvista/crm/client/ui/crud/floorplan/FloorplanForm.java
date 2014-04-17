@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -88,7 +88,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        main.setWidget(++row, 0, 2, inject(proto().marketingName(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().marketingName(), new FieldDecoratorBuilder(true).build()));
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
             main.setH1(++row, 0, 2, proto().ilsSummary().getMeta().getCaption());
@@ -108,9 +108,9 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().caption(), new FormDecoratorBuilder(8, 15, 16).build()));
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().description(), new FormDecoratorBuilder(8, 15, 16).build()));
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().visibility(), new FormDecoratorBuilder(8, 7, 16).build()));
+                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().caption(), new FieldDecoratorBuilder(8, 15, 16).build()));
+                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(8, 15, 16).build()));
+                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().visibility(), new FieldDecoratorBuilder(8, 7, 16).build()));
 
                 return main;
             }
@@ -136,19 +136,19 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         leftRow = rightRow = Math.max(leftRow, rightRow);
 
-        main.setWidget(++leftRow, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++leftRow, 0, inject(proto().bedrooms(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++leftRow, 0, inject(proto().dens(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++leftRow, 0, inject(proto().area(), new FormDecoratorBuilder(8).build()));
+        main.setWidget(++leftRow, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++leftRow, 0, inject(proto().bedrooms(), new FieldDecoratorBuilder(3).build()));
+        main.setWidget(++leftRow, 0, inject(proto().dens(), new FieldDecoratorBuilder(3).build()));
+        main.setWidget(++leftRow, 0, inject(proto().area(), new FieldDecoratorBuilder(8).build()));
 
-        main.setWidget(++rightRow, 1, inject(proto().floorCount(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++rightRow, 1, inject(proto().bathrooms(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++rightRow, 1, inject(proto().halfBath(), new FormDecoratorBuilder(3).build()));
-        main.setWidget(++rightRow, 1, inject(proto().areaUnits(), new FormDecoratorBuilder(8).build()));
+        main.setWidget(++rightRow, 1, inject(proto().floorCount(), new FieldDecoratorBuilder(3).build()));
+        main.setWidget(++rightRow, 1, inject(proto().bathrooms(), new FieldDecoratorBuilder(3).build()));
+        main.setWidget(++rightRow, 1, inject(proto().halfBath(), new FieldDecoratorBuilder(3).build()));
+        main.setWidget(++rightRow, 1, inject(proto().areaUnits(), new FieldDecoratorBuilder(8).build()));
 
         leftRow = rightRow = Math.max(leftRow, rightRow);
 
-        main.setWidget(++leftRow, 0, 2, inject(proto().description(), new FormDecoratorBuilder(true).build()));
+        main.setWidget(++leftRow, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
 
         main.setH1(++leftRow, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(++leftRow, 0, 2, inject(proto().amenities(), createAmenitiesListEditor()));
@@ -183,8 +183,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 frontImage.setImageSize(240, 160);
 
                 content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
-                content.setWidget(0, 1, inject(proto().title(), new FormDecoratorBuilder(10, 50, 55).build()));
-                content.setWidget(1, 0, inject(proto().description(), new FormDecoratorBuilder(10, 50, 55).build()));
+                content.setWidget(0, 1, inject(proto().title(), new FieldDecoratorBuilder(10, 50, 55).build()));
+                content.setWidget(1, 0, inject(proto().description(), new FieldDecoratorBuilder(10, 50, 55).build()));
                 content.getFlexCellFormatter().setRowSpan(0, 0, 2);
 
                 return content;
@@ -247,8 +247,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().vendor(), new CEnumLabel(), new FormDecoratorBuilder().build()));
-                content.setWidget(row, 1, inject(proto().priority(), new FormDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().vendor(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
+                content.setWidget(row, 1, inject(proto().priority(), new FieldDecoratorBuilder().build()));
 
                 content.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 

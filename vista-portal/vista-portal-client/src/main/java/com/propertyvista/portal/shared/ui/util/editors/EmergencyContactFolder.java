@@ -29,7 +29,7 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
@@ -83,15 +83,15 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
             int row = -1;
 
             main.setWidget(++row, 0, 1, inject(proto().name(), new NameEditor(i18n.tr("Full Name"))));
-            main.setWidget(++row, 0, inject(proto().sex(), new FormWidgetDecoratorBuilder(85).build()));
-            main.setWidget(++row, 0, inject(proto().birthDate(), new FormWidgetDecoratorBuilder(120).build()));
+            main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(85).build()));
+            main.setWidget(++row, 0, inject(proto().birthDate(), new FieldDecoratorBuilder(120).build()));
 
             main.setH3(++row, 0, 1, i18n.tr("Contact Info"));
-            main.setWidget(++row, 0, inject(proto().relationship(), new FormWidgetDecoratorBuilder().build()));
-            main.setWidget(++row, 0, inject(proto().homePhone(), new FormWidgetDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().mobilePhone(), new FormWidgetDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().workPhone(), new FormWidgetDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().email(), new FormWidgetDecoratorBuilder(250).build()));
+            main.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
+            main.setWidget(++row, 0, inject(proto().homePhone(), new FieldDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().mobilePhone(), new FieldDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().workPhone(), new FieldDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder(250).build()));
 
             main.setH3(++row, 0, 1, i18n.tr("Address"));
             main.setWidget(++row, 0, 1, inject(proto().address(), new AddressSimpleEditor()));

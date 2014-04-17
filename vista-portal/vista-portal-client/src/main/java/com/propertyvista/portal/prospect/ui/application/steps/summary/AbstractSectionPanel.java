@@ -34,7 +34,7 @@ import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public abstract class AbstractSectionPanel extends CollapsablePanel {
 
@@ -92,16 +92,16 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     }
 
     protected void addField(IObject<?> member) {
-        contentPanel.setWidget(++row, 0, form.inject(member, new FormWidgetDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, form.inject(member, new FieldDecoratorBuilder().build()));
     }
 
     protected void addField(IObject<?> member, String customLabel) {
-        contentPanel.setWidget(++row, 0, form.inject(member, new FormWidgetDecoratorBuilder().customLabel(customLabel).build()));
+        contentPanel.setWidget(++row, 0, form.inject(member, new FieldDecoratorBuilder().customLabel(customLabel).build()));
     }
 
     protected void addField(IObject<?> member, CComponent<?> component, boolean decorate) {
         if (decorate) {
-            contentPanel.setWidget(++row, 0, form.inject(member, component, new FormWidgetDecoratorBuilder().build()));
+            contentPanel.setWidget(++row, 0, form.inject(member, component, new FieldDecoratorBuilder().build()));
         } else {
             contentPanel.setWidget(++row, 0, form.inject(member, component));
         }

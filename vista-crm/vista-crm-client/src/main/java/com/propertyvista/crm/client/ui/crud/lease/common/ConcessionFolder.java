@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -57,19 +57,19 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
             int row = -1;
-            content.setWidget(++row, 0, inject(proto().version().type(), new FormDecoratorBuilder(12).build()));
-            content.setWidget(++row, 0, inject(proto().version().value(), new FormDecoratorBuilder(7).build()));
-            content.setWidget(++row, 0, inject(proto().version().term(), new FormDecoratorBuilder(12).build()));
-            content.setWidget(++row, 0, inject(proto().version().condition(), new FormDecoratorBuilder(10).build()));
-            content.setWidget(++row, 0, inject(proto().version().mixable(), new FormDecoratorBuilder(5).build()));
+            content.setWidget(++row, 0, inject(proto().version().type(), new FieldDecoratorBuilder(12).build()));
+            content.setWidget(++row, 0, inject(proto().version().value(), new FieldDecoratorBuilder(7).build()));
+            content.setWidget(++row, 0, inject(proto().version().term(), new FieldDecoratorBuilder(12).build()));
+            content.setWidget(++row, 0, inject(proto().version().condition(), new FieldDecoratorBuilder(10).build()));
+            content.setWidget(++row, 0, inject(proto().version().mixable(), new FieldDecoratorBuilder(5).build()));
 
-            content.setWidget(++row, 0, inject(proto().version().description(), new FormDecoratorBuilder(60).build()));
+            content.setWidget(++row, 0, inject(proto().version().description(), new FieldDecoratorBuilder(60).build()));
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             row = -1;
-            content.setWidget(++row, 1, inject(proto().version().effectiveDate(), new FormDecoratorBuilder(9).build()));
-            content.setWidget(++row, 1, inject(proto().version().expirationDate(), new FormDecoratorBuilder(9).build()));
-            content.setWidget(++row, 1, inject(proto().updated(), new FormDecoratorBuilder(9).build()));
+            content.setWidget(++row, 1, inject(proto().version().effectiveDate(), new FieldDecoratorBuilder(9).build()));
+            content.setWidget(++row, 1, inject(proto().version().expirationDate(), new FieldDecoratorBuilder(9).build()));
+            content.setWidget(++row, 1, inject(proto().updated(), new FieldDecoratorBuilder(9).build()));
 
             return content;
         }

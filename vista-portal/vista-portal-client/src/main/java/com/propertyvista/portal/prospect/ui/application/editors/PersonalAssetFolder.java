@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPersonalAsset> {
 
@@ -80,9 +80,9 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            main.setWidget(++row, 0, inject(proto().assetType(), new FormWidgetDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().percent(), new FormWidgetDecoratorBuilder(60).build()));
-            main.setWidget(++row, 0, inject(proto().assetValue(), new FormWidgetDecoratorBuilder(100).build()));
+            main.setWidget(++row, 0, inject(proto().assetType(), new FieldDecoratorBuilder(180).build()));
+            main.setWidget(++row, 0, inject(proto().percent(), new FieldDecoratorBuilder(60).build()));
+            main.setWidget(++row, 0, inject(proto().assetValue(), new FieldDecoratorBuilder(100).build()));
             main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
 
             return main;

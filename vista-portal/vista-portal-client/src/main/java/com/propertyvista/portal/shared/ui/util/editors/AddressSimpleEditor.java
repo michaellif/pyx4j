@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
@@ -44,12 +44,12 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
         int row = -1;
 
-        main.setWidget(++row, 0, inject(proto().street1(), new FormWidgetDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().street2(), new FormWidgetDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().city(), new FormWidgetDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().province(), new FormWidgetDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().country(), new FormWidgetDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().postalCode(), new FormWidgetDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().street1(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().street2(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().city(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().province(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().country(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
 
         return main;
     }

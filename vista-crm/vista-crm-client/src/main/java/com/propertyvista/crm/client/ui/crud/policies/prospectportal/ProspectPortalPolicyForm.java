@@ -21,7 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -45,14 +45,14 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        content.setWidget(++row, 0, 2, inject(proto().unitAvailabilitySpan(), new FormDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxExactMatchUnits(), new FormDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxPartialMatchUnits(), new FormDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().unitAvailabilitySpan(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxExactMatchUnits(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxPartialMatchUnits(), new FieldDecoratorBuilder(5, true).build()));
 
         content.setBR(++row, 0, 2);
 
-        content.setWidget(++row, 0, 2, inject(proto().feePayment(), new FormDecoratorBuilder(10, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().feeAmount(), new FormDecoratorBuilder(10, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().feePayment(), new FieldDecoratorBuilder(10, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().feeAmount(), new FieldDecoratorBuilder(10, true).build()));
 
         get(proto().feePayment()).addValueChangeHandler(new ValueChangeHandler<FeePayment>() {
             @Override

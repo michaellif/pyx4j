@@ -28,7 +28,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFile;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAssetDocumentFile> {
 
@@ -60,8 +60,8 @@ public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAsset
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfAssetDocumentFile.class));
 
-            main.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FormWidgetDecoratorBuilder().customLabel("").labelWidth("0px").build()));
-            main.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder().build()));
+            main.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FieldDecoratorBuilder().customLabel("").labelWidth("0px").build()));
+            main.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder().build()));
 
             return main;
         }

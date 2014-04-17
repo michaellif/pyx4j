@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -58,43 +58,43 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
         content.setH3(++row, 0, 2, i18n.tr("Desired:"));
 
         if (isEditable()) {
-            content.setWidget(++row, 0, inject(proto().building(), new CEntityLabel<Building>(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder(20).build()));
         } else {
             content.setWidget(
                     ++row,
                     0,
-                    inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)), new FormDecoratorBuilder(
+                    inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)), new FieldDecoratorBuilder(
                             20).build()));
         }
         if (isEditable()) {
-            content.setWidget(++row, 0, inject(proto().floorplan(), new CEntityLabel<Floorplan>(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder(20).build()));
         } else {
             content.setWidget(
                     ++row,
                     0,
                     inject(proto().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class)),
-                            new FormDecoratorBuilder(20).build()));
+                            new FieldDecoratorBuilder(20).build()));
         }
 
         content.setH3(++row, 0, 2, i18n.tr("Suggested:"));
 
         if (isEditable()) {
-            content.setWidget(++row, 0, inject(proto().unit().building(), new CEntityLabel<Building>(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().unit().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder(20).build()));
         } else {
             content.setWidget(
                     ++row,
                     0,
                     inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)),
-                            new FormDecoratorBuilder(20).build()));
+                            new FieldDecoratorBuilder(20).build()));
         }
         if (isEditable()) {
-            content.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FormDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder(20).build()));
         } else {
             content.setWidget(
                     ++row,
                     0,
                     inject(proto().unit().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class)),
-                            new FormDecoratorBuilder(20).build()));
+                            new FieldDecoratorBuilder(20).build()));
         }
 
         content.setWidget(++row, 0, inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
@@ -135,12 +135,12 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
                     }
                 };
             }
-        }, new FormDecoratorBuilder(20).build()));
+        }, new FieldDecoratorBuilder(20).build()));
 
         row = 3;
-        content.setWidget(++row, 1, inject(proto().status(), new FormDecoratorBuilder(12).build()));
-        content.setWidget(++row, 1, inject(proto().result(), new FormDecoratorBuilder(12).build()));
-        content.setWidget(++row, 1, inject(proto().reason(), new FormDecoratorBuilder(12).build()));
+        content.setWidget(++row, 1, inject(proto().status(), new FieldDecoratorBuilder(12).build()));
+        content.setWidget(++row, 1, inject(proto().result(), new FieldDecoratorBuilder(12).build()));
+        content.setWidget(++row, 1, inject(proto().reason(), new FieldDecoratorBuilder(12).build()));
 
         // tweak UI:
         get(proto().status()).setEditable(false);

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -39,7 +39,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().version().caption(), new FormDecoratorBuilder(10, true).build()));
+        main.setWidget(++row, 0, 2, inject(proto().version().caption(), new FieldDecoratorBuilder(10, true).build()));
         main.setWidget(++row, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
 
         setTabBarVisible(false);
@@ -74,11 +74,11 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
             int row = -1;
             // locale
-            main.setWidget(++row, 0, 2, inject(proto().locale(), new FormDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().locale(), new FieldDecoratorBuilder(10, true).build()));
             // content
             CComponent<?> editor = null;
             editor = new CRichTextArea();
-            main.setWidget(++row, 0, 2, inject(proto().content(), editor, new FormDecoratorBuilder(true).build()));
+            main.setWidget(++row, 0, 2, inject(proto().content(), editor, new FieldDecoratorBuilder(true).build()));
 
             return main;
         }

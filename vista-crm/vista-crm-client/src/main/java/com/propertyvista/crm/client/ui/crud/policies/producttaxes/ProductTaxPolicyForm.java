@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -105,7 +105,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, 2, inject(proto().productCode(), new FormDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().productCode(), new FieldDecoratorBuilder(true).build()));
                 get(proto().productCode()).setViewable(true);
 
                 content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());

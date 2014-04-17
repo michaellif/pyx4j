@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 
@@ -33,24 +33,24 @@ public class ArrearsGadgetSummaryMetadataForm extends CEntityForm<ArrearsSummary
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().customizeCategory(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().customizeCategory(), new FieldDecoratorBuilder().build()));
         get(proto().customizeCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().category()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, inject(proto().category(), new FormDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().category(), new FieldDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().asOf()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
         return content;
     }
 

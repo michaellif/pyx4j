@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymentCoveredItemDTO> {
 
@@ -67,12 +67,12 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
             content.setWidget(
                     ++row,
                     0,
-                    inject(proto().billableItem(), new PapBillableItemLabel(), new FormWidgetDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
+                    inject(proto().billableItem(), new PapBillableItemLabel(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
             content.setWidget(++row, 0,
-                    inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));
-            content.setWidget(++row, 0, inject(proto().covered(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
-            content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
-            content.setWidget(++row, 0, inject(proto().percent(), new CPercentageLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                    inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));
+            content.setWidget(++row, 0, inject(proto().covered(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
+            content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
+            content.setWidget(++row, 0, inject(proto().percent(), new CPercentageLabel(), new FieldDecoratorBuilder(100).build()));
 
             // tweaks:
             get(proto().amount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {

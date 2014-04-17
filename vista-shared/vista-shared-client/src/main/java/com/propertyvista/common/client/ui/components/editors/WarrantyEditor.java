@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.property.vendor.Warranty;
@@ -44,8 +44,8 @@ public class WarrantyEditor extends CEntityForm<Warranty> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, inject(proto().title(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(row, 1, inject(proto().type(), new FormDecoratorBuilder(11).build()));
+        main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(row, 1, inject(proto().type(), new FieldDecoratorBuilder(11).build()));
 
         main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contract(), new ContractEditor()));

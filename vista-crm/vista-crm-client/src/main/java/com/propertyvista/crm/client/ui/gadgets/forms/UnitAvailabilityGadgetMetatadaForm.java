@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 
@@ -34,10 +34,10 @@ public class UnitAvailabilityGadgetMetatadaForm extends CEntityForm<UnitAvailabi
         // TODO Auto-generated method stub
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().unitStatusListerSettings().pageSize(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().filterPreset(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().unitStatusListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().filterPreset(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -46,7 +46,7 @@ public class UnitAvailabilityGadgetMetatadaForm extends CEntityForm<UnitAvailabi
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
         get(proto().asOf()).setVisible(false);
         return p;
     }

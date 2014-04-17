@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -46,8 +46,8 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Misc. Settings"));
         int row = -1;
 
-        content.setWidget(++row, 0, 2, inject(proto().yearRangeStart(), new FormDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().yearRangeFutureSpan(), new FormDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().yearRangeStart(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().yearRangeFutureSpan(), new FieldDecoratorBuilder(5, true).build()));
 
         // components tune up:
         CComponent<?> comp = get(proto().yearRangeStart());

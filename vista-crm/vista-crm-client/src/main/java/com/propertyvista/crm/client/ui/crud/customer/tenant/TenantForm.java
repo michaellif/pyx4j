@@ -37,7 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -120,7 +120,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
 
-        main.setWidget(++row, 0, 2, inject(proto().nextScheduledPaymentDate(), new CDateLabel(), new FormDecoratorBuilder(true).labelWidth("20em").build()));
+        main.setWidget(++row, 0, 2, inject(proto().nextScheduledPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(true).labelWidth("20em").build()));
 
         main.setH3(++row, 0, 2, proto().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
@@ -133,7 +133,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         int row = -1;
 
         tabPanel.setH1(++row, 0, 2, i18n.tr("Requirements"));
-        tabPanel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FormDecoratorBuilder(true).build()));
+        tabPanel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FieldDecoratorBuilder(true).build()));
         get(proto().minimumRequiredLiability()).setEditable(false);
 
         noRequirementsLabel = new Label(i18n.tr("None"));
@@ -214,12 +214,12 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
+                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
 
-                content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(15).build()));
-                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
+                content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(15).build()));
+                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
 
-                content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(15).build()));
+                content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(15).build()));
 
                 content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
@@ -233,7 +233,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                }, new FormDecoratorBuilder().componentWidth("35em").build()));
+                }, new FieldDecoratorBuilder().componentWidth("35em").build()));
 
                 content.setBR(++row, 0, 2);
 

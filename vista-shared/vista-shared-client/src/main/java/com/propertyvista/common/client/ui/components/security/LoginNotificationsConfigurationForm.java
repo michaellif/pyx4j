@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.security.LoginNotificationsConfigurationDTO;
 
@@ -33,8 +33,8 @@ public class LoginNotificationsConfigurationForm extends CEntityForm<LoginNotifi
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
-        contentPanel.setWidget(0, 0, inject(proto().isEmailNotificationEnabled(), new FormDecoratorBuilder(5).build()));
-        contentPanel.setWidget(0, 1, inject(proto().email(), new FormDecoratorBuilder(22).build()));
+        contentPanel.setWidget(0, 0, inject(proto().isEmailNotificationEnabled(), new FieldDecoratorBuilder(5).build()));
+        contentPanel.setWidget(0, 1, inject(proto().email(), new FieldDecoratorBuilder(22).build()));
 
         get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -49,19 +49,19 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         int span = (oneColumn ? 1 : 2);
 
         main.setWidget(++row, 0, span, inject(proto().name(), new NameEditor(i18n.tr("Person"), oneColumn)));
-        main.setWidget(++row, 0, inject(proto().sex(), new FormDecoratorBuilder(7).build()));
+        main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(7).build()));
 
         row = (oneColumn ? row : row - 1);
-        main.setWidget(++row, col, inject(proto().birthDate(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, col, inject(proto().birthDate(), new FieldDecoratorBuilder(10).build()));
 
         main.setH3(++row, 0, 2, i18n.tr("Contact Info"));
-        main.setWidget(++row, 0, inject(proto().homePhone(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().mobilePhone(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().workPhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().homePhone(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().mobilePhone(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().workPhone(), new FieldDecoratorBuilder(15).build()));
 
         row = (oneColumn ? row : row - 3);
-        main.setWidget(++row, col, inject(proto().relationship(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, col, inject(proto().email(), new FormDecoratorBuilder(22).build()));
+        main.setWidget(++row, col, inject(proto().relationship(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++row, col, inject(proto().email(), new FieldDecoratorBuilder(22).build()));
 
         row = (oneColumn ? row : row + 1);
         main.setHR(++row, 0, 2);

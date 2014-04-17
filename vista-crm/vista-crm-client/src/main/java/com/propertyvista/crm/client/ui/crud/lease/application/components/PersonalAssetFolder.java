@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
@@ -76,9 +76,9 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            main.setWidget(++row, 0, inject(proto().assetType(), new FormDecoratorBuilder(15).build()));
-            main.setWidget(++row, 0, inject(proto().percent(), new FormDecoratorBuilder(5).build()));
-            main.setWidget(++row, 0, inject(proto().assetValue(), new FormDecoratorBuilder(10).build()));
+            main.setWidget(++row, 0, inject(proto().assetType(), new FieldDecoratorBuilder(15).build()));
+            main.setWidget(++row, 0, inject(proto().percent(), new FieldDecoratorBuilder(5).build()));
+            main.setWidget(++row, 0, inject(proto().assetValue(), new FieldDecoratorBuilder(10).build()));
             main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
 
             return main;

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
@@ -45,23 +45,23 @@ public class AvailabilityReportSettingsSimpleForm extends CEntityForm<Availabili
     protected IsWidget createContent() {
         int row = -1;
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
+        panel.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
         panel.setWidget(
                 ++row,
                 0,
                 inject(proto().vacancyStatus(),
                         new CEnumSubsetSelector<UnitAvailabilityStatus.Vacancy>(UnitAvailabilityStatus.Vacancy.class, Layout.Horizontal),
-                        new FormDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
+                        new FieldDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
 
         rentedStatusPreset = new CComboBox<RentedStatusPreset>(NotInOptionsPolicy.DISCARD);
         rentedStatusPreset.setOptions(Arrays.asList(RentedStatusPreset.values()));
         panel.setWidget(++row, 0,
-                inject(proto().rentedStatus(), rentedStatusPreset, new FormDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
+                inject(proto().rentedStatus(), rentedStatusPreset, new FieldDecoratorBuilder().labelWidth("10em").componentWidth("10em").build()));
 
         rentReadinessStatusPreset = new CComboBox<RentReadinessStatusPreset>(NotInOptionsPolicy.DISCARD);
         rentReadinessStatusPreset.setOptions(Arrays.asList(RentReadinessStatusPreset.values()));
         panel.setWidget(row, 1,
-                inject(proto().rentReadinessStatus(), rentReadinessStatusPreset, new FormDecoratorBuilder().labelWidth("10em").componentWidth("15em").build()));
+                inject(proto().rentReadinessStatus(), rentReadinessStatusPreset, new FieldDecoratorBuilder().labelWidth("10em").componentWidth("15em").build()));
 
         return panel;
     }

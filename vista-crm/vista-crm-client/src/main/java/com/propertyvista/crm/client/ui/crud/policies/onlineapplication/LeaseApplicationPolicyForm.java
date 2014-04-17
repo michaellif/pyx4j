@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -86,10 +86,10 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                main.setWidget(++row, 0, inject(proto().applyToRole(), new FormDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().title(), new FormDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().body(), new FormDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FormDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().applyToRole(), new FieldDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().body(), new FieldDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FieldDecoratorBuilder(35).build()));
                 return main;
             }
         }
@@ -120,10 +120,10 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                main.setWidget(++row, 0, inject(proto().applyToRole(), new FormDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().title(), new FormDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().body(), new FormDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FormDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().applyToRole(), new FieldDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().body(), new FieldDecoratorBuilder(35).build()));
+                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FieldDecoratorBuilder(35).build()));
                 return main;
             }
         }

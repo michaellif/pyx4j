@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.components.boxes.LocalizedContentFolderBase;
@@ -65,8 +65,8 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
             int row = -1;
 
-            panel.setWidget(++row, 0, 2, editor.inject(proto().locale(), new CEntityLabel<AvailableLocale>(), new FormDecoratorBuilder(10, true).build()));
-            panel.setWidget(++row, 0, 2, editor.inject(proto().text(), new FormDecoratorBuilder(50, true).build()));
+            panel.setWidget(++row, 0, 2, editor.inject(proto().locale(), new CEntityLabel<AvailableLocale>(), new FieldDecoratorBuilder(10, true).build()));
+            panel.setWidget(++row, 0, 2, editor.inject(proto().text(), new FieldDecoratorBuilder(50, true).build()));
 
             return panel;
         }

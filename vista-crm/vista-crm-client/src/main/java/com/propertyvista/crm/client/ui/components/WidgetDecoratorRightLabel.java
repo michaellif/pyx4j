@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.DebugIds;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.DebugIds;
 import com.pyx4j.widgets.client.Label;
 
 /**

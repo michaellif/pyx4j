@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -56,10 +56,10 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         
-        formPanel.setWidget(++row, 0, 2, inject(proto().status(),new FormDecoratorBuilder( true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().serialNumber(), new FormDecoratorBuilder(true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().creatationDate(), new FormDecoratorBuilder( true).build()));
-        formPanel.setWidget(++row, 0, 2, inject(proto().sentDate(), new FormDecoratorBuilder( true).build())); 
+        formPanel.setWidget(++row, 0, 2, inject(proto().status(),new FieldDecoratorBuilder( true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().serialNumber(), new FieldDecoratorBuilder(true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().creatationDate(), new FieldDecoratorBuilder( true).build()));
+        formPanel.setWidget(++row, 0, 2, inject(proto().sentDate(), new FieldDecoratorBuilder( true).build())); 
         formPanel.setH1(++row, 0, 2, "Direct Debit Records");
         formPanel.setWidget(++row, 0, 2, inject(proto().records(), new DirectDebitSimRecordTableFolder()));
         

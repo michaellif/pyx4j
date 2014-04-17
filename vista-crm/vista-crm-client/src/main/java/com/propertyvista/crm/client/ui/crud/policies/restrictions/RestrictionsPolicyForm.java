@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -41,16 +41,16 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Restrictions"));
         int row = -1;
         String lbw = "220px";
-        content.setWidget(++row, 0, 2, inject(proto().maxParkingSpots(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxLockers(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxPets(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().occupantsPerBedRoom(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxParkingSpots(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxLockers(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maxPets(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().occupantsPerBedRoom(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, 2, inject(proto().ageOfMajority(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().enforceAgeOfMajority(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maturedOccupantsAreApplicants(), new FormDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().ageOfMajority(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().enforceAgeOfMajority(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        content.setWidget(++row, 0, 2, inject(proto().maturedOccupantsAreApplicants(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
 
         return content;
     }

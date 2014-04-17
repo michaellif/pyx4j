@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -98,7 +98,7 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
 
         SimplePanel dnsSubdomainNameHolder = new SimplePanel();
         int domainNameFieldWidth = 13;
-        dnsSubdomainNameHolder.setWidget(inject(proto().dnsName(), new FormDecoratorBuilder(domainNameFieldWidth).customLabel("").labelWidth(0)
+        dnsSubdomainNameHolder.setWidget(inject(proto().dnsName(), new FieldDecoratorBuilder(domainNameFieldWidth).customLabel("").labelWidth(0)
                 .useLabelSemicolon(false).mandatoryMarker(false).build()));
 
         Label pmcDomainNameSuffixLabel = new Label(".propertyvista.com");
@@ -139,30 +139,30 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
         contentPanel.setWidget(
                 ++row,
                 0,
-                inject(proto().name(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).customLabel("")
+                inject(proto().name(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).customLabel("")
                         .labelWidth(0).build()));
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(
                 ++row,
                 0,
-                inject(proto().countryOfOperation(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
+                inject(proto().countryOfOperation(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
                         .build()));
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0,
-                inject(proto().firstName(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
+                inject(proto().firstName(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
         contentPanel.setWidget(++row, 0,
-                inject(proto().lastName(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
+                inject(proto().lastName(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0,
-                inject(proto().email(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
+                inject(proto().email(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
         contentPanel
                 .setWidget(
                         ++row,
                         0,
-                        inject(proto().confirmEmail(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
+                        inject(proto().confirmEmail(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
                                 .build()));
         get(proto().confirmEmail()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
@@ -178,11 +178,11 @@ public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreatio
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         contentPanel.setWidget(++row, 0,
-                inject(proto().password(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
+                inject(proto().password(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
         contentPanel.setWidget(
                 ++row,
                 0,
-                inject(proto().confirmPassword(), new FormDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
+                inject(proto().confirmPassword(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
                         .build()));
         get(proto().confirmPassword()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override

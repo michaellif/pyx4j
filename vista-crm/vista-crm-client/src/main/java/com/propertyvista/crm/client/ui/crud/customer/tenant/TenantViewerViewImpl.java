@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
@@ -155,13 +155,13 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
                     int row = -1;
-                    panel.setWidget(++row, 0, inject(proto().address(), new FormDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().postalCode(), new FormDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().unit(), new FormDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().firstName(), new FormDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().middleName(), new FormDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().lastName(), new FormDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().portalRegistrationToken(), new FormDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().address(), new FieldDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().unit(), new FieldDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().firstName(), new FieldDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().middleName(), new FieldDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().lastName(), new FieldDecoratorBuilder().build()));
+                    panel.setWidget(++row, 0, inject(proto().portalRegistrationToken(), new FieldDecoratorBuilder().build()));
                     return panel;
                 }
             };

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferr
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -31,41 +31,41 @@ public class FundsTransferDebitRecordForm extends OperationsEntityForm<FundsTran
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, inject(proto().padBatch().pmc().name(), new FormDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().padBatch().merchantTerminalId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().padBatch().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().padBatch().merchantTerminalId(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile().fundsTransferType(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile().sent(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile().fundsTransferType(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile().sent(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, inject(proto().clientId(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().transactionId(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().processed(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().statusChangeDate(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().clientId(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().transactionId(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processed(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().statusChangeDate(), new FieldDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, i18n.tr("Reconciliation Record Paid Or Rejected"));
 
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().paymentDate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().reconciliationStatus(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().reasonCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().reasonText(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().fee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().processingStatus(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().paymentDate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().reconciliationStatus(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().reasonCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().reasonText(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().fee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordPaidOrRejected().processingStatus(), new FieldDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, i18n.tr("Reconciliation Record Return"));
 
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().paymentDate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().reconciliationStatus(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().reasonCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().reasonText(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().fee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().processingStatus(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().paymentDate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().reconciliationStatus(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().reasonCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().reasonText(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().fee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordReturn().processingStatus(), new FieldDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

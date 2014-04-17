@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
@@ -34,13 +34,13 @@ public class CompanyEditor extends CEntityForm<Company> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
 
 // TODO : design representation for:
 //      main.add(parent.inject(proto.addresses()), 15);
 
         main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        main.setWidget(++row, 0, inject(proto().website(), new FormDecoratorBuilder(22).build()));
+        main.setWidget(++row, 0, inject(proto().website(), new FieldDecoratorBuilder(22).build()));
 
         main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
 

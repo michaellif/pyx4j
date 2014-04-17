@@ -29,7 +29,7 @@ import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class LeaseStep extends ApplicationWizardStep {
 
@@ -49,19 +49,19 @@ public class LeaseStep extends ApplicationWizardStep {
         int row = -1;
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
-        panel.setWidget(++row, 0, inject(proto().unit().info().number(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>(), new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().info().number(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
-        panel.setWidget(++row, 0, inject(proto().leaseFrom(), new CDateLabel(), new FormWidgetDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().leaseTo(), new CDateLabel(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().leaseFrom(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().leaseTo(), new CDateLabel(), new FieldDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
         panel.setWidget(++row, 0,
-                inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Unit Rent")).build()));
-        panel.setWidget(++row, 0, inject(proto().selectedService().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
+                inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Unit Rent")).build()));
+        panel.setWidget(++row, 0, inject(proto().selectedService().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, depositPanel);
         depositPanel.setH4(0, 0, 1, i18n.tr("Unit Deposits"));

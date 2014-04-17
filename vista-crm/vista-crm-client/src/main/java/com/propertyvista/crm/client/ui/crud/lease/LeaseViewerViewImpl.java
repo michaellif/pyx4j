@@ -45,7 +45,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -602,13 +602,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     main.setWidget(
                             0,
                             0,
-                            inject(proto().moveOutSubmissionDate(), new FormDecoratorBuilder(9).customLabel(action.toString() + i18n.tr(" Submission Date"))
+                            inject(proto().moveOutSubmissionDate(), new FieldDecoratorBuilder(9).customLabel(action.toString() + i18n.tr(" Submission Date"))
                                     .build()));
-                    main.setWidget(1, 0, inject(proto().expectedMoveOut(), new FormDecoratorBuilder(9).build()));
+                    main.setWidget(1, 0, inject(proto().expectedMoveOut(), new FieldDecoratorBuilder(9).build()));
 
                     if (showTermination) {
                         main.setWidget(2, 0,
-                                inject(proto().terminationLeaseTo(), new FormDecoratorBuilder(9).customLabel(i18n.tr("Lease Termination Date")).build()));
+                                inject(proto().terminationLeaseTo(), new FieldDecoratorBuilder(9).customLabel(i18n.tr("Lease Termination Date")).build()));
                     }
 
                     // just for validation purpose:

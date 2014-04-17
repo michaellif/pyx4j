@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
@@ -63,7 +63,7 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         mainPanel.setWidget(
                 ++row,
                 0,
-                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormWidgetDecoratorBuilder(200).labelAlignment(Alignment.left)
+                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(200).labelAlignment(Alignment.left)
                         .build()));
 
         mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
@@ -82,8 +82,8 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
         mainPanel.setHR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, inject(proto().total(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().total(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
 
         get(proto().coveredItems()).setVisible(isViewable());
         get(proto().coveredItemsDTO()).setVisible(!isViewable());

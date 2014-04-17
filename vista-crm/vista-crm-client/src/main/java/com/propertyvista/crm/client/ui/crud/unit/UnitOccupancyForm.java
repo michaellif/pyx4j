@@ -18,7 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -36,12 +36,12 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().dateFrom(), new FormDecoratorBuilder(9).build()));
-        content.setWidget(++row, 0, inject(proto().dateTo(), new FormDecoratorBuilder(9).build()));
-        content.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().offMarket(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().lease(), new FormDecoratorBuilder(25).build()));
-        content.setWidget(++row, 0, inject(proto().description(), new FormDecoratorBuilder(50).build()));
+        content.setWidget(++row, 0, inject(proto().dateFrom(), new FieldDecoratorBuilder(9).build()));
+        content.setWidget(++row, 0, inject(proto().dateTo(), new FieldDecoratorBuilder(9).build()));
+        content.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().offMarket(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().lease(), new FieldDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(50).build()));
 
         get(proto().status()).addValueChangeHandler(new ValueChangeHandler<AptUnitOccupancySegment.Status>() {
             @Override

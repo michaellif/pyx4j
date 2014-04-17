@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -45,14 +45,14 @@ public class PetDataEditor extends CEntityForm<Pet> {
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Pet Data"));
 
-        panel.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
-        panel.setWidget(++row, 0, inject(proto().color(), new FormDecoratorBuilder(15).build()));
-        panel.setWidget(++row, 0, inject(proto().breed(), new FormDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().color(), new FieldDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 0, inject(proto().breed(), new FieldDecoratorBuilder(15).build()));
 
         row = 0; // skip header
-        panel.setWidget(++row, 1, inject(proto().weight(), new FormDecoratorBuilder(4).build()));
-        panel.setWidget(++row, 1, inject(proto().weightUnit(), new FormDecoratorBuilder(4).build()));
-        panel.setWidget(++row, 1, inject(proto().birthDate(), new FormDecoratorBuilder(9).build()));
+        panel.setWidget(++row, 1, inject(proto().weight(), new FieldDecoratorBuilder(4).build()));
+        panel.setWidget(++row, 1, inject(proto().weightUnit(), new FieldDecoratorBuilder(4).build()));
+        panel.setWidget(++row, 1, inject(proto().birthDate(), new FieldDecoratorBuilder(9).build()));
 
         removeMandatory();
         return panel;

@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
@@ -49,11 +49,11 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().accountNo(), accountEditor, new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().accountNo(), accountEditor, new FieldDecoratorBuilder(20).build()));
 
-        panel.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FormDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().bankId(), new FormDecoratorBuilder(3).build()));
+        panel.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().bankId(), new FieldDecoratorBuilder(3).build()));
 
         if (!isViewable() && isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());

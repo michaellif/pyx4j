@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.payment.DirectDebitInfo;
 
@@ -34,9 +34,9 @@ public class DirectDebitInfoEditor extends CEntityForm<DirectDebitInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().nameOn(), new FormDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().traceNumber(), new FormDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().locationCode(), new FormDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().traceNumber(), new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, inject(proto().locationCode(), new FieldDecoratorBuilder(20).build()));
 
         return panel;
     }

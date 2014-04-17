@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
@@ -90,16 +90,16 @@ public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
 
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, 2, inject(proto().currentPassword(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+        mainPanel.setWidget(++row, 0, 2, inject(proto().currentPassword(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
         mainPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         mainPanel.setWidget(newPasswordFieldRow = ++row, 0, 2,
-                inject(proto().newPassword(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
-        mainPanel.setWidget(++row, 0, 2, inject(proto().newPasswordConfirm(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+                inject(proto().newPassword(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
+        mainPanel.setWidget(++row, 0, 2, inject(proto().newPasswordConfirm(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
 
         mainPanel.setWidget(++row, 0, 2,
-                inject(proto().requireChangePasswordOnNextSignIn(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+                inject(proto().requireChangePasswordOnNextSignIn(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
 
         return mainPanel;
     }
@@ -194,7 +194,7 @@ public class PasswordChangeForm extends CEntityForm<PasswordChangeRequest> {
         c.addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
 
         mainPanel.setWidget(newPasswordFieldRow, 0, 2,
-                inject(proto().newPassword(), c, new FormDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
+                inject(proto().newPassword(), c, new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
         setPasswordStrengthRule(passwordStrengthRule); // to redraw tooltip
 
     }

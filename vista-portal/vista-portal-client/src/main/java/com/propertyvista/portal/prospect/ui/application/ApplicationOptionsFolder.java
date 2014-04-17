@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
 
@@ -61,9 +61,9 @@ public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
 
             int row = -1;
             mainPanel.setWidget(++row, 0,
-                    inject(proto().item(), new CEntityLabel<ProductItem>(), new FormWidgetDecoratorBuilder(200).customLabel(i18n.tr("Item Name")).build()));
+                    inject(proto().item(), new CEntityLabel<ProductItem>(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Item Name")).build()));
 
-            mainPanel.setWidget(++row, 0, inject(proto().price(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
+            mainPanel.setWidget(++row, 0, inject(proto().price(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
             return mainPanel;
         }
     }

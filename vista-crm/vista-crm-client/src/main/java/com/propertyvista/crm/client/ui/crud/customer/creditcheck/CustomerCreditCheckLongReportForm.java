@@ -27,14 +27,14 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
@@ -108,17 +108,17 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         TwoColumnFlexFormPanel summary = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        summary.setWidget(++row, 0, inject(proto().percentOfRentCovered(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().totalAccounts(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().totalOutstandingBalance(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().outstandingRevolvingDebt(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().outstandingCollectionsBalance(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().percentOfRentCovered(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().totalAccounts(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().totalOutstandingBalance(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().outstandingRevolvingDebt(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 0, inject(proto().outstandingCollectionsBalance(), new FieldDecoratorBuilder(20, 10, 20).build()));
 
         row = 0;
-        summary.setWidget(++row, 1, inject(proto().accountsWithNoLatePayments(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 1, inject(proto().numberOfLegalItems(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 1, inject(proto().numberOfBancruptciesOrActs(), new FormDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 1, inject(proto().landlordCollectionsFiled(), new FormDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().accountsWithNoLatePayments(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().numberOfLegalItems(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().numberOfBancruptciesOrActs(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        summary.setWidget(++row, 1, inject(proto().landlordCollectionsFiled(), new FieldDecoratorBuilder(20, 10, 20).build()));
 // Not implemented in Equifax:
 //      summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfEvictions()), 20, 10, 20).build());
 
@@ -174,11 +174,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         name.setWidget(0, 0, 2, inject(proto().identity().name(), new NameEditor(i18n.tr("Name"))));
 
-        name.setWidget(1, 0, inject(proto().identity().SIN(), new FormDecoratorBuilder(20).build()));
-        name.setWidget(2, 0, inject(proto().identity().maritalStatus(), new FormDecoratorBuilder(10).build()));
+        name.setWidget(1, 0, inject(proto().identity().SIN(), new FieldDecoratorBuilder(20).build()));
+        name.setWidget(2, 0, inject(proto().identity().maritalStatus(), new FieldDecoratorBuilder(10).build()));
 
-        name.setWidget(1, 1, inject(proto().identity().birthDate(), new FormDecoratorBuilder(10).build()));
-        name.setWidget(2, 1, inject(proto().identity().deathDate(), new FormDecoratorBuilder(10).build()));
+        name.setWidget(1, 1, inject(proto().identity().birthDate(), new FieldDecoratorBuilder(10).build()));
+        name.setWidget(2, 1, inject(proto().identity().deathDate(), new FieldDecoratorBuilder(10).build()));
 
         BasicFlexFormPanel address = new BasicFlexFormPanel();
         address.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
@@ -192,13 +192,13 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         BasicFlexFormPanel employement = new BasicFlexFormPanel();
         employement.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
         employement.getWidget(0, 0).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        employement.setWidget(1, 0, inject(proto().identity().currentEmployer(), new FormDecoratorBuilder(20).build()));
-        employement.setWidget(4, 0, inject(proto().identity().currentOccupation(), new FormDecoratorBuilder(20).build()));
+        employement.setWidget(1, 0, inject(proto().identity().currentEmployer(), new FieldDecoratorBuilder(20).build()));
+        employement.setWidget(4, 0, inject(proto().identity().currentOccupation(), new FieldDecoratorBuilder(20).build()));
 
         employement.setWidget(0, 1, new HTML("<i>" + i18n.tr("Former:") + "</i>"));
         employement.getWidget(0, 1).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        employement.setWidget(1, 1, inject(proto().identity().formerEmployer(), new FormDecoratorBuilder(20).build()));
-        employement.setWidget(2, 1, inject(proto().identity().formerOccupation(), new FormDecoratorBuilder(20).build()));
+        employement.setWidget(1, 1, inject(proto().identity().formerEmployer(), new FieldDecoratorBuilder(20).build()));
+        employement.setWidget(2, 1, inject(proto().identity().formerOccupation(), new FieldDecoratorBuilder(20).build()));
 
         // put all together:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -214,8 +214,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         return main;
     }
 
-    private WidgetDecorator decorator(double width) {
-        return new FormDecoratorBuilder(width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
+    private FieldDecorator decorator(double width) {
+        return new FieldDecoratorBuilder(width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
                 .componentAlignment(Alignment.center).build();
     }
 
@@ -257,8 +257,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, inject(proto().paymentRate(), new FormDecoratorBuilder(25).build()));
-                main.setWidget(2, 1, inject(proto().paymentType(), new FormDecoratorBuilder(25).build()));
+                main.setWidget(2, 0, inject(proto().paymentRate(), new FieldDecoratorBuilder(25).build()));
+                main.setWidget(2, 1, inject(proto().paymentType(), new FieldDecoratorBuilder(25).build()));
 
                 return main;
             }
@@ -302,8 +302,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, inject(proto().plaintiff(), new FormDecoratorBuilder(50, true).build()));
-                main.setWidget(3, 0, 2, inject(proto().defendants(), new FormDecoratorBuilder(50, true).build()));
+                main.setWidget(2, 0, 2, inject(proto().plaintiff(), new FieldDecoratorBuilder(50, true).build()));
+                main.setWidget(3, 0, 2, inject(proto().defendants(), new FieldDecoratorBuilder(50, true).build()));
 
                 return main;
             }
@@ -347,8 +347,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, inject(proto().caseNumberAndTrustee(), new FormDecoratorBuilder(50, true).build()));
-                main.setWidget(3, 0, 2, inject(proto().intentOrDisposition(), new FormDecoratorBuilder(50, true).build()));
+                main.setWidget(2, 0, 2, inject(proto().caseNumberAndTrustee(), new FieldDecoratorBuilder(50, true).build()));
+                main.setWidget(3, 0, 2, inject(proto().intentOrDisposition(), new FieldDecoratorBuilder(50, true).build()));
 
                 return main;
             }
@@ -392,8 +392,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, inject(proto().plaintiff(), new FormDecoratorBuilder(50, true).build()));
-                main.setWidget(3, 0, 2, inject(proto().defendants(), new FormDecoratorBuilder(50, true).build()));
+                main.setWidget(2, 0, 2, inject(proto().plaintiff(), new FieldDecoratorBuilder(50, true).build()));
+                main.setWidget(3, 0, 2, inject(proto().defendants(), new FieldDecoratorBuilder(50, true).build()));
                 main.setWidget(4, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 return main;
@@ -438,9 +438,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 main.setHR(1, 0, 2);
 
-                main.setWidget(2, 0, 2, inject(proto().lastUpdated(), new FormDecoratorBuilder(25, true).build()));
-                main.setWidget(3, 0, inject(proto().from(), new FormDecoratorBuilder(10).build()));
-                main.setWidget(3, 1, inject(proto().to(), new FormDecoratorBuilder(10).build()));
+                main.setWidget(2, 0, 2, inject(proto().lastUpdated(), new FieldDecoratorBuilder(25, true).build()));
+                main.setWidget(3, 0, inject(proto().from(), new FieldDecoratorBuilder(10).build()));
+                main.setWidget(3, 1, inject(proto().to(), new FieldDecoratorBuilder(10).build()));
                 main.setWidget(4, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 return main;

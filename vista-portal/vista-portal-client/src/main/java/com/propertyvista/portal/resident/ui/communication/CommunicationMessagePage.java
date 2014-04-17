@@ -44,7 +44,7 @@ import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePa
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMessageDTO> {
 
@@ -81,8 +81,8 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
     protected IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
-        mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
         mainPanel.setWidget(++row, 0, inject(proto().thread().content(), messagesFolder));
         mainPanel.setBR(++row, 0, 1);
 
@@ -139,8 +139,8 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, inject(proto().date(), new CLabel<String>(), new FormWidgetDecoratorBuilder(180).build()));
-            content.setWidget(++row, 0, inject(proto().text(), new FormWidgetDecoratorBuilder(250).build()));
+            content.setWidget(++row, 0, inject(proto().date(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
+            content.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(250).build()));
             content.setBR(++row, 0, 1);
             content.setH1(++row, 0, 1, "Attachments");
             content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));

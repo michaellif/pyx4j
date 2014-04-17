@@ -28,7 +28,7 @@ import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepayment
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<InsurancePaymentMethodDTO> {
 
@@ -63,11 +63,11 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     private BasicFlexFormPanel createDisplayCurrentPaymentMethodStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Current Payment Method"));
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().currentPaymentMethod().creationDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        panel.setWidget(++row, 0, inject(proto().currentPaymentMethod().creationDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
         panel.setWidget(++row, 0,
-                inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FormWidgetDecoratorBuilder().build()));
+                inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0,
-                inject(proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FormWidgetDecoratorBuilder().build()));
+                inject(proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FieldDecoratorBuilder().build()));
 
         return panel;
     }

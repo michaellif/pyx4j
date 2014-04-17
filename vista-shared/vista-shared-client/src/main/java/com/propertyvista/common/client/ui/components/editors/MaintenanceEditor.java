@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -43,8 +43,8 @@ public class MaintenanceEditor extends CEntityForm<Maintenance> {
 
         main.setH1(++row, 0, 2, i18n.tr("Schedule"));
         ++row;
-        main.setWidget(row, 0, inject(proto().lastService(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(row, 1, inject(proto().nextService(), new FormDecoratorBuilder(9).build()));
+        main.setWidget(row, 0, inject(proto().lastService(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(row, 1, inject(proto().nextService(), new FieldDecoratorBuilder(9).build()));
 
         validateMaintenanceDates();
         return main;

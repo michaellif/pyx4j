@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -194,10 +194,10 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                     TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, 2, inject(proto().caption(), new FormDecoratorBuilder(20, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().date(), new FormDecoratorBuilder(10, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().time(), new FormDecoratorBuilder(10, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().description(), new FormDecoratorBuilder(50, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().caption(), new FieldDecoratorBuilder(20, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().date(), new FieldDecoratorBuilder(10, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().time(), new FieldDecoratorBuilder(10, true).build()));
+                    content.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(50, true).build()));
                     content.setWidget(++row, 0, 2, createLowerToolbar());
                     content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 

@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyDTO> {
 
@@ -40,11 +40,11 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceProvider(), new FormWidgetDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceCertificateNumber(), new FormWidgetDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().liabilityCoverage(), new FormWidgetDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().inceptionDate(), new FormWidgetDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().expiryDate(), new FormWidgetDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceProvider(), new FieldDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceCertificateNumber(), new FieldDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().liabilityCoverage(), new FieldDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().inceptionDate(), new FieldDecoratorBuilder(150).build()));
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().expiryDate(), new FieldDecoratorBuilder(150).build()));
 
         mainPanel.setH1(++row, 0, 1, "Scanned Insurance Certificate Documents");
         mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));

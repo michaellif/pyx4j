@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,9 +54,9 @@ public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO> {
 
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
-                main.setWidget(++row, 0, inject(proto().type(), new WidgetDecorator.Builder().componentWidth(10).build()));
-                main.setWidget(++row, 0, inject(proto().dataFormat(), new WidgetDecorator.Builder().componentWidth(10).build()));
-                main.setWidget(++row, 0, inject(proto().ignoreMissingMedia(), new WidgetDecorator.Builder().componentWidth(10).build()));
+                main.setWidget(++row, 0, inject(proto().type(), new FieldDecorator.Builder().componentWidth(10).build()));
+                main.setWidget(++row, 0, inject(proto().dataFormat(), new FieldDecorator.Builder().componentWidth(10).build()));
+                main.setWidget(++row, 0, inject(proto().ignoreMissingMedia(), new FieldDecorator.Builder().componentWidth(10).build()));
                 return main;
             }
         };

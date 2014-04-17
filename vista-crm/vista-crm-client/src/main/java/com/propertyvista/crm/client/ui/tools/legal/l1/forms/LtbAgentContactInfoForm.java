@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 
@@ -31,17 +31,17 @@ public class LtbAgentContactInfoForm extends CEntityForm<LtbAgentContactInfo> {
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().firstName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().lastName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().companyName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().mailingAddress(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().municipality(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().province(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().postalCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().phoneNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().faxNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().email(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().firstName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().lastName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().companyName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().mailingAddress(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().unit(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().municipality(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().province(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().phoneNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().faxNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder().build()));
         return panel;
     }
 

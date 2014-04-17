@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 
 /** Sets up defaults for Landing Forms (Login, Password Reset, TenantRegsitration etc.. ), right now intended to be used not with 'editable' forms only */
-public class LoginWidgetDecoratorBuilder extends FormWidgetDecoratorBuilder {
+public class LoginWidgetDecoratorBuilder extends FieldDecoratorBuilder {
 
     private String watermark;
 

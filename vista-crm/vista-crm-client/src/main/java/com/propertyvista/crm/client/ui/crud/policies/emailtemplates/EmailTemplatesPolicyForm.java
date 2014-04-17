@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
@@ -73,8 +73,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Header and Footer"));
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, inject(proto().header(), new FormDecoratorBuilder(true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().footer(), new FormDecoratorBuilder(true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().header(), new FieldDecoratorBuilder(true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().footer(), new FieldDecoratorBuilder(true).build()));
 
         return panel;
     }
@@ -132,13 +132,13 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 int row = -1;
 
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, inject(proto().type(), new FormDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, 2, inject(proto().subject(), new FormDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, 2, inject(proto().useHeader(), new FormDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, 2, inject(proto().useFooter(), new FormDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().type(), new FieldDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().subject(), new FieldDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().useHeader(), new FieldDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().useFooter(), new FieldDecoratorBuilder(true).build()));
                 CRichTextArea editor = new CRichTextArea();
                 editor.setImageProvider(new SiteImageResourceProvider());
-                content.setWidget(++row, 0, 2, inject(proto().content(), editor, new FormDecoratorBuilder(true).build()));
+                content.setWidget(++row, 0, 2, inject(proto().content(), editor, new FieldDecoratorBuilder(true).build()));
                 if (isEditable()) {
                     // create variable selection button
                     final PushButton pb = editor.getNativeComponent().getEditor().getCustomButton();

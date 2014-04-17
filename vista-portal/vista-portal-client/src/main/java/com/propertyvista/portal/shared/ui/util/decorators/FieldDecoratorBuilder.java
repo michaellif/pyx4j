@@ -13,18 +13,18 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
-public class FormWidgetDecoratorBuilder extends WidgetDecorator.Builder {
+public class FieldDecoratorBuilder extends FieldDecorator.Builder {
 
     // default sizes (in pixels): 
     public static final int LABEL_WIDTH = 220;
 
     public static final int CONTENT_WIDTH = 250;
 
-    public FormWidgetDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
+    public FieldDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
         super();
         labelWidth(labelWidth);
         contentWidth(contentWidth);
@@ -32,19 +32,19 @@ public class FormWidgetDecoratorBuilder extends WidgetDecorator.Builder {
         labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
     }
 
-    public FormWidgetDecoratorBuilder(int labelWidth, int componentWidth, int contentWidth) {
+    public FieldDecoratorBuilder(int labelWidth, int componentWidth, int contentWidth) {
         this(labelWidth + "px", componentWidth + "px", contentWidth + "px");
     }
 
-    public FormWidgetDecoratorBuilder(int labelWidth, int componentWidth) {
+    public FieldDecoratorBuilder(int labelWidth, int componentWidth) {
         this(labelWidth, componentWidth, CONTENT_WIDTH);
     }
 
-    public FormWidgetDecoratorBuilder(int componentWidth) {
+    public FieldDecoratorBuilder(int componentWidth) {
         this(LABEL_WIDTH, componentWidth);
     }
 
-    public FormWidgetDecoratorBuilder() {
+    public FieldDecoratorBuilder() {
         this(CONTENT_WIDTH);
     }
 

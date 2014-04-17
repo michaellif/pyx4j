@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -51,27 +51,27 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>(), new FormDecoratorBuilder(22).build()));
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormDecoratorBuilder(22).build()));
+        content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>(), new FieldDecoratorBuilder(22).build()));
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(22).build()));
 
-        content.setWidget(++row, 0, inject(proto().effectiveFrom(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().expiredFrom(), new CDateLabel(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().effectiveFrom(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().expiredFrom(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FormDecoratorBuilder(22).build()));
-        content.setWidget(++row, 0, inject(proto().creationDate(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
+        content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(15).build()));
 
-        content.setWidget(++row, 0, inject(proto().updatedByTenant(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().updatedBySystem(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().updatedByTenant(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().updatedBySystem(), new FieldDecoratorBuilder(10).build()));
 
-        content.setWidget(++row, 0, inject(proto().updated(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().isDeleted(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().isDeleted(), new FieldDecoratorBuilder(5).build()));
         CLabel<Key> reviewOfPapLink;
         content.setWidget(
                 ++row,
                 0,
-                reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>(), new FormDecoratorBuilder(5).customLabel(i18n.tr("Reviewed AutoPay"))
+                reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>(), new FieldDecoratorBuilder(5).customLabel(i18n.tr("Reviewed AutoPay"))
                         .build()));
         reviewOfPapLink.setNavigationCommand(new Command() {
             @Override

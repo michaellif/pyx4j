@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
@@ -33,13 +33,13 @@ public class PaymentFeesForm<E extends AbstractPaymentFees> extends CEntityForm<
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().ccVisaFee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().ccMasterCardFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().ccVisaFee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().ccMasterCardFee(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, inject(proto().visaDebitFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().visaDebitFee(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, inject(proto().eChequeFee(), new CMoneyField(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().directBankingFee(), new CMoneyField(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().eChequeFee(), new CMoneyField(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().directBankingFee(), new CMoneyField(), new FieldDecoratorBuilder().build()));
 
         return panel;
     }

@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class DepositFolder extends PortalBoxFolder<Deposit> {
 
@@ -51,8 +51,8 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder().build()));
 
             return content;
         }

@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -103,7 +103,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                 }
             }
         });
-        selectPolicyScopeBox.setDecorator(new FormDecoratorBuilder(10).customLabel(i18n.tr("Scope")).labelWidth(8).build());
+        selectPolicyScopeBox.setDecorator(new FieldDecoratorBuilder(10).customLabel(i18n.tr("Scope")).labelWidth(8).build());
 
         content.setWidget(++row, 0, selectPolicyScopeBox);
         content.setWidget(++row, 0, inject(proto().node(), new PolicyNodeEditor()));
@@ -245,7 +245,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
             int row = -1;
             for (CComponent<?> nodeComponent : nodeTypeToComponentMap.values()) {
-                nodeComponent.setDecorator(new FormDecoratorBuilder(16).customLabel(i18n.tr("Applied to")).labelWidth(8).build());
+                nodeComponent.setDecorator(new FieldDecoratorBuilder(16).customLabel(i18n.tr("Applied to")).labelWidth(8).build());
                 content.setWidget(++row, 0, nodeComponent);
             }
 

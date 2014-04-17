@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHistoryDTO> {
 
@@ -44,8 +44,8 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().issueDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
-        content.setWidget(++row, 0, inject(proto().currentBalanceAmount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
+        content.setWidget(++row, 0, inject(proto().issueDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+        content.setWidget(++row, 0, inject(proto().currentBalanceAmount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
 
         content.setWidget(++row, 0, inject(proto().lineItems(), new InvoiceLineItemFolder()));
 
@@ -77,9 +77,9 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().postDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FormWidgetDecoratorBuilder(250).build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().postDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
 
                 return content;
             }

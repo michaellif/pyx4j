@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO> {
 
@@ -81,10 +81,10 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().referenceNo(), new CNumberLabel(), new FormWidgetDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FormWidgetDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().fromDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().dueDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().referenceNo(), new CNumberLabel(), new FieldDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().fromDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().dueDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
 
                 content.setWidget(++row, 0, new Anchor("View Details", new Command() {
                     @Override

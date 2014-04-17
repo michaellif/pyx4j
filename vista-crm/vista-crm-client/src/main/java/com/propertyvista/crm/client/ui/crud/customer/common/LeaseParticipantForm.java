@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
@@ -153,7 +153,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         ++row;
         main.setWidget(row, 0, injectAndDecorate(proto().participantId(), 10));
-        main.setWidget(row, 1, inject(proto().customer().picture().file(), imageHolder, new FormDecoratorBuilder().customLabel("").build()));
+        main.setWidget(row, 1, inject(proto().customer().picture().file(), imageHolder, new FieldDecoratorBuilder().customLabel("").build()));
         main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 
         main.setWidget(++row, 0, injectAndDecorate(proto().yardiApplicantId(), 10));

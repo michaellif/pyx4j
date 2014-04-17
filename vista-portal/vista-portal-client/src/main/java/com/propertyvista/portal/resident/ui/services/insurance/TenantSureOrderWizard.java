@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,7 +43,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsu
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
 
@@ -113,13 +113,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setWidget(
                 ++row,
                 0,
-                inject(proto().personalDisclaimerSignature(), new FormWidgetDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden)
+                inject(proto().personalDisclaimerSignature(), new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden)
                         .contentWidth("250px").componentWidth("250px").build()));
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
-        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantName(), new FormWidgetDecoratorBuilder(200).build()));
-        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantPhone(), new FormWidgetDecoratorBuilder(200).build()));
+        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantName(), new FieldDecoratorBuilder(200).build()));
+        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantPhone(), new FieldDecoratorBuilder(200).build()));
         panel.setWidget(++row, 0, 1, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
 
         personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);

@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public abstract class ApplicationWizardStep extends WizardStep {
 
@@ -84,6 +85,46 @@ public abstract class ApplicationWizardStep extends WizardStep {
 
     public <T extends CComponent<?>> T inject(IObject<?> member, T comp, IDecorator<?> decorator) {
         return getWizard().inject(member, comp, decorator);
+    }
+
+    public final CComponent<?> injectAndDecorate(IObject<?> member) {
+        return inject(member, new FieldDecoratorBuilder().build());
+    }
+
+    public final CComponent<?> injectAndDecorate(IObject<?> member, String labelWidth, String componentWidth, String contentWidth) {
+        return inject(member, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
+    }
+
+    public final CComponent<?> injectAndDecorate(IObject<?> member, int labelWidth, int componentWidth, int contentWidth) {
+        return inject(member, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
+    }
+
+    public final CComponent<?> injectAndDecorate(IObject<?> member, int labelWidth, int componentWidth) {
+        return inject(member, new FieldDecoratorBuilder(labelWidth, componentWidth).build());
+    }
+
+    public final CComponent<?> injectAndDecorate(IObject<?> member, int labelWidth) {
+        return inject(member, new FieldDecoratorBuilder(labelWidth).build());
+    }
+
+    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp) {
+        return inject(member, comp, new FieldDecoratorBuilder().build());
+    }
+
+    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, String labelWidth, String componentWidth, String contentWidth) {
+        return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
+    }
+
+    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, int labelWidth, int componentWidth, int contentWidth) {
+        return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
+    }
+
+    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, int labelWidth, int componentWidth) {
+        return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth).build());
+    }
+
+    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, int labelWidth) {
+        return inject(member, comp, new FieldDecoratorBuilder(labelWidth).build());
     }
 
     public <T extends IEntity> CComponent<T> get(T member) {

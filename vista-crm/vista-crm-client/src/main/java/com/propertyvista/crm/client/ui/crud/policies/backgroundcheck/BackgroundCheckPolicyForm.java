@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.resources.CrmResources;
@@ -47,10 +47,10 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Policy"));
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().version().bankruptcy(), new FormDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().version().judgment(), new FormDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().version().collection(), new FormDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().version().chargeOff(), new FormDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().version().bankruptcy(), new FieldDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().version().judgment(), new FieldDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().version().collection(), new FieldDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, inject(proto().version().chargeOff(), new FieldDecoratorBuilder(5).build()));
 
         panel.setH3(++row, 0, 2, i18n.tr("Help"));
         panel.setWidget(++row, 0, 2, new HTML(CrmResources.INSTANCE.backgroundCheckHelp().getText()));

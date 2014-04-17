@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -48,14 +48,14 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     private TwoColumnFlexFormPanel createInsuranceRequirementsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Insurance Requirements"));
         int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().requireMinimumLiability(), new FormDecoratorBuilder(5, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().requireMinimumLiability(), new FieldDecoratorBuilder(5, true).build()));
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().minimumRequiredLiability()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FormDecoratorBuilder(20, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FieldDecoratorBuilder(20, true).build()));
         get(proto().minimumRequiredLiability()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public FieldValidationError isValid() {

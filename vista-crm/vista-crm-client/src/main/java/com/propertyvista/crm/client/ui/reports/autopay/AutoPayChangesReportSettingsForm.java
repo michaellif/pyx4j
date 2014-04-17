@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
@@ -42,8 +42,8 @@ public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChanges
 
         FlowPanel leftSidePanel = new FlowPanel();
 
-        leftSidePanel.add(inject(proto().leasesOnNoticeOnly(), new FormDecoratorBuilder().build()));
-        leftSidePanel.add(inject(proto().filterByExpectedMoveOut(), new FormDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().leasesOnNoticeOnly(), new FieldDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().filterByExpectedMoveOut(), new FieldDecoratorBuilder().build()));
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -51,11 +51,11 @@ public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChanges
                 get(proto().maximum()).setVisible(event.getValue() == true);
             }
         });
-        leftSidePanel.add(inject(proto().minimum(), new FormDecoratorBuilder().build()));
-        leftSidePanel.add(inject(proto().maximum(), new FormDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().minimum(), new FieldDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().build()));
 
         FlowPanel buildingFilterPanel = new FlowPanel();
-        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FormDecoratorBuilder().build()));
+        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder().build()));
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

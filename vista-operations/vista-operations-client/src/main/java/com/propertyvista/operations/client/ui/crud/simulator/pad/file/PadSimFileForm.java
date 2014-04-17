@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -49,31 +49,31 @@ public class PadSimFileForm extends OperationsEntityForm<PadSimFile> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().fileName(), new FormDecoratorBuilder(25).build()));
-        main.setWidget(row, 1, inject(proto().fileCreationNumber(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().fileName(), new FieldDecoratorBuilder(25).build()));
+        main.setWidget(row, 1, inject(proto().fileCreationNumber(), new FieldDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0, inject(proto().fundsTransferType(), new FormDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().fundsTransferType(), new FieldDecoratorBuilder(25).build()));
 
         main.setWidget(
                 ++row,
                 0,
                 inject(proto().originalFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class)),
-                        new FormDecoratorBuilder(35).build()));
-        main.setWidget(++row, 0, inject(proto().returnSent(), new FormDecoratorBuilder(10).build()));
+                        new FieldDecoratorBuilder(35).build()));
+        main.setWidget(++row, 0, inject(proto().returnSent(), new FieldDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0, inject(proto().state(), new FormDecoratorBuilder(25).build()));
-        main.setWidget(row, 1, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().state(), new FieldDecoratorBuilder(25).build()));
+        main.setWidget(row, 1, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0, inject(proto().received(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().acknowledgmentRejectReasonMessage(), new FormDecoratorBuilder(40).build()));
+        main.setWidget(++row, 0, inject(proto().received(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().acknowledgmentRejectReasonMessage(), new FieldDecoratorBuilder(40).build()));
 
-        main.setWidget(++row, 0, inject(proto().acknowledged(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().reconciliationSent(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().acknowledged(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().reconciliationSent(), new FieldDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0, inject(proto().batchRecordsCount(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().recordsCount(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().batchRecordsCount(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(row, 1, inject(proto().recordsCount(), new FieldDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0, inject(proto().fileAmount(), new FormDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().fileAmount(), new FieldDecoratorBuilder(10).build()));
 
         return main;
     }

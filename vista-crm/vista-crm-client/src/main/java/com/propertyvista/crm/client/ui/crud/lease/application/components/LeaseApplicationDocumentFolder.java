@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -61,11 +61,11 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
                     0,
                     2,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseApplicationDocument.class)), new FormDecoratorBuilder().componentWidth("350px")
+                            LeaseApplicationDocument.class)), new FieldDecoratorBuilder().componentWidth("350px")
                             .customLabel(i18n.tr("Agreement Document File")).build()));
-            panel.setWidget(++row, 0, 2, inject(proto().isSignedByInk(), new FormDecoratorBuilder().componentWidth("350px").build()));
-            panel.setWidget(++row, 0, 2, inject(proto().signedBy(), new FormDecoratorBuilder().componentWidth("350px").build()));
-            panel.setWidget(++row, 0, 2, inject(proto().uploader(), new FormDecoratorBuilder().componentWidth("350px").build()));
+            panel.setWidget(++row, 0, 2, inject(proto().isSignedByInk(), new FieldDecoratorBuilder().componentWidth("350px").build()));
+            panel.setWidget(++row, 0, 2, inject(proto().signedBy(), new FieldDecoratorBuilder().componentWidth("350px").build()));
+            panel.setWidget(++row, 0, 2, inject(proto().uploader(), new FieldDecoratorBuilder().componentWidth("350px").build()));
             return panel;
         }
 

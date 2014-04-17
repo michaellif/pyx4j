@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.domain.company.Employee;
@@ -79,7 +79,7 @@ public abstract class SigningEmplyeeSelectionDialog extends OkCancelDialog {
                     ++row,
                     0,
                     inject(proto().employee(), createAgentComboBox(),
-                            new FormDecoratorBuilder().componentWidth("150px").labelWidth("150px").contentWidth("150px").build()));
+                            new FieldDecoratorBuilder().componentWidth("150px").labelWidth("150px").contentWidth("150px").build()));
             return panel;
         }
 

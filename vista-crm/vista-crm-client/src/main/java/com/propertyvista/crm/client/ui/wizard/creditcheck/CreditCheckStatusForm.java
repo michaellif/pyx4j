@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
 
@@ -54,12 +54,12 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontSize(1.3, Unit.EM);
         contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
 
-        contentPanel.setWidget(++row, 0, inject(proto().reportType(), new FormDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, inject(proto().reportType(), new FieldDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, inject(proto().setupFee(), new FormDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, inject(proto().setupFee(), new FieldDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, inject(proto().perApplicantFee(), new FormDecoratorBuilder().build()));
+        contentPanel.setWidget(++row, 0, inject(proto().perApplicantFee(), new FieldDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         selectTab(addTab(contentPanel));

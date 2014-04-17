@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -50,8 +50,8 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().numberOfRequiredIDs(), new FormDecoratorBuilder(3).build()));
-        content.setWidget(row, 1, inject(proto().mandatoryProofOfIncome(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().numberOfRequiredIDs(), new FieldDecoratorBuilder(3).build()));
+        content.setWidget(row, 1, inject(proto().mandatoryProofOfIncome(), new FieldDecoratorBuilder(10).build()));
 
         content.setH3(++row, 0, 2, proto().allowedIDs().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));

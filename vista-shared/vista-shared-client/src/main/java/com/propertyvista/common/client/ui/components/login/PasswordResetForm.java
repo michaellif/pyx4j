@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
@@ -67,13 +67,13 @@ public class PasswordResetForm extends CEntityForm<PasswordChangeRequest> {
 
         int row = -1;
 
-        main.setWidget(++row, 0, inject(proto().securityQuestion(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().securityAnswer(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().securityQuestion(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().securityAnswer(), new FieldDecoratorBuilder().build()));
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         main.setWidget(++row, 0,
-                inject(proto().newPassword(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
-        main.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new FormDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+                inject(proto().newPassword(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build()));
+        main.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
 
         get(proto().securityQuestion()).setVisible(false);
         get(proto().securityAnswer()).setVisible(false);

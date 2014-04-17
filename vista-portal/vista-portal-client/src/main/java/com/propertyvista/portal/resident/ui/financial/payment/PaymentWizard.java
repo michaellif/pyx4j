@@ -77,7 +77,7 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
@@ -149,11 +149,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>(), new FormWidgetDecoratorBuilder(200)
+                inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>(), new FieldDecoratorBuilder(200)
                         .customLabel(i18n.tr("Tenant")).build()));
 
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder(100).build()));
+        panel.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(100).build()));
 
         return panel;
     }
@@ -166,15 +166,15 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                 ++row,
                 0,
                 inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL),
-                        new FormWidgetDecoratorBuilder().build()));
+                        new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, inject(proto().storeInProfile(), new FormWidgetDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().storeInProfile(), new FieldDecoratorBuilder().build()));
 
         // tweaks:
 

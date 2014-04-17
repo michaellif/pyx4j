@@ -21,14 +21,14 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.prospect.ui.application.AccessoryEntityForm;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
-public class NameEditor extends CEntityForm<Name> {
+public class NameEditor extends AccessoryEntityForm<Name> {
 
     private final CComponent<Name> nameComp;
 
@@ -41,7 +41,7 @@ public class NameEditor extends CEntityForm<Name> {
 
         nameComp = new CEntityLabel<Name>();
         nameComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-        nameComp.setDecorator(new FormWidgetDecoratorBuilder(200).customLabel(customViewLabel).build());
+        nameComp.setDecorator(new FieldDecoratorBuilder(200).customLabel(customViewLabel).build());
 
         adopt(nameComp);
     }
@@ -59,11 +59,11 @@ public class NameEditor extends CEntityForm<Name> {
         int row = -1;
 
         main.setWidget(++row, 0, nameComp);
-        main.setWidget(++row, 0, inject(proto().firstName(), new FormWidgetDecoratorBuilder(200).build()));
-        main.setWidget(++row, 0, inject(proto().lastName(), new FormWidgetDecoratorBuilder(200).build()));
-        main.setWidget(++row, 0, inject(proto().middleName(), new FormWidgetDecoratorBuilder(60).build()));
-        main.setWidget(++row, 0, inject(proto().namePrefix(), new FormWidgetDecoratorBuilder(60).build()));
-        main.setWidget(++row, 0, inject(proto().nameSuffix(), new FormWidgetDecoratorBuilder(60).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().firstName(), 200));
+        main.setWidget(++row, 0, injectAndDecorate(proto().lastName(), 200));
+        main.setWidget(++row, 0, injectAndDecorate(proto().middleName(), 60));
+        main.setWidget(++row, 0, injectAndDecorate(proto().namePrefix(), 80));
+        main.setWidget(++row, 0, injectAndDecorate(proto().nameSuffix(), 60));
 
         calculateFieldsStatus();
 

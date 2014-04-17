@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -38,9 +38,9 @@ public class PersonalInformationForm extends CEntityForm<PersonalInformationDTO>
         main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, inject(proto().dto_personalAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().email(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().dateOfBirth(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().sin(), new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().dateOfBirth(), new FieldDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().sin(), new FieldDecoratorBuilder().build()));
         return main;
     }
 

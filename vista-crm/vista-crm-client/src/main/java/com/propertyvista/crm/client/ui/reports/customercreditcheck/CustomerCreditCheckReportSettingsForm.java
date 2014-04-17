@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
@@ -31,11 +31,11 @@ public class CustomerCreditCheckReportSettingsForm extends CEntityForm<CustomerC
     protected IsWidget createContent() {
 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(0, 0, inject(proto().minAmountChecked(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
-        panel.setWidget(1, 0, inject(proto().maxAmountChecked(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(0, 0, inject(proto().minAmountChecked(), new FieldDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(1, 0, inject(proto().maxAmountChecked(), new FieldDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
 
-        panel.setWidget(0, 1, inject(proto().minCreditCheckDate(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
-        panel.setWidget(1, 1, inject(proto().maxCreditCheckDate(), new FormDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(0, 1, inject(proto().minCreditCheckDate(), new FieldDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
+        panel.setWidget(1, 1, inject(proto().maxCreditCheckDate(), new FieldDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
 
         return panel;
     }

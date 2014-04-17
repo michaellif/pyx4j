@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -37,7 +37,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodD
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
 
@@ -54,7 +54,7 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
         mainPanel.setWidget(
                 ++row,
                 0,
-                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormWidgetDecoratorBuilder(250).labelAlignment(Alignment.left)
+                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(250).labelAlignment(Alignment.left)
                         .build()));
 
         mainPanel.setHR(++row, 0, 1);

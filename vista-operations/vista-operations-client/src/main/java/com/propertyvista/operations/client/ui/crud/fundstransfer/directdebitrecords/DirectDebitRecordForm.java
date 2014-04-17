@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -28,22 +28,22 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FormDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().paymentReferenceNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().customerName(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().receivedDate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().amount(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().paymentReferenceNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().customerName(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().receivedDate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, inject(proto().operationsNotes(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().operationsNotes(), new FieldDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 2, "Trace");
 
-        panel.setWidget(++row, 0, 1, inject(proto().trace().collectionDate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().trace().locationCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().trace().sourceCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().trace().traceNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().collectionDate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().locationCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().sourceCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().trace().traceNumber(), new FieldDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

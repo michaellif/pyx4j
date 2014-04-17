@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferbatch;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -28,18 +28,18 @@ public class FundsTransferBatchForm extends OperationsEntityForm<FundsTransferBa
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FormDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().chargeDescription(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().batchAmount(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().accountNumber(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().chargeDescription(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().batchAmount(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().acknowledgmentStatusCode(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 1, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

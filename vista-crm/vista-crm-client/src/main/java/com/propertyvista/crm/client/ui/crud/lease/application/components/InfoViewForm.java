@@ -25,14 +25,14 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -83,14 +83,14 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         int row = -1;
         main.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
 
-        main.setWidget(++row, 0, inject(proto().person().sex(), new FormDecoratorBuilder(7).build()));
-        main.setWidget(++row, 0, inject(proto().person().birthDate(), new FormDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().person().email(), new FormDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().person().sex(), new FieldDecoratorBuilder(7).build()));
+        main.setWidget(++row, 0, inject(proto().person().birthDate(), new FieldDecoratorBuilder(10).build()));
+        main.setWidget(++row, 0, inject(proto().person().email(), new FieldDecoratorBuilder(25).build()));
 
         row -= 3;
-        main.setWidget(++row, 1, inject(proto().person().homePhone(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, 1, inject(proto().person().mobilePhone(), new FormDecoratorBuilder(15).build()));
-        main.setWidget(++row, 1, inject(proto().person().workPhone(), new FormDecoratorBuilder(15).build()));
+        main.setWidget(++row, 1, inject(proto().person().homePhone(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++row, 1, inject(proto().person().mobilePhone(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++row, 1, inject(proto().person().workPhone(), new FieldDecoratorBuilder(15).build()));
 
         main.setH1(++row, 0, 2, i18n.tr("Identification Documents"));
         main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload = new IdUploaderFolder()));
@@ -230,7 +230,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         });
     }
 
-    private WidgetDecorator createLegalQuestionDecorator() {
-        return new FormDecoratorBuilder(60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+    private FieldDecorator createLegalQuestionDecorator() {
+        return new FieldDecoratorBuilder(60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 }

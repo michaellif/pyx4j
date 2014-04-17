@@ -20,7 +20,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Button;
@@ -89,8 +89,8 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     private TwoColumnFlexFormPanel createRelatedFilesStep() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Related Files"));
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber1(), new FormDecoratorBuilder().labelWidth("20em").build()));
-        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber2(), new FormDecoratorBuilder().labelWidth("20em").build()));
+        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber1(), new FieldDecoratorBuilder().labelWidth("20em").build()));
+        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber2(), new FieldDecoratorBuilder().labelWidth("20em").build()));
         return panel;
     }
 
@@ -129,9 +129,9 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
             }
         }));
         panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Summary")));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().applicationFillingFee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().applicationFillingFee(), new FieldDecoratorBuilder().build()));
         get(proto().formData().owedSummary().applicationFillingFee()).setViewable(true);
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().total(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().total(), new FieldDecoratorBuilder().build()));
         get(proto().formData().owedSummary().total()).setViewable(true);
 
         return panel;

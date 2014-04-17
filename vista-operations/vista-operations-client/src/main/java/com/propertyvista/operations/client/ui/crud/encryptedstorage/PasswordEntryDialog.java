@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class PasswordEntryDialog extends OkCancelDialog {
@@ -43,9 +43,9 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
         @Override
         protected IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
-            contentPanel.add(inject(proto().password(), new FormDecoratorBuilder().build()));
+            contentPanel.add(inject(proto().password(), new FieldDecoratorBuilder().build()));
             if (requirePasswordConfirm) {
-                contentPanel.add(inject(proto().passwordConfirm(), new FormDecoratorBuilder().build()));
+                contentPanel.add(inject(proto().passwordConfirm(), new FieldDecoratorBuilder().build()));
                 get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                     @Override
                     public FieldValidationError isValid() {

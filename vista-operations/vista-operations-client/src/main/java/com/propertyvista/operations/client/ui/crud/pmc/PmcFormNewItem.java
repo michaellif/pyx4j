@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.domain.DemoData;
@@ -35,12 +35,12 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().dnsName(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().firstName(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().lastName(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().email(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().password(), new FormDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().dnsName(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().firstName(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().lastName(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().email(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().onboardingUser().password(), new FieldDecoratorBuilder(15).build()));
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().features(), new PmcFeaturesForm()));

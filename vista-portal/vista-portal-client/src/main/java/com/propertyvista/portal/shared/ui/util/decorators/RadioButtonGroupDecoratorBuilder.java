@@ -13,9 +13,9 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-public class RadioButtonGroupDecoratorBuilder extends WidgetDecorator.Builder {
+public class RadioButtonGroupDecoratorBuilder extends FieldDecorator.Builder {
 
     public RadioButtonGroupDecoratorBuilder() {
         super();

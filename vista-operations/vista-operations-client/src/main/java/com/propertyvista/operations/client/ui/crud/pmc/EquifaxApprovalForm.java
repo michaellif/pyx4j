@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
@@ -31,9 +31,9 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, "Credit Pricing Option");
-        panel.setWidget(++row, 0, inject(proto().reportType(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().setupFee(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().perApplicantFeee(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().reportType(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().setupFee(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().perApplicantFeee(), new FieldDecoratorBuilder().build()));
 
         panel.setH1(++row, 0, 1, "Business Information");
         panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));

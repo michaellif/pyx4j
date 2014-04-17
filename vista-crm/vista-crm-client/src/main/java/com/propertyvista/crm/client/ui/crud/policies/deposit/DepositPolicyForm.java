@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -41,8 +41,8 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().annualInterestRate(), new FormDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().securityDepositRefundWindow(), new FormDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().annualInterestRate(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().securityDepositRefundWindow(), new FieldDecoratorBuilder().build()));
 
         return panel;
     }

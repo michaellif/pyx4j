@@ -40,7 +40,7 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class ApplicationStatusPageViewImpl extends FlowPanel implements ApplicationStatusPageView {
 
@@ -245,7 +245,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, inject(proto().progress(), new FormWidgetDecoratorBuilder().build()));
+                main.setWidget(++row, 0, inject(proto().progress(), new FieldDecoratorBuilder().build()));
                 main.setBR(++row, 0, 1);
                 main.setWidget(++row, 0, inject(proto().individualApplications(), new ApplicationStatusFolder()));
 

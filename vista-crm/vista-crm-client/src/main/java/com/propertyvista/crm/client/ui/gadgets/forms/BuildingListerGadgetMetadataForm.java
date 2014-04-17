@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 
@@ -31,8 +31,8 @@ public class BuildingListerGadgetMetadataForm extends CEntityForm<BuildingLister
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().buildingListerSettings().pageSize(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().buildingListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
         return p;
     }
 

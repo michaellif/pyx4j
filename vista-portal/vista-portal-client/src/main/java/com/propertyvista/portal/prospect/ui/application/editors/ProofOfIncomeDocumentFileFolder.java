@@ -28,7 +28,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFile;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocumentProspectUploadService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfIncomeDocumentFile> {
 
@@ -60,8 +60,8 @@ public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfInco
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfIncomeDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfIncomeDocumentFile.class));
 
-            main.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FormWidgetDecoratorBuilder().customLabel("").labelWidth("0px").build()));
-            main.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder().build()));
+            main.setWidget(++row, 0, 1, inject(proto().file(), cfile, new FieldDecoratorBuilder().customLabel("").labelWidth("0px").build()));
+            main.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder().build()));
 
             return main;
         }

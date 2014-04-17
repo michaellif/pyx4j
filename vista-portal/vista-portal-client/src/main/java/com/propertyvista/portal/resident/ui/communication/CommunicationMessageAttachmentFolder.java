@@ -27,7 +27,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<CommunicationMessageAttachment> {
     private final static I18n i18n = I18n.get(CommunicationMessageAttachmentFolder.class);
@@ -61,9 +61,9 @@ public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<Commun
                     0,
                     inject(proto().file(),
                             new CFile(GWT.<CommunicationMessageAttachmentUploadPortalService> create(CommunicationMessageAttachmentUploadPortalService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), new FormWidgetDecoratorBuilder(250).build()));
+                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), new FieldDecoratorBuilder(250).build()));
 
-            content.setWidget(++row, 0, inject(proto().description(), new FormWidgetDecoratorBuilder(200).build()));
+            content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(200).build()));
 
             return content;
         }

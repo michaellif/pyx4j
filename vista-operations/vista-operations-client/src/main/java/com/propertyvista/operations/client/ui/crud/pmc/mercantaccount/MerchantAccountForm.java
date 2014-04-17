@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -78,38 +78,38 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().created(), new FormDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().updated(), new FormDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().created(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().updated(), new FieldDecoratorBuilder(10).build()));
 
         content.setWidget(++row, 0,
-                inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FormDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().status(), new FormDecoratorBuilder().build()));
+                inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FieldDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().status(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FormDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().paymentsStatus(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().paymentsStatus(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantTerminalIdConvenienceFee(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantTerminalIdConvenienceFee(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().bankId(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().invalid(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().bankId(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().invalid(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().branchTransitNumber(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().chargeDescription(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().branchTransitNumber(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().chargeDescription(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().accountNumber(), new FormDecoratorBuilder(15).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().accountName(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().accountNumber(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().accountName(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, 2, inject(proto().merchantAccount().operationsNotes(), new FormDecoratorBuilder(15, true).build()));
+        content.setWidget(++row, 0, 2, inject(proto().merchantAccount().operationsNotes(), new FieldDecoratorBuilder(15, true).build()));
 
         content.setH2(++row, 0, 2, i18n.tr("Payment Types Activation"));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedEcheck(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedDirectBanking(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedEcheck(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedDirectBanking(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedCreditCard(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee(), new FormDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedCreditCard(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedInterac(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedInterac(), new FieldDecoratorBuilder(5).build()));
 
         content.setH2(++row, 0, 2, i18n.tr("Assigned Buildings"));
         content.setWidget(++row, 0, 2, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));

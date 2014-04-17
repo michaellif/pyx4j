@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
@@ -47,11 +47,11 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().paymentsSummaryListerSettings().pageSize(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().paymentsSummaryListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
         p.setWidget(++row, 0, new HTML("&nbsp"));
-        p.setWidget(++row, 0, inject(proto().customizeDate(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().asOf(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
         p.setWidget(++row, 0, new HTML("&nbsp"));
         get(proto().asOf()).setVisible(false);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -75,7 +75,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentStatus(), paymentStatusSelector, new FormDecoratorBuilder(50).build()));
+        p.setWidget(++row, 0, inject(proto().paymentStatus(), paymentStatusSelector, new FieldDecoratorBuilder(50).build()));
         return p;
     }
 

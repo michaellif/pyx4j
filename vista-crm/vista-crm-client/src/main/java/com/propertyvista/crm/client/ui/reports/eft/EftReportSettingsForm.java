@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
 import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
@@ -62,8 +62,8 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
         final String CHECKBOX_WIDTH = "100px";
         final String INPUT_FIELD_WIDTH = "150px";
         final String CONTENT_WIDTH = "180px";
-        column1.add(inject(proto().leasesOnNoticeOnly(), new FormDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
-        column1.add(inject(proto().forthcomingEft(), new FormDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().leasesOnNoticeOnly(), new FieldDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().forthcomingEft(), new FieldDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
         get(proto().forthcomingEft()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -73,13 +73,13 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
                 get(proto().onlyWithNotice()).setVisible(event.getValue() != true);
             }
         });
-        column1.add(inject(proto().onlyWithNotice(), new FormDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
-        column1.add(inject(proto().paymentStatus(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build()));
-        column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+        column1.add(inject(proto().onlyWithNotice(), new FieldDecoratorBuilder().contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().paymentStatus(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build()));
+        column1.add(inject(proto().orderBy(), makeOrderByComboBox(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
                 .build()));
 
         FlowPanel column2 = new FlowPanel();
-        column2.add(inject(proto().filterByBillingCycle(), new FormDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build()));
+        column2.add(inject(proto().filterByBillingCycle(), new FieldDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build()));
         get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -95,15 +95,15 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
         billingCycleFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
         billingCycleFilterPanel.getElement().getStyle().setPaddingBottom(1, Unit.EM);
 
-        billingCycleFilterPanel.add(inject(proto().billingPeriod(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+        billingCycleFilterPanel.add(inject(proto().billingPeriod(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
                 .build()));
         get(proto().billingPeriod()).setEnabled(!VistaFeatures.instance().yardiIntegration());
 
         billingCycleFilterPanel.add(inject(proto().billingCycleStartDate(),
-                new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build()));
+                new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build()));
         column2.add(billingCycleFilterPanel);
 
-        column2.add(inject(proto().filterByExpectedMoveOut(), new FormDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build()));
+        column2.add(inject(proto().filterByExpectedMoveOut(), new FieldDecoratorBuilder().componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build()));
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -113,14 +113,14 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
         });
         FlowPanel expectedMoveOutFilterPanel = new FlowPanel();
         expectedMoveOutFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
-        expectedMoveOutFilterPanel.add(inject(proto().minimum(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+        expectedMoveOutFilterPanel.add(inject(proto().minimum(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
                 .build()));
-        expectedMoveOutFilterPanel.add(inject(proto().maximum(), new FormDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+        expectedMoveOutFilterPanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
                 .build()));
         column2.add(expectedMoveOutFilterPanel);
 
         FlowPanel buildingFilterPanel = new FlowPanel();
-        buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FormDecoratorBuilder().build()));
+        buildingFilterPanel.add(inject(proto().filterByPortfolio(), new FieldDecoratorBuilder().build()));
         buildingFilterPanel.add(inject(proto().selectedPortfolios(), new PortfolioFolder(parentView, isEditable())));
         get(proto().filterByPortfolio()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -129,7 +129,7 @@ public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
             }
         });
 
-        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FormDecoratorBuilder().build()));
+        buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder().build()));
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

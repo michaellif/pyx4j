@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
 
@@ -57,9 +57,9 @@ public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0, inject(proto().name(), new CEntityLabel<Name>(), new FormWidgetDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().birthDate(), new CDateLabel(), new FormWidgetDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().relationship(), new CEnumLabel(), new FormWidgetDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().birthDate(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().relationship(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
 
             return mainPanel;
         }

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -39,17 +39,17 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().date(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 0, inject(proto().time(), new FormDecoratorBuilder(7).build()));
-        main.setWidget(++row, 0, inject(proto().address(), new FormDecoratorBuilder(25).build()));
-        main.setWidget(++row, 0, inject(proto().status(), new FormDecoratorBuilder(9).build()));
-        main.setWidget(++row, 0, inject(proto().closeReason(), new FormDecoratorBuilder(25).build()));
-        main.setWidget(++row, 0, inject(proto().notes(), new FormDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().time(), new FieldDecoratorBuilder(7).build()));
+        main.setWidget(++row, 0, inject(proto().address(), new FieldDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(9).build()));
+        main.setWidget(++row, 0, inject(proto().closeReason(), new FieldDecoratorBuilder(25).build()));
+        main.setWidget(++row, 0, inject(proto().notes(), new FieldDecoratorBuilder(25).build()));
 
         row = -1;
-        main.setWidget(++row, 1, inject(proto().agent(), new FormDecoratorBuilder(20).build()));
-        main.setWidget(++row, 1, inject(proto().phone(), new FormDecoratorBuilder(20).customLabel(i18n.tr("Agent Phone")).build()));
-        main.setWidget(++row, 1, inject(proto().email(), new FormDecoratorBuilder(20).customLabel(i18n.tr("Agent Email")).build()));
+        main.setWidget(++row, 1, inject(proto().agent(), new FieldDecoratorBuilder(20).build()));
+        main.setWidget(++row, 1, inject(proto().phone(), new FieldDecoratorBuilder(20).customLabel(i18n.tr("Agent Phone")).build()));
+        main.setWidget(++row, 1, inject(proto().email(), new FieldDecoratorBuilder(20).customLabel(i18n.tr("Agent Email")).build()));
 
         // tweak UI:
         get(proto().status()).setEditable(false);

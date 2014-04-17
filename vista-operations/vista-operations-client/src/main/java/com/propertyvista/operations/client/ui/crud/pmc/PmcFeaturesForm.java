@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
@@ -34,11 +34,11 @@ public class PmcFeaturesForm extends CEntityForm<PmcVistaFeatures> {
     protected IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        content.setWidget(++row, 0, inject(proto().countryOfOperation(), new FormDecoratorBuilder(25).build()));
-        content.setWidget(++row, 0, inject(proto().onlineApplication(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().yardiIntegration(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().yardiMaintenance(), new FormDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().tenantSureIntegration(), new FormDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().countryOfOperation(), new FieldDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().onlineApplication(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().yardiIntegration(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().yardiMaintenance(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().tenantSureIntegration(), new FieldDecoratorBuilder(5).build()));
 
         final CComponent<Boolean> yardiIntegrationSwitch = get(proto().yardiIntegration());
         final CComponent<Boolean> yardiMaintenanceSwitch = get(proto().yardiMaintenance());

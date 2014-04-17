@@ -42,7 +42,7 @@ import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -95,7 +95,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
             int row = -1;
 
-            mainPanel.setWidget(++row, 0, inject(proto().nextAutoPayDate(), new CDateLabel(), new FormWidgetDecoratorBuilder(100).build()));
+            mainPanel.setWidget(++row, 0, inject(proto().nextAutoPayDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
             mainPanel.setBR(++row, 0, 1);
             mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder(this)));
 
@@ -165,9 +165,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Tenant>(), new FormWidgetDecoratorBuilder(250).build()));
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>(), new FormWidgetDecoratorBuilder(250).build()));
-                content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder(100).build()));
+                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Tenant>(), new FieldDecoratorBuilder(250).build()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>(), new FieldDecoratorBuilder(250).build()));
+                content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(100).build()));
 
                 content.setWidget(++row, 0, detailsViewAnchor);
 

@@ -17,7 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -33,15 +33,15 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, inject(proto().responseDelay(), new FormDecoratorBuilder(5, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseDelay(), new FieldDecoratorBuilder(5, true).build()));
 
-        panel.setWidget(++row, 0, 2, inject(proto().responseType(), new FormDecoratorBuilder(15, true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().responseCode(), new FormDecoratorBuilder(15, true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().responseHttpCode(), new FormDecoratorBuilder(15, true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().responseText(), new FormDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseType(), new FieldDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseCode(), new FieldDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseHttpCode(), new FieldDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().responseText(), new FieldDecoratorBuilder(15, true).build()));
 
-        panel.setWidget(++row, 0, 2, inject(proto().acceptCardExpiryFrom(), new FormDecoratorBuilder(15, true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().acceptCardExpiryTo(), new FormDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().acceptCardExpiryFrom(), new FieldDecoratorBuilder(15, true).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().acceptCardExpiryTo(), new FieldDecoratorBuilder(15, true).build()));
 
         get(proto().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
 

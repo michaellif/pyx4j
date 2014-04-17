@@ -37,7 +37,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView.PaymentConfirmationPresenter;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
@@ -60,16 +60,16 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FormWidgetDecoratorBuilder().customLabel(i18n.tr("Reference Number")).build()));
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FormWidgetDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().amount(), new FormWidgetDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().transactionAuthorizationNumber(), new FormWidgetDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().convenienceFee(), new FormWidgetDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().convenienceFeeTransactionAuthorizationNumber(), new FormWidgetDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Reference Number")).build()));
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().transactionAuthorizationNumber(), new FieldDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().convenienceFee(), new FieldDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().convenienceFeeTransactionAuthorizationNumber(), new FieldDecoratorBuilder().build()));
 
         content.setHR(++row, 0, 1);
 
-        content.setWidget(++row, 0, inject(proto().transactionErrorMessage(), new FormWidgetDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().transactionErrorMessage(), new FieldDecoratorBuilder().build()));
 
         content.setWidget(++row, 0, autoPaySignupPanel = createAutoPaySignupPanel());
 

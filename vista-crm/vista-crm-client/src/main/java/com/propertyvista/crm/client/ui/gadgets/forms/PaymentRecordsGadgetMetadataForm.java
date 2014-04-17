@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
@@ -49,11 +49,11 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
         TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().paymentRecordsListerSettings().pageSize(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().paymentRecordsListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
         p.setWidget(++row, 0, new HTML("&nbsp"));
-        p.setWidget(++row, 0, inject(proto().customizeTargetDate(), new FormDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().targetDate(), new FormDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().customizeTargetDate(), new FieldDecoratorBuilder().build()));
+        p.setWidget(++row, 0, inject(proto().targetDate(), new FieldDecoratorBuilder().build()));
         get(proto().targetDate()).setVisible(false);
         get(proto().customizeTargetDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -76,7 +76,7 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentMethodFilter(), paymentTypeSelector, new FormDecoratorBuilder(50).build()));
+        p.setWidget(++row, 0, inject(proto().paymentMethodFilter(), paymentTypeSelector, new FieldDecoratorBuilder(50).build()));
 
         // TODO we don't use PaymentStatus.Processing that's why we choose this constructor
         CComponent<Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(
@@ -91,7 +91,7 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentStatusFilter(), paymentStatusSelector, new FormDecoratorBuilder(50).build()));
+        p.setWidget(++row, 0, inject(proto().paymentStatusFilter(), paymentStatusSelector, new FieldDecoratorBuilder(50).build()));
 
         return p;
     }

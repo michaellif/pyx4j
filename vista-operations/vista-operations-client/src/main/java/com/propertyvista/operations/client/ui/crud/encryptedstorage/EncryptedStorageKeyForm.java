@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FormDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -87,14 +87,14 @@ public class EncryptedStorageKeyForm extends CEntityForm<EncryptedStorageKeyDTO>
     private Widget makeStatusPanel() {
         TwoColumnFlexFormPanel statusPanel = new TwoColumnFlexFormPanel();
         int row = -1;
-        statusPanel.setWidget(++row, 0, inject(proto().name(), new FormDecoratorBuilder().componentWidth(15).build()));
-        statusPanel.setWidget(++row, 0, inject(proto().isCurrent(), new FormDecoratorBuilder().componentWidth(5).build()));
-        statusPanel.setWidget(++row, 0, inject(proto().decryptionEnabled(), new FormDecoratorBuilder().componentWidth(5).build()));
+        statusPanel.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().componentWidth(15).build()));
+        statusPanel.setWidget(++row, 0, inject(proto().isCurrent(), new FieldDecoratorBuilder().componentWidth(5).build()));
+        statusPanel.setWidget(++row, 0, inject(proto().decryptionEnabled(), new FieldDecoratorBuilder().componentWidth(5).build()));
 
         row = -1;
-        statusPanel.setWidget(++row, 1, inject(proto().recordsCount(), new FormDecoratorBuilder().build()));
-        statusPanel.setWidget(++row, 1, inject(proto().created(), new FormDecoratorBuilder().build()));
-        statusPanel.setWidget(++row, 1, inject(proto().expired(), new FormDecoratorBuilder().build()));
+        statusPanel.setWidget(++row, 1, inject(proto().recordsCount(), new FieldDecoratorBuilder().build()));
+        statusPanel.setWidget(++row, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
+        statusPanel.setWidget(++row, 1, inject(proto().expired(), new FieldDecoratorBuilder().build()));
         return statusPanel;
     }
 
