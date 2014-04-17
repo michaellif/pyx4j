@@ -128,9 +128,9 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof InsuranceCertificateSummaryDTO) {
-                return new InsuranceCertificateViewer();
+                return (T) new InsuranceCertificateViewer();
             }
             return super.create(member);
         }

@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
@@ -91,6 +92,10 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         setExpended(false);
     }
 
+    protected void addComponent(IObject<?> member, CComponent<?, ?> component) {
+        contentPanel.setWidget(++row, 0, form.inject(member, component));
+    }
+
     protected void addField(IObject<?> member) {
         contentPanel.setWidget(++row, 0, form.inject(member, new FieldDecoratorBuilder().build()));
     }
@@ -99,12 +104,8 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         contentPanel.setWidget(++row, 0, form.inject(member, new FieldDecoratorBuilder().customLabel(customLabel).build()));
     }
 
-    protected void addField(IObject<?> member, CComponent<?, ?> component, boolean decorate) {
-        if (decorate) {
-            contentPanel.setWidget(++row, 0, form.inject(member, component, new FieldDecoratorBuilder().build()));
-        } else {
-            contentPanel.setWidget(++row, 0, form.inject(member, component));
-        }
+    protected void addField(IObject<?> member, CField<?, ?> field) {
+        contentPanel.setWidget(++row, 0, form.injectAndDecorate(member, field));
     }
 
     protected void addCaption(String caption) {

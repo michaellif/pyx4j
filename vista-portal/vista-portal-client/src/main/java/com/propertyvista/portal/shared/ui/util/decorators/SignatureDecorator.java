@@ -27,12 +27,13 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.DebugIds;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
-public class SignatureDecorator extends FlowPanel implements IDecorator<CSignature> {
+public class SignatureDecorator extends FlowPanel implements IDecorator<CField<?, ?>> {
 
     private final SimplePanel componentHolder;
 
@@ -60,8 +61,8 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CSignatu
     }
 
     @Override
-    public void init(CSignature component) {
-        this.component = component;
+    public void init(CField<?, ?> component) {
+        this.component = (CSignature) component;
         component.asWidget().addStyleName(WidgetDecoratorComponent.name());
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {

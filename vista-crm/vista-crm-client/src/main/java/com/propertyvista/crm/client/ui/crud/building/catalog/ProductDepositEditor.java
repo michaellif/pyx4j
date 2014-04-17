@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -97,7 +97,7 @@ public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
         if (valueType == null)
             return; // New item
 
-        CComponent<?, ?> comp = null;
+        CField<BigDecimal, ?> comp = null;
         switch (valueType) {
         case Monetary:
             comp = new CMoneyField();

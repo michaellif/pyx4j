@@ -28,7 +28,7 @@ public class PeopleSectionPanel extends AbstractSectionPanel {
         super(index, OnlineApplicationWizardStepMeta.People.toString(), form, step);
 
         addCaption(i18n.tr("People Living with You"));
-        addField(proto().coapplicants(), new CoapplicantsReadonlyFolder(), false);
-        addField(proto().dependents(), new DependentsReadonlyFolder(), false);
+        addComponent(proto().coapplicants(), new CoapplicantsReadonlyFolder());
+        addComponent(proto().dependents(), new DependentsReadonlyFolder());
     }
 }

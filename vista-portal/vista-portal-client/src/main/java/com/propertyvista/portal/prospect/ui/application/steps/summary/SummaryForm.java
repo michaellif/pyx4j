@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
 import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
@@ -34,8 +33,9 @@ import com.propertyvista.portal.prospect.ui.application.steps.OptionsStep;
 import com.propertyvista.portal.prospect.ui.application.steps.PeopleStep;
 import com.propertyvista.portal.prospect.ui.application.steps.UnitStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
 
-public class SummaryForm extends CEntityForm<OnlineApplicationDTO> {
+public class SummaryForm extends AccessoryEntityForm<OnlineApplicationDTO> {
 
     private final ApplicationWizard applicationWizard;
 

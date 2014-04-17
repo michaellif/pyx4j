@@ -41,9 +41,9 @@ public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof OptionDTO) {
-            return new ApplicationOptionForm();
+            return (T) new ApplicationOptionForm();
         } else {
             return super.create(member);
         }

@@ -68,8 +68,8 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
     }
 
     @Override
-    protected FormDecorator<CommunicationMessageDTO, CEntityForm<CommunicationMessageDTO>> createDecorator() {
-        FormDecorator<CommunicationMessageDTO, CEntityForm<CommunicationMessageDTO>> decorator = super.createDecorator();
+    protected FormDecorator<CommunicationMessageDTO> createDecorator() {
+        FormDecorator<CommunicationMessageDTO> decorator = super.createDecorator();
 
         decorator.addFooterToolbarWidget(btnReplay);
         decorator.getFooterPanel().setVisible(true);
@@ -97,9 +97,9 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof CommunicationMessage) {
-                return new MessageFolderItem(this);
+                return (T) new MessageFolderItem(this);
             }
             return super.create(member);
         }

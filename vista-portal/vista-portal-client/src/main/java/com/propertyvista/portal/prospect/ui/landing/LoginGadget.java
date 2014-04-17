@@ -137,14 +137,14 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             contentPanel.setBR(++row, 0, 2);
 
-            CEmailField emailField = inject(proto().email(), new CEmailField(),
+            CEmailField emailField = (CEmailField) inject(proto().email(), new CEmailField(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Email Address")).build());
             emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
             emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, emailField);
 
-            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(),
-                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Password")).build());
+            CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField(), new LoginWidgetDecoratorBuilder()
+                    .watermark(LandingViewImpl.i18n.tr("Password")).build());
             passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
             passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, passwordField);

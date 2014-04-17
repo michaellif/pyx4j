@@ -60,9 +60,9 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof BillDataDTO) {
-                return new BillDataViewer();
+                return (T) new BillDataViewer();
             }
             return super.create(member);
         }

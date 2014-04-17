@@ -28,9 +28,9 @@ public class FinancialSectionPanel extends AbstractSectionPanel {
         super(index, OnlineApplicationWizardStepMeta.Financial.toString(), form, step);
 
         addCaption(i18n.tr("Income"));
-        addField(proto().applicant().incomes(), new PersonalIncomeFolder(false), false);
+        addComponent(proto().applicant().incomes(), new PersonalIncomeFolder(false));
 
         addCaption(i18n.tr("Assets"));
-        addField(proto().applicant().assets(), new PersonalAssetFolder(false), false);
+        addComponent(proto().applicant().assets(), new PersonalAssetFolder(false));
     }
 }

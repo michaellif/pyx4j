@@ -254,9 +254,9 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof Notification) {
-                return new NotificationEditor();
+                return (T) new NotificationEditor();
             }
             return super.create(member);
         }

@@ -63,9 +63,9 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LeaseTermAgreementDocument) {
-            return new LeaseAgreementDocumentForm(true);
+            return (T) new LeaseAgreementDocumentForm(true);
         }
         return super.create(member);
     }
@@ -123,17 +123,11 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                     2,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class), new VistaFileURLBuilder(
                             LeaseTermAgreementDocument.class)),
-                            new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Agreement Document File")).componentWidth("350px")
-                                    .build()));
+                            new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Agreement Document File"))
+                                    .componentWidth("350px").build()));
 
             if (viewOnly) {
-                panel.setWidget(
-                        ++row,
-                        0,
-                        2,
-                        inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer(),
-                                new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants")).componentWidth("350px")
-                                        .build()));
+                panel.setWidget(++row, 0, 2, inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer()));
             } else {
                 panel.setWidget(
                         ++row,

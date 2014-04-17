@@ -59,9 +59,9 @@ public class TaxFolder extends VistaTableFolder<Tax> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof Tax) {
-            return new ChargeCodeTaxEditor();
+            return (T) new ChargeCodeTaxEditor();
         }
         return super.create(member);
     }

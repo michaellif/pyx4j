@@ -51,10 +51,10 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
 
         if (member instanceof RentOwingForPeriod) {
-            return new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
+            return (T) new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
 
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {

@@ -67,9 +67,9 @@ public class ProofOfIncomeUploaderFolder extends PortalBoxFolder<ProofOfIncomeDo
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof ProofOfIncomeDocumentFolder) {
-            return new ProofOfIncomeDocumentEditor();
+            return (T) new ProofOfIncomeDocumentEditor();
         }
         return super.create(member);
     }

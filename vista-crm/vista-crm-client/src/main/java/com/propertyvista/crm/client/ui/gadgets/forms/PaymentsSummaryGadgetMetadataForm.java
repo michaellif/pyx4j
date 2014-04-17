@@ -75,7 +75,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentStatus(), paymentStatusSelector, new FieldDecoratorBuilder(50).build()));
+        p.setWidget(++row, 0, inject(proto().paymentStatus(), paymentStatusSelector));
         return p;
     }
 

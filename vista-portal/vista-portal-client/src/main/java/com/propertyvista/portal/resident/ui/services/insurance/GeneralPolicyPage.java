@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,8 +53,8 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
     }
 
     @Override
-    protected FormDecorator<GeneralInsurancePolicyDTO, CEntityForm<GeneralInsurancePolicyDTO>> createDecorator() {
-        FormDecorator<GeneralInsurancePolicyDTO, CEntityForm<GeneralInsurancePolicyDTO>> decorator = super.createDecorator();
+    protected FormDecorator<GeneralInsurancePolicyDTO> createDecorator() {
+        FormDecorator<GeneralInsurancePolicyDTO> decorator = super.createDecorator();
 
         Button btnEdit = new Button(i18n.tr("Remove"), new Command() {
             @Override

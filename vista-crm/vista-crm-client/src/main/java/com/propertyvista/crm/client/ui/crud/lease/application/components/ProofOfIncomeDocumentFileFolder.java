@@ -38,9 +38,9 @@ public class ProofOfIncomeDocumentFileFolder extends VistaBoxFolder<ProofOfIncom
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof ProofOfIncomeDocumentFile) {
-            return new DocumentEditor();
+            return (T) new DocumentEditor();
         }
         return super.create(member);
     }

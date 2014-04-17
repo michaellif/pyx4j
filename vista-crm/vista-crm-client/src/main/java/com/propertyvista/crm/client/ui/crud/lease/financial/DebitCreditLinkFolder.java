@@ -61,9 +61,9 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (DebitLinkDTO.class.equals(member.getObjectClass())) {
-            return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
+            return (T) new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
                 @SuppressWarnings("rawtypes")
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {

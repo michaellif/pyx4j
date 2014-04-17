@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
@@ -102,7 +101,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         super.onReset();
 
         @SuppressWarnings("unchecked")
-        FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>> decorator = ((FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>>) getDecorator());
+        FormDecorator<PaymentRecordDTO> decorator = ((FormDecorator<PaymentRecordDTO>) getDecorator());
         decorator.setCaption(headerUndefined);
 
         decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
@@ -118,7 +117,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         super.onValueSet(populate);
 
         @SuppressWarnings("unchecked")
-        FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>> decorator = ((FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>>) getDecorator());
+        FormDecorator<PaymentRecordDTO> decorator = ((FormDecorator<PaymentRecordDTO>) getDecorator());
 
         if (getValue().paymentStatus().getValue().isFailed()) {
             decorator.setCaption(headerFailed);

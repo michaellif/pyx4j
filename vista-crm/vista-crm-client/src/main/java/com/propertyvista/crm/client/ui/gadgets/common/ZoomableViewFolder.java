@@ -103,11 +103,11 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member.getValueClass().equals(proto().getValueClass())) {
             ZoomableViewEntityRowEditor<E> e = editorfactory.createEditor(this, columns());
             e.initZoomin(zoomInHandler, zoomableMembers);
-            return e;
+            return (T) e;
         } else {
             return super.create(member);
         }

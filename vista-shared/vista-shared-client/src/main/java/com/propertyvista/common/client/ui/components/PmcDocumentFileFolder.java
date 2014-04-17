@@ -101,9 +101,9 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof PmcDocumentFile) {
-            return new PmcDocumentFileForm();
+            return (T) new PmcDocumentFileForm();
         }
         return super.create(member);
     }

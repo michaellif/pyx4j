@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -348,9 +349,9 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof BillableItemAdjustment) {
-                return new BillableItemAdjustmentEditor();
+                return (T) new BillableItemAdjustmentEditor();
             }
             return super.create(member);
         }
@@ -385,7 +386,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
             }
 
             private void bindValueEditor(Type valueType, boolean populate) {
-                CComponent<?, ?> comp = null;
+                CField<BigDecimal, ?> comp = null;
                 if (valueType != null) {
                     switch (valueType) {
                     case monetary:
@@ -399,7 +400,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
                 if (comp != null) {
                     @SuppressWarnings("unchecked")
-                    IDecorator<CComponent<?, BigDecimal>> decor = get((proto().value())).getDecorator();
+                    IDecorator<CField<BigDecimal, ?>> decor = (IDecorator<CField<BigDecimal, ?>>) get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
                     comp.setDecorator(decor);
@@ -535,9 +536,9 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof Deposit) {
-                return new DepositEditor();
+                return (T) new DepositEditor();
             }
             return super.create(member);
         }

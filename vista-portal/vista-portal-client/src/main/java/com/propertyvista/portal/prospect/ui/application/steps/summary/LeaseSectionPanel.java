@@ -40,12 +40,12 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
 
         addCaption(i18n.tr("Lease Options"));
         addField(proto().selectedService().agreedPrice(), i18n.tr("Unit Rent"));
-        addField(proto().selectedFeatures(), new FeatureReadOnlyFolder(), false);
+        addComponent(proto().selectedFeatures(), new FeatureReadOnlyFolder());
         addField(proto().totalMonthlyCharge());
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             addCaption(i18n.tr("Peoples"));
-            addField(proto().tenants(), new TenantsReadonlyFolder(), false);
+            addComponent(proto().tenants(), new TenantsReadonlyFolder());
         }
     }
 }

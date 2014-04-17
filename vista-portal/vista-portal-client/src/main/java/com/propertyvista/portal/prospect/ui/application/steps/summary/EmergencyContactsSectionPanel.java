@@ -22,6 +22,6 @@ public class EmergencyContactsSectionPanel extends AbstractSectionPanel {
     public EmergencyContactsSectionPanel(int index, SummaryForm form, EmergencyContactsStep step) {
         super(index, OnlineApplicationWizardStepMeta.EmergencyContacts.toString(), form, step);
 
-        addField(proto().applicant().emergencyContacts(), new EmergencyContactFolder(false), false);
+        addComponent(proto().applicant().emergencyContacts(), new EmergencyContactFolder(false));
     }
 }

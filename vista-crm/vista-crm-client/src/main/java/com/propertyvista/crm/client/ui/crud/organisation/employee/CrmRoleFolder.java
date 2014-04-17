@@ -58,9 +58,9 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof CrmRole) {
-            return new CEntityFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
+            return (T) new CEntityFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
                 @SuppressWarnings("rawtypes")
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {

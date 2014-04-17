@@ -38,9 +38,9 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof CoapplicantDTO) {
-            return new CoapplicantForm();
+            return (T) new CoapplicantForm();
         } else {
             return super.create(member);
         }

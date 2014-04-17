@@ -76,9 +76,9 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LeasePaymentMethod) {
-            return new LeasePaymentMethodEditor();
+            return (T) new LeasePaymentMethodEditor();
         }
         return super.create(member);
     }

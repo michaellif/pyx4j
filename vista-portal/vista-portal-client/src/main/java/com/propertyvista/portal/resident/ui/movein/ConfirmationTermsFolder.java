@@ -40,9 +40,9 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedAgreementConf
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof SignedAgreementConfirmationTerm) {
-            return new LegalTermForm();
+            return (T) new LegalTermForm();
         } else {
             return super.create(member);
         }

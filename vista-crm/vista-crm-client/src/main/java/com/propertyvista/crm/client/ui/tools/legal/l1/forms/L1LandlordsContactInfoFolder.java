@@ -27,9 +27,9 @@ public class L1LandlordsContactInfoFolder extends VistaBoxFolder<L1LandlordsCont
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof L1LandlordsContactInfo) {
-            return new L1LandlordsContactInfoForm();
+            return (T) new L1LandlordsContactInfoForm();
         }
         return super.create(member);
     }

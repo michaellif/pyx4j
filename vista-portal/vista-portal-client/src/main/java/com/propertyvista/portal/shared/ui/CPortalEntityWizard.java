@@ -16,6 +16,7 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
@@ -66,7 +67,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     };
 
     @Override
-    protected IDecorator<?> createDecorator() {
+    protected IDecorator<CEntityForm<E>> createDecorator() {
         WizardDecorator<E> decorator = new WizardDecorator<E>(endButtonCaption);
 
         decorator.getBtnPrevious().setVisible(false);

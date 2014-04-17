@@ -39,9 +39,9 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LeaseApplicationDocument) {
-            return new LeaseApplicationDocumentForm();
+            return (T) new LeaseApplicationDocumentForm();
         }
         return super.create(member);
     }
@@ -61,8 +61,8 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
                     0,
                     2,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseApplicationDocument.class)), new FieldDecoratorBuilder().componentWidth("350px")
-                            .customLabel(i18n.tr("Agreement Document File")).build()));
+                            LeaseApplicationDocument.class)),
+                            new FieldDecoratorBuilder().componentWidth("350px").customLabel(i18n.tr("Agreement Document File")).build()));
             panel.setWidget(++row, 0, 2, inject(proto().isSignedByInk(), new FieldDecoratorBuilder().componentWidth("350px").build()));
             panel.setWidget(++row, 0, 2, inject(proto().signedBy(), new FieldDecoratorBuilder().componentWidth("350px").build()));
             panel.setWidget(++row, 0, 2, inject(proto().uploader(), new FieldDecoratorBuilder().componentWidth("350px").build()));

@@ -37,9 +37,9 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof TriggerNotification) {
-            return new NotificationEditor();
+            return (T) new NotificationEditor();
         } else {
             return super.create(member);
         }

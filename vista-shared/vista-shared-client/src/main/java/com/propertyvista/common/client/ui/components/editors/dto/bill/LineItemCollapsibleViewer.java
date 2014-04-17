@@ -46,7 +46,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemGroupDTO> implements ToggleHandler {
+public class LineItemCollapsibleViewer extends CEntityContainer<LineItemCollapsibleViewer, InvoiceLineItemGroupDTO> implements ToggleHandler {
 
     private static final I18n i18n = I18n.get(LineItemCollapsibleViewer.class);
 
@@ -55,7 +55,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private SimplePanel expandedPanel;
 
     public LineItemCollapsibleViewer() {
-        BasicCollapsableDecorator<?> decorator = new BasicCollapsableDecorator<InvoiceLineItemGroupDTO>(VistaImages.INSTANCE);
+        BasicCollapsableDecorator<LineItemCollapsibleViewer, InvoiceLineItemGroupDTO> decorator = new BasicCollapsableDecorator<>(VistaImages.INSTANCE);
         decorator.addToggleHandler(this);
         setDecorator(decorator);
     }
@@ -96,7 +96,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     }
 
     private void setExpended(boolean expended) {
-        ((BasicCollapsableDecorator<?>) getDecorator()).setExpended(expended);
+        ((BasicCollapsableDecorator) getDecorator()).setExpended(expended);
     }
 
     @Override

@@ -110,11 +110,11 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         FlowPanel main = new FlowPanel();
         main.add(header);
 
-        emailField = inject(proto().email(), new CTextField(), new LoginPanelWidgetDecorator());
+        emailField = (CTextField) inject(proto().email(), new CTextField(), new LoginPanelWidgetDecorator());
         emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(emailField);
 
-        CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(), new LoginPanelWidgetDecorator());
+        CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField(), new LoginPanelWidgetDecorator());
         passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(passwordField);
 
@@ -122,7 +122,7 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(captchaField);
 
-        CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox(), new LoginPanelWidgetDecorator());
+        CCheckBox rememberID = (CCheckBox) inject(proto().rememberID(), new CCheckBox(), new LoginPanelWidgetDecorator());
         rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(rememberID);
 

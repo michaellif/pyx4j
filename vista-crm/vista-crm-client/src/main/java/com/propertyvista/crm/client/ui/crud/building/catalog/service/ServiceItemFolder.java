@@ -69,9 +69,9 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof ProductItem) {
-            return new ServiceItemEditor();
+            return (T) new ServiceItemEditor();
         }
         return super.create(member);
     }

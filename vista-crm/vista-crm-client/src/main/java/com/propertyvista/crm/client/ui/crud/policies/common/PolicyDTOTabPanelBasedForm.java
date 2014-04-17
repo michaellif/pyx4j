@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -189,7 +190,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      */
     private static class PolicyNodeEditor extends CEntityForm<PolicyNode> {
 
-        private Map<Class<? extends PolicyNode>, CComponent<?, ?>> nodeTypeToComponentMap;
+        private Map<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>> nodeTypeToComponentMap;
 
         public PolicyNodeEditor() {
             super(PolicyNode.class);
@@ -212,10 +213,10 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         protected IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
-            nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CComponent<?, ?>>();
+            nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>>();
             for (NodeType nodeType : AVAILABLE_NODE_TYPES) {
                 if (!nodeType.hasOnlyOneInstance()) {
-                    CComponent<?, ? extends PolicyNode> comp = null;
+                    CField<? extends PolicyNode, ?> comp = null;
                     if (isEditable()) {
                         CEntityComboBox<? extends PolicyNode> comboBox = new CEntityComboBox(nodeType.getType());
                         comboBox.addValueChangeHandler(new ValueChangeHandler() {
@@ -244,7 +245,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             }
 
             int row = -1;
-            for (CComponent<?, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+            for (CField<? extends PolicyNode, ?> nodeComponent : nodeTypeToComponentMap.values()) {
                 nodeComponent.setDecorator(new FieldDecoratorBuilder(16).customLabel(i18n.tr("Applied to")).labelWidth(8).build());
                 content.setWidget(++row, 0, nodeComponent);
             }

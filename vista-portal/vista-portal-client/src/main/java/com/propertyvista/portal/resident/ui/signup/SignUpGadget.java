@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -34,6 +33,7 @@ import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -179,7 +179,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
             flexPanel.setH4(row, 1, 1, i18n.tr("Which building do you live in?"));
 
-            buildingSelector = (inject(proto().building(), new BuildingSuggestBox(), new LoginWidgetDecoratorBuilder().build()));
+            buildingSelector = (BuildingSuggestBox) inject(proto().building(), new BuildingSuggestBox(), new LoginWidgetDecoratorBuilder().build());
             buildingSelector.setWatermark(i18n.tr("Your building's address"));
             buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
             flexPanel.setWidget(++row, 0, buildingSelector);
@@ -203,7 +203,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             flexPanel.setWidget(++row, 0, inject(proto().lastName(), new LoginWidgetDecoratorBuilder().build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email());
+            CField<String, ?> emailField = inject(proto().email());
             emailField.setDecorator(new LoginWidgetDecoratorBuilder().build());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
             flexPanel.setWidget(++row, 0, emailField);

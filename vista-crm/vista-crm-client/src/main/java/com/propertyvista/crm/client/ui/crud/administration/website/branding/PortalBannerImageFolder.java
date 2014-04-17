@@ -95,13 +95,13 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof PortalBannerImage) {
             PortalBannerImageEditor editor = new PortalBannerImageEditor();
             if (imageSize != null) {
                 editor.setImageSize(imageSize.width, imageSize.height);
             }
-            return editor;
+            return (T) editor;
         }
         return super.create(member);
     }

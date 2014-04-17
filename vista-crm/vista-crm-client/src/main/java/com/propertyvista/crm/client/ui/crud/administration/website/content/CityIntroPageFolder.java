@@ -54,9 +54,9 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof CityIntroPage) {
-            return new CityIntroPageEditor();
+            return (T) new CityIntroPageEditor();
         }
         return super.create(member);
     }

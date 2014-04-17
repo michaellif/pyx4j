@@ -38,9 +38,9 @@ public class IdentificationDocumentFileUploaderFolder extends VistaBoxFolder<Ide
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof IdentificationDocumentFile) {
-            return new DocumentEditor();
+            return (T) new DocumentEditor();
         }
         return super.create(member);
     }

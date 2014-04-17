@@ -20,8 +20,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.person.Name;
@@ -30,7 +30,7 @@ import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class NameEditor extends AccessoryEntityForm<Name> {
 
-    private final CComponent<?, Name> nameComp;
+    private final CField<Name, ?> nameComp;
 
     public NameEditor() {
         this(null);

@@ -59,9 +59,9 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof AptUnitServicePriceDTO) {
-            return new ServicePriceEditor();
+            return (T) new ServicePriceEditor();
         }
         return super.create(member);
     }

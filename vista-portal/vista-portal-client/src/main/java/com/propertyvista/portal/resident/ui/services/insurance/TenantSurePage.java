@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
@@ -113,9 +112,9 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
     }
 
     @Override
-    protected FormDecorator<TenantSureInsurancePolicyDTO, CEntityForm<TenantSureInsurancePolicyDTO>> createDecorator() {
+    protected FormDecorator<TenantSureInsurancePolicyDTO> createDecorator() {
 
-        FormDecorator<TenantSureInsurancePolicyDTO, CEntityForm<TenantSureInsurancePolicyDTO>> decorator = super.createDecorator();
+        FormDecorator<TenantSureInsurancePolicyDTO> decorator = super.createDecorator();
         decorator.setCaption(i18n.tr("TenantSure"));
 
         Button btnActions = new Button(i18n.tr("Actions"));

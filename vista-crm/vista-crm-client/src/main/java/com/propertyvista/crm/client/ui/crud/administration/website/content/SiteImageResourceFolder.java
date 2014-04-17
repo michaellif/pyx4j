@@ -87,9 +87,9 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof SiteLogoImageResource) {
-            return new PortalImageResourceEditor();
+            return (T) new PortalImageResourceEditor();
         }
         return super.create(member);
     }

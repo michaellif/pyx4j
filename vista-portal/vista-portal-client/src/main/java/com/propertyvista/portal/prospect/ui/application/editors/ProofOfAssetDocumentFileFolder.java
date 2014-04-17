@@ -39,9 +39,9 @@ public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAsset
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof ProofOfAssetDocumentFile) {
-            return new DocumentEditor();
+            return (T) new DocumentEditor();
         }
         return super.create(member);
     }

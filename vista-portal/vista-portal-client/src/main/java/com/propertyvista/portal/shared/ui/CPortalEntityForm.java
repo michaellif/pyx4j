@@ -23,7 +23,7 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
 
     private final IViewerView<? extends IEntity> view;
 
-    private FormDecorator<E, CEntityForm<E>> decorator;
+    private FormDecorator<E> decorator;
 
     private final String headerCaption;
 
@@ -50,8 +50,8 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
     }
 
     @Override
-    protected FormDecorator<E, CEntityForm<E>> createDecorator() {
-        decorator = new FormDecorator<E, CEntityForm<E>>();
+    protected FormDecorator<E> createDecorator() {
+        decorator = new FormDecorator<E>();
 
         decorator.setCaption(headerCaption);
 

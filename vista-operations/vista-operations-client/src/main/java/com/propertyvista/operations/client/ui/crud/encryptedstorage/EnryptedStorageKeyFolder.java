@@ -32,11 +32,11 @@ public class EnryptedStorageKeyFolder extends VistaBoxFolder<EncryptedStorageKey
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof EncryptedStorageKeyDTO) {
             EncryptedStorageKeyForm form = new EncryptedStorageKeyForm();
             form.setPresenter(presenter);
-            return form;
+            return (T) form;
         }
         return super.create(member);
     }

@@ -77,9 +77,9 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof InvoicePaymentDTO) {
-                return new InvoiceLineItemViewer();
+                return (T) new InvoiceLineItemViewer();
             }
             return super.create(member);
         }

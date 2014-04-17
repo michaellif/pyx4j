@@ -57,9 +57,9 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof CustomerScreeningIncome) {
-            return new PersonalIncomeEditor(documentationPolicy);
+            return (T) new PersonalIncomeEditor(documentationPolicy);
         }
         return super.create(member);
     }

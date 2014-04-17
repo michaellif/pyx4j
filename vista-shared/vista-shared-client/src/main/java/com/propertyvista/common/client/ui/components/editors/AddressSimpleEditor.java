@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -33,8 +33,6 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
-
-    private static final I18n i18n = I18n.get(AddressSimpleEditor.class);
 
     private final boolean oneColumn;
 
@@ -61,7 +59,6 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
         this.contentWidth = contentWidth;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected IsWidget createContent() {
         BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
@@ -75,15 +72,15 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
         row = (oneColumn ? row : -1);
 
-        CComponent<?, Province> province = (CComponent<?, Province>) inject(proto().province());
+        CField<Province, ?> province = inject(proto().province());
         province.setDecorator(decorator(maxCompWidth).build());
         main.setWidget(++row, col, province);
 
-        final CComponent<?, Country> country = (CComponent<?, Country>) inject(proto().country());
+        final CField<Country, ?> country = inject(proto().country());
         country.setDecorator(decorator(maxCompWidth).build());
         main.setWidget(++row, col, country);
 
-        CComponent<?, String> postalCode = (CComponent<?, String>) inject(proto().postalCode());
+        CField<String, ?> postalCode = inject(proto().postalCode());
         postalCode.setDecorator(decorator(10).build());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));

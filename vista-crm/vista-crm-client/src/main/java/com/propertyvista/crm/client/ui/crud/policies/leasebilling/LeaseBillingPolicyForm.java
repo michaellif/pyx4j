@@ -35,6 +35,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
@@ -158,7 +159,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return; // New item
         }
 
-        CComponent<?, ?> comp = null;
+        CField<BigDecimal, ?> comp = null;
         switch (baseFeeType) {
         case FlatAmount:
             comp = new CMoneyField();
@@ -173,7 +174,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         unbind(proto().lateFee().baseFee());
 
         if (comp != null) {
-            baseFeeHolder.setWidget(inject(proto().lateFee().baseFee(), comp, new FieldDecoratorBuilder(6).build()));
+            baseFeeHolder.setWidget(injectAndDecorate(proto().lateFee().baseFee(), comp, 6));
 
             if (repopulatevalue) {
                 get(proto().lateFee().baseFee()).populate(getValue().lateFee().baseFee().getValue(BigDecimal.ZERO));
@@ -186,7 +187,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return; // New item
         }
 
-        CComponent<?, ?> comp = null;
+        CField<BigDecimal, ?> comp = null;
         switch (maxFeeType) {
         case Unlimited:
         case FlatAmount:
@@ -279,9 +280,9 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof LeaseBillingTypePolicyItem) {
-                return new LeaseBillingTypeEditor();
+                return (T) new LeaseBillingTypeEditor();
             } else {
                 return super.create(member);
             }

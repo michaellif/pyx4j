@@ -29,9 +29,9 @@ public class LegalNoticeCandidateFolder extends BulkItemsFolder<LegalNoticeCandi
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LegalNoticeCandidateDTO) {
-            return new LegalNoticeCandidateForm();
+            return (T) new LegalNoticeCandidateForm();
         }
         return super.create(member);
     }

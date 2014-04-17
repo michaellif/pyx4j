@@ -42,9 +42,9 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof AutopayAgreementCoveredItem) {
-            return new CoveredItemViewer();
+            return (T) new CoveredItemViewer();
         }
         return super.create(member);
     }
@@ -63,14 +63,11 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
             BasicFlexFormPanel content = new BasicFlexFormPanel(i18n.tr("Details"));
             int row = -1;
 
-            content.setWidget(
-                    ++row,
-                    0,
+            content.setWidget(++row, 0,
                     inject(proto().billableItem(), new PapBillableItemLabel(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
             content.setWidget(++row, 0,
                     inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));
-            content.setWidget(++row, 0,
-                    inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
+            content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
 
             get(proto().amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 

@@ -74,9 +74,9 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof CardServiceSimulationToken) {
-                return new CEntityFolderRowEditor<CardServiceSimulationToken>(CardServiceSimulationToken.class, COLUMNS) {
+                return (T) new CEntityFolderRowEditor<CardServiceSimulationToken>(CardServiceSimulationToken.class, COLUMNS) {
                     @Override
                     protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                         if (column == proto().token()) {

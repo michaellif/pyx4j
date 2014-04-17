@@ -71,9 +71,9 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof Employee) {
-            return new CEntityFolderRowEditor<Employee>(Employee.class, columns()) {
+            return (T) new CEntityFolderRowEditor<Employee>(Employee.class, columns()) {
 
                 @SuppressWarnings("rawtypes")
                 @Override

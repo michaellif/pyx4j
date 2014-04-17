@@ -175,8 +175,8 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     }
 
     @Override
-    protected FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> createDecorator() {
-        FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> decorator = super.createDecorator();
+    protected FormDecorator<MaintenanceRequestDTO> createDecorator() {
+        FormDecorator<MaintenanceRequestDTO> decorator = super.createDecorator();
 
         decorator.addHeaderToolbarWidget(btnCancel);
         decorator.addHeaderToolbarWidget(btnPrint);

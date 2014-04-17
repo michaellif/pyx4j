@@ -64,9 +64,9 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LeaseParticipanApprovalDTO) {
-            return new LeaseParticipanApprovalViewer();
+            return (T) new LeaseParticipanApprovalViewer();
         }
         return super.create(member);
     }
@@ -104,8 +104,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             panel.setWidget(
                     ++row,
                     0,
-                    inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder(15, 20,
-                            20).build()));
+                    inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder(15,
+                            20, 20).build()));
             ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {

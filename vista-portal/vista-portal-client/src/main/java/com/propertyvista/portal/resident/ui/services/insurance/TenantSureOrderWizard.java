@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
@@ -113,8 +112,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setWidget(
                 ++row,
                 0,
-                inject(proto().personalDisclaimerSignature(), new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden)
-                        .contentWidth("250px").componentWidth("250px").build()));
+                inject(proto().personalDisclaimerSignature(),
+                        new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build()));
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
@@ -223,7 +222,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     }
 
     @Override
-    protected IDecorator<?> createDecorator() {
+    protected WizardDecorator<TenantSureInsurancePolicyDTO> createDecorator() {
         wizardDecorator = (WizardDecorator<TenantSureInsurancePolicyDTO>) super.createDecorator();
         return wizardDecorator;
     }

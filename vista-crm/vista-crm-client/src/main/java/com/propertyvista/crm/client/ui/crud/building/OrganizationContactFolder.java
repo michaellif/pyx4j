@@ -38,9 +38,9 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof OrganizationContact) {
-            return new OrganizationContactEditor();
+            return (T) new OrganizationContactEditor();
         } else {
             return super.create(member);
         }

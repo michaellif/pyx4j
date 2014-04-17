@@ -18,7 +18,6 @@ import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -50,8 +49,8 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
     }
 
     @Override
-    protected IDecorator<?> createDecorator() {
-        WizardDecorator<?> decorator = (WizardDecorator<?>) super.createDecorator();
+    protected WizardDecorator<PasswordChangeRequest> createDecorator() {
+        WizardDecorator<PasswordChangeRequest> decorator = (WizardDecorator<PasswordChangeRequest>) super.createDecorator();
         decorator.getBtnCancel().setVisible(false);
         return decorator;
     }

@@ -46,9 +46,9 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof PreauthorizedPaymentCoveredItemDTO) {
-            return new CoveredItemDtoEditor();
+            return (T) new CoveredItemDtoEditor();
         }
         return super.create(member);
     }
@@ -64,9 +64,7 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
             BasicFlexFormPanel content = new BasicFlexFormPanel(i18n.tr("Details"));
             int row = -1;
 
-            content.setWidget(
-                    ++row,
-                    0,
+            content.setWidget(++row, 0,
                     inject(proto().billableItem(), new PapBillableItemLabel(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
             content.setWidget(++row, 0,
                     inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));

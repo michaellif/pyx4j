@@ -20,7 +20,6 @@ import java.util.HashMap;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -126,7 +125,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     @Override
-    protected IDecorator<?> createDecorator() {
+    protected ApplicationWizardDecorator createDecorator() {
         ApplicationWizardDecorator decorator = new ApplicationWizardDecorator();
         decorator.getBtnCancel().setVisible(false);
         return decorator;

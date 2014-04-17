@@ -18,7 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.PriorAddress;
@@ -43,8 +43,7 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
         main.setWidget(++row, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(120).build()));
         main.setWidget(++row, 0, inject(proto().moveOutDate(), new FieldDecoratorBuilder(120).build()));
 
-        @SuppressWarnings("unchecked")
-        CComponent<?, OwnedRented> rentedComponent = (CComponent<?, OwnedRented>) inject(proto().rented());
+        CField<OwnedRented, ?> rentedComponent = inject(proto().rented());
         rentedComponent.setDecorator(new FieldDecoratorBuilder(150).build());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override

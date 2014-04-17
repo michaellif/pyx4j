@@ -62,8 +62,8 @@ public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandi
     protected IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
 
-        panel.add(inject(proto().portfolios(), createPortfolioSelector(), new SearchCriteriaFormDecoratorBuilder().componentWidth("300px").build()));
-        panel.add(inject(proto().buildings(), createBuildingSelector(), new SearchCriteriaFormDecoratorBuilder().componentWidth("300px").build()));
+        panel.add(inject(proto().portfolios(), createPortfolioSelector()));
+        panel.add(inject(proto().buildings(), createBuildingSelector()));
         panel.add(inject(proto().unit(), new SearchCriteriaFormDecoratorBuilder().componentWidth("100px").build()));
         panel.add(inject(proto().lease(), new SearchCriteriaFormDecoratorBuilder().componentWidth("100px").build()));
         panel.add(inject(proto().tenant(), new SearchCriteriaFormDecoratorBuilder().componentWidth("150px").build()));

@@ -87,10 +87,8 @@ public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearch
 
         searchCriteriaPanel = new FlowPanel();
 
-        searchCriteriaPanel.add(inject(proto().portfolios(), createPortfolioSelector(), new SearchCriteriaFormDecoratorBuilder().componentWidth("300px")
-                .build()));
-        searchCriteriaPanel
-                .add(inject(proto().buildings(), createBuildingSelector(), new SearchCriteriaFormDecoratorBuilder().componentWidth("300px").build()));
+        searchCriteriaPanel.add(inject(proto().portfolios(), createPortfolioSelector()));
+        searchCriteriaPanel.add(inject(proto().buildings(), createBuildingSelector()));
         searchCriteriaPanel.add(inject(proto().minAmountOwed(), new SearchCriteriaFormDecoratorBuilder().componentWidth("200px").build()));
 
         panel.setWidget(1, 0, 2, searchCriteriaPanel);

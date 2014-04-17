@@ -226,9 +226,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof AccountDTO) {
-                return new AccountViewer();
+                return (T) new AccountViewer();
             }
             return super.create(member);
         }
@@ -272,9 +272,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof JudgementDTO) {
-                return new JudgementViewer();
+                return (T) new JudgementViewer();
             }
             return super.create(member);
         }
@@ -317,9 +317,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof ProposalDTO) {
-                return new ProposalViewer();
+                return (T) new ProposalViewer();
             }
             return super.create(member);
         }
@@ -362,9 +362,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof EvictionDTO) {
-                return new EvictionViewer();
+                return (T) new EvictionViewer();
             }
             return super.create(member);
         }
@@ -408,9 +408,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof RentDTO) {
-                return new RentViewer();
+                return (T) new RentViewer();
             }
             return super.create(member);
         }
@@ -455,9 +455,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof CollectionDTO) {
-                return new CollectionViewer();
+                return (T) new CollectionViewer();
             }
             return super.create(member);
         }

@@ -75,9 +75,9 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof IdAssignmentItem) {
-                return new IdAssignmentItemEditor();
+                return (T) new IdAssignmentItemEditor();
             }
             return super.create(member);
         }

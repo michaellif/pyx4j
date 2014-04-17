@@ -46,9 +46,9 @@ public class YardiChargeCodeFolder extends VistaTableFolder<YardiChargeCode> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof YardiChargeCode) {
-            return new YardiChargeCodeForm();
+            return (T) new YardiChargeCodeForm();
         }
         return super.create(member);
     }

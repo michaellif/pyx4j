@@ -27,7 +27,7 @@ public class LoginWidgetDecorator extends FormWidgetDecorator {
     }
 
     @Override
-    public void init(CField<?, ?> component) {
+    public void init(CField component) {
         String text = builder.getWatermark() != null ? builder.getWatermark() : component.getTitle();
         if (component instanceof CTextFieldBase) {
             ((CTextFieldBase<?, ?>) component).setWatermark(text);
@@ -36,4 +36,5 @@ public class LoginWidgetDecorator extends FormWidgetDecorator {
         }
         super.init(component);
     }
+
 }

@@ -24,9 +24,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -120,9 +118,9 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof PaymentMethodInfoDTO) {
-                return new PaymentMethodViewer();
+                return (T) new PaymentMethodViewer();
             }
             return super.create(member);
         }
@@ -158,8 +156,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
                 content.setWidget(++row, 0, inject(proto().paymentMethod().creationDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
                 content.setWidget(++row, 0, inject(proto().paymentMethod().type(), new CEnumLabel(), new FieldDecoratorBuilder(150).build()));
-                content.setWidget(++row, 0,
-                        inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
                 content.setWidget(++row, 0,
                         inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FieldDecoratorBuilder().build()));
 

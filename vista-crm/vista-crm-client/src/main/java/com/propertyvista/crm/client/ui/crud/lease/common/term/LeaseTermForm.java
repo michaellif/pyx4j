@@ -319,7 +319,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         flexPanel.setH1(++leftRow, 0, 2, proto().version().leaseProducts().getMeta().getCaption());
         flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
             @Override
-            protected com.pyx4j.forms.client.ui.decorators.IDecorator<?> createDecorator() {
+            protected EntityContainerCollapsableDecorator<BillableItem> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
             };
         }));
@@ -495,9 +495,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof BuildingUtility) {
-                return new BuildingUtilityEditor();
+                return (T) new BuildingUtilityEditor();
             }
             return super.create(member);
         }

@@ -33,9 +33,9 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof Deposit) {
-            return new DepositEditor();
+            return (T) new DepositEditor();
         }
         return super.create(member);
     }

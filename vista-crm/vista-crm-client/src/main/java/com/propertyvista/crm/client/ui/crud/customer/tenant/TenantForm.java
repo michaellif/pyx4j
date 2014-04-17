@@ -176,9 +176,9 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof PreauthorizedPaymentDTO) {
-                return new PreauthorizedPaymentEditor();
+                return (T) new PreauthorizedPaymentEditor();
             }
             return super.create(member);
         }

@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
@@ -35,7 +34,7 @@ import com.propertyvista.domain.person.Name;
 
 public class NameEditor extends CEntityForm<Name> {
 
-    private final CComponent<?, Name> viewComp;
+    private final CField<Name, ?> viewComp;
 
     private final String customViewLabel;
 

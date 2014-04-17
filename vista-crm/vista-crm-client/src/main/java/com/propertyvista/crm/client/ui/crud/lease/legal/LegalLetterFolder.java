@@ -79,9 +79,9 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LegalLetter) {
-            return new PolyLegalLetterForm();
+            return (T) new PolyLegalLetterForm();
         }
 
         return super.create(member);

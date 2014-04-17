@@ -90,9 +90,9 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof PageContent) {
-            return new PageContentEditor();
+            return (T) new PageContentEditor();
         }
         return super.create(member);
     }

@@ -128,9 +128,9 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
+            public <T extends CComponent<T, ?>> T create(IObject<?> member) {
                 if (member instanceof NotesAndAttachments) {
-                    return new NoteEditor(true);
+                    return (T) new NoteEditor(true);
                 } else {
                     return super.create(member);
                 }
@@ -273,7 +273,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public void onAdopt(final CEntityContainer<?> parent) {
+                public void onAdopt(final CEntityContainer<?, ?> parent) {
                     super.onAdopt(parent);
                     addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -340,9 +340,9 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public CComponent<?, ?> create(IObject<?> member) {
+                public <T extends CComponent<T, ?>> T create(IObject<?> member) {
                     if (member instanceof NoteAttachment) {
-                        return new AttachmentEditor();
+                        return (T) new AttachmentEditor();
                     } else {
                         return super.create(member);
                     }

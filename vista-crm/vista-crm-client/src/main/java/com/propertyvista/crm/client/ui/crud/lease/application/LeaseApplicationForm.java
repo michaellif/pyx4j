@@ -104,9 +104,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     private CEntityFolder<TenantInfoDTO> createTenantView() {
         return new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
+            public <T extends CComponent<T, ?>> T create(IObject<?> member) {
                 if (member instanceof TenantInfoDTO) {
-                    return new InfoViewForm(true);
+                    return (T) new InfoViewForm(true);
                 }
                 return super.create(member);
             }
@@ -123,9 +123,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     private CEntityFolder<TenantFinancialDTO> createFinancialView() {
         return new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
+            public <T extends CComponent<T, ?>> T create(IObject<?> member) {
                 if (member instanceof TenantFinancialDTO) {
-                    return new FinancialViewForm(true);
+                    return (T) new FinancialViewForm(true);
                 }
                 return super.create(member);
             }

@@ -76,7 +76,7 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentMethodFilter(), paymentTypeSelector, new FieldDecoratorBuilder(50).build()));
+        p.setWidget(++row, 0, inject(proto().paymentMethodFilter(), paymentTypeSelector));
 
         // TODO we don't use PaymentStatus.Processing that's why we choose this constructor
         CComponent<?, Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.complementOf(EnumSet
@@ -91,7 +91,7 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentStatusFilter(), paymentStatusSelector, new FieldDecoratorBuilder(50).build()));
+        p.setWidget(++row, 0, inject(proto().paymentStatusFilter(), paymentStatusSelector));
 
         return p;
     }

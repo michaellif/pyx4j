@@ -214,7 +214,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         content.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer() {
             @Override
-            protected com.pyx4j.forms.client.ui.decorators.IDecorator<?> createDecorator() {
+            protected EntityContainerCollapsableDecorator<BillableItem> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
             };
         }));

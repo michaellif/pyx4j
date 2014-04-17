@@ -64,12 +64,12 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (DepositSlipCheckDetailsRecordDTO.class.equals(member.getObjectClass())) {
-                return new CEntityFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
+                return (T) new CEntityFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
                         new VistaViewersComponentFactory()) {
                     @Override
-                    public CComponent<?, ?> create(IObject<?> member) {
+                    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
                         if (proto().id().getFieldName().equals(member.getFieldName())) {
                             CLabel<Key> idLabel = new CLabel<Key>();
                             idLabel.setNavigationCommand(new Command() {
@@ -78,7 +78,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
                                     onShowToPaymentRecord(getValue().id().getValue());
                                 }
                             });
-                            return idLabel;
+                            return (T) idLabel;
                         } else {
                             return super.create(member);
                         }

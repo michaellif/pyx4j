@@ -110,7 +110,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof SiteImageSet) {
             PortalImageSetEditor editor = new PortalImageSetEditor();
             if (imageSize != null) {
@@ -119,7 +119,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
             if (thumbSize != null) {
                 editor.setThumbSize(thumbSize.width, thumbSize.height);
             }
-            return editor;
+            return (T) editor;
         }
         return super.create(member);
     }

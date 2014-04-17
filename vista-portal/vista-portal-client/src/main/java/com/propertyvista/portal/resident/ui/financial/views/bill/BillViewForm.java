@@ -17,7 +17,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,8 +44,8 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
     }
 
     @Override
-    protected FormDecorator<BillViewDTO, CEntityForm<BillViewDTO>> createDecorator() {
-        FormDecorator<BillViewDTO, CEntityForm<BillViewDTO>> decorator = super.createDecorator();
+    protected FormDecorator<BillViewDTO> createDecorator() {
+        FormDecorator<BillViewDTO> decorator = super.createDecorator();
 
         Button btnPay = new Button(i18n.tr("Pay Bill"), new Command() {
             @Override

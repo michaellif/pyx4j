@@ -150,9 +150,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof LeaseTermTenant) {
-            return new TenantInLeaseEditor();
+            return (T) new TenantInLeaseEditor();
         }
         return super.create(member);
     }
@@ -362,9 +362,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof AutopayAgreement) {
-                return new PreauthorizedPaymentViewer();
+                return (T) new PreauthorizedPaymentViewer();
             }
             return super.create(member);
         }

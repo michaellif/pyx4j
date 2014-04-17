@@ -42,9 +42,9 @@ public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationS
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member.getObjectClass().equals(Name.class)) {
-            return new CEntityLabel<Name>();
+            return (T) new CEntityLabel<Name>();
         }
         return super.create(member);
     }

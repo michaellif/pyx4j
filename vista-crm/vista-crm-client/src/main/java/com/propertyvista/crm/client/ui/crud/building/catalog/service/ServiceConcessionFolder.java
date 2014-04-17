@@ -63,9 +63,9 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof Concession) {
-            return new ConcessionEditor();
+            return (T) new ConcessionEditor();
         }
         return super.create(member);
 
@@ -81,7 +81,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().version().type())) {
                 comp = new CEnumLabel();
@@ -96,7 +96,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
             } else {
                 comp = super.create(member);
             }
-            return comp;
+            return (T) comp;
         }
     }
 

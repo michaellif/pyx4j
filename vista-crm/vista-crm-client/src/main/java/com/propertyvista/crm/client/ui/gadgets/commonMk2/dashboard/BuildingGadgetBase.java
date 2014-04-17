@@ -24,7 +24,7 @@ public abstract class BuildingGadgetBase<G extends GadgetMetadata> extends Gadge
 
     protected IBuildingFilterContainer buildingsFilterContainer;
 
-    public BuildingGadgetBase(GadgetMetadata metadata, Class<G> metadataClass, CEntityContainer<G> setupForm) {
+    public BuildingGadgetBase(GadgetMetadata metadata, Class<G> metadataClass, CEntityContainer<?, G> setupForm) {
         super(metadata, metadataClass, setupForm);
     }
 

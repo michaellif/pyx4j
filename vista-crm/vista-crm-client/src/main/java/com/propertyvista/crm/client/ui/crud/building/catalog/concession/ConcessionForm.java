@@ -19,7 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -75,7 +75,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
     }
 
     private void bindValueEditor(Concession.Type valueType, boolean repopulatevalue) {
-        CComponent<?, ?> comp = null;
+        CField<BigDecimal, ?> comp = null;
         if (valueType != null) {
             switch (valueType) {
             case monetaryOff:

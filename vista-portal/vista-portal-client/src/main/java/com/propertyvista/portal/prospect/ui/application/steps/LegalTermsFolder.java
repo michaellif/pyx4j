@@ -45,9 +45,9 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
         if (member instanceof SignedOnlineApplicationLegalTerm) {
-            return new LegalTermForm();
+            return (T) new LegalTermForm();
         } else {
             return super.create(member);
         }

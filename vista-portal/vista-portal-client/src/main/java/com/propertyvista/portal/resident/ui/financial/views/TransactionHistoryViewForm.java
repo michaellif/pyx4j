@@ -59,9 +59,9 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof InvoiceLineItem) {
-                return new InvoiceLineItemViewer();
+                return (T) new InvoiceLineItemViewer();
             }
             return super.create(member);
         }

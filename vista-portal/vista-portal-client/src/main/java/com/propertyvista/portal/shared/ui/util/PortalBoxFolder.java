@@ -19,13 +19,10 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 
 public class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
-
-    private static final I18n i18n = I18n.get(PortalBoxFolder.class);
 
     private final String itemName;
 

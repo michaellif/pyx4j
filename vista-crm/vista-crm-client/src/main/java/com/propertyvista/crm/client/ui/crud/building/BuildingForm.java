@@ -327,8 +327,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         row = 1;
         flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalDate(), 9));
         flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalValue(), 10));
-        flexPanel
-                .setWidget(row++, 1, inject(proto().financial().currency().name(), new FieldDecoratorBuilder(10).customLabel(i18n.tr("Currency Name")).build()));
+        flexPanel.setWidget(row++, 1,
+                inject(proto().financial().currency().name(), new FieldDecoratorBuilder(10).customLabel(i18n.tr("Currency Name")).build()));
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
@@ -473,9 +473,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof ILSSummaryBuilding) {
-                return new ILSSummaryEditor();
+                return (T) new ILSSummaryEditor();
             } else {
                 return super.create(member);
             }
@@ -519,9 +519,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
             if (member instanceof ILSProfileBuilding) {
-                return new ILSProfileBuildingEditor();
+                return (T) new ILSProfileBuildingEditor();
             } else {
                 return super.create(member);
             }
