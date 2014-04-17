@@ -67,6 +67,7 @@ public class CComponentTheme extends Theme {
     private void initContainerStyles() {
         Style style = new Style(".", StyleName.CEntityContainerContentHolder);
         style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
         addStyle(style);
     }
 
