@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CFile;
@@ -137,27 +138,13 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
             @Override
             public IFolderItemDecorator<NotesAndAttachments> createItemDecorator() {
-                return new VistaBoxFolderItemDecorator<NotesAndAttachments>(this) {
-                    @Override
-                    public void init(final CEntityFolderItem<NotesAndAttachments> folderItem) {
-                        super.init(folderItem);
-                        final NoteEditor editor = (NoteEditor) getContent();
-                        editor.addPropertyChangeHandler(new PropertyChangeHandler() {
-
-                            @Override
-                            public void onPropertyChange(PropertyChangeEvent event) {
-                                if (event.getPropertyName() == PropertyName.viewable) {
-                                    folderItem.getItemActionsBar().setVisible(editor.isViewable());
-                                }
-                            }
-                        });
-                    }
-                };
+                return new VistaBoxFolderItemDecorator<NotesAndAttachments>(this);
             }
 
             @Override
             protected CEntityFolderItem<NotesAndAttachments> createItem(boolean first) {
                 final CEntityFolderItem<NotesAndAttachments> item = super.createItem(first);
+
                 item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
 
                     @SuppressWarnings("rawtypes")
@@ -283,6 +270,20 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     tb.addItem(btnCancel);
 
                     return tb;
+                }
+
+                @Override
+                public void onAdopt(final CEntityContainer<?> parent) {
+                    super.onAdopt(parent);
+                    addPropertyChangeHandler(new PropertyChangeHandler() {
+
+                        @Override
+                        public void onPropertyChange(PropertyChangeEvent event) {
+                            if (event.getPropertyName() == PropertyName.viewable) {
+                                ((CEntityFolderItem<NotesAndAttachments>) parent).getItemActionsBar().setVisible(isViewable());
+                            }
+                        }
+                    });
                 }
 
                 @Override

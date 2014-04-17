@@ -17,14 +17,11 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 
 public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E> {
-
-    private static final I18n i18n = I18n.get(VistaBoxFolder.class);
 
     private final String itemName;
 
