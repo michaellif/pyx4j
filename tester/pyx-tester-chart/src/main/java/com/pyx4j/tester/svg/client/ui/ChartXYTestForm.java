@@ -23,7 +23,7 @@ package com.pyx4j.tester.svg.client.ui;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.tester.svg.client.config.ChartXYTestConfiguration;
 
@@ -39,21 +39,21 @@ public class ChartXYTestForm extends CEntityForm<ChartXYTestConfiguration> {
 
         String labelWidth = "7em";
         int row = 0;
-        main.setWidget(row, 0, inject(proto().chartType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 1, inject(proto().pointsType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 2, inject(proto().points(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 0, inject(proto().chartType(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 1, inject(proto().pointsType(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 2, inject(proto().points(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
 
         row++;
-        main.setWidget(row, 0, inject(proto().xValuesType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 1, inject(proto().xFrom(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 2, inject(proto().xTo(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 3, inject(proto().xMultiplication(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 0, inject(proto().xValuesType(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 1, inject(proto().xFrom(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 2, inject(proto().xTo(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 3, inject(proto().xMultiplication(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
 
         row++;
-        main.setWidget(row, 0, inject(proto().yValuesType(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 1, inject(proto().yFrom(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 2, inject(proto().yTo(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
-        main.setWidget(row, 3, inject(proto().yMultiplication(), new WidgetDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 0, inject(proto().yValuesType(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 1, inject(proto().yFrom(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 2, inject(proto().yTo(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
+        main.setWidget(row, 3, inject(proto().yMultiplication(), new FieldDecorator.Builder().componentWidth("8em").labelWidth(labelWidth).build()));
 
         return main;
     }

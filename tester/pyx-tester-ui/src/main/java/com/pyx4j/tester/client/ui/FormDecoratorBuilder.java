@@ -17,11 +17,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
-public class FormDecoratorBuilder extends WidgetDecorator.Builder {
+public class FormDecoratorBuilder extends FieldDecorator.Builder {
 
     public FormDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
         super();
@@ -42,8 +42,8 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     }
 
     @Override
-    public WidgetDecorator build() {
-        final WidgetDecorator decorator = super.build();
+    public FieldDecorator build() {
+        final FieldDecorator decorator = super.build();
         decorator.sinkEvents(Event.ONCLICK);
 
         decorator.addHandler(new ClickHandler() {

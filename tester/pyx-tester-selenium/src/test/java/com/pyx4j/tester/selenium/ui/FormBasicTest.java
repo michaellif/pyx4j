@@ -21,7 +21,7 @@
 package com.pyx4j.tester.selenium.ui;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.selenium.DebugIdBuilder;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.tester.client.TesterSiteMap;
@@ -47,19 +47,19 @@ public class FormBasicTest extends TesterSeleniumTestBase {
 
         // How to click on a Label for a component
         // It will populate component properties form
-        selenium.click(DebugIdBuilder.id(DebugIdBuilder.id(proto(EntityI.class).textBox()), WidgetDecorator.DebugIds.Label.debugId()));
+        selenium.click(DebugIdBuilder.id(DebugIdBuilder.id(proto(EntityI.class).textBox()), FieldDecorator.DebugIds.Label.debugId()));
 
         // Set mandatory flag on component properties panel
         selenium.click(DebugIdBuilder.id(proto(CComponentProperties.class).mandatory()));
 
         // Check mandatory asterisk" visible
-        assertVisible(DebugIdBuilder.id(DebugIdBuilder.id(proto(EntityI.class).textBox()), WidgetDecorator.DebugIds.MandatoryImage.debugId()));
+        assertVisible(DebugIdBuilder.id(DebugIdBuilder.id(proto(EntityI.class).textBox()), FieldDecorator.DebugIds.MandatoryImage.debugId()));
 
         // Click again
         selenium.click(DebugIdBuilder.id(proto(CComponentProperties.class).mandatory()));
 
         // Check mandatory "asterisk" disappeared
-        assertNotVisible(DebugIdBuilder.id(DebugIdBuilder.id(proto(EntityI.class).textBox()), WidgetDecorator.DebugIds.MandatoryImage.debugId()));
+        assertNotVisible(DebugIdBuilder.id(DebugIdBuilder.id(proto(EntityI.class).textBox()), FieldDecorator.DebugIds.MandatoryImage.debugId()));
 
         // Click populate button
         selenium.click(DebugIdBuilder.id(FormTesterViewImpl.DebugIds.ButtonPanel, FormTesterViewImpl.DebugIds.PopulateButton));

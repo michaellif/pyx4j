@@ -58,10 +58,10 @@ import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.INativeField;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 
-public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?>> {
+public class FieldDecorator extends FlowPanel implements IDecorator<CField<?, ?>> {
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
@@ -98,11 +98,11 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?
 
     private final Builder builder;
 
-    public WidgetDecorator() {
+    public FieldDecorator() {
         this(new Builder());
     }
 
-    protected WidgetDecorator(final Builder builder) {
+    protected FieldDecorator(final Builder builder) {
         this.builder = builder;
 
         setStyleName(WidgetDecorator.name());
@@ -449,8 +449,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?
             contentWidth = "auto";
         }
 
-        public WidgetDecorator build() {
-            return new WidgetDecorator(this);
+        public FieldDecorator build() {
+            return new FieldDecorator(this);
         }
 
         @Deprecated

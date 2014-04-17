@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.CComponentProperties;
@@ -52,13 +52,13 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("CComponent Properties"));
 
-        main.setWidget(++row, 0, inject(proto().title(), new WidgetDecorator.Builder().labelWidth("10em").build()));
+        main.setWidget(++row, 0, inject(proto().title(), new FieldDecorator.Builder().labelWidth("10em").build()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0, inject(proto().componentValue(), new WidgetDecorator.Builder().labelWidth("10em").build()));
+        main.setWidget(++row, 0, inject(proto().componentValue(), new FieldDecorator.Builder().labelWidth("10em").build()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        WidgetDecorator decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        FieldDecorator decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
@@ -70,7 +70,7 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
         });
         main.setWidget(++row, 0, inject(proto().mandatory(), decorator));
 
-        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
@@ -82,7 +82,7 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
         });
         main.setWidget(++row, 0, inject(proto().enabled(), decorator));
 
-        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
@@ -94,7 +94,7 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
         });
         main.setWidget(++row, 0, inject(proto().editable(), decorator));
 
-        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
@@ -106,7 +106,7 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
         });
         main.setWidget(++row, 0, inject(proto().visible(), decorator));
 
-        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
@@ -118,11 +118,11 @@ public class CComponentViewForm extends CEntityForm<CComponentProperties> {
         });
         main.setWidget(++row, 0, inject(proto().viewable(), decorator));
 
-        decorator = new WidgetDecorator.Builder().labelWidth("10em").build();
+        decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().setViewable(true);
         main.setWidget(++row, 0, inject(proto().valid(), decorator));
 
-        main.setWidget(++row, 0, inject(proto().toolTip(), new WidgetDecorator.Builder().labelWidth("10em").build()));
+        main.setWidget(++row, 0, inject(proto().toolTip(), new FieldDecorator.Builder().labelWidth("10em").build()));
 
         return main;
     }

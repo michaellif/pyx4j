@@ -13,9 +13,9 @@
  */
 package com.pyx4j.site.client.ui.prime.form;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-public class FormDecoratorBuilder extends WidgetDecorator.Builder {
+public class FieldDecoratorBuilder extends FieldDecorator.Builder {
 
     // default sizes (in EMs): 
     public static final double LABEL_WIDTH = 15;
@@ -24,36 +24,36 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     public static final double CONTENT_WIDTH_DUAL = 65;
 
-    public FormDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
+    public FieldDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
         super();
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
     }
 
-    public FormDecoratorBuilder(double labelWidth, double componentWidth, double contentWidth) {
+    public FieldDecoratorBuilder(double labelWidth, double componentWidth, double contentWidth) {
         this(labelWidth + "em", componentWidth + "em", contentWidth + "em");
     }
 
-    public FormDecoratorBuilder(double componentWidth, boolean dual) {
+    public FieldDecoratorBuilder(double componentWidth, boolean dual) {
         this(LABEL_WIDTH, componentWidth, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH));
     }
 
-    public FormDecoratorBuilder(double componentWidth) {
+    public FieldDecoratorBuilder(double componentWidth) {
         this(componentWidth, false);
     }
 
-    public FormDecoratorBuilder(boolean dual) {
+    public FieldDecoratorBuilder(boolean dual) {
         this(dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH, dual);
     }
 
-    public FormDecoratorBuilder() {
+    public FieldDecoratorBuilder() {
         this(false);
     }
 
     @Override
-    public WidgetDecorator build() {
-        return new WidgetDecorator(this) {
+    public FieldDecorator build() {
+        return new FieldDecorator(this) {
             @Override
             protected void updateViewable() {
                 if (getLabelPosition() != LabelPosition.top) {
