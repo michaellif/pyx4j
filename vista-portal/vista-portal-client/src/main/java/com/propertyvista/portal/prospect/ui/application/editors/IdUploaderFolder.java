@@ -39,7 +39,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
-import com.propertyvista.portal.prospect.ui.application.AccessoryEntityForm;
+import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {

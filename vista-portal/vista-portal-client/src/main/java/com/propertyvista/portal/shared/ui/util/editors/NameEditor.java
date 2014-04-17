@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.portal.prospect.ui.application.AccessoryEntityForm;
+import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class NameEditor extends AccessoryEntityForm<Name> {
