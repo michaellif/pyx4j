@@ -74,7 +74,7 @@ public class ImportAutoPayAgreementsDataProcessor {
         }
 
         for (BillableItem billableItem : billableItems.values()) {
-            if (!itemModel.chargeCode().getValue().equals(billableItem.yardiChargeCode().getValue())) {
+            if (!itemModel.chargeCode().equals(billableItem.yardiChargeCode())) {
                 continue;
             } else if (itemModel.chargeAmount().getValue().compareTo(billableItem.agreedPrice().getValue()) != 0) {
                 continue;

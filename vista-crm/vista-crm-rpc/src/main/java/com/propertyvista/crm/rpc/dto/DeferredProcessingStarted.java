@@ -13,13 +13,17 @@
  */
 package com.propertyvista.crm.rpc.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
+import com.pyx4j.i18n.annotations.I18n;
 
 /**
  * As a result of Blob Upload a new DeferredProcess started. Its process should be monitored separately.
  * 
  */
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface DeferredProcessingStarted extends AbstractIFileBlob {
 
     IPrimitive<String> deferredCorrelationId();
