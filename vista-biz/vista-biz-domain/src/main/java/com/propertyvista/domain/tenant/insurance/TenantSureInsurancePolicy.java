@@ -51,7 +51,10 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
         PendingCancellation,
 
         /** This insurance is no longer active, and stored for archive purposes */
-        Cancelled;
+        Cancelled,
+
+        /** Insurance moved to another PMC */
+        Moved;
 
     }
 
