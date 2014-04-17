@@ -69,7 +69,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ProductItem) {
             return new ServiceItemEditor();
         }
@@ -117,7 +117,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
 
@@ -126,7 +126,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 isViewable = true;
             }
 
-            CComponent<?> comp;
+            CComponent<?, ?> comp;
             if (column.getObject() == proto().element()) {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {

@@ -40,7 +40,7 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificateScan) {
             return new CertificateScanViewer();
         }

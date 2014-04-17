@@ -65,7 +65,7 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
         });
         p.setWidget(++row, 0, new HTML("&nbsp"));
 
-        CComponent<Set<PaymentType>> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
+        CComponent<?, Set<PaymentType>> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
         paymentTypeSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentType>>() {
             @Override
             public FieldValidationError isValid() {
@@ -79,8 +79,8 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityForm<PaymentRecords
         p.setWidget(++row, 0, inject(proto().paymentMethodFilter(), paymentTypeSelector, new FieldDecoratorBuilder(50).build()));
 
         // TODO we don't use PaymentStatus.Processing that's why we choose this constructor
-        CComponent<Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(
-                EnumSet.complementOf(EnumSet.of(PaymentStatus.Processing)), Layout.Horizontal);
+        CComponent<?, Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.complementOf(EnumSet
+                .of(PaymentStatus.Processing)), Layout.Horizontal);
         paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentRecord.PaymentStatus>>() {
             @Override
             public FieldValidationError isValid() {

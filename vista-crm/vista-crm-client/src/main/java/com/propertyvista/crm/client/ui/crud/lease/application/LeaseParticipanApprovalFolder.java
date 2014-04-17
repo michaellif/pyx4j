@@ -64,7 +64,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseParticipanApprovalDTO) {
             return new LeaseParticipanApprovalViewer();
         }

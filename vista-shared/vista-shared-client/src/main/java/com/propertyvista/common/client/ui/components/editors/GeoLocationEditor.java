@@ -63,7 +63,7 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
         get(proto().latitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
             public FieldValidationError isValid() {
-                CComponent<LatitudeType> latitudeType = get(proto().latitudeType());
+                CComponent<?, LatitudeType> latitudeType = get(proto().latitudeType());
                 Double value = getComponent().getValue();
                 return ((value == null && latitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 90))) ? null
                         : new FieldValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
@@ -74,7 +74,7 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
         get(proto().latitudeType()).addComponentValidator(new AbstractComponentValidator<LatitudeType>() {
             @Override
             public FieldValidationError isValid() {
-                CComponent<Double> latitude = get(proto().latitude());
+                CComponent<?, Double> latitude = get(proto().latitude());
                 return (getComponent().getValue() != null || latitude.getValue() == null) ? null : new FieldValidationError(getComponent(), i18n
                         .tr("This field is Mandatory"));
             }
@@ -86,7 +86,7 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
         get(proto().longitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
             public FieldValidationError isValid() {
-                CComponent<LongitudeType> longitudeType = get(proto().longitudeType());
+                CComponent<?, LongitudeType> longitudeType = get(proto().longitudeType());
                 return ((getComponent().getValue() == null && longitudeType.getValue() == null) || (getComponent().getValue() != null && (getComponent()
                         .getValue() >= 0 && getComponent().getValue() <= 180))) ? null : new FieldValidationError(getComponent(), i18n
                         .tr("Longitude may be in range [0-180] degree"));
@@ -97,7 +97,7 @@ public class GeoLocationEditor extends CEntityForm<GeoLocation> {
         get(proto().longitudeType()).addComponentValidator(new AbstractComponentValidator<LongitudeType>() {
             @Override
             public FieldValidationError isValid() {
-                CComponent<Double> longitude = get(proto().longitude());
+                CComponent<?, Double> longitude = get(proto().longitude());
                 return (getComponent().getValue() != null || longitude.getValue() == null) ? null : new FieldValidationError(getComponent(), i18n
                         .tr("This field is Mandatory"));
             }

@@ -85,7 +85,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
         main.setWidget(row, 1, inject(proto().creationDate(), new FieldDecoratorBuilder(10).build()));
 
-        main.setWidget(++row, 0,
+        main.setWidget(
+                ++row,
+                0,
                 inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL), new FieldDecoratorBuilder(22).build()));
         if (proto() instanceof PaymentMethod) {
             main.setWidget(row, 1, inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
@@ -395,7 +397,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         get(proto().billingAddress()).setValue(address);
     }
 
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, AddressSimple> comp) {
         // Implements meaningful in derived classes...
     }
 

@@ -61,14 +61,14 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (DebitLinkDTO.class.equals(member.getObjectClass())) {
             return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
                 @SuppressWarnings("rawtypes")
                 @Override
-                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     if (column.getObject() == proto().debitAmount()) {
-                        CComponent<?> comp = inject(column.getObject());
+                        CComponent<?, ?> comp = inject(column.getObject());
                         ((CField) comp).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {
@@ -78,7 +78,7 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
                         });
                         return comp;
                     } else if (column.getObject() == proto().paidAmount()) {
-                        CComponent<?> comp = inject(column.getObject());
+                        CComponent<?, ?> comp = inject(column.getObject());
                         ((CField) comp).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {

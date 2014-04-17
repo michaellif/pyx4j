@@ -37,7 +37,7 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CommunicationMessageAttachment) {
             return new CommunicationMessageAttachmentViewer();
         }

@@ -34,7 +34,7 @@ public class L1TenantInfoFolder extends VistaBoxFolder<L1TenantInfo> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof L1TenantInfo) {
             return new L1TenantInfoForm();
         }

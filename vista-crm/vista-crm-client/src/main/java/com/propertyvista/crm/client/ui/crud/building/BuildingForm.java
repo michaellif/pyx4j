@@ -143,7 +143,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                         @Override
                         public void onSuccess(DatesPolicy result) {
                             // set build year date picker range: 
-                            CComponent<?> comp = get(proto().info().structureBuildYear());
+                            CComponent<?, ?> comp = get(proto().info().structureBuildYear());
                             if (comp instanceof CMonthYearPicker) {
                                 int rangeStart = 1900 + result.yearRangeStart().getValue().getYear();
                                 ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 + ClientContext.getServerDate().getYear())
@@ -473,7 +473,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSSummaryBuilding) {
                 return new ILSSummaryEditor();
             } else {
@@ -519,7 +519,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSProfileBuilding) {
                 return new ILSProfileBuildingEditor();
             } else {

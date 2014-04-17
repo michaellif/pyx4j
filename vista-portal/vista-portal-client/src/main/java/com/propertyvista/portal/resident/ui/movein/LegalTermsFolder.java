@@ -40,7 +40,7 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> 
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof SignedAgreementLegalTerm) {
             return new LegalTermForm();
         } else {

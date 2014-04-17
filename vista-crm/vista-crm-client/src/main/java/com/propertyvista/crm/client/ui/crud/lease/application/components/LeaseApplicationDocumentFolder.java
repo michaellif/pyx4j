@@ -39,7 +39,7 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseApplicationDocument) {
             return new LeaseApplicationDocumentForm();
         }

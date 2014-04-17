@@ -51,13 +51,13 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
 
         if (member instanceof RentOwingForPeriod) {
             return new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
 
                 @Override
-                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     if (proto().from() == column.getObject()) {
                         CDatePicker datePicker = new CDatePicker();
                         datePicker.setMandatory(true);

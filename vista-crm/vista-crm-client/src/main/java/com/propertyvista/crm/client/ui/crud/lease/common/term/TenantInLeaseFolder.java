@@ -84,7 +84,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
-        for (CComponent<?> comp : getComponents()) {
+        for (CComponent<?, ?> comp : getComponents()) {
             ((TenantInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
         }
     }
@@ -150,7 +150,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseTermTenant) {
             return new TenantInLeaseEditor();
         }
@@ -362,7 +362,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof AutopayAgreement) {
                 return new PreauthorizedPaymentViewer();
             }

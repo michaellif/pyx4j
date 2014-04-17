@@ -51,13 +51,13 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {
         this.documentationPolicy = policy;
 
-        for (CComponent<?> item : getComponents()) {
+        for (CComponent<?, ?> item : getComponents()) {
             ((PersonalIncomeEditor) ((CEntityFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
         }
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningIncome) {
             return new PersonalIncomeEditor(documentationPolicy);
         }

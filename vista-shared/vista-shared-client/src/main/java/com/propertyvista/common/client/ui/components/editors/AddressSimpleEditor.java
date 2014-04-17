@@ -75,15 +75,15 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
         row = (oneColumn ? row : -1);
 
-        CComponent<Province> province = (CComponent<Province>) inject(proto().province());
+        CComponent<?, Province> province = (CComponent<?, Province>) inject(proto().province());
         province.setDecorator(decorator(maxCompWidth).build());
         main.setWidget(++row, col, province);
 
-        final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
+        final CComponent<?, Country> country = (CComponent<?, Country>) inject(proto().country());
         country.setDecorator(decorator(maxCompWidth).build());
         main.setWidget(++row, col, country);
 
-        CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
+        CComponent<?, String> postalCode = (CComponent<?, String>) inject(proto().postalCode());
         postalCode.setDecorator(decorator(10).build());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
@@ -95,7 +95,7 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
         return main;
     }
 
-    private void attachFilters(final AddressSimple proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
+    private void attachFilters(final AddressSimple proto, CComponent<?, Province> province, CComponent<?, Country> country, CComponent<?, String> postalCode) {
         postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

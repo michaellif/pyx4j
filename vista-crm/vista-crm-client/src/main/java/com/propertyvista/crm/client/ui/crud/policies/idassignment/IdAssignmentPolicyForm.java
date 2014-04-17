@@ -75,7 +75,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof IdAssignmentItem) {
                 return new IdAssignmentItemEditor();
             }
@@ -89,7 +89,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
             }
 
             @Override
-            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 if (column.getObject() == proto().target()) {
                     return inject(column.getObject(), new CEnumLabel());
                 }

@@ -39,7 +39,7 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof IdentificationDocumentFile) {
             return new ApplicationDocumentEditor();
         }

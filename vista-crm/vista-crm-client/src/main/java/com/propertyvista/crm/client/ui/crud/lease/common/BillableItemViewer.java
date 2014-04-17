@@ -242,7 +242,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof BillableItemAdjustment) {
                 return new BillableItemAdjustmentEditor();
             }
@@ -262,7 +262,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
             }
 
             private void bindValueEditor(Type valueType, boolean populate) {
-                CComponent<?> comp = null;
+                CComponent<?, ?> comp = null;
                 if (valueType != null) {
                     switch (valueType) {
                     case monetary:
@@ -276,7 +276,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
 
                 if (comp != null) {
                     @SuppressWarnings("unchecked")
-                    IDecorator<CComponent<BigDecimal>> decor = get((proto().value())).getDecorator();
+                    IDecorator<CComponent<?, BigDecimal>> decor = get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
                     comp.setDecorator(decor);
@@ -305,7 +305,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof Deposit) {
                 return new DepositEditor();
             }

@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.CustomerSignature;
 public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().equals(CustomerSignature.class)) {
             return new CSignature(mm.getCaption());

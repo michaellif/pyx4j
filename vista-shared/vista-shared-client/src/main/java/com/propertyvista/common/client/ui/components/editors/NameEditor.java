@@ -35,7 +35,7 @@ import com.propertyvista.domain.person.Name;
 
 public class NameEditor extends CEntityForm<Name> {
 
-    private final CComponent<Name> viewComp;
+    private final CComponent<?, Name> viewComp;
 
     private final String customViewLabel;
 

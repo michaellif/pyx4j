@@ -243,9 +243,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
             flexPanel.setWidget(++leftRow, 0, inject(proto().type(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
         } else {
-            flexPanel.setWidget(++leftRow, 0, inject(proto().type(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
+            flexPanel
+                    .setWidget(++leftRow, 0, inject(proto().type(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
         }
-        flexPanel.setWidget(++leftRow, 0, inject(proto().status(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Status")).build()));
+        flexPanel
+                .setWidget(++leftRow, 0, inject(proto().status(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Status")).build()));
 
         int rightRow = 0;
 
@@ -444,7 +446,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
     }
 
-    private void crossValidate(CComponent<LogicalDate> date1, CComponent<LogicalDate> date2, String message) {
+    private void crossValidate(CComponent<?, LogicalDate> date1, CComponent<?, LogicalDate> date2, String message) {
         new StartEndDateValidation(date1, date2, message);
         date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
         date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
@@ -493,7 +495,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof BuildingUtility) {
                 return new BuildingUtilityEditor();
             }

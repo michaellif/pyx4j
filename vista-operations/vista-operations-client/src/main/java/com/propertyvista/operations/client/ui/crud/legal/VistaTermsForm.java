@@ -53,7 +53,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LegalDocument) {
                 return new LegalDocumentForm();
             } else {
@@ -76,7 +76,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
             // locale
             main.setWidget(++row, 0, 2, inject(proto().locale(), new FieldDecoratorBuilder(10, true).build()));
             // content
-            CComponent<?> editor = null;
+            CComponent<?, ?> editor = null;
             editor = new CRichTextArea();
             main.setWidget(++row, 0, 2, inject(proto().content(), editor, new FieldDecoratorBuilder(true).build()));
 

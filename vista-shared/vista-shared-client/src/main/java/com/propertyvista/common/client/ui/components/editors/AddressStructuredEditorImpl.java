@@ -50,11 +50,11 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         @SuppressWarnings("unchecked")
-        final CComponent<Country> country = (CComponent<Country>) inject(proto().country(), new FieldDecoratorBuilder(15).build());
+        final CComponent<?, Country> country = (CComponent<?, Country>) inject(proto().country(), new FieldDecoratorBuilder(15).build());
         @SuppressWarnings("unchecked")
-        final CComponent<Province> province = (CComponent<Province>) inject(proto().province(), new FieldDecoratorBuilder(15).build());
+        final CComponent<?, Province> province = (CComponent<?, Province>) inject(proto().province(), new FieldDecoratorBuilder(15).build());
         @SuppressWarnings("unchecked")
-        final CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode(), new FieldDecoratorBuilder(10).build());
+        final CComponent<?, String> postalCode = (CComponent<?, String>) inject(proto().postalCode(), new FieldDecoratorBuilder(10).build());
         if (postalCode instanceof CTextFieldBase) {
             @SuppressWarnings("unchecked")
             CTextFieldBase<String, ?> comp = ((CTextFieldBase<String, ?>) postalCode);
@@ -91,7 +91,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         return content;
     }
 
-    private void attachFilters(final AddressStructured proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
+    private void attachFilters(final AddressStructured proto, CComponent<?, Province> province, CComponent<?, Country> country, CComponent<?, String> postalCode) {
         postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

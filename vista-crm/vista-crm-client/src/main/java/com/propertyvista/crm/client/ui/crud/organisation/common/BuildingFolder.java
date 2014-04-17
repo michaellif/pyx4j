@@ -61,11 +61,11 @@ public class BuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Building) {
             return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
                 @Override
-                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     CLabel<?> comp = inject(column.getObject(), new CLabel<String>());
 
                     if (proto().propertyCode() == column.getObject()) {

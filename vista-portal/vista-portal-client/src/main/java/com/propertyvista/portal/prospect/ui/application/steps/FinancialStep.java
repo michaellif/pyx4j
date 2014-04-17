@@ -64,7 +64,7 @@ public class FinancialStep extends ApplicationWizardStep {
         super.onValueSet(populate);
 
         if (getWizard().isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?>) get(proto().applicant().incomes())).setDocumentsPolicy(getValue().applicant().documentsPolicy());
+            ((PersonalIncomeFolder) (CComponent<?, ?>) get(proto().applicant().incomes())).setDocumentsPolicy(getValue().applicant().documentsPolicy());
         }
     }
 

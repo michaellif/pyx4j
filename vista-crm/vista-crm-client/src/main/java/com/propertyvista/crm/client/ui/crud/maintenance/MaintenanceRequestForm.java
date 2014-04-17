@@ -635,7 +635,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof MaintenanceRequestSchedule) {
                 return new MaintenanceRequestScheduleViewer();
             }
@@ -762,7 +762,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof MaintenanceRequestStatusRecord) {
                 return new StatusRecordViewer();
             }

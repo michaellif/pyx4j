@@ -67,7 +67,7 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ProofOfIncomeDocumentFolder) {
             return new ProofOfIncomeDocumentEditor();
         }

@@ -69,7 +69,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
-        for (CComponent<?> comp : getComponents()) {
+        for (CComponent<?, ?> comp : getComponents()) {
             ((GuarantorInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
         }
     }
@@ -109,7 +109,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseTermGuarantor) {
             return new GuarantorInLeaseEditor();
         }
@@ -117,7 +117,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     void updateTenantList() {
-        for (CComponent<?> comp : getComponents()) {
+        for (CComponent<?, ?> comp : getComponents()) {
             ((GuarantorInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).updateTenantList();
         }
     }

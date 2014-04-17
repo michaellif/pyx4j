@@ -70,7 +70,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        for (CComponent<?> comp : getComponents()) {
+        for (CComponent<?, ?> comp : getComponents()) {
             ((PortalImageSetEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }
@@ -110,7 +110,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof SiteImageSet) {
             PortalImageSetEditor editor = new PortalImageSetEditor();
             if (imageSize != null) {

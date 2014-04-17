@@ -28,7 +28,7 @@ public class DateInPeriodValidation {
      * outputs default error message
      */
 
-    public DateInPeriodValidation(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final CComponent<LogicalDate> value3) {
+    public DateInPeriodValidation(final CComponent<?, LogicalDate> value1, final CComponent<?, LogicalDate> value2, final CComponent<?, LogicalDate> value3) {
         this(value1, value2, value3, null);
     }
 
@@ -37,7 +37,7 @@ public class DateInPeriodValidation {
      * outputs provided String <code>message</code>
      */
 
-    public DateInPeriodValidation(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final CComponent<LogicalDate> value3,
+    public DateInPeriodValidation(final CComponent<?, LogicalDate> value1, final CComponent<?, LogicalDate> value2, final CComponent<?, LogicalDate> value3,
             String message) {
         if (message == null) {
             message = i18n.tr("The date entered is not within the range specified");

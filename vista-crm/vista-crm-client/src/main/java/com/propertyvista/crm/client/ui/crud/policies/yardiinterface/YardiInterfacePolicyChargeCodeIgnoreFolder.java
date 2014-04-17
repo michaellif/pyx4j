@@ -46,7 +46,7 @@ public class YardiInterfacePolicyChargeCodeIgnoreFolder extends VistaTableFolder
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof YardiInterfacePolicyChargeCodeIgnore) {
             return new YardiInterfacePolicyChargeCodeIgnoreForm();
         }
@@ -60,7 +60,7 @@ public class YardiInterfacePolicyChargeCodeIgnoreFolder extends VistaTableFolder
         }
 
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column == proto().yardiChargeCode()) {
                 // TODO do we actually have to override the default CComponent?
                 return new CTextField();

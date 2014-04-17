@@ -55,9 +55,9 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?> createCell(final EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(final EntityFolderColumnDescriptor column) {
             if (isZoomable(column.getObject())) {
-                CComponent<?> comp = inject(column.getObject(), this.create(column.getObject()));
+                CComponent<?, ?> comp = inject(column.getObject(), this.create(column.getObject()));
                 ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
@@ -103,7 +103,7 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(proto().getValueClass())) {
             ZoomableViewEntityRowEditor<E> e = editorfactory.createEditor(this, columns());
             e.initZoomin(zoomInHandler, zoomableMembers);

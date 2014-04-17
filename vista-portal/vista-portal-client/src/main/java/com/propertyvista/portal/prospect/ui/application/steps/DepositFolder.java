@@ -33,7 +33,7 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Deposit) {
             return new DepositEditor();
         }

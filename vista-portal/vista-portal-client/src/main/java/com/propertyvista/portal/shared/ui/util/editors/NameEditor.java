@@ -30,7 +30,7 @@ import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class NameEditor extends AccessoryEntityForm<Name> {
 
-    private final CComponent<Name> nameComp;
+    private final CComponent<?, Name> nameComp;
 
     public NameEditor() {
         this(null);

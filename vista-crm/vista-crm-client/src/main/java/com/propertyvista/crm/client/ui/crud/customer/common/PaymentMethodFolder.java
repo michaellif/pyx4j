@@ -76,7 +76,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeasePaymentMethod) {
             return new LeasePaymentMethodEditor();
         }
@@ -140,7 +140,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         };
 
         @Override
-        protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
+        protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, AddressSimple> comp) {
             PaymentMethodFolder.this.onBillingAddressSameAsCurrentOne(set, comp);
         }
     }
@@ -149,7 +149,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 
     protected abstract Set<CreditCardType> getAllowedCardTypes();
 
-    protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp);
+    protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, AddressSimple> comp);
 
     protected abstract void getAllowedPaymentTypes(AsyncCallback<EnumSet<PaymentType>> callback);
 

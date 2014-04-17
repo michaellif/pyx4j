@@ -67,7 +67,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Feature) {
             return new FeatureEditor();
         }
@@ -84,8 +84,8 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        public CComponent<?> create(IObject<?> member) {
-            CComponent<?> comp = null;
+        public CComponent<?, ?> create(IObject<?> member) {
+            CComponent<?, ?> comp = null;
             if (member.equals(proto().code())) {
                 comp = new CEntityLabel<ARCode>();
                 if (!ServiceFeatureFolder.this.isEditable()) {

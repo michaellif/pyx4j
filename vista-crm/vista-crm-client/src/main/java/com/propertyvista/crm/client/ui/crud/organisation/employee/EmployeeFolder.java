@@ -71,14 +71,14 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Employee) {
             return new CEntityFolderRowEditor<Employee>(Employee.class, columns()) {
 
                 @SuppressWarnings("rawtypes")
                 @Override
-                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                    CComponent<?> comp = null;
+                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                    CComponent<?, ?> comp = null;
                     if (proto().title() == column.getObject()) {
                         comp = inject(column.getObject(), new CLabel<String>());
                     } else if (proto().name() == column.getObject()) {

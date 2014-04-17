@@ -50,7 +50,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         int col = 1;
 
         @SuppressWarnings("unchecked")
-        CComponent<OwnedRented> rentedComponent = (CComponent<OwnedRented>) inject(proto().rented());
+        CComponent<?, OwnedRented> rentedComponent = (CComponent<?, OwnedRented>) inject(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {

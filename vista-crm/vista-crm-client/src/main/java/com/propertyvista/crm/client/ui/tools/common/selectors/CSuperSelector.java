@@ -32,7 +32,7 @@ import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
  * Use {link {@link #getSelectorWidget()} to access the wrapped widget
  */
 @Deprecated
-public class CSuperSelector<E extends IEntity> extends CComponent<IList<E>> {
+public class CSuperSelector<E extends IEntity> extends CComponent<CSuperSelector<E>, IList<E>> {
 
     private final SuperSelector<E> superSelector;
 

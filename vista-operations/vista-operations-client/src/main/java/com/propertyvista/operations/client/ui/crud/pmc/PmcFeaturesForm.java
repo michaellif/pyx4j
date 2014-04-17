@@ -40,8 +40,8 @@ public class PmcFeaturesForm extends CEntityForm<PmcVistaFeatures> {
         content.setWidget(++row, 0, inject(proto().yardiMaintenance(), new FieldDecoratorBuilder(5).build()));
         content.setWidget(++row, 0, inject(proto().tenantSureIntegration(), new FieldDecoratorBuilder(5).build()));
 
-        final CComponent<Boolean> yardiIntegrationSwitch = get(proto().yardiIntegration());
-        final CComponent<Boolean> yardiMaintenanceSwitch = get(proto().yardiMaintenance());
+        final CComponent<?, Boolean> yardiIntegrationSwitch = get(proto().yardiIntegration());
+        final CComponent<?, Boolean> yardiMaintenanceSwitch = get(proto().yardiMaintenance());
         yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

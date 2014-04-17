@@ -58,7 +58,7 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningPersonalAsset) {
             return new PersonalAssetEditor();
         }

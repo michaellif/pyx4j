@@ -63,7 +63,7 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof HomePageGadget) {
             return new HomePageGadgetItemEditor();
         }
@@ -78,8 +78,8 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?> comp = null;
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?, ?> comp = null;
             if (column.getObject().equals(proto().name())) {
                 comp = new CLabel<String>();
                 ((CField) comp).setNavigationCommand(new Command() {

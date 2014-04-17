@@ -75,7 +75,7 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
         super.onValueSet(populate);
 
         if (isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?>) get(proto().incomes())).setPolicyEntity(getValue());
+            ((PersonalIncomeFolder) (CComponent<?, ?>) get(proto().incomes())).setPolicyEntity(getValue());
         }
     }
 }

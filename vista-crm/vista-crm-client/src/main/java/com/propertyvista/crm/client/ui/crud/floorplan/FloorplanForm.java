@@ -162,7 +162,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSSummaryFloorplan) {
                 return new ILSSummaryEditor();
             } else {
@@ -198,7 +198,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSProfileFloorplan) {
                 return new ILSProfileFloorplanEditor();
             } else {

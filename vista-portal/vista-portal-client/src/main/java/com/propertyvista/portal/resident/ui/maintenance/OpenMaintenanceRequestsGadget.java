@@ -100,7 +100,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof MaintenanceRequestStatusDTO) {
                 return new MaintenanceRequestFolderItem(getGadgetView().getPresenter());
             }

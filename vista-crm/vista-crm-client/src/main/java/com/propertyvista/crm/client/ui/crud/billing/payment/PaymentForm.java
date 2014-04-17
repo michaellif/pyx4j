@@ -103,7 +103,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple> comp) {
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
                         new DefaultAsyncCallback<AddressSimple>() {
@@ -214,8 +214,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                                 PaymentForm.this.getValue().participants()) {
                             @Override
                             public boolean onClickOk() {
-                                CComponent<?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
-                                ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp).setValue(getSelectedItems().get(0));
+                                CComponent<?, ?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
+                                ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp).setValue(getSelectedItems().get(0));
                                 return true;
                             }
                         };
@@ -251,8 +251,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         right.setWidget(++row, 1, injectAndDecorate(proto().notes(), 22));
 
         // tweak UI:
-        CComponent<?> comp = get(proto().leaseTermParticipant());
-        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp)
+        CComponent<?, ?> comp = get(proto().leaseTermParticipant());
+        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp)
                 .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseTermParticipant<? extends LeaseParticipant<?>>> event) {

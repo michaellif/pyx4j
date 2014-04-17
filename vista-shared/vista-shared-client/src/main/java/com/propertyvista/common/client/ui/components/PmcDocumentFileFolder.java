@@ -53,7 +53,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         }
 
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().file().fileName()) {
                 CTextField cmp = new CTextField();
                 cmp.setNavigationCommand(new Command() {
@@ -101,7 +101,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PmcDocumentFile) {
             return new PmcDocumentFileForm();
         }

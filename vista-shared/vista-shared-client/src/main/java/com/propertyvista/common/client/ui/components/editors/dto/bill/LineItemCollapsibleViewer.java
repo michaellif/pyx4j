@@ -83,7 +83,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     }
 
     @Override
-    public Collection<? extends CComponent<?>> getComponents() {
+    public Collection<? extends CComponent<?, ?>> getComponents() {
         // TODO Auto-generated method stub
         return null;
     }

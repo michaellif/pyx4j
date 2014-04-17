@@ -59,7 +59,7 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof AptUnitServicePriceDTO) {
             return new ServicePriceEditor();
         }
@@ -74,8 +74,8 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?> comp;
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?, ?> comp;
             if (column.getObject() == proto().code()) {
                 comp = inject(proto().code(), new CEntityLabel<ARCode>());
                 if (!isEditable()) {

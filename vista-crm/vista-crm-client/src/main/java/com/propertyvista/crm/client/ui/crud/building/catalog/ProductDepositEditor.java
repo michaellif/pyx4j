@@ -97,7 +97,7 @@ public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
         if (valueType == null)
             return; // New item
 
-        CComponent<?> comp = null;
+        CComponent<?, ?> comp = null;
         switch (valueType) {
         case Monetary:
             comp = new CMoneyField();

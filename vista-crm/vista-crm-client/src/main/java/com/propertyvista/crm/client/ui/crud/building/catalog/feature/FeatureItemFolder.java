@@ -68,7 +68,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ProductItem) {
             return new FeatureItemEditor();
         }
@@ -83,7 +83,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().code().type().getValue()) {
             case Parking:
@@ -94,7 +94,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 break;
             }
 
-            CComponent<?> comp;
+            CComponent<?, ?> comp;
             if (column.getObject() == proto().element()) {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {

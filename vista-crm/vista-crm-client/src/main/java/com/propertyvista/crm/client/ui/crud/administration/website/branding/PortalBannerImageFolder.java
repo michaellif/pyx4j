@@ -59,7 +59,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        for (CComponent<?> comp : getComponents()) {
+        for (CComponent<?, ?> comp : getComponents()) {
             ((PortalBannerImageEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }
@@ -95,7 +95,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PortalBannerImage) {
             PortalBannerImageEditor editor = new PortalBannerImageEditor();
             if (imageSize != null) {

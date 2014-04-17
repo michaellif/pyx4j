@@ -62,7 +62,7 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningPersonalAsset) {
             return new PersonalAssetEditor();
         }

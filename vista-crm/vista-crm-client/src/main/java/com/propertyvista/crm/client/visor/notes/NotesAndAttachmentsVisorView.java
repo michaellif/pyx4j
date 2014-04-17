@@ -128,7 +128,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            public CComponent<?> create(IObject<?> member) {
+            public CComponent<?, ?> create(IObject<?> member) {
                 if (member instanceof NotesAndAttachments) {
                     return new NoteEditor(true);
                 } else {
@@ -340,7 +340,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public CComponent<?> create(IObject<?> member) {
+                public CComponent<?, ?> create(IObject<?> member) {
                     if (member instanceof NoteAttachment) {
                         return new AttachmentEditor();
                     } else {

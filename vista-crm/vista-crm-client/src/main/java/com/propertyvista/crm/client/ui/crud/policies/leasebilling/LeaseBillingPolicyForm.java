@@ -158,7 +158,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return; // New item
         }
 
-        CComponent<?> comp = null;
+        CComponent<?, ?> comp = null;
         switch (baseFeeType) {
         case FlatAmount:
             comp = new CMoneyField();
@@ -186,7 +186,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return; // New item
         }
 
-        CComponent<?> comp = null;
+        CComponent<?, ?> comp = null;
         switch (maxFeeType) {
         case Unlimited:
         case FlatAmount:
@@ -279,7 +279,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LeaseBillingTypePolicyItem) {
                 return new LeaseBillingTypeEditor();
             } else {

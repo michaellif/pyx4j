@@ -183,7 +183,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
     }
 
     private void checkAll(boolean isChecked) {
-        CComponent<?> c = get(proto().items());
+        CComponent<?, ?> c = get(proto().items());
         BulkItemsFolder<Item> folder = (BulkItemsFolder<Item>) c;
         folder.checkAll(isChecked);
     }

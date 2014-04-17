@@ -54,7 +54,7 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CityIntroPage) {
             return new CityIntroPageEditor();
         }
@@ -77,9 +77,9 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().cityName())) {
-                CComponent<?> comp = null;
+                CComponent<?, ?> comp = null;
                 comp = inject(column.getObject(), new CLabel<String>());
                 ((CField) comp).setNavigationCommand(new Command() {
                     @Override

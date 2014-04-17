@@ -58,7 +58,7 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Building) {
             return new LandlordBuildingEditor();
         }
@@ -92,9 +92,9 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().propertyCode() == column.getObject()) {
-                CComponent<?> comp = inject(proto().propertyCode());
+                CComponent<?, ?> comp = inject(proto().propertyCode());
                 ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {

@@ -52,12 +52,12 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getObjectClass().equals(proto().getObjectClass())) {
             CEntityFolderRowEditor<NsfChargeDetails> rowEditor = new CEntityFolderRowEditor<NsfChargeDetails>(NsfChargeDetails.class, columns(),
                     new VistaViewersComponentFactory()) {
                 @Override
-                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     if (proto().chequeAmount() == column.getObject()) {
                         CMoneyField moneyField = new CMoneyField();
                         moneyField.setMandatory(true);

@@ -38,7 +38,7 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantDTO) {
             return new TenantForm();
         }

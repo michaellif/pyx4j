@@ -39,7 +39,7 @@ public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfInco
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ProofOfIncomeDocumentFile) {
             return new DocumentEditor();
         }

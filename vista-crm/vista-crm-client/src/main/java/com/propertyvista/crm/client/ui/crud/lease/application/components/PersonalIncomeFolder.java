@@ -54,7 +54,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                     public void onSuccess(ApplicationDocumentationPolicy result) {
                         documentationPolicy = result;
 
-                        for (CComponent<?> item : getComponents()) {
+                        for (CComponent<?, ?> item : getComponents()) {
                             ((PersonalIncomeEditor) ((CEntityFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
                         }
                     }
@@ -62,7 +62,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningIncome) {
             return new PersonalIncomeEditor(documentationPolicy);
         }

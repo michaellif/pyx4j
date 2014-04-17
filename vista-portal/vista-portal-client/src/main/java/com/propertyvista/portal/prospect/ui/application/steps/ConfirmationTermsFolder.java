@@ -48,7 +48,7 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplica
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof SignedOnlineApplicationConfirmationTerm) {
             return new ConfirmationTermForm();
         } else {

@@ -65,7 +65,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LeaseAdjustmentPolicyItem) {
                 return new LeaseAdjustmentPolicyItemEditor();
             } else {

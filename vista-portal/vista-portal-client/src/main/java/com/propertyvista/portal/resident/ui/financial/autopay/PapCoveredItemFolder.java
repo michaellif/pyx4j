@@ -42,7 +42,7 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof AutopayAgreementCoveredItem) {
             return new CoveredItemViewer();
         }

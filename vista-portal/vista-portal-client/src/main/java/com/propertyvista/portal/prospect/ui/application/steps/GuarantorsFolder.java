@@ -46,7 +46,7 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof GuarantorDTO) {
             return new GuarantorForm();
         }

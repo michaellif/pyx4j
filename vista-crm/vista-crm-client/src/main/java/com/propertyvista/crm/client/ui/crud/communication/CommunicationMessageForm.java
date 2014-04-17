@@ -99,7 +99,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof CommunicationMessage) {
                 return new MessageFolderItem();
             }

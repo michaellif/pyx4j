@@ -189,7 +189,7 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
         return EnumSet.allOf(CreditCardType.class);
     }
 
-    private FieldValidationError validateCreditCardNumberAsync(final CComponent<?> component, CreditCardNumberIdentity value) {
+    private FieldValidationError validateCreditCardNumberAsync(final CComponent<?, ?> component, CreditCardNumberIdentity value) {
         if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
             if (ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue())) {
                 if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {

@@ -38,7 +38,7 @@ public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof DependentDTO) {
             return new CoapplicantForm();
         } else {
