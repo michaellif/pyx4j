@@ -51,6 +51,7 @@ public class EmailToTenantsDeferredProcess extends AbstractDeferredProcess {
     public void execute() {
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
         criteria.isCurrent(criteria.proto().leaseTermV());
+        criteria.eq(criteria.proto().leaseTermV().holder().lease().unit().building().suspended(), false);
 
         progress.progressMaximum.addAndGet(Persistence.service().count(criteria));
 
