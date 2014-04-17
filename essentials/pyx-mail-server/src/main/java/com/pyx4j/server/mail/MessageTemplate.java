@@ -21,7 +21,7 @@
 package com.pyx4j.server.mail;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,7 +34,7 @@ public class MessageTemplate {
 
     private String body;
 
-    private final Map<String, String> variables = new HashMap<String, String>();
+    private final Map<String, String> variables = new LinkedHashMap<String, String>();
 
     public MessageTemplate(String textResourceName) {
         try {
