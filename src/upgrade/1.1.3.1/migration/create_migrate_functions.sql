@@ -23,6 +23,9 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- check constraints
+        
+        ALTER TABLE insurance_policy DROP CONSTRAINT insurance_policy_status_e_ck;
         
         
         /**
@@ -82,7 +85,7 @@ BEGIN
                     JOIN    _admin_.admin_pmc_vista_features f ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
         THEN
                 EXECUTE 'UPDATE '||v_schema_name||'.apt_unit '
-                        ||'SET  info_unit_number = UPPER(info_unit_number '; 
+                        ||'SET  info_unit_number = UPPER(info_unit_number) '; 
                 
         END IF;
         
@@ -105,7 +108,10 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- check constraints
         
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_status_e_ck 
+            CHECK ((status) IN ('Active', 'Cancelled', 'Draft', 'Failed', 'Moved', 'Pending', 'PendingCancellation'));
        
         /**
         ***     ====================================================================================================

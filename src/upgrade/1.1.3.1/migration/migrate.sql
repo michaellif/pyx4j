@@ -27,7 +27,7 @@ SET client_min_messages = 'error';
 BEGIN TRANSACTION;
         SELECT  'a' AS letter,
                 COUNT(namespace) AS to_process,
-                COUNT(_dba_.migrate_pmc_11311(namespace)) AS processed
+                COUNT(_dba_.migrate_pmc_1131(namespace)) AS processed
         FROM    _admin_.admin_pmc a
         JOIN    pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
