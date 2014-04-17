@@ -74,6 +74,7 @@ public class TenantSecurityViewImpl extends AbstractPane implements TenantSecuri
             super(i18n.tr("Send mail"));
             setBody(createBody());
 
+            emailType.setMandatory(true);
             emailType.setOptions(Arrays.asList(EmailTemplateType.TenantInvitation));
             emailType.setValue(EmailTemplateType.TenantInvitation);
         }
