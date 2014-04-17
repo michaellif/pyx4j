@@ -111,19 +111,19 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         main.add(header);
 
         emailField = inject(proto().email(), new CTextField(), new LoginPanelWidgetDecorator());
-        emailField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+        emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(emailField);
 
         CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(), new LoginPanelWidgetDecorator());
-        passwordField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+        passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(passwordField);
 
         CCaptcha captchaField = (CCaptcha) inject(proto().captcha(), new LoginPanelWidgetDecorator(30));
-        captchaField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+        captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(captchaField);
 
         CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox(), new LoginPanelWidgetDecorator());
-        rememberID.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+        rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
         main.add(rememberID);
 
         HorizontalPanel buttonPanel = new HorizontalPanel();

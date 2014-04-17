@@ -21,7 +21,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.IComponentWidget;
+import com.pyx4j.forms.client.ui.INativeComponent;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
@@ -69,7 +69,7 @@ public class CSuperSelector<E extends IEntity> extends CComponent<IList<E>> {
     }
 
     @Override
-    public IComponentWidget<IList<E>> getNativeWidget() {
+    public INativeComponent<IList<E>> getNativeComponent() {
         // TODO Auto-generated method stub
         return null;
     }

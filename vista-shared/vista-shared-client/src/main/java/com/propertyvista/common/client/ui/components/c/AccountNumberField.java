@@ -41,7 +41,7 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
 
         field.setActionButton(actionButton);
 
-        setNativeWidget(field);
+        setNativeComponent(field);
     }
 
     public abstract void onRevealNumber();

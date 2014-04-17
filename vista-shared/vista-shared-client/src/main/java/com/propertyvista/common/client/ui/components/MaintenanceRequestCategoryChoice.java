@@ -75,7 +75,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         if (isEditable() && optionsMode == LoadOptionsMode.REFRESH) {
             // this is a hack to avoid clearing CComp value, that we are trying to set, from
             // NComboBox#refreshOptions() when new options are loaded
-            getNativeWidget().setNativeValue(null);
+            getNativeComponent().setNativeValue(null);
             resetOptions();
         }
         // set visibility based on value pushed by parent container or child selector via onValueSet()
@@ -165,7 +165,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     protected void acceptChild(final MaintenanceRequestCategoryChoice child) {
         this.child = child;
         if (isEditable()) {
-            getNativeWidget().getEditor().addChangeHandler(new ChangeHandler() {
+            getNativeComponent().getEditor().addChangeHandler(new ChangeHandler() {
                 @Override
                 public void onChange(ChangeEvent event) {
                     child.onParentChange();

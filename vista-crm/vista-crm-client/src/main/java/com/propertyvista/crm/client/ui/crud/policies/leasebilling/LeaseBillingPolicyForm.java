@@ -386,8 +386,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     setBody(new Label(i18n.tr("Sorry, no more items to choose from.")));
                 } else {
                     setBody(selector);
-                    selector.getNativeWidget().getEditor().setVisibleItemCount(options.size());
-                    selector.getNativeWidget().getEditor().setHeight("100px");
+                    selector.getNativeComponent().getEditor().setVisibleItemCount(options.size());
+                    selector.getNativeComponent().getEditor().setHeight("100px");
                 }
             }
 

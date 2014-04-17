@@ -64,7 +64,7 @@ public class CheckBoxDecorator extends FlowPanel implements IDecorator<CCheckBox
         label.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                CheckBoxDecorator.this.component.getNativeWidget().setFocus(true);
+                CheckBoxDecorator.this.component.getNativeComponent().setFocus(true);
             }
         });
     }

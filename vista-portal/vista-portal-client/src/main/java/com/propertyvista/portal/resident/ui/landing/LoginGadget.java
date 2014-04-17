@@ -135,18 +135,18 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             CEmailField emailField = inject(proto().email(), new CEmailField(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Email Address")).build());
-            emailField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+            emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, emailField);
             emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
 
             CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Password")).build());
-            passwordField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+            passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, passwordField);
             passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
 
             CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
-            rememberID.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+            rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new CheckBoxDecorator(rememberID));
 
             Anchor resetPassword = new Anchor(i18n.tr("Forgot your password?"));
@@ -160,7 +160,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             captchaField = (CCaptcha) inject(proto().captcha(),
                     new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
-            captchaField.getNativeWidget().addKeyUpHandler(new EnterKeyHandler());
+            captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, captchaField);
             setEnableCaptcha(false);
 
