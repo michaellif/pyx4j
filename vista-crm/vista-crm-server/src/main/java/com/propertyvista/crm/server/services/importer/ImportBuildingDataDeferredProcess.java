@@ -66,6 +66,9 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
         return r;
     }
 
+    private static class FlowTerminationRollbackRuntimeException extends RuntimeException {
+    };
+
     @Override
     public void execute() {
         final ImportIO importIO = new VistaXMLImportParser().parse(uploadedData.binaryContent, DownloadFormat.XML);
@@ -74,20 +77,26 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
             progress.progressMaximum.addAndGet(buildingIO.units().size());
         }
 
-        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
-            @Override
-            public Void execute() {
+        try {
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
 
-                for (BuildingIO buildingIO : importIO.buildings()) {
-                    new ImportBuildingDataProcessor().importModel(buildingIO, progress, monitor);
-                    if (status().isCanceled()) {
-                        break;
+                    for (BuildingIO buildingIO : importIO.buildings()) {
+                        new ImportBuildingDataProcessor().importModel(buildingIO, progress, monitor);
+                        if (status().isCanceled()) {
+                            break;
+                        }
+                        if ((monitor.getFailed() != 0) || (monitor.getErred() != 0)) {
+                            throw new FlowTerminationRollbackRuntimeException();
+                        }
                     }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        } catch (FlowTerminationRollbackRuntimeException ok) {
+        }
+
         completed = true;
     }
-
 }

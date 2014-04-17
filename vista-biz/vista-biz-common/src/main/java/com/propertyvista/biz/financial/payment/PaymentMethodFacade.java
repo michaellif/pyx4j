@@ -47,7 +47,7 @@ public interface PaymentMethodFacade {
      */
     boolean isCompletePaymentMethod(LeasePaymentMethod paymentMethod);
 
-    LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building);
+    LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building buildingId);
 
     void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethodId);
 

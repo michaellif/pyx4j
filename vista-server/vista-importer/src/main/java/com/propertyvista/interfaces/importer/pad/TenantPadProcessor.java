@@ -1009,7 +1009,8 @@ public class TenantPadProcessor {
             }
 
             if (matchingBillableItem != null) {
-                billableItems.remove(matchingBillableItem);
+                billableItems.remove(matchingBillableItem.uid().getValue());
+                billableItemsUnprocessed.remove(matchingBillableItem);
                 billableItemsProcesed.add(matchingBillableItem);
 
                 AutopayAgreementCoveredItem padItem = EntityFactory.create(AutopayAgreementCoveredItem.class);

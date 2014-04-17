@@ -19,9 +19,11 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.converter.TenantConverter;
+import com.propertyvista.interfaces.importer.model.AutoPayAgreementIO;
 import com.propertyvista.interfaces.importer.model.TenantIO;
 
 public class ImportTenantDataProcessor {
@@ -37,7 +39,7 @@ public class ImportTenantDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public void importModel(Lease lease, TenantIO tenantIO, ExecutionMonitor monitor) {
+    public void importModel(Building buildingId, Lease lease, TenantIO tenantIO, ExecutionMonitor monitor) {
         LeaseTermTenant leaseTermTenant = retrive(lease, tenantIO);
         if (leaseTermTenant == null) {
             monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found");
@@ -51,6 +53,10 @@ public class ImportTenantDataProcessor {
         if (!tenantIO.vistaPasswordHash().isNull()) {
             ServerSideFactory.create(CustomerFacade.class).setCustomerPasswordHash(leaseTermTenant.leaseParticipant().customer(),
                     tenantIO.vistaPasswordHash().getValue());
+        }
+
+        for (AutoPayAgreementIO autoPayIO : tenantIO.autoPayAgreements()) {
+            new ImportAutoPayAgreementsDataProcessor().importModel(buildingId, lease, leaseTermTenant, autoPayIO, monitor);
         }
 
     }

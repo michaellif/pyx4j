@@ -38,7 +38,7 @@ public class ImportUnitDataProcessor {
         }
 
         if (!aptUnitIO.lease().isNull()) {
-            new ImportLeaseDataProcessor().importModel(unit, aptUnitIO.lease(), monitor);
+            new ImportLeaseDataProcessor().importModel(building, unit, aptUnitIO.lease(), monitor);
         }
 
         monitor.addProcessedEvent("Unit");

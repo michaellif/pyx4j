@@ -15,6 +15,8 @@ package com.propertyvista.interfaces.importer.model;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -22,8 +24,10 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@ToStringFormat("{0,choice,null#|!null#{0}}, amount: ${1}, charge: ${2}")
 public interface AutoPayAgreementCoveredItemIO extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> chargeCode();
 
     IPrimitive<String> chargeId();
@@ -32,7 +36,9 @@ public interface AutoPayAgreementCoveredItemIO extends IEntity {
 
     IPrimitive<String> description();
 
+    @ToString(index = 1)
     IPrimitive<BigDecimal> amount();
 
+    @ToString(index = 2)
     IPrimitive<BigDecimal> chargeAmount();
 }
