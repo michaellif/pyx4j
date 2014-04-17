@@ -26,6 +26,12 @@ public interface AutoPayAgreementCoveredItemIO extends IEntity {
 
     IPrimitive<String> chargeCode();
 
+    IPrimitive<String> chargeId();
+
+    IPrimitive<String> chargeARCodeType();
+
+    IPrimitive<String> description();
+
     IPrimitive<BigDecimal> amount();
 
     IPrimitive<BigDecimal> chargeAmount();

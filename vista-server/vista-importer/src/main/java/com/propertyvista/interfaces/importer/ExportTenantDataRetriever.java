@@ -34,6 +34,8 @@ public class ExportTenantDataRetriever {
             tenantIO.vistaPasswordHash().setValue(credential.credential().getValue());
         }
 
+        tenantIO.autoPayAgreements().addAll(new ExportAutoPayAgreementDataRetriever().getModel(leaseTermTenant));
+
         return tenantIO;
     }
 

@@ -30,5 +30,5 @@ public interface PaymentMethodIO extends IEntity {
 
     IPrimitive<String> accountNumber();
 
-    AddressSimpleIO address();
+    AddressSimpleIO billingAddress();
 }
