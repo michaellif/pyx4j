@@ -76,7 +76,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                INativeComponent<DATA> impl = getNativeWidget();
+                INativeField<DATA> impl = getNativeComponent();
                 if (impl instanceof FocusWidget) {
                     ((FocusWidget) impl).setFocus(true);
                 }
@@ -86,7 +86,7 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     @Override
     public boolean isValueEmpty() {
-        if (!CommonsStringUtils.isEmpty(getNativeWidget().getNativeText())) {
+        if (!CommonsStringUtils.isEmpty(getNativeComponent().getNativeText())) {
             return false;
         }
         return super.isValueEmpty() || ((getValue() instanceof String) && CommonsStringUtils.isEmpty((String) getValue()));

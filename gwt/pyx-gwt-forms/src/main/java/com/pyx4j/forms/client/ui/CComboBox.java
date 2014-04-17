@@ -89,7 +89,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
         NComboBox<E> nativeComboBox = new NComboBox<E>(this);
         nativeComboBox.refreshOptions();
-        setNativeWidget(nativeComboBox);
+        setNativeComponent(nativeComboBox);
         asWidget().setWidth("100%");
     }
 
@@ -122,7 +122,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         if (opt != null) {
             options.addAll(opt);
         }
-        getNativeWidget().refreshOptions();
+        getNativeComponent().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 
@@ -144,7 +144,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     public void removeOption(E opt) {
         if (options.contains(opt)) {
-            getNativeWidget().removeOption(opt);
+            getNativeComponent().removeOption(opt);
         }
         options.remove(opt);
         if (isValuesEquals(getValue(), opt)) {
@@ -157,15 +157,15 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             options = createOptionsImpl();
         }
         if (options.contains(opt)) {
-            getNativeWidget().refreshOption(opt);
+            getNativeComponent().refreshOption(opt);
         } else {
             options.add(opt);
-            getNativeWidget().refreshOptions();
+            getNativeComponent().refreshOptions();
         }
     }
 
     public void refreshOption(E opt) {
-        getNativeWidget().refreshOption(opt);
+        getNativeComponent().refreshOption(opt);
     }
 
     public String getItemName(E o) {
@@ -175,14 +175,14 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     public void setFormat(IFormat<E> format) {
         this.format = format;
         setValue(getValue(), false);
-        getNativeWidget().refreshOptions();
+        getNativeComponent().refreshOptions();
     }
 
     @Override
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
-            getNativeWidget().refreshOptions();
+            getNativeComponent().refreshOptions();
         }
     }
 
@@ -194,7 +194,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
         super.onValuePropagation(value, fireEvent, populate);
         if (populate) {
-            getNativeWidget().setPopulatedValue(value);
+            getNativeComponent().setPopulatedValue(value);
         }
     }
 

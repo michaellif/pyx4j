@@ -29,7 +29,7 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
     public CLabel() {
         super();
         setFormat(new LabelFormat());
-        setNativeWidget(new NLabel<E>(this));
+        setNativeComponent(new NLabel<E>(this));
         setEditable(false);
     }
 

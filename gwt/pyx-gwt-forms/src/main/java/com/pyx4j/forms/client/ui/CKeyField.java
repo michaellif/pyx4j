@@ -43,7 +43,7 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
         numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<Key>();
         addComponentValidator(validator);
-        setNativeWidget(new NTextBox<Key>(this));
+        setNativeComponent(new NTextBox<Key>(this));
         asWidget().setWidth("100%");
 
         setFormat(new IFormat<Key>() {

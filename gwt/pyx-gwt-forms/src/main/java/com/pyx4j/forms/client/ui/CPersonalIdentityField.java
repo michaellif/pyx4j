@@ -63,7 +63,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         this.entityClass = entityClass;
         setMandatory(mandatory);
         setPersonalIdentityFormatter(formatter);
-        setNativeWidget(new NPersonalIdentityField<T>(this));
+        setNativeComponent(new NPersonalIdentityField<T>(this));
         asWidget().setWidth("100%");
     }
 
@@ -94,7 +94,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     @Override
     public void onEditingStop() {
-        if (!getNativeWidget().getEditor().getText().isEmpty() && getValue() != null) {
+        if (!getNativeComponent().getEditor().getText().isEmpty() && getValue() != null) {
             // clear obfuscated value to indicate user input
             getValue().obfuscatedNumber().setValue(null);
         }
@@ -117,7 +117,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     public void clear(boolean clearNative) {
         if (clearNative) {
-            getNativeWidget().getEditor().setText("");
+            getNativeComponent().getEditor().setText("");
         }
         if (getValue() != null) {
             getValue().newNumber().setValue(null);

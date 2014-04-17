@@ -20,9 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.IWidget;
 
+public interface INativeViewer<E> extends INativeComponent<E>, IWidget {
 
-public interface INativeFocusComponent<E> extends INativeComponent<E>, IFocusWidget {
+    void setNativeValue(E value);
 
 }

@@ -70,7 +70,7 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
         super();
         this.mode = mode;
         nativeListBox = new NListBox<E>(this);
-        setNativeWidget(nativeListBox);
+        setNativeComponent(nativeListBox);
         asWidget().setWidth("100%");
         setVisibleItemCount(visibleItemCount);
     }
@@ -128,7 +128,7 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
             }
             options.addAll(opt);
         }
-        getNativeWidget().refreshOptions();
+        getNativeComponent().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 

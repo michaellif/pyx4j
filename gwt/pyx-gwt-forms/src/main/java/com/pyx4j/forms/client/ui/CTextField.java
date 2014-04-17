@@ -36,7 +36,7 @@ public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
     public CTextField() {
         super();
         setFormat(new StringFormat());
-        setNativeWidget(new NTextBox<String>(this));
+        setNativeComponent(new NTextBox<String>(this));
         asWidget().setWidth("100%");
     }
 

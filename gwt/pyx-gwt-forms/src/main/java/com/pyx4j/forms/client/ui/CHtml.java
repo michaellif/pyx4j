@@ -29,7 +29,7 @@ public class CHtml extends CField<String, NHtml> {
     public CHtml() {
         super();
         setFormat(new HtmlFormat());
-        setNativeWidget(new NHtml(this));
+        setNativeComponent(new NHtml(this));
     }
 
     public void setFormat(IFormat<String> format) {

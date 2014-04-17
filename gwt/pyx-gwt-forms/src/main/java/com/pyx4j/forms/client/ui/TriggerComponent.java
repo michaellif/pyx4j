@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 
-public abstract class TriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeFocusComponent<E> {
+public abstract class TriggerComponent<E> extends HorizontalPanel implements Focusable, HasDoubleClickHandlers, INativeFocusField<E> {
 
     private FocusWidget widget;
 

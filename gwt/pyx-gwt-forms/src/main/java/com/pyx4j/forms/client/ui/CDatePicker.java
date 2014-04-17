@@ -49,7 +49,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
         super();
         setFormat(new DateFormat(defaultDateFormat));
         addComponentValidator(new TextBoxParserValidator<LogicalDate>());
-        setNativeWidget(new NDatePicker(this));
+        setNativeComponent(new NDatePicker(this));
         asWidget().setWidth("100%");
     }
 

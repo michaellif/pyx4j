@@ -47,7 +47,7 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.INativeComponent;
+import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.i18n.shared.I18n;
@@ -228,7 +228,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             path = fieldsList.getValue().getPath();
         }
         Operator operand = operandsList.getValue();
-        Serializable value = (Serializable) ((CComponent) ((INativeComponent<?>) valueHolder.getWidget()).getCComponent()).getValue();
+        Serializable value = (Serializable) ((CComponent) ((INativeField<?>) valueHolder.getWidget()).getCComponent()).getValue();
 
         return new PropertyCriterion(path, operand.getCriterion(), value);
     }

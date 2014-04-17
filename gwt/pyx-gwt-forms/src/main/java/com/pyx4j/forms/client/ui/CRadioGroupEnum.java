@@ -52,7 +52,7 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
                 return null;
             }
         });
-        setNativeWidget(new NRadioGroup<E>(this));
+        setNativeComponent(new NRadioGroup<E>(this));
         super.setOptions(opt);
 
     }

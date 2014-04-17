@@ -44,7 +44,7 @@ public class CSignature extends CFocusComponent<ISignature, NSignature> {
     public CSignature(IsWidget widget) {
         super();
         descriptionWidget = widget;
-        setNativeWidget(new NSignature(this));
+        setNativeComponent(new NSignature(this));
         asWidget().setWidth("100%");
 
         setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {

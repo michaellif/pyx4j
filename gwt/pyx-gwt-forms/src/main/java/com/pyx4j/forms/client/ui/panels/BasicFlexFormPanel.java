@@ -52,7 +52,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.IComponentWidget;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -178,8 +178,8 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
 
     private List<CComponent<?>> locateCComponents(Widget widget) {
         List<CComponent<?>> components = new ArrayList<CComponent<?>>();
-        if (widget instanceof IComponentWidget) {
-            CComponent<?> comp = ((IComponentWidget<?>) widget).getCComponent();
+        if (widget instanceof INativeComponent) {
+            CComponent<?> comp = ((INativeComponent<?>) widget).getCComponent();
             components.add(comp);
         }
         if (widget instanceof HasWidgets) {

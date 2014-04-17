@@ -166,7 +166,7 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
     public void refreshOptions() {
         resetOptions();
         retriveOptions(null);
-        getNativeWidget().refreshOptions();
+        getNativeComponent().refreshOptions();
     }
 
     private class TerminableHandlingCallback implements AsyncCallback<List<E>> {

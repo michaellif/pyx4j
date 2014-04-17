@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.IComponentWidget;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.widgets.client.Button;
 
 public abstract class AbstractDevConsole extends FlowPanel {
@@ -43,8 +43,8 @@ public abstract class AbstractDevConsole extends FlowPanel {
 
     protected void setMockValues(IsWidget widget) {
 
-        if (widget instanceof IComponentWidget) {
-            CComponent<?> component = ((IComponentWidget<?>) widget).getCComponent();
+        if (widget instanceof INativeComponent) {
+            CComponent<?> component = ((INativeComponent<?>) widget).getCComponent();
             component.generateMockData();
         }
 

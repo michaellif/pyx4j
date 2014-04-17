@@ -86,7 +86,6 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
     public void init(T component) {
         assert this.component == null;
         this.component = component;
-        setContent(component.getContent());
     }
 
     public T getComponent() {

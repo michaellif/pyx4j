@@ -46,7 +46,7 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
         this.setMandatory(mandatory);
         setFormat(new EmailFormat());
         addComponentValidator(new TextBoxParserValidator<String>());
-        setNativeWidget(new NTextBox<String>(this));
+        setNativeComponent(new NTextBox<String>(this));
         asWidget().setWidth("100%");
     }
 

@@ -38,7 +38,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
@@ -697,7 +696,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     protected abstract DATA_TYPE getEditorValue() throws ParseException;
 
-    public abstract IComponentWidget<DATA_TYPE> getNativeWidget();
+    public abstract INativeComponent<DATA_TYPE> getNativeComponent();
 
     public IDecorator getDecorator() {
         return decorator;
@@ -706,10 +705,10 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     public void setDecorator(IDecorator decorator) {
         this.decorator = decorator;
         if (decorator == null) {
-            getNativeWidget().getContentHolder().setWidget(getNativeWidget().getContent());
+            getNativeComponent().getContentHolder().setWidget(getNativeComponent().getContent());
         } else {
-            getNativeWidget().getContentHolder().setWidget(decorator);
-            decorator.setContent(getNativeWidget().getContent());
+            getNativeComponent().getContentHolder().setWidget(decorator);
+            decorator.setContent(getNativeComponent().getContent());
             decorator.init(this);
         }
     }

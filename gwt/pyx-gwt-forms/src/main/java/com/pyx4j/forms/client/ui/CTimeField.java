@@ -40,7 +40,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
         super();
         setTimeFormat(defaultTimeFormat);
         addComponentValidator(new TextBoxParserValidator<Time>());
-        setNativeWidget(new NTextBox<Time>(this));
+        setNativeComponent(new NTextBox<Time>(this));
         setWatermark("__:__ AM/PM");
         asWidget().setWidth("100%");
     }

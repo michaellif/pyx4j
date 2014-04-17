@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CField<DATA, WIDGET> {
+public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CField<DATA, WIDGET> {
 
     private int tabIndex = 0;
 
@@ -34,11 +34,11 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
 
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
-        getNativeWidget().setTabIndex(tabIndex);
+        getNativeComponent().setTabIndex(tabIndex);
     }
 
     public void setFocus(boolean focused) {
-        getNativeWidget().setFocus(focused);
+        getNativeComponent().setFocus(focused);
     }
 
     @Override

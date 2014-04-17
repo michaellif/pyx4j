@@ -39,7 +39,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<E>();
         addComponentValidator(validator);
-        setNativeWidget(new NTextBox<E>(this));
+        setNativeComponent(new NTextBox<E>(this));
         asWidget().setWidth("100%");
     }
 

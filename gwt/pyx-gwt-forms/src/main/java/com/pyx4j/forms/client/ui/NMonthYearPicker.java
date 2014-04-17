@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
-public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusComponent<LogicalDate> {
+public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusField<LogicalDate> {
 
     private static final I18n i18n = I18n.get(NMonthYearPicker.class);
 

@@ -38,7 +38,7 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
     protected abstract IShowable getSelectorDialog();
 
     public CEntitySelectorHyperlink() {
-        setNativeWidget(new NEntitySelectorHyperlink<E>(this));
+        setNativeComponent(new NEntitySelectorHyperlink<E>(this));
         asWidget().setWidth("100%");
     }
 

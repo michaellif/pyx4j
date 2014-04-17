@@ -57,7 +57,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.Cursor;
-import com.pyx4j.forms.client.ui.INativeComponent;
+import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 
@@ -195,7 +195,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CField<?, ?
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
-        final INativeComponent<?> nativeComponent = component.getNativeWidget();
+        final INativeField<?> nativeComponent = component.getNativeComponent();
 
         Widget content = nativeComponent.getContent().asWidget();
 

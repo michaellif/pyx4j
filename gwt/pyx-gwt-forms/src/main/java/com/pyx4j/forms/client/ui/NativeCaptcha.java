@@ -38,7 +38,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public class NativeCaptcha extends SimplePanel implements INativeFocusComponent<Pair<String, String>>, WatermarkComponent {
+public class NativeCaptcha extends SimplePanel implements INativeFocusField<Pair<String, String>>, WatermarkComponent {
 
     public static enum StyleDependent implements IStyleDependent {
         invalid

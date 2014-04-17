@@ -26,7 +26,7 @@ public class TextBoxParserValidator<E> extends AbstractComponentValidator<E> {
         if (getComponent() instanceof CTextFieldBase) {
             CTextFieldBase<E, ?> field = (CTextFieldBase) getComponent();
             try {
-                field.getNativeWidget().getNativeValue();
+                field.getNativeComponent().getNativeValue();
             } catch (ParseException e) {
                 return new FieldValidationError(getComponent(), e.getMessage());
             }

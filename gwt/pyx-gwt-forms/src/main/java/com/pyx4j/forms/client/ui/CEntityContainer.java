@@ -62,13 +62,11 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     private boolean initiated = false;
 
-    private final ContainerPanel containerPanel;
-
-    private IsWidget content;
+    private final NEntityContainer nativeComponent;
 
     @SuppressWarnings("unchecked")
     public CEntityContainer() {
-        containerPanel = new ContainerPanel();
+        nativeComponent = new NEntityContainer();
 
         if (false) {
             Button debugButton = new Button("Debug", new Command() {
@@ -79,8 +77,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                 }
             });
             debugButton.getElement().getStyle().setProperty("display", "inline-block");
-            containerPanel.add(debugButton);
-            containerPanel.getElement().getStyle().setProperty("border", "red solid 1px");
+            nativeComponent.add(debugButton);
+            nativeComponent.getElement().getStyle().setProperty("border", "red solid 1px");
         }
 
         applyAccessibilityRules();
@@ -241,25 +239,17 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     @Override
     public Widget asWidget() {
-        return containerPanel;
+        return nativeComponent;
     }
 
     protected abstract IsWidget createContent();
 
-    public IsWidget getContent() {
-        return content;
-    }
-
+    @Deprecated
+    /**
+     * @deprecated use {@link setDecorator(IDecorator decorator)}
+     */
     protected IDecorator<?> createDecorator() {
         return null;
-    }
-
-    @Override
-    public void setDecorator(IDecorator decorator) {
-        if (initiated == true) {
-            throw new Error("Decorator should be set before container initiated");
-        }
-        super.setDecorator(decorator);
     }
 
     public final void init() {
@@ -267,27 +257,21 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         if (!initiated) {
             asWidget();
 
-            content = createContent();
-            containerPanel.contentHolder.setWidget(content);
+            nativeComponent.setContent(createContent());
 
             IDecorator<?> decorator = createDecorator();
             if (decorator != null) {
                 setDecorator(decorator);
             }
+
             addValidations();
+
             if (ApplicationMode.isDevelopment()) {
                 DevelopmentShortcutUtil.attachDevelopmentShortcuts(asWidget(), this);
             }
+
             initiated = true;
         }
-    }
-
-    public void setIcon(ImageResource icon) {
-        this.icon = icon;
-    }
-
-    public ImageResource getIcon() {
-        return icon;
     }
 
     @Override
@@ -318,30 +302,40 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public final IComponentWidget<E> getNativeWidget() {
-        return containerPanel;
+    public final INativeComponent<E> getNativeComponent() {
+        return nativeComponent;
     }
 
-    class ContainerPanel extends SimplePanel implements RequiresResize, ProvidesResize, IComponentWidget<E> {
+    public void setIcon(ImageResource icon) {
+        this.icon = icon;
+    }
 
-        private final SimplePanel contentHolder;
+    public ImageResource getIcon() {
+        return icon;
+    }
 
-        public ContainerPanel() {
-            contentHolder = new SimplePanel();
-            contentHolder.setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
-            setWidget(contentHolder);
+    class NEntityContainer extends SimplePanel implements RequiresResize, ProvidesResize, INativeComponent<E> {
+
+        private IsWidget content;
+
+        public NEntityContainer() {
         }
 
         @Override
-        public void onResize() {
-            if (contentHolder.getWidget() instanceof RequiresResize) {
-                ((RequiresResize) contentHolder.getWidget()).onResize();
+        public IsWidget getContent() {
+            return content;
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public void setContent(IsWidget content) {
+            this.content = content;
+            content.asWidget().setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
+            if (getWidget() instanceof IDecorator) {
+                ((IDecorator<CEntityContainer>) getWidget()).setContent(content);
+                ((IDecorator<CEntityContainer>) getWidget()).init(CEntityContainer.this);
+            } else {
+                setWidget(content);
             }
-        }
-
-        @Override
-        public CComponent<E> getCComponent() {
-            return CEntityContainer.this;
         }
 
         @Override
@@ -350,9 +344,17 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         }
 
         @Override
-        public IsWidget getContent() {
-            return contentHolder;
+        public void onResize() {
+            if (content instanceof RequiresResize) {
+                ((RequiresResize) content).onResize();
+            }
         }
+
+        @Override
+        public CComponent<E> getCComponent() {
+            return CEntityContainer.this;
+        }
+
     }
 
 }

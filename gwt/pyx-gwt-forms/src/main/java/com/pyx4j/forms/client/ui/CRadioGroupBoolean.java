@@ -50,7 +50,7 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
                 return null;
             }
         });
-        setNativeWidget(new NRadioGroup<Boolean>(this));
+        setNativeComponent(new NRadioGroup<Boolean>(this));
         super.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
 
     }

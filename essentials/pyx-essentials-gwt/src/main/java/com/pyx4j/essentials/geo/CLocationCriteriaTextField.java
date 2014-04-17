@@ -42,7 +42,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
     public CLocationCriteriaTextField() {
         super();
         setFormat(new GeoCriteriaFormat());
-        setNativeWidget(new NTextBox<GeoCriteria>(this));
+        setNativeComponent(new NTextBox<GeoCriteria>(this));
         asWidget().setWidth("100%");
     }
 

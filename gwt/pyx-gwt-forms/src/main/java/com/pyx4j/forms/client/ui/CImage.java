@@ -25,12 +25,12 @@ public class CImage extends CField<IFile<?>, NImage> {
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
         this.imageSize = new Dimension(250, 250);
-        setNativeWidget(new NImage(this));
+        setNativeComponent(new NImage(this));
     }
 
     public void setThumbnailPlaceholder(Image placeholder) {
         this.placeholder = placeholder;
-        getNativeWidget().reset();
+        getNativeComponent().reset();
     }
 
     public Image getThumbnailPlaceholder() {
@@ -38,12 +38,12 @@ public class CImage extends CField<IFile<?>, NImage> {
     }
 
     public void setScaleMode(ScaleMode scaleMode) {
-        getNativeWidget().setScaleMode(scaleMode);
+        getNativeComponent().setScaleMode(scaleMode);
     }
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        getNativeWidget().resizeToFit();
+        getNativeComponent().resizeToFit();
     }
 
     public Dimension getImageSize() {

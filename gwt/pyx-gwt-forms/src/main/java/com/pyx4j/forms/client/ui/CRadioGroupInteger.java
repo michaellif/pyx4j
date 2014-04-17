@@ -44,7 +44,7 @@ public class CRadioGroupInteger extends CRadioGroup<Integer> {
                 return null;
             }
         });
-        setNativeWidget(new NRadioGroup<Integer>(this));
+        setNativeComponent(new NRadioGroup<Integer>(this));
         super.setOptions(options.keySet());
 
     }

@@ -52,7 +52,7 @@ import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 
 public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
-        INativeComponent<DATA> {
+        INativeField<DATA> {
 
     private EDITOR editor;
 

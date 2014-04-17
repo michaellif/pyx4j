@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CFocusComponent<DATA, WIDGET> {
+public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> {
 
     private TextComponentLengthValidator validator;
 

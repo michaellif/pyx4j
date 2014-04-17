@@ -55,7 +55,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
             }
         });
 
-        setNativeWidget(new NCheckBox(this));
+        setNativeComponent(new NCheckBox(this));
     }
 
     public IFormat<Boolean> getFormat() {
@@ -68,7 +68,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     public void setAlignmet(Alignment alignment) {
         this.alignment = alignment;
-        getNativeWidget().setAlignmet(alignment);
+        getNativeComponent().setAlignmet(alignment);
     }
 
     public Alignment getAlignmet() {

@@ -38,7 +38,7 @@ public class CFile extends CField<IFile<?>, NFile> {
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
 
-        setNativeWidget(new NFile(this));
+        setNativeComponent(new NFile(this));
 
         setFormat(new IFormat<IFile<?>>() {
             @Override

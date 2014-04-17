@@ -31,9 +31,9 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
-public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE> {
+public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends CComponent<DATA_TYPE> {
 
-    private WIDGET_TYPE nativeWidget;
+    private WIDGET_TYPE nativeComponent;
 
     private Command navigationCommand;
 
@@ -55,15 +55,15 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
 
     @Override
     protected void setEditorValue(DATA_TYPE value) {
-        if (nativeWidget != null) {
-            nativeWidget.setNativeValue(value);
+        if (nativeComponent != null) {
+            nativeComponent.setNativeValue(value);
         }
     }
 
     @Override
     protected DATA_TYPE getEditorValue() throws ParseException {
-        if (nativeWidget != null) {
-            return nativeWidget.getNativeValue();
+        if (nativeComponent != null) {
+            return nativeComponent.getNativeValue();
         } else {
             return null;
         }
@@ -71,7 +71,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
 
     public void setNavigationCommand(Command navigationCommand) {
         this.navigationCommand = navigationCommand;
-        nativeWidget.setNavigationCommand(navigationCommand);
+        nativeComponent.setNavigationCommand(navigationCommand);
 
     }
 
@@ -79,8 +79,22 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         return navigationCommand;
     }
 
-    protected void setNativeWidget(WIDGET_TYPE widget) {
-        this.nativeWidget = widget;
+    @Override
+    public Widget asWidget() {
+        if (nativeComponent == null) {
+            return null;
+        } else {
+            return nativeComponent.asWidget();
+        }
+    }
+
+    @Override
+    public final WIDGET_TYPE getNativeComponent() {
+        return nativeComponent;
+    }
+
+    protected final void setNativeComponent(WIDGET_TYPE widget) {
+        this.nativeComponent = widget;
         widget.init();
         applyAccessibilityRules();
 
@@ -92,19 +106,6 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     }
 
     @Override
-    public Widget asWidget() {
-        if (nativeWidget == null) {
-            return null;
-        } else {
-            return nativeWidget.asWidget();
-        }
-    }
-
-    public final WIDGET_TYPE getNativeWidget() {
-        return nativeWidget;
-    }
-
-    @Override
     public boolean isValidatable() {
         return isVisible() && isEditable() && isEnabled() && !isViewable() && (isVisited() || !isValueEmpty() || isEditingInProgress());
     }
@@ -113,8 +114,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         boolean visible = isVisible();
-        if (nativeWidget.isVisible() != visible) {
-            nativeWidget.setVisible(visible);
+        if (nativeComponent.isVisible() != visible) {
+            nativeComponent.setVisible(visible);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
         }
     }
@@ -123,8 +124,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     public void applyEnablingRules() {
         super.applyEnablingRules();
         boolean enabled = isEnabled();
-        if (nativeWidget.isEnabled() != enabled) {
-            nativeWidget.setEnabled(enabled);
+        if (nativeComponent.isEnabled() != enabled) {
+            nativeComponent.setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
@@ -133,8 +134,8 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         boolean editable = isEditable();
-        if (nativeWidget.isEditable() != editable) {
-            nativeWidget.setEditable(editable);
+        if (nativeComponent.isEditable() != editable) {
+            nativeComponent.setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
 
@@ -144,15 +145,15 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         boolean viewable = isViewable();
-        if (nativeWidget.isViewable() != viewable) {
-            nativeWidget.setViewable(viewable);
+        if (nativeComponent.isViewable() != viewable) {
+            nativeComponent.setViewable(viewable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
         }
     }
 
     @Override
     protected void setDebugId(IDebugId debugId) {
-        nativeWidget.setDebugId(debugId);
+        nativeComponent.setDebugId(debugId);
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 11, 2014
- * @author michaellif
+ * Created on Jan 11, 2010
+ * @author Michael
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.widgets.client.IFocusWidget;
 
-public interface IComponentWidget<E> extends IsWidget {
 
-    CComponent<E> getCComponent();
+public interface INativeFocusField<E> extends INativeField<E>, IFocusWidget {
 
-    SimplePanel getContentHolder();
-
-    IsWidget getContent();
 }

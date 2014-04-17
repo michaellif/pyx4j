@@ -20,8 +20,27 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeTextComponent<DATA> extends INativeFocusField<DATA> {
+import java.text.ParseException;
 
-    public String getNativeText();
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.widgets.client.IWidget;
+
+public interface INativeField<E> extends INativeComponent<E>, IWidget {
+
+    boolean isViewable();
+
+    void setViewable(boolean editable);
+
+    void setNativeValue(E value);
+
+    E getNativeValue() throws ParseException;
+
+    void setNavigationCommand(Command navigationCommand);
+
+    void setDebugId(IDebugId debugId);
+
+    void init();
 
 }

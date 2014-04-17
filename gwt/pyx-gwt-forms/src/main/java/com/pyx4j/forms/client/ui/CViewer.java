@@ -20,15 +20,103 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import java.text.ParseException;
 
-public abstract class CViewer<E> extends CField<E, NViewer<E>> {
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.commons.IDebugId;
+
+public abstract class CViewer<E> extends CComponent<E> {
+
+    private final NViewer<E> nativeComponent;
 
     public CViewer() {
         super();
-        setNativeWidget(new NViewer<E>(this));
+        nativeComponent = new NViewer<E>(this);
+    }
+
+    @Override
+    public final INativeComponent<E> getNativeComponent() {
+        return nativeComponent;
     }
 
     public abstract IsWidget createContent(E value);
+
+    class NViewer<DATA> extends SimplePanel implements INativeViewer<DATA> {
+
+        private final CViewer<DATA> cComponent;
+
+        private final SimplePanel contentPanel;
+
+        public NViewer(CViewer<DATA> cComponent) {
+            this.cComponent = cComponent;
+            contentPanel = new SimplePanel();
+            setWidget(contentPanel);
+        }
+
+        @Override
+        public void setNativeValue(DATA value) {
+            IsWidget widget = getCComponent().createContent(value);
+            contentPanel.setWidget(widget);
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+
+        @Override
+        public void setEditable(boolean editable) {
+        }
+
+        @Override
+        public boolean isEditable() {
+            return false;
+        }
+
+        @Override
+        public CViewer<DATA> getCComponent() {
+            return cComponent;
+        }
+
+        @Override
+        public SimplePanel getContentHolder() {
+            return this;
+        }
+
+        @Override
+        public IsWidget getContent() {
+            return contentPanel;
+        }
+    }
+
+    @Override
+    public Widget asWidget() {
+        return nativeComponent;
+    }
+
+    @Override
+    protected void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void setEditorValue(E value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected E getEditorValue() throws ParseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
