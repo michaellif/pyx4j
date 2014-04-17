@@ -218,11 +218,11 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public Collection<CComponent<?>> getComponents() {
+    public Collection<CComponent<?, ?>> getComponents() {
         if (entityForm == null) {
             return null;
         }
-        return Arrays.asList(new CComponent<?>[] { entityForm });
+        return Arrays.asList(new CComponent<?, ?>[] { entityForm });
     }
 
 }

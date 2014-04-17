@@ -50,13 +50,13 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<E> implements IEditableComponentFactory {
+public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<CEntityContainer<E>, E> implements IEditableComponentFactory {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityContainer.class);
 
-    private final HashMap<CComponent<?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?>, HandlerRegistration>();
+    private final HashMap<CComponent<?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
 
-    private final HashMap<CComponent<?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?>, HandlerRegistration>();
+    private final HashMap<CComponent<?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
 
     private ImageResource icon;
 
@@ -86,7 +86,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         addComponentValidator(new EntityContainerValidator());
     }
 
-    public abstract Collection<? extends CComponent<?>> getComponents();
+    public abstract Collection<? extends CComponent<?, ?>> getComponents();
 
     protected abstract void setComponentsValue(E value, boolean fireEvent, boolean populate);
 
@@ -106,12 +106,12 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         return null;
     }
 
-    protected <T> void updateContainer(CComponent<T> component) {
+    protected <T> void updateContainer(CComponent<?, T> component) {
 
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void adopt(final CComponent<?> component) {
+    public void adopt(final CComponent<?, ?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -141,7 +141,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         component.onAdopt(this);
     }
 
-    public void abandon(CComponent<?> component) {
+    public void abandon(CComponent<?, ?> component) {
         propertyChangeHandlerRegistrations.remove(component).removeHandler();
         valueChangeHandlerRegistrations.remove(component).removeHandler();
         component.onAbandon();
@@ -149,7 +149,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
 
     public void setVisitedRecursive() {
         if (getComponents() != null) {
-            for (CComponent<?> ccomponent : getComponents()) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
                 if (ccomponent instanceof CField) {
                     ((CField<?, ?>) ccomponent).setVisited(true);
                 } else if (ccomponent instanceof CEntityContainer) {
@@ -168,7 +168,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     @Override
     protected void onReset() {
         if (getComponents() != null) {
-            for (CComponent<?> ccomponent : getComponents()) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
                 ccomponent.reset();
             }
         }
@@ -180,7 +180,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         super.applyVisibilityRules();
         asWidget().setVisible(isVisible());
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -194,7 +194,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyViewabilityRules();
             }
         }
@@ -208,7 +208,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -222,7 +222,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
+            for (CComponent<?, ?> component : getComponents()) {
                 component.applyEditabilityRules();
             }
         }
@@ -275,7 +275,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
         return ((CEntityContainer<?>) getParent()).create(member);
     }
@@ -351,7 +351,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         }
 
         @Override
-        public CComponent<E> getCComponent() {
+        public CComponent<?, ?> getCComponent() {
             return CEntityContainer.this;
         }
 

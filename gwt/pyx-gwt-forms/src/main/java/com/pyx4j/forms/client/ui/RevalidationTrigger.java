@@ -29,9 +29,9 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 
 public class RevalidationTrigger<E> implements ValueChangeHandler<E>, PropertyChangeHandler {
 
-    private final CComponent<?> targetComponent;
+    private final CComponent<?, ?> targetComponent;
 
-    public RevalidationTrigger(CComponent<?> targetComponent) {
+    public RevalidationTrigger(CComponent<?, ?> targetComponent) {
         this.targetComponent = targetComponent;
     }
 

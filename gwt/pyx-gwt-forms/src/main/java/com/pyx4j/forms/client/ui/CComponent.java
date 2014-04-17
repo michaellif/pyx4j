@@ -56,7 +56,8 @@ import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
+public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE>, DATA_TYPE> implements HasHandlers, HasPropertyChangeHandlers, IsWidget,
+        HasValueChangeHandlers<DATA_TYPE> {
 
     private static final I18n i18n = I18n.get(CComponent.class);
 
@@ -144,7 +145,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
     /**
      * Basic information would be available in server log
      */
-    public static String runtimeCrashInfo(CComponent<?> component) {
+    public static String runtimeCrashInfo(CComponent<?, ?> component) {
         if (component == null) {
             return "n/a";
         }

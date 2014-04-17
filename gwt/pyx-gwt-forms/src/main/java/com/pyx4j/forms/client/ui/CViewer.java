@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 
-public abstract class CViewer<E> extends CComponent<E> {
+public abstract class CViewer<E> extends CComponent<CViewer<E>, E> {
 
     private final NViewer<E> nativeComponent;
 

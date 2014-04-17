@@ -24,11 +24,11 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class FieldValidationError extends AbstractValidationError {
 
-    private CComponent<?> originator;
+    private CComponent<?, ?> originator;
 
     private String message;
 
-    public FieldValidationError(CComponent<?> originator, String message) {
+    public FieldValidationError(CComponent<?, ?> originator, String message) {
         this.message = message;
     }
 
@@ -42,7 +42,7 @@ public class FieldValidationError extends AbstractValidationError {
     }
 
     @Override
-    public CComponent<?> getOriginator() {
+    public CComponent<?, ?> getOriginator() {
         return originator;
     }
 

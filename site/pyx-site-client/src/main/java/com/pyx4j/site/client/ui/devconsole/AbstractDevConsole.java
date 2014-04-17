@@ -44,7 +44,7 @@ public abstract class AbstractDevConsole extends FlowPanel {
     protected void setMockValues(IsWidget widget) {
 
         if (widget instanceof INativeComponent) {
-            CComponent<?> component = ((INativeComponent<?>) widget).getCComponent();
+            CComponent<?, ?> component = ((INativeComponent<?>) widget).getCComponent();
             component.generateMockData();
         }
 

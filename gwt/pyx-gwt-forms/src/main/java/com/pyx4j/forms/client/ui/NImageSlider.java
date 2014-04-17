@@ -189,7 +189,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
 
         @SuppressWarnings("unchecked")
         public void clear() {
-            for (CComponent<?> item : new ArrayList<CComponent<?>>(getComponents())) {
+            for (CComponent<?, ?> item : new ArrayList<CComponent<?, ?>>(getComponents())) {
                 removeItem((CEntityFolderItem<T>) item);
             }
         }
@@ -200,7 +200,7 @@ public class NImageSlider<T extends IHasFile<?>> extends NField<IList<T>, ImageS
         }
 
         @Override
-        public CComponent<?> create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
                 return new CEntityForm<T>(imgClass) {
                     private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);

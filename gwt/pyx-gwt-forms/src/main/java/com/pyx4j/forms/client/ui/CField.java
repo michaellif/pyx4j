@@ -31,7 +31,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
-public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends CComponent<DATA_TYPE> {
+public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE> {
 
     private WIDGET_TYPE nativeComponent;
 

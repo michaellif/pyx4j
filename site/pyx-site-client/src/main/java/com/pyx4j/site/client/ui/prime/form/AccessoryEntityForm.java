@@ -36,43 +36,43 @@ public abstract class AccessoryEntityForm<E extends IEntity> extends CEntityForm
         super(clazz, factory);
     }
 
-    public final CComponent<?> injectAndDecorate(IObject<?> member) {
+    public final CComponent<?, ?> injectAndDecorate(IObject<?> member) {
         return inject(member, new FieldDecoratorBuilder().build());
     }
 
-    public final CComponent<?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth, double contentWidth) {
+    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth, double contentWidth) {
         return inject(member, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
     }
 
-    public final CComponent<?> injectAndDecorate(IObject<?> member, double componentWidth, boolean dual) {
+    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, double componentWidth, boolean dual) {
         return inject(member, new FieldDecoratorBuilder(componentWidth, dual).build());
     }
 
-    public final CComponent<?> injectAndDecorate(IObject<?> member, double componentWidth) {
+    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, double componentWidth) {
         return inject(member, new FieldDecoratorBuilder(componentWidth).build());
     }
 
-    public final CComponent<?> injectAndDecorate(IObject<?> member, boolean dual) {
+    public final CComponent<?, ?> injectAndDecorate(IObject<?> member, boolean dual) {
         return inject(member, new FieldDecoratorBuilder(dual).build());
     }
 
-    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp) {
+    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp) {
         return inject(member, comp, new FieldDecoratorBuilder().build());
     }
 
-    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, double labelWidth, double componentWidth, double contentWidth) {
+    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double labelWidth, double componentWidth, double contentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
     }
 
-    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth, boolean dual) {
+    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth, boolean dual) {
         return inject(member, comp, new FieldDecoratorBuilder(componentWidth, dual).build());
     }
 
-    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth) {
+    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(componentWidth).build());
     }
 
-    public final <T extends CComponent<?>> T injectAndDecorate(IObject<?> member, T comp, boolean dual) {
+    public final <T extends CComponent<?, ?>> T injectAndDecorate(IObject<?> member, T comp, boolean dual) {
         return inject(member, comp, new FieldDecoratorBuilder(dual).build());
     }
 }

@@ -62,9 +62,9 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     private E origEntity;
 
     // Bidirectional map CComponent to Path
-    private final Map<Path, CComponent<?>> components = new HashMap<Path, CComponent<?>>();
+    private final Map<Path, CComponent<?, ?>> components = new HashMap<Path, CComponent<?, ?>>();
 
-    private final Map<CComponent<?>, Path> binding = new HashMap<CComponent<?>, Path>();
+    private final Map<CComponent<?, ?>, Path> binding = new HashMap<CComponent<?, ?>, Path>();
 
     public CEntityForm(Class<E> clazz) {
         this(clazz, null);
@@ -84,7 +84,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (isAttached()) {
             return super.create(member);
         } else {
@@ -92,40 +92,40 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         }
     }
 
-    public final CComponent<?> inject(IObject<?> member) {
-        CComponent<?> comp = create(member);
+    public final CComponent<?, ?> inject(IObject<?> member) {
+        CComponent<?, ?> comp = create(member);
         bind(comp, member);
         return comp;
     }
 
-    public final CComponent<?> inject(IObject<?> member, IDecorator<?> decorator) {
-        CComponent<?> comp = inject(member);
+    public final CComponent<?, ?> inject(IObject<?> member, IDecorator<?> decorator) {
+        CComponent<?, ?> comp = inject(member);
         comp.setDecorator(decorator);
         return comp;
     }
 
-    public final <T extends CComponent<?>> T inject(IObject<?> member, T comp) {
+    public final <T extends CComponent<?, ?>> T inject(IObject<?> member, T comp) {
         bind(comp, member);
         return comp;
     }
 
-    public final <T extends CComponent<?>> T inject(IObject<?> member, T comp, IDecorator<?> decorator) {
+    public final <T extends CComponent<?, ?>> T inject(IObject<?> member, T comp, IDecorator<?> decorator) {
         comp.setDecorator(decorator);
         return inject(member, comp);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CComponent<T> get(T member) {
+    public <T extends IEntity> CComponent<?, T> get(T member) {
         return getRaw((IObject<?>) member);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CComponent<List<T>> get(IList<T> member) {
+    public <T extends IEntity> CComponent<?, List<T>> get(IList<T> member) {
         return getRaw((IObject<?>) member);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> CComponent<T> get(IObject<T> member) {
+    public <T> CComponent<?, T> get(IObject<T> member) {
         return getRaw(member);
     }
 
@@ -143,10 +143,10 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         return components.containsKey(member.getPath());
     }
 
-    public void bind(CComponent<?> component, IObject<?> member) {
+    public void bind(CComponent<?, ?> component, IObject<?> member) {
         // verify that member actually exists in entity.
         assert (proto().getMember(member.getPath()) != null);
-        CComponent<?> alreadyBound = components.get(member.getPath());
+        CComponent<?, ?> alreadyBound = components.get(member.getPath());
         if (alreadyBound != null) {
             throw new Error("Path '" + member.getPath() + "' already bound");
         }
@@ -156,7 +156,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     public void unbind(IObject<?> member) {
-        CComponent<?> component = components.get(member.getPath());
+        CComponent<?, ?> component = components.get(member.getPath());
         if (component != null) {
             binding.remove(component);
         }
@@ -168,7 +168,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     @Override
-    public void adopt(CComponent<?> component) {
+    public void adopt(CComponent<?, ?> component) {
         Path path = binding.get(component);
         if (path != null) {
             IObject<?> member = proto().getMember(path);
@@ -242,13 +242,13 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
 //    public void setComponentsDebugId(IDebugId debugId) {
-//        for (Map.Entry<CComponent<?>, Path> me : binding.entrySet()) {
+//        for (Map.Entry<CComponent<?, ?>, Path> me : binding.entrySet()) {
 //            me.getKey().setDebugIdSuffix(new CompositeDebugId(debugId, me.getValue()));
 //        }
 //    }
 
     @Override
-    public Collection<? extends CComponent<?>> getComponents() {
+    public Collection<? extends CComponent<?, ?>> getComponents() {
         if (binding != null) {
             return binding.keySet();
         }
@@ -406,7 +406,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     @Override
-    protected final <T> void updateContainer(CComponent<T> component) {
+    protected final <T> void updateContainer(CComponent<?, T> component) {
         T value = component.getValue();
         Path memberPath = binding.get(component);
         if ((memberPath != null) && (getValue() != null)) {
