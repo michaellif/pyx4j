@@ -135,6 +135,10 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
     }
 
     public E proto() {
+        // Fixed serialization
+        if (!entityPrototype.isPrototype()) {
+            this.entityPrototype = EntityFactory.getEntityPrototype(getEntityClass());
+        }
         return entityPrototype;
     }
 
