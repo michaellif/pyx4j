@@ -46,7 +46,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
         bind(toProto.accountName(), boProto.accountName());
         bind(toProto.chargeDescription(), boProto.chargeDescription());
 
-        // TODO Read only or Behavior + condition
+        // TODO Read only or Behavior + condition  , See copyTOtoBO
         bind(toProto.bankId(), boProto.bankId());
         bind(toProto.branchTransitNumber(), boProto.branchTransitNumber());
         bind(toProto.accountNumber(), boProto.accountNumber());
@@ -55,6 +55,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
     @Override
     public void copyTOtoBO(MerchantAccount dto, MerchantAccount dbo) {
         // TODO move to Minding type
+        dbo.accountName().setValue(dto.accountName().getValue());
         dbo.chargeDescription().setValue(dto.chargeDescription().getValue());
     }
 
