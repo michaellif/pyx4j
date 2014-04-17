@@ -35,7 +35,7 @@ public class ChartTestSelectorPanel extends SimplePanel {
 
     public ChartTestSelectorPanel() {
         form = new ChartXYTestForm();
-        form.initContent();
+        form.init();
         form.populateNew();
         this.setWidget(form.asWidget());
     }

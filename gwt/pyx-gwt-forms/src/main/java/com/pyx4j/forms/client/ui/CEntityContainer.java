@@ -326,13 +326,13 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
             return content;
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @SuppressWarnings({ "unchecked" })
         public void setContent(IsWidget content) {
             this.content = content;
             content.asWidget().setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
             if (getWidget() instanceof IDecorator) {
-                ((IDecorator<CEntityContainer>) getWidget()).setContent(content);
-                ((IDecorator<CEntityContainer>) getWidget()).init(CEntityContainer.this);
+                ((IDecorator<CEntityContainer<E>>) getWidget()).setContent(content);
+                ((IDecorator<CEntityContainer<E>>) getWidget()).init(CEntityContainer.this);
             } else {
                 setWidget(content);
             }
