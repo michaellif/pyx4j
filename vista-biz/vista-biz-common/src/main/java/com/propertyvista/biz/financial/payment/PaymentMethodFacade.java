@@ -97,6 +97,11 @@ public interface PaymentMethodFacade {
      */
     void terminateAutopayAgreements(Lease lease);
 
+    /**
+     * Opposite to previous function do the same unconditionally.
+     */
+    void deleteAutopayAgreements(Lease lease, boolean sendNotification);
+
     AutoPayReviewLeaseDTO getAutopayAgreementRequiresReview(BillingAccount billingAccountId);
 
     List<AutopayAgreement> retrieveAutopayAgreements(Tenant tenantId);

@@ -409,6 +409,18 @@ class AutopayAgreementMananger {
         }
     }
 
+    void deleteAutopayAgreements(Lease lease, boolean sendNotification) {
+        List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
+        if (!activePaps.isEmpty()) {
+            for (AutopayAgreement pap : activePaps) {
+                deleteAutopayAgreement(pap);
+            }
+            if (sendNotification) {
+                ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
+            }
+        }
+    }
+
     public void deleteExpiringAutopayAgreement(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.le(criteria.proto().billingCycleStartDate(), forDate);

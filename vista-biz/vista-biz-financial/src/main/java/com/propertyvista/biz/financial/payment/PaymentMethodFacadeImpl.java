@@ -228,6 +228,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
+    public void deleteAutopayAgreements(Lease lease, boolean sendNotification) {
+        new AutopayAgreementMananger().deleteAutopayAgreements(lease, sendNotification);
+    }
+
+    @Override
     public AutoPayReviewLeaseDTO getAutopayAgreementRequiresReview(BillingAccount billingAccount) {
         return new AutopayReviewReport().getPreauthorizedPaymentRequiresReview(billingAccount);
     }

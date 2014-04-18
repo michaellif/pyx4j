@@ -45,7 +45,7 @@ public class ImportLeaseDataProcessor {
         }
 
         // If Importing AutoPay, suspend existing. TODO make it configurable
-        ServerSideFactory.create(PaymentMethodFacade.class).terminateAutopayAgreements(lease);
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreements(lease, false);
 
         // For now process only tenants
         for (TenantIO tenantIO : leaseIO.tenants()) {
