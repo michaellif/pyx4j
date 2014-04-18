@@ -28,9 +28,9 @@ import com.pyx4j.forms.client.ui.datatable.filter.CriteriaEditableComponentFacto
 public class GeoCriteriaEditableComponentFactory extends CriteriaEditableComponentFactory {
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getObjectClass().equals(GeoCriteria.class)) {
-            return (T) new CLocationCriteriaTextField();
+            return new CLocationCriteriaTextField();
         } else {
             return super.create(member);
         }

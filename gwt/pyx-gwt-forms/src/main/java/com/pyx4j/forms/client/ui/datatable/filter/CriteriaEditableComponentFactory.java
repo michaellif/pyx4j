@@ -49,38 +49,38 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        T comp;
+        CComponent<?, ?> comp;
         if (mm.isEntity()) {
-            comp = (T) new CEntityComboBox(mm.getObjectClass());
+            comp = new CEntityComboBox(mm.getObjectClass());
             ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
         } else if ((mm.getObjectClassType() == ObjectClassType.EntityList) || (mm.getObjectClassType() == ObjectClassType.EntitySet)) {
-            comp = (T) new CEntityComboBox(mm.getValueClass());
+            comp = new CEntityComboBox(mm.getValueClass());
             ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
         } else if (mm.getValueClass().isEnum()) {
-            comp = (T) new CComboBox();
+            comp = new CComboBox();
             ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
         } else if (mm.getValueClass().equals(LogicalDate.class) || mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
-            comp = (T) new CDatePicker();
+            comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Integer.class)) {
-            comp = (T) new CIntegerField();
+            comp = new CIntegerField();
         } else if (mm.getValueClass().equals(Key.class)) {
-            comp = (T) new CKeyField();
+            comp = new CKeyField();
         } else if (mm.getValueClass().equals(BigDecimal.class)) {
-            comp = (T) new CBigDecimalField();
+            comp = new CBigDecimalField();
         } else if (mm.getValueClass().equals(Long.class)) {
-            comp = (T) new CLongField();
+            comp = new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
-            comp = (T) new CDoubleField();
+            comp = new CDoubleField();
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            comp = (T) new CComboBoxBoolean();
+            comp = new CComboBoxBoolean();
         } else {
             if (EditorType.phone.equals(mm.getEditorType())) {
-                comp = (T) new CPhoneField();
+                comp = new CPhoneField();
                 ((CPhoneField) comp).setFormat(new CPhoneField.PhoneSearchFormat());
             } else {
-                comp = (T) new CTextField();
+                comp = new CTextField();
             }
         }
         return comp;

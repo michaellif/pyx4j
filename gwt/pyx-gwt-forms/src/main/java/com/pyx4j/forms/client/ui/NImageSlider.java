@@ -200,9 +200,9 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
-                return (T) new CEntityForm<E>(imgClass) {
+                return new CEntityForm<E>(imgClass) {
                     private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
 
                     @Override

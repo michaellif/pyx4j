@@ -24,6 +24,6 @@ import com.pyx4j.entity.core.IObject;
 
 public interface IEditableComponentFactory {
 
-    <T extends CComponent<T, ?>> T create(IObject<?> member);
+    CComponent<?, ?> create(IObject<?> member);
 
 }

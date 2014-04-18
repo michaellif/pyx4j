@@ -84,7 +84,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (isAttached()) {
             return super.create(member);
         } else {
@@ -92,8 +92,9 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
         }
     }
 
+    @SuppressWarnings("unchecked")
     public final <T extends CComponent<T, ?>> T inject(IObject<?> member) {
-        T comp = create(member);
+        T comp = (T) create(member);
         bind(comp, member);
         return comp;
     }

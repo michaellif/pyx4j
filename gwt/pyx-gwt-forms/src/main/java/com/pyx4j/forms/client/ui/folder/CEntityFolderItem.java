@@ -116,15 +116,16 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     protected IsWidget createContent() {
-        entityForm = create(EntityFactory.getEntityPrototype(clazz));
+        entityForm = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
         adopt(entityForm);
         return entityForm;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void setDecorator(IDecorator decorator) {
+    public void setDecorator(IDecorator<? super CEntityFolderItem<E>> decorator) {
         super.setDecorator(decorator);
-        ((IFolderItemDecorator) decorator).adoptItemActionsBar();
+        ((IFolderItemDecorator<E>) decorator).adoptItemActionsBar();
     }
 
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {
