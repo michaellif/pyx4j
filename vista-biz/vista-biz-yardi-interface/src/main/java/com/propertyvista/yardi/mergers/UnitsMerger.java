@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -101,7 +102,7 @@ public class UnitsMerger {
         }
 
         // new unit - see if the floorplan is in the list
-        Persistence.service().retrieveMember(building.floorplans());
+        Persistence.ensureRetrieve(building.floorplans(), AttachLevel.Attached);
         for (Floorplan existing : building.floorplans()) {
             if (StringUtils.equals(existing.name().getValue(), fp.name().getValue())) {
                 unit.floorplan().set(existing);

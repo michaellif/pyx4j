@@ -40,6 +40,7 @@ import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.shared.config.YardiImported;
 
 @DiscriminatorValue("Floorplan")
 public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
@@ -56,11 +57,13 @@ public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
     // third party identifier
     @NotNull
     @ReadOnly
+    @YardiImported
     IPrimitive<String> code();
 
     @NotNull
     @ToString(index = 0)
     @Caption(watermark = "e.g. 1bdrm+f")
+    @YardiImported
     IPrimitive<String> name();
 
     @Caption(watermark = "e.g. 1 Bedroom, Furnished")
@@ -75,20 +78,24 @@ public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
 
     @NotNull
     @Caption(name = "Beds")
+    @YardiImported
     IPrimitive<Integer> bedrooms();
 
     IPrimitive<Integer> dens();
 
     @NotNull
     @Caption(name = "Baths")
+    @YardiImported
     IPrimitive<Integer> bathrooms();
 
     // Separate WC
     IPrimitive<Integer> halfBath();
 
     @Format("#0.000")
+    @YardiImported
     IPrimitive<Double> area();
 
+    @YardiImported
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
     @Owned

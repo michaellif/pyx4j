@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.shared.config.YardiImported;
 
 public interface Marketing extends IEntity {
 
@@ -32,6 +33,7 @@ public interface Marketing extends IEntity {
 
     @ToString
     @Length(128)
+    @YardiImported
     IPrimitive<String> name();
 
     @Length(4000)

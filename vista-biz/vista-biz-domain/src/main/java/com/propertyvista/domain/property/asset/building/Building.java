@@ -65,6 +65,7 @@ import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
+import com.propertyvista.shared.config.YardiImported;
 
 //TODO rename to Property?!
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
@@ -87,6 +88,7 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
     @Length(10)
     @Indexed(uniqueConstraint = true, ignoreCase = true, group = { "c,1" })
     @MemberColumn(notNull = true, sortAdapter = AlphanumIndexAdapter.class)
+    @YardiImported
     IPrimitive<String> propertyCode();
 
     //as of now @see PmcYardiCredential or -1 for internal

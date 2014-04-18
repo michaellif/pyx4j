@@ -32,6 +32,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.shared.config.YardiImported;
 
 @EmbeddedEntity
 @ToStringFormat("{0}{1,choice,null#|!null#, {1}}")
@@ -203,9 +204,11 @@ public interface BuildingInfo extends IEntity {
      * Legal name of the property (max 120 char)
      */
     @ToString(index = 0)
+    @YardiImported
     IPrimitive<String> name();
 
     @EmbeddedEntity
+    @YardiImported
     AddressStructured address();
 
     IPrimitive<GeoPoint> location();

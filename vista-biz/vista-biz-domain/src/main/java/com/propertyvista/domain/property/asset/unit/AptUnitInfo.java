@@ -30,6 +30,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
+import com.propertyvista.shared.config.YardiImported;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -52,10 +53,12 @@ public interface AptUnitInfo extends IEntity {
         }
     }
 
+    @YardiImported
     IPrimitive<EconomicStatus> economicStatus();
 
     @Length(250)
     @Editor(type = Editor.EditorType.textarea)
+    @YardiImported
     IPrimitive<String> economicStatusDescription();
 
     IPrimitive<Integer> floor();
@@ -65,6 +68,7 @@ public interface AptUnitInfo extends IEntity {
     @Indexed(group = "BuildingUnitNumber,11", uniqueConstraint = true, ignoreCase = true)
     @NotNull
     @Length(20)
+    @YardiImported
     IPrimitive<String> number();
 
     @Caption(name = "Unit Legal Address is different from Building Address")
@@ -75,17 +79,21 @@ public interface AptUnitInfo extends IEntity {
     // ---- Physical: ----------------
 
     @Format("0.##")
+    @YardiImported
     IPrimitive<Double> area();
 
+    @YardiImported
     IPrimitive<AreaMeasurementUnit> areaUnits();
 
     // This values are populated from floorplan and should not be editable
     @Caption(name = "Beds")
     @Editor(type = Editor.EditorType.label)
+    @YardiImported
     IPrimitive<Integer> _bedrooms();
 
     // This values are populated from floorplan and should not be editable
     @Caption(name = "Baths")
     @Editor(type = Editor.EditorType.label)
+    @YardiImported
     IPrimitive<Integer> _bathrooms();
 }
