@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -49,9 +50,14 @@ public class EmailToTenantsDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
+        criteria.in(criteria.proto().role(), LeaseTermParticipant.Role.portalAccess());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
         criteria.isCurrent(criteria.proto().leaseTermV());
+        // Active Buildings
         criteria.eq(criteria.proto().leaseTermV().holder().lease().unit().building().suspended(), false);
+        // Active Leases
+        criteria.eq(criteria.proto().leaseTermV().holder().lease().status(), Lease.Status.Active);
+        criteria.isNull(criteria.proto().leaseTermV().holder().lease().completion());
 
         progress.progressMaximum.addAndGet(Persistence.service().count(criteria));
 
