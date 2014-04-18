@@ -118,9 +118,9 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof PaymentMethodInfoDTO) {
-                return (T) new PaymentMethodViewer();
+                return new PaymentMethodViewer();
             }
             return super.create(member);
         }

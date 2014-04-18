@@ -30,9 +30,9 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Testimonial) {
-            return (T) new TestimonialEditor();
+            return new TestimonialEditor();
         }
         return super.create(member);
     }

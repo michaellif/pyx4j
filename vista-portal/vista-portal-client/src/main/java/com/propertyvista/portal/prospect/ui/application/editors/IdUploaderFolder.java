@@ -129,9 +129,9 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof IdentificationDocumentFolder) {
-            return (T) new IdentificationDocumentEditor();
+            return new IdentificationDocumentEditor();
         } else {
             return super.create(member);
         }

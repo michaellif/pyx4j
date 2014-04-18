@@ -138,9 +138,9 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSOpenHouse) {
-                return (T) new ILSOpenHouseEditor();
+                return new ILSOpenHouseEditor();
             } else {
                 return super.create(member);
             }

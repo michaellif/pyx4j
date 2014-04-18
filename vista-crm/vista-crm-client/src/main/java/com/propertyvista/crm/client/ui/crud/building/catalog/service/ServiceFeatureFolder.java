@@ -67,9 +67,9 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Feature) {
-            return (T) new FeatureEditor();
+            return new FeatureEditor();
         }
         return super.create(member);
     }
@@ -84,7 +84,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().code())) {
                 comp = new CEntityLabel<ARCode>();
@@ -99,7 +99,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
             } else {
                 comp = super.create(member);
             }
-            return (T) comp;
+            return comp;
         }
     }
 

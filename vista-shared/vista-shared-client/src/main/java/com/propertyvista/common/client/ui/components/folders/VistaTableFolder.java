@@ -75,9 +75,9 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (clazz.equals(member.getObjectClass())) {
-            return (T) new CEntityFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
+            return new CEntityFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
         } else {
             return super.create(member);
         }

@@ -80,9 +80,9 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof SocialLink) {
-            return (T) new SocialLinkEditor();
+            return new SocialLinkEditor();
         }
         return super.create(member);
     }

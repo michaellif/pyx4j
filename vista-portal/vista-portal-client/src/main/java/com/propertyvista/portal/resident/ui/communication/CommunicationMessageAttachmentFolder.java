@@ -38,9 +38,9 @@ public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<Commun
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CommunicationMessageAttachment) {
-            return (T) new CommunicationMessageAttachmentViewer();
+            return new CommunicationMessageAttachmentViewer();
         }
         return super.create(member);
     }

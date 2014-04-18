@@ -36,40 +36,40 @@ import com.propertyvista.domain.ref.Province;
 public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getObjectClassType() == ObjectClassType.Primitive) {
             if (mm.getValueClass().equals(String.class)) {
-                return (T) new CLabel();
+                return new CLabel();
             } else if (mm.getValueClass().isEnum()) {
-                return (T) new CEnumLabel();
+                return new CEnumLabel();
             } else if (mm.isNumberValueClass()) {
                 CNumberLabel comp = new CNumberLabel();
                 if (mm.getFormat() != null) {
                     (comp).setNumberFormat(mm.getFormat(), mm.useMessageFormat());
                 }
-                return (T) comp;
+                return comp;
             } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class) || mm.getValueClass().equals(LogicalDate.class)) {
                 CDateLabel comp = new CDateLabel();
                 if (mm.getFormat() != null) {
                     (comp).setDateFormat(mm.getFormat());
                 }
-                return (T) comp;
+                return comp;
             } else if (mm.getValueClass().equals(Time.class)) {
                 CTimeLabel comp = new CTimeLabel();
                 if (mm.getFormat() != null) {
                     (comp).setTimeFormat(mm.getFormat());
                 }
-                return (T) comp;
+                return comp;
             } else if (mm.getValueClass() == Boolean.class) {
-                return (T) new CBooleanLabel();
+                return new CBooleanLabel();
             } else {
                 return super.create(member);
             }
         } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
-            return (T) new CEntityLabel();
+            return new CEntityLabel();
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
-            return (T) new CEntityLabel();
+            return new CEntityLabel();
         }
         return super.create(member);
     }

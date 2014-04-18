@@ -30,9 +30,9 @@ public class NewsFolder extends VistaBoxFolder<News> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof News) {
-            return (T) new NewsEditor();
+            return new NewsEditor();
         }
         return super.create(member);
     }

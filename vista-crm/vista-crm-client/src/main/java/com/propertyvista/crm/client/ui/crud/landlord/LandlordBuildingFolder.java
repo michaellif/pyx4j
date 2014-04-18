@@ -58,9 +58,9 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Building) {
-            return (T) new LandlordBuildingEditor();
+            return new LandlordBuildingEditor();
         }
         return super.create(member);
     }

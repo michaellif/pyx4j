@@ -473,9 +473,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSSummaryBuilding) {
-                return (T) new ILSSummaryEditor();
+                return new ILSSummaryEditor();
             } else {
                 return super.create(member);
             }
@@ -519,9 +519,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof ILSProfileBuilding) {
-                return (T) new ILSProfileBuildingEditor();
+                return new ILSProfileBuildingEditor();
             } else {
                 return super.create(member);
             }

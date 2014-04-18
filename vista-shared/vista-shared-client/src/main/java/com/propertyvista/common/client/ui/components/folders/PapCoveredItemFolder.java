@@ -50,9 +50,9 @@ public class PapCoveredItemFolder extends VistaTableFolder<AutopayAgreement.Auto
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof AutopayAgreementCoveredItem) {
-            return (T) new CoveredItemViewer();
+            return new CoveredItemViewer();
         }
         return super.create(member);
     }

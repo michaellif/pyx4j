@@ -78,9 +78,9 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ILocalizedEntity) {
-            return (T) new LocalizedContentEditor();
+            return new LocalizedContentEditor();
         }
         return super.create(member);
     }

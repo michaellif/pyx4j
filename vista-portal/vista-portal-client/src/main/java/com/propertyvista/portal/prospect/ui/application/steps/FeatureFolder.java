@@ -76,9 +76,9 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            return (T) new FeatureItemForm();
+            return new FeatureItemForm();
         } else {
             return super.create(member);
         }

@@ -38,9 +38,9 @@ public class YardiCredentialFolder extends VistaBoxFolder<PmcYardiCredential> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PmcYardiCredential) {
-            return (T) new YardiCredentialEditor();
+            return new YardiCredentialEditor();
         }
         return super.create(member);
     }

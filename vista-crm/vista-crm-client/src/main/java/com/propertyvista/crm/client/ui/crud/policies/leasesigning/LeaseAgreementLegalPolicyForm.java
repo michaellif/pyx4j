@@ -72,9 +72,9 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if ((member instanceof LeaseAgreementLegalTerm)) {
-                return (T) new LegalTermEditor();
+                return new LegalTermEditor();
             }
             return super.create(member);
         }
@@ -105,9 +105,9 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if ((member instanceof LeaseAgreementConfirmationTerm)) {
-                return (T) new ConfirmationTermEditor();
+                return new ConfirmationTermEditor();
             }
             return super.create(member);
         }

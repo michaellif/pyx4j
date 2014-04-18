@@ -72,16 +72,13 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
         row = (oneColumn ? row : -1);
 
-        CField<Province, ?> province = inject(proto().province());
-        province.setDecorator(decorator(maxCompWidth).build());
+        CField<Province, ?> province = (CField<Province, ?>) inject(proto().province(), decorator(maxCompWidth).build());
         main.setWidget(++row, col, province);
 
-        final CField<Country, ?> country = inject(proto().country());
-        country.setDecorator(decorator(maxCompWidth).build());
+        final CField<Country, ?> country = (CField<Country, ?>) inject(proto().country(), decorator(maxCompWidth).build());
         main.setWidget(++row, col, country);
 
-        CField<String, ?> postalCode = inject(proto().postalCode());
-        postalCode.setDecorator(decorator(10).build());
+        CField<String, ?> postalCode = (CField<String, ?>) inject(proto().postalCode(), decorator(10).build());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }

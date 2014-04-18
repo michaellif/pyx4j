@@ -87,9 +87,9 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LegalLetter) {
-                return (T) new LegalLetterForm();
+                return new LegalLetterForm();
             }
             return super.create(member);
         }

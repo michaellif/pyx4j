@@ -52,7 +52,7 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getObjectClass().equals(proto().getObjectClass())) {
             CEntityFolderRowEditor<NsfChargeDetails> rowEditor = new CEntityFolderRowEditor<NsfChargeDetails>(NsfChargeDetails.class, columns(),
                     new VistaViewersComponentFactory()) {
@@ -113,7 +113,7 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
                 }
 
             };
-            return (T) rowEditor;
+            return rowEditor;
         }
         return super.create(member);
     }

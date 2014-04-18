@@ -64,9 +64,9 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Guest) {
-            return (T) new GuestEditor();
+            return new GuestEditor();
         }
         return super.create(member);
     }

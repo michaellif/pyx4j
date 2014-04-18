@@ -176,12 +176,12 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof N4PolicyDTOARCodeHolderDTO) {
                 N4PolicyDTOARCodeHolderForm form = new N4PolicyDTOARCodeHolderForm(null, false);
                 form.inheritViewable(false);
                 form.setViewable(true);
-                return (T) form;
+                return form;
             }
             return super.create(member);
         }

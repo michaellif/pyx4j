@@ -72,11 +72,11 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof CrmUser) {
-            return (T) new CommunicationEndpointEditor<CrmUser>(CrmUser.class);
+            return new CommunicationEndpointEditor<CrmUser>(CrmUser.class);
         } else if (member instanceof CustomerUser) {
-            return (T) new CommunicationEndpointEditor<CustomerUser>(CustomerUser.class);
+            return new CommunicationEndpointEditor<CustomerUser>(CustomerUser.class);
         }
         return super.create(member);
     }

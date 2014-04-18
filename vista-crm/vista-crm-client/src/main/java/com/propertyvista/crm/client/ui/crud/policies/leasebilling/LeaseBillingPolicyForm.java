@@ -280,9 +280,9 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LeaseBillingTypePolicyItem) {
-                return (T) new LeaseBillingTypeEditor();
+                return new LeaseBillingTypeEditor();
             } else {
                 return super.create(member);
             }

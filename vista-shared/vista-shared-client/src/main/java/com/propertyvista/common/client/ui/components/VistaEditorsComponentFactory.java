@@ -31,10 +31,10 @@ import com.propertyvista.domain.security.CustomerSignature;
 public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().equals(CustomerSignature.class)) {
-            return (T) new CSignature(mm.getCaption());
+            return new CSignature(mm.getCaption());
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {
@@ -56,9 +56,9 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
                     return entity;
                 }
             });
-            return (T) c;
+            return c;
         } else if (member.getValueClass().equals(GeoLocation.class)) {
-            return (T) new GeoLocationEditor();
+            return new GeoLocationEditor();
         }
         return super.create(member);
     }

@@ -41,9 +41,9 @@ public final class PapChargesFolder extends VistaBoxFolder<PapChargeReviewDTO> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PapChargeReviewDTO) {
-            return (T) new PapChargeReviewForm();
+            return new PapChargeReviewForm();
         }
         return super.create(member);
     }

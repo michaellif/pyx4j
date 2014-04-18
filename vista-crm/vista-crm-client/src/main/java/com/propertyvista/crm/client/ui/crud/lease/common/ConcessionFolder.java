@@ -36,9 +36,9 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Concession) {
-            return (T) new ConcessionEditor();
+            return new ConcessionEditor();
         }
         return super.create(member);
 

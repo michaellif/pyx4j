@@ -52,9 +52,9 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return (T) new EmergencyContactEditor(oneColumn);
+            return new EmergencyContactEditor(oneColumn);
         } else {
             return super.create(member);
         }

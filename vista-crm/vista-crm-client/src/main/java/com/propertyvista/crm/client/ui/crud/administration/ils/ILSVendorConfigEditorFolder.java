@@ -62,9 +62,9 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ILSVendorConfig) {
-            return (T) new ILSVendorConfigEditor();
+            return new ILSVendorConfigEditor();
         } else {
             return super.create(member);
         }

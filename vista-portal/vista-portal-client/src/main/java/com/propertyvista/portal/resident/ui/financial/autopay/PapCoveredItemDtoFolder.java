@@ -46,9 +46,9 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PreauthorizedPaymentCoveredItemDTO) {
-            return (T) new CoveredItemDtoEditor();
+            return new CoveredItemDtoEditor();
         }
         return super.create(member);
     }

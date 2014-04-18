@@ -61,9 +61,9 @@ public class BuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Building) {
-            return (T) new CEntityFolderRowEditor<Building>(Building.class, columns()) {
+            return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     CLabel<?> comp = inject(column.getObject(), new CLabel<String>());

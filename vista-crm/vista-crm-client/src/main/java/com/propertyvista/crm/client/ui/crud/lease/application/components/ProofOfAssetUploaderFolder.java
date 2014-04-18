@@ -34,9 +34,9 @@ public class ProofOfAssetUploaderFolder extends VistaBoxFolder<ProofOfAssetDocum
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ProofOfAssetDocumentFolder) {
-            return (T) new ProofOfAssetDocumentEditor();
+            return new ProofOfAssetDocumentEditor();
         }
         return super.create(member);
     }

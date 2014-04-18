@@ -65,9 +65,9 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Portfolio) {
-            return (T) new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
+            return new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
                 @SuppressWarnings("rawtypes")
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {

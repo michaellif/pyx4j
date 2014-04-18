@@ -44,9 +44,9 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return (T) new EmergencyContactEditor();
+            return new EmergencyContactEditor();
         } else {
             return super.create(member);
         }

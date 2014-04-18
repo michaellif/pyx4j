@@ -495,9 +495,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof BuildingUtility) {
-                return (T) new BuildingUtilityEditor();
+                return new BuildingUtilityEditor();
             }
             return super.create(member);
         }

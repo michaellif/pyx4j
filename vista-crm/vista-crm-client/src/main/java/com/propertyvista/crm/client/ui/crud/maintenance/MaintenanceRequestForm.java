@@ -635,9 +635,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof MaintenanceRequestSchedule) {
-                return (T) new MaintenanceRequestScheduleViewer();
+                return new MaintenanceRequestScheduleViewer();
             }
             return super.create(member);
         }
@@ -762,9 +762,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof MaintenanceRequestStatusRecord) {
-                return (T) new StatusRecordViewer();
+                return new StatusRecordViewer();
             }
             return super.create(member);
         }

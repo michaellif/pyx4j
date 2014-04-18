@@ -58,9 +58,9 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PapReviewDTO) {
-            return (T) new PapReviewForm();
+            return new PapReviewForm();
         }
         return super.create(member);
     }

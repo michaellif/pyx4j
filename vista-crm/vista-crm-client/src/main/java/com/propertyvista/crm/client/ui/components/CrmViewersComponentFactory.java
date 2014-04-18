@@ -27,7 +27,7 @@ public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member.getOwner() == null) {
             throw new Error("Factory doesn't have editor for " + member);
         }
@@ -36,7 +36,7 @@ public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
             @SuppressWarnings("unchecked")
             CrudAppPlace place = AppPlaceEntityMapper.resolvePlace((Class<IEntity>) mm.getObjectClass());
             if (place != null) {
-                return (T) new CEntityCrudHyperlink(place);
+                return new CEntityCrudHyperlink(place);
             }
         }
         return super.create(member);

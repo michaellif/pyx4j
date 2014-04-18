@@ -58,9 +58,9 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Building) {
-            return (T) new CEntityFolderRowEditor<Building>(Building.class, COLUMNS) {
+            return new CEntityFolderRowEditor<Building>(Building.class, COLUMNS) {
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     if (column.getObject() == proto().propertyCode()) {

@@ -73,9 +73,9 @@ public class RichTextContentFolder extends VistaBoxFolder<HtmlContent> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof HtmlContent) {
-            return (T) new RichTextContentEditor();
+            return new RichTextContentEditor();
         }
         return super.create(member);
     }

@@ -38,9 +38,9 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseTermTenant) {
-            return (T) new TenantForm();
+            return new TenantForm();
         } else {
             return super.create(member);
         }

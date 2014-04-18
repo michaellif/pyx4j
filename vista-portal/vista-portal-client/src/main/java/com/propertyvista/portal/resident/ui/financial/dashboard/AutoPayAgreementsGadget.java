@@ -127,9 +127,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof AutoPayInfoDTO) {
-                return (T) new AutoPayViewer();
+                return new AutoPayViewer();
             }
             return super.create(member);
         }

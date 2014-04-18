@@ -63,9 +63,9 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LeaseTermAgreementDocument) {
-            return (T) new LeaseAgreementDocumentForm(true);
+            return new LeaseAgreementDocumentForm(true);
         }
         return super.create(member);
     }

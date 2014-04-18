@@ -46,9 +46,9 @@ public class YardiInterfacePolicyChargeCodeIgnoreFolder extends VistaTableFolder
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof YardiInterfacePolicyChargeCodeIgnore) {
-            return (T) new YardiInterfacePolicyChargeCodeIgnoreForm();
+            return new YardiInterfacePolicyChargeCodeIgnoreForm();
         }
         return super.create(member);
     }

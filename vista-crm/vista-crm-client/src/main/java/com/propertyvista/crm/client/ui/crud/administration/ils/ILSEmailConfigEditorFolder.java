@@ -30,9 +30,9 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ILSEmailConfig) {
-            return (T) new ILSEmailConfigEditor();
+            return new ILSEmailConfigEditor();
         } else {
             return super.create(member);
         }

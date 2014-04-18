@@ -78,9 +78,9 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof CoapplicantDTO) {
-                return (T) new CoapplicantForm();
+                return new CoapplicantForm();
             }
             return super.create(member);
         }
@@ -158,9 +158,9 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof DependentDTO) {
-                return (T) new DependentForm();
+                return new DependentForm();
             } else {
                 return super.create(member);
             }

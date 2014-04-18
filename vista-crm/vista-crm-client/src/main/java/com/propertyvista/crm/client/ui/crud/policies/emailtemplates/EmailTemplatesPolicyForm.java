@@ -112,9 +112,9 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof EmailTemplate) {
-                return (T) new EmailTemplateEditor();
+                return new EmailTemplateEditor();
             } else {
                 return super.create(member);
             }

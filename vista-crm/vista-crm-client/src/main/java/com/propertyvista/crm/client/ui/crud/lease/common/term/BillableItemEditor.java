@@ -349,9 +349,9 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof BillableItemAdjustment) {
-                return (T) new BillableItemAdjustmentEditor();
+                return new BillableItemAdjustmentEditor();
             }
             return super.create(member);
         }
@@ -536,9 +536,9 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof Deposit) {
-                return (T) new DepositEditor();
+                return new DepositEditor();
             }
             return super.create(member);
         }

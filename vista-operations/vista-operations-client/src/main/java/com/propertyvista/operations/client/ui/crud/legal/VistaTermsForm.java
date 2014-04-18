@@ -53,9 +53,9 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof LegalDocument) {
-                return (T) new LegalDocumentForm();
+                return new LegalDocumentForm();
             } else {
                 return super.create(member);
             }

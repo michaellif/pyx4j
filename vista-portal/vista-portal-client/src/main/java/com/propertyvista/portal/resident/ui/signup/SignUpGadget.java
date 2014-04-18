@@ -203,8 +203,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             flexPanel.setWidget(++row, 0, inject(proto().lastName(), new LoginWidgetDecoratorBuilder().build()));
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            CField<String, ?> emailField = inject(proto().email());
-            emailField.setDecorator(new LoginWidgetDecoratorBuilder().build());
+            CField<String, ?> emailField = (CField<String, ?>) inject(proto().email(), new LoginWidgetDecoratorBuilder().build());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
             flexPanel.setWidget(++row, 0, emailField);
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);

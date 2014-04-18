@@ -53,9 +53,9 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PreauthorizedPaymentCoveredItemDTO) {
-            return (T) new CoveredItemEditor();
+            return new CoveredItemEditor();
         }
         return super.create(member);
     }

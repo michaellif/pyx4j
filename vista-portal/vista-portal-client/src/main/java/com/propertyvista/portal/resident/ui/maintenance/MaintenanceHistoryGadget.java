@@ -87,9 +87,9 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof MaintenanceRequestStatusDTO) {
-                return (T) new MaintenanceRequestFolderItem(getGadgetView().getPresenter());
+                return new MaintenanceRequestFolderItem(getGadgetView().getPresenter());
             }
             return super.create(member);
         }

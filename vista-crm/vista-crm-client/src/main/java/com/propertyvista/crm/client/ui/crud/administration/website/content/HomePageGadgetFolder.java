@@ -63,9 +63,9 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof HomePageGadget) {
-            return (T) new HomePageGadgetItemEditor();
+            return new HomePageGadgetItemEditor();
         }
         return super.create(member);
     }

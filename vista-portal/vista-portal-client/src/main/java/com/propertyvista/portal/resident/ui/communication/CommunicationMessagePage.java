@@ -97,9 +97,9 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof CommunicationMessage) {
-                return (T) new MessageFolderItem(this);
+                return new MessageFolderItem(this);
             }
             return super.create(member);
         }

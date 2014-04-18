@@ -87,9 +87,9 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof PreauthorizedPaymentDTO) {
-                return (T) new PreauthorizedPaymentEditor();
+                return new PreauthorizedPaymentEditor();
             }
             return super.create(member);
         }

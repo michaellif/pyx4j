@@ -243,9 +243,9 @@ public class UnitStep extends ApplicationWizardStep {
         }
 
         @Override
-        public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+        public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof UnitTO) {
-                return (T) new AvailableUnitForm();
+                return new AvailableUnitForm();
             } else {
                 return super.create(member);
             }

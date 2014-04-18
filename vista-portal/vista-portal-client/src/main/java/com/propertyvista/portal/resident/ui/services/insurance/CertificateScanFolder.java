@@ -40,9 +40,9 @@ public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateS
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificateScan) {
-            return (T) new CertificateScanViewer();
+            return new CertificateScanViewer();
         }
         return super.create(member);
     }

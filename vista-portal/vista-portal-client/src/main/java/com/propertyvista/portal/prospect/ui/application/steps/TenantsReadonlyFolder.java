@@ -21,7 +21,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.TenantDTO;
@@ -30,17 +29,15 @@ import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
 
-    private static final I18n i18n = I18n.get(TenantsReadonlyFolder.class);
-
     public TenantsReadonlyFolder() {
         super(TenantDTO.class, false);
         setNoDataNotificationWidget(null);
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof TenantDTO) {
-            return (T) new TenantForm();
+            return new TenantForm();
         }
         return super.create(member);
     }

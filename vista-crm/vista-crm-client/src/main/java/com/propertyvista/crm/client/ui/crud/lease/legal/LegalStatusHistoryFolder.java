@@ -44,12 +44,12 @@ public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatu
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LegalStatus) {
             LegalStatusForm form = new LegalStatusForm(false);
             form.inheritViewable(false);
             form.setViewable(true);
-            return (T) form;
+            return form;
         }
         return super.create(member);
     }

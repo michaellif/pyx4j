@@ -48,9 +48,9 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof InvoiceProductCharge) {
-            return (T) new ProductChargeEditor();
+            return new ProductChargeEditor();
         }
         return super.create(member);
     }

@@ -51,9 +51,9 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PageDescriptor) {
-            return (T) new PageDescriptorEditor();
+            return new PageDescriptorEditor();
         }
         return super.create(member);
     }

@@ -132,9 +132,9 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PmcPaymentMethod) {
-            return (T) new PmcPaymentMethodEditor();
+            return new PmcPaymentMethodEditor();
         }
         return super.create(member);
     }

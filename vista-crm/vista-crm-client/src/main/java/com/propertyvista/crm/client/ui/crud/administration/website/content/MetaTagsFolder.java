@@ -77,9 +77,9 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PageMetaTags) {
-            return (T) new PageMetaTagsEditor();
+            return new PageMetaTagsEditor();
         }
         return super.create(member);
     }

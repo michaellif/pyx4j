@@ -43,8 +43,7 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
         main.setWidget(++row, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(120).build()));
         main.setWidget(++row, 0, inject(proto().moveOutDate(), new FieldDecoratorBuilder(120).build()));
 
-        CField<OwnedRented, ?> rentedComponent = inject(proto().rented());
-        rentedComponent.setDecorator(new FieldDecoratorBuilder(150).build());
+        CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) inject(proto().rented(), new FieldDecoratorBuilder(150).build());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {

@@ -77,9 +77,9 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
     }
 
     @Override
-    public <T extends CComponent<T, ?>> T create(IObject<?> member) {
+    public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof SiteTitles) {
-            return (T) new SiteTitlesEditor();
+            return new SiteTitlesEditor();
         }
         return super.create(member);
     }
