@@ -121,7 +121,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         return entityForm;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setDecorator(IDecorator<? super CEntityFolderItem<E>> decorator) {
         super.setDecorator(decorator);

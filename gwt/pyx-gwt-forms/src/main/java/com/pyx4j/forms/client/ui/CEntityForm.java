@@ -92,15 +92,14 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public final <T extends CComponent<T, ?>> T inject(IObject<?> member) {
-        T comp = (T) create(member);
+    public final CComponent<?, ?> inject(IObject<?> member) {
+        CComponent<?, ?> comp = create(member);
         bind(comp, member);
         return comp;
     }
 
     public final <T extends CComponent<T, ?>> T inject(IObject<?> member, IDecorator<T> decorator) {
-        T comp = inject(member);
+        T comp = (T) inject(member);
         comp.setDecorator(decorator);
         return comp;
     }

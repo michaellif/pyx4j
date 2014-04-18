@@ -141,7 +141,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     private void calculateActionsState() {
         boolean addable = isAddable() && isEnabled() && isEditable() && !isViewable();
         if (getDecorator() != null) {
-            ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
+            ((IFolderDecorator<E>) getDecorator()).setAddButtonVisible(addable);
         }
         for (CEntityFolderItem<E> item : itemsList) {
             item.calculateActionsState();
@@ -206,7 +206,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         });
     }
 
-    @SuppressWarnings("unchecked")
     protected void addItem(E newEntity) {
         if (getValue() == null) {
             log.warn("Request to add item has been issued before the form populated with value");
