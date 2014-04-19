@@ -37,6 +37,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.yardi.mappers.MappingUtils;
+import com.propertyvista.yardi.mappers.UnitsMapper;
 
 public class YardiILSMarketingProcessor {
 
@@ -103,8 +104,8 @@ public class YardiILSMarketingProcessor {
             // process deposit data
             DepositType depositType = ilsUnit.getDeposit();
             if (ilsUnit.getUnit().getInformation().size() == 1 && depositType != null && depositType.getAmount().getValue() != null) {
-                depositInfo.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), depositType.getAmount().getValue() == null ? null : depositType
-                        .getAmount().getValue().setScale(2));
+                depositInfo.put(UnitsMapper.getUnitID(ilsUnit.getUnit().getInformation().get(0)), depositType.getAmount().getValue() == null ? null
+                        : depositType.getAmount().getValue().setScale(2));
             }
         }
         return depositInfo;

@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.maintenance.ServiceRequest;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Unit;
 import com.yardi.entity.mits.Uniteconstatusinfo;
@@ -37,6 +38,18 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
 public class UnitsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(UnitsMapper.class);
+
+    static public String getUnitID(Unit unit) {
+        return getUnitID(unit.getInformation().get(0));
+    }
+
+    static public String getUnitID(Information unitInfo) {
+        return unitInfo.getUnitID().toUpperCase();
+    }
+
+    static public String getUnitID(ServiceRequest maintenanceRequest) {
+        return maintenanceRequest.getUnitCode().toUpperCase();
+    }
 
     /**
      * Maps units from YARDI System to VISTA domain units
@@ -68,7 +81,7 @@ public class UnitsMapper {
         unitTo.floorplan().set(floorplan);
 
         // info
-        unitTo.info().number().setValue(info.getUnitID());
+        unitTo.info().number().setValue(getUnitID(info));
         unitTo.info()._bedrooms().set(floorplan.bedrooms());
         unitTo.info()._bathrooms().set(floorplan.bathrooms());
         unitTo.info().area().set(floorplan.area());

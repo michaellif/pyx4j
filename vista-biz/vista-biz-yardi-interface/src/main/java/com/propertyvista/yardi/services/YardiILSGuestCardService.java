@@ -22,6 +22,7 @@ import com.yardi.entity.ils.Availability;
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.PhysicalProperty;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Executable;
@@ -32,6 +33,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.mappers.UnitsMapper;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
@@ -60,7 +62,7 @@ public class YardiILSGuestCardService extends YardiAbstractService {
 
         // process new availability data
         for (ILSUnit ilsUnit : marketingInfo.getProperty().get(0).getILSUnit()) {
-            if (aptUnit.info().number().getValue("").equals(ilsUnit.getUnit().getInformation().get(0).getUnitID())) {
+            if (CommonsStringUtils.equals(aptUnit.info().number().getValue(), UnitsMapper.getUnitID(ilsUnit.getUnit().getInformation().get(0)))) {
                 final Availability avail = ilsUnit.getAvailability();
                 log.info("New Unit Availability: {}: {}", aptUnit.getStringView(), (avail == null || avail.getVacateDate() == null ? "Not " : "") + "Available");
 

@@ -79,7 +79,7 @@ public class YardiARIntegrationAgent {
     }
 
     public static String getUnitId(RTCustomer customer) {
-        return customer.getRTUnit() != null ? customer.getRTUnit().getUnitID() : null;
+        return customer.getRTUnit() != null ? customer.getRTUnit().getUnitID().toUpperCase() : null;
     }
 
     /*
