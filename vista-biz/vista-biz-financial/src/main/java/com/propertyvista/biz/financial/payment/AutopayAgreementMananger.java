@@ -223,7 +223,7 @@ class AutopayAgreementMananger {
     }
 
     //If Tenant removes PAP - payment will NOT be canceled.
-    void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId) {
+    void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId, boolean sendNotification) {
         AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentId.getPrimaryKey());
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant().lease(), AttachLevel.Attached);
@@ -236,10 +236,12 @@ class AutopayAgreementMananger {
             } else {
                 List<AutopayAgreement> canceledAgreements = new ArrayList<AutopayAgreement>();
                 canceledAgreements.add(preauthorizedPayment);
-                ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease(),
-                        canceledAgreements);
+                if (sendNotification) {
+                    ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease(),
+                            canceledAgreements);
+                }
             }
-        } else {
+        } else if (sendNotification) {
             ServerSideFactory.create(NotificationFacade.class).autoPayCancellation(preauthorizedPayment);
         }
 
@@ -257,7 +259,7 @@ class AutopayAgreementMananger {
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
 
         for (AutopayAgreement preauthorizedPayment : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
-            deleteAutopayAgreement(preauthorizedPayment);
+            deleteAutopayAgreement(preauthorizedPayment, true);
             new ScheduledPaymentsManager().cancelScheduledPayments(preauthorizedPayment);
         }
 
@@ -276,7 +278,7 @@ class AutopayAgreementMananger {
         if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
             // Suspend All
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap);
+                deleteAutopayAgreement(pap, true);
             }
             ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
             return;
@@ -403,7 +405,7 @@ class AutopayAgreementMananger {
 
         if (terminate) {
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap);
+                deleteAutopayAgreement(pap, true);
             }
             ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
         }
@@ -413,7 +415,7 @@ class AutopayAgreementMananger {
         List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
         if (!activePaps.isEmpty()) {
             for (AutopayAgreement pap : activePaps) {
-                deleteAutopayAgreement(pap);
+                deleteAutopayAgreement(pap, sendNotification);
             }
             if (sendNotification) {
                 ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
@@ -488,7 +490,7 @@ class AutopayAgreementMananger {
                                         for (AutopayAgreement item : activePaps) {
                                             if (terminate) {
                                                 atLeaseOneTerminated = true;
-                                                deleteAutopayAgreement(item);
+                                                deleteAutopayAgreement(item, true);
                                                 executionMonitor.addProcessedEvent("AutoPay Cancel");
                                             }
                                         }
