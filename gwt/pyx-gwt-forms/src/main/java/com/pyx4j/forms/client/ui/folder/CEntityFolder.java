@@ -141,7 +141,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     private void calculateActionsState() {
         boolean addable = isAddable() && isEnabled() && isEditable() && !isViewable();
         if (getDecorator() != null) {
-            ((IFolderDecorator<E>) getDecorator()).setAddButtonVisible(addable);
+            ((IFolderDecorator) getDecorator()).setAddButtonVisible(addable);
         }
         for (CEntityFolderItem<E> item : itemsList) {
             item.calculateActionsState();
@@ -223,7 +223,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
 
         if (item.getDecorator() instanceof BoxFolderItemDecorator) {
-            ((BoxFolderItemDecorator<E>) item.getDecorator()).setExpended(true);
+            ((BoxFolderItemDecorator) item.getDecorator()).setExpended(true);
         }
 
     }
@@ -316,13 +316,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
 
         if (getDecorator() instanceof TableFolderDecorator) {
-            ((TableFolderDecorator<E>) getDecorator()).setHeaderVisible(container.getWidgetCount() > 0);
+            ((TableFolderDecorator) getDecorator()).setHeaderVisible(container.getWidgetCount() > 0);
         }
     }
 
     @Override
     public void adopt(final CComponent<?, ?> component) {
-        itemsList.add((CEntityFolderItem<E>) component);
+        itemsList.add((CEntityFolderItem) component);
         container.add(component);
 
         IDebugId rowDebugId = new CompositeDebugId(IDebugId.ROW_PREFIX, currentRowDebugId);
