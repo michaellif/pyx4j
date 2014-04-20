@@ -29,7 +29,7 @@ public enum PmcProcessType implements Serializable {
 
     vistaCaleonReport,
 
-    billing(PmcProcessOptions.RunForDay),
+    billing(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     depositRefund,
 
@@ -42,14 +42,14 @@ public enum PmcProcessType implements Serializable {
     paymentsDbpProcess,
 
     @Translate("P 1 - Issue PreAuthorized Payments")
-    paymentsIssue(PmcProcessOptions.RunForDay),
+    paymentsIssue(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     @Translate("P 3 - Process Scheduled eCheque Payments")
-    paymentsScheduledEcheck(PmcProcessOptions.RunForDay),
+    paymentsScheduledEcheck(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     @Translate("P 4 - Process Scheduled Cards Payments")
     // TODO rename enum to remove redit
-    paymentsScheduledCreditCards(PmcProcessOptions.RunForDay),
+    paymentsScheduledCreditCards(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     @Translate("P 5A - Send eCheque(PAD) Funds Transfer to Caledon")
     paymentsPadSend,
@@ -75,7 +75,7 @@ public enum PmcProcessType implements Serializable {
     @Translate("P 7C - Payments Direct Banking Process Reconciliation (auto triggered by ReceiveReconciliation)")
     paymentsDbpProcessReconciliation,
 
-    paymentsTenantSure(PmcProcessOptions.RunForDay),
+    paymentsTenantSure(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 
     // TODO rename to : paymentsUpdatePreauthorizedPaymentAgreements
     paymentsLastMonthSuspend(PmcProcessOptions.RunForDay),

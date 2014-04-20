@@ -18,6 +18,8 @@ public enum PmcProcessOptions {
 
     RunForDay,
 
-    GlobalOnly
+    GlobalOnly,
+
+    RequiredDaily
 
 }
