@@ -10,8 +10,6 @@
 
 CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_1131(v_schema_name TEXT) RETURNS VOID AS
 $$
-DECLARE
-        v_rowcount      INT     := 0;
 BEGIN
         EXECUTE 'SET search_path = '||v_schema_name;
         
