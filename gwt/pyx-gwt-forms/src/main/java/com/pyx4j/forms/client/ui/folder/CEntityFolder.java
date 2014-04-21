@@ -54,7 +54,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<CEntityFolder<E>, IList<E>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<CEntityFolder<E>, IList<E>, IFolderDecorator<E>> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -331,7 +331,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void adopt(final CComponent<?, ?> component) {
+    public void adopt(final CComponent<?, ?, ?> component) {
         itemsList.add((CEntityFolderItem) component);
         container.add(component);
 
@@ -346,7 +346,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void abandon(final CComponent<?, ?> component) {
+    public void abandon(final CComponent<?, ?, ?> component) {
         super.abandon(component);
         container.remove(component);
         itemsList.remove(component);
@@ -378,7 +378,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     protected void onReset() {
-        for (CComponent<?, ?> component : new ArrayList<CComponent<?, ?>>(getComponents())) {
+        for (CComponent<?, ?, ?> component : new ArrayList<CComponent<?, ?, ?>>(getComponents())) {
             abandon(component);
         }
         container.clear();

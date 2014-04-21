@@ -30,10 +30,10 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.IFormDecorator;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class FormDecorator<E extends IEntity> extends FlowPanel implements IDecorator<CEntityForm<E>> {
+public class FormDecorator<E extends IEntity> extends FlowPanel implements IFormDecorator<E> {
 
     private CEntityForm<E> component;
 

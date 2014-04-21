@@ -38,12 +38,11 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<CEntityFolderItem<E>, E> {
+public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<CEntityFolderItem<E>, E, IFolderItemDecorator<E>> {
 
     private static final I18n i18n = I18n.get(CEntityFolderItem.class);
 
@@ -125,7 +124,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     protected abstract CEntityForm<? extends E> createItemForm(IObject<?> member);
 
     @Override
-    public void setDecorator(IDecorator<? super CEntityFolderItem<E>> decorator) {
+    public void setDecorator(IFolderItemDecorator<E> decorator) {
         super.setDecorator(decorator);
         ((IFolderItemDecorator) decorator).adoptItemActionsBar();
     }
@@ -157,7 +156,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onAdopt(final CEntityContainer<?, ?> parent) {
+    public void onAdopt(final CEntityContainer<?, ?, ?> parent) {
         super.onAdopt(parent);
 
         final CEntityFolder<E> folder = (CEntityFolder<E>) parent;
@@ -221,11 +220,11 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public Collection<CComponent<?, ?>> getComponents() {
+    public Collection<CComponent<?, ?, ?>> getComponents() {
         if (entityForm == null) {
             return null;
         }
-        return Arrays.asList(new CComponent<?, ?>[] { entityForm });
+        return Arrays.asList(new CComponent<?, ?, ?>[] { entityForm });
     }
 
 }

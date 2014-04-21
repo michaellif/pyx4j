@@ -37,11 +37,11 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
 public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
 
@@ -60,7 +60,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
     protected IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
         for (EntityFolderColumnDescriptor column : columns) {
-            CComponent<?, ?> component = createCell(column);
+            CField<?, ?> component = createCell(column);
             if (column.isReadOnly()) {
                 component.setViewable(true);
             }
@@ -71,20 +71,19 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         return main;
     }
 
-    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-        CComponent<?, ?> comp = inject(column.getObject());
+    protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        CField<?, ?> comp = inject(column.getObject());
 
         // Special TableFolder customization
         if (comp instanceof CCheckBox) {
             ((CCheckBox) comp).setAlignmet(CCheckBox.Alignment.center);
         }
-
         return comp;
     }
 
-    class CellDecorator extends SimplePanel implements IDecorator<CComponent<?, ?>> {
+    class CellDecorator extends SimplePanel implements IFieldDecorator {
 
-        private CComponent<?, ?> component;
+        private CField<?, ?> component;
 
         protected CellDecorator(String width) {
 
@@ -103,7 +102,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         }
 
         @Override
-        public void init(final CComponent<?, ?> component) {
+        public void init(final CField<?, ?> component) {
             this.component = component;
             final Widget nativeComponent = component.asWidget();
             nativeComponent.addStyleName(WidgetDecoratorComponent.name());
@@ -123,7 +122,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
 
         }
 
-        public CComponent<?, ?> getComnponent() {
+        public CField<?, ?> getComnponent() {
             return component;
         }
 

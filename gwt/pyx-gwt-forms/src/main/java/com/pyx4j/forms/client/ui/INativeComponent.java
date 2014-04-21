@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public interface INativeComponent<E> extends IsWidget {
 
-    CComponent<?, ?> getCComponent();
+    CComponent<?, ?, ?> getCComponent();
 
     SimplePanel getContentHolder();
 

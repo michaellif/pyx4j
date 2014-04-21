@@ -27,8 +27,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
-public abstract class CViewer<E> extends CComponent<CViewer<E>, E> {
+public abstract class CViewer<E> extends CComponent<CViewer<E>, E, IDecorator<CViewer<E>>> {
 
     private final NViewer<E> nativeComponent;
 

@@ -56,8 +56,8 @@ import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE>, DATA_TYPE> implements HasHandlers, HasPropertyChangeHandlers, IsWidget,
-        HasValueChangeHandlers<DATA_TYPE> {
+public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE>, DATA_TYPE, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
+        implements HasHandlers, HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
 
     private static final I18n i18n = I18n.get(CComponent.class);
 
@@ -88,7 +88,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private NoteStyle noteStyle;
 
-    private CEntityContainer<?, ?> parent;
+    private CEntityContainer<?, ?, ?> parent;
 
     private final Collection<IAccessAdapter> accessAdapters = new ArrayList<IAccessAdapter>();
 
@@ -116,7 +116,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     protected Set<AbstractValidationError> validationErrors = new HashSet<>();
 
-    private IDecorator<? super SELF_TYPE> decorator;
+    private DECORATOR_TYPE decorator;
 
     public CComponent() {
         this(null);
@@ -145,7 +145,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     /**
      * Basic information would be available in server log
      */
-    public static String runtimeCrashInfo(CComponent<?, ?> component) {
+    public static String runtimeCrashInfo(CComponent<?, ?, ?> component) {
         if (component == null) {
             return "n/a";
         }
@@ -161,7 +161,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.title);
     }
 
-    public CEntityContainer<?, ?> getParent() {
+    public CEntityContainer<?, ?, ?> getParent() {
         return parent;
     }
 
@@ -169,7 +169,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return parent != null;
     }
 
-    public void onAdopt(CEntityContainer<?, ?> parent) {
+    public void onAdopt(CEntityContainer<?, ?, ?> parent) {
         assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);
@@ -699,11 +699,11 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public abstract INativeComponent<DATA_TYPE> getNativeComponent();
 
-    public IDecorator<? super SELF_TYPE> getDecorator() {
+    public DECORATOR_TYPE getDecorator() {
         return decorator;
     }
 
-    public void setDecorator(IDecorator<? super SELF_TYPE> decorator) {
+    public void setDecorator(DECORATOR_TYPE decorator) {
         this.decorator = decorator;
         if (decorator == null) {
             getNativeComponent().getContentHolder().setWidget(getNativeComponent().getContent());

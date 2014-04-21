@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class EntityContainerCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IDecorator<CEntityForm<E>> {
+public class EntityContainerCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IFormDecorator<E> {
 
     private final EntityContainerDecoratorToolbar toolbar;
 

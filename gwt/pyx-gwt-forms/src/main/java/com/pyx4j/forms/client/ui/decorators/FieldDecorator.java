@@ -61,7 +61,7 @@ import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 
-public class FieldDecorator extends FlowPanel implements IDecorator<CField<?, ?>> {
+public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;

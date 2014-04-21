@@ -37,6 +37,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
@@ -103,10 +104,10 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
     }
 
     @Override
-    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+    protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
 
         if (column == proto().path()) {
-            CComponent<?, ?> comp = super.createCell(column);
+            CField<?, ?> comp = super.createCell(column);
             comp.setViewable(true);
             return comp;
         } else if (column == proto().restriction()) {
@@ -123,7 +124,7 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         if (tableProto != null) {
-            CComponent<?, ?> comp = get(proto().restriction());
+            CComponent<?, ?, ?> comp = get(proto().restriction());
             if (comp instanceof CComboBox) {
                 CComboBox<PropertyCriterion.Restriction> comboBox = (CComboBox<PropertyCriterion.Restriction>) comp;
                 IObject<?> member = tableProto.getMember(new Path(getValue().path().getValue()));

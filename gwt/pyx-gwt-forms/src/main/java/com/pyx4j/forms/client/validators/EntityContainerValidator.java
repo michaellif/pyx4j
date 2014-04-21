@@ -38,9 +38,9 @@ public class EntityContainerValidator extends AbstractComponentValidator {
         if (!(getComponent() instanceof CEntityContainer)) {
             throw new Error("EntityContainerValidator can be added only to CEntityContainer");
         }
-        CEntityContainer<?, ?> container = (CEntityContainer<?, ?>) getComponent();
+        CEntityContainer<?, ?, ?> container = (CEntityContainer<?, ?, ?>) getComponent();
         if (container.getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : container.getComponents()) {
+            for (CComponent<?, ?, ?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {
                     return new EntityContainerValidationError(container, i18n.tr("Form is not valid"));
                 }

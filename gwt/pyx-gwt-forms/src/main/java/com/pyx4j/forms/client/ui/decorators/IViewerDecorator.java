@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Apr 21, 2014
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.validators;
+package com.pyx4j.forms.client.ui.decorators;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.CViewer;
 
-/**
- * Created on 2008-08-01
- */
-public interface ComponentValidator<DATA_TYPE> {
-
-    public AbstractValidationError isValid();
-
-    void setComponent(CComponent<?, DATA_TYPE, ?> component);
+public interface IViewerDecorator<E extends IEntity> extends IDecorator<CViewer<E>> {
 
 }

@@ -50,14 +50,14 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE>, DATA_TYPE extends IObject<?>> extends
-        CComponent<SELF_TYPE, DATA_TYPE> implements IEditableComponentFactory {
+public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
+        extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE> implements IEditableComponentFactory {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityContainer.class);
 
-    private final HashMap<CComponent<?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?, ?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?>, HandlerRegistration>();
 
-    private final HashMap<CComponent<?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?, ?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?>, HandlerRegistration>();
 
     private ImageResource icon;
 
@@ -87,7 +87,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
         addComponentValidator(new EntityContainerValidator());
     }
 
-    public abstract Collection<? extends CComponent<?, ?>> getComponents();
+    public abstract Collection<? extends CComponent<?, ?, ?>> getComponents();
 
     protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
@@ -107,12 +107,12 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
         return null;
     }
 
-    protected <T> void updateContainer(CComponent<?, T> component) {
+    protected <T> void updateContainer(CComponent<?, T, ?> component) {
 
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void adopt(final CComponent<?, ?> component) {
+    public void adopt(final CComponent<?, ?, ?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
 
@@ -142,7 +142,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
         component.onAdopt(this);
     }
 
-    public void abandon(CComponent<?, ?> component) {
+    public void abandon(CComponent<?, ?, ?> component) {
         propertyChangeHandlerRegistrations.remove(component).removeHandler();
         valueChangeHandlerRegistrations.remove(component).removeHandler();
         component.onAbandon();
@@ -150,11 +150,11 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
 
     public void setVisitedRecursive() {
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?, ?> ccomponent : getComponents()) {
                 if (ccomponent instanceof CField) {
                     ((CField<?, ?>) ccomponent).setVisited(true);
                 } else if (ccomponent instanceof CEntityContainer) {
-                    ((CEntityContainer<?, ?>) ccomponent).setVisitedRecursive();
+                    ((CEntityContainer<?, ?, ?>) ccomponent).setVisitedRecursive();
                 }
             }
         }
@@ -169,7 +169,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     @Override
     protected void onReset() {
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?, ?, ?> ccomponent : getComponents()) {
                 ccomponent.reset();
             }
         }
@@ -181,7 +181,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
         super.applyVisibilityRules();
         asWidget().setVisible(isVisible());
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -195,7 +195,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?> component : getComponents()) {
                 component.applyViewabilityRules();
             }
         }
@@ -209,7 +209,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -223,7 +223,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?, ?, ?> component : getComponents()) {
                 component.applyEditabilityRules();
             }
         }
@@ -249,7 +249,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     /**
      * @deprecated use {@link setDecorator(IDecorator decorator)}
      */
-    protected IDecorator<? super SELF_TYPE> createDecorator() {
+    protected DECORATOR_TYPE createDecorator() {
         return null;
     }
 
@@ -260,7 +260,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
 
             nativeComponent.setContent(createContent());
 
-            IDecorator<? super SELF_TYPE> decorator = createDecorator();
+            DECORATOR_TYPE decorator = createDecorator();
             if (decorator != null) {
                 setDecorator(decorator);
             }
@@ -282,7 +282,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     }
 
     @Override
-    public void onAdopt(CEntityContainer<?, ?> parent) {
+    public void onAdopt(CEntityContainer<?, ?, ?> parent) {
         super.onAdopt(parent);
         if (!initiated) {
             init();
@@ -352,7 +352,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
         }
 
         @Override
-        public CComponent<?, ?> getCComponent() {
+        public CComponent<?, ?, ?> getCComponent() {
             return CEntityContainer.this;
         }
 

@@ -30,8 +30,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
-public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE> {
+public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TYPE>> extends
+        CComponent<CField<DATA_TYPE, WIDGET_TYPE>, DATA_TYPE, IFieldDecorator> {
 
     private WIDGET_TYPE nativeComponent;
 

@@ -24,17 +24,17 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class EntityContainerValidationError extends AbstractValidationError {
 
-    private final CComponent<?, ?> originator;
+    private final CComponent<?, ?, ?> originator;
 
     private final String message;
 
-    public EntityContainerValidationError(CComponent<?, ?> originator, String message) {
+    public EntityContainerValidationError(CComponent<?, ?, ?> originator, String message) {
         this.originator = originator;
         this.message = message;
     }
 
     @Override
-    public CComponent<?, ?> getOriginator() {
+    public CComponent<?, ?, ?> getOriginator() {
         return originator;
     }
 

@@ -46,7 +46,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         }
     }
 
-    private CEntityContainer<?, ?> entityContainer;
+    private CEntityContainer<?, ?, ?> entityContainer;
 
     private final SimplePanel actionsPanelHolder;
 
@@ -110,7 +110,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         caption.setVisible(!expanded);
     }
 
-    public void setEntityContainer(CEntityContainer<?, ?> entityContainer) {
+    public void setEntityContainer(CEntityContainer<?, ?, ?> entityContainer) {
         this.entityContainer = entityContainer;
         ImageResource icon = entityContainer.getIcon();
         if (icon != null) {
