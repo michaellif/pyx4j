@@ -110,7 +110,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
         return comp;
     }
 
-    public final CField<?, ?> inject(IObject<?> member, CField<?, ?> comp, IFieldDecorator decorator) {
+    public final <T extends CField<?, ?>> T inject(IObject<?> member, T comp, IFieldDecorator decorator) {
         comp.setDecorator(decorator);
         return inject(member, comp);
     }

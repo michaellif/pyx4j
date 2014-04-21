@@ -51,60 +51,60 @@ public abstract class PrimeEntityForm<E extends IEntity> extends CTabbedEntityFo
     }
 
     public final CField<?, ?> injectAndDecorate(IObject<?> member) {
-        CField<?, ?> comp = (CField<?, ?>) inject(member);
+        CField<?, ?> comp = inject(member);
         comp.setDecorator(new FieldDecoratorBuilder().build());
         return comp;
     }
 
     public final CField<?, ?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth, double contentWidth) {
-        CField<?, ?> comp = (CField<?, ?>) inject(member);
+        CField<?, ?> comp = inject(member);
         comp.setDecorator(new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
         return comp;
     }
 
     public final CField<?, ?> injectAndDecorate(IObject<?> member, double componentWidth, boolean dual) {
-        CField<?, ?> comp = (CField<?, ?>) inject(member);
+        CField<?, ?> comp = inject(member);
         comp.setDecorator(new FieldDecoratorBuilder(componentWidth, dual).build());
         return comp;
     }
 
     public final CField<?, ?> injectAndDecorate(IObject<?> member, double componentWidth) {
-        CField<?, ?> comp = (CField<?, ?>) inject(member);
+        CField<?, ?> comp = inject(member);
         comp.setDecorator(new FieldDecoratorBuilder(componentWidth).build());
         return comp;
     }
 
     public final CField<?, ?> injectAndDecorate(IObject<?> member, boolean dual) {
-        CField<?, ?> comp = (CField<?, ?>) inject(member);
+        CField<?, ?> comp = inject(member);
         comp.setDecorator(new FieldDecoratorBuilder(dual).build());
         return comp;
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp) {
         inject(member, comp);
         comp.setDecorator(new FieldDecoratorBuilder().build());
         return comp;
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, double labelWidth, double componentWidth, double contentWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double labelWidth, double componentWidth, double contentWidth) {
         inject(member, comp);
         comp.setDecorator(new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
         return comp;
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, double componentWidth, boolean dual) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth, boolean dual) {
         inject(member, comp);
         comp.setDecorator(new FieldDecoratorBuilder(componentWidth, dual).build());
         return comp;
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, double componentWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double componentWidth) {
         inject(member, comp);
         comp.setDecorator(new FieldDecoratorBuilder(componentWidth).build());
         return comp;
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, boolean dual) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, boolean dual) {
         inject(member, comp);
         comp.setDecorator(new FieldDecoratorBuilder(dual).build());
         return comp;
