@@ -703,6 +703,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return decorator;
     }
 
+    @SuppressWarnings("unchecked")
     public void setDecorator(DECORATOR_TYPE decorator) {
         this.decorator = decorator;
         if (decorator == null) {

@@ -327,7 +327,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
             return content;
         }
 
-        @SuppressWarnings({ "unchecked" })
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         public void setContent(IsWidget content) {
             this.content = content;
             content.asWidget().setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
