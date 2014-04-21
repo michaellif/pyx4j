@@ -80,11 +80,11 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return getWizard().inject(member, decorator);
     }
 
-    public CComponent<?, ?, ?> inject(IObject<?> member, CComponent<?, ?, ?> comp) {
+    public <T extends CComponent<?, ?, ?>> T inject(IObject<?> member, T comp) {
         return getWizard().inject(member, comp);
     }
 
-    public CField<?, ?> inject(IObject<?> member, CField<?, ?> comp, IFieldDecorator decorator) {
+    public <T extends CField<?, ?>> T inject(IObject<?> member, T comp, IFieldDecorator decorator) {
         return getWizard().inject(member, comp, decorator);
     }
 
@@ -108,23 +108,23 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return inject(member, new FieldDecoratorBuilder(labelWidth).build());
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp) {
         return inject(member, comp, new FieldDecoratorBuilder().build());
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, String labelWidth, String componentWidth, String contentWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, String labelWidth, String componentWidth, String contentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, int labelWidth, int componentWidth, int contentWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, int labelWidth, int componentWidth, int contentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, int labelWidth, int componentWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, int labelWidth, int componentWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth, componentWidth).build());
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, CField<?, ?> comp, int labelWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, int labelWidth) {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth).build());
     }
 
