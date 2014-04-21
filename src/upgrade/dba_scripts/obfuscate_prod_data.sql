@@ -95,10 +95,10 @@ BEGIN
         SET     merchant_terminal_id = LPAD(id::text,8,'X')
         WHERE   merchant_terminal_id IS NOT NULL; 
         
-        UPDATE  _admin_.pad_batch
+        UPDATE  _admin_.funds_transfer_batch
         SET     account_number = LPAD(id::text,12,'0');
         
-        UPDATE  _admin_.pad_debit_record
+        UPDATE  _admin_.funds_transfer_record
         SET     account_number = LPAD(id::text,12,'0');
 
         
