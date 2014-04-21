@@ -30,13 +30,12 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
 
     @Override
     public CField<?, ?> create(IObject<?> member) {
-        CField<?, ?> comp;
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().equals(CustomerSignature.class)) {
-            comp = new CSignature(mm.getCaption());
+            return new CSignature(mm.getCaption());
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
-            final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
-            c.setFormat(new IFormat<Country>() {
+            final CEntitySuggestBox<Country> comp = new CEntitySuggestBox<Country>(Country.class);
+            comp.setFormat(new IFormat<Country>() {
 
                 @Override
                 public String format(Country value) {
@@ -45,8 +44,8 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
 
                 @Override
                 public Country parse(String string) {
-                    for (Country option : c.getOptions()) {
-                        if (c.getOptionName(option).equals(string)) {
+                    for (Country option : comp.getOptions()) {
+                        if (comp.getOptionName(option).equals(string)) {
                             return option;
                         }
                     }
@@ -55,10 +54,9 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
                     return entity;
                 }
             });
-            comp = c;
+            return comp;
         } else {
-            comp = super.create(member);
+            return super.create(member);
         }
-        return comp;
     }
 }

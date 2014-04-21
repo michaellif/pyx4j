@@ -37,40 +37,41 @@ public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
 
     @Override
     public CField<?, ?> create(IObject<?> member) {
-        CField<?, ?> comp;
         MemberMeta mm = member.getMeta();
         if (mm.getObjectClassType() == ObjectClassType.Primitive) {
             if (mm.getValueClass().equals(String.class)) {
-                comp = new CLabel<String>();
+                return new CLabel<String>();
             } else if (mm.getValueClass().isEnum()) {
-                comp = new CEnumLabel();
+                return new CEnumLabel();
             } else if (mm.isNumberValueClass()) {
-                comp = new CNumberLabel();
+                CNumberLabel comp = new CNumberLabel();
                 if (mm.getFormat() != null) {
-                    ((CNumberLabel) comp).setNumberFormat(mm.getFormat(), mm.useMessageFormat());
+                    comp.setNumberFormat(mm.getFormat(), mm.useMessageFormat());
                 }
+                return comp;
             } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class) || mm.getValueClass().equals(LogicalDate.class)) {
-                comp = new CDateLabel();
+                CDateLabel comp = new CDateLabel();
                 if (mm.getFormat() != null) {
-                    ((CDateLabel) comp).setDateFormat(mm.getFormat());
+                    comp.setDateFormat(mm.getFormat());
                 }
+                return comp;
             } else if (mm.getValueClass().equals(Time.class)) {
-                comp = new CTimeLabel();
+                CTimeLabel comp = new CTimeLabel();
                 if (mm.getFormat() != null) {
-                    ((CTimeLabel) comp).setTimeFormat(mm.getFormat());
+                    comp.setTimeFormat(mm.getFormat());
                 }
+                return comp;
             } else if (mm.getValueClass() == Boolean.class) {
-                comp = new CBooleanLabel();
+                return new CBooleanLabel();
             } else {
-                comp = super.create(member);
+                return super.create(member);
             }
         } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
-            comp = new CEntityLabel();
+            return new CEntityLabel();
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
-            comp = new CEntityLabel();
+            return new CEntityLabel();
         } else {
-            comp = super.create(member);
+            return super.create(member);
         }
-        return super.create(member);
     }
 }
