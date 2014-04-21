@@ -92,24 +92,24 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
         }
     }
 
-    public final CComponent<?, ?> inject(IObject<?> member) {
-        CComponent<?, ?> comp = create(member);
-        bind(comp, member);
-        return comp;
-    }
-
-    public final <T extends CComponent<T, ?>> T inject(IObject<?> member, IDecorator<T> decorator) {
-        T comp = (T) inject(member);
-        comp.setDecorator(decorator);
-        return comp;
-    }
-
     public final <T extends CComponent<?, ?>> T inject(IObject<?> member, T comp) {
         bind(comp, member);
         return comp;
     }
 
-    public final <T extends CComponent<T, ?>> T inject(IObject<?> member, T comp, IDecorator<T> decorator) {
+    public final CField<?, ?> inject(IObject<?> member) {
+        CField<?, ?> comp = create(member);
+        bind(comp, member);
+        return comp;
+    }
+
+    public final CField<?, ?> inject(IObject<?> member, IDecorator<CField<?, ?>> decorator) {
+        CField<?, ?> comp = inject(member);
+        comp.setDecorator(decorator);
+        return comp;
+    }
+
+    public final CField<?, ?> inject(IObject<?> member, CField<?, ?> comp, IDecorator<CField<?, ?>> decorator) {
         comp.setDecorator(decorator);
         return inject(member, comp);
     }

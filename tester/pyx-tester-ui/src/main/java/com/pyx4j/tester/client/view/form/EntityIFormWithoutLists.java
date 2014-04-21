@@ -89,13 +89,15 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         e3.stringMember().setValue("Three");
         e3.integerMember().setValue(3);
         listBox.setOptions(Arrays.asList(e1, e2, e3));
+        listBox.setDecorator(new FormDecoratorBuilder().build());
 
-        main.setWidget(++row, 0, inject(proto().entityIIIList(), listBox, new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().entityIIIList(), listBox));
 
         CEntityListBox<EntityIII> setBox = new CEntityListBox<EntityIII>(SelectionMode.TWO_PANEL);
         setBox.setOptions(Arrays.asList(e1, e2, e3));
+        setBox.setDecorator(new FormDecoratorBuilder().build());
 
-        main.setWidget(++row, 0, inject(proto().entityIIIList2(), setBox, new FormDecoratorBuilder().build()));
+        main.setWidget(++row, 0, inject(proto().entityIIIList2(), setBox));
 
         // Personal Identity
         main.setWidget(
