@@ -51,39 +51,41 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public CField<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CField<?, ?> comp;
         if (mm.isEntity()) {
-            comp = new CEntityComboBox(mm.getObjectClass());
-            ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
+            CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
+            comp.setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
+            return comp;
         } else if ((mm.getObjectClassType() == ObjectClassType.EntityList) || (mm.getObjectClassType() == ObjectClassType.EntitySet)) {
-            comp = new CEntityComboBox(mm.getValueClass());
-            ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
+            CEntityComboBox comp = new CEntityComboBox(mm.getValueClass());
+            comp.setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
+            return comp;
         } else if (mm.getValueClass().isEnum()) {
-            comp = new CComboBox();
-            ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+            CComboBox comp = new CComboBox();
+            comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+            return comp;
         } else if (mm.getValueClass().equals(LogicalDate.class) || mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
-            comp = new CDatePicker();
+            return new CDatePicker();
         } else if (mm.getValueClass().equals(Integer.class)) {
-            comp = new CIntegerField();
+            return new CIntegerField();
         } else if (mm.getValueClass().equals(Key.class)) {
-            comp = new CKeyField();
+            return new CKeyField();
         } else if (mm.getValueClass().equals(BigDecimal.class)) {
-            comp = new CBigDecimalField();
+            return new CBigDecimalField();
         } else if (mm.getValueClass().equals(Long.class)) {
-            comp = new CLongField();
+            return new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
-            comp = new CDoubleField();
+            return new CDoubleField();
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            comp = new CComboBoxBoolean();
+            return new CComboBoxBoolean();
         } else {
             if (EditorType.phone.equals(mm.getEditorType())) {
-                comp = new CPhoneField();
-                ((CPhoneField) comp).setFormat(new CPhoneField.PhoneSearchFormat());
+                CPhoneField comp = new CPhoneField();
+                comp.setFormat(new CPhoneField.PhoneSearchFormat());
+                return comp;
             } else {
-                comp = new CTextField();
+                return new CTextField();
             }
         }
-        return comp;
     }
 
 }
