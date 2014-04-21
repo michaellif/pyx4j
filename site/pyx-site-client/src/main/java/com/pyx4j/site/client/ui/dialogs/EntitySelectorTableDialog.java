@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui.dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,17 +61,17 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
     private final ListerDataSource<E> dataSource;
 
-    private final List<E> alreadySelected;
+    private final Collection<E> alreadySelected;
 
     public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, String caption) {
         this(entityClass, false, isMultiselect, null, caption);
     }
 
-    public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, List<E> alreadySelected, String caption) {
+    public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, Collection<E> alreadySelected, String caption) {
         this(entityClass, false, isMultiselect, alreadySelected, caption);
     }
 
-    public EntitySelectorTableDialog(Class<E> entityClass, boolean isVersioned, boolean isMultiselect, List<E> alreadySelected, String caption) {
+    public EntitySelectorTableDialog(Class<E> entityClass, boolean isVersioned, boolean isMultiselect, Collection<E> alreadySelected, String caption) {
         super(caption);
 
         this.entityClass = entityClass;
