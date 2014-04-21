@@ -55,7 +55,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                     public void onSuccess(ApplicationDocumentationPolicy result) {
                         documentationPolicy = result;
 
-                        for (CComponent<?, ?> item : getComponents()) {
+                        for (CComponent<?, ?, ?> item : getComponents()) {
                             ((PersonalIncomeEditor) ((CEntityFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
                         }
                     }

@@ -71,13 +71,12 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             super(PageDescriptor.class, columns());
         }
 
-        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
-                CComponent<?, ?> comp = null;
+                CField<?, ?> comp = null;
                 comp = inject(column.getObject(), new CLabel<String>());
-                ((CField) comp).setNavigationCommand(new Command() {
+                comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         viewer.viewChild(getValue().getPrimaryKey());
@@ -90,7 +89,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public void adopt(final CComponent<?, ?> component) {
+    public void adopt(final CComponent<?, ?, ?> component) {
         // first two items are not editable
         if (this.getItemCount() < 2) {
             @SuppressWarnings("unchecked")

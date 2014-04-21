@@ -31,7 +31,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
 
     private final static I18n i18n = I18n.get(AdminUserForm.class);
 
-    private Map<CComponent<?, ?>, Condition> conditionalVisibilityMap;
+    private Map<CComponent<?, ?, ?>, Condition> conditionalVisibilityMap;
 
     private Condition isSelfManagedUserCondition;
 
@@ -40,7 +40,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
     public AdminUserForm(IForm<OperationsUserDTO> view) {
         super(OperationsUserDTO.class, view);
 
-        conditionalVisibilityMap = new HashMap<CComponent<?, ?>, Condition>();
+        conditionalVisibilityMap = new HashMap<CComponent<?, ?, ?>, Condition>();
 
         isSelfManagedUserCondition = new Condition() {
             @Override
@@ -70,7 +70,10 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
         content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().passwordConfirm(), new FieldDecoratorBuilder(true).build()), isNewUserCondition));
         content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().enabled(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
         content.setWidget(++row, 0, 2, addVisibilityCondition(inject(proto().role(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
-        content.setWidget(++row, 0, 2,
+        content.setWidget(
+                ++row,
+                0,
+                2,
                 addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
 
         content.setWidget(++row, 0, 2, inject(proto().credentialUpdated(), new FieldDecoratorBuilder(true).build()));
@@ -83,12 +86,12 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        for (Entry<CComponent<?, ?>, Condition> entry : conditionalVisibilityMap.entrySet()) {
+        for (Entry<CComponent<?, ?, ?>, Condition> entry : conditionalVisibilityMap.entrySet()) {
             entry.getKey().setVisible(entry.getValue().isVisible());
         }
     }
 
-    private CComponent<?, ?> addVisibilityCondition(CComponent<?, ?> widget, Condition condition) {
+    private CComponent<?, ?, ?> addVisibilityCondition(CComponent<?, ?, ?> widget, Condition condition) {
         conditionalVisibilityMap.put(widget, condition);
         return widget;
     }

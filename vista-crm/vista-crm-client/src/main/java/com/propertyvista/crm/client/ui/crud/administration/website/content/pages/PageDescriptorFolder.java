@@ -70,12 +70,11 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             super(PageDescriptor.class, columns());
         }
 
-        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
-                CComponent<?, ?> comp = new CLabel<String>();
-                ((CField) comp).setNavigationCommand(new Command() {
+                CField<?, ?> comp = new CLabel<String>();
+                comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         viewer.viewChild(getValue().getPrimaryKey());

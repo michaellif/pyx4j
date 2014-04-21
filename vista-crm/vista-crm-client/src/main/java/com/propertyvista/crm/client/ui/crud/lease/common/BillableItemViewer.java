@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -272,8 +273,7 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
                 }
 
                 if (comp != null) {
-                    @SuppressWarnings("unchecked")
-                    IDecorator<CField<BigDecimal, ?>> decor = (IDecorator<CField<BigDecimal, ?>>) get((proto().value())).getDecorator();
+                    IFieldDecorator decor = (IFieldDecorator) get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
                     comp.setDecorator(decor);

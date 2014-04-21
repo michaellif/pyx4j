@@ -447,7 +447,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
     }
 
-    private void crossValidate(CComponent<?, LogicalDate> date1, CComponent<?, LogicalDate> date2, String message) {
+    private void crossValidate(CComponent<?, LogicalDate, ?> date1, CComponent<?, LogicalDate, ?> date2, String message) {
         new StartEndDateValidation(date1, date2, message);
         date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
         date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));

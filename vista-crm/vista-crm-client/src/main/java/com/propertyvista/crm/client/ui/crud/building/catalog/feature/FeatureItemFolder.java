@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -77,7 +78,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().code().type().getValue()) {
             case Parking:
@@ -88,7 +89,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 break;
             }
 
-            CComponent<?, ?> comp;
+            CField<?, ?> comp;
             if (column.getObject() == proto().element()) {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {

@@ -92,7 +92,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
         setExpended(false);
     }
 
-    protected void addComponent(IObject<?> member, CComponent<?, ?> component) {
+    protected void addComponent(IObject<?> member, CComponent<?, ?, ?> component) {
         contentPanel.setWidget(++row, 0, form.inject(member, component));
     }
 

@@ -63,13 +63,13 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private Populator defaultPopulator;
 
-    private CEntityContainer<?, T> setupForm;
+    private CEntityContainer<?, T, ?> setupForm;
 
     private final T metadata;
 
     // TODO metadataClass argument is needed only for creation of the default metatada, remove when default metadata creation is implemented on server side
     @SuppressWarnings("unchecked")
-    public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CEntityContainer<?, T> setupForm) {
+    public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CEntityContainer<?, T, ?> setupForm) {
         assert metadata != null;
         this.metadata = (T) metadata;
         this.setupForm = setupForm;
@@ -418,9 +418,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected class SetupFormWrapper implements ISetup {
 
-        private final CEntityContainer<?, T> form;
+        private final CEntityContainer<?, T, ?> form;
 
-        public SetupFormWrapper(CEntityContainer<?, T> form) {
+        public SetupFormWrapper(CEntityContainer<?, T, ?> form) {
             assert form != null;
             this.form = form;
         }

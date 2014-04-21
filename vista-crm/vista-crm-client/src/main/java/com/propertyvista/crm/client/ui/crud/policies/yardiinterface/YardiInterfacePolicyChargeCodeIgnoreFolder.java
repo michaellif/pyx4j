@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -58,7 +59,7 @@ public class YardiInterfacePolicyChargeCodeIgnoreFolder extends VistaTableFolder
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column == proto().yardiChargeCode()) {
                 // TODO do we actually have to override the default CComponent?
                 return new CTextField();

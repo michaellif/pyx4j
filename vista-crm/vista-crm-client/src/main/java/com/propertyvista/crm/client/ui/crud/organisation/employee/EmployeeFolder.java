@@ -77,8 +77,8 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
 
             @SuppressWarnings("rawtypes")
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                CComponent<?, ?> comp = null;
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CField<?, ?> comp = null;
                 if (proto().title() == column.getObject()) {
                     comp = inject(column.getObject(), new CLabel<String>());
                 } else if (proto().name() == column.getObject()) {

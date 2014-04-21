@@ -90,9 +90,9 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().propertyCode() == column.getObject()) {
-                CComponent<?, ?> comp = inject(proto().propertyCode());
+                CField<?, ?> comp = inject(proto().propertyCode());
                 ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {

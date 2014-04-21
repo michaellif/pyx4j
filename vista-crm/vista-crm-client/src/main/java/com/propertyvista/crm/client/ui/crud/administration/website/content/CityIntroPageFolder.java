@@ -73,13 +73,12 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
             super(CityIntroPage.class, columns());
         }
 
-        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().cityName())) {
-                CComponent<?, ?> comp = null;
+                CField<?, ?> comp = null;
                 comp = inject(column.getObject(), new CLabel<String>());
-                ((CField) comp).setNavigationCommand(new Command() {
+                comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         viewer.viewChild(getValue().getPrimaryKey(), ContentManagement.Website.CityIntroPage.class);

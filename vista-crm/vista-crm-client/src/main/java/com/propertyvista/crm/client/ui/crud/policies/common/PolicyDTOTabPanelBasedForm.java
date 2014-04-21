@@ -202,7 +202,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             if (getValue() != null) {
                 Class<? extends PolicyNode> nodeType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
                 if (nodeTypeToComponentMap.containsKey(nodeType)) {
-                    CComponent<?, PolicyNode> comp = (CComponent<?, PolicyNode>) nodeTypeToComponentMap.get(nodeType);
+                    CComponent<?, PolicyNode, ?> comp = (CComponent<?, PolicyNode, ?>) nodeTypeToComponentMap.get(nodeType);
                     comp.setViewable(isViewable());
                 }
             }
@@ -254,13 +254,13 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                 @Override
                 public void onPropertyChange(PropertyChangeEvent event) {
                     if (event.getPropertyName().equals(PropertyChangeEvent.PropertyName.repopulated)) {
-                        for (CComponent<?, ?> nodeComponent : nodeTypeToComponentMap.values()) {
+                        for (CComponent<?, ?, ?> nodeComponent : nodeTypeToComponentMap.values()) {
                             nodeComponent.setVisible(false);
                             nodeComponent.setMandatory(false);
                         }
                         Class<? extends PolicyNode> nodeType = (Class<? extends PolicyNode>) getValue().getInstanceValueClass();
                         if (nodeTypeToComponentMap.containsKey(nodeType)) {
-                            CComponent<?, PolicyNode> comp = (CComponent<?, PolicyNode>) nodeTypeToComponentMap.get(nodeType);
+                            CComponent<?, PolicyNode, ?> comp = (CComponent<?, PolicyNode, ?>) nodeTypeToComponentMap.get(nodeType);
                             comp.setVisible(true);
                             comp.setMandatory(true);
                             comp.setViewable(false);

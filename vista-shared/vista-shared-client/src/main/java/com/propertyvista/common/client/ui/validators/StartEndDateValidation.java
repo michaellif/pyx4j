@@ -24,11 +24,11 @@ public class StartEndDateValidation {
 
     private static final I18n i18n = I18n.get(StartEndDateValidation.class);
 
-    public StartEndDateValidation(final CComponent<?, LogicalDate> start, final CComponent<?, LogicalDate> end) {
+    public StartEndDateValidation(final CComponent<?, LogicalDate, ?> start, final CComponent<?, LogicalDate, ?> end) {
         this(start, end, null);
     }
 
-    public StartEndDateValidation(final CComponent<?, LogicalDate> start, final CComponent<?, LogicalDate> end, String message) {
+    public StartEndDateValidation(final CComponent<?, LogicalDate, ?> start, final CComponent<?, LogicalDate, ?> end, String message) {
         if (message == null) {
             message = i18n.tr("The Start Date Must Be Earlier Than The End Date");
         }

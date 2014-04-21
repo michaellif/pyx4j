@@ -70,7 +70,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        for (CComponent<?, ?> comp : getComponents()) {
+        for (CComponent<?, ?, ?> comp : getComponents()) {
             ((PortalImageSetEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }

@@ -22,8 +22,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -66,8 +66,8 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
 
         @SuppressWarnings("unchecked")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp;
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CField<?, ?> comp;
 
             if (column.getObject() == proto().billableItem()) {
                 comp = inject(column.getObject(), new PapBillableItemLabel());
@@ -77,7 +77,7 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
 
             // handle value changes: 
             if (column.getObject() == proto().amount()) {
-                ((CComponent<?, BigDecimal>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                ((CField<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                         BigDecimal percent = BigDecimal.ONE;

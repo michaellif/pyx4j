@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -68,14 +67,13 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
     @Override
     protected CEntityForm<Portfolio> createItemForm(IObject<?> member) {
         return new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
-            @SuppressWarnings("rawtypes")
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                CComponent<?, ?> comp = null;
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CField<?, ?> comp = null;
 
                 if (proto().name() == column.getObject()) {
                     comp = inject(column.getObject(), new CLabel<String>());
-                    ((CField) comp).setNavigationCommand(new Command() {
+                    comp.setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Portfolio().formViewerPlace(getValue().id().getValue()));

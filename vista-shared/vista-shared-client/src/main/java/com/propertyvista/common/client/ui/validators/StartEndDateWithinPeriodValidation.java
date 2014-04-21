@@ -26,12 +26,12 @@ public class StartEndDateWithinPeriodValidation {
 
     private static final I18n i18n = I18n.get(StartEndDateWithinPeriodValidation.class);
 
-    public StartEndDateWithinPeriodValidation(final CComponent<?, LogicalDate> start, final CComponent<?, LogicalDate> end, int months, int days) {
+    public StartEndDateWithinPeriodValidation(final CComponent<?, LogicalDate, ?> start, final CComponent<?, LogicalDate, ?> end, int months, int days) {
         this(start, end, months, days, null);
     }
 
-    public StartEndDateWithinPeriodValidation(final CComponent<?, LogicalDate> start, final CComponent<?, LogicalDate> end, final int months, final int days,
-            String message) {
+    public StartEndDateWithinPeriodValidation(final CComponent<?, LogicalDate, ?> start, final CComponent<?, LogicalDate, ?> end, final int months,
+            final int days, String message) {
         if (message == null) {
             message = i18n.tr("The Start Date must be within Specified Period of the End Date");
         }

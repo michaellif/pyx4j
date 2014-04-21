@@ -97,9 +97,9 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().propertyCode() == column.getObject()) {
-                CComponent<?, ?> comp = inject(proto().propertyCode());
+                CField<?, ?> comp = inject(proto().propertyCode());
                 ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
@@ -110,7 +110,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
             } else if (proto().info() == column.getObject()) {
                 return inject(proto().info(), new CEntityLabel<BuildingInfo>());
             } else if (column.getObject() == proto().complexPrimary() && isEditable()) {
-                CComponent<?, ?> comp = inject(column.getObject());
+                CField<?, ?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
             }
@@ -126,7 +126,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < ComplexBuildingFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?> comp : ComplexBuildingFolder.this.getItem(i).getComponents()) {
+                            for (CComponent<?, ?, ?> comp : ComplexBuildingFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof ComplexBuildingEditor && !comp.equals(ComplexBuildingEditor.this)) {
                                     ((ComplexBuildingEditor) comp).get(proto().complexPrimary()).setValue(false);
                                 }

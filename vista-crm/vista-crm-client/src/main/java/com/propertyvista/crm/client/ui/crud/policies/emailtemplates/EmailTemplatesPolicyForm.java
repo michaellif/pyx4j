@@ -160,7 +160,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                         }
                     });
                     // change template object list when template type selection changes
-                    final CComponent<?, EmailTemplateType> comp = get(proto().type());
+                    final CComponent<?, EmailTemplateType, ?> comp = get(proto().type());
                     comp.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {

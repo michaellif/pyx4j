@@ -223,7 +223,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     main.setWidget(0, 0, inject(proto().resolvedDate(), new FieldDecoratorBuilder(10).build()));
                     main.setWidget(1, 0, inject(proto().resolution(), new FieldDecoratorBuilder(25).build()));
 
-                    CComponent<?, LogicalDate> datePicker = get(proto().resolvedDate());
+                    CComponent<?, LogicalDate, ?> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);
                     datePicker.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                         @Override

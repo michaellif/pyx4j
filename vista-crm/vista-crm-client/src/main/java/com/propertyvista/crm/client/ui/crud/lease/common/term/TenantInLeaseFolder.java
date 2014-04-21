@@ -84,7 +84,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
-        for (CComponent<?, ?> comp : getComponents()) {
+        for (CComponent<?, ?, ?> comp : getComponents()) {
             ((TenantInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
         }
     }

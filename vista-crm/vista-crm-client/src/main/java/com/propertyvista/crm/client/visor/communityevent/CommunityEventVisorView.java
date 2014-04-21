@@ -235,7 +235,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public void onAdopt(final CEntityContainer<?, ?> parent) {
+                public void onAdopt(final CEntityContainer<?, ?, ?> parent) {
                     super.onAdopt(parent);
                     addPropertyChangeHandler(new PropertyChangeHandler() {
 

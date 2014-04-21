@@ -50,7 +50,7 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
         content.setWidget(++row, 0, 2, inject(proto().yearRangeFutureSpan(), new FieldDecoratorBuilder(5, true).build()));
 
         // components tune up:
-        CComponent<?, ?> comp = get(proto().yearRangeStart());
+        CComponent<?, ?, ?> comp = get(proto().yearRangeStart());
         if (comp instanceof CMonthYearPicker) {
             int rangeStart = 1500;
             ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 - rangeStart) + ClientContext.getServerDate().getYear() + 1));

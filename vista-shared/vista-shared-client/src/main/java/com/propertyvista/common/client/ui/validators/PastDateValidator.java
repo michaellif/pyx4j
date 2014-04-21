@@ -49,7 +49,7 @@ public class PastDateValidator extends AbstractComponentValidator<LogicalDate> {
                 getComponent(), message);
     }
 
-    public AbstractValidationError isValid(CComponent<?, LogicalDate> component) {
+    public AbstractValidationError isValid(CComponent<?, LogicalDate, ?> component) {
         setComponent(component);
         return isValid();
     }

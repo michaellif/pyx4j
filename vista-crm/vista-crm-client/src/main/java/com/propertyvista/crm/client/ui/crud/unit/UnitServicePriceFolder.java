@@ -72,8 +72,8 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp;
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CField<?, ?> comp;
             if (column.getObject() == proto().code()) {
                 comp = inject(proto().code(), new CEntityLabel<ARCode>());
                 if (!isEditable()) {

@@ -86,7 +86,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < PmcPaymentMethodFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?> comp : PmcPaymentMethodFolder.this.getItem(i).getComponents()) {
+                            for (CComponent<?, ?, ?> comp : PmcPaymentMethodFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof PmcPaymentMethodEditor && !comp.equals(PmcPaymentMethodEditor.this)) {
                                     ((PmcPaymentMethodEditor) comp).get(proto().selectForEquifaxPayments()).setValue(false, false);
                                 }

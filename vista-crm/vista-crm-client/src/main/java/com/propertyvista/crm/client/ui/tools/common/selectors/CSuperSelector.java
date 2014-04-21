@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
@@ -32,7 +33,7 @@ import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
  * Use {link {@link #getSelectorWidget()} to access the wrapped widget
  */
 @Deprecated
-public class CSuperSelector<E extends IEntity> extends CComponent<CSuperSelector<E>, IList<E>> {
+public class CSuperSelector<E extends IEntity> extends CComponent<CSuperSelector<E>, IList<E>, IDecorator<CSuperSelector<E>>> {
 
     private final SuperSelector<E> superSelector;
 

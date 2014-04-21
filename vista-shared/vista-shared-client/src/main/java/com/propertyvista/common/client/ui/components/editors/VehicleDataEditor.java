@@ -57,10 +57,10 @@ public class VehicleDataEditor extends CEntityForm<Vehicle> {
 
         row = 0; // skip header
         panel.setWidget(++row, 1, inject(proto().plateNumber(), new FieldDecoratorBuilder(10).build()));
-        CComponent<?, Province> province;
-        panel.setWidget(++row, 1, province = (CComponent<?, Province>) inject(proto().province(), new FieldDecoratorBuilder(17).build()));
-        CComponent<?, Country> country;
-        panel.setWidget(++row, 1, country = (CComponent<?, Country>) inject(proto().country(), new FieldDecoratorBuilder(13).build()));
+        CComponent<?, Province, ?> province;
+        panel.setWidget(++row, 1, province = (CComponent<?, Province, ?>) inject(proto().province(), new FieldDecoratorBuilder(17).build()));
+        CComponent<?, Country, ?> country;
+        panel.setWidget(++row, 1, country = (CComponent<?, Country, ?>) inject(proto().country(), new FieldDecoratorBuilder(13).build()));
 
         ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
             @Override

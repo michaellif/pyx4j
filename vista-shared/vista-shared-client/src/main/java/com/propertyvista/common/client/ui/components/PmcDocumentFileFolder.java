@@ -23,8 +23,8 @@ import com.google.gwt.user.client.Window;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -54,7 +54,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().file().fileName()) {
                 CTextField cmp = new CTextField();
                 cmp.setNavigationCommand(new Command() {

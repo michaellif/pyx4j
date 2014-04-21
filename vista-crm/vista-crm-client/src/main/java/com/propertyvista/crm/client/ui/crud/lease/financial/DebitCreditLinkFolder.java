@@ -64,12 +64,11 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
     @Override
     protected CEntityForm<DebitLinkDTO> createItemForm(IObject<?> member) {
         return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
-            @SuppressWarnings("rawtypes")
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 if (column.getObject() == proto().debitAmount()) {
-                    CComponent<?, ?> comp = inject(column.getObject());
-                    ((CField) comp).setNavigationCommand(new Command() {
+                    CField<?, ?> comp = inject(column.getObject());
+                    comp.setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             AppSite.getPlaceController()
@@ -78,8 +77,8 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
                     });
                     return comp;
                 } else if (column.getObject() == proto().paidAmount()) {
-                    CComponent<?, ?> comp = inject(column.getObject());
-                    ((CField) comp).setNavigationCommand(new Command() {
+                    CField<?, ?> comp = inject(column.getObject());
+                    comp.setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             AppSite.getPlaceController().goTo(

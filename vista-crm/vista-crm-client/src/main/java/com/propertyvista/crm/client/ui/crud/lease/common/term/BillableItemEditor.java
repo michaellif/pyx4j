@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -83,9 +83,9 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
     private final LeaseTermEditorView leaseTermEditorView;
 
-    private CComponent<?, LogicalDate> itemEffectiveDateEditor;
+    private CComponent<?, LogicalDate, ?> itemEffectiveDateEditor;
 
-    private CComponent<?, LogicalDate> itemExpirationDateEditor;
+    private CComponent<?, LogicalDate, ?> itemExpirationDateEditor;
 
     public BillableItemEditor(CEntityForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
         super(BillableItem.class);
@@ -134,9 +134,9 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
         flexPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FieldDecoratorBuilder(10).build()));
         flexPanel.setWidget(++row, 0,
-                itemEffectiveDateEditor = (CComponent<?, LogicalDate>) inject(proto().effectiveDate(), new FieldDecoratorBuilder(9).build()));
+                itemEffectiveDateEditor = (CComponent<?, LogicalDate, ?>) inject(proto().effectiveDate(), new FieldDecoratorBuilder(9).build()));
         flexPanel.setWidget(row, 1,
-                itemExpirationDateEditor = (CComponent<?, LogicalDate>) inject(proto().expirationDate(), new FieldDecoratorBuilder(9).build()));
+                itemExpirationDateEditor = (CComponent<?, LogicalDate, ?>) inject(proto().expirationDate(), new FieldDecoratorBuilder(9).build()));
 
         flexPanel.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
         flexPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -218,7 +218,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                             item.inheritViewable(false);
 
                             // compensate the fact that item.setViewable DOESN'T call kids' setViewable!?
-                            for (CComponent<?, ?> comp : item.getComponents()) {
+                            for (CComponent<?, ?, ?> comp : item.getComponents()) {
                                 comp.setViewable(true);
                             }
                         }
@@ -361,11 +361,11 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
             @SuppressWarnings("unchecked")
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                CComponent<?, ?> comp = super.createCell(column);
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CField<?, ?> comp = super.createCell(column);
 
                 if (column.getObject() == proto().type()) {
-                    ((CComponent<?, Type>) comp).addValueChangeHandler(new ValueChangeHandler<Type>() {
+                    ((CComponent<?, Type, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<Type> event) {
                             bindValueEditor(event.getValue(), false);
@@ -397,7 +397,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
                 if (comp != null) {
                     @SuppressWarnings("unchecked")
-                    IDecorator<CField<BigDecimal, ?>> decor = (IDecorator<CField<BigDecimal, ?>>) get((proto().value())).getDecorator();
+                    IFieldDecorator decor = (IFieldDecorator) get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
                     comp.setDecorator(decor);
@@ -558,11 +558,11 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
             }
 
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 // TODO MoveIn Deposits
                 if (VistaTODO.VISTA_4340_MoveInDeposit) {
                     if (column.getObject() == proto().type()) {
-                        CComponent<?, ?> component = super.createCell(column);
+                        CField<?, ?> component = super.createCell(column);
                         if (component instanceof CComboBox) {
                             CComboBox<DepositType> typeCombox = (CComboBox<DepositType>) component;
                             typeCombox.setOptions(Arrays.asList(DepositType.LastMonthDeposit, DepositType.SecurityDeposit));
@@ -571,7 +571,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                     }
                 }
 
-                CComponent<?, ?> comp = super.createCell(column);
+                CField<?, ?> comp = super.createCell(column);
 
                 if (VistaFeatures.instance().yardiIntegration()) {
                     if (column.getObject() == proto().description()) {

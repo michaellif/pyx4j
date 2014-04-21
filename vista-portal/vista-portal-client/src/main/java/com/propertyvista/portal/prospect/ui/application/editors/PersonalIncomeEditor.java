@@ -309,7 +309,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
             protected IsWidget createContent() {
                 BasicFlexFormPanel main = new BasicFlexFormPanel();
 
-                CComponent<?, ?> name, ends;
+                CComponent<?, ?, ?> name, ends;
 
                 int row = -1;
                 main.setWidget(++row, 0, name = inject(proto().name(), new FieldDecoratorBuilder(250).build()));

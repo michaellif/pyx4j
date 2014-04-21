@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -56,7 +56,7 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
         return new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
 
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 if (proto().from() == column.getObject()) {
                     CDatePicker datePicker = new CDatePicker();
                     datePicker.setMandatory(true);

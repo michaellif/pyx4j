@@ -60,7 +60,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
 
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
-        for (CComponent<?, ?> comp : getComponents()) {
+        for (CComponent<?, ?, ?> comp : getComponents()) {
             ((PortalBannerImageEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }

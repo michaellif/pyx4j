@@ -132,10 +132,10 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
         CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
 
-        CComponent<?, LogicalDate> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
-        CComponent<?, LogicalDate> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
-        CComponent<?, LogicalDate> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
-        CComponent<?, LogicalDate> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
+        CComponent<?, LogicalDate, ?> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
+        CComponent<?, LogicalDate, ?> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
+        CComponent<?, LogicalDate, ?> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
+        CComponent<?, LogicalDate, ?> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
@@ -212,7 +212,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
         enablePreviousAddress();
     }
 
-    private void StartEndDateWithinMonth(final CComponent<?, LogicalDate> value1, final CComponent<?, LogicalDate> value2, final String message) {
+    private void StartEndDateWithinMonth(final CComponent<?, LogicalDate, ?> value1, final CComponent<?, LogicalDate, ?> value2, final String message) {
         value1.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
 
             @Override

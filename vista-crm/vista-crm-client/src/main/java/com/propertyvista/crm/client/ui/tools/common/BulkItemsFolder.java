@@ -28,7 +28,7 @@ public abstract class BulkItemsFolder<Item extends BulkEditableEntity> extends V
     }
 
     public void checkAll(boolean isChecked) {
-        for (CComponent<?, ?> c : getComponents()) {
+        for (CComponent<?, ?, ?> c : getComponents()) {
             if (c instanceof CEntityFolderItem) {
                 BulkEditableEntityForm<?> form = (BulkEditableEntityForm<?>) ((CEntityFolderItem<?>) c).getComponents().iterator().next();
                 form.setChecked(isChecked);

@@ -89,7 +89,8 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
         return main;
     }
 
-    private void attachFilters(final AddressSimple proto, CComponent<?, Province> province, CComponent<?, Country> country, CComponent<?, String> postalCode) {
+    private void attachFilters(final AddressSimple proto, CComponent<?, Province, ?> province, CComponent<?, Country, ?> country,
+            CComponent<?, String, ?> postalCode) {
         postalCode.addComponentValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

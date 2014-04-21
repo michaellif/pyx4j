@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -72,19 +72,19 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return getWizard().proto();
     }
 
-    public CComponent<?, ?> inject(IObject<?> member) {
+    public CComponent<?, ?, ?> inject(IObject<?> member) {
         return getWizard().inject(member);
     }
 
-    public CField<?, ?> inject(IObject<?> member, IDecorator<CField<?, ?>> decorator) {
+    public CField<?, ?> inject(IObject<?> member, IFieldDecorator decorator) {
         return getWizard().inject(member, decorator);
     }
 
-    public CComponent<?, ?> inject(IObject<?> member, CComponent<?, ?> comp) {
+    public CComponent<?, ?, ?> inject(IObject<?> member, CComponent<?, ?, ?> comp) {
         return getWizard().inject(member, comp);
     }
 
-    public CField<?, ?> inject(IObject<?> member, CField<?, ?> comp, IDecorator<CField<?, ?>> decorator) {
+    public CField<?, ?> inject(IObject<?> member, CField<?, ?> comp, IFieldDecorator decorator) {
         return getWizard().inject(member, comp, decorator);
     }
 
@@ -128,15 +128,15 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return inject(member, comp, new FieldDecoratorBuilder(labelWidth).build());
     }
 
-    public <T extends IEntity> CComponent<?, T> get(T member) {
+    public <T extends IEntity> CComponent<?, T, ?> get(T member) {
         return getWizard().get(member);
     }
 
-    public <T extends IEntity> CComponent<?, List<T>> get(IList<T> member) {
+    public <T extends IEntity> CComponent<?, List<T>, ?> get(IList<T> member) {
         return getWizard().get(member);
     }
 
-    public <T> CComponent<?, T> get(IObject<T> member) {
+    public <T> CComponent<?, T, ?> get(IObject<T> member) {
         return getWizard().get(member);
     }
 

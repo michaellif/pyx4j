@@ -76,8 +76,8 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = null;
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CField<?, ?> comp = null;
             if (column.getObject().equals(proto().name())) {
                 comp = new CLabel<String>();
                 ((CField) comp).setNavigationCommand(new Command() {

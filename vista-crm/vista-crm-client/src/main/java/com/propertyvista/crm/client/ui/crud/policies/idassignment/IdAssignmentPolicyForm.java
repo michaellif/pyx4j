@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -87,7 +88,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
             }
 
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 if (column.getObject() == proto().target()) {
                     return inject(column.getObject(), new CEnumLabel());
                 }

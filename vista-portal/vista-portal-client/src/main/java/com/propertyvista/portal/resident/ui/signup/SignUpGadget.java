@@ -156,12 +156,12 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         private final TenantPasswordStrengthRule passwordStrengthRule;
 
-        private final List<CComponent<?, ?>> validationList;
+        private final List<CComponent<?, ?, ?>> validationList;
 
         public SignUpForm() {
             super(ResidentSelfRegistrationDTO.class);
             this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
-            validationList = new ArrayList<CComponent<?, ?>>();
+            validationList = new ArrayList<CComponent<?, ?, ?>>();
         }
 
         @SuppressWarnings("unchecked")
@@ -276,7 +276,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             if (caught != null) {
                 for (MemberValidationError memberError : caught.getErrors()) {
                     // add member validator if not done before
-                    CComponent<?, ?> comp = get(memberError.getMember());
+                    CComponent<?, ?, ?> comp = get(memberError.getMember());
                     if (!validationList.contains(comp)) {
                         comp.addComponentValidator(new FormMemberValidator(memberError.getMember()));
                         validationList.add(comp);

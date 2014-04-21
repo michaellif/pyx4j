@@ -58,8 +58,8 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
     public void addValidations() {
         super.addValidations();
 
-        CComponent<?, Province> province = get(proto().province());
-        CComponent<?, Country> country = get(proto().country());
+        CComponent<?, Province, ?> province = get(proto().province());
+        CComponent<?, Country, ?> country = get(proto().country());
 
         @SuppressWarnings("unchecked")
         CTextFieldBase<String, ?> postalCode = (CTextFieldBase<String, ?>) get(proto().postalCode());

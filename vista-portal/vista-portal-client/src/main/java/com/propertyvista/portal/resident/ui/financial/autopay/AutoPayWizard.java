@@ -105,7 +105,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
                 ((AutoPayWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
@@ -125,7 +125,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         }
     };
 
-    private final CComponent<?, ?> totalWidget;
+    private final CComponent<?, ?, ?> totalWidget;
 
     private AutoPayWizardView.Presenter presenter;
 

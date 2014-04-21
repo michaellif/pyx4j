@@ -62,7 +62,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSumma
                 }
             }
         });
-        CComponent<?, Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.copyOf(PaymentStatus.processed()),
+        CComponent<?, Set<PaymentStatus>, ?> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.copyOf(PaymentStatus.processed()),
                 Layout.Horizontal);
         paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentStatus>>() {
 

@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;
@@ -81,7 +82,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
             isSelectedAndCaptionHolderPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelectedAndCaptionHolderPanel.getElement().getStyle().setPaddingBottom(10, Unit.PX);
 
-            final CComponent<?, Boolean> isSelected = (CComponent<?, Boolean>) inject(proto().isSelected());
+            final CField<Boolean, ?> isSelected = (CField<Boolean, ?>) inject(proto().isSelected());
             isSelected.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             isSelected.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelected.asWidget().getElement().getStyle().setPaddingRight(15, Unit.PX);
@@ -94,7 +95,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
             });
             isSelectedAndCaptionHolderPanel.add(isSelected);
 
-            CComponent<?, ?> caption = inject(proto().caption(), new PapReviewCaptionViewer());
+            CComponent<?, ?, ?> caption = inject(proto().caption(), new PapReviewCaptionViewer());
             caption.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             caption.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelectedAndCaptionHolderPanel.add(caption);

@@ -48,7 +48,7 @@ public class FutureDateIncludeTodayValidator extends AbstractComponentValidator<
                 : new FieldValidationError(getComponent(), message);
     }
 
-    public AbstractValidationError isValid(CComponent<?, LogicalDate> component) {
+    public AbstractValidationError isValid(CComponent<?, LogicalDate, ?> component) {
         setComponent(component);
         return isValid();
     }

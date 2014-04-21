@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -65,8 +66,8 @@ public class PapCoveredItemFolder extends VistaTableFolder<AutopayAgreement.Auto
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp;
+        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            CField<?, ?> comp;
 
             if (column.getObject() == proto().billableItem()) {
                 comp = inject(column.getObject(), new PapBillableItemLabel());
