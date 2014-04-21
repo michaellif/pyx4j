@@ -40,7 +40,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.PropertyMapper;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsComparisonDTO;

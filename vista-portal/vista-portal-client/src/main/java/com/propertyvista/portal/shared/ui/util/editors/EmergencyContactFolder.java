@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -44,12 +43,8 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof EmergencyContact) {
-            return new EmergencyContactEditor();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<EmergencyContact> createItemForm(IObject<?> member) {
+        return new EmergencyContactEditor();
     }
 
     @Override

@@ -176,11 +176,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof PreauthorizedPaymentDTO) {
-                return new PreauthorizedPaymentEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<PreauthorizedPaymentDTO> createItemForm(IObject<?> member) {
+            return new PreauthorizedPaymentEditor();
         }
 
         @Override

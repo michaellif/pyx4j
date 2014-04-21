@@ -19,8 +19,8 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
+import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.server.TaskRunner;
 
 public class MerchantTerminalSourceTenantSure implements MerchantTerminalSource {

@@ -20,6 +20,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,11 +51,8 @@ public class PapCoveredItemFolder extends VistaTableFolder<AutopayAgreement.Auto
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof AutopayAgreementCoveredItem) {
-            return new CoveredItemViewer();
-        }
-        return super.create(member);
+    protected CEntityForm<AutopayAgreementCoveredItem> createItemForm(IObject<?> member) {
+        return new CoveredItemViewer();
     }
 
     class CoveredItemViewer extends CEntityFolderRowEditor<AutopayAgreementCoveredItem> {

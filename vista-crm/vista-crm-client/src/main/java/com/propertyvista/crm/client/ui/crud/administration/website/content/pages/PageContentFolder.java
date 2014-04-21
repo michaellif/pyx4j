@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -90,11 +89,8 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PageContent) {
-            return new PageContentEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<PageContent> createItemForm(IObject<?> member) {
+        return new PageContentEditor();
     }
 
     @Override

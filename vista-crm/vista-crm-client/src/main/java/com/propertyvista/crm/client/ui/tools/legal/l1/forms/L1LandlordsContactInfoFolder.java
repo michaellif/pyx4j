@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
@@ -27,11 +27,7 @@ public class L1LandlordsContactInfoFolder extends VistaBoxFolder<L1LandlordsCont
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof L1LandlordsContactInfo) {
-            return new L1LandlordsContactInfoForm();
-        }
-        return super.create(member);
+    protected CEntityForm<L1LandlordsContactInfo> createItemForm(IObject<?> member) {
+        return new L1LandlordsContactInfoForm();
     }
-
 }

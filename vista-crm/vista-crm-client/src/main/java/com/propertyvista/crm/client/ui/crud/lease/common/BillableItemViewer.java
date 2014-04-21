@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
@@ -243,11 +242,8 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof BillableItemAdjustment) {
-                return new BillableItemAdjustmentEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<? extends BillableItemAdjustment> createItemForm(IObject<?> member) {
+            return new BillableItemAdjustmentEditor();
         }
 
         private class BillableItemAdjustmentEditor extends CEntityFolderRowEditor<BillableItemAdjustment> {
@@ -306,11 +302,8 @@ public class BillableItemViewer extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Deposit) {
-                return new DepositEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<Deposit> createItemForm(IObject<?> member) {
+            return new DepositEditor();
         }
 
         private class DepositEditor extends CEntityFolderRowEditor<Deposit> {

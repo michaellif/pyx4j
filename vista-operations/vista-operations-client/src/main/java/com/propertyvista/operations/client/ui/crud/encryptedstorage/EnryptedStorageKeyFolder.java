@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
@@ -32,13 +32,10 @@ public class EnryptedStorageKeyFolder extends VistaBoxFolder<EncryptedStorageKey
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof EncryptedStorageKeyDTO) {
-            EncryptedStorageKeyForm form = new EncryptedStorageKeyForm();
-            form.setPresenter(presenter);
-            return form;
-        }
-        return super.create(member);
+    protected CEntityForm<EncryptedStorageKeyDTO> createItemForm(IObject<?> member) {
+        EncryptedStorageKeyForm form = new EncryptedStorageKeyForm();
+        form.setPresenter(presenter);
+        return form;
     }
 
     public void setPresenter(EncryptedStorageView.Presenter presenter) {

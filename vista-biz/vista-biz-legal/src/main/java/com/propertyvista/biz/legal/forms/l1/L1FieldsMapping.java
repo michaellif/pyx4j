@@ -41,8 +41,8 @@ import com.propertyvista.domain.legal.l1.L1TenantInfo;
 import com.propertyvista.domain.legal.l1.NsfChargeDetails;
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
-import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 
 public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
 

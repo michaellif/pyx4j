@@ -26,7 +26,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
@@ -162,12 +161,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ILSSummaryFloorplan) {
-                return new ILSSummaryEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<ILSSummaryFloorplan> createItemForm(IObject<?> member) {
+            return new ILSSummaryEditor();
         }
 
         private class ILSSummaryEditor extends CEntityForm<ILSSummaryFloorplan> {
@@ -198,12 +193,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ILSProfileFloorplan) {
-                return new ILSProfileFloorplanEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<ILSProfileFloorplan> createItemForm(IObject<?> member) {
+            return new ILSProfileFloorplanEditor();
         }
 
         @Override

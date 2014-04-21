@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -69,7 +69,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
         if (proto().lang().getPath().equals(member.getPath())) {
             return new CLabel();
         }

@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -75,11 +75,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (clazz.equals(member.getObjectClass())) {
-            return new CEntityFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<? extends E> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
     }
 }

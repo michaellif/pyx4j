@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.ils;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
@@ -30,12 +30,8 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ILSEmailConfig) {
-            return new ILSEmailConfigEditor();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<ILSEmailConfig> createItemForm(IObject<?> member) {
+        return new ILSEmailConfigEditor();
     }
 
     class ILSEmailConfigEditor extends AccessoryEntityForm<ILSEmailConfig> {

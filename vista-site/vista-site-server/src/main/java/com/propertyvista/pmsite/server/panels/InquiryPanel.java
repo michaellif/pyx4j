@@ -34,7 +34,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import templates.TemplateResources;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;

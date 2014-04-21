@@ -24,8 +24,8 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
-import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
+import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 
 public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimFile> {
 

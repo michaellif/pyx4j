@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -38,11 +38,8 @@ public class YardiCredentialFolder extends VistaBoxFolder<PmcYardiCredential> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PmcYardiCredential) {
-            return new YardiCredentialEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<PmcYardiCredential> createItemForm(IObject<?> member) {
+        return new YardiCredentialEditor();
     }
 
     @Override

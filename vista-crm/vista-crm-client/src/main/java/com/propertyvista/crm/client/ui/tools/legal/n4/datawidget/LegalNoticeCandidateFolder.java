@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.tools.legal.n4.datawidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
 import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
@@ -29,11 +29,7 @@ public class LegalNoticeCandidateFolder extends BulkItemsFolder<LegalNoticeCandi
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LegalNoticeCandidateDTO) {
-            return new LegalNoticeCandidateForm();
-        }
-        return super.create(member);
+    protected CEntityForm<LegalNoticeCandidateDTO> createItemForm(IObject<?> member) {
+        return new LegalNoticeCandidateForm();
     }
-
 }

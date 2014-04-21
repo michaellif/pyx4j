@@ -20,6 +20,7 @@ import java.util.List;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -75,11 +76,8 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof IdAssignmentItem) {
-                return new IdAssignmentItemEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<IdAssignmentItem> createItemForm(IObject<?> member) {
+            return new IdAssignmentItemEditor();
         }
 
         private class IdAssignmentItemEditor extends CEntityFolderRowEditor<IdAssignmentItem> {

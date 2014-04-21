@@ -21,7 +21,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CPercentageLabel;
@@ -46,11 +45,8 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PreauthorizedPaymentCoveredItemDTO) {
-            return new CoveredItemDtoEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<PreauthorizedPaymentCoveredItemDTO> createItemForm(IObject<?> member) {
+        return new CoveredItemDtoEditor();
     }
 
     class CoveredItemDtoEditor extends CEntityForm<PreauthorizedPaymentCoveredItemDTO> {

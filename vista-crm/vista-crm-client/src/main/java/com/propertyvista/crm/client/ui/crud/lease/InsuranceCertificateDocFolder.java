@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -40,11 +39,8 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof InsuranceCertificateScan) {
-            return new CertificateScanViewer();
-        }
-        return super.create(member);
+    protected CEntityForm<InsuranceCertificateScan> createItemForm(IObject<?> member) {
+        return new CertificateScanViewer();
     }
 
     private class CertificateScanViewer extends CEntityForm<InsuranceCertificateScan> {

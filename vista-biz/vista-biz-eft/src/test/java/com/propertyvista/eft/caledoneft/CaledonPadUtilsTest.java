@@ -15,8 +15,6 @@ package com.propertyvista.eft.caledoneft;
 
 import java.math.BigDecimal;
 
-import com.propertyvista.eft.caledoneft.CaledonPadUtils;
-
 import junit.framework.TestCase;
 
 public class CaledonPadUtilsTest extends TestCase {

@@ -23,8 +23,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.validation.framework.CollectionValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class HasAtLeastOneApplicantValidator implements CollectionValidator<LeaseTermTenant> {
 

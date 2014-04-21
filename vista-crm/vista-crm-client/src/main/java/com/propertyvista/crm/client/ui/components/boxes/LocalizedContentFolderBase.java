@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -78,11 +77,8 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ILocalizedEntity) {
-            return new LocalizedContentEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<E> createItemForm(IObject<?> member) {
+        return new LocalizedContentEditor();
     }
 
     public abstract IsWidget createEditorContent(CEntityForm<E> editor);

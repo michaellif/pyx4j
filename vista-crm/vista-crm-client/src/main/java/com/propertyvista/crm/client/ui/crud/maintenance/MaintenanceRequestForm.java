@@ -36,7 +36,6 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -635,11 +634,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof MaintenanceRequestSchedule) {
-                return new MaintenanceRequestScheduleViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<MaintenanceRequestSchedule> createItemForm(IObject<?> member) {
+            return new MaintenanceRequestScheduleViewer();
         }
 
         @Override
@@ -762,11 +758,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof MaintenanceRequestStatusRecord) {
-                return new StatusRecordViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<MaintenanceRequestStatusRecord> createItemForm(IObject<?> member) {
+            return new StatusRecordViewer();
         }
 
         class StatusRecordViewer extends CEntityForm<MaintenanceRequestStatusRecord> {

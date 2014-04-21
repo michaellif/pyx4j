@@ -19,7 +19,6 @@ import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
 import com.propertyvista.biz.system.eft.PaymentProcessingException;
-import com.propertyvista.eft.caledoncards.CaledonPaymentProcessor;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
 import com.propertyvista.operations.domain.eft.cards.to.Merchant;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentRequest;

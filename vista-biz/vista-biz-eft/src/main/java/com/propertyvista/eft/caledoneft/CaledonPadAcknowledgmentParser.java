@@ -25,8 +25,8 @@ import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckBatch;
-import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
 
 class CaledonPadAcknowledgmentParser {
 

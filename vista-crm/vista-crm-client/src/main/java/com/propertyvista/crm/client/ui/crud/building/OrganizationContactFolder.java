@@ -18,7 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -38,12 +38,8 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof OrganizationContact) {
-            return new OrganizationContactEditor();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<OrganizationContact> createItemForm(IObject<?> member) {
+        return new OrganizationContactEditor();
     }
 
     private BuildingEditorView.Presenter getPresenter() {

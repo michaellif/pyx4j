@@ -40,7 +40,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -195,17 +194,13 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof AddGadgetGadgetDescriptor) {
-                return new GadgetDescriptorForm();
-            } else {
-                return super.create(member);
-            }
+        public IFolderItemDecorator<AddGadgetGadgetDescriptor> createItemDecorator() {
+            return new GadgetDescriptorDecorator();
         }
 
         @Override
-        public IFolderItemDecorator<AddGadgetGadgetDescriptor> createItemDecorator() {
-            return new GadgetDescriptorDecorator();
+        protected CEntityForm<AddGadgetGadgetDescriptor> createItemForm(IObject<?> member) {
+            return new GadgetDescriptorForm();
         }
     }
 

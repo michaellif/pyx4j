@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -87,11 +86,8 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof PreauthorizedPaymentDTO) {
-                return new PreauthorizedPaymentEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<PreauthorizedPaymentDTO> createItemForm(IObject<?> member) {
+            return new PreauthorizedPaymentEditor();
         }
 
         @Override

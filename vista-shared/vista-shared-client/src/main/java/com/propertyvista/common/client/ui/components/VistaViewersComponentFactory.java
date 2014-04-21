@@ -22,10 +22,10 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
@@ -36,40 +36,40 @@ import com.propertyvista.domain.ref.Province;
 public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
+        CField<?, ?> comp;
         MemberMeta mm = member.getMeta();
         if (mm.getObjectClassType() == ObjectClassType.Primitive) {
             if (mm.getValueClass().equals(String.class)) {
-                return new CLabel();
+                comp = new CLabel<String>();
             } else if (mm.getValueClass().isEnum()) {
-                return new CEnumLabel();
+                comp = new CEnumLabel();
             } else if (mm.isNumberValueClass()) {
-                CNumberLabel comp = new CNumberLabel();
+                comp = new CNumberLabel();
                 if (mm.getFormat() != null) {
-                    (comp).setNumberFormat(mm.getFormat(), mm.useMessageFormat());
+                    ((CNumberLabel) comp).setNumberFormat(mm.getFormat(), mm.useMessageFormat());
                 }
-                return comp;
             } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class) || mm.getValueClass().equals(LogicalDate.class)) {
-                CDateLabel comp = new CDateLabel();
+                comp = new CDateLabel();
                 if (mm.getFormat() != null) {
-                    (comp).setDateFormat(mm.getFormat());
+                    ((CDateLabel) comp).setDateFormat(mm.getFormat());
                 }
-                return comp;
             } else if (mm.getValueClass().equals(Time.class)) {
-                CTimeLabel comp = new CTimeLabel();
+                comp = new CTimeLabel();
                 if (mm.getFormat() != null) {
-                    (comp).setTimeFormat(mm.getFormat());
+                    ((CTimeLabel) comp).setTimeFormat(mm.getFormat());
                 }
-                return comp;
             } else if (mm.getValueClass() == Boolean.class) {
-                return new CBooleanLabel();
+                comp = new CBooleanLabel();
             } else {
-                return super.create(member);
+                comp = super.create(member);
             }
         } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
-            return new CEntityLabel();
+            comp = new CEntityLabel();
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
-            return new CEntityLabel();
+            comp = new CEntityLabel();
+        } else {
+            comp = super.create(member);
         }
         return super.create(member);
     }

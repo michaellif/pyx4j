@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;

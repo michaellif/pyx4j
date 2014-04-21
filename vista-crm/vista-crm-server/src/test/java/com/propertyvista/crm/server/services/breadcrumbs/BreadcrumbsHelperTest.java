@@ -27,7 +27,6 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.crm.server.services.breadcrumbs.BreadcrumbsHelper;
 
 public class BreadcrumbsHelperTest {
 

@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -99,11 +98,8 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof CommunicationMessage) {
-                return new MessageFolderItem();
-            }
-            return super.create(member);
+        protected CEntityForm<CommunicationMessage> createItemForm(IObject<?> member) {
+            return new MessageFolderItem();
         }
 
         @Override

@@ -110,18 +110,15 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof SiteImageSet) {
-            PortalImageSetEditor editor = new PortalImageSetEditor();
-            if (imageSize != null) {
-                editor.setImageSize(imageSize.width, imageSize.height);
-            }
-            if (thumbSize != null) {
-                editor.setThumbSize(thumbSize.width, thumbSize.height);
-            }
-            return editor;
+    protected CEntityForm<SiteImageSet> createItemForm(IObject<?> member) {
+        PortalImageSetEditor editor = new PortalImageSetEditor();
+        if (imageSize != null) {
+            editor.setImageSize(imageSize.width, imageSize.height);
         }
-        return super.create(member);
+        if (thumbSize != null) {
+            editor.setThumbSize(thumbSize.width, thumbSize.height);
+        }
+        return editor;
     }
 
     class PortalImageSetEditor extends AccessoryEntityForm<SiteImageSet> {

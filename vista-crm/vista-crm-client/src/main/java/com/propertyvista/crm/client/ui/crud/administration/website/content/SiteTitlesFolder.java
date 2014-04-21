@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -77,11 +77,8 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof SiteTitles) {
-            return new SiteTitlesEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<SiteTitles> createItemForm(IObject<?> member) {
+        return new SiteTitlesEditor();
     }
 
     class SiteTitlesEditor extends AccessoryEntityForm<SiteTitles> {

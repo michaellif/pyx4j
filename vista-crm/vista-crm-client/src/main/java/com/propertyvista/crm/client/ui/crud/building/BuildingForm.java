@@ -60,6 +60,7 @@ import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -220,7 +221,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         flexPanel.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
 //        if (isEditable()) {
-        flexPanel.setWidget(row, 0, inject(proto().geoLocation()));
+        flexPanel.setWidget(row, 0, inject(proto().geoLocation(), new GeoLocationEditor()));
 //        } else {
 //            main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
 //        }
@@ -473,12 +474,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ILSSummaryBuilding) {
-                return new ILSSummaryEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<ILSSummaryBuilding> createItemForm(IObject<?> member) {
+            return new ILSSummaryEditor();
         }
 
         private class ILSSummaryEditor extends AccessoryEntityForm<ILSSummaryBuilding> {
@@ -519,12 +516,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ILSProfileBuilding) {
-                return new ILSProfileBuildingEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<ILSProfileBuilding> createItemForm(IObject<?> member) {
+            return new ILSProfileBuildingEditor();
         }
 
         @Override

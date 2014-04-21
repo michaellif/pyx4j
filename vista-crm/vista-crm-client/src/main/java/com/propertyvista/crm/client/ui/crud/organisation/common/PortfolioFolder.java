@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -65,33 +66,30 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Portfolio) {
-            return new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
-                @SuppressWarnings("rawtypes")
-                @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                    CComponent<?, ?> comp = null;
+    protected CEntityForm<Portfolio> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
+            @SuppressWarnings("rawtypes")
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CComponent<?, ?> comp = null;
 
-                    if (proto().name() == column.getObject()) {
-                        comp = inject(column.getObject(), new CLabel<String>());
-                        ((CField) comp).setNavigationCommand(new Command() {
-                            @Override
-                            public void execute() {
-                                AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Portfolio().formViewerPlace(getValue().id().getValue()));
-                            }
-                        });
-                    } else if (proto().description() == column.getObject()) {
-                        comp = inject(column.getObject(), new CLabel<String>());
-                    } else {
-                        comp = super.createCell(column);
-                    }
-
-                    return comp;
+                if (proto().name() == column.getObject()) {
+                    comp = inject(column.getObject(), new CLabel<String>());
+                    ((CField) comp).setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Portfolio().formViewerPlace(getValue().id().getValue()));
+                        }
+                    });
+                } else if (proto().description() == column.getObject()) {
+                    comp = inject(column.getObject(), new CLabel<String>());
+                } else {
+                    comp = super.createCell(column);
                 }
-            };
-        }
-        return super.create(member);
+
+                return comp;
+            }
+        };
     }
 
     @Override

@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
-import com.propertyvista.eft.caledoncards.CaledonPaymentProcessor;
-import com.propertyvista.eft.caledoncards.CaledonTokenResponse;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentRequest;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentResponse;
 import com.propertyvista.operations.domain.eft.cards.to.TokenPaymentInstrument;

@@ -16,13 +16,11 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
@@ -31,19 +29,13 @@ import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
 
-    private static final I18n i18n = I18n.get(DependentsReadonlyFolder.class);
-
     public DependentsReadonlyFolder() {
         super(DependentDTO.class, false);
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof DependentDTO) {
-            return new CoapplicantForm();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<DependentDTO> createItemForm(IObject<?> member) {
+        return new CoapplicantForm();
     }
 
     class CoapplicantForm extends CEntityForm<DependentDTO> {

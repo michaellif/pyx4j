@@ -40,8 +40,8 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.yardi.beans.Message;
-import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.beans.Message.MessageType;
+import com.propertyvista.yardi.beans.Messages;
 import com.propertyvista.yardi.mappers.ApplicantScreeningMapper;
 
 @WebService(endpointInterface = "com.yardi.ws.WSScreeningService")

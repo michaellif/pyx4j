@@ -28,7 +28,6 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -115,12 +114,8 @@ public class CommunityEventVisorView extends AbstractVisorPane {
             }
 
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof CommunityEvent) {
-                    return new EventEditor(true);
-                } else {
-                    return super.create(member);
-                }
+            protected CEntityForm<CommunityEvent> createItemForm(IObject<?> member) {
+                return new EventEditor(true);
             }
 
             @Override

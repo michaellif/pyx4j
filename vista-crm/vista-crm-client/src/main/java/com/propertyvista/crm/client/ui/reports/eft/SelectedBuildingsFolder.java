@@ -20,6 +20,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.site.client.ui.IPane;
@@ -58,19 +59,16 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Building) {
-            return new CEntityFolderRowEditor<Building>(Building.class, COLUMNS) {
-                @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                    if (column.getObject() == proto().propertyCode()) {
-                        return inject(proto().propertyCode());
-                    }
-                    return super.createCell(column);
+    protected CEntityForm<Building> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<Building>(Building.class, COLUMNS) {
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                if (column.getObject() == proto().propertyCode()) {
+                    return inject(proto().propertyCode());
                 }
-            };
-        }
-        return super.create(member);
+                return super.createCell(column);
+            }
+        };
     }
 
     @Override

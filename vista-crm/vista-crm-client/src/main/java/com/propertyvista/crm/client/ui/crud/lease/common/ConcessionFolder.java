@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -36,12 +35,8 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Concession) {
-            return new ConcessionEditor();
-        }
-        return super.create(member);
-
+    protected CEntityForm<Concession> createItemForm(IObject<?> member) {
+        return new ConcessionEditor();
     }
 
     private class ConcessionEditor extends CEntityForm<Concession> {

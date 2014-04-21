@@ -16,7 +16,6 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -35,11 +34,8 @@ public class TenantsReadonlyFolder extends PortalBoxFolder<TenantDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof TenantDTO) {
-            return new TenantForm();
-        }
-        return super.create(member);
+    protected CEntityForm<TenantDTO> createItemForm(IObject<?> member) {
+        return new TenantForm();
     }
 
     class TenantForm extends CEntityForm<TenantDTO> {

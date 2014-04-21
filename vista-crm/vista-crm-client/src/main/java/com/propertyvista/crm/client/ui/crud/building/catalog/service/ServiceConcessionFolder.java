@@ -22,7 +22,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -63,12 +63,8 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Concession) {
-            return new ConcessionEditor();
-        }
-        return super.create(member);
-
+    protected CEntityForm<Concession> createItemForm(IObject<?> member) {
+        return new ConcessionEditor();
     }
 
     private class ConcessionEditor extends CEntityFolderRowEditor<Concession> {
@@ -81,8 +77,8 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            CComponent<?, ?> comp = null;
+        public CField<?, ?> create(IObject<?> member) {
+            CField<?, ?> comp = null;
             if (member.equals(proto().version().type())) {
                 comp = new CEnumLabel();
                 if (!ServiceConcessionFolder.this.isEditable()) {

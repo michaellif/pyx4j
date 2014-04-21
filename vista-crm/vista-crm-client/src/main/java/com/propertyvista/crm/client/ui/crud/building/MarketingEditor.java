@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -138,12 +137,8 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ILSOpenHouse) {
-                return new ILSOpenHouseEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<ILSOpenHouse> createItemForm(IObject<?> member) {
+            return new ILSOpenHouseEditor();
         }
 
         private class ILSOpenHouseEditor extends CEntityForm<ILSOpenHouse> {

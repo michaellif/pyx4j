@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -128,11 +127,8 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof InsuranceCertificateSummaryDTO) {
-                return new InsuranceCertificateViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<InsuranceCertificateSummaryDTO> createItemForm(IObject<?> member) {
+            return new InsuranceCertificateViewer();
         }
 
         private class InsuranceCertificateViewer extends CEntityForm<InsuranceCertificateSummaryDTO> {

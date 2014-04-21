@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -72,12 +71,8 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ProductTaxPolicyItem) {
-                return new ProductTaxPolicyItemEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<ProductTaxPolicyItem> createItemForm(IObject<?> member) {
+            return new ProductTaxPolicyItemEditor();
         }
 
         @Override

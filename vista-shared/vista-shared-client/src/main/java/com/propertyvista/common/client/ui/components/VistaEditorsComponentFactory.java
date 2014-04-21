@@ -19,22 +19,21 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.BaseEditableComponentFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntitySuggestBox;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CSignature;
 
-import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
-import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.CustomerSignature;
 
 public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
+        CField<?, ?> comp;
         MemberMeta mm = member.getMeta();
         if (mm.getValueClass().equals(CustomerSignature.class)) {
-            return new CSignature(mm.getCaption());
+            comp = new CSignature(mm.getCaption());
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {
@@ -56,10 +55,10 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
                     return entity;
                 }
             });
-            return c;
-        } else if (member.getValueClass().equals(GeoLocation.class)) {
-            return new GeoLocationEditor();
+            comp = c;
+        } else {
+            comp = super.create(member);
         }
-        return super.create(member);
+        return comp;
     }
 }

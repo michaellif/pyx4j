@@ -24,10 +24,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
-import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 
 public class EquifaxApprovalCrudServiceImpl extends AbstractCrudServiceDtoImpl<PmcEquifaxInfo, EquifaxSetupRequestDTO> implements EquifaxApprovalCrudService {
 

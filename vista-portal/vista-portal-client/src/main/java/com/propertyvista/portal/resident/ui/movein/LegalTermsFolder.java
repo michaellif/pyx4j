@@ -16,7 +16,6 @@ package com.propertyvista.portal.resident.ui.movein;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -40,12 +39,8 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedAgreementLegalTerm> 
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof SignedAgreementLegalTerm) {
-            return new LegalTermForm();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<SignedAgreementLegalTerm> createItemForm(IObject<?> member) {
+        return new LegalTermForm();
     }
 
     class LegalTermForm extends CEntityForm<SignedAgreementLegalTerm> {

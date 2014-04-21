@@ -349,11 +349,8 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof BillableItemAdjustment) {
-                return new BillableItemAdjustmentEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<? extends BillableItemAdjustment> createItemForm(IObject<?> member) {
+            return new BillableItemAdjustmentEditor();
         }
 
         private class BillableItemAdjustmentEditor extends CEntityFolderRowEditor<BillableItemAdjustment> {
@@ -536,11 +533,8 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Deposit) {
-                return new DepositEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<? extends Deposit> createItemForm(IObject<?> member) {
+            return new DepositEditor();
         }
 
         private class DepositEditor extends CEntityFolderRowEditor<Deposit> {

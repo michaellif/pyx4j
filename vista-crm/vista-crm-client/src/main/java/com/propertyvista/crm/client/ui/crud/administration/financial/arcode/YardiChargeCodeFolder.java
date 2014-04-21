@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -46,11 +47,8 @@ public class YardiChargeCodeFolder extends VistaTableFolder<YardiChargeCode> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof YardiChargeCode) {
-            return new YardiChargeCodeForm();
-        }
-        return super.create(member);
+    protected CEntityForm<YardiChargeCode> createItemForm(IObject<?> member) {
+        return new YardiChargeCodeForm();
     }
 
     public static class YardiChargeCodeForm extends CEntityFolderRowEditor<YardiChargeCode> {

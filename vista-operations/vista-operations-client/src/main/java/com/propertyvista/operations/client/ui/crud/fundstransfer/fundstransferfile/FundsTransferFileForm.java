@@ -28,8 +28,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
-import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
 public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFileDTO> {
 

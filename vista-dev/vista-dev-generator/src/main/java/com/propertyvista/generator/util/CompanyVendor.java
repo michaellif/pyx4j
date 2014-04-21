@@ -15,8 +15,6 @@ package com.propertyvista.generator.util;
 
 import java.math.BigDecimal;
 
-
-
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.company.Company;

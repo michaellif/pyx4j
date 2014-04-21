@@ -25,7 +25,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -38,8 +37,6 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.shared.config.VistaFeatures;
 
 class FeatureItemFolder extends VistaTableFolder<ProductItem> {
-
-    private static final I18n i18n = I18n.get(FeatureItemFolder.class);
 
     private final CEntityForm<Feature> parent;
 
@@ -68,11 +65,8 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ProductItem) {
-            return new FeatureItemEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<ProductItem> createItemForm(IObject<?> member) {
+        return new FeatureItemEditor();
     }
 
     private class FeatureItemEditor extends CEntityFolderRowEditor<ProductItem> {

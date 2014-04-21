@@ -18,8 +18,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 @Transient

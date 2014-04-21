@@ -17,8 +17,6 @@ import junit.framework.TestCase;
 
 import com.pyx4j.commons.TimeUtils;
 
-import com.propertyvista.domain.util.ValidationUtils;
-
 public class ValidationUtilsTest extends TestCase {
 
     public void testCC() {

@@ -13,15 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
-import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
-
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 
 public class CrmEditorsComponentFactory extends VistaEditorsComponentFactory {
 
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        return super.create(member);
-    }
 }

@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.concurrent.Callable;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;

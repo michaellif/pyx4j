@@ -21,9 +21,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class DevelopmentSecurity {

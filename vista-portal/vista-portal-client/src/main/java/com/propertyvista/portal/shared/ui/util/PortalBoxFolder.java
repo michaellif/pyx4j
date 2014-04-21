@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.resources.VistaImages;
 
-public class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
+public abstract class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
 
     private final String itemName;
 

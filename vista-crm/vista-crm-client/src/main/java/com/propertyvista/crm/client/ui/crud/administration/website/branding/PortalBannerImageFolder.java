@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -95,15 +96,12 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PortalBannerImage) {
-            PortalBannerImageEditor editor = new PortalBannerImageEditor();
-            if (imageSize != null) {
-                editor.setImageSize(imageSize.width, imageSize.height);
-            }
-            return editor;
+    protected CEntityForm<PortalBannerImage> createItemForm(IObject<?> member) {
+        PortalBannerImageEditor editor = new PortalBannerImageEditor();
+        if (imageSize != null) {
+            editor.setImageSize(imageSize.width, imageSize.height);
         }
-        return super.create(member);
+        return editor;
     }
 
     class PortalBannerImageEditor extends AccessoryEntityForm<PortalBannerImage> {

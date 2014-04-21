@@ -26,6 +26,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -64,11 +65,8 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Building) {
-            return new ComplexBuildingEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<Building> createItemForm(IObject<?> member) {
+        return new ComplexBuildingEditor();
     }
 
     @Override

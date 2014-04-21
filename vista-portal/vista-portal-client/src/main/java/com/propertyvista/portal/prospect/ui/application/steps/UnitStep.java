@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -243,12 +242,8 @@ public class UnitStep extends ApplicationWizardStep {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof UnitTO) {
-                return new AvailableUnitForm();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<UnitTO> createItemForm(IObject<?> member) {
+            return new AvailableUnitForm();
         }
 
         class AvailableUnitForm extends CEntityForm<UnitTO> {

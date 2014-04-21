@@ -19,8 +19,8 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
-import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 
 public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsReconciliationRecordRecord, FundsReconciliationRecordRecordDTO>

@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -72,11 +71,8 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if ((member instanceof LeaseAgreementLegalTerm)) {
-                return new LegalTermEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<LeaseAgreementLegalTerm> createItemForm(IObject<?> member) {
+            return new LegalTermEditor();
         }
 
         class LegalTermEditor extends CEntityForm<LeaseAgreementLegalTerm> {
@@ -105,11 +101,8 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if ((member instanceof LeaseAgreementConfirmationTerm)) {
-                return new ConfirmationTermEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<LeaseAgreementConfirmationTerm> createItemForm(IObject<?> member) {
+            return new ConfirmationTermEditor();
         }
 
         class ConfirmationTermEditor extends CEntityForm<LeaseAgreementConfirmationTerm> {

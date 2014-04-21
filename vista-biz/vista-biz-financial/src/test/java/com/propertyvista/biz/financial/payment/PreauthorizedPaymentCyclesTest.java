@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.payment;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;

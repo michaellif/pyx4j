@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -97,11 +96,8 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof CommunicationMessage) {
-                return new MessageFolderItem(this);
-            }
-            return super.create(member);
+        protected CEntityForm<CommunicationMessage> createItemForm(IObject<?> member) {
+            return new MessageFolderItem(this);
         }
 
         @Override

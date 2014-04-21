@@ -15,7 +15,6 @@ package com.propertyvista.biz.system.eft;
 
 import com.pyx4j.config.server.FacadeFactory;
 
-import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
 import com.propertyvista.eft.caledoncards.CaledonPaymentProcessor;
 
 /**

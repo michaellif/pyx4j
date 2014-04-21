@@ -23,7 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -72,13 +72,14 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    protected CEntityForm<? extends CommunicationEndpoint> createItemForm(IObject<?> member) {
         if (member instanceof CrmUser) {
             return new CommunicationEndpointEditor<CrmUser>(CrmUser.class);
         } else if (member instanceof CustomerUser) {
             return new CommunicationEndpointEditor<CustomerUser>(CustomerUser.class);
+        } else {
+            throw new Error("Can't create editor");
         }
-        return super.create(member);
     }
 
     @Override

@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,22 +34,15 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorsFolder.class);
 
-    private final ApplicationWizardViewImpl view;
-
     public GuarantorsFolder(ApplicationWizardViewImpl view) {
         super(GuarantorDTO.class, i18n.tr("Guarantor"));
-        this.view = view;
-
         setNoDataNotificationWidget(new Label(
                 i18n.tr("Guarantors are individuals who are financially responsible for your lease commitment but will not be living in your apartment")));
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof GuarantorDTO) {
-            return new GuarantorForm();
-        }
-        return super.create(member);
+    protected CEntityForm<GuarantorDTO> createItemForm(IObject<?> member) {
+        return new GuarantorForm();
     }
 
     class GuarantorForm extends CEntityForm<GuarantorDTO> {

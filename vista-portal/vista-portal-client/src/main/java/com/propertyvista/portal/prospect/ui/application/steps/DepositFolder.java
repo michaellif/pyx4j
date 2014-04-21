@@ -16,7 +16,6 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -33,11 +32,8 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Deposit) {
-            return new DepositEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<Deposit> createItemForm(IObject<?> member) {
+        return new DepositEditor();
     }
 
     private class DepositEditor extends CEntityForm<Deposit> {

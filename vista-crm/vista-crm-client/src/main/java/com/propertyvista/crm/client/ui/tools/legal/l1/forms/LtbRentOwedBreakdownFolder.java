@@ -25,6 +25,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -51,67 +52,63 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    protected CEntityForm<? extends RentOwingForPeriod> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
 
-        if (member instanceof RentOwingForPeriod) {
-            return new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                if (proto().from() == column.getObject()) {
+                    CDatePicker datePicker = new CDatePicker();
+                    datePicker.setMandatory(true);
+                    return inject(proto().from(), datePicker);
+                } else if (proto().to() == column.getObject()) {
+                    CDatePicker datePicker = new CDatePicker();
+                    datePicker.setMandatory(true);
+                    return inject(proto().to(), datePicker);
+                } else if (proto().rentCharged() == column.getObject()) {
+                    CMoneyField field = new CMoneyField();
+                    return inject(proto().rentCharged(), field);
+                } else if (proto().rentPaid() == column.getObject()) {
+                    CMoneyField field = new CMoneyField();
+                    return inject(proto().rentPaid(), field);
+                } else if (proto().rentOwing() == column.getObject()) {
+                    CMoneyField field = new CMoneyField();
+                    field.setViewable(true);
+                    return inject(proto().rentOwing(), field);
+                }
+                return super.createCell(column);
+            }
 
-                @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                    if (proto().from() == column.getObject()) {
-                        CDatePicker datePicker = new CDatePicker();
-                        datePicker.setMandatory(true);
-                        return inject(proto().from(), datePicker);
-                    } else if (proto().to() == column.getObject()) {
-                        CDatePicker datePicker = new CDatePicker();
-                        datePicker.setMandatory(true);
-                        return inject(proto().to(), datePicker);
-                    } else if (proto().rentCharged() == column.getObject()) {
-                        CMoneyField field = new CMoneyField();
-                        return inject(proto().rentCharged(), field);
-                    } else if (proto().rentPaid() == column.getObject()) {
-                        CMoneyField field = new CMoneyField();
-                        return inject(proto().rentPaid(), field);
-                    } else if (proto().rentOwing() == column.getObject()) {
-                        CMoneyField field = new CMoneyField();
-                        field.setViewable(true);
-                        return inject(proto().rentOwing(), field);
+            @Override
+            protected IsWidget createContent() {
+                IsWidget w = super.createContent();
+                get(proto().rentCharged()).addValueChangeHandler(createOwedRentNeedsUpdateHandler());
+                get(proto().rentPaid()).addValueChangeHandler(createOwedRentNeedsUpdateHandler());
+                get(proto().rentOwing()).addValueChangeHandler(createOwedRentChangedHandler());
+                return w;
+            }
+
+            private ValueChangeHandler<BigDecimal> createOwedRentNeedsUpdateHandler() {
+                return new ValueChangeHandler<BigDecimal>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                        BigDecimal charged = getValue().rentCharged().getValue(new BigDecimal("0.00"));
+                        BigDecimal paid = getValue().rentPaid().getValue(new BigDecimal("0.00"));
+                        get(proto().rentOwing()).setValue(charged.subtract(paid), true, true);
                     }
-                    return super.createCell(column);
-                }
+                };
+            }
 
-                @Override
-                protected IsWidget createContent() {
-                    IsWidget w = super.createContent();
-                    get(proto().rentCharged()).addValueChangeHandler(createOwedRentNeedsUpdateHandler());
-                    get(proto().rentPaid()).addValueChangeHandler(createOwedRentNeedsUpdateHandler());
-                    get(proto().rentOwing()).addValueChangeHandler(createOwedRentChangedHandler());
-                    return w;
-                }
+            private ValueChangeHandler<BigDecimal> createOwedRentChangedHandler() {
+                return new ValueChangeHandler<BigDecimal>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                        onTotalOwedRentChanged();
+                    }
+                };
+            }
 
-                private ValueChangeHandler<BigDecimal> createOwedRentNeedsUpdateHandler() {
-                    return new ValueChangeHandler<BigDecimal>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                            BigDecimal charged = getValue().rentCharged().getValue(new BigDecimal("0.00"));
-                            BigDecimal paid = getValue().rentPaid().getValue(new BigDecimal("0.00"));
-                            get(proto().rentOwing()).setValue(charged.subtract(paid), true, true);
-                        }
-                    };
-                }
-
-                private ValueChangeHandler<BigDecimal> createOwedRentChangedHandler() {
-                    return new ValueChangeHandler<BigDecimal>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                            onTotalOwedRentChanged();
-                        }
-                    };
-                }
-
-            };
-        }
-        return super.create(member);
+        };
     }
 
     @Override

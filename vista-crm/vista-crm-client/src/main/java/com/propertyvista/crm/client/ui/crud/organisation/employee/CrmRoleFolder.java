@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -58,17 +59,13 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof CrmRole) {
-            return new CEntityFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
-                @SuppressWarnings("rawtypes")
-                @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                    return inject(column.getObject(), new CLabel<String>());
-                }
-            };
-        }
-        return super.create(member);
+    protected CEntityForm<CrmRole> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                return inject(column.getObject(), new CLabel<String>());
+            }
+        };
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -61,39 +62,36 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (DebitLinkDTO.class.equals(member.getObjectClass())) {
-            return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
-                @SuppressWarnings("rawtypes")
-                @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                    if (column.getObject() == proto().debitAmount()) {
-                        CComponent<?, ?> comp = inject(column.getObject());
-                        ((CField) comp).setNavigationCommand(new Command() {
-                            @Override
-                            public void execute() {
-                                AppSite.getPlaceController().goTo(
-                                        AppPlaceEntityMapper.resolvePlace(InvoiceDebit.class, getValue().debitItemStub().getPrimaryKey()));
-                            }
-                        });
-                        return comp;
-                    } else if (column.getObject() == proto().paidAmount()) {
-                        CComponent<?, ?> comp = inject(column.getObject());
-                        ((CField) comp).setNavigationCommand(new Command() {
-                            @Override
-                            public void execute() {
-                                AppSite.getPlaceController().goTo(
-                                        AppPlaceEntityMapper.resolvePlace(InvoiceCredit.class, getValue().creditItemStub().getPrimaryKey()));
-                            }
-                        });
-                        return comp;
-                    } else {
-                        return super.createCell(column);
-                    }
+    protected CEntityForm<DebitLinkDTO> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
+            @SuppressWarnings("rawtypes")
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                if (column.getObject() == proto().debitAmount()) {
+                    CComponent<?, ?> comp = inject(column.getObject());
+                    ((CField) comp).setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController()
+                                    .goTo(AppPlaceEntityMapper.resolvePlace(InvoiceDebit.class, getValue().debitItemStub().getPrimaryKey()));
+                        }
+                    });
+                    return comp;
+                } else if (column.getObject() == proto().paidAmount()) {
+                    CComponent<?, ?> comp = inject(column.getObject());
+                    ((CField) comp).setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(
+                                    AppPlaceEntityMapper.resolvePlace(InvoiceCredit.class, getValue().creditItemStub().getPrimaryKey()));
+                        }
+                    });
+                    return comp;
+                } else {
+                    return super.createCell(column);
                 }
-            };
-        } else {
-            return super.create(member);
-        }
+            }
+        };
     }
+
 }

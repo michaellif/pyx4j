@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -54,11 +55,8 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof CityIntroPage) {
-            return new CityIntroPageEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<CityIntroPage> createItemForm(IObject<?> member) {
+        return new CityIntroPageEditor();
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -53,11 +54,8 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PreauthorizedPaymentCoveredItemDTO) {
-            return new CoveredItemEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<PreauthorizedPaymentCoveredItemDTO> createItemForm(IObject<?> member) {
+        return new CoveredItemEditor();
     }
 
     class CoveredItemEditor extends CEntityFolderRowEditor<PreauthorizedPaymentCoveredItemDTO> {

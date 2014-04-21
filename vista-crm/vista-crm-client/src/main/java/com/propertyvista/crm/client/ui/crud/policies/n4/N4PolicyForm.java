@@ -27,7 +27,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -176,14 +175,11 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof N4PolicyDTOARCodeHolderDTO) {
-                N4PolicyDTOARCodeHolderForm form = new N4PolicyDTOARCodeHolderForm(null, false);
-                form.inheritViewable(false);
-                form.setViewable(true);
-                return form;
-            }
-            return super.create(member);
+        protected CEntityForm<N4PolicyDTOARCodeHolderDTO> createItemForm(IObject<?> member) {
+            N4PolicyDTOARCodeHolderForm form = new N4PolicyDTOARCodeHolderForm(null, false);
+            form.inheritViewable(false);
+            form.setViewable(true);
+            return form;
         }
 
         @Override

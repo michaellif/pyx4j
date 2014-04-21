@@ -15,13 +15,13 @@ package com.propertyvista.operations.client.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.operations.client.ui.login.LoginViewImpl;
 import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenViewImpl;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.operations.client.ui.login.LoginViewImpl;
 
 public class LoginVeiwFactory extends ViewFactoryBase {
 

@@ -25,7 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.propertyvista.oapi.model.LeaseIO;
-import com.propertyvista.oapi.ws.WSLeaseService;
 
 public class WSLeaseServiceTest extends WSOapiTestBase {
 

@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -100,11 +99,8 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof MaintenanceRequestStatusDTO) {
-                return new MaintenanceRequestFolderItem(getGadgetView().getPresenter());
-            }
-            return super.create(member);
+        protected CEntityForm<MaintenanceRequestStatusDTO> createItemForm(IObject<?> member) {
+            return new MaintenanceRequestFolderItem(getGadgetView().getPresenter());
         }
     }
 }

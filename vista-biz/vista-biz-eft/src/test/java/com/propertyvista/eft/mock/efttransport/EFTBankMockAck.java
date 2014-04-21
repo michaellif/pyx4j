@@ -28,8 +28,8 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckBatch;
-import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckRecord;
 import com.propertyvista.test.mock.MockEventBus;
 
 class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, ScheduledResponseAckMerchant.Handler {

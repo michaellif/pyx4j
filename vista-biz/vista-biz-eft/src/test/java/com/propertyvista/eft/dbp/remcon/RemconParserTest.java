@@ -23,10 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.eft.dbp.remcon.RemconFile;
-import com.propertyvista.eft.dbp.remcon.RemconParser;
-import com.propertyvista.eft.dbp.remcon.RemconRecordDetailRecord;
-
 public class RemconParserTest {
 
     private static final Logger log = LoggerFactory.getLogger(RemconParserTest.class);

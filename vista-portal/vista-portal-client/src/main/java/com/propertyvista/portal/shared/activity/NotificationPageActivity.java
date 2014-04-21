@@ -17,9 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Consts;
-import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;

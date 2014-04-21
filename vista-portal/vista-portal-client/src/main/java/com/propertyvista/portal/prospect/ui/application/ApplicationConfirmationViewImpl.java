@@ -14,7 +14,6 @@
 package com.propertyvista.portal.prospect.ui.application;
 
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationConfirmationDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 
 public class ApplicationConfirmationViewImpl extends AbstractFormView<OnlineApplicationConfirmationDTO> implements ApplicationConfirmationView {

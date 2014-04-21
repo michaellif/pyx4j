@@ -16,7 +16,6 @@ package com.propertyvista.portal.resident.ui.movein;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -38,12 +37,8 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LeaseTermTenant) {
-            return new TenantForm();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<LeaseTermTenant> createItemForm(IObject<?> member) {
+        return new TenantForm();
     }
 
     class TenantForm extends CEntityForm<LeaseTermTenant> {

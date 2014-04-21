@@ -16,7 +16,6 @@ package com.propertyvista.test.integration;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
-import com.propertyvista.test.integration.Tester;
 
 public class InvoiceProductChargeTester extends Tester {
 

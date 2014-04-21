@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -58,11 +57,8 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof CustomerScreeningPersonalAsset) {
-            return new PersonalAssetEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<CustomerScreeningPersonalAsset> createItemForm(IObject<?> member) {
+        return new PersonalAssetEditor();
     }
 
     private class PersonalAssetEditor extends CEntityForm<CustomerScreeningPersonalAsset> {

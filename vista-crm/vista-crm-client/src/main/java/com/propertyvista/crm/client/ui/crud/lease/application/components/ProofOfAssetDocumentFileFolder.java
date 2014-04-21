@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -38,11 +37,8 @@ public class ProofOfAssetDocumentFileFolder extends VistaBoxFolder<ProofOfAssetD
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ProofOfAssetDocumentFile) {
-            return new DocumentEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<ProofOfAssetDocumentFile> createItemForm(IObject<?> member) {
+        return new DocumentEditor();
     }
 
     private class DocumentEditor extends CEntityForm<ProofOfAssetDocumentFile> {

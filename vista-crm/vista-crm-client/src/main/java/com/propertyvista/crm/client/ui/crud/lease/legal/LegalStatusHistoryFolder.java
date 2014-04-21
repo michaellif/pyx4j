@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.legal;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
@@ -25,13 +25,14 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.dto.LegalStatusDTO;
 
-public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatus> {
+public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatusDTO> {
 
     private static final I18n i18n = I18n.get(LegalStatusHistoryFolder.class);
 
     public LegalStatusHistoryFolder() {
-        super(LegalStatus.class);
+        super(LegalStatusDTO.class);
         inheritEditable(false);
         inheritViewable(false);
 
@@ -44,18 +45,15 @@ public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatu
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LegalStatus) {
-            LegalStatusForm form = new LegalStatusForm(false);
-            form.inheritViewable(false);
-            form.setViewable(true);
-            return form;
-        }
-        return super.create(member);
+    protected CEntityForm<LegalStatusDTO> createItemForm(IObject<?> member) {
+        LegalStatusForm form = new LegalStatusForm(false);
+        form.inheritViewable(false);
+        form.setViewable(true);
+        return form;
     }
 
     @Override
-    protected void removeItem(final CEntityFolderItem<LegalStatus> item) {
+    protected void removeItem(final CEntityFolderItem<LegalStatusDTO> item) {
         MessageDialog.confirm(i18n.tr("Remove Status"), i18n.tr("Are you sure"), new Command() {
             @Override
             public void execute() {
@@ -66,8 +64,8 @@ public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatu
     }
 
     @Override
-    public IFolderItemDecorator<LegalStatus> createItemDecorator() {
-        VistaBoxFolderItemDecorator<LegalStatus> d = (VistaBoxFolderItemDecorator<LegalStatus>) super.createItemDecorator();
+    public IFolderItemDecorator<LegalStatusDTO> createItemDecorator() {
+        VistaBoxFolderItemDecorator<LegalStatusDTO> d = (VistaBoxFolderItemDecorator<LegalStatusDTO>) super.createItemDecorator();
         d.setExpended(false);
         return d;
     }

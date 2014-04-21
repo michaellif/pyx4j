@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -76,12 +75,8 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof BillableItem) {
-            return new FeatureItemForm();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<BillableItem> createItemForm(IObject<?> member) {
+        return new FeatureItemForm();
     }
 
     class FeatureItemForm extends CEntityForm<BillableItem> {

@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -80,11 +80,8 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof SocialLink) {
-            return new SocialLinkEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<SocialLink> createItemForm(IObject<?> member) {
+        return new SocialLinkEditor();
     }
 
     class SocialSiteSelector extends Dialog implements CancelOption {

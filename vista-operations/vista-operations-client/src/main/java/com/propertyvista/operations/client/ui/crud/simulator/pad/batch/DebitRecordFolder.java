@@ -18,7 +18,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,11 +35,8 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PadSimDebitRecord) {
-            return new DebitRecordEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<PadSimDebitRecord> createItemForm(IObject<?> member) {
+        return new DebitRecordEditor();
     }
 
     private class DebitRecordEditor extends CEntityForm<PadSimDebitRecord> {

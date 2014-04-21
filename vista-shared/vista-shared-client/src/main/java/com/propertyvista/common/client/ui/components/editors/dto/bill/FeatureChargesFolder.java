@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -48,11 +47,8 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof InvoiceProductCharge) {
-            return new ProductChargeEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<InvoiceProductCharge> createItemForm(IObject<?> member) {
+        return new ProductChargeEditor();
     }
 
     class ProductChargeEditor extends CEntityForm<InvoiceProductCharge> {

@@ -20,12 +20,12 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
+import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
 import com.propertyvista.operations.server.qa.PmcDataBuildingsReportDeferredProcess;
 import com.propertyvista.operations.server.qa.PmcDataImagesReportDeferredProcess;
-import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.domain.pmc.Pmc;
 
 public class PmcDataReportServiceImpl extends ReportServiceImpl<PmcDTO> implements PmcDataReportService {
 

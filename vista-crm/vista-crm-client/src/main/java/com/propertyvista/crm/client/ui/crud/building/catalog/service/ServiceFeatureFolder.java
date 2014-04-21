@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -67,11 +67,8 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Feature) {
-            return new FeatureEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<Feature> createItemForm(IObject<?> member) {
+        return new FeatureEditor();
     }
 
     private class FeatureEditor extends CEntityFolderRowEditor<Feature> {
@@ -84,8 +81,8 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            CComponent<?, ?> comp = null;
+        public CField<?, ?> create(IObject<?> member) {
+            CField<?, ?> comp = null;
             if (member.equals(proto().code())) {
                 comp = new CEntityLabel<ARCode>();
                 if (!ServiceFeatureFolder.this.isEditable()) {

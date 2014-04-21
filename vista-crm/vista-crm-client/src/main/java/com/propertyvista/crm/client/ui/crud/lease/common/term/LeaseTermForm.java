@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -495,11 +496,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof BuildingUtility) {
-                return new BuildingUtilityEditor();
-            }
-            return super.create(member);
+        protected CEntityForm<BuildingUtility> createItemForm(IObject<?> member) {
+            return new BuildingUtilityEditor();
         }
 
         @Override

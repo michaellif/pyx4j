@@ -13,17 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
@@ -62,29 +56,14 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityForm<E>
     public void bind(CComponent<?, ?> component, final IObject<?> member) {
         super.bind(component, member);
         if (zoomInHandler != null) {
-            if ((component instanceof ZoomableViewFolder) & isZoomable(member)) {
-                List<IObject<?>> transformedZoomInMembers = new ArrayList<IObject<?>>();
-                for (IObject<?> zoomableMember : zoomableMembers) {
-                    String zoomableMemberPath = zoomableMember.getPath().toString();
-                    if (zoomableMemberPath.startsWith(member.getPath().toString())) {
-                        IEntity zoomedProto = EntityFactory.getEntityPrototype(((ICollection) member).getValueClass());
-                        String transformedMemberPath = GWTJava5Helper.getSimpleName(zoomedProto.getValueClass()) + zoomableMemberPath.split("\\[\\]")[1];
-                        IObject<?> transformedZoomInMember = zoomedProto.getMember(new Path(transformedMemberPath));
-                        transformedZoomInMembers.add(transformedZoomInMember);
-                    }
-                }
-                ((ZoomableViewFolder<?>) component)
-                        .initZoomIn(zoomInHandler, transformedZoomInMembers.toArray(new IObject<?>[transformedZoomInMembers.size()]));
-            } else if (isZoomable(member)) {
+            if (isZoomable(member)) {
                 ((CField) component).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         zoomInHandler.onZoomIn(ZoomableViewForm.this.getValue().getMember(member.getPath()));
                     }
                 });
-
             }
-
         }
     }
 

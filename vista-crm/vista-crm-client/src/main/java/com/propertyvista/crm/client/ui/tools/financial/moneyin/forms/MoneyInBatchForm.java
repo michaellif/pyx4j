@@ -21,7 +21,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -64,29 +65,25 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (DepositSlipCheckDetailsRecordDTO.class.equals(member.getObjectClass())) {
-                return new CEntityFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
-                        new VistaViewersComponentFactory()) {
-                    @Override
-                    public CComponent<?, ?> create(IObject<?> member) {
-                        if (proto().id().getFieldName().equals(member.getFieldName())) {
-                            CLabel<Key> idLabel = new CLabel<Key>();
-                            idLabel.setNavigationCommand(new Command() {
-                                @Override
-                                public void execute() {
-                                    onShowToPaymentRecord(getValue().id().getValue());
-                                }
-                            });
-                            return idLabel;
-                        } else {
-                            return super.create(member);
-                        }
+        protected CEntityForm<DepositSlipCheckDetailsRecordDTO> createItemForm(IObject<?> member) {
+            return new CEntityFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
+                    new VistaViewersComponentFactory()) {
+                @Override
+                public CField<?, ?> create(IObject<?> member) {
+                    if (proto().id().getFieldName().equals(member.getFieldName())) {
+                        CLabel<Key> idLabel = new CLabel<Key>();
+                        idLabel.setNavigationCommand(new Command() {
+                            @Override
+                            public void execute() {
+                                onShowToPaymentRecord(getValue().id().getValue());
+                            }
+                        });
+                        return idLabel;
+                    } else {
+                        return super.create(member);
                     }
-                };
-            } else {
-                return super.create(member);
-            }
+                }
+            };
         }
 
     }

@@ -23,10 +23,10 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
-import com.propertyvista.operations.domain.legal.LegalDocument;
-import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
+import com.propertyvista.operations.domain.legal.LegalDocument;
+import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.server.TaskRunner;
 
 public class OnboardingPublicActivationServiceImpl implements OnboardingPublicActivationService {

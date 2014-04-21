@@ -26,7 +26,6 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -120,12 +119,8 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof IdentificationDocumentFolder) {
-            return new IdentificationDocumentEditor();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
+        return new IdentificationDocumentEditor();
     }
 
     @Override
@@ -140,6 +135,11 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             public void onValueSet(boolean populate) {
                 // update removable
                 setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
+            }
+
+            @Override
+            protected CEntityForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
+                return IdUploaderFolder.this.createItemForm(null);
             }
         };
     }

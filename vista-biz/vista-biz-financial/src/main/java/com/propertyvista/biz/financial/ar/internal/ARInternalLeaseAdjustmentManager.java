@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.ar.internal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 

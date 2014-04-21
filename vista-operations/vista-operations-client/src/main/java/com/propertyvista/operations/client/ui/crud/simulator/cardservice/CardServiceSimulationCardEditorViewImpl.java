@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -74,20 +75,17 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof CardServiceSimulationToken) {
-                return new CEntityFolderRowEditor<CardServiceSimulationToken>(CardServiceSimulationToken.class, COLUMNS) {
-                    @Override
-                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                        if (column == proto().token()) {
-                            return inject(proto().token());
-                        } else {
-                            return super.createCell(column);
-                        }
+        protected CEntityForm<? extends CardServiceSimulationToken> createItemForm(IObject<?> member) {
+            return new CEntityFolderRowEditor<CardServiceSimulationToken>(CardServiceSimulationToken.class, COLUMNS) {
+                @Override
+                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                    if (column == proto().token()) {
+                        return inject(proto().token());
+                    } else {
+                        return super.createCell(column);
                     }
-                };
-            }
-            return super.create(member);
+                }
+            };
         }
 
     }

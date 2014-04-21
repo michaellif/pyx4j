@@ -22,9 +22,9 @@ import java.util.List;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 /**

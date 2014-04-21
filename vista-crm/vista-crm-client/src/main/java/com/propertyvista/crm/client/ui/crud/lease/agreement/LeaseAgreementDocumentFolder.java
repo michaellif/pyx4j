@@ -23,7 +23,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CListBox;
@@ -63,11 +62,8 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LeaseTermAgreementDocument) {
-            return new LeaseAgreementDocumentForm(true);
-        }
-        return super.create(member);
+    protected CEntityForm<LeaseTermAgreementDocument> createItemForm(IObject<?> member) {
+        return new LeaseAgreementDocumentForm(true);
     }
 
     @Override

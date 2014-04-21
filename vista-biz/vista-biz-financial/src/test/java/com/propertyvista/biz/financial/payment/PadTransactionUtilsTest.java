@@ -20,10 +20,10 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
-import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @Category({ RegressionTests.class })
 public class PadTransactionUtilsTest extends VistaDBTestBase {

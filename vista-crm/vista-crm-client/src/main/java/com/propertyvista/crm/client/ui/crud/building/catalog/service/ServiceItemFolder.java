@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -69,11 +70,8 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ProductItem) {
-            return new ServiceItemEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<ProductItem> createItemForm(IObject<?> member) {
+        return new ServiceItemEditor();
     }
 
     @Override

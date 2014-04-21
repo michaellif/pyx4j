@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -79,12 +78,8 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LegalLetter) {
-            return new PolyLegalLetterForm();
-        }
-
-        return super.create(member);
+    protected CEntityForm<LegalLetter> createItemForm(IObject<?> member) {
+        return new PolyLegalLetterForm();
     }
 
     private static class PolyLegalLetterForm extends CEntityForm<LegalLetter> {

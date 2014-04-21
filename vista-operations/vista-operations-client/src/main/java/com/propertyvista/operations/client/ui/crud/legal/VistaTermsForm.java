@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.ui.crud.legal;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -53,12 +52,8 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof LegalDocument) {
-                return new LegalDocumentForm();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<LegalDocument> createItemForm(IObject<?> member) {
+            return new LegalDocumentForm();
         }
     }
 

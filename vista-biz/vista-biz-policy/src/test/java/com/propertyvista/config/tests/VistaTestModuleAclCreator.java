@@ -18,8 +18,6 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ReflectionEnabledAclBuilder;
 
-import com.propertyvista.config.tests.TestAclCreator;
-
 public class VistaTestModuleAclCreator extends ReflectionEnabledAclBuilder implements TestAclCreator {
 
     public VistaTestModuleAclCreator() {

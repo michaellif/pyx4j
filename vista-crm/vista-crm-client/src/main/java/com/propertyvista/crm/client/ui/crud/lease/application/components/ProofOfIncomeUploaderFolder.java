@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -67,11 +66,8 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ProofOfIncomeDocumentFolder) {
-            return new ProofOfIncomeDocumentEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<ProofOfIncomeDocumentFolder> createItemForm(IObject<?> member) {
+        return new ProofOfIncomeDocumentEditor();
     }
 
     private class ProofOfIncomeDocumentEditor extends CEntityForm<ProofOfIncomeDocumentFolder> {

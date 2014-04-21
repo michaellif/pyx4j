@@ -15,9 +15,9 @@ package com.propertyvista.operations.client.ui.crud.simulateddatapreload;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
-
 import com.pyx4j.site.client.IsView;
+
+import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 
 public interface SimulatedDataPreloadView extends IsWidget, IsView {
 

@@ -16,14 +16,12 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
@@ -34,26 +32,16 @@ import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplicationConfirmationTerm> {
 
-    private static final I18n i18n = I18n.get(ConfirmationTermsFolder.class);
-
-    private final ApplicationWizardView view;
-
     public ConfirmationTermsFolder(ApplicationWizardView view) {
         super(SignedOnlineApplicationConfirmationTerm.class);
         setOrderable(false);
         setAddable(false);
         setRemovable(false);
-
-        this.view = view;
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof SignedOnlineApplicationConfirmationTerm) {
-            return new ConfirmationTermForm();
-        } else {
-            return super.create(member);
-        }
+    protected CEntityForm<SignedOnlineApplicationConfirmationTerm> createItemForm(IObject<?> member) {
+        return new ConfirmationTermForm();
     }
 
     class ConfirmationTermForm extends CEntityForm<SignedOnlineApplicationConfirmationTerm> {

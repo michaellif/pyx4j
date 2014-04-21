@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -59,11 +60,8 @@ public class TaxFolder extends VistaTableFolder<Tax> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Tax) {
-            return new ChargeCodeTaxEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<Tax> createItemForm(IObject<?> member) {
+        return new ChargeCodeTaxEditor();
     }
 
     @Override

@@ -35,8 +35,8 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.eft.caledoncards.CaledonTokenAction;
 import com.propertyvista.eft.caledoncards.CaledonTransactionType;
 import com.propertyvista.eft.caledoncards.dev.VisaDebitInternalValidator;
-import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction.SimpulationTransactionType;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulatorConfig;
 
 public class CardServiceSimulationUtils {
 

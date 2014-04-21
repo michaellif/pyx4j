@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.website.content.gadg
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
@@ -30,11 +30,8 @@ public class NewsFolder extends VistaBoxFolder<News> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof News) {
-            return new NewsEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<News> createItemForm(IObject<?> member) {
+        return new NewsEditor();
     }
 
     class NewsEditor extends AccessoryEntityForm<News> {

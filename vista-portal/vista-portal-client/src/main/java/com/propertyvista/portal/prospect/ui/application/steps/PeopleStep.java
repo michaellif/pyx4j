@@ -22,7 +22,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -70,19 +69,13 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {
 
-        private final ApplicationWizard wizard;
-
         public CoapplicantsFolder(ApplicationWizard applicationWizard) {
             super(CoapplicantDTO.class, i18n.tr("Co-Applicant"));
-            this.wizard = applicationWizard;
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof CoapplicantDTO) {
-                return new CoapplicantForm();
-            }
-            return super.create(member);
+        protected CEntityForm<CoapplicantDTO> createItemForm(IObject<?> member) {
+            return new CoapplicantForm();
         }
 
         @Override
@@ -158,12 +151,8 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof DependentDTO) {
-                return new DependentForm();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<DependentDTO> createItemForm(IObject<?> member) {
+            return new DependentForm();
         }
 
         @Override

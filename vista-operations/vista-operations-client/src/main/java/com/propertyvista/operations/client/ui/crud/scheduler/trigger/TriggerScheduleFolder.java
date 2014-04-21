@@ -44,11 +44,8 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof TriggerSchedule) {
-            return new TriggerScheduleEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<TriggerSchedule> createItemForm(IObject<?> member) {
+        return new TriggerScheduleEditor();
     }
 
     private class TriggerScheduleEditor extends CEntityForm<TriggerSchedule> {

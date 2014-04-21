@@ -18,7 +18,6 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.propertyvista.biz.policy.AccountNumberGenerator;
 import com.propertyvista.biz.policy.AccountNumberGenerator.RandomDigitGenerator;
 import com.propertyvista.domain.util.ValidationUtils;
 

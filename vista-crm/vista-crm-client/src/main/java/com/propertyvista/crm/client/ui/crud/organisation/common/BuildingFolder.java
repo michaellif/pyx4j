@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -61,28 +62,24 @@ public class BuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Building) {
-            return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
-                @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                    CLabel<?> comp = inject(column.getObject(), new CLabel<String>());
+    protected CEntityForm<Building> createItemForm(IObject<?> member) {
+        return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CLabel<?> comp = inject(column.getObject(), new CLabel<String>());
 
-                    if (proto().propertyCode() == column.getObject()) {
-                        comp.setNavigationCommand(new Command() {
-                            @Override
-                            public void execute() {
-                                AppSite.getPlaceController()
-                                        .goTo(AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
-                            }
-                        });
-                    }
-
-                    return comp;
+                if (proto().propertyCode() == column.getObject()) {
+                    comp.setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
+                        }
+                    });
                 }
-            };
-        }
-        return super.create(member);
+
+                return comp;
+            }
+        };
     }
 
     @Override

@@ -33,7 +33,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -280,12 +279,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof LeaseBillingTypePolicyItem) {
-                return new LeaseBillingTypeEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<LeaseBillingTypePolicyItem> createItemForm(IObject<?> member) {
+            return new LeaseBillingTypeEditor();
         }
 
         class LeaseBillingTypeEditor extends CEntityForm<LeaseBillingTypePolicyItem> {

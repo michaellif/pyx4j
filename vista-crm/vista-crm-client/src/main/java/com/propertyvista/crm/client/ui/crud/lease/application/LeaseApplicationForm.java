@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
@@ -103,12 +103,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private CEntityFolder<TenantInfoDTO> createTenantView() {
         return new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
+
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof TenantInfoDTO) {
-                    return new InfoViewForm(true);
-                }
-                return super.create(member);
+            protected CEntityForm<TenantInfoDTO> createItemForm(IObject<?> member) {
+                return new InfoViewForm(true);
             }
 
             @Override
@@ -122,12 +120,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private CEntityFolder<TenantFinancialDTO> createFinancialView() {
         return new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
+
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof TenantFinancialDTO) {
-                    return new FinancialViewForm(true);
-                }
-                return super.create(member);
+            protected CEntityForm<TenantFinancialDTO> createItemForm(IObject<?> member) {
+                return new FinancialViewForm(true);
             }
 
             @Override

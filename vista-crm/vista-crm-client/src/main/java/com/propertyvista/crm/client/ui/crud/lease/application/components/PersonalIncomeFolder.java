@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
@@ -62,11 +63,8 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof CustomerScreeningIncome) {
-            return new PersonalIncomeEditor(documentationPolicy);
-        }
-        return super.create(member);
+    protected CEntityForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
+        return new PersonalIncomeEditor(documentationPolicy);
     }
 
     @Override

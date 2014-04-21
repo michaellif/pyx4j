@@ -109,11 +109,8 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof LeaseTermGuarantor) {
-            return new GuarantorInLeaseEditor();
-        }
-        return super.create(member);
+    protected CEntityForm<LeaseTermGuarantor> createItemForm(IObject<?> member) {
+        return new GuarantorInLeaseEditor();
     }
 
     void updateTenantList() {

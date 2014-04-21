@@ -33,8 +33,8 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.DebugIds;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.Label;
 
 /**

@@ -25,8 +25,8 @@ import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileViewerView;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
-import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudService;
+import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
 
 public class FundsReconciliationFileViewerActivity extends AbstractViewerActivity<FundsReconciliationFileDTO> implements
         FundsReconciliationFileViewerView.Presenter {

@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
@@ -226,11 +225,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof AccountDTO) {
-                return new AccountViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<AccountDTO> createItemForm(IObject<?> member) {
+            return new AccountViewer();
         }
 
         private class AccountViewer extends CEntityForm<AccountDTO> {
@@ -272,11 +268,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof JudgementDTO) {
-                return new JudgementViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<JudgementDTO> createItemForm(IObject<?> member) {
+            return new JudgementViewer();
         }
 
         private class JudgementViewer extends CEntityForm<JudgementDTO> {
@@ -317,11 +310,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof ProposalDTO) {
-                return new ProposalViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<ProposalDTO> createItemForm(IObject<?> member) {
+            return new ProposalViewer();
         }
 
         private class ProposalViewer extends CEntityForm<ProposalDTO> {
@@ -362,11 +352,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof EvictionDTO) {
-                return new EvictionViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<EvictionDTO> createItemForm(IObject<?> member) {
+            return new EvictionViewer();
         }
 
         private class EvictionViewer extends CEntityForm<EvictionDTO> {
@@ -408,11 +395,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof RentDTO) {
-                return new RentViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<RentDTO> createItemForm(IObject<?> member) {
+            return new RentViewer();
         }
 
         private class RentViewer extends CEntityForm<RentDTO> {
@@ -455,11 +439,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof CollectionDTO) {
-                return new CollectionViewer();
-            }
-            return super.create(member);
+        protected CEntityForm<CollectionDTO> createItemForm(IObject<?> member) {
+            return new CollectionViewer();
         }
 
         private class CollectionViewer extends CEntityForm<CollectionDTO> {

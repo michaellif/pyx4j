@@ -30,7 +30,6 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -128,12 +127,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof NotesAndAttachments) {
-                    return new NoteEditor(true);
-                } else {
-                    return super.create(member);
-                }
+            protected CEntityForm<NotesAndAttachments> createItemForm(IObject<?> member) {
+                return new NoteEditor(true);
             }
 
             @Override
@@ -340,12 +335,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public CComponent<?, ?> create(IObject<?> member) {
-                    if (member instanceof NoteAttachment) {
-                        return new AttachmentEditor();
-                    } else {
-                        return super.create(member);
-                    }
+                protected CEntityForm<NoteAttachment> createItemForm(IObject<?> member) {
+                    return new AttachmentEditor();
                 }
 
                 @Override
