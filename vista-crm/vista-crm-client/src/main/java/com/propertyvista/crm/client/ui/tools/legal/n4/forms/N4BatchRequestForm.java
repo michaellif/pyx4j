@@ -80,7 +80,7 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
 
         panel.setH1(++row, 0, 2, i18n.tr("Agent/Company Contact Information:"));
         panel.setWidget(++row, 0, inject(proto().companyName(), new FieldDecoratorBuilder().build()));
-        CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
+        CPhoneField phoneNumberField = (CPhoneField) inject(proto().phoneNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
                 return N4PolicyForm.PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;
@@ -93,7 +93,7 @@ public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
 
         panel.setWidget(++row, 0, phoneNumberField);
 
-        CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
+        CPhoneField faxNumberField = (CPhoneField) inject(proto().faxNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
                 return N4PolicyForm.PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;

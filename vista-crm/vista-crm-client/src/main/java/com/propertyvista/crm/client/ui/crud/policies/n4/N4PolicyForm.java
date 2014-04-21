@@ -104,7 +104,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, inject(proto().companyName(), new FieldDecoratorBuilder().build()));
         companyNameAndPhonesPanel.setWidget(subRow, 1, 1, inject(proto().emailAddress(), new FieldDecoratorBuilder().build()));
 
-        CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
+        CPhoneField phoneNumberField = (CPhoneField) inject(proto().phoneNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
                 return PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;
@@ -115,7 +115,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         phoneNumberField.setDecorator(new FieldDecoratorBuilder().build());
         companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, phoneNumberField);
 
-        CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
+        CPhoneField faxNumberField = (CPhoneField) inject(proto().faxNumber(), new CPhoneField() {
             @Override
             public IFormat<String> getFormat() {
                 return PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;

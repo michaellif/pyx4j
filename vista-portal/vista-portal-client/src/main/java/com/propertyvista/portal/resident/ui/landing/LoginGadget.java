@@ -145,7 +145,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             contentPanel.setWidget(++row, 0, passwordField);
             passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
 
-            CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
+            CCheckBox rememberID = (CCheckBox) inject(proto().rememberID(), new CCheckBox());
             rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new CheckBoxDecorator(rememberID));
 

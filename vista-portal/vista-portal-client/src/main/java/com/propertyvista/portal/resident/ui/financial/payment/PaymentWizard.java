@@ -269,8 +269,9 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
+        cSignature.setDecorator(new SignatureDecorator());
 
-        panel.setWidget(++row, 0, new SignatureDecorator(inject(proto().convenienceFeeSignature(), cSignature)));
+        panel.setWidget(++row, 0, inject(proto().convenienceFeeSignature(), cSignature));
 
         panel.setHR(++row, 0, 1);
 
@@ -311,24 +312,26 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     public void onReset() {
         super.onReset();
 
-        ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(true);
-//      ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(true);
+        if (getDecorator() instanceof WizardDecorator) {
+            ((WizardDecorator) getDecorator()).getBtnNext().setVisible(true);
+        }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void onStepSelected(WizardStep selectedStep) {
         super.onStepSelected(selectedStep);
-
-        ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(true);
-//      ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(true);
+        if (getDecorator() instanceof WizardDecorator) {
+            ((WizardDecorator) getDecorator()).getBtnNext().setVisible(true);
+        }
         if (selectedStep.equals(confirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
 
             if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
-                ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(false);
-//                ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(false);
+                if (getDecorator() instanceof WizardDecorator) {
+                    ((WizardDecorator) getDecorator()).getBtnNext().setVisible(false);
+                }
             }
         }
     }

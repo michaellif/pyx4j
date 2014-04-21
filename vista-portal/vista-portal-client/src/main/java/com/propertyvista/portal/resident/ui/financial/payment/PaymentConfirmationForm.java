@@ -100,11 +100,11 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     public void onReset() {
         super.onReset();
 
-        @SuppressWarnings("unchecked")
-        FormDecorator<PaymentRecordDTO> decorator = ((FormDecorator<PaymentRecordDTO>) getDecorator());
-        decorator.setCaption(headerUndefined);
-
-        decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        if (getDecorator() instanceof FormDecorator) {
+            FormDecorator decorator = ((FormDecorator) getDecorator());
+            decorator.setCaption(headerUndefined);
+            decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.ErrorMessage.name());
+        }
 
         get(proto().transactionErrorMessage()).setVisible(false);
         get(proto().transactionAuthorizationNumber()).setVisible(false);
@@ -116,18 +116,20 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        @SuppressWarnings("unchecked")
-        FormDecorator<PaymentRecordDTO> decorator = ((FormDecorator<PaymentRecordDTO>) getDecorator());
+        if (getDecorator() instanceof FormDecorator) {
+            FormDecorator decorator = ((FormDecorator) getDecorator());
+            if (getValue().paymentStatus().getValue().isFailed()) {
+                decorator.setCaption(headerFailed);
+                decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
+            } else {
+                decorator.setCaption(headerSuccess);
+            }
+        }
 
         if (getValue().paymentStatus().getValue().isFailed()) {
-            decorator.setCaption(headerFailed);
-            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.ErrorMessage.name());
-
             get(proto().transactionErrorMessage()).setVisible(true);
             autoPaySignupPanel.setVisible(false);
         } else {
-            decorator.setCaption(headerSuccess);
-
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
             get(proto().convenienceFeeTransactionAuthorizationNumber()).setVisible(!getValue().convenienceFeeTransactionAuthorizationNumber().isNull());
         }

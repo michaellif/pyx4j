@@ -66,7 +66,7 @@ public class BuildingFolder extends VistaTableFolder<Building> {
         return new CEntityFolderRowEditor<Building>(Building.class, columns()) {
             @Override
             protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                CLabel<?> comp = inject(column.getObject(), new CLabel<String>());
+                CLabel<?> comp = (CLabel<?>) inject(column.getObject(), new CLabel<String>());
 
                 if (proto().propertyCode() == column.getObject()) {
                     comp.setNavigationCommand(new Command() {

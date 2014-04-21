@@ -149,7 +149,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, passwordField);
 
-            CCheckBox rememberID = inject(proto().rememberID(), new CCheckBox());
+            CCheckBox rememberID = (CCheckBox) inject(proto().rememberID(), new CCheckBox());
             rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
             contentPanel.setWidget(++row, 0, new CheckBoxDecorator(rememberID));
 

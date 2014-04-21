@@ -67,7 +67,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
         Anchor termsAnchor = new TermsAnchor(i18n.tr("TenantSure Pre-Authorized Payment Terms"), ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
 
-        content.setWidget(++row, 0, 2, new SignatureDecorator(inject(proto().preAuthorizedAgreementSignature(), new CSignature(signatureDescriptionPanel))));
+        content.setWidget(++row, 0, 2, inject(proto().preAuthorizedAgreementSignature(), new CSignature(signatureDescriptionPanel), new SignatureDecorator()));
         return content;
     }
 

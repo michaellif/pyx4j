@@ -60,11 +60,8 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setWidget(
-                ++row,
-                0,
-                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(200).labelAlignment(Alignment.left)
-                        .build()));
+        mainPanel.setWidget(++row, 0,
+                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(200).labelAlignment(Alignment.left).build()));
 
         mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         mainPanel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
@@ -96,8 +93,10 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         super.onValueSet(populate);
 
         get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
-        ((EditableFormDecorator<AutoPayDTO>) getDecorator()).getBtnEdit().setVisible(
-                !getValue().paymentMethod().isNull() && !getValue().isDeleted().getValue(false) && !getValue().leaseStatus().getValue().isNoAutoPay()
-                        && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+        if (getDecorator() instanceof EditableFormDecorator) {
+            ((EditableFormDecorator) getDecorator()).getBtnEdit().setVisible(
+                    !getValue().paymentMethod().isNull() && !getValue().isDeleted().getValue(false) && !getValue().leaseStatus().getValue().isNoAutoPay()
+                            && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+        }
     }
 }

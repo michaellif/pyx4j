@@ -41,7 +41,7 @@ public class SignatureDecorator extends FlowPanel implements IDecorator<CField<?
 
     private CSignature component;
 
-    public SignatureDecorator(CSignature component) {
+    public SignatureDecorator() {
 
         componentHolder = new SimplePanel();
         componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);

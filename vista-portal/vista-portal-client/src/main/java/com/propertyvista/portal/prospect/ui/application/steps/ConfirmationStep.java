@@ -90,7 +90,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
             }
         });
 
-        content.setWidget(++row, 0, new SignatureDecorator(inject(proto().payment().convenienceFeeSignature(), cSignature)));
+        content.setWidget(++row, 0, inject(proto().payment().convenienceFeeSignature(), cSignature, new SignatureDecorator()));
 
         content.setBR(++row, 0, 1);
 
