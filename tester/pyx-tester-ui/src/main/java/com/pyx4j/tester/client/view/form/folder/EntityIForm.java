@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -46,7 +45,6 @@ import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
-import com.pyx4j.tester.client.view.form.EntityIIFormWithVisibilityChange;
 
 public class EntityIForm extends CEntityForm<EntityI> {
 
@@ -54,19 +52,6 @@ public class EntityIForm extends CEntityForm<EntityI> {
 
     public EntityIForm() {
         super(EntityI.class);
-    }
-
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof EntityIII) {
-            return new EntityIIIEditor();
-        } else if (member instanceof EntityII) {
-            return new EntityIIFormWithVisibilityChange();
-        } else if (member instanceof EntityIV) {
-            return new EntityIVEditor();
-        } else {
-            return super.create(member);
-        }
     }
 
     @Override
@@ -107,12 +92,8 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof EntityII) {
-                return new EntityIIEditor();
-            } else {
-                return super.create(member);
-            }
+        protected CEntityForm<EntityII> createItemForm(IObject<?> member) {
+            return new EntityIIEditor();
         }
 
     }
@@ -157,6 +138,11 @@ public class EntityIForm extends CEntityForm<EntityI> {
             return new BoxFolderItemDecorator<EntityIII>(Images.INSTANCE);
         }
 
+        @Override
+        protected CEntityForm<EntityIII> createItemForm(IObject<?> member) {
+            return new EntityIIIEditor();
+        }
+
     }
 
     static class EntityIIIEditor extends CEntityForm<EntityIII> {
@@ -197,6 +183,10 @@ public class EntityIForm extends CEntityForm<EntityI> {
             return new TableFolderItemDecorator<EntityIV>(Images.INSTANCE);
         }
 
+        @Override
+        protected CEntityForm<EntityIV> createItemForm(IObject<?> member) {
+            return new EntityIVEditor();
+        }
     }
 
     static class EntityIVEditor extends CEntityFolderRowEditor<EntityIV> {

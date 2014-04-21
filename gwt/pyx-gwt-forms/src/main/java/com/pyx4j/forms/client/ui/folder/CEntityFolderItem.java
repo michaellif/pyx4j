@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
@@ -116,10 +117,12 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     protected IsWidget createContent() {
-        entityForm = (CEntityForm) create(EntityFactory.getEntityPrototype(clazz));
+        entityForm = (CEntityForm<E>) createItemForm(EntityFactory.getEntityPrototype(clazz));
         adopt(entityForm);
         return entityForm;
     }
+
+    protected abstract CEntityForm<? extends E> createItemForm(IObject<?> member);
 
     @Override
     public void setDecorator(IDecorator<? super CEntityFolderItem<E>> decorator) {

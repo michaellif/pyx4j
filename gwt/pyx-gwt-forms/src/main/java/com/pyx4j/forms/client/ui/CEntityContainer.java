@@ -276,9 +276,9 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
         assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
-        return ((CEntityContainer<?, ?>) getParent()).create(member);
+        return getParent().create(member);
     }
 
     @Override

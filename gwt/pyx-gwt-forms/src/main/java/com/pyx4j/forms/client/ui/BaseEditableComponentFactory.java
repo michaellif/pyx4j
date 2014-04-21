@@ -35,157 +35,146 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
+        CField<?, ?> comp;
         MemberMeta mm = member.getMeta();
         EditorType editorType = mm.getEditorType();
         if (editorType != null) {
             switch (editorType) {
             case text:
-                return new CTextField();
+                comp = new CTextField();
             case password:
-                return new CPasswordTextField();
+                comp = new CPasswordTextField();
             case textarea:
-                return new CTextArea();
+                comp = new CTextArea();
             case richtextarea:
-                return new CRichTextArea();
+                comp = new CRichTextArea();
             case combo:
                 if (mm.isEntity()) {
-                    CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
+                    comp = new CEntityComboBox(mm.getObjectClass());
                     if (mm.isEmbedded()) {
-                        comp.setUseNamesComparison(true);
+                        ((CEntityComboBox) comp).setUseNamesComparison(true);
                     }
-                    return comp;
                 } else {
-                    CComboBox comp = new CComboBox();
+                    comp = new CComboBox();
                     if (mm.getValueClass().isEnum()) {
-                        comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+                        ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
                     }
-                    return comp;
                 }
             case suggest:
                 if (mm.isEntity()) {
-                    return new CEntitySuggestBox(mm.getObjectClass());
+                    comp = new CEntitySuggestBox(mm.getObjectClass());
                 } else {
-                    return new CSuggestStringBox();
+                    comp = new CSuggestStringBox();
                 }
             case captcha:
-                return new CCaptcha();
+                comp = new CCaptcha();
             case monthyearpicker:
-                return new CMonthYearPicker(false);
+                comp = new CMonthYearPicker(false);
             case yearpicker:
-                return new CMonthYearPicker(true);
+                comp = new CMonthYearPicker(true);
             case timepicker: {
-                CTimeField comp = new CTimeField();
+                comp = new CTimeField();
                 if (mm.getFormat() != null) {
-                    comp.setTimeFormat(mm.getFormat());
+                    ((CTimeField) comp).setTimeFormat(mm.getFormat());
                 }
-                return comp;
             }
             case percentage: {
-                CPercentageField comp = new CPercentageField();
+                comp = new CPercentageField();
                 if (mm.getFormat() != null) {
-                    comp.setPercentageFormat(mm.getFormat());
+                    ((CPercentageField) comp).setPercentageFormat(mm.getFormat());
                 }
-                return comp;
             }
             case percentagelabel: {
-                CPercentageLabel comp = new CPercentageLabel();
+                comp = new CPercentageLabel();
                 if (mm.getFormat() != null) {
-                    comp.setPercentageFormat(mm.getFormat());
+                    ((CPercentageLabel) comp).setPercentageFormat(mm.getFormat());
                 }
-                return comp;
             }
             case money:
-                return new CMoneyField();
+                comp = new CMoneyField();
             case moneylabel:
-                return new CMoneyLabel();
+                comp = new CMoneyLabel();
             case email:
-                return new CEmailField();
+                comp = new CEmailField();
             case phone:
-                return new CPhoneField();
+                comp = new CPhoneField();
             case radiogroup:
                 if (mm.getValueClass() == Boolean.class) {
-                    return new CRadioGroupBoolean(RadioGroup.Layout.HORISONTAL);
+                    comp = new CRadioGroupBoolean(RadioGroup.Layout.HORISONTAL);
                 } else if (mm.getValueClass().isEnum()) {
-                    return new CRadioGroupEnum(mm.getValueClass(), RadioGroup.Layout.HORISONTAL);
+                    comp = new CRadioGroupEnum(mm.getValueClass(), RadioGroup.Layout.HORISONTAL);
                 } else {
                     throw new Error("Unknown");
                 }
             case label:
                 if (mm.getValueClass().equals(String.class)) {
-                    return new CLabel();
+                    comp = new CLabel();
                 } else if (mm.getValueClass().isEnum()) {
-                    return new CEnumLabel();
+                    comp = new CEnumLabel();
                 } else if (mm.isEntity()) {
-                    return new CEntityLabel();
+                    comp = new CEntityLabel();
                 } else if (mm.isNumberValueClass()) {
-                    return new CNumberLabel();
+                    comp = new CNumberLabel();
                 } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))
                         || (mm.getValueClass().equals(LogicalDate.class))) {
-                    CDateLabel comp = new CDateLabel();
+                    comp = new CDateLabel();
                     if (mm.getFormat() != null) {
-                        comp.setDateFormat(mm.getFormat());
+                        ((CDateLabel) comp).setDateFormat(mm.getFormat());
                     }
-                    return comp;
                 } else if (mm.getValueClass() == Boolean.class) {
-                    return new CBooleanLabel();
+                    comp = new CBooleanLabel();
                 }
             case color:
-                return new CColorPicker();
+                comp = new CColorPicker();
             case hue:
-                return new CColorPicker(true);
+                comp = new CColorPicker(true);
             default:
                 throw new Error("Unknown");
             }
         } else if (mm.getValueClass().equals(String.class)) {
-            return new CTextField();
+            comp = new CTextField();
         } else if (mm.isEntity()) {
             if (mm.isOwnedRelationships()) {
-                CEntityLabel comp = new CEntityLabel();
-                return comp;
+                comp = new CEntityLabel();
             } else {
-                CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
-                return comp;
+                comp = new CEntityComboBox(mm.getObjectClass());
             }
         } else if (mm.getValueClass().isEnum()) {
-            CComboBox comp = new CComboBox();
-            comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
-            return comp;
+            comp = new CComboBox();
+            ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
         } else if (mm.getValueClass().equals(LogicalDate.class)) {
-            CDatePicker comp = new CDatePicker();
+            comp = new CDatePicker();
             if (mm.getFormat() != null) {
-                comp.setDateFormat(mm.getFormat());
+                ((CDatePicker) comp).setDateFormat(mm.getFormat());
             }
-            return comp;
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            CDateLabel comp = new CDateLabel();
+            comp = new CDateLabel();
             if (mm.getFormat() != null) {
-                comp.setDateFormat(mm.getFormat());
+                ((CDateLabel) comp).setDateFormat(mm.getFormat());
             }
-            return comp;
         } else if (mm.getValueClass().equals(Time.class)) {
-            CTimeField comp = new CTimeField();
+            comp = new CTimeField();
             if (mm.getFormat() != null) {
-                comp.setTimeFormat(mm.getFormat());
+                ((CTimeField) comp).setTimeFormat(mm.getFormat());
             }
-            return comp;
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            return new CCheckBox();
+            comp = new CCheckBox();
         } else if (mm.getValueClass().equals(Integer.class)) {
-            return new CIntegerField();
+            comp = new CIntegerField();
         } else if (mm.getValueClass().equals(BigDecimal.class)) {
-            return new CBigDecimalField();
+            comp = new CBigDecimalField();
         } else if (mm.getValueClass().equals(Long.class)) {
-            return new CLongField();
+            comp = new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
-            CDoubleField comp = new CDoubleField();
+            comp = new CDoubleField();
             if (mm.getFormat() != null) {
-                comp.setNumberPattern(mm.getFormat());
+                ((CDoubleField) comp).setNumberPattern(mm.getFormat());
             }
-            return comp;
         } else {
             throw new Error("No Component factory for member '" + member.getMeta().getFieldName() + "' of class " + member.getValueClass());
         }
+        return comp;
     }
 
 }

@@ -84,7 +84,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
         if (isAttached()) {
             return super.create(member);
         } else {

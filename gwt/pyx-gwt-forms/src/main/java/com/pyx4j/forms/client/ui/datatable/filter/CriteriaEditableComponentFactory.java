@@ -34,10 +34,10 @@ import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
 import com.pyx4j.forms.client.ui.CBigDecimalField;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CKeyField;
 import com.pyx4j.forms.client.ui.CLongField;
@@ -49,9 +49,9 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CField<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CComponent<?, ?> comp;
+        CField<?, ?> comp;
         if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getObjectClass());
             ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());

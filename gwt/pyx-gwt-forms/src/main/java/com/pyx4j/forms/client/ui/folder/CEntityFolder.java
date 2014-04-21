@@ -41,11 +41,13 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -165,12 +167,20 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected abstract IFolderItemDecorator<E> createItemDecorator();
 
+    protected abstract CEntityForm<? extends E> createItemForm(IObject<?> member);
+
     protected CEntityFolderItem<E> createItem(boolean first) {
         return new CEntityFolderItem<E>(rowClass) {
             @Override
             public IFolderItemDecorator<E> createItemDecorator() {
                 return CEntityFolder.this.createItemDecorator();
             }
+
+            @Override
+            protected CEntityForm<? extends E> createItemForm(IObject<?> member) {
+                return CEntityFolder.this.createItemForm(null);
+            }
+
         };
     }
 

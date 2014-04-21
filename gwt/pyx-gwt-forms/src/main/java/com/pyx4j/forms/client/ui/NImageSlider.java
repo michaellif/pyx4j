@@ -200,34 +200,30 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member.getObjectClass().equals(imgClass)) {
-                return new CEntityForm<E>(imgClass) {
-                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
+        protected CEntityForm<E> createItemForm(IObject<?> member) {
+            return new CEntityForm<E>(imgClass) {
+                private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
 
-                    @Override
-                    protected IsWidget createContent() {
-                        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                @Override
+                protected IsWidget createContent() {
+                    TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
-                        thumb.setImage(getCComponent().getThumbnailPlaceholder());
-                        content.setWidget(0, 0, thumb);
-                        content.setWidget(0, 1, getCComponent().getImageEntryView(this));
+                    thumb.setImage(getCComponent().getThumbnailPlaceholder());
+                    content.setWidget(0, 0, thumb);
+                    content.setWidget(0, 1, getCComponent().getImageEntryView(this));
 
-                        return content;
+                    return content;
+                }
+
+                @Override
+                protected void onValueSet(boolean populate) {
+                    super.onValueSet(populate);
+                    if (getValue() != null) {
+                        thumb.setImage(new Image(getCComponent().getImageUrl(getValue())));
                     }
+                }
 
-                    @Override
-                    protected void onValueSet(boolean populate) {
-                        super.onValueSet(populate);
-                        if (getValue() != null) {
-                            thumb.setImage(new Image(getCComponent().getImageUrl(getValue())));
-                        }
-                    }
-
-                };
-            } else {
-                return factory.create(member);
-            }
+            };
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
