@@ -23,25 +23,15 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 
 public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
-    private final boolean modifyable;
-
     private final boolean collapsed;
 
-    private final boolean oneColumn;
-
-    public EmergencyContactFolder(boolean modifyable) {
-        this(modifyable, false);
+    public EmergencyContactFolder() {
+        this(false);
     }
 
-    public EmergencyContactFolder(boolean modifyable, boolean oneColumn) {
-        this(modifyable, false, false);
-    }
-
-    public EmergencyContactFolder(boolean modifyable, boolean collapsed, boolean oneColumn) {
-        super(EmergencyContact.class, modifyable);
-        this.modifyable = modifyable;
+    public EmergencyContactFolder(boolean collapsed) {
+        super(EmergencyContact.class);
         this.collapsed = collapsed;
-        this.oneColumn = oneColumn;
     }
 
     @Override
@@ -53,7 +43,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
     @Override
     protected CEntityForm<EmergencyContact> createItemForm(IObject<?> member) {
-        return new EmergencyContactEditor(oneColumn);
+        return new EmergencyContactEditor();
     }
 
     @Override

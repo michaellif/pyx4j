@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -27,16 +26,15 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.person.Name;
 
-public class NameEditor extends CEntityForm<Name> {
+public class NameEditor extends AccessoryEntityForm<Name> {
 
     private final CField<Name, ?> viewComp;
-
-    private final String customViewLabel;
 
     private final CrudAppPlace linkPlace;
 
@@ -44,10 +42,6 @@ public class NameEditor extends CEntityForm<Name> {
 
     public NameEditor() {
         this(null);
-    }
-
-    public NameEditor(boolean oneColumn) {
-        this(null, oneColumn);
     }
 
     public NameEditor(String customViewLabel) {
@@ -61,7 +55,6 @@ public class NameEditor extends CEntityForm<Name> {
     @SuppressWarnings("rawtypes")
     public NameEditor(String customViewLabel, Class<? extends IEntity> linkType, boolean oneColumn) {
         super(Name.class);
-        this.customViewLabel = customViewLabel;
         this.oneColumn = oneColumn;
 
         viewComp = new CEntityLabel<Name>();
@@ -103,14 +96,14 @@ public class NameEditor extends CEntityForm<Name> {
         int span = (oneColumn ? 1 : 2);
 
         if (!isViewable()) {
-            main.setWidget(++row, 0, inject(proto().firstName(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++row, 0, inject(proto().lastName(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++row, 0, inject(proto().middleName(), new FieldDecoratorBuilder(5).build()));
+            main.setWidget(++row, 0, injectAndDecorate(proto().firstName(), 18));
+            main.setWidget(++row, 0, injectAndDecorate(proto().lastName(), 18));
+            main.setWidget(++row, 0, injectAndDecorate(proto().middleName(), 5));
 
             row = (oneColumn ? row : -1);
-            main.setWidget(++row, col, inject(proto().namePrefix(), new FieldDecoratorBuilder(5).build()));
-            main.setWidget(++row, col, inject(proto().nameSuffix(), new FieldDecoratorBuilder(5).build()));
-            main.setWidget(++row, col, inject(proto().maidenName(), new FieldDecoratorBuilder(15).build()));
+            main.setWidget(++row, col, injectAndDecorate(proto().namePrefix(), 5));
+            main.setWidget(++row, col, injectAndDecorate(proto().nameSuffix(), 5));
+            main.setWidget(++row, col, injectAndDecorate(proto().maidenName(), 15));
         } else {
             main.setWidget(0, 0, span, viewComp);
         }

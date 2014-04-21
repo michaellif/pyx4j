@@ -15,14 +15,13 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.domain.payment.AccountType;
 import com.propertyvista.domain.payment.CheckInfo;
 
-public class CheckInfoEditor extends CEntityForm<CheckInfo> {
+public class CheckInfoEditor extends AccessoryEntityForm<CheckInfo> {
 
     public CheckInfoEditor() {
         super(CheckInfo.class);
@@ -33,15 +32,15 @@ public class CheckInfoEditor extends CEntityForm<CheckInfo> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().bankName(), new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().accountType(), new FieldDecoratorBuilder(10).build()));
-        panel.setWidget(++row, 0, inject(proto().checkNo(), new FieldDecoratorBuilder(5).build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().nameOn(), 20));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().bankName(), 20));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().accountType(), 10));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().checkNo(), 5));
 
         row = 0;
-        panel.setWidget(++row, 1, inject(proto().transitNo(), new FieldDecoratorBuilder(10).build()));
-        panel.setWidget(++row, 1, inject(proto().institutionNo(), new FieldDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 1, inject(proto().accountNo(), new FieldDecoratorBuilder(15).build()));
+        panel.setWidget(++row, 1, injectAndDecorate(proto().transitNo(), 10));
+        panel.setWidget(++row, 1, injectAndDecorate(proto().institutionNo(), 5));
+        panel.setWidget(++row, 1, injectAndDecorate(proto().accountNo(), 15));
 
         return panel;
     }

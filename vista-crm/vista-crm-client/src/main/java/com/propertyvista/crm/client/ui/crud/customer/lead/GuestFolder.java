@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
@@ -23,6 +24,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -67,7 +69,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         return new GuestEditor();
     }
 
-    class GuestEditor extends CEntityForm<Guest> {
+    class GuestEditor extends AccessoryEntityForm<Guest> {
 
         public GuestEditor() {
             super(Guest.class);
@@ -78,14 +80,15 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
             BasicFlexFormPanel right = new BasicFlexFormPanel();
             int row = -1;
 
-            right.setWidget(++row, 0, inject(proto().person().email(), new FieldDecoratorBuilder(22).build()));
-            right.setWidget(++row, 0, inject(proto().person().homePhone(), new FieldDecoratorBuilder(15).build()));
-            right.setWidget(++row, 0, inject(proto().person().mobilePhone(), new FieldDecoratorBuilder(15).build()));
-            right.setWidget(++row, 0, inject(proto().person().workPhone(), new FieldDecoratorBuilder(15).build()));
+            right.setWidget(++row, 0, injectAndDecorate(proto().person().email(), 22));
+            right.setWidget(++row, 0, injectAndDecorate(proto().person().homePhone(), 15));
+            right.setWidget(++row, 0, injectAndDecorate(proto().person().mobilePhone(), 15));
+            right.setWidget(++row, 0, injectAndDecorate(proto().person().workPhone(), 15));
 
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
             main.setWidget(0, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"), true)));
             main.setWidget(0, 1, right);
+            main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
             return main;
         }
