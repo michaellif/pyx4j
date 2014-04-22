@@ -25,7 +25,7 @@ BEGIN TRANSACTION;
         JOIN    greenwin.building b ON (b.id = a.building)
         LEFT JOIN   greenwin.customer_user cu ON (cu.id = i.user_id) 
         WHERE   b.property_code = 'rich0033'
-        AND     i.status != 'Moved'
+        AND     COALESCE(i.status,'') != 'Moved'
     );
     
     CREATE TABLE _dba_.insurance_certificate AS
@@ -103,7 +103,7 @@ BEGIN TRANSACTION;
     
     UPDATE  greenwin.insurance_policy
     SET     status = 'Moved'
-    WHERE   id IN (SELECT id FROM _dba_.insurance_certificate);
+    WHERE   id IN (SELECT id FROM _dba_.insurance_policy);
     
     SET CONSTRAINTS ALL IMMEDIATE;
     
