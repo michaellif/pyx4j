@@ -25,7 +25,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -71,7 +71,7 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E> {
     }
 
     @Override
-    public void init(CEntityForm<E> component) {
+    public void init(CForm<E> component) {
         super.init(component);
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
 

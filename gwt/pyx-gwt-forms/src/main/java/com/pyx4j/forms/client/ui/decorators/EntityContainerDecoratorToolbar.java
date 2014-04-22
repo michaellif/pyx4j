@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class EntityContainerDecoratorToolbar extends HorizontalPanel {
@@ -46,7 +46,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         }
     }
 
-    private CEntityContainer<?, ?, ?> entityContainer;
+    private CContainer<?, ?, ?> entityContainer;
 
     private final SimplePanel actionsPanelHolder;
 
@@ -110,7 +110,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         caption.setVisible(!expanded);
     }
 
-    public void setEntityContainer(CEntityContainer<?, ?, ?> entityContainer) {
+    public void setEntityContainer(CContainer<?, ?, ?> entityContainer) {
         this.entityContainer = entityContainer;
         ImageResource icon = entityContainer.getIcon();
         if (icon != null) {

@@ -28,9 +28,9 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.pyx4j.widgets.client.images.ButtonImages;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public interface EntityFolderImages extends WidgetsImages, ButtonImages {
+public interface FolderImages extends WidgetsImages, ButtonImages {
 
-    EntityFolderImages INSTANCE = GWT.create(EntityFolderImages.class);
+    FolderImages INSTANCE = GWT.create(FolderImages.class);
 
     MoveUpIconButtonImages moveUpButton();
 

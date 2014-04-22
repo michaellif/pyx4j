@@ -27,12 +27,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolder;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
@@ -46,7 +46,7 @@ import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 
-public class EntityIForm extends CEntityForm<EntityI> {
+public class EntityIForm extends CForm<EntityI> {
 
     private static final I18n i18n = I18n.get(EntityIForm.class);
 
@@ -74,7 +74,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
         return main;
     }
 
-    static class EntityIIFolder extends CEntityFolder<EntityII> {
+    static class EntityIIFolder extends CFolder<EntityII> {
         public EntityIIFolder() {
             super(EntityII.class);
         }
@@ -92,13 +92,13 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        protected CEntityForm<EntityII> createItemForm(IObject<?> member) {
+        protected CForm<EntityII> createItemForm(IObject<?> member) {
             return new EntityIIEditor();
         }
 
     }
 
-    static class EntityIIEditor extends CEntityForm<EntityII> {
+    static class EntityIIEditor extends CForm<EntityII> {
 
         public EntityIIEditor() {
             super(EntityII.class);
@@ -121,7 +121,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
     }
 
-    static class EntityIIIFolder extends CEntityFolder<EntityIII> {
+    static class EntityIIIFolder extends CFolder<EntityIII> {
 
         public EntityIIIFolder() {
             super(EntityIII.class);
@@ -139,13 +139,13 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        protected CEntityForm<EntityIII> createItemForm(IObject<?> member) {
+        protected CForm<EntityIII> createItemForm(IObject<?> member) {
             return new EntityIIIEditor();
         }
 
     }
 
-    static class EntityIIIEditor extends CEntityForm<EntityIII> {
+    static class EntityIIIEditor extends CForm<EntityIII> {
 
         public EntityIIIEditor() {
             super(EntityIII.class);
@@ -160,13 +160,13 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
     }
 
-    static class EntityIVFolder extends CEntityFolder<EntityIV> {
+    static class EntityIVFolder extends CFolder<EntityIV> {
 
-        public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
+        public static final ArrayList<FolderColumnDescriptor> COLUMNS = new ArrayList<FolderColumnDescriptor>();
         static {
             EntityIV proto = EntityFactory.getEntityPrototype(EntityIV.class);
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.stringMember(), "15em"));
-            COLUMNS.add(new EntityFolderColumnDescriptor(proto.integerMember(), "15em"));
+            COLUMNS.add(new FolderColumnDescriptor(proto.stringMember(), "15em"));
+            COLUMNS.add(new FolderColumnDescriptor(proto.integerMember(), "15em"));
         }
 
         public EntityIVFolder() {
@@ -184,12 +184,12 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        protected CEntityForm<EntityIV> createItemForm(IObject<?> member) {
+        protected CForm<EntityIV> createItemForm(IObject<?> member) {
             return new EntityIVEditor();
         }
     }
 
-    static class EntityIVEditor extends CEntityFolderRowEditor<EntityIV> {
+    static class EntityIVEditor extends CFolderRowEditor<EntityIV> {
         public EntityIVEditor() {
             super(EntityIV.class, EntityIVFolder.COLUMNS);
         }

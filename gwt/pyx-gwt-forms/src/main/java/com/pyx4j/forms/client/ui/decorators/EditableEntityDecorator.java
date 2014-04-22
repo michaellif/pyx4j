@@ -27,12 +27,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implements IDecorator<CEntityForm<E>> {
+public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implements IDecorator<CForm<E>> {
 
     private static final I18n i18n = I18n.get(EditableEntityDecorator.class);
 
@@ -74,7 +74,7 @@ public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implem
     }
 
     @Override
-    public void init(CEntityForm<E> viewer) {
+    public void init(CForm<E> viewer) {
 
     }
 

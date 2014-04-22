@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
@@ -73,6 +73,6 @@ public class DataTableFilterHeader extends HorizontalPanel {
     }
 
     protected void setExpanded(boolean expanded) {
-        collapseImage.setResource(expanded ? EntityFolderImages.INSTANCE.collapse() : images.expand());
+        collapseImage.setResource(expanded ? FolderImages.INSTANCE.collapse() : images.expand());
     }
 }

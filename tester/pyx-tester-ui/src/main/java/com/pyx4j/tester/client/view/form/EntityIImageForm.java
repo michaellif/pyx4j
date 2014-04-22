@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -37,7 +37,7 @@ import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
-public class EntityIImageForm extends CEntityForm<EntityI> {
+public class EntityIImageForm extends CForm<EntityI> {
 
     private static final I18n i18n = I18n.get(EntityIImageForm.class);
 
@@ -56,12 +56,12 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
         CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class), new ImageFileURLBuilder(
                 false)) {
             @Override
-            public EntityFolderImages getFolderIcons() {
+            public FolderImages getFolderIcons() {
                 return Images.INSTANCE;
             }
 
             @Override
-            public Widget getImageEntryView(CEntityForm<TFile> entryForm) {
+            public Widget getImageEntryView(CForm<TFile> entryForm) {
                 VerticalPanel infoPanel = new VerticalPanel();
                 infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FormDecoratorBuilder().build()));
                 infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FormDecoratorBuilder().build()));

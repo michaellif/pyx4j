@@ -38,10 +38,10 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolder;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -170,13 +170,13 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         organizerWidth = width;
     }
 
-    class ImageOrganizer extends CEntityFolder<E> {
+    class ImageOrganizer extends CFolder<E> {
 
         private final Class<E> imgClass;
 
-        private final EntityFolderImages folderIcons;
+        private final FolderImages folderIcons;
 
-        public ImageOrganizer(Class<E> imgClass, EntityFolderImages folderIcons) {
+        public ImageOrganizer(Class<E> imgClass, FolderImages folderIcons) {
             super(imgClass);
             this.imgClass = imgClass;
             this.folderIcons = folderIcons;
@@ -190,7 +190,7 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         @SuppressWarnings("unchecked")
         public void clear() {
             for (CComponent<?, ?, ?> item : new ArrayList<CComponent<?, ?, ?>>(getComponents())) {
-                removeItem((CEntityFolderItem<E>) item);
+                removeItem((CFolderItem<E>) item);
             }
         }
 
@@ -200,8 +200,8 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         }
 
         @Override
-        protected CEntityForm<E> createItemForm(IObject<?> member) {
-            return new CEntityForm<E>(imgClass) {
+        protected CForm<E> createItemForm(IObject<?> member) {
+            return new CForm<E>(imgClass) {
                 private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
 
                 @Override
@@ -293,7 +293,7 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
             }
 
             @Override
-            public void init(CEntityFolder<E> folder) {
+            public void init(CFolder<E> folder) {
             }
 
             @Override

@@ -20,9 +20,9 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableDecorator;
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableHeader;
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderTableHeaderLabel;
+import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderTableDecorator;
+import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderTableHeader;
+import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderTableHeaderLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 
 public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
@@ -54,33 +54,33 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
     private boolean showHeader = true;
 
-    private CEntityFolder<E> folder;
+    private CFolder<E> folder;
 
     private final List<Image> mandatoryImages = new ArrayList<Image>();
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images) {
+    public TableFolderDecorator(final List<FolderColumnDescriptor> columns, FolderImages images) {
         this(columns, images, null, true);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title) {
+    public TableFolderDecorator(final List<FolderColumnDescriptor> columns, FolderImages images, String title) {
         this(columns, images, title, true);
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, EntityFolderImages images, String title, boolean addable) {
+    public TableFolderDecorator(final List<FolderColumnDescriptor> columns, FolderImages images, String title, boolean addable) {
         super(images, title, addable);
 
-        asWidget().setStyleName(EntityFolderTableDecorator.name());
+        asWidget().setStyleName(CFolderTableDecorator.name());
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         header = new HorizontalPanel();
-        header.setStyleName(EntityFolderTableHeader.name());
+        header.setStyleName(CFolderTableHeader.name());
         setHeaderVisible(false);
 
-        for (EntityFolderColumnDescriptor column : columns) {
+        for (FolderColumnDescriptor column : columns) {
             HorizontalPanel headerLabelPanel = new HorizontalPanel();
             headerLabelPanel.setWidth(column.getWidth());
-            headerLabelPanel.setStyleName(EntityFolderTableHeaderLabel.name());
+            headerLabelPanel.setStyleName(CFolderTableHeaderLabel.name());
 
             String caption;
             if (column.getCaption() != null) {
@@ -138,7 +138,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
     }
 
     @Override
-    public void init(final CEntityFolder<E> folder) {
+    public void init(final CFolder<E> folder) {
         this.folder = folder;
         super.init(folder);
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {

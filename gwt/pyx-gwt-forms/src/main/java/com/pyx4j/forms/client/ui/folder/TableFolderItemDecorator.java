@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator;
+import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderRowItemDecorator;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -38,7 +38,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 
@@ -61,15 +61,15 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     private IDebugId parentDebugId;
 
-    public TableFolderItemDecorator(EntityFolderImages images) {
+    public TableFolderItemDecorator(FolderImages images) {
         this(images, null);
     }
 
     //TODO propagate removeLabel to tooltip
-    public TableFolderItemDecorator(EntityFolderImages images, String removeLabel) {
+    public TableFolderItemDecorator(FolderImages images, String removeLabel) {
         super(images);
 
-        setStyleName(EntityFolderRowItemDecorator.name());
+        setStyleName(CFolderRowItemDecorator.name());
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         DockPanel mainPanel = new DockPanel();
@@ -94,7 +94,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     @Override
-    public void init(final CEntityFolderItem<E> folderItem) {
+    public void init(final CFolderItem<E> folderItem) {
         super.init(folderItem);
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {

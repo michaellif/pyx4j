@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.i18n.shared.I18n;
 
 @SuppressWarnings("rawtypes")
@@ -35,10 +35,10 @@ public class EntityContainerValidator extends AbstractComponentValidator {
 
     @Override
     public AbstractValidationError isValid() {
-        if (!(getComponent() instanceof CEntityContainer)) {
+        if (!(getComponent() instanceof CContainer)) {
             throw new Error("EntityContainerValidator can be added only to CEntityContainer");
         }
-        CEntityContainer<?, ?, ?> container = (CEntityContainer<?, ?, ?>) getComponent();
+        CContainer<?, ?, ?> container = (CContainer<?, ?, ?>) getComponent();
         if (container.getComponents() != null) {
             for (CComponent<?, ?, ?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {

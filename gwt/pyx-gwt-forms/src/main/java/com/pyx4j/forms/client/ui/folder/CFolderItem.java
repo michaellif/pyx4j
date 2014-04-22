@@ -34,17 +34,17 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityContainer;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<CEntityFolderItem<E>, E, IFolderItemDecorator<E>> {
+public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderItem<E>, E, IFolderItemDecorator<E>> {
 
-    private static final I18n i18n = I18n.get(CEntityFolderItem.class);
+    private static final I18n i18n = I18n.get(CFolderItem.class);
 
     private boolean first;
 
@@ -56,17 +56,17 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private HandlerRegistration folderHandlerRegistration;
 
-    private CEntityForm<E> entityForm;
+    private CForm<E> entityForm;
 
     private final Class<E> clazz;
 
     private ItemActionsBar actionsBar;
 
-    public CEntityFolderItem(Class<E> clazz) {
+    public CFolderItem(Class<E> clazz) {
         this(clazz, true, true);
     }
 
-    public CEntityFolderItem(Class<E> clazz, boolean movable, boolean removable) {
+    public CFolderItem(Class<E> clazz, boolean movable, boolean removable) {
         super();
         this.clazz = clazz;
         this.movable = movable;
@@ -76,7 +76,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
         IFolderItemDecorator<E> decorator = createItemDecorator();
 
-        EntityFolderImages images = decorator.getImages();
+        FolderImages images = decorator.getImages();
 
         addAction(ActionType.Remove, i18n.tr("Delete Item"), images.delButton(), null);
         addAction(ActionType.Up, i18n.tr("Move up"), images.moveUpButton(), null);
@@ -116,12 +116,12 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     protected IsWidget createContent() {
-        entityForm = (CEntityForm<E>) createItemForm(EntityFactory.getEntityPrototype(clazz));
+        entityForm = (CForm<E>) createItemForm(EntityFactory.getEntityPrototype(clazz));
         adopt(entityForm);
         return entityForm;
     }
 
-    protected abstract CEntityForm<? extends E> createItemForm(IObject<?> member);
+    protected abstract CForm<? extends E> createItemForm(IObject<?> member);
 
     @Override
     public void setDecorator(IFolderItemDecorator<E> decorator) {
@@ -156,10 +156,10 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onAdopt(final CEntityContainer<?, ?, ?> parent) {
+    public void onAdopt(final CContainer<?, ?, ?> parent) {
         super.onAdopt(parent);
 
-        final CEntityFolder<E> folder = (CEntityFolder<E>) parent;
+        final CFolder<E> folder = (CFolder<E>) parent;
 
         folderHandlerRegistration = folder.addValueChangeHandler(new ValueChangeHandler<IList<E>>() {
 
@@ -172,19 +172,19 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         setActionCommand(ActionType.Remove, new Command() {
             @Override
             public void execute() {
-                folder.removeItem(CEntityFolderItem.this);
+                folder.removeItem(CFolderItem.this);
             }
         });
         setActionCommand(ActionType.Up, new Command() {
             @Override
             public void execute() {
-                folder.moveUpItem(CEntityFolderItem.this);
+                folder.moveUpItem(CFolderItem.this);
             }
         });
         setActionCommand(ActionType.Down, new Command() {
             @Override
             public void execute() {
-                folder.moveDownItem(CEntityFolderItem.this);
+                folder.moveDownItem(CFolderItem.this);
             }
         });
 
@@ -199,14 +199,14 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             actionsBar.setDefaultActionsState(false, false, false);
         } else {
 
-            CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
-            int index = parent.getItemIndex(CEntityFolderItem.this);
+            CFolder<E> parent = ((CFolder<E>) getParent());
+            int index = parent.getItemIndex(CFolderItem.this);
 
             first = index == 0;
             last = index == parent.getItemCount() - 1;
 
-            CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
-            CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
+            CFolderItem<?> previousSibling = parent.getItem(index - 1);
+            CFolderItem<?> nextSibling = parent.getItem(index + 1);
 
             actionsBar.setDefaultActionsState(removable && parent.isRemovable(), movable && !first && previousSibling.isMovable() && parent.isOrderable(),
                     movable && !last && nextSibling.isMovable() && parent.isOrderable());

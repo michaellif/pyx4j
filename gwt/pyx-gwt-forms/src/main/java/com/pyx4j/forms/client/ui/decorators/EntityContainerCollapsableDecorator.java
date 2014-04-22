@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
+import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderBoxItem;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,7 +35,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.widgets.client.CollapsablePanel;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
@@ -77,14 +77,14 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
-        contentHolder.setStyleName(EntityFolderBoxItem.name());
+        contentHolder.setStyleName(CFolderBoxItem.name());
 
         mainPanel.add(contentHolder);
 
     }
 
     @Override
-    public void init(final CEntityForm<E> entityContainer) {
+    public void init(final CForm<E> entityContainer) {
         toolbar.setEntityContainer(entityContainer);
 
         entityContainer.addPropertyChangeHandler(new PropertyChangeHandler() {

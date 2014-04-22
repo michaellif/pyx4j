@@ -27,9 +27,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public interface IDecorator<COMP_TYPE extends CComponent<? extends COMP_TYPE, ?, ?>> extends IsWidget {
 
-    void init(COMP_TYPE component);
-
     void setContent(IsWidget content);
+
+    void init(COMP_TYPE component);
 
     void onSetDebugId(IDebugId parentDebugId);
 }

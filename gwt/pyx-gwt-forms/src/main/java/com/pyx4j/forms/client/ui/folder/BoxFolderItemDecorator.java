@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
+import static com.pyx4j.forms.client.ui.folder.DefaultFolderTheme.StyleName.CFolderBoxItem;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -41,7 +41,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerDecoratorToolbar;
@@ -69,12 +69,12 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     private IDebugId parentDebugId;
 
-    public BoxFolderItemDecorator(EntityFolderImages images) {
+    public BoxFolderItemDecorator(FolderImages images) {
         this(images, "Remove");
     }
 
     //TODO propagate removeLabel
-    public BoxFolderItemDecorator(EntityFolderImages images, String removeLabel) {
+    public BoxFolderItemDecorator(FolderImages images, String removeLabel) {
         super(images);
 
         setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecorator.name());
@@ -109,7 +109,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         mainPanel.add(toolbar);
 
         contentHolder = new SimplePanel();
-        contentHolder.setStyleName(EntityFolderBoxItem.name());
+        contentHolder.setStyleName(CFolderBoxItem.name());
 
         mainPanel.add(contentHolder);
 
@@ -122,7 +122,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void init(final CEntityFolderItem<E> folderItem) {
+    public void init(final CFolderItem<E> folderItem) {
         super.init(folderItem);
 
         toolbar.setEntityContainer(folderItem);

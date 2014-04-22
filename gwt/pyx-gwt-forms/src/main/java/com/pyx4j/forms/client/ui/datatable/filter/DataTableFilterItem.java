@@ -43,7 +43,7 @@ import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
@@ -161,7 +161,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterItem.name());
 
-        Image btnDel = new IconButton(i18n.tr("Remove Filter"), EntityFolderImages.INSTANCE.delButton(), new Command() {
+        Image btnDel = new IconButton(i18n.tr("Remove Filter"), FolderImages.INSTANCE.delButton(), new Command() {
 
             @Override
             public void execute() {

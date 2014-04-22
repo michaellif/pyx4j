@@ -25,13 +25,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityII;
 import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 
-public class EntityIIFormWithVisibilityChange extends CEntityForm<EntityII> {
+public class EntityIIFormWithVisibilityChange extends CForm<EntityII> {
 
     private static final I18n i18n = I18n.get(EntityIIFormWithVisibilityChange.class);
 

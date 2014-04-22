@@ -23,9 +23,9 @@ package com.pyx4j.tester.client.images;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 
-public interface Images extends ClientBundle, EntityFolderImages {
+public interface Images extends ClientBundle, FolderImages {
 
     Images INSTANCE = GWT.create(Images.class);
 

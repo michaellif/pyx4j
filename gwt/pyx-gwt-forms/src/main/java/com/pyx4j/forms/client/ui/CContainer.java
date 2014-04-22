@@ -50,10 +50,10 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
+public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE>, DATA_TYPE extends IObject<?>, DECORATOR_TYPE extends IDecorator<? super SELF_TYPE>>
         extends CComponent<SELF_TYPE, DATA_TYPE, DECORATOR_TYPE> implements IEditableComponentFactory {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityContainer.class);
+    private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 
     private final HashMap<CComponent<?, ?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?, ?>, HandlerRegistration>();
 
@@ -66,7 +66,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     private final NEntityContainer nativeComponent;
 
     @SuppressWarnings("unchecked")
-    public CEntityContainer() {
+    public CContainer() {
         nativeComponent = new NEntityContainer();
 
         if (false) {
@@ -74,7 +74,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
 
                 @Override
                 public void execute() {
-                    new EntityViewerDialog(CEntityContainer.this.getValue()).show();
+                    new EntityViewerDialog(CContainer.this.getValue()).show();
                 }
             });
             debugButton.getElement().getStyle().setProperty("display", "inline-block");
@@ -120,9 +120,9 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
             public void onPropertyChange(final PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid)) {
                     boolean wasValid = isValid();
-                    CEntityContainer.super.revalidate();
+                    CContainer.super.revalidate();
                     if (wasValid != isValid()) {
-                        PropertyChangeEvent.fire(CEntityContainer.this, PropertyName.valid);
+                        PropertyChangeEvent.fire(CContainer.this, PropertyName.valid);
                     }
 
                 }
@@ -133,9 +133,9 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
 
             @Override
             public void onValueChange(final ValueChangeEvent event) {
-                CEntityContainer.super.revalidate();
+                CContainer.super.revalidate();
                 log.trace("CContainer.onValueChange fired from {}", shortDebugInfo());
-                ValueChangeEvent.fire(CEntityContainer.this, getValue());
+                ValueChangeEvent.fire(CContainer.this, getValue());
             }
         }));
 
@@ -153,8 +153,8 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
             for (CComponent<?, ?, ?> ccomponent : getComponents()) {
                 if (ccomponent instanceof CField) {
                     ((CField<?, ?>) ccomponent).setVisited(true);
-                } else if (ccomponent instanceof CEntityContainer) {
-                    ((CEntityContainer<?, ?, ?>) ccomponent).setVisitedRecursive();
+                } else if (ccomponent instanceof CContainer) {
+                    ((CContainer<?, ?, ?>) ccomponent).setVisitedRecursive();
                 }
             }
         }
@@ -282,7 +282,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
     }
 
     @Override
-    public void onAdopt(CEntityContainer<?, ?, ?> parent) {
+    public void onAdopt(CContainer<?, ?, ?> parent) {
         super.onAdopt(parent);
         if (!initiated) {
             init();
@@ -333,7 +333,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
             content.asWidget().setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
             if (getWidget() instanceof IDecorator) {
                 ((IDecorator) getWidget()).setContent(content);
-                ((IDecorator) getWidget()).init(CEntityContainer.this);
+                ((IDecorator) getWidget()).init(CContainer.this);
             } else {
                 setWidget(content);
             }
@@ -353,7 +353,7 @@ public abstract class CEntityContainer<SELF_TYPE extends CComponent<SELF_TYPE, D
 
         @Override
         public CComponent<?, ?, ?> getCComponent() {
-            return CEntityContainer.this;
+            return CContainer.this;
         }
 
     }

@@ -24,11 +24,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 
 public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisorPane implements IVisorViewer<E> {
 
-    private CEntityForm<E> form;
+    private CForm<E> form;
 
     public AbstractVisorForm(Controller controller) {
         super(controller);
@@ -39,7 +39,7 @@ public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisor
         throw new Error("Call setForm instead of calling setContentPane");
     }
 
-    protected void setForm(CEntityForm<E> form) {
+    protected void setForm(CForm<E> form) {
 
         this.form = form;
         this.form.init();
@@ -48,7 +48,7 @@ public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisor
 
     }
 
-    protected CEntityForm<E> getForm() {
+    protected CForm<E> getForm() {
         return form;
     }
 

@@ -29,13 +29,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.IFormDecorator;
 import com.pyx4j.widgets.client.Toolbar;
 
 public class FormDecorator<E extends IEntity> extends FlowPanel implements IFormDecorator<E> {
 
-    private CEntityForm<E> component;
+    private CForm<E> component;
 
     private final Toolbar headerToolbar;
 
@@ -83,12 +83,12 @@ public class FormDecorator<E extends IEntity> extends FlowPanel implements IForm
     }
 
     @Override
-    public void init(CEntityForm<E> component) {
+    public void init(CForm<E> component) {
         assert this.component == null;
         this.component = component;
     }
 
-    public CEntityForm<E> getComponent() {
+    public CForm<E> getComponent() {
         return component;
     }
 

@@ -41,7 +41,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.gwt.commons.FocusUtil;
@@ -150,7 +150,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private Widget createAddButton() {
 
-        IconButton btnAdd = new IconButton(i18n.tr("Add filter..."), EntityFolderImages.INSTANCE.addButton(), new Command() {
+        IconButton btnAdd = new IconButton(i18n.tr("Add filter..."), FolderImages.INSTANCE.addButton(), new Command() {
             @Override
             public void execute() {
                 grid.addFilter(new DataTableFilterItem<E>(grid));

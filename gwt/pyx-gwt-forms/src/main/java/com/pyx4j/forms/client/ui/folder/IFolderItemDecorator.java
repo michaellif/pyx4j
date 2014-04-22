@@ -21,15 +21,15 @@
 package com.pyx4j.forms.client.ui.folder;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
-public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEntityFolderItem<E>> {
+public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CFolderItem<E>> {
 
     void setActionsState(boolean remove, boolean up, boolean down);
 
     void adoptItemActionsBar();
 
-    EntityFolderImages getImages();
+    FolderImages getImages();
 
 }

@@ -32,7 +32,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -49,16 +49,16 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private final HTML validationMessageHolder;
 
-    public BaseFolderDecorator(EntityFolderImages images, String title, boolean addable) {
+    public BaseFolderDecorator(FolderImages images, String title, boolean addable) {
         this.addable = addable;
         addButton = new Button(images.addButton().regular(), title);
-        addButton.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderAddButton.name());
+        addButton.setStyleName(DefaultFolderTheme.StyleName.CFolderAddButton.name());
 
         validationMessageHolder = new HTML();
         validationMessageHolder.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
         container = new SimplePanel();
-        container.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderContent.name());
+        container.setStyleName(DefaultFolderTheme.StyleName.CFolderContent.name());
 
     }
 
@@ -98,7 +98,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     }
 
     @Override
-    public void init(final CEntityFolder<E> folder) {
+    public void init(final CFolder<E> folder) {
 
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

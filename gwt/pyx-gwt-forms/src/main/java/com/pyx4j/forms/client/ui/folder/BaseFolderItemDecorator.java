@@ -27,17 +27,17 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 
 public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimplePanel implements IFolderItemDecorator<E> {
 
-    private final EntityFolderImages images;
+    private final FolderImages images;
 
-    private CEntityFolderItem<E> folderItem;
+    private CFolderItem<E> folderItem;
 
     private IsWidget content;
 
-    public BaseFolderItemDecorator(EntityFolderImages images) {
+    public BaseFolderItemDecorator(FolderImages images) {
         this.images = images;
     }
 
@@ -51,7 +51,7 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     }
 
     @Override
-    public void init(final CEntityFolderItem<E> folderItem) {
+    public void init(final CFolderItem<E> folderItem) {
         this.folderItem = folderItem;
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -66,12 +66,12 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
         onSetDebugId(folderItem.getDebugId());
     }
 
-    public CEntityFolderItem<E> getFolderItem() {
+    public CFolderItem<E> getFolderItem() {
         return folderItem;
     }
 
     @Override
-    public EntityFolderImages getImages() {
+    public FolderImages getImages() {
         return images;
     }
 

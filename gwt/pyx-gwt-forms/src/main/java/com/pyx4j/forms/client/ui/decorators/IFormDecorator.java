@@ -21,8 +21,8 @@
 package com.pyx4j.forms.client.ui.decorators;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 
-public interface IFormDecorator<E extends IEntity> extends IDecorator<CEntityForm<E>> {
+public interface IFormDecorator<E extends IEntity> extends IDecorator<CForm<E>> {
 
 }

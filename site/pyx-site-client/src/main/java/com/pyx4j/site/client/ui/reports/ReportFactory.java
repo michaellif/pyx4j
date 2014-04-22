@@ -20,12 +20,12 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface ReportFactory<S extends ReportMetadata> {
 
-    CEntityForm<S> getReportSettingsForm();
+    CForm<S> getReportSettingsForm();
 
     ReportWidget getReport();
 

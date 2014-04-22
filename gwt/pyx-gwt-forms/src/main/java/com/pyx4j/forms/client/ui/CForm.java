@@ -52,9 +52,9 @@ import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.IFormDecorator;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
-public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CEntityForm<E>, E, IFormDecorator<E>> {
+public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, IFormDecorator<E>> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
+    private static final Logger log = LoggerFactory.getLogger(CForm.class);
 
     protected IEditableComponentFactory factory;
 
@@ -67,11 +67,11 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
 
     private final Map<CComponent<?, ?, ?>, Path> binding = new HashMap<CComponent<?, ?, ?>, Path>();
 
-    public CEntityForm(Class<E> clazz) {
+    public CForm(Class<E> clazz) {
         this(clazz, null);
     }
 
-    public CEntityForm(Class<E> clazz, IEditableComponentFactory factory) {
+    public CForm(Class<E> clazz, IEditableComponentFactory factory) {
         if (factory == null) {
             factory = new BaseEditableComponentFactory();
         }
@@ -214,8 +214,8 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
     protected void setComponentsValue(E entity, boolean fireEvent, boolean populate) {
         if (entity == null) {
             for (CComponent component : getComponents()) {
-                if (component instanceof CEntityForm) {
-                    ((CEntityForm) component).reset();
+                if (component instanceof CForm) {
+                    ((CForm) component).reset();
                 } else {
                     component.setValue(null, fireEvent, populate);
                 }
@@ -416,7 +416,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<CE
                 ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
             } else if (value instanceof ICollection) {
                 ((ICollection<?, ?>) getValue().getMember(memberPath)).set((ICollection) value);
-            } else if (!(component instanceof CEntityContainer)) {
+            } else if (!(component instanceof CContainer)) {
                 if (value instanceof Date) {
                     Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
                     // Synchronize the value in Editor with model

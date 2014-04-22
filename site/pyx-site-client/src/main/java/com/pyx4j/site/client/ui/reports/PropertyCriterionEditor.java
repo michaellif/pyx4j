@@ -38,22 +38,22 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 
-public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCriterionEntity> {
+public class PropertyCriterionEditor extends CFolderRowEditor<PropertyCriterionEntity> {
 
-    private static List<EntityFolderColumnDescriptor> COLUMN_DESCRIPTORS;
+    private static List<FolderColumnDescriptor> COLUMN_DESCRIPTORS;
 
     private static Map<Class<?>, Collection<PropertyCriterion.Restriction>> DATA_TYPE_RESTRICTIONS;
 
     static {
         COLUMN_DESCRIPTORS = new ArrayList<>();
         PropertyCriterionEntity proto = EntityFactory.getEntityPrototype(PropertyCriterionEntity.class);
-        COLUMN_DESCRIPTORS.add(new EntityFolderColumnDescriptor(proto.criterionName(), "15em", true));
-        COLUMN_DESCRIPTORS.add(new EntityFolderColumnDescriptor(proto.restriction(), "20em"));
-        COLUMN_DESCRIPTORS.add(new EntityFolderColumnDescriptor(proto.value(), "20em"));
+        COLUMN_DESCRIPTORS.add(new FolderColumnDescriptor(proto.criterionName(), "15em", true));
+        COLUMN_DESCRIPTORS.add(new FolderColumnDescriptor(proto.restriction(), "20em"));
+        COLUMN_DESCRIPTORS.add(new FolderColumnDescriptor(proto.value(), "20em"));
 
         Collection<PropertyCriterion.Restriction> numberRestriction = Arrays.asList(//@formatter:off
                 PropertyCriterion.Restriction.EQUAL,
@@ -104,7 +104,7 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
     }
 
     @Override
-    protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+    protected CField<?, ?> createCell(FolderColumnDescriptor column) {
 
         if (column == proto().path()) {
             CField<?, ?> comp = super.createCell(column);

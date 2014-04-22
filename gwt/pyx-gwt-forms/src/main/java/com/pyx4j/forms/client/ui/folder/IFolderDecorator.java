@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
-public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityFolder<E>>, ValueChangeHandler<IList<E>> {
+public interface IFolderDecorator<E extends IEntity> extends IDecorator<CFolder<E>>, ValueChangeHandler<IList<E>> {
 
     public static String DEBUGID_SUFIX = "_fd_";
 

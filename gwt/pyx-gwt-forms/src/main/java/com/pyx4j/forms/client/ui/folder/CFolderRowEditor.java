@@ -37,21 +37,21 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 
-public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
+public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
 
-    protected final List<EntityFolderColumnDescriptor> columns;
+    protected final List<FolderColumnDescriptor> columns;
 
-    public CEntityFolderRowEditor(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
+    public CFolderRowEditor(Class<E> clazz, List<FolderColumnDescriptor> columns) {
         this(clazz, columns, null);
     }
 
-    public CEntityFolderRowEditor(Class<E> clazz, List<EntityFolderColumnDescriptor> columns, IEditableComponentFactory factory) {
+    public CFolderRowEditor(Class<E> clazz, List<FolderColumnDescriptor> columns, IEditableComponentFactory factory) {
         super(clazz, factory);
         this.columns = columns;
     }
@@ -59,7 +59,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
     @Override
     protected IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
-        for (EntityFolderColumnDescriptor column : columns) {
+        for (FolderColumnDescriptor column : columns) {
             CField<?, ?> component = createCell(column);
             if (column.isReadOnly()) {
                 component.setViewable(true);
@@ -71,7 +71,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         return main;
     }
 
-    protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+    protected CField<?, ?> createCell(FolderColumnDescriptor column) {
         CField<?, ?> comp = inject(column.getObject());
 
         // Special TableFolder customization

@@ -40,7 +40,7 @@ import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.commons.Print;
@@ -142,17 +142,17 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private ReportWidget reportWidget;
 
-    private CEntityForm<R> activeSettingsForm;
+    private CForm<R> activeSettingsForm;
 
-    private CEntityForm<R> simpleSettingsForm;
+    private CForm<R> simpleSettingsForm;
 
-    private CEntityForm<R> advancedSettingsForm;
+    private CForm<R> advancedSettingsForm;
 
     /**
      * @param advancedSettingsForm
      *            this is optional, and in this case ReportMetadata has to implement HasAdvancedSettings
      */
-    public void setReportWidget(ReportWidget reportWidget, CEntityForm<R> simpleSettingsForm, CEntityForm<R> advancedSettingsForm) {
+    public void setReportWidget(ReportWidget reportWidget, CForm<R> simpleSettingsForm, CForm<R> advancedSettingsForm) {
         setSize("100%", "100%");
 
         this.reportWidget = reportWidget;

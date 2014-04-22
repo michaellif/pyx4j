@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
@@ -60,7 +60,7 @@ import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
+public class EntityIFormWithoutLists extends CForm<EntityI> {
 
     private static final I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 

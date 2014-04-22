@@ -42,7 +42,7 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
-public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
+public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
 
     private final TabPanel tabPanel;
 

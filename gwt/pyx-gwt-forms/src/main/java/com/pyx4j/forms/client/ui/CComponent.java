@@ -88,7 +88,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private NoteStyle noteStyle;
 
-    private CEntityContainer<?, ?, ?> parent;
+    private CContainer<?, ?, ?> parent;
 
     private final Collection<IAccessAdapter> accessAdapters = new ArrayList<IAccessAdapter>();
 
@@ -161,7 +161,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.title);
     }
 
-    public CEntityContainer<?, ?, ?> getParent() {
+    public CContainer<?, ?, ?> getParent() {
         return parent;
     }
 
@@ -169,7 +169,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return parent != null;
     }
 
-    public void onAdopt(CEntityContainer<?, ?, ?> parent) {
+    public void onAdopt(CContainer<?, ?, ?> parent) {
         assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);

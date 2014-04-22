@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.shared.IHasFile;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
@@ -42,7 +42,7 @@ public abstract class CImageSlider<E extends IHasFile<?>> extends CField<IList<E
         return imgClass;
     }
 
-    protected abstract EntityFolderImages getFolderIcons();
+    protected abstract FolderImages getFolderIcons();
 
     public String getImageUrl(E file) {
         return imageFileUrlBuilder.getUrl(file.file());
@@ -86,5 +86,5 @@ public abstract class CImageSlider<E extends IHasFile<?>> extends CField<IList<E
         return service;
     }
 
-    public abstract Widget getImageEntryView(CEntityForm<E> entryForm);
+    public abstract Widget getImageEntryView(CForm<E> entryForm);
 }

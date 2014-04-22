@@ -36,7 +36,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,7 +44,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.WizardPanel;
 
-public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab> {
+public abstract class WizardForm<E extends IEntity> extends CForm<E> implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab> {
 
     private static final I18n i18n = I18n.get(WizardForm.class);
 

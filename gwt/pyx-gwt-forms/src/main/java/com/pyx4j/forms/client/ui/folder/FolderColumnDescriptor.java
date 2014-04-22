@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui.folder;
 
 import com.pyx4j.entity.core.IObject;
 
-public class EntityFolderColumnDescriptor {
+public class FolderColumnDescriptor {
 
     private final IObject<?> object;
 
@@ -32,19 +32,19 @@ public class EntityFolderColumnDescriptor {
 
     private final String caption;
 
-    public EntityFolderColumnDescriptor(IObject<?> object, String width) {
+    public FolderColumnDescriptor(IObject<?> object, String width) {
         this(object, width, null, false);
     }
 
-    public EntityFolderColumnDescriptor(IObject<?> object, String width, String caption) {
+    public FolderColumnDescriptor(IObject<?> object, String width, String caption) {
         this(object, width, caption, false);
     }
 
-    public EntityFolderColumnDescriptor(IObject<?> object, String width, boolean readOnly) {
+    public FolderColumnDescriptor(IObject<?> object, String width, boolean readOnly) {
         this(object, width, null, readOnly);
     }
 
-    public EntityFolderColumnDescriptor(IObject<?> object, String width, String caption, boolean readOnly) {
+    public FolderColumnDescriptor(IObject<?> object, String width, String caption, boolean readOnly) {
         super();
         this.object = object;
         this.width = width;

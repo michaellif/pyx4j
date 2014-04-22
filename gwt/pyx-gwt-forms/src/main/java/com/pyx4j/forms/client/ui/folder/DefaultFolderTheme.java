@@ -29,27 +29,27 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public abstract class DefaultEntityFolderTheme extends Theme {
+public abstract class DefaultFolderTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        EntityFolder, EntityFolderActionsBar, EntityFolderAddButton, EntityFolderContent,
+        CFolder, CFolderActionsBar, CFolderAddButton, CFolderContent,
 
-        EntityFolderRemoveButton, EntityFolderUpButton, EntityFolderDownButton, EntityFolderCustomButton,
+        CFolderRemoveButton, CFolderUpButton, CFolderDownButton, CFolderCustomButton,
 
-        EntityFolderNoDataMessage,
+        CFolderNoDataMessage,
 
         //Box
-        EntityFolderBoxItem, EntityFolderBoxDecorator, EntityFolderBoxDecoratorAddButtonHolder,
+        CFolderBoxItem, CFolderBoxDecorator, CFolderBoxDecoratorAddButtonHolder,
 
         //Table
-        EntityFolderRowItem, EntityFolderTableDecorator, EntityFolderRowItemDecorator, EntityFolderTableHeader, EntityFolderTableHeaderLabel
+        CFolderRowItem, CFolderTableDecorator, CFolderRowItemDecorator, CFolderTableHeader, CFolderTableHeaderLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
         hover, readOnly
     }
 
-    public DefaultEntityFolderTheme() {
+    public DefaultFolderTheme() {
         initStyles();
     }
 
@@ -59,58 +59,58 @@ public abstract class DefaultEntityFolderTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style(".", StyleName.EntityFolder);
+        Style style = new Style(".", StyleName.CFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly);
+        style = new Style(".", StyleName.CFolder, "-", StyleDependent.readOnly);
         style.addProperty("font-weight", "bold");
         style.addProperty("color", ThemeColor.foreground, 1);
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolder, " img");
+        style = new Style(".", StyleName.CFolder, " img");
         style.addProperty("display", "block");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderBoxDecorator);
+        style = new Style(".", StyleName.CFolderBoxDecorator);
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderBoxDecoratorAddButtonHolder);
+        style = new Style(".", StyleName.CFolderBoxDecoratorAddButtonHolder);
         style.addProperty("width", "100%");
         style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderTableDecorator);
+        style = new Style(".", StyleName.CFolderTableDecorator);
         style.addProperty("margin-top", "2px");
         style.addProperty("padding", "4px");
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderContent);
+        style = new Style(".", StyleName.CFolderContent);
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderBoxItem);
+        style = new Style(".", StyleName.CFolderBoxItem);
         style.addProperty("padding", "6px");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderBoxItem, " .", StyleName.EntityFolder);
+        style = new Style(".", StyleName.CFolderBoxItem, " .", StyleName.CFolder);
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderRowItemDecorator);
+        style = new Style(".", StyleName.CFolderRowItemDecorator);
         //style.addProperty("width", "0");
         style.addProperty("margin", "6px");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderActionsBar);
+        style = new Style(".", StyleName.CFolderActionsBar);
         style.addProperty("opacity", "0.2");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderActionsBar, "-", StyleDependent.hover);
+        style = new Style(".", StyleName.CFolderActionsBar, "-", StyleDependent.hover);
         style.addProperty("opacity", "1");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderAddButton);
+        style = new Style(".", StyleName.CFolderAddButton);
         style.addProperty("display", "inline-block");
         style.addProperty("margin", "6px");
         style.addProperty("color", ThemeColor.object1, 0.8);
@@ -119,40 +119,40 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderAddButton, " .", DefaultWidgetsTheme.StyleName.ButtonText);
+        style = new Style(".", StyleName.CFolderAddButton, " .", DefaultWidgetsTheme.StyleName.ButtonText);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderUpButton);
+        style = new Style(".", StyleName.CFolderUpButton);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderDownButton);
+        style = new Style(".", StyleName.CFolderDownButton);
         style.addProperty("float", "right");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderRemoveButton);
+        style = new Style(".", StyleName.CFolderRemoveButton);
         style.addProperty("float", "right");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderRowItemDecorator, " .", StyleName.EntityFolderRemoveButton);
+        style = new Style(".", StyleName.CFolderRowItemDecorator, " .", StyleName.CFolderRemoveButton);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderCustomButton);
+        style = new Style(".", StyleName.CFolderCustomButton);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderRowItemDecorator, " .", StyleName.EntityFolderCustomButton);
+        style = new Style(".", StyleName.CFolderRowItemDecorator, " .", StyleName.CFolderCustomButton);
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderTableHeader);
+        style = new Style(".", StyleName.CFolderTableHeader);
         style.addProperty("border-bottom", "1px dotted");
         style.addProperty("border-bottom-color", getBackgroundColor());
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderTableHeaderLabel);
+        style = new Style(".", StyleName.CFolderTableHeaderLabel);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("font-weight", "bold");
         style.addProperty("margin-left", "3px");
@@ -160,11 +160,11 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style.addProperty("float", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly, " .", StyleName.EntityFolderTableHeaderLabel);
+        style = new Style(".", StyleName.CFolder, "-", StyleDependent.readOnly, " .", StyleName.CFolderTableHeaderLabel);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
-        style = new Style(".", StyleName.EntityFolderNoDataMessage);
+        style = new Style(".", StyleName.CFolderNoDataMessage);
         style.addProperty("font-style", "italic");
         style.addProperty("color", ThemeColor.foreground, 0.7);
         addStyle(style);

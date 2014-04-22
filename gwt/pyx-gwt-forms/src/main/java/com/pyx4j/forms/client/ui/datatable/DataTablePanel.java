@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
@@ -66,11 +66,11 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     private Button filterButton;
 
     public DataTablePanel(Class<E> clazz) {
-        this(clazz, null, EntityFolderImages.INSTANCE);
+        this(clazz, null, FolderImages.INSTANCE);
     }
 
     public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm) {
-        this(clazz, criteriaForm, EntityFolderImages.INSTANCE);
+        this(clazz, criteriaForm, FolderImages.INSTANCE);
     }
 
     public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, WidgetsImages images) {
@@ -130,13 +130,13 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setAddActionCommand(Command addActionCommand) {
         topActionsBar.getToolbar().insertItem(
-                addButton = new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
+                addButton = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
                         addActionCommand), 0);
     }
 
     public void setDelActionCommand(Command delActionCommand) {
         topActionsBar.getToolbar().insertItem(
-                delButton = new Button(EntityFolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
+                delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);

@@ -26,27 +26,27 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 
 public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
-    public BoxFolderDecorator(EntityFolderImages images) {
+    public BoxFolderDecorator(FolderImages images) {
         this(images, null, false);
     }
 
-    public BoxFolderDecorator(EntityFolderImages images, String title) {
+    public BoxFolderDecorator(FolderImages images, String title) {
         this(images, title, true);
     }
 
-    public BoxFolderDecorator(EntityFolderImages images, String title, boolean addable) {
+    public BoxFolderDecorator(FolderImages images, String title, boolean addable) {
         super(images, title, addable);
 
-        asWidget().setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecorator.name());
+        asWidget().setStyleName(DefaultFolderTheme.StyleName.CFolderBoxDecorator.name());
 
         add(getContainer());
 
         SimplePanel addButtonHolder = new SimplePanel(getAddButton());
-        addButtonHolder.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecoratorAddButtonHolder.name());
+        addButtonHolder.setStyleName(DefaultFolderTheme.StyleName.CFolderBoxDecoratorAddButtonHolder.name());
 
         add(addButtonHolder);
 

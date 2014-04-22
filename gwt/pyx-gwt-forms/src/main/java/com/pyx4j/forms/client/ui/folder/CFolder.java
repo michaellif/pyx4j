@@ -46,19 +46,19 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityContainer;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<CEntityFolder<E>, IList<E>, IFolderDecorator<E>> {
+public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, IList<E>, IFolderDecorator<E>> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
+    private static final Logger log = LoggerFactory.getLogger(CFolder.class);
 
-    private static final I18n i18n = I18n.get(CEntityFolder.class);
+    private static final I18n i18n = I18n.get(CFolder.class);
 
     private final FlowPanel container;
 
@@ -72,21 +72,21 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private int currentRowDebugId = 0;
 
-    private final List<CEntityFolderItem<E>> itemsList;
+    private final List<CFolderItem<E>> itemsList;
 
     private final E entityPrototype;
 
     private final Class<E> rowClass;
 
-    public CEntityFolder(Class<E> rowClass) {
+    public CFolder(Class<E> rowClass) {
         this.rowClass = rowClass;
-        asWidget().setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolder.name());
-        itemsList = new ArrayList<CEntityFolderItem<E>>();
+        asWidget().setStyleName(DefaultFolderTheme.StyleName.CFolder.name());
+        itemsList = new ArrayList<CFolderItem<E>>();
 
         container = new FlowPanel();
 
         noDataNotificationHolder = new SimplePanel();
-        noDataNotificationHolder.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderNoDataMessage.name());
+        noDataNotificationHolder.setStyleName(DefaultFolderTheme.StyleName.CFolderNoDataMessage.name());
         noDataNotificationHolder.setWidget(new Label(i18n.tr("No Data")));
 
         if (rowClass != null) {
@@ -145,7 +145,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (getDecorator() instanceof IFolderDecorator) {
             ((IFolderDecorator<?>) getDecorator()).setAddButtonVisible(addable);
         }
-        for (CEntityFolderItem<E> item : itemsList) {
+        for (CFolderItem<E> item : itemsList) {
             item.calculateActionsState();
         }
     }
@@ -167,24 +167,24 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected abstract IFolderItemDecorator<E> createItemDecorator();
 
-    protected abstract CEntityForm<? extends E> createItemForm(IObject<?> member);
+    protected abstract CForm<? extends E> createItemForm(IObject<?> member);
 
-    protected CEntityFolderItem<E> createItem(boolean first) {
-        return new CEntityFolderItem<E>(rowClass) {
+    protected CFolderItem<E> createItem(boolean first) {
+        return new CFolderItem<E>(rowClass) {
             @Override
             public IFolderItemDecorator<E> createItemDecorator() {
-                return CEntityFolder.this.createItemDecorator();
+                return CFolder.this.createItemDecorator();
             }
 
             @Override
-            protected CEntityForm<? extends E> createItemForm(IObject<?> member) {
-                return CEntityFolder.this.createItemForm(null);
+            protected CForm<? extends E> createItemForm(IObject<?> member) {
+                return CFolder.this.createItemForm(null);
             }
 
         };
     }
 
-    private CEntityFolderItem<E> createItemPrivate() {
+    private CFolderItem<E> createItemPrivate() {
         return createItem(container.getWidgetCount() == 0);
     }
 
@@ -222,7 +222,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        final CEntityFolderItem<E> item = createItemPrivate();
+        final CFolderItem<E> item = createItemPrivate();
 
         adopt(item);
         getValue().add(newEntity);
@@ -230,7 +230,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         setVisited(true);
 
         revalidate();
-        ValueChangeEvent.fire(CEntityFolder.this, getValue());
+        ValueChangeEvent.fire(CFolder.this, getValue());
 
         if (item.getDecorator() instanceof BoxFolderItemDecorator) {
             ((BoxFolderItemDecorator<?>) item.getDecorator()).setExpended(true);
@@ -238,24 +238,24 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     }
 
-    protected void removeItem(CEntityFolderItem<E> item) {
+    protected void removeItem(CFolderItem<E> item) {
         abandon(item);
         getValue().remove(item.getValue());
         setVisited(true);
         revalidate();
-        ValueChangeEvent.fire(CEntityFolder.this, getValue());
+        ValueChangeEvent.fire(CFolder.this, getValue());
 
     }
 
-    protected void moveUpItem(CEntityFolderItem<E> item) {
+    protected void moveUpItem(CFolderItem<E> item) {
         moveItem(item, true);
     }
 
-    protected void moveDownItem(CEntityFolderItem<E> item) {
+    protected void moveDownItem(CFolderItem<E> item) {
         moveItem(item, false);
     }
 
-    protected void moveItem(CEntityFolderItem<E> item, boolean up) {
+    protected void moveItem(CFolderItem<E> item, boolean up) {
         int indexBefore = getValue().indexOf(item.getValue());
         int indexAfter = indexBefore + (up ? -1 : +1);
         if (indexAfter < 0 || indexAfter > getValue().size()) {
@@ -271,7 +271,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         setVisited(true);
         revalidate();
-        ValueChangeEvent.fire(CEntityFolder.this, getValue());
+        ValueChangeEvent.fire(CFolder.this, getValue());
         return;
     }
 
@@ -290,9 +290,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     protected void setComponentsValue(IList<E> value, boolean fireEvent, boolean populate) {
 
-        ArrayList<CEntityFolderItem<E>> previousList = new ArrayList<CEntityFolderItem<E>>(itemsList);
+        ArrayList<CFolderItem<E>> previousList = new ArrayList<CFolderItem<E>>(itemsList);
 
-        for (CEntityFolderItem<E> item : previousList) {
+        for (CFolderItem<E> item : previousList) {
             abandon(item);
         }
 
@@ -301,8 +301,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         if (value != null) {
 
             for (E entity : value) {
-                CEntityFolderItem<E> item = null;
-                for (CEntityFolderItem<E> itemFromCahe : previousList) {
+                CFolderItem<E> item = null;
+                for (CFolderItem<E> itemFromCahe : previousList) {
                     if (itemFromCahe.getValue().equals(entity)) {
                         previousList.remove(itemFromCahe);
                         item = itemFromCahe;
@@ -320,7 +320,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         }
 
-        for (CEntityFolderItem<E> item : itemsList) {
+        for (CFolderItem<E> item : itemsList) {
             item.calculateActionsState();
         }
 
@@ -331,7 +331,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public void adopt(final CComponent<?, ?, ?> component) {
-        itemsList.add((CEntityFolderItem<E>) component);
+        itemsList.add((CFolderItem<E>) component);
         container.add(component);
 
         IDebugId rowDebugId = new CompositeDebugId(IDebugId.ROW_PREFIX, currentRowDebugId);
@@ -355,7 +355,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public List<CEntityFolderItem<E>> getComponents() {
+    public List<CFolderItem<E>> getComponents() {
         return itemsList;
     }
 
@@ -363,11 +363,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return itemsList.size();
     }
 
-    public int getItemIndex(CEntityFolderItem<E> item) {
+    public int getItemIndex(CFolderItem<E> item) {
         return itemsList.indexOf(item);
     }
 
-    public CEntityFolderItem<E> getItem(int index) {
+    public CFolderItem<E> getItem(int index) {
         if (itemsList.size() > 0 && index > -1 && index < itemsList.size()) {
             return itemsList.get(index);
         } else {

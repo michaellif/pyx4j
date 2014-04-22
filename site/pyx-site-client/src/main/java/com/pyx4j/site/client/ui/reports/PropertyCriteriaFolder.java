@@ -27,12 +27,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderItemDecorator;
@@ -40,17 +40,17 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.PropertyCriterionEntity;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntity> {
+public class PropertyCriteriaFolder extends CFolder<PropertyCriterionEntity> {
 
     private static final I18n i18n = I18n.get(PropertyCriteriaFolder.class);
 
-    private final EntityFolderImages images;
+    private final FolderImages images;
 
     private final List<MemberColumnDescriptor> availableCriteriaColumns;
 
     private final Class<? extends IEntity> tableEntityClass;
 
-    public PropertyCriteriaFolder(EntityFolderImages images, Class<? extends IEntity> tableEntityClass, List<MemberColumnDescriptor> availableCriteriaColumns) {
+    public PropertyCriteriaFolder(FolderImages images, Class<? extends IEntity> tableEntityClass, List<MemberColumnDescriptor> availableCriteriaColumns) {
         super(PropertyCriterionEntity.class);
         this.images = images;
         this.availableCriteriaColumns = availableCriteriaColumns;
@@ -58,7 +58,7 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
     }
 
     @Override
-    protected CEntityForm<PropertyCriterionEntity> createItemForm(IObject<?> member) {
+    protected CForm<PropertyCriterionEntity> createItemForm(IObject<?> member) {
         return new PropertyCriterionEditor(EntityFactory.getEntityPrototype(tableEntityClass));
     }
 
