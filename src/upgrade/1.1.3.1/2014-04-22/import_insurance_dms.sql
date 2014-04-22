@@ -50,6 +50,34 @@ BEGIN TRANSACTION;
         WHERE   id IN (SELECT file_blob_key FROM _dba_.insurance_certificate_scan)
     );
     
+    
+    /**
+    *** ================================================================
+    ***
+    ***     For TenantSure 
+    ***
+    *** ================================================================
+    **/
+    
+    CREATE TABLE _dba_.payment_method AS
+    (
+        SELECT  pm.*,lp.participant_id 
+        FROM    greenwin.payment_method pm
+        JOIN    greenwin.lease_participant lp ON (lp.id = pm.tenant)
+        JOIN    greenwin.lease l ON (l.id = lp.lease)
+        JOIN    greenwin.apt_unit a ON (a.id = l.unit)
+        JOIN    greenwin.building b ON (b.id = a.building)
+        WHERE   b.property_code IN ('mark0150','mark0155','mark0160',
+                'quee0297','firs0053','huro2465')
+    );
+    
+    CREATE TABLE _dba_.payment_payment_details AS
+    (
+        SELECT  *
+        FROM    greenwin.payment_payment_details
+        WHERE   id IN (SELECT details FROM _dba_.payment_method)
+    );
+    
     ALTER TABLE dms.insurance_policy ADD COLUMN old_id BIGINT;
     ALTER TABLE dms.insurance_certificate ADD COLUMN old_id BIGINT;
     ALTER TABLE dms.insurance_certificate_scan_blob ADD COLUMN old_id BIGINT;
