@@ -19,13 +19,13 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
-import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
@@ -62,8 +62,8 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
     protected IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
 
-        panel.add(inject(proto().portfolios(), createPortfolioSelector()));
-        panel.add(inject(proto().buildings(), createBuildingSelector()));
+        panel.add(createPortfolioSelector());
+        panel.add(createBuildingSelector());
         panel.add(inject(proto().unit(), new SearchCriteriaFormDecoratorBuilder().componentWidth("100px").build()));
         panel.add(inject(proto().lease(), new SearchCriteriaFormDecoratorBuilder().componentWidth("100px").build()));
         panel.add(inject(proto().tenant(), new SearchCriteriaFormDecoratorBuilder().componentWidth("150px").build()));
@@ -86,8 +86,8 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
 
     }
 
-    private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
-        return new CSuperSelector<PortfolioForSelectionDTO>(portfolioSelector = new PortfolioSelector() {//@formatter:off
+    private Widget createPortfolioSelector() {
+        return portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
                 super.onItemAdded(item);
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
@@ -105,11 +105,11 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
                 super.onRedraw();
                 MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
             }
-        });//@formatter:on
+        };//@formatter:on
     }
 
-    private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
-        return new CSuperSelector<BuildingForSelectionDTO>(buildingSelector = new BuildingSelector() {//@formatter:off
+    private Widget createBuildingSelector() {
+        return buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
                 super.onItemAdded(item);
                 MoneyInCandidateSearchCriteriaModel searchCriteria = MoneyInCandidateSearchCriteriaForm.this.getValue(); 
@@ -125,7 +125,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
                 super.onRedraw();
                 MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
             }
-        });//@formatter:on
+        };//@formatter:on
     }
 
     private void setTextBoxHeightFieldsHack() {

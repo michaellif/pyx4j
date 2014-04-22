@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CForm;
@@ -31,7 +32,6 @@ import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
-import com.propertyvista.crm.client.ui.tools.common.selectors.CSuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
@@ -87,8 +87,8 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
 
         searchCriteriaPanel = new FlowPanel();
 
-        searchCriteriaPanel.add(inject(proto().portfolios(), createPortfolioSelector()));
-        searchCriteriaPanel.add(inject(proto().buildings(), createBuildingSelector()));
+        searchCriteriaPanel.add(createPortfolioSelector());
+        searchCriteriaPanel.add(createBuildingSelector());
         searchCriteriaPanel.add(inject(proto().minAmountOwed(), new SearchCriteriaFormDecoratorBuilder().componentWidth("200px").build()));
 
         panel.setWidget(1, 0, 2, searchCriteriaPanel);
@@ -125,8 +125,8 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
         searchCriteriaPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
     }
 
-    private CSuperSelector<PortfolioForSelectionDTO> createPortfolioSelector() {
-        return new CSuperSelector<PortfolioForSelectionDTO>(portfolioSelector = new PortfolioSelector() {//@formatter:off
+    private Widget createPortfolioSelector() {
+        return portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
                 super.onItemAdded(item);
                 N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
@@ -144,11 +144,11 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
                 super.onRedraw();
                 N4CandidateSearchCriteriaForm.this.onSuperSelectorResized();
             }
-        });//@formatter:on
+        };//@formatter:on
     }
 
-    private CSuperSelector<BuildingForSelectionDTO> createBuildingSelector() {
-        return new CSuperSelector<BuildingForSelectionDTO>(buildingSelector = new BuildingSelector() {//@formatter:off
+    private Widget createBuildingSelector() {
+        return buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
                 super.onItemAdded(item);
                 N4CandidateSearchCriteriaDTO searchCriteria = N4CandidateSearchCriteriaForm.this.getValue(); 
@@ -164,7 +164,7 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
                 super.onRedraw();
                 N4CandidateSearchCriteriaForm.this.onSuperSelectorResized();
             }
-        });//@formatter:on
+        };//@formatter:on
     }
 
 }
