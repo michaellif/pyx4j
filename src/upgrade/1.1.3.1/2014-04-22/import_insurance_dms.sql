@@ -78,6 +78,25 @@ BEGIN TRANSACTION;
         WHERE   id IN (SELECT details FROM _dba_.payment_method)
     );
     
+    ALTER TABLE dms.payment_payment_details ADD COLUMN old_id BIGINT;
+    ALTER TABLE dms.payment_method ADD COLUMN old_id BIGINT;
+    
+    
+    INSERT INTO dms.payment_payment_details (id,old_id,id_discriminator,
+    received_amount,change_amount,notes,name_on,bank_id,branch_transit_number,
+    account_no_number,account_no_obfuscated_number,bank_name,account_type,
+    check_no,transit_no,institution_no,account_no,card_type,card_obfuscated_number,
+    token,expiry_date,bank_phone,incoming_interac_transaction,bank_no,
+    location_code,trace_number )
+    (SELECT nextval('public.payment_payment_details_seq') AS id,t.id AS old_id,
+            t.id_discriminator,t.received_amount,t.change_amount,t.notes,
+            t.name_on,t.bank_id,t.branch_transit_number,t.account_no_number,
+            t.account_no_obfuscated_number,t.bank_name,t.account_type,
+            t.check_no,t.transit_no,t.institution_no,t.account_no,t.card_type,
+            t.card_obfuscated_number,t.token,t.expiry_date,t.bank_phone,
+            t.incoming_interac_transaction,t.bank_no,t.location_code,t.trace_number 
+    FROM    _dba_.payment_payment_details t);
+    
     ALTER TABLE dms.insurance_policy ADD COLUMN old_id BIGINT;
     ALTER TABLE dms.insurance_certificate ADD COLUMN old_id BIGINT;
     ALTER TABLE dms.insurance_certificate_scan_blob ADD COLUMN old_id BIGINT;
