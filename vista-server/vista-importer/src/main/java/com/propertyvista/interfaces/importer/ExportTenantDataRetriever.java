@@ -28,7 +28,7 @@ public class ExportTenantDataRetriever {
 
         TenantIO tenantIO = new TenantConverter().createTO(leaseTermTenant);
 
-        if (!leaseTermTenant.leaseParticipant().customer().user().isNull()) {
+        if (!leaseTermTenant.leaseParticipant().customer().user().isNull() && !leaseTermTenant.leaseParticipant().customer().person().email().isNull()) {
             CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class,
                     leaseTermTenant.leaseParticipant().customer().user().getPrimaryKey());
             tenantIO.vistaPasswordHash().setValue(credential.credential().getValue());

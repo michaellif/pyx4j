@@ -50,7 +50,7 @@ public class ImportTenantDataProcessor {
             ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseTermTenant.leaseParticipant().customer());
         }
 
-        if (!tenantIO.vistaPasswordHash().isNull()) {
+        if (!tenantIO.vistaPasswordHash().isNull() && !leaseTermTenant.leaseParticipant().customer().user().isNull()) {
             ServerSideFactory.create(CustomerFacade.class).setCustomerPasswordHash(leaseTermTenant.leaseParticipant().customer(),
                     tenantIO.vistaPasswordHash().getValue());
         }
