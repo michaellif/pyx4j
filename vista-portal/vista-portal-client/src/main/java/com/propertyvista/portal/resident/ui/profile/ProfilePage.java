@@ -85,8 +85,8 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
     @Override
     public void addValidations() {
+        get(proto().person().email()).setMandatory(true);
         get(proto().person().birthDate()).addComponentValidator(new PastDateIncludeTodayValidator());
-
         get(proto().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
             @Override
             public FieldValidationError isValid() {
