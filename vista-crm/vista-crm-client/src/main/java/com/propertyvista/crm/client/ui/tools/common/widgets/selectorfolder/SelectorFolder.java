@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.tools.common.widgets.selectorfolder;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 
-public abstract class SelectorFolder<E extends IEntity> extends CEntityFolder<E> {
+public abstract class SelectorFolder<E extends IEntity> extends CFolder<E> {
 
     public SelectorFolder(Class<E> rowClass) {
         super(rowClass);

@@ -22,13 +22,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 
 public class SelectorFolderDecorator<E extends IEntity> extends Composite implements IFolderDecorator<E> {
 
     @Override
-    public void init(CEntityFolder<E> folder) {
+    public void init(CFolder<E> folder) {
         // TODO Auto-generated method stub
 
     }

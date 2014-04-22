@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 public class SelectorFolderItemDecorator<E extends IEntity> extends Composite implements IFolderItemDecorator<E> {
@@ -33,7 +33,7 @@ public class SelectorFolderItemDecorator<E extends IEntity> extends Composite im
     }
 
     @Override
-    public void init(CEntityFolderItem<E> component) {
+    public void init(CFolderItem<E> component) {
         // TODO Auto-generated method stub
 
     }
@@ -62,9 +62,8 @@ public class SelectorFolderItemDecorator<E extends IEntity> extends Composite im
     }
 
     @Override
-    public EntityFolderImages getImages() {
-        // TODO Auto-generated method stub
+    public FolderImages getImages() {
+        // TODO 
         return null;
     }
-
 }
