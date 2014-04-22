@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -52,7 +52,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         view.populate(value);
     }
 
-    class LatestActivitiesView extends CEntityForm<LatestActivitiesDTO> {
+    class LatestActivitiesView extends CForm<LatestActivitiesDTO> {
 
         public LatestActivitiesView() {
             super(LatestActivitiesDTO.class);
@@ -76,11 +76,11 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         }
 
         @Override
-        protected CEntityForm<InvoicePaymentDTO> createItemForm(IObject<?> member) {
+        protected CForm<InvoicePaymentDTO> createItemForm(IObject<?> member) {
             return new InvoiceLineItemViewer();
         }
 
-        private class InvoiceLineItemViewer extends CEntityForm<InvoicePaymentDTO> {
+        private class InvoiceLineItemViewer extends CForm<InvoicePaymentDTO> {
 
             public InvoiceLineItemViewer() {
                 super(InvoicePaymentDTO.class);

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -63,11 +63,11 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
     }
 
     @Override
-    protected CEntityForm<LeaseParticipanApprovalDTO> createItemForm(IObject<?> member) {
+    protected CForm<LeaseParticipanApprovalDTO> createItemForm(IObject<?> member) {
         return new LeaseParticipanApprovalViewer();
     }
 
-    private class LeaseParticipanApprovalViewer extends CEntityForm<LeaseParticipanApprovalDTO> {
+    private class LeaseParticipanApprovalViewer extends CForm<LeaseParticipanApprovalDTO> {
 
         private Widget creditCheckResultPanel;
 

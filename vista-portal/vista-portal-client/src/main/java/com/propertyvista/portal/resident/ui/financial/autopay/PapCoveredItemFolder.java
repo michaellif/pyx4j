@@ -17,7 +17,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,11 +41,11 @@ public class PapCoveredItemFolder extends PortalBoxFolder<AutopayAgreement.Autop
     }
 
     @Override
-    protected CEntityForm<AutopayAgreementCoveredItem> createItemForm(IObject<?> member) {
+    protected CForm<AutopayAgreementCoveredItem> createItemForm(IObject<?> member) {
         return new CoveredItemViewer();
     }
 
-    class CoveredItemViewer extends CEntityForm<AutopayAgreementCoveredItem> {
+    class CoveredItemViewer extends CForm<AutopayAgreementCoveredItem> {
 
         public CoveredItemViewer() {
             super(AutopayAgreementCoveredItem.class);

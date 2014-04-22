@@ -34,15 +34,15 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -236,12 +236,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 GWT.<MaintenanceRequestPictureUploadService> create(MaintenanceRequestPictureUploadService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
             @Override
-            protected EntityFolderImages getFolderIcons() {
+            protected FolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
             }
 
             @Override
-            public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
+            public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 main.setWidget(0, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(8, 15, 16).build()));
 
@@ -634,22 +634,22 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        protected CEntityForm<MaintenanceRequestSchedule> createItemForm(IObject<?> member) {
+        protected CForm<MaintenanceRequestSchedule> createItemForm(IObject<?> member) {
             return new MaintenanceRequestScheduleViewer();
         }
 
         @Override
-        protected CEntityFolderItem<MaintenanceRequestSchedule> createItem(boolean first) {
-            final CEntityFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
+        protected CFolderItem<MaintenanceRequestSchedule> createItem(boolean first) {
+            final CFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
             if (!isEditable()) {
                 item.addAction(ActionType.Cust1, "Add Progress Note", HelperImages.INSTANCE.editButton(), new Command() {
                     @Override
                     public void execute() {
                         new OkCancelDialog("Enter Progress Note") {
-                            private final CEntityForm<MaintenanceRequestSchedule> content = createContent();
+                            private final CForm<MaintenanceRequestSchedule> content = createContent();
 
-                            private CEntityForm<MaintenanceRequestSchedule> createContent() {
-                                CEntityForm<MaintenanceRequestSchedule> content = new CEntityForm<MaintenanceRequestSchedule>(MaintenanceRequestSchedule.class) {
+                            private CForm<MaintenanceRequestSchedule> createContent() {
+                                CForm<MaintenanceRequestSchedule> content = new CForm<MaintenanceRequestSchedule>(MaintenanceRequestSchedule.class) {
 
                                     @Override
                                     protected IsWidget createContent() {
@@ -689,7 +689,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             super.onValueSet(populate);
         }
 
-        class MaintenanceRequestScheduleViewer extends CEntityForm<MaintenanceRequestSchedule> {
+        class MaintenanceRequestScheduleViewer extends CForm<MaintenanceRequestSchedule> {
 
             public MaintenanceRequestScheduleViewer() {
                 super(MaintenanceRequestSchedule.class);
@@ -728,7 +728,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         }
 
-        class NoticeOfEntryViewer extends CEntityForm<NoticeOfEntry> {
+        class NoticeOfEntryViewer extends CForm<NoticeOfEntry> {
 
             public NoticeOfEntryViewer() {
                 super(NoticeOfEntry.class);
@@ -758,11 +758,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
-        protected CEntityForm<MaintenanceRequestStatusRecord> createItemForm(IObject<?> member) {
+        protected CForm<MaintenanceRequestStatusRecord> createItemForm(IObject<?> member) {
             return new StatusRecordViewer();
         }
 
-        class StatusRecordViewer extends CEntityForm<MaintenanceRequestStatusRecord> {
+        class StatusRecordViewer extends CForm<MaintenanceRequestStatusRecord> {
 
             public StatusRecordViewer() {
                 super(MaintenanceRequestStatusRecord.class);

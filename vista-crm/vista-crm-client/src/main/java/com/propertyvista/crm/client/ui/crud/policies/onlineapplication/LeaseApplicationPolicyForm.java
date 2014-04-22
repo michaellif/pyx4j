@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -67,11 +67,11 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
         }
 
         @Override
-        protected CEntityForm<LeaseApplicationLegalTerm> createItemForm(IObject<?> member) {
+        protected CForm<LeaseApplicationLegalTerm> createItemForm(IObject<?> member) {
             return new LegalTermEditor();
         }
 
-        class LegalTermEditor extends CEntityForm<LeaseApplicationLegalTerm> {
+        class LegalTermEditor extends CForm<LeaseApplicationLegalTerm> {
 
             public LegalTermEditor() {
                 super(LeaseApplicationLegalTerm.class);
@@ -98,11 +98,11 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
         }
 
         @Override
-        protected CEntityForm<LeaseApplicationConfirmationTerm> createItemForm(IObject<?> member) {
+        protected CForm<LeaseApplicationConfirmationTerm> createItemForm(IObject<?> member) {
             return new ConfirmationTermEditor();
         }
 
-        class ConfirmationTermEditor extends CEntityForm<LeaseApplicationConfirmationTerm> {
+        class ConfirmationTermEditor extends CForm<LeaseApplicationConfirmationTerm> {
 
             public ConfirmationTermEditor() {
                 super(LeaseApplicationConfirmationTerm.class);

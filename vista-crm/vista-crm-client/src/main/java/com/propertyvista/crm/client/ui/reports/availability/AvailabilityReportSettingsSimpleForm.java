@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -31,7 +31,7 @@ import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata.RentReadinessStatusPreset;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata.RentedStatusPreset;
 
-public class AvailabilityReportSettingsSimpleForm extends CEntityForm<AvailabilityReportMetadata> {
+public class AvailabilityReportSettingsSimpleForm extends CForm<AvailabilityReportMetadata> {
 
     private CComboBox<RentedStatusPreset> rentedStatusPreset;
 

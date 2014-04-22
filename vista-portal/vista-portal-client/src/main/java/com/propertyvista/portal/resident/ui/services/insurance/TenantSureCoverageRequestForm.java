@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureAgre
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
-public class TenantSureCoverageRequestForm extends CEntityForm<TenantSureCoverageDTO> {
+public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
 

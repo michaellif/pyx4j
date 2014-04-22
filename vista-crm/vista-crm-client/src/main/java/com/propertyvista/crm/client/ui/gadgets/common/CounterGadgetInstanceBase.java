@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.webstorage.client.HTML5Storage;
@@ -101,7 +101,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
     }
 
     public CounterGadgetInstanceBase(Class<Data> dataClass, final AbstractCounterGadgetBaseService<Data, Query> service, ZoomableViewForm<Data> summaryForm,
-            GadgetMetadata metadata, Class<GadgetType> metadataClass, CEntityForm<GadgetType> form) {
+            GadgetMetadata metadata, Class<GadgetType> metadataClass, CForm<GadgetType> form) {
         super(metadata, metadataClass, form);
         this.dataClass = dataClass;
 

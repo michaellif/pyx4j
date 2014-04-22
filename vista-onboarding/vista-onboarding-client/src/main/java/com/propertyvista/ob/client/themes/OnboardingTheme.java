@@ -23,7 +23,7 @@ import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -61,7 +61,7 @@ public class OnboardingTheme extends Theme {
                 return ThemeColor.background;
             }
         });
-        addTheme(new DefaultEntityFolderTheme() {
+        addTheme(new DefaultFolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.background;

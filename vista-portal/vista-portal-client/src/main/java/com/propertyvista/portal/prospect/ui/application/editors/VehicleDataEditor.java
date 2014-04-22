@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
-public class VehicleDataEditor extends CEntityForm<Vehicle> {
+public class VehicleDataEditor extends CForm<Vehicle> {
 
     private static final I18n i18n = I18n.get(VehicleDataEditor.class);
 

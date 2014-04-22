@@ -26,10 +26,10 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -176,7 +176,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         }
 
         @Override
-        protected CEntityForm<PreauthorizedPaymentDTO> createItemForm(IObject<?> member) {
+        protected CForm<PreauthorizedPaymentDTO> createItemForm(IObject<?> member) {
             return new PreauthorizedPaymentEditor();
         }
 
@@ -191,7 +191,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentDTO> item) {
+        protected void removeItem(final CFolderItem<PreauthorizedPaymentDTO> item) {
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
                 @Override
                 public void execute() {
@@ -200,7 +200,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             });
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityForm<PreauthorizedPaymentDTO> {
+        private class PreauthorizedPaymentEditor extends CForm<PreauthorizedPaymentDTO> {
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);

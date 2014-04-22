@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -86,11 +86,11 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                                new EntityFolderColumnDescriptor(proto().type(), "15em", true),                    
-                                new EntityFolderColumnDescriptor(proto().name(), "30em"),
-                                new EntityFolderColumnDescriptor(proto().importance(), "10em")
+                                new FolderColumnDescriptor(proto().type(), "15em", true),                    
+                                new FolderColumnDescriptor(proto().name(), "30em"),
+                                new FolderColumnDescriptor(proto().importance(), "10em")
                                 );//@formatter:on
         }
 

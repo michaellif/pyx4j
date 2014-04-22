@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -128,7 +128,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
     }
 
-    class SignUpForm extends CEntityForm<ProspectSignUpDTO> {
+    class SignUpForm extends CForm<ProspectSignUpDTO> {
 
         private EntityValidationException entityValidationException;
 

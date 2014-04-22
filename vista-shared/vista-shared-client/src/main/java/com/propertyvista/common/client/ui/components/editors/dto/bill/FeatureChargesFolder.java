@@ -19,9 +19,9 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
@@ -47,11 +47,11 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
     }
 
     @Override
-    protected CEntityForm<InvoiceProductCharge> createItemForm(IObject<?> member) {
+    protected CForm<InvoiceProductCharge> createItemForm(IObject<?> member) {
         return new ProductChargeEditor();
     }
 
-    class ProductChargeEditor extends CEntityForm<InvoiceProductCharge> {
+    class ProductChargeEditor extends CForm<InvoiceProductCharge> {
 
         public ProductChargeEditor() {
             super(InvoiceProductCharge.class);
@@ -82,10 +82,10 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().amount(), "15em"));
+        public List<FolderColumnDescriptor> columns() {
+            ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
+            columns.add(new FolderColumnDescriptor(proto().amount(), "15em"));
             return columns;
         }
 

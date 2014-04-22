@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -74,7 +74,7 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
-        protected CEntityForm<CoapplicantDTO> createItemForm(IObject<?> member) {
+        protected CForm<CoapplicantDTO> createItemForm(IObject<?> member) {
             return new CoapplicantForm();
         }
 
@@ -86,7 +86,7 @@ public class PeopleStep extends ApplicationWizardStep {
             }
         }
 
-        class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
+        class CoapplicantForm extends CForm<CoapplicantDTO> {
 
             public CoapplicantForm() {
                 super(CoapplicantDTO.class);
@@ -151,7 +151,7 @@ public class PeopleStep extends ApplicationWizardStep {
         }
 
         @Override
-        protected CEntityForm<DependentDTO> createItemForm(IObject<?> member) {
+        protected CForm<DependentDTO> createItemForm(IObject<?> member) {
             return new DependentForm();
         }
 
@@ -164,7 +164,7 @@ public class PeopleStep extends ApplicationWizardStep {
             }
         }
 
-        class DependentForm extends CEntityForm<DependentDTO> {
+        class DependentForm extends CForm<DependentDTO> {
 
             public DependentForm() {
                 super(DependentDTO.class);

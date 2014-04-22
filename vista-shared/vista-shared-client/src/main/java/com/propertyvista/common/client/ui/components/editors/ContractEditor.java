@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -24,7 +24,7 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
 
-public class ContractEditor extends CEntityForm<Contract> {
+public class ContractEditor extends CForm<Contract> {
 
     public ContractEditor() {
         super(Contract.class);

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.dto.LeaseAgreementStakeholderSigningProgressDTO;
@@ -28,12 +28,12 @@ public class LeaseAgreementSigningProgressFolder extends VistaTableFolder<LeaseA
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().name(), "200px"),
-                new EntityFolderColumnDescriptor(proto().role(), "150px"),
-                new EntityFolderColumnDescriptor(proto().hasSigned(), "150px"),
-                new EntityFolderColumnDescriptor(proto().singatureType(), "150px")
+                new FolderColumnDescriptor(proto().name(), "200px"),
+                new FolderColumnDescriptor(proto().role(), "150px"),
+                new FolderColumnDescriptor(proto().hasSigned(), "150px"),
+                new FolderColumnDescriptor(proto().singatureType(), "150px")
         );//@formatter:on
     }
 }

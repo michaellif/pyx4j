@@ -20,10 +20,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -75,11 +75,11 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
     }
 
     @Override
-    protected CEntityForm<BillableItem> createItemForm(IObject<?> member) {
+    protected CForm<BillableItem> createItemForm(IObject<?> member) {
         return new FeatureItemForm();
     }
 
-    class FeatureItemForm extends CEntityForm<BillableItem> {
+    class FeatureItemForm extends CForm<BillableItem> {
 
         private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
 
@@ -112,7 +112,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
             super.onValueSet(populate);
 
             @SuppressWarnings("unchecked")
-            CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
+            CFolderItem<BillableItem> item = (CFolderItem<BillableItem>) getParent();
             item.setRemovable(!isMandatoryFeature(getValue().item().product()));
 
             depositPanel.setVisible(!getValue().deposits().isEmpty());
@@ -140,7 +140,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
             if (value != null) {
                 @SuppressWarnings("rawtypes")
-                CEntityForm editor = null;
+                CForm editor = null;
                 BillableItemExtraData extraData = value.extraData();
 
                 if (ARCode.Type.features().contains(value.item().product().holder().code().type().getValue())) {
@@ -181,7 +181,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
     }
 
     @Override
-    protected void removeItem(final CEntityFolderItem<BillableItem> item) {
+    protected void removeItem(final CFolderItem<BillableItem> item) {
         MessageDialog.confirm(i18n.tr("Feature removal"), i18n.tr("Do you really want to remove the Feature?"), new Command() {
             @Override
             public void execute() {

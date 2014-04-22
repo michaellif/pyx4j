@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -59,11 +59,11 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
         }
 
         @Override
-        protected CEntityForm<BillDataDTO> createItemForm(IObject<?> member) {
+        protected CForm<BillDataDTO> createItemForm(IObject<?> member) {
             return new BillDataViewer();
         }
 
-        private class BillDataViewer extends CEntityForm<BillDataDTO> {
+        private class BillDataViewer extends CForm<BillDataDTO> {
 
             public BillDataViewer() {
                 super(BillDataDTO.class);

@@ -18,14 +18,14 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 
-public class N4DownloadSettingsForm extends CEntityForm<N4DownloadSettingsDTO> {
+public class N4DownloadSettingsForm extends CForm<N4DownloadSettingsDTO> {
 
     private CComboBox<N4GenerationDTO> generationsBox;
 

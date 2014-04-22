@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.domain.company.CompanyEmail;
 
@@ -27,10 +27,10 @@ public class EmailFolder extends VistaTableFolder<CompanyEmail> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        List<EntityFolderColumnDescriptor> columns;
-        columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().email(), "35em"));
+    public List<FolderColumnDescriptor> columns() {
+        List<FolderColumnDescriptor> columns;
+        columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().email(), "35em"));
         return columns;
     }
 }

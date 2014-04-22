@@ -21,10 +21,10 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -38,17 +38,17 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
 
     private static final I18n i18n = I18n.get(DebitCreditLinkFolder.class);
 
-    private static final List<EntityFolderColumnDescriptor> COLUMNS;
+    private static final List<FolderColumnDescriptor> COLUMNS;
     static {
         DebitLinkDTO proto = EntityFactory.getEntityPrototype(DebitLinkDTO.class);
         COLUMNS = Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto.date(), "10em"),
-                new EntityFolderColumnDescriptor(proto.arCodeType(), "10em"),
-                new EntityFolderColumnDescriptor(proto.arCode(), "10em"),                
-                new EntityFolderColumnDescriptor(proto.description(), "20em"),
-                new EntityFolderColumnDescriptor(proto.debitAmount(), "10em"),
-                new EntityFolderColumnDescriptor(proto.paidAmount(), "10em"),
-                new EntityFolderColumnDescriptor(proto.outstandingAmount(), "10em")                
+                new FolderColumnDescriptor(proto.date(), "10em"),
+                new FolderColumnDescriptor(proto.arCodeType(), "10em"),
+                new FolderColumnDescriptor(proto.arCode(), "10em"),                
+                new FolderColumnDescriptor(proto.description(), "20em"),
+                new FolderColumnDescriptor(proto.debitAmount(), "10em"),
+                new FolderColumnDescriptor(proto.paidAmount(), "10em"),
+                new FolderColumnDescriptor(proto.outstandingAmount(), "10em")                
         );//@formatter:on
     }
 
@@ -57,15 +57,15 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return COLUMNS;
     }
 
     @Override
-    protected CEntityForm<DebitLinkDTO> createItemForm(IObject<?> member) {
-        return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
+    protected CForm<DebitLinkDTO> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (column.getObject() == proto().debitAmount()) {
                     CField<?, ?> comp = inject(column.getObject());
                     comp.setNavigationCommand(new Command() {

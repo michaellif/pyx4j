@@ -23,11 +23,11 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -52,26 +52,26 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
 
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().element(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().name(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().price(), "8em"));
+        columns.add(new FolderColumnDescriptor(proto().element(), "10em"));
         if (VistaFeatures.instance().yardiIntegration()) {
-            columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "10em"));
+            columns.add(new FolderColumnDescriptor(proto().depositLMR(), "10em"));
         } else {
-            columns.add(new EntityFolderColumnDescriptor(proto().depositLMR(), "5em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().depositMoveIn(), "5em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().depositSecurity(), "5em"));
+            columns.add(new FolderColumnDescriptor(proto().depositLMR(), "5em"));
+            columns.add(new FolderColumnDescriptor(proto().depositMoveIn(), "5em"));
+            columns.add(new FolderColumnDescriptor(proto().depositSecurity(), "5em"));
         }
-        columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+        columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
 
         return columns;
     }
 
     @Override
-    protected CEntityForm<ProductItem> createItemForm(IObject<?> member) {
+    protected CForm<ProductItem> createItemForm(IObject<?> member) {
         return new ServiceItemEditor();
     }
 
@@ -108,7 +108,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         }
     }
 
-    private class ServiceItemEditor extends CEntityFolderRowEditor<ProductItem> {
+    private class ServiceItemEditor extends CFolderRowEditor<ProductItem> {
 
         public ServiceItemEditor() {
             super(ProductItem.class, columns());
@@ -116,7 +116,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
 

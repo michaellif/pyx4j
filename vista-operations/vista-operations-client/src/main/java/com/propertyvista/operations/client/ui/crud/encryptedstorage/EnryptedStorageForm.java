@@ -16,11 +16,11 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
-public class EnryptedStorageForm extends CEntityForm<EncryptedStorageDTO> {
+public class EnryptedStorageForm extends CForm<EncryptedStorageDTO> {
 
     private EnryptedStorageKeyFolder folder;
 

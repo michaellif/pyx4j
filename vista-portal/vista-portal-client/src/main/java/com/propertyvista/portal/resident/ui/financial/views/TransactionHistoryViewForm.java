@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -58,11 +58,11 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
         }
 
         @Override
-        protected CEntityForm<InvoiceLineItem> createItemForm(IObject<?> member) {
+        protected CForm<InvoiceLineItem> createItemForm(IObject<?> member) {
             return new InvoiceLineItemViewer();
         }
 
-        private class InvoiceLineItemViewer extends CEntityForm<InvoiceLineItem> {
+        private class InvoiceLineItemViewer extends CForm<InvoiceLineItem> {
 
             public InvoiceLineItemViewer() {
                 super(InvoiceLineItem.class);

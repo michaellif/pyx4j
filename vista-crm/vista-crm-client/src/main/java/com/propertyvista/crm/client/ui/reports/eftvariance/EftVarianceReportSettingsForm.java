@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.reports.eftvariance;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
-public class EftVarianceReportSettingsForm extends CEntityForm<EftVarianceReportMetadata> {
+public class EftVarianceReportSettingsForm extends CForm<EftVarianceReportMetadata> {
 
     public EftVarianceReportSettingsForm() {
         super(EftVarianceReportMetadata.class);

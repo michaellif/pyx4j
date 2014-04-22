@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -64,7 +64,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
         }
 
         @Override
-        protected CEntityForm<LeaseAdjustmentPolicyItem> createItemForm(IObject<?> member) {
+        protected CForm<LeaseAdjustmentPolicyItem> createItemForm(IObject<?> member) {
             return new LeaseAdjustmentPolicyItemEditor();
         }
 
@@ -91,7 +91,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
         // internals:
 
-        class LeaseAdjustmentPolicyItemEditor extends CEntityForm<LeaseAdjustmentPolicyItem> {
+        class LeaseAdjustmentPolicyItemEditor extends CForm<LeaseAdjustmentPolicyItem> {
 
             public LeaseAdjustmentPolicyItemEditor() {
                 super(LeaseAdjustmentPolicyItem.class);

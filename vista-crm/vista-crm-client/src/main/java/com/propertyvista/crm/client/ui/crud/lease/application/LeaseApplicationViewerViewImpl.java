@@ -28,7 +28,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -480,7 +480,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         LeaseTermParticipant<?> selectParticipant();
     }
 
-    private static class SelectParticipantForm extends CEntityForm<SelectParticipant> {
+    private static class SelectParticipantForm extends CForm<SelectParticipant> {
 
         private CComboBox<LeaseTermParticipant<?>> selectCombo;
 
@@ -529,7 +529,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
     }
 
-    private static class LeaseApplicationDocumentUploadForm extends CEntityForm<LeaseApplicationDocument> {
+    private static class LeaseApplicationDocumentUploadForm extends CForm<LeaseApplicationDocument> {
 
         private CComboBox<LeaseTermParticipant<?>> signedByCombo;
 

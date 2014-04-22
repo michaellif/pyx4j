@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.lease.legal;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -45,7 +45,7 @@ public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatu
     }
 
     @Override
-    protected CEntityForm<LegalStatusDTO> createItemForm(IObject<?> member) {
+    protected CForm<LegalStatusDTO> createItemForm(IObject<?> member) {
         LegalStatusForm form = new LegalStatusForm(false);
         form.inheritViewable(false);
         form.setViewable(true);
@@ -53,7 +53,7 @@ public abstract class LegalStatusHistoryFolder extends VistaBoxFolder<LegalStatu
     }
 
     @Override
-    protected void removeItem(final CEntityFolderItem<LegalStatusDTO> item) {
+    protected void removeItem(final CFolderItem<LegalStatusDTO> item) {
         MessageDialog.confirm(i18n.tr("Remove Status"), i18n.tr("Are you sure"), new Command() {
             @Override
             public void execute() {

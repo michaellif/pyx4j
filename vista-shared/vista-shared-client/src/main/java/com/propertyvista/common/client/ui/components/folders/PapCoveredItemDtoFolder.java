@@ -22,10 +22,10 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
@@ -40,13 +40,13 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().billableItem(),"25em", i18n.tr("Lease Charge")),
-                new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"6em", i18n.tr("Price"), true),
-                new EntityFolderColumnDescriptor(proto().covered(), "6em", true),
-                new EntityFolderColumnDescriptor(proto().amount(), "6em", i18n.tr("Payment")),
-                new EntityFolderColumnDescriptor(proto().percent(), "4em", true));
+                new FolderColumnDescriptor(proto().billableItem(),"25em", i18n.tr("Lease Charge")),
+                new FolderColumnDescriptor(proto().billableItem().agreedPrice(),"6em", i18n.tr("Price"), true),
+                new FolderColumnDescriptor(proto().covered(), "6em", true),
+                new FolderColumnDescriptor(proto().amount(), "6em", i18n.tr("Payment")),
+                new FolderColumnDescriptor(proto().percent(), "4em", true));
           //@formatter:on                
     }
 
@@ -54,11 +54,11 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     }
 
     @Override
-    protected CEntityForm<PreauthorizedPaymentCoveredItemDTO> createItemForm(IObject<?> member) {
+    protected CForm<PreauthorizedPaymentCoveredItemDTO> createItemForm(IObject<?> member) {
         return new CoveredItemEditor();
     }
 
-    class CoveredItemEditor extends CEntityFolderRowEditor<PreauthorizedPaymentCoveredItemDTO> {
+    class CoveredItemEditor extends CFolderRowEditor<PreauthorizedPaymentCoveredItemDTO> {
 
         public CoveredItemEditor() {
             super(PreauthorizedPaymentCoveredItemDTO.class, columns());
@@ -66,7 +66,7 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
 
         @SuppressWarnings("unchecked")
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             CField<?, ?> comp;
 
             if (column.getObject() == proto().billableItem()) {

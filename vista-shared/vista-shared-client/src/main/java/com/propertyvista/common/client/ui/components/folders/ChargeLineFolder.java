@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.domain.charges.ChargeLine;
 
@@ -29,10 +29,10 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().label(), "40em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().amount(), "7em"));
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().label(), "40em"));
+        columns.add(new FolderColumnDescriptor(proto().amount(), "7em"));
         return columns;
     }
 

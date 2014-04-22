@@ -19,7 +19,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> extends CEntityForm<E> {
+public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> extends CForm<E> {
 
     final static I18n i18n = I18n.get(TenantInsuranceCertificateForm.class);
 

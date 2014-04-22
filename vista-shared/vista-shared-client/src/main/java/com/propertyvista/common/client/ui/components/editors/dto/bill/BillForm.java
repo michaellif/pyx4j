@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class BillForm extends CEntityForm<BillDTO> {
+public class BillForm extends CForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 

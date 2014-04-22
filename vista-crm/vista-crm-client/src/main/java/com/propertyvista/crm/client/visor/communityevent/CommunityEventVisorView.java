@@ -28,10 +28,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityContainer;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -88,7 +88,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         return (CommunityEventVisorController) super.getController();
     }
 
-    public class CommunityEventForm extends CEntityForm<CommunityEventsDTO> {
+    public class CommunityEventForm extends CForm<CommunityEventsDTO> {
 
         public CommunityEventForm() {
             super(CommunityEventsDTO.class);
@@ -114,7 +114,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
             }
 
             @Override
-            protected CEntityForm<CommunityEvent> createItemForm(IObject<?> member) {
+            protected CForm<CommunityEvent> createItemForm(IObject<?> member) {
                 return new EventEditor(true);
             }
 
@@ -124,8 +124,8 @@ public class CommunityEventVisorView extends AbstractVisorPane {
             }
 
             @Override
-            protected CEntityFolderItem<CommunityEvent> createItem(boolean first) {
-                final CEntityFolderItem<CommunityEvent> item = super.createItem(first);
+            protected CFolderItem<CommunityEvent> createItem(boolean first) {
+                final CFolderItem<CommunityEvent> item = super.createItem(first);
                 item.addAction(ActionType.Cust1, i18n.tr("Edit Community Event"), CrmImages.INSTANCE.editButton(), new Command() {
 
                     @SuppressWarnings("rawtypes")
@@ -141,7 +141,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
             }
 
             @Override
-            protected void removeItem(final CEntityFolderItem<CommunityEvent> item) {
+            protected void removeItem(final CFolderItem<CommunityEvent> item) {
                 Dialog confirm = new OkCancelDialog(i18n.tr("Delete Community Event")) {
                     @Override
                     public boolean onClickOk() {
@@ -158,7 +158,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                 confirm.show();
             }
 
-            private class EventEditor extends CEntityForm<CommunityEvent> {
+            private class EventEditor extends CForm<CommunityEvent> {
 
                 private Button btnSave;
 
@@ -215,7 +215,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                         @Override
                         public void execute() {
                             if (getValue().getPrimaryKey() == null) {
-                                ((CommunityEventFolder) getParent().getParent()).removeItem((CEntityFolderItem<CommunityEvent>) getParent());
+                                ((CommunityEventFolder) getParent().getParent()).removeItem((CFolderItem<CommunityEvent>) getParent());
                             } else {
                                 MessageDialog.confirm(i18n.tr("Confirm"),
                                         i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
@@ -235,14 +235,14 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public void onAdopt(final CEntityContainer<?, ?, ?> parent) {
+                public void onAdopt(final CContainer<?, ?, ?> parent) {
                     super.onAdopt(parent);
                     addPropertyChangeHandler(new PropertyChangeHandler() {
 
                         @Override
                         public void onPropertyChange(PropertyChangeEvent event) {
                             if (event.getPropertyName() == PropertyName.viewable) {
-                                ((CEntityFolderItem<CommunityEvent>) parent).getItemActionsBar().setVisible(isViewable());
+                                ((CFolderItem<CommunityEvent>) parent).getItemActionsBar().setVisible(isViewable());
                             }
                         }
                     });

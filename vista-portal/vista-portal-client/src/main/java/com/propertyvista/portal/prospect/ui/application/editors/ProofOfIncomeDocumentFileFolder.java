@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -38,11 +38,11 @@ public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfInco
     }
 
     @Override
-    protected CEntityForm<ProofOfIncomeDocumentFile> createItemForm(IObject<?> member) {
+    protected CForm<ProofOfIncomeDocumentFile> createItemForm(IObject<?> member) {
         return new DocumentEditor();
     }
 
-    private class DocumentEditor extends CEntityForm<ProofOfIncomeDocumentFile> {
+    private class DocumentEditor extends CForm<ProofOfIncomeDocumentFile> {
 
         public DocumentEditor() {
             super(ProofOfIncomeDocumentFile.class);

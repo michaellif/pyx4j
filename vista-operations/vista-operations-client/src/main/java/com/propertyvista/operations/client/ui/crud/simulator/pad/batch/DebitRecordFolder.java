@@ -18,7 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -35,11 +35,11 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
     }
 
     @Override
-    protected CEntityForm<PadSimDebitRecord> createItemForm(IObject<?> member) {
+    protected CForm<PadSimDebitRecord> createItemForm(IObject<?> member) {
         return new DebitRecordEditor();
     }
 
-    private class DebitRecordEditor extends CEntityForm<PadSimDebitRecord> {
+    private class DebitRecordEditor extends CForm<PadSimDebitRecord> {
 
         public DebitRecordEditor() {
             super(PadSimDebitRecord.class);

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
-public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequestStatusDTO> {
+public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatusDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestFolderItem.class);
 

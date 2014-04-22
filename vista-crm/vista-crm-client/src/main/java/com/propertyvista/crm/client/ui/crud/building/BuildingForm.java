@@ -31,16 +31,16 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -358,12 +358,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
                 GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder()) {
             @Override
-            protected EntityFolderImages getFolderIcons() {
+            protected FolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
             }
 
             @Override
-            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+            public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
@@ -424,14 +424,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().phone(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().type(), "9em"));
+            columns.add(new FolderColumnDescriptor(proto().name(), "10em"));
+            columns.add(new FolderColumnDescriptor(proto().description(), "20em"));
+            columns.add(new FolderColumnDescriptor(proto().phone(), "10em"));
+            columns.add(new FolderColumnDescriptor(proto().email(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().visibility(), "7em"));
             return columns;
         }
     }
@@ -443,11 +443,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
             return columns;
         }
     }
@@ -459,11 +459,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
             return columns;
         }
     }
@@ -474,7 +474,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        protected CEntityForm<ILSSummaryBuilding> createItemForm(IObject<?> member) {
+        protected CForm<ILSSummaryBuilding> createItemForm(IObject<?> member) {
             return new ILSSummaryEditor();
         }
 
@@ -516,7 +516,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         @Override
-        protected CEntityForm<ILSProfileBuilding> createItemForm(IObject<?> member) {
+        protected CForm<ILSProfileBuilding> createItemForm(IObject<?> member) {
             return new ILSProfileBuildingEditor();
         }
 

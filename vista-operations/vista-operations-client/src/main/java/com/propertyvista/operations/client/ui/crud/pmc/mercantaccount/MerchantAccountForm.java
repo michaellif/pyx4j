@@ -23,7 +23,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -50,11 +50,11 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
     public static class AssignedBuildingsFolder extends VistaTableFolder<Building> {
 
-        private static List<EntityFolderColumnDescriptor> COLUMNS;
+        private static List<FolderColumnDescriptor> COLUMNS;
         static {
             Building proto = EntityFactory.getEntityPrototype(Building.class);
             COLUMNS = Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto.propertyCode(), "10em")
+                    new FolderColumnDescriptor(proto.propertyCode(), "10em")
             );//@formatter:on
         }
 
@@ -66,7 +66,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return COLUMNS;
         }
 

@@ -39,9 +39,9 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -82,7 +82,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
         IList<AddGadgetGadgetDescriptor> descriptors();
     }
 
-    public class GadgetDescriptorsListForm extends CEntityForm<AddGadgetGadgetDescriptorContainer> {
+    public class GadgetDescriptorsListForm extends CForm<AddGadgetGadgetDescriptorContainer> {
 
         public GadgetDescriptorsListForm() {
             super(AddGadgetGadgetDescriptorContainer.class);
@@ -119,7 +119,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
             }
 
             @Override
-            public void init(final CEntityFolderItem<AddGadgetGadgetDescriptor> folderItem) {
+            public void init(final CFolderItem<AddGadgetGadgetDescriptor> folderItem) {
             }
 
             @Override
@@ -128,7 +128,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
             }
 
             @Override
-            public EntityFolderImages getImages() {
+            public FolderImages getImages() {
                 return VistaImages.INSTANCE;
             }
 
@@ -149,7 +149,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
 
         }
 
-        public class GadgetDescriptorForm extends CEntityForm<AddGadgetGadgetDescriptor> {
+        public class GadgetDescriptorForm extends CForm<AddGadgetGadgetDescriptor> {
 
             public GadgetDescriptorForm() {
                 super(AddGadgetGadgetDescriptor.class);
@@ -199,7 +199,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
         }
 
         @Override
-        protected CEntityForm<AddGadgetGadgetDescriptor> createItemForm(IObject<?> member) {
+        protected CForm<AddGadgetGadgetDescriptor> createItemForm(IObject<?> member) {
             return new GadgetDescriptorForm();
         }
     }

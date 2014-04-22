@@ -31,7 +31,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEmailField;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -114,7 +114,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginToolbar.setDevLogin(devCredientials, appModeName);
     }
 
-    class LoginForm extends CEntityForm<AuthenticationRequest> {
+    class LoginForm extends CForm<AuthenticationRequest> {
 
         private CCaptcha captchaField;
 

@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.application.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -33,11 +33,11 @@ public class ProofOfAssetUploaderFolder extends PortalBoxFolder<ProofOfAssetDocu
     }
 
     @Override
-    protected CEntityForm<ProofOfAssetDocumentFolder> createItemForm(IObject<?> member) {
+    protected CForm<ProofOfAssetDocumentFolder> createItemForm(IObject<?> member) {
         return new ProofOfAssetDocumentEditor();
     }
 
-    private class ProofOfAssetDocumentEditor extends CEntityForm<ProofOfAssetDocumentFolder> {
+    private class ProofOfAssetDocumentEditor extends CForm<ProofOfAssetDocumentFolder> {
 
         public ProofOfAssetDocumentEditor() {
             super(ProofOfAssetDocumentFolder.class);

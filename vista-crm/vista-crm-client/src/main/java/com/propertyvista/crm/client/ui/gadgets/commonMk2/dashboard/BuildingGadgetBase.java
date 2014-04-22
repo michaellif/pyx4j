@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CContainer;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -24,7 +24,7 @@ public abstract class BuildingGadgetBase<G extends GadgetMetadata> extends Gadge
 
     protected IBuildingFilterContainer buildingsFilterContainer;
 
-    public BuildingGadgetBase(GadgetMetadata metadata, Class<G> metadataClass, CEntityContainer<?, G, ?> setupForm) {
+    public BuildingGadgetBase(GadgetMetadata metadata, Class<G> metadataClass, CContainer<?, G, ?> setupForm) {
         super(metadata, metadataClass, setupForm);
     }
 

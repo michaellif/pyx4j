@@ -26,11 +26,11 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -55,17 +55,17 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        List<EntityFolderColumnDescriptor> columns;
-        columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().propertyCode(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().info(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().complexPrimary(), "7em"));
+    public List<FolderColumnDescriptor> columns() {
+        List<FolderColumnDescriptor> columns;
+        columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().propertyCode(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().info(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().complexPrimary(), "7em"));
         return columns;
     }
 
     @Override
-    protected CEntityForm<Building> createItemForm(IObject<?> member) {
+    protected CForm<Building> createItemForm(IObject<?> member) {
         return new ComplexBuildingEditor();
     }
 
@@ -88,7 +88,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
         }.show();
     }
 
-    private class ComplexBuildingEditor extends CEntityFolderRowEditor<Building> {
+    private class ComplexBuildingEditor extends CFolderRowEditor<Building> {
 
         public ComplexBuildingEditor() {
             super(Building.class, columns());
@@ -97,7 +97,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             if (proto().propertyCode() == column.getObject()) {
                 CField<?, ?> comp = inject(proto().propertyCode());
                 ((CField) comp).setNavigationCommand(new Command() {

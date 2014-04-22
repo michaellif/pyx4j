@@ -29,12 +29,12 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -60,10 +60,10 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
     private static class CardServiceSimulationTokenTableFolder extends VistaTableFolder<CardServiceSimulationToken> {
 
-        private static List<EntityFolderColumnDescriptor> COLUMNS;
+        private static List<FolderColumnDescriptor> COLUMNS;
         static {
             CardServiceSimulationToken p = EntityFactory.getEntityPrototype(CardServiceSimulationToken.class);
-            COLUMNS = Arrays.asList(new EntityFolderColumnDescriptor(p.token(), "25em"));
+            COLUMNS = Arrays.asList(new FolderColumnDescriptor(p.token(), "25em"));
         }
 
         public CardServiceSimulationTokenTableFolder() {
@@ -71,15 +71,15 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return COLUMNS;
         }
 
         @Override
-        protected CEntityForm<? extends CardServiceSimulationToken> createItemForm(IObject<?> member) {
-            return new CEntityFolderRowEditor<CardServiceSimulationToken>(CardServiceSimulationToken.class, COLUMNS) {
+        protected CForm<? extends CardServiceSimulationToken> createItemForm(IObject<?> member) {
+            return new CFolderRowEditor<CardServiceSimulationToken>(CardServiceSimulationToken.class, COLUMNS) {
                 @Override
-                protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                     if (column == proto().token()) {
                         return inject(proto().token());
                     } else {
@@ -89,21 +89,6 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
             };
         }
 
-    }
-
-    private static class CardServiceSimulationTransactionsViewer extends CViewer<ISet<CardServiceSimulationTransaction>> {
-
-        @Override
-        public IsWidget createContent(ISet<CardServiceSimulationTransaction> transactions) {
-            FlowPanel panel = new FlowPanel();
-            for (CardServiceSimulationTransaction t : transactions) {
-                CEntityCrudHyperlink<CardServiceSimulationTransaction> hyperLink = OperationsEditorsComponentFactory
-                        .createEntityHyperlink(CardServiceSimulationTransaction.class);
-                hyperLink.populate(t);
-                panel.add(hyperLink);
-            }
-            return panel;
-        }
     }
 
     private class CardServiceSimulationForm extends OperationsEntityForm<CardServiceSimulationCard> {

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
@@ -49,7 +49,7 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
         closedMaintenanceRequestsViewer.populate(value);
     }
 
-    class ClosedMaintenanceRequestsViewer extends CEntityForm<MaintenanceSummaryDTO> {
+    class ClosedMaintenanceRequestsViewer extends CForm<MaintenanceSummaryDTO> {
 
         private final Label message;
 
@@ -86,7 +86,7 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
         }
 
         @Override
-        protected CEntityForm<MaintenanceRequestStatusDTO> createItemForm(IObject<?> member) {
+        protected CForm<MaintenanceRequestStatusDTO> createItemForm(IObject<?> member) {
             return new MaintenanceRequestFolderItem(getGadgetView().getPresenter());
         }
     }

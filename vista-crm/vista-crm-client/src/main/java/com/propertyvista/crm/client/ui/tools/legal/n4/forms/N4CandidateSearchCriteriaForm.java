@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -37,7 +37,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4CandidateSearchCriteriaDTO;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
-public class N4CandidateSearchCriteriaForm extends CEntityForm<N4CandidateSearchCriteriaDTO> {
+public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriteriaDTO> {
 
     private static class SearchCriteriaFormDecoratorBuilder extends FieldDecoratorBuilder {
 

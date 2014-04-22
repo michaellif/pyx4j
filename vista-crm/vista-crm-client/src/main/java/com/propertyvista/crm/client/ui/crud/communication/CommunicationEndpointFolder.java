@@ -23,11 +23,11 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
@@ -55,10 +55,10 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().email(), "20em"));
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().name(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().email(), "20em"));
         return columns;
     }
 
@@ -72,7 +72,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
     }
 
     @Override
-    protected CEntityForm<? extends CommunicationEndpoint> createItemForm(IObject<?> member) {
+    protected CForm<? extends CommunicationEndpoint> createItemForm(IObject<?> member) {
         if (member instanceof CrmUser) {
             return new CommunicationEndpointEditor<CrmUser>(CrmUser.class);
         } else if (member instanceof CustomerUser) {
@@ -117,7 +117,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
         }.show();
     }
 
-    private class CommunicationEndpointEditor<E extends CommunicationEndpoint> extends CEntityFolderRowEditor<E> {
+    private class CommunicationEndpointEditor<E extends CommunicationEndpoint> extends CFolderRowEditor<E> {
 
         public CommunicationEndpointEditor(Class<E> clazz) {
             super(clazz, columns());

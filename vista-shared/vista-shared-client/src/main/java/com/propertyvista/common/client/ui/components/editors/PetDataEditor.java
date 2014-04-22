@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 
-public class PetDataEditor extends CEntityForm<Pet> {
+public class PetDataEditor extends CForm<Pet> {
 
     private static final I18n i18n = I18n.get(PetDataEditor.class);
 

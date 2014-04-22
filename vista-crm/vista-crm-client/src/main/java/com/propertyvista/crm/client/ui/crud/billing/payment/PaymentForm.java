@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -123,7 +123,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
 
         @Override
-        protected CEntityForm<?> createEcheckInfoEditor() {
+        protected CForm<?> createEcheckInfoEditor() {
             return new EcheckInfoEditor() {
                 @SuppressWarnings("rawtypes")
                 @Override
@@ -536,7 +536,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private class PreauthorizedPaymentViewer extends CEntityForm<AutopayAgreement> {
+    private class PreauthorizedPaymentViewer extends CForm<AutopayAgreement> {
 
         public PreauthorizedPaymentViewer() {
             super(AutopayAgreement.class);

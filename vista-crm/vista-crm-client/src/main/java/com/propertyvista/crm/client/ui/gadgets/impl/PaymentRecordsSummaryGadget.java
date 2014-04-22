@@ -34,12 +34,12 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -87,7 +87,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
 
     private final PaymentRecordsSummaryGadgetService service;
 
-    private CEntityForm<PaymentFeesHolderDTO> paymentFeesForm;
+    private CForm<PaymentFeesHolderDTO> paymentFeesForm;
 
     private HTML summaryTitlePanel;
 
@@ -306,7 +306,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         return getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
     }
 
-    private static final class PaymentFeesForm extends CEntityForm<PaymentFeesHolderDTO> {
+    private static final class PaymentFeesForm extends CForm<PaymentFeesHolderDTO> {
 
         public PaymentFeesForm() {
             super(PaymentFeesHolderDTO.class);
@@ -323,24 +323,24 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
 
         private static final class PaymentFeesFolder extends VistaTableFolder<PaymentFeesDTO> {
 
-            private final List<EntityFolderColumnDescriptor> columns;
+            private final List<FolderColumnDescriptor> columns;
 
             public PaymentFeesFolder() {
                 super(PaymentFeesDTO.class);
                 setAddable(false);
                 setRemovable(false);
                 columns = Arrays.asList(//@formatter:off
-                        new EntityFolderColumnDescriptor(proto().paymentFeePolicy(), "10em"),
-                        new EntityFolderColumnDescriptor(proto().visa(), "8em"),
-                        new EntityFolderColumnDescriptor(proto().visaDebit(), "8em"),
-                        new EntityFolderColumnDescriptor(proto().masterCard(), "8em"),
-                        new EntityFolderColumnDescriptor(proto().eCheck(), "8em"),
-                        new EntityFolderColumnDescriptor(proto().directBanking(), "8em")
+                        new FolderColumnDescriptor(proto().paymentFeePolicy(), "10em"),
+                        new FolderColumnDescriptor(proto().visa(), "8em"),
+                        new FolderColumnDescriptor(proto().visaDebit(), "8em"),
+                        new FolderColumnDescriptor(proto().masterCard(), "8em"),
+                        new FolderColumnDescriptor(proto().eCheck(), "8em"),
+                        new FolderColumnDescriptor(proto().directBanking(), "8em")
                 );//@formatter:on
             }
 
             @Override
-            public List<EntityFolderColumnDescriptor> columns() {
+            public List<FolderColumnDescriptor> columns() {
                 return columns;
             }
 

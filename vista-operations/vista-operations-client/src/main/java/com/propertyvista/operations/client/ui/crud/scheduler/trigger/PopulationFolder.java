@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 
@@ -46,8 +46,8 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return Arrays.asList(new EntityFolderColumnDescriptor(proto().pmc(), "40em", true));
+    public List<FolderColumnDescriptor> columns() {
+        return Arrays.asList(new FolderColumnDescriptor(proto().pmc(), "40em", true));
     }
 
     @Override

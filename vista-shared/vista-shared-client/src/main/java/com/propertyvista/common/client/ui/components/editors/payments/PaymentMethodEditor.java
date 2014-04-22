@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -53,7 +53,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
-public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntityForm<E> {
+public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
@@ -186,7 +186,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
         if (type != null && getValue() != null) {
             @SuppressWarnings("rawtypes")
-            CEntityForm editor = null;
+            CForm editor = null;
             PaymentDetails details = getValue().details();
 
             switch (type) {
@@ -253,19 +253,19 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     // Override these methods for method editors customization:
 
-    protected CEntityForm<?> createCashInfoEditor() {
+    protected CForm<?> createCashInfoEditor() {
         return new CashInfoEditor();
     }
 
-    protected CEntityForm<?> createCheckInfoEditor() {
+    protected CForm<?> createCheckInfoEditor() {
         return new CheckInfoEditor();
     }
 
-    protected CEntityForm<?> createEcheckInfoEditor() {
+    protected CForm<?> createEcheckInfoEditor() {
         return new EcheckInfoEditor();
     }
 
-    protected CEntityForm<?> createCreditCardInfoEditor() {
+    protected CForm<?> createCreditCardInfoEditor() {
         return new CreditCardInfoEditor() {
             @Override
             protected Set<CreditCardType> getAllowedCardTypes() {
@@ -274,11 +274,11 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         };
     }
 
-    protected CEntityForm<?> createInteracInfoEditor() {
+    protected CForm<?> createInteracInfoEditor() {
         return new InteracInfoEditor();
     }
 
-    private CEntityForm<?> createDirectDebitInfoEditor() {
+    private CForm<?> createDirectDebitInfoEditor() {
         return new DirectDebitInfoEditor();
     }
 

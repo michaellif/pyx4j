@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.application;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -37,11 +37,11 @@ public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
     }
 
     @Override
-    protected CEntityForm<OptionDTO> createItemForm(IObject<?> member) {
+    protected CForm<OptionDTO> createItemForm(IObject<?> member) {
         return new ApplicationOptionForm();
     }
 
-    class ApplicationOptionForm extends CEntityForm<OptionDTO> {
+    class ApplicationOptionForm extends CForm<OptionDTO> {
 
         public ApplicationOptionForm() {
             super(OptionDTO.class);

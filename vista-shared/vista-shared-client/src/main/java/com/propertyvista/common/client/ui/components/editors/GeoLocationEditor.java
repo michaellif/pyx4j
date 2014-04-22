@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -34,7 +34,7 @@ import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 
-public class GeoLocationEditor extends CEntityForm<GeoLocation> {
+public class GeoLocationEditor extends CForm<GeoLocation> {
 
     private static final I18n i18n = I18n.get(GeoLocationEditor.class);
 

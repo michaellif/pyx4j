@@ -24,11 +24,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
@@ -41,22 +41,22 @@ public class LtbRentOwedBreakdownFolder extends VistaTableFolder<RentOwingForPer
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().from(), "150px"),
-                new EntityFolderColumnDescriptor(proto().to(), "150px"),
-                new EntityFolderColumnDescriptor(proto().rentCharged(), "150px"),                
-                new EntityFolderColumnDescriptor(proto().rentPaid(), "150px"),
-                new EntityFolderColumnDescriptor(proto().rentOwing(), "150px")
+                new FolderColumnDescriptor(proto().from(), "150px"),
+                new FolderColumnDescriptor(proto().to(), "150px"),
+                new FolderColumnDescriptor(proto().rentCharged(), "150px"),                
+                new FolderColumnDescriptor(proto().rentPaid(), "150px"),
+                new FolderColumnDescriptor(proto().rentOwing(), "150px")
         );//@formatter:on
     }
 
     @Override
-    protected CEntityForm<? extends RentOwingForPeriod> createItemForm(IObject<?> member) {
-        return new CEntityFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
+    protected CForm<? extends RentOwingForPeriod> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<RentOwingForPeriod>(RentOwingForPeriod.class, columns()) {
 
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (proto().from() == column.getObject()) {
                     CDatePicker datePicker = new CDatePicker();
                     datePicker.setMandatory(true);

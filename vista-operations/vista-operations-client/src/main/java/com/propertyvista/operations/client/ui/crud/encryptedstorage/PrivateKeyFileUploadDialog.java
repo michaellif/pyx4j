@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
@@ -38,7 +38,7 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, 
 
     private final EncryptedStorageKeyDTO keyToUpload;
 
-    private CEntityForm<PasswordEntryDTO> form;
+    private CForm<PasswordEntryDTO> form;
 
     public PrivateKeyFileUploadDialog(EncryptedStorageKeyDTO keyToUpload, UploadReceiver uploadReciver) {
         super(i18n.tr("Upload Private Key File"), null, GWT
@@ -49,7 +49,7 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, 
     @Override
     protected IsWidget createContent(final UploadPanel<PrivateKeyDTO, AbstractIFileBlob> uploadPanel) {
 
-        form = new CEntityForm<PasswordEntryDTO>(PasswordEntryDTO.class) {
+        form = new CForm<PasswordEntryDTO>(PasswordEntryDTO.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

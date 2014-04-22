@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -25,7 +25,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
-public class PropertyAccountInfoForm extends CEntityForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
+public class PropertyAccountInfoForm extends CForm<OnlinePaymentSetupDTO.PropertyAccountInfo> {
 
     public PropertyAccountInfoForm() {
         super(PropertyAccountInfo.class);

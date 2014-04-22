@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -63,13 +63,13 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private Populator defaultPopulator;
 
-    private CEntityContainer<?, T, ?> setupForm;
+    private CContainer<?, T, ?> setupForm;
 
     private final T metadata;
 
     // TODO metadataClass argument is needed only for creation of the default metatada, remove when default metadata creation is implemented on server side
     @SuppressWarnings("unchecked")
-    public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CEntityContainer<?, T, ?> setupForm) {
+    public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CContainer<?, T, ?> setupForm) {
         assert metadata != null;
         this.metadata = (T) metadata;
         this.setupForm = setupForm;
@@ -418,9 +418,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected class SetupFormWrapper implements ISetup {
 
-        private final CEntityContainer<?, T, ?> form;
+        private final CContainer<?, T, ?> form;
 
-        public SetupFormWrapper(CEntityContainer<?, T, ?> form) {
+        public SetupFormWrapper(CContainer<?, T, ?> form) {
             assert form != null;
             this.form = form;
         }

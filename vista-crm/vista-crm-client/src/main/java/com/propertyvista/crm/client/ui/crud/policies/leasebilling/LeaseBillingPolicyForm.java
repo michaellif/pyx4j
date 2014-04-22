@@ -33,12 +33,12 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
@@ -279,11 +279,11 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        protected CEntityForm<LeaseBillingTypePolicyItem> createItemForm(IObject<?> member) {
+        protected CForm<LeaseBillingTypePolicyItem> createItemForm(IObject<?> member) {
             return new LeaseBillingTypeEditor();
         }
 
-        class LeaseBillingTypeEditor extends CEntityForm<LeaseBillingTypePolicyItem> {
+        class LeaseBillingTypeEditor extends CForm<LeaseBillingTypePolicyItem> {
 
             private final CComboBox<Integer> startDay;
 
@@ -401,10 +401,10 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().paymentType(), "10em", true),
-                new EntityFolderColumnDescriptor(proto().fee(), "6em")
+                new FolderColumnDescriptor(proto().paymentType(), "10em", true),
+                new FolderColumnDescriptor(proto().fee(), "6em")
             );//@formatter:on
         }
 

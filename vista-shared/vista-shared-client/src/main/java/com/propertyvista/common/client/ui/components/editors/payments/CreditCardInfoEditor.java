@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
@@ -52,7 +52,7 @@ import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.shared.util.CreditCardFormatter;
 
-public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
+public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 

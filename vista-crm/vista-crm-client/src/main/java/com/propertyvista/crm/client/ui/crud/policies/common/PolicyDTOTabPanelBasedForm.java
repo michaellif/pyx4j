@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -188,7 +188,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      * 
      * @author ArtyomB
      */
-    private static class PolicyNodeEditor extends CEntityForm<PolicyNode> {
+    private static class PolicyNodeEditor extends CForm<PolicyNode> {
 
         private Map<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>> nodeTypeToComponentMap;
 

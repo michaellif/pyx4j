@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 
-public class LegalTermsPolicyItemForm extends CEntityForm<LegalTermsPolicyItem> {
+public class LegalTermsPolicyItemForm extends CForm<LegalTermsPolicyItem> {
 
     public LegalTermsPolicyItemForm(boolean isEditable) {
         super(LegalTermsPolicyItem.class);

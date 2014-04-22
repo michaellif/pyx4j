@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,7 +32,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
     private static final I18n i18n = I18n.get(LegalLetterFolder.class);
 
-    public static class N4LegalLetterForm extends CEntityForm<N4LegalLetter> {
+    public static class N4LegalLetterForm extends CForm<N4LegalLetter> {
 
         public N4LegalLetterForm() {
             super(N4LegalLetter.class);
@@ -51,7 +51,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         }
     }
 
-    private static class LegalLetterForm extends CEntityForm<LegalLetter> {
+    private static class LegalLetterForm extends CForm<LegalLetter> {
 
         public LegalLetterForm() {
             super(LegalLetter.class);
@@ -78,11 +78,11 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
     }
 
     @Override
-    protected CEntityForm<LegalLetter> createItemForm(IObject<?> member) {
+    protected CForm<LegalLetter> createItemForm(IObject<?> member) {
         return new PolyLegalLetterForm();
     }
 
-    private static class PolyLegalLetterForm extends CEntityForm<LegalLetter> {
+    private static class PolyLegalLetterForm extends CForm<LegalLetter> {
 
         private SimplePanel polymorphicFormContainer;
 

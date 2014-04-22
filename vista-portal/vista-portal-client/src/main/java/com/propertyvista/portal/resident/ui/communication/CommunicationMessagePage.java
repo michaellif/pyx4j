@@ -19,10 +19,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -96,7 +96,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        protected CEntityForm<CommunicationMessage> createItemForm(IObject<?> member) {
+        protected CForm<CommunicationMessage> createItemForm(IObject<?> member) {
             return new MessageFolderItem(this);
         }
 
@@ -106,14 +106,14 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        public void removeItem(CEntityFolderItem<CommunicationMessage> item) {
+        public void removeItem(CFolderItem<CommunicationMessage> item) {
             super.removeItem(item);
 
         }
 
     }
 
-    public class MessageFolderItem extends CEntityForm<CommunicationMessage> {
+    public class MessageFolderItem extends CForm<CommunicationMessage> {
         private Anchor btnSend;
 
         private Anchor btnCancel;
@@ -171,7 +171,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
             btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
                 @Override
                 public void execute() {
-                    ((OpenMessageFolder) getParent().getParent()).removeItem((CEntityFolderItem<CommunicationMessage>) getParent());
+                    ((OpenMessageFolder) getParent().getParent()).removeItem((CFolderItem<CommunicationMessage>) getParent());
                 }
             });
 

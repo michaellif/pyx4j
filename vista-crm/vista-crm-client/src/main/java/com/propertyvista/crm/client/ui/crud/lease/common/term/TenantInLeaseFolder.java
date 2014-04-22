@@ -30,12 +30,12 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -85,7 +85,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
         for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((TenantInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
+            ((TenantInLeaseEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
         }
     }
 
@@ -150,7 +150,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     }
 
     @Override
-    protected CEntityForm<LeaseTermTenant> createItemForm(IObject<?> member) {
+    protected CForm<LeaseTermTenant> createItemForm(IObject<?> member) {
         return new TenantInLeaseEditor();
     }
 
@@ -192,7 +192,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         });
     }
 
-    private class TenantInLeaseEditor extends CEntityForm<LeaseTermTenant> {
+    private class TenantInLeaseEditor extends CForm<LeaseTermTenant> {
 
         private final TwoColumnFlexFormPanel preauthorizedPaymentsPanel = new TwoColumnFlexFormPanel();
 
@@ -359,11 +359,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
 
         @Override
-        protected CEntityForm<AutopayAgreement> createItemForm(IObject<?> member) {
+        protected CForm<AutopayAgreement> createItemForm(IObject<?> member) {
             return new PreauthorizedPaymentViewer();
         }
 
-        private class PreauthorizedPaymentViewer extends CEntityForm<AutopayAgreement> {
+        private class PreauthorizedPaymentViewer extends CForm<AutopayAgreement> {
 
             public PreauthorizedPaymentViewer() {
                 super(AutopayAgreement.class);

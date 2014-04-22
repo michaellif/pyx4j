@@ -25,9 +25,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.commons.ClientEventBus;
@@ -228,8 +228,8 @@ public class UnitStep extends ApplicationWizardStep {
         }
 
         @Override
-        protected CEntityFolderItem<UnitTO> createItem(boolean first) {
-            final CEntityFolderItem<UnitTO> item = super.createItem(first);
+        protected CFolderItem<UnitTO> createItem(boolean first) {
+            final CFolderItem<UnitTO> item = super.createItem(first);
             item.asWidget().addStyleName(ApplicationWizardTheme.StyleName.SelectUnitToobar.name());
             item.addAction(ActionType.Cust1, i18n.tr("Select Unit"), PortalImages.INSTANCE.selectButton(), new Command() {
                 @Override
@@ -242,11 +242,11 @@ public class UnitStep extends ApplicationWizardStep {
         }
 
         @Override
-        protected CEntityForm<UnitTO> createItemForm(IObject<?> member) {
+        protected CForm<UnitTO> createItemForm(IObject<?> member) {
             return new AvailableUnitForm();
         }
 
-        class AvailableUnitForm extends CEntityForm<UnitTO> {
+        class AvailableUnitForm extends CForm<UnitTO> {
 
             public AvailableUnitForm() {
                 super(UnitTO.class);

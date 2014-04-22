@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
-public class CustomerCreditCheckReportSettingsForm extends CEntityForm<CustomerCreditCheckReportMetadata> {
+public class CustomerCreditCheckReportSettingsForm extends CForm<CustomerCreditCheckReportMetadata> {
 
     public CustomerCreditCheckReportSettingsForm() {
         super(CustomerCreditCheckReportMetadata.class);

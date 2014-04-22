@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -233,7 +233,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
             }
         }
 
-        class ApplicationProgressForm extends CEntityForm<MasterOnlineApplicationStatus> {
+        class ApplicationProgressForm extends CForm<MasterOnlineApplicationStatus> {
 
             public ApplicationProgressForm() {
                 super(MasterOnlineApplicationStatus.class);
@@ -259,10 +259,10 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 }
 
                 @Override
-                public List<EntityFolderColumnDescriptor> columns() {
-                    ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<>();
-                    columns.add(new EntityFolderColumnDescriptor(proto().customer(), "200px"));
-                    columns.add(new EntityFolderColumnDescriptor(proto().progress(), "80px"));
+                public List<FolderColumnDescriptor> columns() {
+                    ArrayList<FolderColumnDescriptor> columns = new ArrayList<>();
+                    columns.add(new FolderColumnDescriptor(proto().customer(), "200px"));
+                    columns.add(new FolderColumnDescriptor(proto().progress(), "80px"));
                     return columns;
                 }
             }

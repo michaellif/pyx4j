@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -36,11 +36,11 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
     }
 
     @Override
-    protected CEntityForm<TriggerNotification> createItemForm(IObject<?> member) {
+    protected CForm<TriggerNotification> createItemForm(IObject<?> member) {
         return new NotificationEditor();
     }
 
-    public class NotificationEditor extends CEntityForm<TriggerNotification> {
+    public class NotificationEditor extends CForm<TriggerNotification> {
 
         public NotificationEditor() {
             super(TriggerNotification.class);

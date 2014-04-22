@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -39,11 +39,11 @@ public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateS
     }
 
     @Override
-    protected CEntityForm<InsuranceCertificateScan> createItemForm(IObject<?> member) {
+    protected CForm<InsuranceCertificateScan> createItemForm(IObject<?> member) {
         return new CertificateScanViewer();
     }
 
-    private class CertificateScanViewer extends CEntityForm<InsuranceCertificateScan> {
+    private class CertificateScanViewer extends CForm<InsuranceCertificateScan> {
 
         public CertificateScanViewer() {
             super(InsuranceCertificateScan.class);

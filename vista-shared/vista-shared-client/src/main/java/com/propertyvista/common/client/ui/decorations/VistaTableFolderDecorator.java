@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.decorations;
 import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -26,15 +26,15 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 public class VistaTableFolderDecorator<E extends IEntity> extends TableFolderDecorator<E> {
     private static final I18n i18n = I18n.get(VistaTableFolderDecorator.class);
 
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns) {
+    public VistaTableFolderDecorator(List<FolderColumnDescriptor> columns) {
         super(columns, VistaImages.INSTANCE);
     }
 
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String addLabel) {
+    public VistaTableFolderDecorator(List<FolderColumnDescriptor> columns, String addLabel) {
         super(columns, VistaImages.INSTANCE, addLabel);
     }
 
-    public VistaTableFolderDecorator(List<EntityFolderColumnDescriptor> columns, String addLabel, boolean addable) {
+    public VistaTableFolderDecorator(List<FolderColumnDescriptor> columns, String addLabel, boolean addable) {
         super(columns, VistaImages.INSTANCE, addLabel, addable);
     }
 

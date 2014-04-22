@@ -20,10 +20,10 @@ import com.google.gwt.dom.client.Style.FontWeight;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
@@ -43,20 +43,20 @@ public class PapCoveredItemFolder extends VistaTableFolder<AutopayAgreement.Auto
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().billableItem(),"31em", i18n.tr("Lease Charge")),
-                new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"8em", i18n.tr("Price"), true),
-                new EntityFolderColumnDescriptor(proto().amount(), "8em", i18n.tr("Payment")));
+                new FolderColumnDescriptor(proto().billableItem(),"31em", i18n.tr("Lease Charge")),
+                new FolderColumnDescriptor(proto().billableItem().agreedPrice(),"8em", i18n.tr("Price"), true),
+                new FolderColumnDescriptor(proto().amount(), "8em", i18n.tr("Payment")));
           //@formatter:on                
     }
 
     @Override
-    protected CEntityForm<AutopayAgreementCoveredItem> createItemForm(IObject<?> member) {
+    protected CForm<AutopayAgreementCoveredItem> createItemForm(IObject<?> member) {
         return new CoveredItemViewer();
     }
 
-    class CoveredItemViewer extends CEntityFolderRowEditor<AutopayAgreementCoveredItem> {
+    class CoveredItemViewer extends CFolderRowEditor<AutopayAgreementCoveredItem> {
 
         public CoveredItemViewer() {
             super(AutopayAgreementCoveredItem.class, columns());
@@ -66,7 +66,7 @@ public class PapCoveredItemFolder extends VistaTableFolder<AutopayAgreement.Auto
         }
 
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             CField<?, ?> comp;
 
             if (column.getObject() == proto().billableItem()) {

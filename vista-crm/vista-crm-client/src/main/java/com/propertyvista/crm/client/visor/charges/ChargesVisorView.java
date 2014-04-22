@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -57,7 +57,7 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
         return (ChargesVisorController) super.getController();
     }
 
-    private class ChargesForm extends CEntityForm<BillDataDTO> {
+    private class ChargesForm extends CForm<BillDataDTO> {
 
         public ChargesForm() {
             super(BillDataDTO.class);

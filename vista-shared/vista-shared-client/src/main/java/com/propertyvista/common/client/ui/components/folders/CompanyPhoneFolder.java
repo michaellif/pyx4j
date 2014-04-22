@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.domain.company.CompanyPhone;
 
@@ -27,7 +27,7 @@ public class CompanyPhoneFolder extends VistaTableFolder<CompanyPhone> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return Arrays.asList(new EntityFolderColumnDescriptor(proto().phone(), "15em"));
+    public List<FolderColumnDescriptor> columns() {
+        return Arrays.asList(new FolderColumnDescriptor(proto().phone(), "15em"));
     }
 }

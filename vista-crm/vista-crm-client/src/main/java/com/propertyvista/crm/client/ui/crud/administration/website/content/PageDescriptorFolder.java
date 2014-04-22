@@ -20,12 +20,12 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 
@@ -46,14 +46,14 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().name(), "25em"));
         return columns;
     }
 
     @Override
-    protected CEntityForm<PageDescriptor> createItemForm(IObject<?> member) {
+    protected CForm<PageDescriptor> createItemForm(IObject<?> member) {
         return new PageDescriptorEditor();
     }
 
@@ -65,14 +65,14 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         return decor;
     }
 
-    private class PageDescriptorEditor extends CEntityFolderRowEditor<PageDescriptor> {
+    private class PageDescriptorEditor extends CFolderRowEditor<PageDescriptor> {
 
         public PageDescriptorEditor() {
             super(PageDescriptor.class, columns());
         }
 
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
                 CField<?, ?> comp = null;
                 comp = inject(column.getObject(), new CLabel<String>());
@@ -93,7 +93,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
         // first two items are not editable
         if (this.getItemCount() < 2) {
             @SuppressWarnings("unchecked")
-            CEntityFolderItem<PageDescriptor> item = (CEntityFolderItem<PageDescriptor>) component;
+            CFolderItem<PageDescriptor> item = (CFolderItem<PageDescriptor>) component;
             item.setMovable(false);
             item.setRemovable(false);
         }

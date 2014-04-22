@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -63,7 +63,7 @@ public abstract class SigningEmplyeeSelectionDialog extends OkCancelDialog {
 
     }
 
-    private static class SigningEmployeeSelectionForm extends CEntityForm<SigningEmployeeSelectionModel> {
+    private static class SigningEmployeeSelectionForm extends CForm<SigningEmployeeSelectionModel> {
 
         private CComboBox<Employee> agentComboBox;
 

@@ -36,7 +36,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -580,7 +580,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         private final boolean showTermination;
 
-        private CEntityForm<LeaseDTO> content;
+        private CForm<LeaseDTO> content;
 
         public TermLeaseBox(CompletionType action) {
             super(i18n.tr("Please fill"));
@@ -594,7 +594,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CEntityForm<LeaseDTO>(LeaseDTO.class) {
+            content = new CForm<LeaseDTO>(LeaseDTO.class) {
                 @Override
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

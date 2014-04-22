@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
@@ -26,7 +26,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public class AvailabilityReportSettingsAdvancedForm extends CEntityForm<AvailabilityReportMetadata> {
+public class AvailabilityReportSettingsAdvancedForm extends CForm<AvailabilityReportMetadata> {
 
     public AvailabilityReportSettingsAdvancedForm() {
         super(AvailabilityReportMetadata.class);

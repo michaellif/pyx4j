@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,7 +32,7 @@ import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
 // TODO add document requirements label and validator
-public class BusinessInformationForm extends CEntityForm<BusinessInformationDTO> {
+public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
 
     private static final I18n i18n = I18n.get(BusinessInformationForm.class);
 

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.website.content.gadg
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
@@ -30,7 +30,7 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
     }
 
     @Override
-    protected CEntityForm<Testimonial> createItemForm(IObject<?> member) {
+    protected CForm<Testimonial> createItemForm(IObject<?> member) {
         return new TestimonialEditor();
     }
 

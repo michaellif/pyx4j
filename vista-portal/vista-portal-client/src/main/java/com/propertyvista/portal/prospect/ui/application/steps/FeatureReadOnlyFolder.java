@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -33,11 +33,11 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
     }
 
     @Override
-    protected CEntityForm<BillableItem> createItemForm(IObject<?> member) {
+    protected CForm<BillableItem> createItemForm(IObject<?> member) {
         return new FeatureItemViewer();
     }
 
-    class FeatureItemViewer extends CEntityForm<BillableItem> {
+    class FeatureItemViewer extends CForm<BillableItem> {
 
         public FeatureItemViewer() {
             super(BillableItem.class);

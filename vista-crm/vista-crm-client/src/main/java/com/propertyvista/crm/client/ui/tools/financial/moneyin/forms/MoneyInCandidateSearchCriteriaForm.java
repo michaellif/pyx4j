@@ -20,7 +20,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -30,7 +30,7 @@ import com.propertyvista.crm.client.ui.tools.common.selectors.PortfolioSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 
-public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateSearchCriteriaModel> {
+public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSearchCriteriaModel> {
 
     private static class SearchCriteriaFormDecoratorBuilder extends FieldDecoratorBuilder {
 

@@ -21,8 +21,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -53,12 +53,12 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         this.documentationPolicy = policy;
 
         for (CComponent<?, ?, ?> item : getComponents()) {
-            ((PersonalIncomeEditor) ((CEntityFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
+            ((PersonalIncomeEditor) ((CFolderItem<?>) item).getComponents().iterator().next()).setDocumentsPolicy(documentationPolicy);
         }
     }
 
     @Override
-    protected CEntityForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
+    protected CForm<CustomerScreeningIncome> createItemForm(IObject<?> member) {
         return new PersonalIncomeEditor(documentationPolicy);
     }
 

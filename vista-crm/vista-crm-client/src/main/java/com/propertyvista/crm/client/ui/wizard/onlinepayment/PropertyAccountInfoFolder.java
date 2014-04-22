@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.wizard.onlinepayment;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
@@ -27,7 +27,7 @@ public class PropertyAccountInfoFolder extends VistaBoxFolder<OnlinePaymentSetup
     }
 
     @Override
-    protected CEntityForm<PropertyAccountInfo> createItemForm(IObject<?> member) {
+    protected CForm<PropertyAccountInfo> createItemForm(IObject<?> member) {
         return new PropertyAccountInfoForm();
     }
 

@@ -14,14 +14,14 @@
 package com.propertyvista.common.client.ui.components.folders;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 
-public abstract class VistaBoxFolder<E extends IEntity> extends CEntityFolder<E> {
+public abstract class VistaBoxFolder<E extends IEntity> extends CFolder<E> {
 
     private final String itemName;
 

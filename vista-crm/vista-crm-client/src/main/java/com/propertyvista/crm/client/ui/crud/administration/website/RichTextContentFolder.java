@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -73,7 +73,7 @@ public class RichTextContentFolder extends VistaBoxFolder<HtmlContent> {
     }
 
     @Override
-    protected CEntityForm<HtmlContent> createItemForm(IObject<?> member) {
+    protected CForm<HtmlContent> createItemForm(IObject<?> member) {
         return new RichTextContentEditor();
     }
 }

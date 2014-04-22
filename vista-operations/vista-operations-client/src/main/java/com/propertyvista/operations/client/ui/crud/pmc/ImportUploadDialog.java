@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.UploadPanel;
@@ -37,7 +37,7 @@ public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO> {
 
     private final PmcDTO pmc;
 
-    private CEntityForm<ImportUploadDTO> form;
+    private CForm<ImportUploadDTO> form;
 
     public ImportUploadDialog(PmcDTO pmc) {
         super(i18n.tr("Upload Import"), GWT.<ImportUploadService> create(ImportUploadService.class));
@@ -47,7 +47,7 @@ public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO> {
 
     @Override
     protected IsWidget createContent(final UploadPanel<ImportUploadDTO, AbstractIFileBlob> uploadPanel) {
-        form = new CEntityForm<ImportUploadDTO>(ImportUploadDTO.class) {
+        form = new CForm<ImportUploadDTO>(ImportUploadDTO.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

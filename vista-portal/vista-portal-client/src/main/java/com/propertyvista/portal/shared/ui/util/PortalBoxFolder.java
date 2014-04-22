@@ -16,13 +16,13 @@ package com.propertyvista.portal.shared.ui.util;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.resources.VistaImages;
 
-public abstract class PortalBoxFolder<E extends IEntity> extends CEntityFolder<E> {
+public abstract class PortalBoxFolder<E extends IEntity> extends CFolder<E> {
 
     private final String itemName;
 

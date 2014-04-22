@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -34,11 +34,11 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
     }
 
     @Override
-    protected CEntityForm<CoapplicantDTO> createItemForm(IObject<?> member) {
+    protected CForm<CoapplicantDTO> createItemForm(IObject<?> member) {
         return new CoapplicantForm();
     }
 
-    class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
+    class CoapplicantForm extends CForm<CoapplicantDTO> {
 
         public CoapplicantForm() {
             super(CoapplicantDTO.class);

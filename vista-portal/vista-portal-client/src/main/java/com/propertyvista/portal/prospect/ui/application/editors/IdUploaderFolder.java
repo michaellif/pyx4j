@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -129,13 +129,13 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
     }
 
     @Override
-    protected CEntityForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
+    protected CForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
         return new IdentificationDocumentEditor();
     }
 
     @Override
-    protected CEntityFolderItem<IdentificationDocumentFolder> createItem(boolean first) {
-        return new CEntityFolderItem<IdentificationDocumentFolder>(IdentificationDocumentFolder.class) {
+    protected CFolderItem<IdentificationDocumentFolder> createItem(boolean first) {
+        return new CFolderItem<IdentificationDocumentFolder>(IdentificationDocumentFolder.class) {
             @Override
             public IFolderItemDecorator<IdentificationDocumentFolder> createItemDecorator() {
                 return IdUploaderFolder.this.createItemDecorator();
@@ -148,7 +148,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             }
 
             @Override
-            protected CEntityForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
+            protected CForm<IdentificationDocumentFolder> createItemForm(IObject<?> member) {
                 return IdUploaderFolder.this.createItemForm(null);
             }
         };

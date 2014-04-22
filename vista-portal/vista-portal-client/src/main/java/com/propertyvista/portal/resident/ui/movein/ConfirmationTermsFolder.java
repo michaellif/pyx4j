@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui.movein;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
@@ -39,11 +39,11 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedAgreementConf
     }
 
     @Override
-    protected CEntityForm<SignedAgreementConfirmationTerm> createItemForm(IObject<?> member) {
+    protected CForm<SignedAgreementConfirmationTerm> createItemForm(IObject<?> member) {
         return new LegalTermForm();
     }
 
-    class LegalTermForm extends CEntityForm<SignedAgreementConfirmationTerm> {
+    class LegalTermForm extends CForm<SignedAgreementConfirmationTerm> {
 
         public LegalTermForm() {
             super(SignedAgreementConfirmationTerm.class);

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,18 +31,18 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(BillableItemFolder.class);
 
-    private final CEntityForm<LeaseTermDTO> leaseTerm;
+    private final CForm<LeaseTermDTO> leaseTerm;
 
     private final LeaseTermEditorView leaseTermEditorView;
 
-    public BillableItemFolder(boolean modifyable, CEntityForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
+    public BillableItemFolder(boolean modifyable, CForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
         super(BillableItem.class, modifyable);
         this.leaseTerm = leaseTerm;
         this.leaseTermEditorView = leaseTermEditorView;
     }
 
     @Override
-    protected CEntityForm<BillableItem> createItemForm(IObject<?> member) {
+    protected CForm<BillableItem> createItemForm(IObject<?> member) {
         return new BillableItemEditor(leaseTerm, leaseTermEditorView);
     }
 

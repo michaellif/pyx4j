@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormat;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
@@ -32,7 +32,7 @@ import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewFo
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 
-public final class PapChargeReviewForm extends CEntityForm<PapChargeReviewDTO> {
+public final class PapChargeReviewForm extends CForm<PapChargeReviewDTO> {
 
     public PapChargeReviewForm() {
         super(PapChargeReviewDTO.class);

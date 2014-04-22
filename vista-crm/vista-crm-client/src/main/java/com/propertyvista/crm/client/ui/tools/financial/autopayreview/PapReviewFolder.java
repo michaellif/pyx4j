@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -59,11 +59,11 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
     }
 
     @Override
-    protected CEntityForm<PapReviewDTO> createItemForm(IObject<?> member) {
+    protected CForm<PapReviewDTO> createItemForm(IObject<?> member) {
         return new PapReviewForm();
     }
 
-    private static final class PapReviewForm extends CEntityForm<PapReviewDTO> {
+    private static final class PapReviewForm extends CForm<PapReviewDTO> {
 
         private PapChargeReviewForm chargeTotals;
 

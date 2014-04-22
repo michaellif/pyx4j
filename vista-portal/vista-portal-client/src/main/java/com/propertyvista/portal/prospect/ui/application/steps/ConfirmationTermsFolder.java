@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
@@ -40,11 +40,11 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedOnlineApplica
     }
 
     @Override
-    protected CEntityForm<SignedOnlineApplicationConfirmationTerm> createItemForm(IObject<?> member) {
+    protected CForm<SignedOnlineApplicationConfirmationTerm> createItemForm(IObject<?> member) {
         return new ConfirmationTermForm();
     }
 
-    class ConfirmationTermForm extends CEntityForm<SignedOnlineApplicationConfirmationTerm> {
+    class ConfirmationTermForm extends CForm<SignedOnlineApplicationConfirmationTerm> {
 
         public ConfirmationTermForm() {
             super(SignedOnlineApplicationConfirmationTerm.class);

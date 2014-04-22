@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -33,7 +33,7 @@ public class L1TenantInfoFolder extends VistaBoxFolder<L1TenantInfo> {
     }
 
     @Override
-    protected CEntityForm<L1TenantInfo> createItemForm(IObject<?> member) {
+    protected CForm<L1TenantInfo> createItemForm(IObject<?> member) {
         return new L1TenantInfoForm();
     }
 
@@ -44,7 +44,7 @@ public class L1TenantInfoFolder extends VistaBoxFolder<L1TenantInfo> {
         return dectorator;
     }
 
-    public static class L1TenantInfoForm extends CEntityForm<L1TenantInfo> {
+    public static class L1TenantInfoForm extends CForm<L1TenantInfo> {
 
         public L1TenantInfoForm() {
             super(L1TenantInfo.class);

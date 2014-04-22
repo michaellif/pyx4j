@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -112,11 +112,11 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         }
 
         @Override
-        protected CEntityForm<EmailTemplate> createItemForm(IObject<?> member) {
+        protected CForm<EmailTemplate> createItemForm(IObject<?> member) {
             return new EmailTemplateEditor();
         }
 
-        private static class EmailTemplateEditor extends CEntityForm<EmailTemplate> {
+        private static class EmailTemplateEditor extends CForm<EmailTemplate> {
 
             public EmailTemplateEditor() {
                 super(EmailTemplate.class);

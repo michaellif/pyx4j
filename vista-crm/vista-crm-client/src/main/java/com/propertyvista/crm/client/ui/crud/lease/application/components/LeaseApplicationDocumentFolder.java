@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -38,11 +38,11 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
     }
 
     @Override
-    protected CEntityForm<LeaseApplicationDocument> createItemForm(IObject<?> member) {
+    protected CForm<LeaseApplicationDocument> createItemForm(IObject<?> member) {
         return new LeaseApplicationDocumentForm();
     }
 
-    private static class LeaseApplicationDocumentForm extends CEntityForm<LeaseApplicationDocument> {
+    private static class LeaseApplicationDocumentForm extends CForm<LeaseApplicationDocument> {
 
         public LeaseApplicationDocumentForm() {
             super(LeaseApplicationDocument.class);

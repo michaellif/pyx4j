@@ -17,14 +17,14 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 
-public class LtbOwedRentForm extends CEntityForm<LtbOwedRent> {
+public class LtbOwedRentForm extends CForm<LtbOwedRent> {
 
     public LtbOwedRentForm() {
         super(LtbOwedRent.class);

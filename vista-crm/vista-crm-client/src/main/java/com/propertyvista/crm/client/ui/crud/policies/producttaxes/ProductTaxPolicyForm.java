@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -71,7 +71,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
         }
 
         @Override
-        protected CEntityForm<ProductTaxPolicyItem> createItemForm(IObject<?> member) {
+        protected CForm<ProductTaxPolicyItem> createItemForm(IObject<?> member) {
             return new ProductTaxPolicyItemEditor();
         }
 
@@ -89,7 +89,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
         // internals:
 
-        class ProductTaxPolicyItemEditor extends CEntityForm<ProductTaxPolicyItem> {
+        class ProductTaxPolicyItemEditor extends CForm<ProductTaxPolicyItem> {
 
             public ProductTaxPolicyItemEditor() {
                 super(ProductTaxPolicyItem.class);

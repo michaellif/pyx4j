@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -27,11 +27,11 @@ public class ZipCodeValueValidator extends AbstractComponentValidator<String> {
 
     private static final I18n i18n = I18n.get(ZipCodeValueValidator.class);
 
-    private final CEntityForm<?> editor;
+    private final CForm<?> editor;
 
     private final Path countryPath;
 
-    public ZipCodeValueValidator(CEntityForm<?> editor, Country countryMemberProto) {
+    public ZipCodeValueValidator(CForm<?> editor, Country countryMemberProto) {
         this.editor = editor;
         this.countryPath = countryMemberProto.getPath();
     }

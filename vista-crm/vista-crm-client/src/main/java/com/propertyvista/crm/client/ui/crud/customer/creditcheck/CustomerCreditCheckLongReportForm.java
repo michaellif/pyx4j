@@ -25,11 +25,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -225,11 +225,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        protected CEntityForm<AccountDTO> createItemForm(IObject<?> member) {
+        protected CForm<AccountDTO> createItemForm(IObject<?> member) {
             return new AccountViewer();
         }
 
-        private class AccountViewer extends CEntityForm<AccountDTO> {
+        private class AccountViewer extends CForm<AccountDTO> {
 
             public AccountViewer() {
                 super(AccountDTO.class);
@@ -268,11 +268,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        protected CEntityForm<JudgementDTO> createItemForm(IObject<?> member) {
+        protected CForm<JudgementDTO> createItemForm(IObject<?> member) {
             return new JudgementViewer();
         }
 
-        private class JudgementViewer extends CEntityForm<JudgementDTO> {
+        private class JudgementViewer extends CForm<JudgementDTO> {
 
             public JudgementViewer() {
                 super(JudgementDTO.class);
@@ -310,11 +310,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        protected CEntityForm<ProposalDTO> createItemForm(IObject<?> member) {
+        protected CForm<ProposalDTO> createItemForm(IObject<?> member) {
             return new ProposalViewer();
         }
 
-        private class ProposalViewer extends CEntityForm<ProposalDTO> {
+        private class ProposalViewer extends CForm<ProposalDTO> {
 
             public ProposalViewer() {
                 super(ProposalDTO.class);
@@ -352,11 +352,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        protected CEntityForm<EvictionDTO> createItemForm(IObject<?> member) {
+        protected CForm<EvictionDTO> createItemForm(IObject<?> member) {
             return new EvictionViewer();
         }
 
-        private class EvictionViewer extends CEntityForm<EvictionDTO> {
+        private class EvictionViewer extends CForm<EvictionDTO> {
 
             public EvictionViewer() {
                 super(EvictionDTO.class);
@@ -395,11 +395,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        protected CEntityForm<RentDTO> createItemForm(IObject<?> member) {
+        protected CForm<RentDTO> createItemForm(IObject<?> member) {
             return new RentViewer();
         }
 
-        private class RentViewer extends CEntityForm<RentDTO> {
+        private class RentViewer extends CForm<RentDTO> {
 
             public RentViewer() {
                 super(RentDTO.class);
@@ -439,11 +439,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        protected CEntityForm<CollectionDTO> createItemForm(IObject<?> member) {
+        protected CForm<CollectionDTO> createItemForm(IObject<?> member) {
             return new CollectionViewer();
         }
 
-        private class CollectionViewer extends CEntityForm<CollectionDTO> {
+        private class CollectionViewer extends CForm<CollectionDTO> {
 
             public CollectionViewer() {
                 super(CollectionDTO.class);
@@ -473,12 +473,12 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().onBehalf(), "25em"),
-                    new EntityFolderColumnDescriptor(proto().date(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().customerNumber(), "15em"),
-                    new EntityFolderColumnDescriptor(proto().phone(), "10em"));
+                    new FolderColumnDescriptor(proto().onBehalf(), "25em"),
+                    new FolderColumnDescriptor(proto().date(), "10em"),
+                    new FolderColumnDescriptor(proto().customerNumber(), "15em"),
+                    new FolderColumnDescriptor(proto().phone(), "10em"));
               //@formatter:on        
         }
     }

@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.images.FolderImages;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -127,12 +127,12 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
             @Override
-            protected EntityFolderImages getFolderIcons() {
+            protected FolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
             }
 
             @Override
-            public Widget getImageEntryView(CEntityForm<MaintenanceRequestPicture> entryForm) {
+            public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 main.setWidget(0, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(80, 150, 160).build()));
                 return main;

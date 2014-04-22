@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -109,7 +109,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
     }
 
-    class InsuranceStatusViewer extends CEntityForm<InsuranceStatusDTO> {
+    class InsuranceStatusViewer extends CForm<InsuranceStatusDTO> {
 
         private Label message;
 

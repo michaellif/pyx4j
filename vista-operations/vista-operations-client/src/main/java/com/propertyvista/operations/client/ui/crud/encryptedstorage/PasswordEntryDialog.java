@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -31,7 +31,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
         // TODO Auto-generated constructor stub
     }
 
-    public static class PasswordEntryForm extends CEntityForm<PasswordEntryDTO> {
+    public static class PasswordEntryForm extends CForm<PasswordEntryDTO> {
 
         private final boolean requirePasswordConfirm;
 

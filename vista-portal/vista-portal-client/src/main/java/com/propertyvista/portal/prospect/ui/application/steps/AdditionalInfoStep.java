@@ -19,7 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -104,7 +104,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         super.addValidations();
 
         // ------------------------------------------------------------------------------------------------
-        CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().applicant().currentAddress()));
+        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().applicant().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
         currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
@@ -119,7 +119,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         });
 
         // ------------------------------------------------------------------------------------------------
-        CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().applicant().previousAddress()));
+        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().applicant().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
         previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());

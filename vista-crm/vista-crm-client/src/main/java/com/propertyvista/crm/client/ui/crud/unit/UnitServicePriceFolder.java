@@ -20,11 +20,11 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.site.client.AppSite;
@@ -42,11 +42,11 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().code(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().code(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().name(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().price(), "8em"));
         return columns;
     }
 
@@ -60,11 +60,11 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     }
 
     @Override
-    protected CEntityForm<? extends AptUnitServicePriceDTO> createItemForm(IObject<?> member) {
+    protected CForm<? extends AptUnitServicePriceDTO> createItemForm(IObject<?> member) {
         return new ServicePriceEditor();
     }
 
-    private class ServicePriceEditor extends CEntityFolderRowEditor<AptUnitServicePriceDTO> {
+    private class ServicePriceEditor extends CFolderRowEditor<AptUnitServicePriceDTO> {
 
         public ServicePriceEditor() {
             super(AptUnitServicePriceDTO.class, columns());
@@ -72,7 +72,7 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             CField<?, ?> comp;
             if (column.getObject() == proto().code()) {
                 comp = inject(proto().code(), new CEntityLabel<ARCode>());

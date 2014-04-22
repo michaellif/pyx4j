@@ -18,9 +18,9 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
@@ -80,7 +80,7 @@ public class OptionsStep extends ApplicationWizardStep {
         return getWizard().getValue().unitOptionsSelection();
     }
 
-    private class StepDataForm extends CEntityForm<UnitOptionsSelectionDTO> {
+    private class StepDataForm extends CForm<UnitOptionsSelectionDTO> {
 
         public StepDataForm() {
             super(UnitOptionsSelectionDTO.class);
@@ -173,7 +173,7 @@ public class OptionsStep extends ApplicationWizardStep {
         }
 
         @Override
-        protected void removeItem(CEntityFolderItem<BillableItem> item) {
+        protected void removeItem(CFolderItem<BillableItem> item) {
             super.removeItem(item);
             ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
         }

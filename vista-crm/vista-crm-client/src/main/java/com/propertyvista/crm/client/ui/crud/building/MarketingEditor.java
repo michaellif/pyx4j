@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
@@ -37,13 +37,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
-    private final CEntityForm<? extends Building> parentForm;
+    private final CForm<? extends Building> parentForm;
 
     private final AddressStructuredEditor addressEditor = new AddressStructuredEditor(false);
 
     private AddressStructured emptyAddr;
 
-    public MarketingEditor(CEntityForm<? extends Building> parentForm) {
+    public MarketingEditor(CForm<? extends Building> parentForm) {
         super(Marketing.class);
         this.parentForm = parentForm;
     }
@@ -137,11 +137,11 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
         }
 
         @Override
-        protected CEntityForm<ILSOpenHouse> createItemForm(IObject<?> member) {
+        protected CForm<ILSOpenHouse> createItemForm(IObject<?> member) {
             return new ILSOpenHouseEditor();
         }
 
-        private class ILSOpenHouseEditor extends CEntityForm<ILSOpenHouse> {
+        private class ILSOpenHouseEditor extends CForm<ILSOpenHouse> {
             public ILSOpenHouseEditor() {
                 super(ILSOpenHouse.class);
             }

@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
@@ -47,7 +47,7 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
-public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
+public class InfoViewForm extends CForm<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
@@ -129,8 +129,8 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
     @Override
     public void addValidations() {
-        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
-        CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
+        CForm<PriorAddress> currentAddressForm = ((CForm<PriorAddress>) get(proto().version().currentAddress()));
+        CForm<PriorAddress> previousAddressForm = ((CForm<PriorAddress>) get(proto().version().previousAddress()));
 
         CComponent<?, LogicalDate, ?> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
         CComponent<?, LogicalDate, ?> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());

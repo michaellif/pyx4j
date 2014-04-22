@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -36,7 +36,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     private final static I18n i18n = I18n.get(ScopeDialog.class);
 
-    private CEntityForm<ScopingResultDTO> form;
+    private CForm<ScopingResultDTO> form;
 
     private final Presenter presenter;
 
@@ -44,7 +44,7 @@ public class ScopeDialog extends OkCancelDialog {
         super(i18n.tr("Scoping"));
         this.presenter = presenter;
 
-        form = new CEntityForm<ScopingResultDTO>(ScopingResultDTO.class) {
+        form = new CForm<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();

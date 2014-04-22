@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -230,7 +230,7 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
 
     @Override
     public ISetup getSetup() {
-        CEntityForm<UnitTurnoverAnalysisGadgetMetadata> form = new CEntityForm<UnitTurnoverAnalysisGadgetMetadata>(UnitTurnoverAnalysisGadgetMetadata.class) {
+        CForm<UnitTurnoverAnalysisGadgetMetadata> form = new CForm<UnitTurnoverAnalysisGadgetMetadata>(UnitTurnoverAnalysisGadgetMetadata.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();

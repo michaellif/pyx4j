@@ -32,7 +32,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -140,7 +140,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
         }
     }
 
-    class SignUpForm extends CEntityForm<ResidentSelfRegistrationDTO> {
+    class SignUpForm extends CForm<ResidentSelfRegistrationDTO> {
 
         private BuildingSuggestBox buildingSelector;
 

@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,13 +38,13 @@ public class YardiCredentialFolder extends VistaBoxFolder<PmcYardiCredential> {
     }
 
     @Override
-    protected CEntityForm<PmcYardiCredential> createItemForm(IObject<?> member) {
+    protected CForm<PmcYardiCredential> createItemForm(IObject<?> member) {
         return new YardiCredentialEditor();
     }
 
     @Override
-    protected CEntityFolderItem<PmcYardiCredential> createItem(boolean first) {
-        final CEntityFolderItem<PmcYardiCredential> item = super.createItem(first);
+    protected CFolderItem<PmcYardiCredential> createItem(boolean first) {
+        final CFolderItem<PmcYardiCredential> item = super.createItem(first);
 
         item.addAction(ActionType.Cust1, i18n.tr("Test Connection"), OperationsImages.INSTANCE.connectionTestButton(), new Command() {
 

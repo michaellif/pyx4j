@@ -19,22 +19,22 @@ import java.util.List;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.policy.policies.domain.YardiInterfacePolicyChargeCodeIgnore;
 
 public class YardiInterfacePolicyChargeCodeIgnoreFolder extends VistaTableFolder<YardiInterfacePolicyChargeCodeIgnore> {
 
-    public static List<EntityFolderColumnDescriptor> COLUMNS;
+    public static List<FolderColumnDescriptor> COLUMNS;
     static {
         YardiInterfacePolicyChargeCodeIgnore proto = EntityFactory.getEntityPrototype(YardiInterfacePolicyChargeCodeIgnore.class);
         COLUMNS = Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto.yardiChargeCode(), "100%")
+                new FolderColumnDescriptor(proto.yardiChargeCode(), "100%")
         );//@formatter:on
     }
 
@@ -43,23 +43,23 @@ public class YardiInterfacePolicyChargeCodeIgnoreFolder extends VistaTableFolder
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return COLUMNS;
     }
 
     @Override
-    protected CEntityForm<? extends YardiInterfacePolicyChargeCodeIgnore> createItemForm(IObject<?> member) {
+    protected CForm<? extends YardiInterfacePolicyChargeCodeIgnore> createItemForm(IObject<?> member) {
         return new YardiInterfacePolicyChargeCodeIgnoreForm();
     }
 
-    public static class YardiInterfacePolicyChargeCodeIgnoreForm extends CEntityFolderRowEditor<YardiInterfacePolicyChargeCodeIgnore> {
+    public static class YardiInterfacePolicyChargeCodeIgnoreForm extends CFolderRowEditor<YardiInterfacePolicyChargeCodeIgnore> {
 
         public YardiInterfacePolicyChargeCodeIgnoreForm() {
             super(YardiInterfacePolicyChargeCodeIgnore.class, COLUMNS);
         }
 
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             if (column == proto().yardiChargeCode()) {
                 // TODO do we actually have to override the default CComponent?
                 return new CTextField();

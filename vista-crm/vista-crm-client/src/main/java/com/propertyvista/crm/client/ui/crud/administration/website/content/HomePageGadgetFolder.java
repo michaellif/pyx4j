@@ -21,11 +21,11 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
@@ -55,20 +55,20 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().name(), "25em"));
+        columns.add(new FolderColumnDescriptor(proto().type(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().status(), "10em"));
         return columns;
     }
 
     @Override
-    protected CEntityForm<HomePageGadget> createItemForm(IObject<?> member) {
+    protected CForm<HomePageGadget> createItemForm(IObject<?> member) {
         return new HomePageGadgetItemEditor();
     }
 
-    private class HomePageGadgetItemEditor extends CEntityFolderRowEditor<HomePageGadget> {
+    private class HomePageGadgetItemEditor extends CFolderRowEditor<HomePageGadget> {
 
         public HomePageGadgetItemEditor() {
             super(HomePageGadget.class, columns());
@@ -76,7 +76,7 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             CField<?, ?> comp = null;
             if (column.getObject().equals(proto().name())) {
                 comp = new CLabel<String>();

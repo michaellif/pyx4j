@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -43,12 +43,12 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
     }
 
     @Override
-    protected CEntityForm<EmergencyContact> createItemForm(IObject<?> member) {
+    protected CForm<EmergencyContact> createItemForm(IObject<?> member) {
         return new EmergencyContactEditor();
     }
 
     @Override
-    protected void removeItem(final CEntityFolderItem<EmergencyContact> item) {
+    protected void removeItem(final CFolderItem<EmergencyContact> item) {
         MessageDialog.confirm(i18n.tr("Emergency contact removal"), i18n.tr("Do you really want to remove emergency contact information?"), new Command() {
             @Override
             public void execute() {
@@ -66,7 +66,7 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
         }
     }
 
-    class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
+    class EmergencyContactEditor extends CForm<EmergencyContact> {
 
         public EmergencyContactEditor() {
             super(EmergencyContact.class);

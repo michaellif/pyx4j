@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
@@ -28,7 +28,7 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     }
 
     @Override
-    protected CEntityForm<BillableItem> createItemForm(IObject<?> member) {
+    protected CForm<BillableItem> createItemForm(IObject<?> member) {
         return new BillableItemViewer();
     }
 

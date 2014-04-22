@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication;
 
-public class L1ReasonForApplicationForm extends CEntityForm<L1ReasonForApplication> {
+public class L1ReasonForApplicationForm extends CForm<L1ReasonForApplication> {
 
     private static final I18n i18n = I18n.get(L1ReasonForApplication.class);
 

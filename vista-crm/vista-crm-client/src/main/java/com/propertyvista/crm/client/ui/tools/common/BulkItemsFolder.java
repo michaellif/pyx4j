@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.tools.common;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -29,8 +29,8 @@ public abstract class BulkItemsFolder<Item extends BulkEditableEntity> extends V
 
     public void checkAll(boolean isChecked) {
         for (CComponent<?, ?, ?> c : getComponents()) {
-            if (c instanceof CEntityFolderItem) {
-                BulkEditableEntityForm<?> form = (BulkEditableEntityForm<?>) ((CEntityFolderItem<?>) c).getComponents().iterator().next();
+            if (c instanceof CFolderItem) {
+                BulkEditableEntityForm<?> form = (BulkEditableEntityForm<?>) ((CFolderItem<?>) c).getComponents().iterator().next();
                 form.setChecked(isChecked);
             }
         }

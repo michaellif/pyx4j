@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -27,7 +27,7 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayChangesReportSettingsForm extends CEntityForm<AutoPayChangesReportMetadata> {
+public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReportMetadata> {
 
     private final IPane parentView;
 

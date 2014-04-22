@@ -23,12 +23,12 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
@@ -50,18 +50,18 @@ public class TaxFolder extends VistaTableFolder<Tax> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        List<EntityFolderColumnDescriptor> columns;
-        columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().authority(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().rate(), "7em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().compound(), "7em"));
+    public List<FolderColumnDescriptor> columns() {
+        List<FolderColumnDescriptor> columns;
+        columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().authority(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().name(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().rate(), "7em"));
+        columns.add(new FolderColumnDescriptor(proto().compound(), "7em"));
         return columns;
     }
 
     @Override
-    protected CEntityForm<Tax> createItemForm(IObject<?> member) {
+    protected CForm<Tax> createItemForm(IObject<?> member) {
         return new ChargeCodeTaxEditor();
     }
 
@@ -70,7 +70,7 @@ public class TaxFolder extends VistaTableFolder<Tax> {
         new TaxSelectorDialog(parentForm.getParentView()).show();
     }
 
-    private class ChargeCodeTaxEditor extends CEntityFolderRowEditor<Tax> {
+    private class ChargeCodeTaxEditor extends CFolderRowEditor<Tax> {
 
         public ChargeCodeTaxEditor() {
             super(Tax.class, columns());

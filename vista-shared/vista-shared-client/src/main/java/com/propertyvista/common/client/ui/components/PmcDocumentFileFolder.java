@@ -23,11 +23,11 @@ import com.google.gwt.user.client.Window;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -39,14 +39,14 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
 
     private static final I18n i18n = I18n.get(PmcDocumentFileFolder.class);
 
-    public static final List<EntityFolderColumnDescriptor> COLUMNS;
+    public static final List<FolderColumnDescriptor> COLUMNS;
 
     static {
         PmcDocumentFile proto = EntityFactory.getEntityPrototype(PmcDocumentFile.class);
-        COLUMNS = Arrays.asList((new EntityFolderColumnDescriptor(proto.file().fileName(), "30em")));
+        COLUMNS = Arrays.asList((new FolderColumnDescriptor(proto.file().fileName(), "30em")));
     }
 
-    private static class PmcDocumentFileForm extends CEntityFolderRowEditor<PmcDocumentFile> {
+    private static class PmcDocumentFileForm extends CFolderRowEditor<PmcDocumentFile> {
 
         public PmcDocumentFileForm() {
             super(PmcDocumentFile.class, COLUMNS);
@@ -54,7 +54,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         }
 
         @Override
-        protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CField<?, ?> createCell(FolderColumnDescriptor column) {
             if (column.getObject() == proto().file().fileName()) {
                 CTextField cmp = new CTextField();
                 cmp.setNavigationCommand(new Command() {
@@ -97,12 +97,12 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return COLUMNS;
     }
 
     @Override
-    protected CEntityForm<PmcDocumentFile> createItemForm(IObject<?> member) {
+    protected CForm<PmcDocumentFile> createItemForm(IObject<?> member) {
         return new PmcDocumentFileForm();
     }
 

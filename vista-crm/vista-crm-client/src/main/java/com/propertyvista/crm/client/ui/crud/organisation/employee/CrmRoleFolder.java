@@ -22,13 +22,13 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
@@ -52,18 +52,18 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().name(), "20em"),
-                new EntityFolderColumnDescriptor(proto().behaviors(), "40em")
+                new FolderColumnDescriptor(proto().name(), "20em"),
+                new FolderColumnDescriptor(proto().behaviors(), "40em")
         );//@formatter:on
     }
 
     @Override
-    protected CEntityForm<CrmRole> createItemForm(IObject<?> member) {
-        return new CEntityFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
+    protected CForm<CrmRole> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<CrmRole>(CrmRole.class, columns()) {
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 return inject(column.getObject(), new CLabel<String>());
             }
         };

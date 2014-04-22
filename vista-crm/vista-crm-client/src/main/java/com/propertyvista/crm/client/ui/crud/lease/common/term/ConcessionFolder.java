@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -33,19 +33,19 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
     private static final I18n i18n = I18n.get(ConcessionFolder.class);
 
-    private final CEntityForm<LeaseTermDTO> leaseTerm;
+    private final CForm<LeaseTermDTO> leaseTerm;
 
-    public ConcessionFolder(boolean modifyable, CEntityForm<LeaseTermDTO> parent) {
+    public ConcessionFolder(boolean modifyable, CForm<LeaseTermDTO> parent) {
         super(Concession.class, modifyable);
         this.leaseTerm = parent;
     }
 
     @Override
-    protected CEntityForm<Concession> createItemForm(IObject<?> member) {
+    protected CForm<Concession> createItemForm(IObject<?> member) {
         return new ConcessionEditor();
     }
 
-    private class ConcessionEditor extends CEntityForm<Concession> {
+    private class ConcessionEditor extends CForm<Concession> {
 
         public ConcessionEditor() {
             super(Concession.class);

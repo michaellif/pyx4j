@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -43,7 +43,7 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     }
 
     @Override
-    protected CEntityForm<InsuranceCertificate> createItemForm(IObject<?> member) {
+    protected CForm<InsuranceCertificate> createItemForm(IObject<?> member) {
         TenantInsuranceCertificateForm form = new TenantInsuranceCertificateForm(InsuranceCertificate.class, tenantOwnerClickHanlder != null,
                 tenantOwnerClickHanlder);
         return form;
@@ -63,7 +63,7 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     }
 
     @Override
-    protected void removeItem(CEntityFolderItem<InsuranceCertificate> item) {
+    protected void removeItem(CFolderItem<InsuranceCertificate> item) {
         if ((item.getValue() instanceof PropertyVistaIntegratedInsurance) || ((IPrimitive<Boolean>) item.getValue().isManagedByTenant()).getValue(false)) {
             MessageDialog.info(i18n.tr("This insurance certificate was uploaded by tenant and cannot be deleted"));
         } else {

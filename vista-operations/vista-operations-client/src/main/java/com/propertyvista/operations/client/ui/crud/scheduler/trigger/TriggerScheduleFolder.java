@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -44,11 +44,11 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
     }
 
     @Override
-    protected CEntityForm<TriggerSchedule> createItemForm(IObject<?> member) {
+    protected CForm<TriggerSchedule> createItemForm(IObject<?> member) {
         return new TriggerScheduleEditor();
     }
 
-    private class TriggerScheduleEditor extends CEntityForm<TriggerSchedule> {
+    private class TriggerScheduleEditor extends CForm<TriggerSchedule> {
 
         public TriggerScheduleEditor() {
             super(TriggerSchedule.class);

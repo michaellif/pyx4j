@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.visor.paps;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 
@@ -23,7 +23,7 @@ import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 
 public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<PreauthorizedPaymentsDTO> {
 
-    private final CEntityForm<PreauthorizedPaymentsDTO> form;
+    private final CForm<PreauthorizedPaymentsDTO> form;
 
     public PreauthorizedPaymentsVisorView(PreauthorizedPaymentsVisorController controller) {
         super(controller);

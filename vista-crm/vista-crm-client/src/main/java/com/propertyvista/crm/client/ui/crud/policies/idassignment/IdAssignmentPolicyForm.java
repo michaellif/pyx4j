@@ -20,11 +20,11 @@ import java.util.List;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -67,28 +67,28 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns;
-            columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().target(), "20em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns;
+            columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().target(), "20em"));
+            columns.add(new FolderColumnDescriptor(proto().type(), "20em"));
 
             return columns;
         }
 
         @Override
-        protected CEntityForm<IdAssignmentItem> createItemForm(IObject<?> member) {
+        protected CForm<IdAssignmentItem> createItemForm(IObject<?> member) {
             return new IdAssignmentItemEditor();
         }
 
-        private class IdAssignmentItemEditor extends CEntityFolderRowEditor<IdAssignmentItem> {
+        private class IdAssignmentItemEditor extends CFolderRowEditor<IdAssignmentItem> {
 
             public IdAssignmentItemEditor() {
                 super(IdAssignmentItem.class, columns());
             }
 
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (column.getObject() == proto().target()) {
                     return inject(column.getObject(), new CEnumLabel());
                 }

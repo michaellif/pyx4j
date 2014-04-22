@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -34,7 +34,7 @@ import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 
-public class PaymentsSummaryGadgetMetadataForm extends CEntityForm<PaymentsSummaryGadgetMetadata> {
+public class PaymentsSummaryGadgetMetadataForm extends CForm<PaymentsSummaryGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(PaymentsSummaryGadgetMetadataForm.class);
 

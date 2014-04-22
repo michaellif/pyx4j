@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
-public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
+public class EmergencyContactEditor extends CForm<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
 

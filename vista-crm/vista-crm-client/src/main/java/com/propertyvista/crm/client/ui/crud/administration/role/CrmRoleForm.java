@@ -21,8 +21,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -101,15 +101,15 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         }
 
         @Override
-        protected CEntityFolderItem<VistaCrmBehaviorDTO> createItem(boolean first) {
-            CEntityFolderItem<VistaCrmBehaviorDTO> folderItem = super.createItem(first);
+        protected CFolderItem<VistaCrmBehaviorDTO> createItem(boolean first) {
+            CFolderItem<VistaCrmBehaviorDTO> folderItem = super.createItem(first);
             folderItem.setViewable(true);
             return folderItem;
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(new EntityFolderColumnDescriptor(proto().behavior(), "20em"));
+        public List<FolderColumnDescriptor> columns() {
+            return Arrays.asList(new FolderColumnDescriptor(proto().behavior(), "20em"));
         }
 
         @Override

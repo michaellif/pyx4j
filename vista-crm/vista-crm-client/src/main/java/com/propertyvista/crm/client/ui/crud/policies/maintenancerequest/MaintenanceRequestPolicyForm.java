@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -61,7 +61,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         }
 
         @Override
-        public IsWidget createEditorContent(CEntityForm<PermissionToEnterNote> editor) {
+        public IsWidget createEditorContent(CForm<PermissionToEnterNote> editor) {
             TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
             int row = -1;
 

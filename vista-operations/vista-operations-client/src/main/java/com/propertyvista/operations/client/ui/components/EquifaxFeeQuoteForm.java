@@ -15,13 +15,13 @@ package com.propertyvista.operations.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 
-public class EquifaxFeeQuoteForm extends CEntityForm<AbstractEquifaxFee> {
+public class EquifaxFeeQuoteForm extends CForm<AbstractEquifaxFee> {
 
     private final boolean makeMandatory;
 

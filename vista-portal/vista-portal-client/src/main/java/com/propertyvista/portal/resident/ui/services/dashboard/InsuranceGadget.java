@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -76,7 +76,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         toolbar.recalculateState(value);
     }
 
-    class InsuranceStatusViewer extends CEntityForm<InsuranceStatusDTO> {
+    class InsuranceStatusViewer extends CForm<InsuranceStatusDTO> {
 
         private InsuranceCertificatesFolder folder;
 
@@ -127,11 +127,11 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         }
 
         @Override
-        protected CEntityForm<InsuranceCertificateSummaryDTO> createItemForm(IObject<?> member) {
+        protected CForm<InsuranceCertificateSummaryDTO> createItemForm(IObject<?> member) {
             return new InsuranceCertificateViewer();
         }
 
-        private class InsuranceCertificateViewer extends CEntityForm<InsuranceCertificateSummaryDTO> {
+        private class InsuranceCertificateViewer extends CForm<InsuranceCertificateSummaryDTO> {
 
             private Anchor detailsAnchor;
 

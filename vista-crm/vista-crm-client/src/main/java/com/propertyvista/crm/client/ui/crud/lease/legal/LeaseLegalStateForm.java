@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -28,7 +28,7 @@ import com.propertyvista.crm.client.activity.crud.lease.legal.LeaseLegalStateCon
 import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 
-public class LeaseLegalStateForm extends CEntityForm<LeaseLegalStateDTO> {
+public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
 
     private static final I18n i18n = I18n.get(LeaseLegalStateForm.class);
 

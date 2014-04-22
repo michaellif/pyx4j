@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.shared.util.EcheckFormatter;
 
-public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
+public class EcheckInfoEditor extends CForm<EcheckInfo> {
 
     private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
 

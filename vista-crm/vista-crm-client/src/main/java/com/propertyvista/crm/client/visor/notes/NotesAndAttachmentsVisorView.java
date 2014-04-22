@@ -31,13 +31,13 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityContainer;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
@@ -101,7 +101,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         return (NotesAndAttachmentsVisorController) super.getController();
     }
 
-    public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachmentsDTO> {
+    public class NotesAndAttachmentsForm extends CForm<NotesAndAttachmentsDTO> {
 
         public NotesAndAttachmentsForm() {
             super(NotesAndAttachmentsDTO.class);
@@ -127,7 +127,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            protected CEntityForm<NotesAndAttachments> createItemForm(IObject<?> member) {
+            protected CForm<NotesAndAttachments> createItemForm(IObject<?> member) {
                 return new NoteEditor(true);
             }
 
@@ -137,8 +137,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            protected CEntityFolderItem<NotesAndAttachments> createItem(boolean first) {
-                final CEntityFolderItem<NotesAndAttachments> item = super.createItem(first);
+            protected CFolderItem<NotesAndAttachments> createItem(boolean first) {
+                final CFolderItem<NotesAndAttachments> item = super.createItem(first);
 
                 item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
 
@@ -155,7 +155,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            protected void removeItem(final CEntityFolderItem<NotesAndAttachments> item) {
+            protected void removeItem(final CFolderItem<NotesAndAttachments> item) {
                 Dialog confirm = new OkCancelDialog(i18n.tr("Delete Note")) {
                     @Override
                     public boolean onClickOk() {
@@ -172,7 +172,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 confirm.show();
             }
 
-            private class NoteEditor extends CEntityForm<NotesAndAttachments> {
+            private class NoteEditor extends CForm<NotesAndAttachments> {
 
                 private Button btnSave;
 
@@ -247,7 +247,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         @Override
                         public void execute() {
                             if (getValue().getPrimaryKey() == null) {
-                                ((NotesAndAttachmentsFolder) getParent().getParent()).removeItem((CEntityFolderItem<NotesAndAttachments>) getParent());
+                                ((NotesAndAttachmentsFolder) getParent().getParent()).removeItem((CFolderItem<NotesAndAttachments>) getParent());
                             } else {
                                 MessageDialog.confirm(i18n.tr("Confirm"),
                                         i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
@@ -268,14 +268,14 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public void onAdopt(final CEntityContainer<?, ?, ?> parent) {
+                public void onAdopt(final CContainer<?, ?, ?> parent) {
                     super.onAdopt(parent);
                     addPropertyChangeHandler(new PropertyChangeHandler() {
 
                         @Override
                         public void onPropertyChange(PropertyChangeEvent event) {
                             if (event.getPropertyName() == PropertyName.viewable) {
-                                ((CEntityFolderItem<NotesAndAttachments>) parent).getItemActionsBar().setVisible(isViewable());
+                                ((CFolderItem<NotesAndAttachments>) parent).getItemActionsBar().setVisible(isViewable());
                             }
                         }
                     });
@@ -290,7 +290,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     if (!isOwner()) {
                         @SuppressWarnings("unchecked")
-                        CEntityFolderItem<NotesAndAttachments> item = (CEntityFolderItem<NotesAndAttachments>) getParent();
+                        CFolderItem<NotesAndAttachments> item = (CFolderItem<NotesAndAttachments>) getParent();
                         item.setRemovable(false);
                         item.getItemActionsBar().setButtonVisible(ActionType.Cust1, false);
                     }
@@ -335,7 +335,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                protected CEntityForm<NoteAttachment> createItemForm(IObject<?> member) {
+                protected CForm<NoteAttachment> createItemForm(IObject<?> member) {
                     return new AttachmentEditor();
                 }
 
@@ -346,7 +346,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     return decorator;
                 }
 
-                private class AttachmentEditor extends CEntityForm<NoteAttachment> {
+                private class AttachmentEditor extends CForm<NoteAttachment> {
 
                     public AttachmentEditor() {
                         super(NoteAttachment.class);

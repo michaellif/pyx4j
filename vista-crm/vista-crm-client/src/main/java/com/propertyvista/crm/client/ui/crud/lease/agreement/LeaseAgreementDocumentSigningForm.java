@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 
-public class LeaseAgreementDocumentSigningForm extends CEntityForm<LeaseAgreementDocumentsDTO> {
+public class LeaseAgreementDocumentSigningForm extends CForm<LeaseAgreementDocumentsDTO> {
 
     private static final I18n i18n = I18n.get(LeaseAgreementDocumentSigningForm.class);
 

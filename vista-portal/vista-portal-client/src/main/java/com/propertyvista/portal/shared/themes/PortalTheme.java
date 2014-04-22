@@ -21,7 +21,7 @@ import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
@@ -217,7 +217,7 @@ public class PortalTheme extends Theme {
 
         });
 
-        addTheme(new DefaultEntityFolderTheme() {
+        addTheme(new DefaultFolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -226,7 +226,7 @@ public class PortalTheme extends Theme {
             @Override
             protected void initStyles() {
                 super.initStyles();
-                Style style = new Style(".", StyleName.EntityFolderTableHeader);
+                Style style = new Style(".", StyleName.CFolderTableHeader);
                 style.addProperty("width", "100%");
                 style.addProperty("background-color", ThemeColor.foreground, 0.1);
                 style.addProperty("line-height", "35px");
@@ -234,7 +234,7 @@ public class PortalTheme extends Theme {
                 style.addProperty("border", "none");
                 addStyle(style);
 
-                style = new Style(".", StyleName.EntityFolderRowItemDecorator);
+                style = new Style(".", StyleName.CFolderRowItemDecorator);
                 style.addProperty("height", "35px");
                 style.addProperty("border-bottom", "dotted 1px");
                 style.addProperty("border-bottom-color", ThemeColor.foreground, 0.7);

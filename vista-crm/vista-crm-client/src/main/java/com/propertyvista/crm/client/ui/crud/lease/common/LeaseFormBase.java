@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -269,11 +269,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
             return columns;
         }
     }

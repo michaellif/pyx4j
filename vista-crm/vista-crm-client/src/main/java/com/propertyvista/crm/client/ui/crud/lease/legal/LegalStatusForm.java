@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.legal.GenericLegalLetter;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.LegalStatusDTO;
 
-public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
+public class LegalStatusForm extends CForm<LegalStatusDTO> {
 
     private static final I18n i18n = I18n.get(LegalStatusForm.class);
 
@@ -86,7 +86,7 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
         }
 
         @Override
-        protected CEntityForm<LegalLetter> createItemForm(IObject<?> member) {
+        protected CForm<LegalLetter> createItemForm(IObject<?> member) {
             return new LegalLetterForm();
         }
 
@@ -96,7 +96,7 @@ public class LegalStatusForm extends CEntityForm<LegalStatusDTO> {
         }
     }
 
-    public static class LegalLetterForm extends CEntityForm<LegalLetter> {
+    public static class LegalLetterForm extends CForm<LegalLetter> {
 
         public LegalLetterForm() {
             super(LegalLetter.class);

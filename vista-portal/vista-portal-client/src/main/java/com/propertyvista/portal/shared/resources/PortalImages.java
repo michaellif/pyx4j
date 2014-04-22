@@ -19,11 +19,11 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsImageBundle {
+public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBundle {
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 

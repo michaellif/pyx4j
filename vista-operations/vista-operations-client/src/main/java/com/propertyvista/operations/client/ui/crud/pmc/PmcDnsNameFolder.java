@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.pmc.PmcDnsName;
@@ -28,14 +28,14 @@ public class PmcDnsNameFolder extends VistaTableFolder<PmcDnsName> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().enabled(), "6em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().dnsName(), "25em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().target(), "13em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().httpsEnabled(), "6em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().googleAPIKey(), "16em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().googleAnalyticsId(), "16em"));
+    public List<FolderColumnDescriptor> columns() {
+        List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().enabled(), "6em"));
+        columns.add(new FolderColumnDescriptor(proto().dnsName(), "25em"));
+        columns.add(new FolderColumnDescriptor(proto().target(), "13em"));
+        columns.add(new FolderColumnDescriptor(proto().httpsEnabled(), "6em"));
+        columns.add(new FolderColumnDescriptor(proto().googleAPIKey(), "16em"));
+        columns.add(new FolderColumnDescriptor(proto().googleAnalyticsId(), "16em"));
         return columns;
     }
 

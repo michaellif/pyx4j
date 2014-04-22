@@ -18,7 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CEntityForm<A> {
+public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CForm<A> {
 
     private final boolean showUnit;
 

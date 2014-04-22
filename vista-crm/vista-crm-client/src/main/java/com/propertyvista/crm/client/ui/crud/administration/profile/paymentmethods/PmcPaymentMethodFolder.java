@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -98,7 +98,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
-        protected CEntityForm<?> createEcheckInfoEditor() {
+        protected CForm<?> createEcheckInfoEditor() {
             return new EcheckInfoEditor() {
                 @SuppressWarnings("rawtypes")
                 @Override
@@ -132,7 +132,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
     }
 
     @Override
-    protected CEntityForm<PmcPaymentMethod> createItemForm(IObject<?> member) {
+    protected CForm<PmcPaymentMethod> createItemForm(IObject<?> member) {
         return new PmcPaymentMethodEditor();
     }
 

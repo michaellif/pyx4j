@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
+public class AddressSimpleEditor extends CForm<AddressSimple> {
 
     private final boolean oneColumn;
 

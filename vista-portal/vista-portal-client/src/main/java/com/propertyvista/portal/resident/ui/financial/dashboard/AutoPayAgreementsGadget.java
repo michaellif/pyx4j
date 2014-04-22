@@ -20,10 +20,10 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -83,7 +83,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
     }
 
-    class AutoPaysView extends CEntityForm<AutoPaySummaryDTO> {
+    class AutoPaysView extends CForm<AutoPaySummaryDTO> {
 
         public AutoPaysView() {
             super(AutoPaySummaryDTO.class);
@@ -126,12 +126,12 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
 
         @Override
-        protected CEntityForm<AutoPayInfoDTO> createItemForm(IObject<?> member) {
+        protected CForm<AutoPayInfoDTO> createItemForm(IObject<?> member) {
             return new AutoPayViewer();
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<AutoPayInfoDTO> item) {
+        protected void removeItem(final CFolderItem<AutoPayInfoDTO> item) {
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
                 @Override
                 public void execute() {
@@ -141,7 +141,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             });
         }
 
-        private class AutoPayViewer extends CEntityForm<AutoPayInfoDTO> {
+        private class AutoPayViewer extends CForm<AutoPayInfoDTO> {
 
             private final Anchor detailsViewAnchor = new Anchor("View Details", new Command() {
                 @Override
@@ -178,7 +178,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
                 detailsViewAnchor.setVisible(!getValue().paymentMethod().isNull());
 
-                ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isNull()
+                ((CFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isNull()
                         && parentView.getValue().allowCancelationByResident().getValue(false));
             }
         }

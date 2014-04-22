@@ -40,7 +40,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -56,7 +56,7 @@ import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.shared.config.VistaDemo;
 
 // TODO refactor this form with using a special decorator (same or similar to one that is used in login/singup forms in portal
-public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreationRequest> {
+public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationRequest> {
 
     public enum Styles implements IStyleName {
 

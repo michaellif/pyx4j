@@ -24,7 +24,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
@@ -51,7 +51,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     private final FlowPanel settingsFormPanel;
 
-    private CEntityForm<Settings> settingsForm;
+    private CForm<Settings> settingsForm;
 
     private Range visibleRange;
 
@@ -65,7 +65,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         this(caption, null, holderClass, itemsHolderForm);
     }
 
-    public BulkOperationToolViewImpl(String caption, CEntityForm<Settings> settingsForm, Class<Holder> holderClass,
+    public BulkOperationToolViewImpl(String caption, CForm<Settings> settingsForm, Class<Holder> holderClass,
             ItemsHolderForm<Item, Holder> itemsHolderForm) {
 
         this.pageIncrement = 10;
@@ -118,7 +118,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         visibleRange = new Range(0, pageIncrement);
     }
 
-    public void setSettingsForm(CEntityForm<Settings> settingsForm) {
+    public void setSettingsForm(CForm<Settings> settingsForm) {
         this.settingsForm = settingsForm;
         this.settingsForm.init();
         this.settingsForm.populateNew();
@@ -205,7 +205,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         settingsForm.populate(settings);
     }
 
-    protected CEntityForm<Settings> getSettingsForm() {
+    protected CForm<Settings> getSettingsForm() {
         return settingsForm;
     }
 

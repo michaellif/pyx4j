@@ -19,7 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
@@ -32,12 +32,12 @@ public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationS
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().customer(), "20em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().role(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().progress(), "7em"));
+    public List<FolderColumnDescriptor> columns() {
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().customer(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().role(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().status(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().progress(), "7em"));
         return columns;
     }
 

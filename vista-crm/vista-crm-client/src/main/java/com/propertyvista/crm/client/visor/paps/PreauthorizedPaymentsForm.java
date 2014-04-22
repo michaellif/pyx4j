@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -41,7 +41,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
-public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentsDTO> {
+public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
 
@@ -86,7 +86,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
         }
 
         @Override
-        protected CEntityForm<PreauthorizedPaymentDTO> createItemForm(IObject<?> member) {
+        protected CForm<PreauthorizedPaymentDTO> createItemForm(IObject<?> member) {
             return new PreauthorizedPaymentEditor();
         }
 
@@ -101,7 +101,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentDTO> item) {
+        protected void removeItem(final CFolderItem<PreauthorizedPaymentDTO> item) {
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
                 @Override
                 public void execute() {
@@ -110,7 +110,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPayments
             });
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityForm<PreauthorizedPaymentDTO> {
+        private class PreauthorizedPaymentEditor extends CForm<PreauthorizedPaymentDTO> {
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);

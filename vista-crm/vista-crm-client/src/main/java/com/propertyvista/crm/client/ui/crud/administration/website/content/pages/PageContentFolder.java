@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -44,11 +44,11 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
     private static final I18n i18n = I18n.get(PageContentFolder.class);
 
-    private final CEntityForm<PageDescriptor> parent;
+    private final CForm<PageDescriptor> parent;
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
-    public PageContentFolder(CEntityForm<PageDescriptor> parent) {
+    public PageContentFolder(CForm<PageDescriptor> parent) {
         super(PageContent.class, parent.isEditable());
         this.parent = parent;
         this.addValueChangeHandler(new ValueChangeHandler<IList<PageContent>>() {
@@ -89,7 +89,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    protected CEntityForm<PageContent> createItemForm(IObject<?> member) {
+    protected CForm<PageContent> createItemForm(IObject<?> member) {
         return new PageContentEditor();
     }
 

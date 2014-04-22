@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
@@ -56,7 +56,7 @@ public class LegalNoticeCandidateFolderHolderForm extends ItemsHolderForm<LegalN
     }
 
     @Override
-    protected CEntityFolder<LegalNoticeCandidateDTO> createItemsFolder() {
+    protected CFolder<LegalNoticeCandidateDTO> createItemsFolder() {
         return new LegalNoticeCandidateFolder();
     }
 

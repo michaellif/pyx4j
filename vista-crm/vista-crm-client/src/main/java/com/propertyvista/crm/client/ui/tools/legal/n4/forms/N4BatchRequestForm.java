@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
@@ -35,7 +35,7 @@ import com.propertyvista.crm.client.ui.crud.policies.n4.N4PolicyForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.company.Employee;
 
-public class N4BatchRequestForm extends CEntityForm<N4BatchRequestDTO> {
+public class N4BatchRequestForm extends CForm<N4BatchRequestDTO> {
 
     private static final I18n i18n = I18n.get(N4BatchRequestForm.class);
 

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -94,7 +94,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?, ?, ?> getCustomContentEditor() {
-        CEntityForm<CustomGadgetContent> editor = new CEntityForm<CustomGadgetContent>(CustomGadgetContent.class) {
+        CForm<CustomGadgetContent> editor = new CForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -108,7 +108,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?, ?, ?> getNewsContentEditor() {
-        CEntityForm<NewsGadgetContent> editor = new CEntityForm<NewsGadgetContent>(NewsGadgetContent.class) {
+        CForm<NewsGadgetContent> editor = new CForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -122,7 +122,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?, ?, ?> getTestimContentEditor() {
-        CEntityForm<TestimonialsGadgetContent> editor = new CEntityForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
+        CForm<TestimonialsGadgetContent> editor = new CForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -136,7 +136,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     private CComponent<?, ?, ?> getPromoContentEditor() {
-        CEntityForm<PromoGadgetContent> editor = new CEntityForm<PromoGadgetContent>(PromoGadgetContent.class) {
+        CForm<PromoGadgetContent> editor = new CForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

@@ -23,13 +23,13 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -56,22 +56,22 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().code(), "25em"),
-                new EntityFolderColumnDescriptor(proto().version().name(), "25em"),
-                new EntityFolderColumnDescriptor(proto().version().recurring(), "5em"),
-                new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em"),
-                new EntityFolderColumnDescriptor(proto().version().availableOnline(), "10em")
+                new FolderColumnDescriptor(proto().code(), "25em"),
+                new FolderColumnDescriptor(proto().version().name(), "25em"),
+                new FolderColumnDescriptor(proto().version().recurring(), "5em"),
+                new FolderColumnDescriptor(proto().version().mandatory(), "5em"),
+                new FolderColumnDescriptor(proto().version().availableOnline(), "10em")
                 );//@formatter:on	
     }
 
     @Override
-    protected CEntityForm<Feature> createItemForm(IObject<?> member) {
+    protected CForm<Feature> createItemForm(IObject<?> member) {
         return new FeatureEditor();
     }
 
-    private class FeatureEditor extends CEntityFolderRowEditor<Feature> {
+    private class FeatureEditor extends CFolderRowEditor<Feature> {
 
         public FeatureEditor() {
             super(Feature.class, columns());

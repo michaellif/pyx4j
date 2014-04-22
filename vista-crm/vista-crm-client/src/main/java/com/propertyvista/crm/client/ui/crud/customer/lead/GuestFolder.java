@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -65,7 +65,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
     }
 
     @Override
-    protected CEntityForm<Guest> createItemForm(IObject<?> member) {
+    protected CForm<Guest> createItemForm(IObject<?> member) {
         return new GuestEditor();
     }
 

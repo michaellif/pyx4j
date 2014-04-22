@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
@@ -103,7 +103,7 @@ public class CrmTheme extends VistaTheme {
                 return ThemeColor.foreground;
             }
         });
-        addTheme(new DefaultEntityFolderTheme() {
+        addTheme(new DefaultFolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -783,7 +783,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name() + " .EntityFolderBoxItem");
+        style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name() + " .CFolderBoxItem");
         style.addProperty("padding", "0px");
         addStyle(style);
 
@@ -958,7 +958,7 @@ public class CrmTheme extends VistaTheme {
 //        style.addProperty("background", ThemeColor.object1, 0.5);
         addStyle(style);
 
-        style = new Style("." + PapReviewFolder.Styles.AutoPayChargesFolder.name() + " .EntityFolderBoxItem");
+        style = new Style("." + PapReviewFolder.Styles.AutoPayChargesFolder.name() + " .CFolderBoxItem");
         style.addProperty("margin", "0px");
         style.addProperty("padding", "0px");
         addStyle(style);

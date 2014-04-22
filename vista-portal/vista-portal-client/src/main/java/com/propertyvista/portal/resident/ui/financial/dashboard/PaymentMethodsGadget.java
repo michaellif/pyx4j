@@ -20,10 +20,10 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -81,7 +81,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
-    class PaymentMethodsView extends CEntityForm<PaymentMethodSummaryDTO> {
+    class PaymentMethodsView extends CForm<PaymentMethodSummaryDTO> {
 
         public PaymentMethodsView() {
             super(PaymentMethodSummaryDTO.class);
@@ -117,12 +117,12 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
-        protected CEntityForm<PaymentMethodInfoDTO> createItemForm(IObject<?> member) {
+        protected CForm<PaymentMethodInfoDTO> createItemForm(IObject<?> member) {
             return new PaymentMethodViewer();
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<PaymentMethodInfoDTO> item) {
+        protected void removeItem(final CFolderItem<PaymentMethodInfoDTO> item) {
             String text = i18n.tr("Do you really want to delete the Payment Method?");
             if (item.getValue().usedByAutoPay().getValue(false)) {
                 text = i18n.tr("This Payment Method is used in AutoPay(s). Do you really want to delete it with corresponding AutoPay(s)?");
@@ -137,7 +137,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             });
         }
 
-        private class PaymentMethodViewer extends CEntityForm<PaymentMethodInfoDTO> {
+        private class PaymentMethodViewer extends CForm<PaymentMethodInfoDTO> {
 
             public PaymentMethodViewer() {
                 super(PaymentMethodInfoDTO.class);
@@ -171,7 +171,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 super.onValueSet(populate);
 
                 if (getValue().usedByAutoPay().getValue(false)) {
-                    ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(parentView.getValue().allowCancelationByResident().getValue(false));
+                    ((CFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(parentView.getValue().allowCancelationByResident().getValue(false));
                 }
 
                 if (getValue().restricted().getValue(false)) {

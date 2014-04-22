@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -105,7 +105,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
-    class BillingView extends CEntityForm<BillingSummaryDTO> {
+    class BillingView extends CForm<BillingSummaryDTO> {
 
         private final BasicFlexFormPanel mainPanel;
 

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.profile.companyinfo;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -49,12 +49,12 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().name(), "20em"),
-                new EntityFolderColumnDescriptor(proto().phone(), "12em"),
-                new EntityFolderColumnDescriptor(proto().email(), "15em"),
-                new EntityFolderColumnDescriptor(proto().type(), "10em"));
+                new FolderColumnDescriptor(proto().name(), "20em"),
+                new FolderColumnDescriptor(proto().phone(), "12em"),
+                new FolderColumnDescriptor(proto().email(), "15em"),
+                new FolderColumnDescriptor(proto().type(), "10em"));
             //@formatter:on
         }
     }

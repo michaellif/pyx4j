@@ -31,9 +31,9 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -70,7 +70,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         super.setEnforceAgeOfMajority(enforceAgeOfMajority);
 
         for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((GuarantorInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
+            ((GuarantorInLeaseEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
         }
     }
 
@@ -109,13 +109,13 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    protected CEntityForm<LeaseTermGuarantor> createItemForm(IObject<?> member) {
+    protected CForm<LeaseTermGuarantor> createItemForm(IObject<?> member) {
         return new GuarantorInLeaseEditor();
     }
 
     void updateTenantList() {
         for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((GuarantorInLeaseEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).updateTenantList();
+            ((GuarantorInLeaseEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).updateTenantList();
         }
     }
 
@@ -128,7 +128,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         return Collections.emptyList();
     }
 
-    private class GuarantorInLeaseEditor extends CEntityForm<LeaseTermGuarantor> {
+    private class GuarantorInLeaseEditor extends CForm<LeaseTermGuarantor> {
 
         public GuarantorInLeaseEditor() {
             super(LeaseTermGuarantor.class);

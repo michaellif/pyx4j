@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -38,11 +38,11 @@ public class IdentificationDocumentFolderUploaderFolder extends PortalBoxFolder<
     }
 
     @Override
-    protected CEntityForm<IdentificationDocumentFile> createItemForm(IObject<?> member) {
+    protected CForm<IdentificationDocumentFile> createItemForm(IObject<?> member) {
         return new ApplicationDocumentEditor();
     }
 
-    private class ApplicationDocumentEditor extends CEntityForm<IdentificationDocumentFile> {
+    private class ApplicationDocumentEditor extends CForm<IdentificationDocumentFile> {
 
         public ApplicationDocumentEditor() {
             super(IdentificationDocumentFile.class);

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -31,20 +31,20 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
 
     public static class DirectDebitSimRecordTableFolder extends VistaTableFolder<DirectDebitSimRecord> {
 
-        private final List<EntityFolderColumnDescriptor> columns;
+        private final List<FolderColumnDescriptor> columns;
 
         public DirectDebitSimRecordTableFolder() {
             super(DirectDebitSimRecord.class);
             columns = Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().accountNumber(), "15em"),
-                    new EntityFolderColumnDescriptor(proto().paymentReferenceNumber(), "20em"),
-                    new EntityFolderColumnDescriptor(proto().customerName(), "20em"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "10em")
+                    new FolderColumnDescriptor(proto().accountNumber(), "15em"),
+                    new FolderColumnDescriptor(proto().paymentReferenceNumber(), "20em"),
+                    new FolderColumnDescriptor(proto().customerName(), "20em"),
+                    new FolderColumnDescriptor(proto().amount(), "10em")
             );//@formatter:off
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return columns;
         }
 

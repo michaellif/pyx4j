@@ -42,7 +42,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.NFocusField;
@@ -60,7 +60,7 @@ import com.propertyvista.shared.config.VistaDemo;
 
 // TODO Dev Login needs refactoring (populate devLoginData, and mode from outside, see portal LandingViewImpl for how to)
 @Deprecated
-public class LoginForm extends CEntityForm<AuthenticationRequest> {
+public class LoginForm extends CForm<AuthenticationRequest> {
 
     private static final I18n i18n = I18n.get(LoginForm.class);
 

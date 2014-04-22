@@ -27,15 +27,15 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -69,7 +69,7 @@ import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillableItemEditor extends CEntityForm<BillableItem> {
+public class BillableItemEditor extends CForm<BillableItem> {
 
     static final I18n i18n = I18n.get(BillableItemEditor.class);
 
@@ -79,7 +79,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
     private final TwoColumnFlexFormPanel depositPanel = new TwoColumnFlexFormPanel();
 
-    private final CEntityForm<LeaseTermDTO> leaseTerm;
+    private final CForm<LeaseTermDTO> leaseTerm;
 
     private final LeaseTermEditorView leaseTermEditorView;
 
@@ -87,7 +87,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
     private CComponent<?, LogicalDate, ?> itemExpirationDateEditor;
 
-    public BillableItemEditor(CEntityForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
+    public BillableItemEditor(CForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
         super(BillableItem.class);
         this.leaseTerm = leaseTerm;
         this.leaseTermEditorView = leaseTermEditorView;
@@ -205,8 +205,8 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
                 }
 
                 // correct folder item:
-                if (getParent() instanceof CEntityFolderItem) {
-                    CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
+                if (getParent() instanceof CFolderItem) {
+                    CFolderItem<BillableItem> item = (CFolderItem<BillableItem>) getParent();
 
                     item.setRemovable(!isMandatoryFeature(getValue().item().product()));
 
@@ -294,7 +294,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
         if (value != null) {
             @SuppressWarnings("rawtypes")
-            CEntityForm editor = null;
+            CForm editor = null;
             BillableItemExtraData extraData = value.extraData();
 
             if (ARCode.Type.features().contains(value.item().product().holder().code().type().getValue())) {
@@ -339,21 +339,21 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().type(), "9em"),
-                new EntityFolderColumnDescriptor(proto().value(), "5em"),
-                new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"),
-                new EntityFolderColumnDescriptor(proto().expirationDate(), "10em"));
+                new FolderColumnDescriptor(proto().type(), "9em"),
+                new FolderColumnDescriptor(proto().value(), "5em"),
+                new FolderColumnDescriptor(proto().effectiveDate(), "9em"),
+                new FolderColumnDescriptor(proto().expirationDate(), "10em"));
             //@formatter:on
         }
 
         @Override
-        protected CEntityForm<? extends BillableItemAdjustment> createItemForm(IObject<?> member) {
+        protected CForm<? extends BillableItemAdjustment> createItemForm(IObject<?> member) {
             return new BillableItemAdjustmentEditor();
         }
 
-        private class BillableItemAdjustmentEditor extends CEntityFolderRowEditor<BillableItemAdjustment> {
+        private class BillableItemAdjustmentEditor extends CFolderRowEditor<BillableItemAdjustment> {
 
             public BillableItemAdjustmentEditor() {
                 super(BillableItemAdjustment.class, columns());
@@ -361,7 +361,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
 
             @SuppressWarnings("unchecked")
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 CField<?, ?> comp = super.createCell(column);
 
                 if (column.getObject() == proto().type()) {
@@ -524,20 +524,20 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().type(), "15em"),
-                new EntityFolderColumnDescriptor(proto().amount(), "6em"),
-                new EntityFolderColumnDescriptor(proto().description(), "25em"));
+                new FolderColumnDescriptor(proto().type(), "15em"),
+                new FolderColumnDescriptor(proto().amount(), "6em"),
+                new FolderColumnDescriptor(proto().description(), "25em"));
             //@formatter:on
         }
 
         @Override
-        protected CEntityForm<? extends Deposit> createItemForm(IObject<?> member) {
+        protected CForm<? extends Deposit> createItemForm(IObject<?> member) {
             return new DepositEditor();
         }
 
-        private class DepositEditor extends CEntityFolderRowEditor<Deposit> {
+        private class DepositEditor extends CFolderRowEditor<Deposit> {
 
             public DepositEditor() {
                 super(Deposit.class, columns());
@@ -558,7 +558,7 @@ public class BillableItemEditor extends CEntityForm<BillableItem> {
             }
 
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 // TODO MoveIn Deposits
                 if (VistaTODO.VISTA_4340_MoveInDeposit) {
                     if (column.getObject() == proto().type()) {

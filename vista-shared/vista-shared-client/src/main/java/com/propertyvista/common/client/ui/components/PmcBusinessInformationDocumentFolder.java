@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,7 +30,7 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
 
     private static final I18n i18n = I18n.get(PmcBusinessInformationDocumentFolder.class);
 
-    private class PmcBusinessInformationDocumentForm extends CEntityForm<PmcBusinessInfoDocument> {
+    private class PmcBusinessInformationDocumentForm extends CForm<PmcBusinessInfoDocument> {
 
         public PmcBusinessInformationDocumentForm() {
             super(PmcBusinessInfoDocument.class);
@@ -58,7 +58,7 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
     }
 
     @Override
-    protected CEntityForm<PmcBusinessInfoDocument> createItemForm(IObject<?> member) {
+    protected CForm<PmcBusinessInfoDocument> createItemForm(IObject<?> member) {
         return new PmcBusinessInformationDocumentForm();
     }
 

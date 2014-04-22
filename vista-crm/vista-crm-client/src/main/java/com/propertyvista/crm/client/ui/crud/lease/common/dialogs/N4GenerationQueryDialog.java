@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -45,7 +45,7 @@ public class N4GenerationQueryDialog extends OkCancelDialog {
         return form.getValue();
     }
 
-    private static final class N4GenerationQueryForm extends CEntityForm<N4BatchRequestDTO> {
+    private static final class N4GenerationQueryForm extends CForm<N4BatchRequestDTO> {
 
         public N4GenerationQueryForm() {
             super(N4BatchRequestDTO.class);

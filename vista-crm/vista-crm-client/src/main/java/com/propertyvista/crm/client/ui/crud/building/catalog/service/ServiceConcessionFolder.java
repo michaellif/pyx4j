@@ -22,13 +22,13 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -52,22 +52,22 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().version().type(), "15em"),
-                new EntityFolderColumnDescriptor(proto().version().value(), "7em"),
-                new EntityFolderColumnDescriptor(proto().version().term(), "10em"),
-                new EntityFolderColumnDescriptor(proto().version().condition(), "10em"),
-                new EntityFolderColumnDescriptor(proto().version().mixable(), "5em")
+                new FolderColumnDescriptor(proto().version().type(), "15em"),
+                new FolderColumnDescriptor(proto().version().value(), "7em"),
+                new FolderColumnDescriptor(proto().version().term(), "10em"),
+                new FolderColumnDescriptor(proto().version().condition(), "10em"),
+                new FolderColumnDescriptor(proto().version().mixable(), "5em")
                 );//@formatter:on   
     }
 
     @Override
-    protected CEntityForm<Concession> createItemForm(IObject<?> member) {
+    protected CForm<Concession> createItemForm(IObject<?> member) {
         return new ConcessionEditor();
     }
 
-    private class ConcessionEditor extends CEntityFolderRowEditor<Concession> {
+    private class ConcessionEditor extends CFolderRowEditor<Concession> {
 
         public ConcessionEditor() {
             super(Concession.class, columns());

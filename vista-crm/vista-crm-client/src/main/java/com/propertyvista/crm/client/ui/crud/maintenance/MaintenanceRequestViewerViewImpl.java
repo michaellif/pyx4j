@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -150,7 +150,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     static abstract class ScheduleBox extends OkCancelDialog {
 
-        private CEntityForm<MaintenanceRequestScheduleDTO> content;
+        private CForm<MaintenanceRequestScheduleDTO> content;
 
         public ScheduleBox() {
             super(i18n.tr("Schedule"));
@@ -160,7 +160,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CEntityForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
+            content = new CForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -205,7 +205,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     static abstract class ResolutionBox extends OkCancelDialog {
 
-        private CEntityForm<MaintenanceRequestDTO> content;
+        private CForm<MaintenanceRequestDTO> content;
 
         public ResolutionBox(MaintenanceRequestDTO mr) {
             super(i18n.tr("Resolve"));
@@ -215,7 +215,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         protected Widget createBody(final MaintenanceRequestDTO mr) {
             getOkButton().setEnabled(true);
 
-            content = new CEntityForm<MaintenanceRequestDTO>(MaintenanceRequestDTO.class) {
+            content = new CForm<MaintenanceRequestDTO>(MaintenanceRequestDTO.class) {
                 @Override
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -263,7 +263,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     static abstract class RateBox extends OkCancelDialog {
 
-        private CEntityForm<SurveyResponse> content;
+        private CForm<SurveyResponse> content;
 
         public RateBox(SurveyResponse currentRate) {
             super(i18n.tr("Rate"));
@@ -273,7 +273,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         protected Widget createBody(SurveyResponse currentRate) {
             getOkButton().setEnabled(true);
 
-            content = new CEntityForm<SurveyResponse>(SurveyResponse.class) {
+            content = new CForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
                 protected IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -37,12 +37,12 @@ public class MakePendingDialog extends OkCancelDialog {
 
     private final Presenter presenter;
 
-    private CEntityForm<MakePendingDTO> form;
+    private CForm<MakePendingDTO> form;
 
     public MakePendingDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay, final LogicalDate maxMakeVacantStartDay) {
         super(i18n.tr("Make Pending..."));
         this.presenter = presenter;
-        this.form = new CEntityForm<MakePendingDTO>(MakePendingDTO.class) {
+        this.form = new CForm<MakePendingDTO>(MakePendingDTO.class) {
 
             @Override
             protected IsWidget createContent() {

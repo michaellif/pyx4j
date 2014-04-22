@@ -21,11 +21,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -43,30 +43,30 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
     public class DepositSlipPaymentRecordFolder extends VistaTableFolder<DepositSlipCheckDetailsRecordDTO> {
 
-        private final List<EntityFolderColumnDescriptor> columns;
+        private final List<FolderColumnDescriptor> columns;
 
         public DepositSlipPaymentRecordFolder() {
             super(DepositSlipCheckDetailsRecordDTO.class);
             columns = Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().id(), "100px"),
-                    new EntityFolderColumnDescriptor(proto().status(), "100px"),
-                    new EntityFolderColumnDescriptor(proto().unit(), "50px"),
-                    new EntityFolderColumnDescriptor(proto().tenantId(), "100px"),
-                    new EntityFolderColumnDescriptor(proto().tenantName(), "250px"),
-                    new EntityFolderColumnDescriptor(proto().checkNumber(), "150px"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "150px")
+                    new FolderColumnDescriptor(proto().id(), "100px"),
+                    new FolderColumnDescriptor(proto().status(), "100px"),
+                    new FolderColumnDescriptor(proto().unit(), "50px"),
+                    new FolderColumnDescriptor(proto().tenantId(), "100px"),
+                    new FolderColumnDescriptor(proto().tenantName(), "250px"),
+                    new FolderColumnDescriptor(proto().checkNumber(), "150px"),
+                    new FolderColumnDescriptor(proto().amount(), "150px")
             );//@formatter:on
 
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
+        public List<FolderColumnDescriptor> columns() {
             return columns;
         }
 
         @Override
-        protected CEntityForm<DepositSlipCheckDetailsRecordDTO> createItemForm(IObject<?> member) {
-            return new CEntityFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
+        protected CForm<DepositSlipCheckDetailsRecordDTO> createItemForm(IObject<?> member) {
+            return new CFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
                     new VistaViewersComponentFactory()) {
                 @Override
                 public CField<?, ?> create(IObject<?> member) {

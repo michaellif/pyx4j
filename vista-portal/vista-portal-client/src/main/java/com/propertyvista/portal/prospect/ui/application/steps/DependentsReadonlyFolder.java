@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -34,11 +34,11 @@ public class DependentsReadonlyFolder extends PortalBoxFolder<DependentDTO> {
     }
 
     @Override
-    protected CEntityForm<DependentDTO> createItemForm(IObject<?> member) {
+    protected CForm<DependentDTO> createItemForm(IObject<?> member) {
         return new CoapplicantForm();
     }
 
-    class CoapplicantForm extends CEntityForm<DependentDTO> {
+    class CoapplicantForm extends CForm<DependentDTO> {
 
         public CoapplicantForm() {
             super(DependentDTO.class);

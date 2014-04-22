@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -90,7 +90,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     }
 
     @Override
-    protected CEntityForm<?> createEcheckInfoEditor() {
+    protected CForm<?> createEcheckInfoEditor() {
         return new EcheckInfoEditor() {
             @Override
             protected IsWidget createContent() {
@@ -116,7 +116,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
     }
 
     @Override
-    protected CEntityForm<?> createCreditCardInfoEditor() {
+    protected CForm<?> createCreditCardInfoEditor() {
         return new CreditCardInfoEditor() {
             @Override
             protected IsWidget createContent() {

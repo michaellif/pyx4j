@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -273,7 +273,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             }
 
             @Override
-            protected void removeItem(final CEntityFolderItem<LeasePaymentMethod> item) {
+            protected void removeItem(final CFolderItem<LeasePaymentMethod> item) {
                 String message = null;
                 if (rootClass.equals(TenantDTO.class)) {
                     message = i18n.tr("This Payment Method may be used in AutoPay(s). Do you really want to delete it with corresponding AutoPay(s)?");
@@ -291,7 +291,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 });
             }
 
-            private void doRemoveItem(CEntityFolderItem<LeasePaymentMethod> item) {
+            private void doRemoveItem(CFolderItem<LeasePaymentMethod> item) {
                 onPaymentMethodRemove(item.getValue());
                 super.removeItem(item);
             }

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
-public class EncryptedStorageKeyForm extends CEntityForm<EncryptedStorageKeyDTO> {
+public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
 
     private static final I18n i18n = I18n.get(EncryptedStorageKeyForm.class);
 

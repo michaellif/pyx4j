@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -43,7 +43,7 @@ import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class EftReportSettingsForm extends CEntityForm<EftReportMetadata> {
+public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
     private static final I18n i18n = I18n.get(EftReportSettingsForm.class);
 

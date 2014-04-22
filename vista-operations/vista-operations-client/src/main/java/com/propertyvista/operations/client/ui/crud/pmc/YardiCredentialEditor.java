@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
 
-class YardiCredentialEditor extends CEntityForm<PmcYardiCredential> {
+class YardiCredentialEditor extends CForm<PmcYardiCredential> {
 
     private static final I18n i18n = I18n.get(YardiCredentialEditor.class);
 

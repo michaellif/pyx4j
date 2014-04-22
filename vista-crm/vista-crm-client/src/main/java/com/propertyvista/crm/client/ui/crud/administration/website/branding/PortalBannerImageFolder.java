@@ -25,10 +25,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
@@ -61,7 +61,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
         for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((PortalBannerImageEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
+            ((PortalBannerImageEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }
 
@@ -96,7 +96,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
     }
 
     @Override
-    protected CEntityForm<PortalBannerImage> createItemForm(IObject<?> member) {
+    protected CForm<PortalBannerImage> createItemForm(IObject<?> member) {
         PortalBannerImageEditor editor = new PortalBannerImageEditor();
         if (imageSize != null) {
             editor.setImageSize(imageSize.width, imageSize.height);

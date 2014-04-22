@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -253,11 +253,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         }
 
         @Override
-        protected CEntityForm<Notification> createItemForm(IObject<?> member) {
+        protected CForm<Notification> createItemForm(IObject<?> member) {
             return new NotificationEditor();
         }
 
-        private class NotificationEditor extends CEntityForm<Notification> {
+        private class NotificationEditor extends CForm<Notification> {
 
             public NotificationEditor() {
                 super(Notification.class);

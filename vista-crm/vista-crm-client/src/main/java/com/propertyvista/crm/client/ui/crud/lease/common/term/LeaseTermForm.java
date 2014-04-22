@@ -36,14 +36,14 @@ import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
@@ -487,16 +487,16 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new FolderColumnDescriptor(proto().description(), "25em"));
             return columns;
         }
 
         @Override
-        protected CEntityForm<BuildingUtility> createItemForm(IObject<?> member) {
+        protected CForm<BuildingUtility> createItemForm(IObject<?> member) {
             return new BuildingUtilityEditor();
         }
 
@@ -509,7 +509,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
         }
 
-        private class BuildingUtilityEditor extends CEntityFolderRowEditor<BuildingUtility> {
+        private class BuildingUtilityEditor extends CFolderRowEditor<BuildingUtility> {
 
             public BuildingUtilityEditor() {
                 super(BuildingUtility.class, columns());

@@ -17,7 +17,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.dto.vista2pmc.AgreementDTO;
 
-public class AgreementForm extends CEntityForm<AgreementDTO> {
+public class AgreementForm extends CForm<AgreementDTO> {
 
     private static final I18n i18n = I18n.get(AgreementForm.class);
 

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 
-public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityForm<ArrearsYOYAnalysisChartGadgetMetadata> {
+public class ArrearsYoyAnalysisGadgetMetadataForm extends CForm<ArrearsYOYAnalysisChartGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(ArrearsYoyAnalysisGadgetMetadataForm.class);
 

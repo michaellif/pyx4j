@@ -26,13 +26,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
@@ -71,7 +71,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
         for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((PortalImageSetEditor) ((CEntityFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
+            ((PortalImageSetEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).setImageSize(width, height);
         }
     }
 
@@ -110,7 +110,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     }
 
     @Override
-    protected CEntityForm<SiteImageSet> createItemForm(IObject<?> member) {
+    protected CForm<SiteImageSet> createItemForm(IObject<?> member) {
         PortalImageSetEditor editor = new PortalImageSetEditor();
         if (imageSize != null) {
             editor.setImageSize(imageSize.width, imageSize.height);
@@ -130,12 +130,12 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
             imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class,
                     GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder()) {
                 @Override
-                protected EntityFolderImages getFolderIcons() {
+                protected FolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;
                 }
 
                 @Override
-                public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
+                public Widget getImageEntryView(CForm<SiteImageResource> entryForm) {
                     VerticalPanel infoPanel = new VerticalPanel();
                     infoPanel.add(entryForm.inject(entryForm.proto().file().fileName(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
                     infoPanel.add(entryForm.inject(entryForm.proto().caption(), new FieldDecoratorBuilder().build()));

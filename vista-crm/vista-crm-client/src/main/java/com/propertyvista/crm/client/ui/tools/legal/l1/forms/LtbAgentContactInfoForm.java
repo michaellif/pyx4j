@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
 
-public class LtbAgentContactInfoForm extends CEntityForm<LtbAgentContactInfo> {
+public class LtbAgentContactInfoForm extends CForm<LtbAgentContactInfo> {
 
     public LtbAgentContactInfoForm() {
         super(LtbAgentContactInfo.class);

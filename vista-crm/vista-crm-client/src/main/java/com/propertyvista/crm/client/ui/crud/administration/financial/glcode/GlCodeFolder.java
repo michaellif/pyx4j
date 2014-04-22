@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -31,10 +31,10 @@ public class GlCodeFolder extends VistaTableFolder<GlCode> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().codeId(), "7em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().description(), "35em"));
+    public List<FolderColumnDescriptor> columns() {
+        List<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().codeId(), "7em"));
+        columns.add(new FolderColumnDescriptor(proto().description(), "35em"));
         return columns;
     }
 }

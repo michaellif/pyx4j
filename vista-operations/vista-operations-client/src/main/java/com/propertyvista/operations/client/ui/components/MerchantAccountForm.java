@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.AbstractMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount.AccountType;
 
-public class MerchantAccountForm extends CEntityForm<AbstractMerchantAccount> {
+public class MerchantAccountForm extends CForm<AbstractMerchantAccount> {
 
     public MerchantAccountForm() {
         super(AbstractMerchantAccount.class);

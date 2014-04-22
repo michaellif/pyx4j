@@ -17,10 +17,10 @@ import java.util.List;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.CFolder;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
@@ -28,7 +28,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 
-public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<E> {
+public abstract class VistaTableFolder<E extends IEntity> extends CFolder<E> {
 
     private final String itemName;
 
@@ -58,7 +58,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
         setOrderable(modifyable);
     }
 
-    public abstract List<EntityFolderColumnDescriptor> columns();
+    public abstract List<FolderColumnDescriptor> columns();
 
     @Override
     protected IFolderDecorator<E> createFolderDecorator() {
@@ -75,7 +75,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
     }
 
     @Override
-    protected CEntityForm<? extends E> createItemForm(IObject<?> member) {
-        return new CEntityFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
+    protected CForm<? extends E> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
     }
 }

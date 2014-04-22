@@ -20,10 +20,10 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -37,11 +37,11 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
         SelectedBuildingsFolder
     }
 
-    private static List<EntityFolderColumnDescriptor> COLUMNS;
+    private static List<FolderColumnDescriptor> COLUMNS;
     static {
         Building proto = EntityFactory.getEntityPrototype(Building.class);
         COLUMNS = Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto.propertyCode(), "100px")
+                new FolderColumnDescriptor(proto.propertyCode(), "100px")
         );//@formatter:on
     }
 
@@ -55,15 +55,15 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return COLUMNS;
     }
 
     @Override
-    protected CEntityForm<Building> createItemForm(IObject<?> member) {
-        return new CEntityFolderRowEditor<Building>(Building.class, COLUMNS) {
+    protected CForm<Building> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<Building>(Building.class, COLUMNS) {
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (column.getObject() == proto().propertyCode()) {
                     return inject(proto().propertyCode());
                 }
@@ -80,7 +80,7 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
                 for (Building building : getSelectedItems()) {
                     Building b = EntityFactory.create(Building.class);
                     b.setPrimaryKey(building.getPrimaryKey());
-                    for (EntityFolderColumnDescriptor c : COLUMNS) {
+                    for (FolderColumnDescriptor c : COLUMNS) {
                         b.setValue(c.getObject().getPath(), building.getValue(c.getObject().getPath()));
                     }
                     addItem(b);

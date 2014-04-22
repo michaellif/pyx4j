@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -77,13 +77,13 @@ public abstract class LocalizedContentFolderBase<E extends ILocalizedEntity> ext
     }
 
     @Override
-    protected CEntityForm<E> createItemForm(IObject<?> member) {
+    protected CForm<E> createItemForm(IObject<?> member) {
         return new LocalizedContentEditor();
     }
 
-    public abstract IsWidget createEditorContent(CEntityForm<E> editor);
+    public abstract IsWidget createEditorContent(CForm<E> editor);
 
-    class LocalizedContentEditor extends CEntityForm<E> {
+    class LocalizedContentEditor extends CForm<E> {
 
         public LocalizedContentEditor() {
             super(entityClass);

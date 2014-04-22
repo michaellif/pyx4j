@@ -22,13 +22,13 @@ package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
-public abstract class AccessoryEntityForm<E extends IEntity> extends CEntityForm<E> {
+public abstract class AccessoryEntityForm<E extends IEntity> extends CForm<E> {
 
     public AccessoryEntityForm(Class<E> clazz) {
         super(clazz);

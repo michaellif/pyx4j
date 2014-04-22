@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 // Internals:
 public abstract class RunForDateDialog extends OkCancelDialog {
 
-    private CEntityForm<ScheduleDataDTO> content;
+    private CForm<ScheduleDataDTO> content;
 
     public RunForDateDialog() {
         super(TriggerViewerViewImpl.i18n.tr("Run for Date"));
@@ -37,7 +37,7 @@ public abstract class RunForDateDialog extends OkCancelDialog {
     protected Widget createBody() {
         getOkButton().setEnabled(true);
 
-        content = new CEntityForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
+        content = new CForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
             @Override
             protected IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();

@@ -23,11 +23,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -41,23 +41,23 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
+    public List<FolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().chequeAmount(), "150px"),
-                new EntityFolderColumnDescriptor(proto().dateOfCheque(), "150px"),
-                new EntityFolderColumnDescriptor(proto().dateOfNsfCharge(), "150px"),
-                new EntityFolderColumnDescriptor(proto().bankCharge(), "150px"),
-                new EntityFolderColumnDescriptor(proto().landlordsAdministrationCharge(), "150px"),
-                new EntityFolderColumnDescriptor(proto().totalCharge(), "150px")                
+                new FolderColumnDescriptor(proto().chequeAmount(), "150px"),
+                new FolderColumnDescriptor(proto().dateOfCheque(), "150px"),
+                new FolderColumnDescriptor(proto().dateOfNsfCharge(), "150px"),
+                new FolderColumnDescriptor(proto().bankCharge(), "150px"),
+                new FolderColumnDescriptor(proto().landlordsAdministrationCharge(), "150px"),
+                new FolderColumnDescriptor(proto().totalCharge(), "150px")                
         );//@formatter:on
     }
 
     @Override
-    protected CEntityForm<? extends NsfChargeDetails> createItemForm(IObject<?> member) {
-        CEntityFolderRowEditor<NsfChargeDetails> rowEditor = new CEntityFolderRowEditor<NsfChargeDetails>(NsfChargeDetails.class, columns(),
+    protected CForm<? extends NsfChargeDetails> createItemForm(IObject<?> member) {
+        CFolderRowEditor<NsfChargeDetails> rowEditor = new CFolderRowEditor<NsfChargeDetails>(NsfChargeDetails.class, columns(),
                 new VistaViewersComponentFactory()) {
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 if (proto().chequeAmount() == column.getObject()) {
                     CMoneyField moneyField = new CMoneyField();
                     moneyField.setMandatory(true);

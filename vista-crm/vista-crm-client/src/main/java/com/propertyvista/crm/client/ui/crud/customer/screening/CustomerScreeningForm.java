@@ -19,7 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -94,7 +94,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         super.addValidations();
 
         // ------------------------------------------------------------------------------------------------
-        CEntityForm<PriorAddress> currentAF = ((CEntityForm<PriorAddress>) get(proto().screening().version().currentAddress()));
+        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().screening().version().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
         currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
@@ -109,7 +109,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         });
 
         // ------------------------------------------------------------------------------------------------
-        CEntityForm<PriorAddress> previousAF = ((CEntityForm<PriorAddress>) get(proto().screening().version().previousAddress()));
+        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().screening().version().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
         previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());

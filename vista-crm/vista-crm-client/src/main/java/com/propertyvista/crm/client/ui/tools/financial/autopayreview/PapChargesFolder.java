@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.tools.financial.autopayreview;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -41,7 +41,7 @@ public final class PapChargesFolder extends VistaBoxFolder<PapChargeReviewDTO> {
     }
 
     @Override
-    protected CEntityForm<PapChargeReviewDTO> createItemForm(IObject<?> member) {
+    protected CForm<PapChargeReviewDTO> createItemForm(IObject<?> member) {
         return new PapChargeReviewForm();
     }
 

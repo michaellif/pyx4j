@@ -27,7 +27,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -175,7 +175,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         }
 
         @Override
-        protected CEntityForm<N4PolicyDTOARCodeHolderDTO> createItemForm(IObject<?> member) {
+        protected CForm<N4PolicyDTOARCodeHolderDTO> createItemForm(IObject<?> member) {
             N4PolicyDTOARCodeHolderForm form = new N4PolicyDTOARCodeHolderForm(null, false);
             form.inheritViewable(false);
             form.setViewable(true);
@@ -229,7 +229,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         }
     }
 
-    public static class N4PolicyDTOARCodeHolderForm extends CEntityForm<N4PolicyDTOARCodeHolderDTO> {
+    public static class N4PolicyDTOARCodeHolderForm extends CForm<N4PolicyDTOARCodeHolderDTO> {
 
         private CComboBox<ARCode> arCodeBox;
 

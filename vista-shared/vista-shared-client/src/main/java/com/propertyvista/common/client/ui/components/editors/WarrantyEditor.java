@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
 
-public class WarrantyEditor extends CEntityForm<Warranty> {
+public class WarrantyEditor extends CForm<Warranty> {
 
     private static final I18n i18n = I18n.get(WarrantyEditor.class);
 
@@ -65,10 +65,10 @@ public class WarrantyEditor extends CEntityForm<Warranty> {
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns;
-            columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "50em"));
+        public List<FolderColumnDescriptor> columns() {
+            List<FolderColumnDescriptor> columns;
+            columns = new ArrayList<FolderColumnDescriptor>();
+            columns.add(new FolderColumnDescriptor(proto().name(), "50em"));
             return columns;
         }
 

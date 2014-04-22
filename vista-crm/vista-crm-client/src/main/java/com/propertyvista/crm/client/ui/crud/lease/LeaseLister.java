@@ -21,7 +21,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
@@ -105,7 +105,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
 //        }));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addActionItem(new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
+            addActionItem(new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.New).show();
@@ -114,7 +114,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
         }
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addActionItem(new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
+            addActionItem(new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.Current).show();

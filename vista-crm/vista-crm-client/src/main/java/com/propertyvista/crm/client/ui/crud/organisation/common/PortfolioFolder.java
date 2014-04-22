@@ -27,13 +27,13 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -59,16 +59,16 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return java.util.Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "20em"),
-                new EntityFolderColumnDescriptor(proto().description(), "30em"));
+    public List<FolderColumnDescriptor> columns() {
+        return java.util.Arrays.asList(new FolderColumnDescriptor(proto().name(), "20em"),
+                new FolderColumnDescriptor(proto().description(), "30em"));
     }
 
     @Override
-    protected CEntityForm<Portfolio> createItemForm(IObject<?> member) {
-        return new CEntityFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
+    protected CForm<Portfolio> createItemForm(IObject<?> member) {
+        return new CFolderRowEditor<Portfolio>(Portfolio.class, columns()) {
             @Override
-            protected CField<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            protected CField<?, ?> createCell(FolderColumnDescriptor column) {
                 CField<?, ?> comp = null;
 
                 if (proto().name() == column.getObject()) {

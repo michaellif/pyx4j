@@ -19,14 +19,14 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.l1.L1OwedNsfCharges;
 import com.propertyvista.domain.legal.l1.NsfChargeDetails;
 
-public class L1OwedNsfChargesForm extends CEntityForm<L1OwedNsfCharges> {
+public class L1OwedNsfChargesForm extends CForm<L1OwedNsfCharges> {
 
     public L1OwedNsfChargesForm() {
         super(L1OwedNsfCharges.class);

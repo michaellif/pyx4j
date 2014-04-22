@@ -23,13 +23,13 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -62,7 +62,7 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
     }
 
     @Override
-    protected CEntityForm<LeaseTermAgreementDocument> createItemForm(IObject<?> member) {
+    protected CForm<LeaseTermAgreementDocument> createItemForm(IObject<?> member) {
         return new LeaseAgreementDocumentForm(true);
     }
 
@@ -87,12 +87,12 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
     }
 
     @Override
-    protected void removeItem(CEntityFolderItem<LeaseTermAgreementDocument> item) {
+    protected void removeItem(CFolderItem<LeaseTermAgreementDocument> item) {
         super.removeItem(item);
         onDocumentsChanged();
     }
 
-    public static class LeaseAgreementDocumentForm extends CEntityForm<LeaseTermAgreementDocument> {
+    public static class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument> {
 
         private final boolean viewOnly;
 
