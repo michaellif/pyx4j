@@ -191,7 +191,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         assert (singlePkRoot || (value == null) || (value instanceof Collection) || (value instanceof IEntity)) : "Can't query by polymorphic member using value of class "
                 + value.getClass();
 
-        if ((value instanceof IEntity) && (((IEntity) value).getPrimaryKey() == null)) {
+        if ((value instanceof IEntity) && (((IEntity) value).isPrototype() || (((IEntity) value).getPrimaryKey() == null))) {
             return new DiscriminatorQueryValueBindAdapter();
         } else if ((value instanceof Key) || (value instanceof Long)) {
             return new ValueAdapterEntity.QueryByEntityValueBindAdapter(sqlTypeKey);

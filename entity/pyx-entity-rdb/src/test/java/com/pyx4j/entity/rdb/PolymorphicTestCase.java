@@ -409,11 +409,27 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             Assert.assertTrue(found.contains(ent2));
         }
 
-        // Query using IN criteria by Value
-        // TODO code below fails as follows, fix when time permits...
-        if (false) {
+        // Query using IN criteria by Value Entity
+        {
             List<Concrete1Entity> entList = new ArrayList<Concrete1Entity>();
             entList.add(ent11);
+            EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().reference(), entList);
+
+            Concrete2Entity found = srv.retrieve(criteria);
+            Assert.assertEquals(ent1, found);
+            Assert.assertEquals(ent11, found.reference());
+        }
+
+        // Query using IN criteria by Value Entity List of the same type.
+        Concrete1Entity ent12 = EntityFactory.create(Concrete1Entity.class);
+        ent12.nameC1().setValue("c12:" + uniqueString());
+        srv.persist(ent12);
+        {
+            List<Concrete1Entity> entList = new ArrayList<Concrete1Entity>();
+            entList.add(ent11);
+            entList.add(ent12);
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
             criteria.eq(criteria.proto().testId(), testId);
             criteria.in(criteria.proto().reference(), entList);
@@ -426,8 +442,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         //Query by Class
         {
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().reference(), Concrete1Entity.class));
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.eq(criteria.proto().reference(), Concrete1Entity.class);
             Concrete2Entity found = srv.retrieve(criteria);
             Assert.assertEquals(ent1, found);
             Assert.assertEquals(ent11, found.reference());
@@ -458,8 +474,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
 
         {
             EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.eq(criteria.proto().references(), ent21));
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.eq(criteria.proto().references(), ent21);
             List<ReferenceNotOwnerEntity> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
             Assert.assertEquals(ent21, found.get(0).references().get(0));

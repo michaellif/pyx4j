@@ -334,7 +334,6 @@ public class QueryBuilder<T extends IEntity> {
                 sqlOperator = " != ? ";
                 break;
             case IN:
-                criterionSql.append(" IN (");
                 Collection<?> items;
                 if (bindHolder.bindValue.getClass().isArray()) {
                     items = Arrays.asList((Object[]) bindHolder.bindValue);
@@ -346,6 +345,29 @@ public class QueryBuilder<T extends IEntity> {
                 boolean first = true;
                 for (Object item : items) {
                     if (first) {
+
+                        if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
+                            // Add Discriminator parameter
+                            criterionSql.append(" = ? ");
+
+                            // TODO make a better access to DiscriminatorQueryValueBindAdapter
+                            IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
+
+                            BindHolder itemBindHolder = new BindHolder();
+                            itemBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
+                                    propertyCriterion.getRestriction(), entityProto);
+
+                            itemBindHolder.bindValue = entityProto;
+                            bindParams.add(itemBindHolder);
+
+                            criterionSql.append(" AND ").append(secondPersistenceName);
+
+                            // Replace the adapter for values.
+                            bindHolder.adapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
+                        }
+
+                        criterionSql.append(" IN (");
+
                         first = false;
                     } else {
                         criterionSql.append(",");
@@ -357,7 +379,9 @@ public class QueryBuilder<T extends IEntity> {
                     itemBindHolder.bindValue = item;
                     bindParams.add(itemBindHolder);
                 }
-                criterionSql.append(")");
+                if (!first) {
+                    criterionSql.append(")");
+                }
                 return;
             case RDB_LIKE:
                 if (bindHolder.bindValue != null) {
