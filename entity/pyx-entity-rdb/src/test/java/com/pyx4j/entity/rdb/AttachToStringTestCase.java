@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;

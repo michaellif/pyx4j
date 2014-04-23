@@ -22,7 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import java.util.Date;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.entity.annotations.Owned;

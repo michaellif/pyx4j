@@ -22,9 +22,8 @@ package com.pyx4j.entity.rdb;
 
 import java.util.Date;
 
-import junit.framework.Assert;
-
 import org.apache.commons.lang.time.DateUtils;
+import org.junit.Assert;
 
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
