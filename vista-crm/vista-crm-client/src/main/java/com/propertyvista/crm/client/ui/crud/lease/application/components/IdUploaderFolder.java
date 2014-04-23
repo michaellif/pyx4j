@@ -46,6 +46,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Importance;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
+import com.propertyvista.misc.VistaTODO;
 
 public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolder> {
 
@@ -86,18 +87,20 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
     public void addValidations() {
         super.addValidations();
 
-        addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
-            @Override
-            public FieldValidationError isValid() {
-                if (getComponent().getValue() != null && documentationPolicy != null) {
-                    int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
-                    if (numOfRemainingDocs > 0) {
-                        return new FieldValidationError(getComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
+        if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
+                @Override
+                public FieldValidationError isValid() {
+                    if (getComponent().getValue() != null && documentationPolicy != null) {
+                        int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
+                        if (numOfRemainingDocs > 0) {
+                            return new FieldValidationError(getComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
+                        }
                     }
+                    return null;
                 }
-                return null;
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -133,8 +136,10 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
 
             @Override
             public void onValueSet(boolean populate) {
-                // update removable
-                setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
+                if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+                    // update removable
+                    setRemovable(!Importance.Required.equals(getValue().idType().importance().getValue()));
+                }
             }
 
             @Override
@@ -160,16 +165,18 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             content.setWidget(++row, 0, inject(proto().notes(), new FieldDecoratorBuilder().build()));
 
             IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
-            docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
-                @Override
-                public FieldValidationError isValid() {
-                    if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                        return new FieldValidationError(getComponent(), i18n.tr("At least one document file is required"));
-                    } else {
-                        return null;
+            if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+                docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
+                    @Override
+                    public FieldValidationError isValid() {
+                        if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
+                            return new FieldValidationError(getComponent(), i18n.tr("At least one document file is required"));
+                        } else {
+                            return null;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             // Tune ups:
             get(proto().idType()).setViewable(true);

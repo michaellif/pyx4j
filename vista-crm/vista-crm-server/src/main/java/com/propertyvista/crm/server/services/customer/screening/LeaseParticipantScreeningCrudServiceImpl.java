@@ -30,6 +30,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<CustomerScreening, LeaseParticipantScreeningTO> implements
         LeaseParticipantScreeningCrudService {
@@ -91,6 +92,9 @@ public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedC
         to.leaseParticipantId().set(initData.leaseParticipantId());
 
         to.screening().set(retrivePersonScreeningDraftForEdit(initData.leaseParticipantId().getPrimaryKey()));
+        if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            to.screening().version().documents().clear();
+        }
 
         return to;
     }

@@ -41,6 +41,7 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.Persona
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
 import com.propertyvista.misc.BusinessRules;
+import com.propertyvista.misc.VistaTODO;
 
 public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeningTO> {
 
@@ -161,6 +162,16 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().legalTroubles(), legalQuestionDecorator()));
         main.setHR(row++, 0, 2);
         main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().filedBankruptcy(), legalQuestionDecorator()));
+
+        if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
+            get(proto().screening().version().legalQuestions().suedForRent()).setMandatory(false);
+            get(proto().screening().version().legalQuestions().suedForDamages()).setMandatory(false);
+            get(proto().screening().version().legalQuestions().everEvicted()).setMandatory(false);
+            get(proto().screening().version().legalQuestions().defaultedOnLease()).setMandatory(false);
+            get(proto().screening().version().legalQuestions().convictedOfFelony()).setMandatory(false);
+            get(proto().screening().version().legalQuestions().legalTroubles()).setMandatory(false);
+            get(proto().screening().version().legalQuestions().filedBankruptcy()).setMandatory(false);
+        }
 
         return main;
     }
