@@ -23,34 +23,54 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.i18n.shared.I18n;
 
 public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
 
+    private static final I18n i18n = I18n.get(CPhoneField.class);
+
+    public enum PhoneType {
+        northAmerica, northAmericaWithExtension, search
+    }
+
     public CPhoneField() {
+        this(PhoneType.northAmericaWithExtension);
+    }
+
+    public CPhoneField(PhoneType phoneType) {
         super();
-        setFormat(new PhoneFormat());
+        setFormatter(new PhoneFormatter(phoneType));
+        setParser(new PhoneParser(phoneType));
         addComponentValidator(new TextBoxParserValidator<String>());
         setNativeComponent(new NTextBox<String>(this));
-        setWatermark("(___) ___-____ x___");
+        setWatermark(phoneType);
         asWidget().setWidth("100%");
     }
 
-    public static class PhoneFormat implements IFormat<String> {
-
-        private final static String regex = "^[\\s\\d\\(\\)-]+(x\\d{1,4}){0,1}$";
-
-        public PhoneFormat() {
-
+    private void setWatermark(PhoneType phoneType) {
+        switch (phoneType) {
+        case northAmerica:
+            setWatermark("(___) ___-____");
+            break;
+        case northAmericaWithExtension:
+            setWatermark("(___) ___-____ x___");
+            break;
+        case search:
+            break;
+        default:
+            break;
         }
+    }
 
-        private static String normalize(String value) {
-            if (value == null) {
-                return null;
-            } else {
-                return value.replaceAll("[\\s\\(\\)-]+", "");
-            }
+    public static class PhoneFormatter implements IFormatter<String> {
+
+        final PhoneType phoneType;
+
+        public PhoneFormatter(PhoneType phoneType) {
+            this.phoneType = phoneType;
         }
 
         @Override
@@ -67,7 +87,27 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
             } else {
                 return unformatedPhone;
             }
+        }
 
+        String normalize(String value) {
+            if (value == null) {
+                return null;
+            } else {
+                return value.replaceAll("[\\s\\(\\)-]+", "");
+            }
+        }
+    }
+
+    public static class PhoneParser extends PhoneFormatter implements IParser<String> {
+
+        private final static String NORTH_AMERICA_REGEX = "^[\\s\\d\\(\\)-]+$";
+
+        private final static String NORTH_AMERICA_WITH_EXTENSION_REGEX = "^[\\s\\d\\(\\)-]+(x\\d{1,4}){0,1}$";
+
+        private final static String SEARCH_REGEX = ".*[^0-9\\s\\(\\)-]+.*";
+
+        public PhoneParser(PhoneType phoneType) {
+            super(phoneType);
         }
 
         @Override
@@ -75,53 +115,56 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
-            String errorMessage = "Invalid phone format. Use (123) 456-7890 x1234 format";
-            if (!string.matches(regex)) {
-                throw new ParseException(errorMessage, 0);
+
+            StringBuilder errorMessage = new StringBuilder(i18n.tr("Invalid phone format."));
+            String regex = null;
+
+            switch (phoneType) {
+            case northAmerica:
+                errorMessage.append(" ").append(i18n.tr("Use (123) 456-7890 format"));
+                regex = NORTH_AMERICA_REGEX;
+                break;
+
+            case northAmericaWithExtension:
+                errorMessage.append(" ").append(i18n.tr("Use (123) 456-7890 x1234 format"));
+                regex = NORTH_AMERICA_WITH_EXTENSION_REGEX;
+                break;
+
+            case search:
+                if (string.contains("*")) {
+                    return string;
+                }
+                regex = SEARCH_REGEX;
+                break;
             }
+
+            if (!string.matches(regex)) {
+                throw new ParseException(errorMessage.toString(), 0);
+            }
+
             String unformatedPhone = normalize(string);
-            if (!unformatedPhone.contains("x")) {
+
+            /**
+             * Validate length
+             */
+            switch (phoneType) {
+            case northAmerica:
                 if (unformatedPhone.length() != 10) {
-                    throw new ParseException(errorMessage, 0);
+                    throw new ParseException(errorMessage.toString(), 0);
                 }
-            } else if (unformatedPhone.indexOf("x") == 10) {
-                if (unformatedPhone.length() < 12) {
-                    throw new ParseException(errorMessage, 0);
+                break;
+            case northAmericaWithExtension:
+                if (!(unformatedPhone.indexOf("x") == 10 || unformatedPhone.length() == 10)) {
+                    throw new ParseException(errorMessage.toString(), 0);
                 }
-            } else {
-                throw new ParseException(errorMessage, 0);
+                break;
+            case search:
+                break;
+
             }
 
             return format(string);
         }
     }
 
-    public static class PhoneSearchFormat implements IFormat<String> {
-
-        @Override
-        public String format(String value) {
-            return value;
-        }
-
-        @Override
-        public String parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null; // empty value case
-            }
-            if (string.contains("*")) {
-                return string;
-            } else if (string.matches(".*[^0-9\\s\\(\\)-]+.*")) {
-                throw new ParseException("PhoneSearchFormat", 0);
-            }
-            String unformatedPhone = PhoneFormat.normalize(string);
-            if (unformatedPhone.length() == 10) {
-                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
-            } else if (string.length() != unformatedPhone.length()) {
-                // Contains some user formating.
-                return string;
-            } else {
-                return string;
-            }
-        }
-    }
 }

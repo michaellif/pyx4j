@@ -74,7 +74,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
         } else {
             try {
                 // trim user input before parsing
-                return getCComponent().getFormat().parse(getEditor().getText().trim());
+                return getCComponent().getParser().parse(getEditor().getText().trim());
             } catch (ParseException e) {
                 throw e;
             }

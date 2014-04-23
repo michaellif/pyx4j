@@ -23,7 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CLongField extends CNumberField<Long> {
@@ -32,7 +33,7 @@ public class CLongField extends CNumberField<Long> {
 
     public CLongField() {
         super();
-        setFormat(new IFormat<Long>() {
+        setFormatter(new IFormatter<Long>() {
 
             @Override
             public String format(Long value) {
@@ -42,7 +43,9 @@ public class CLongField extends CNumberField<Long> {
                     return getNumberFormat().format(value);
                 }
             }
+        });
 
+        setParser(new IParser<Long>() {
             @Override
             public Long parse(String string) throws ParseException {
                 if (CommonsStringUtils.isEmpty(string)) {

@@ -28,7 +28,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FocusWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.events.HasNValueChangeHandlers;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
@@ -36,24 +37,38 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptText,
         HasNValueChangeHandlers<String> {
 
-    private IFormat<DATA> format;
+    private IFormatter<DATA> formatter;
+
+    private IParser<DATA> parser;
 
     public CTextFieldBase() {
         super();
+
+        setFormatter(new IFormatter<DATA>() {
+            @Override
+            public String format(DATA value) {
+                if (value == null) {
+                    return null;
+                } else {
+                    return value.toString();
+                }
+            }
+        });
+
     }
 
-    public void setFormat(IFormat<DATA> format) {
-        this.format = format;
+    public final void setFormatter(IFormatter<DATA> formatter) {
+        this.formatter = formatter;
     }
 
-    public IFormat<DATA> getFormat() {
-        return format;
+    public final IFormatter<DATA> getFormatter() {
+        return formatter;
     }
 
     public final String format(DATA value) {
         String text = null;
         try {
-            text = getFormat().format(value);
+            text = getFormatter().format(value);
         } catch (Exception ignore) {
         }
         return text == null ? "" : text;
@@ -63,10 +78,18 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
         return format(getValue());
     }
 
+    public final void setParser(IParser<DATA> parser) {
+        this.parser = parser;
+    }
+
+    public final IParser<DATA> getParser() {
+        return parser;
+    }
+
     @Override
     public void setValueByString(String name) {
         try {
-            setValue(getFormat().parse(name));
+            setValue(getParser().parse(name));
         } catch (ParseException e) {
             // TODO : log something here?..
         }

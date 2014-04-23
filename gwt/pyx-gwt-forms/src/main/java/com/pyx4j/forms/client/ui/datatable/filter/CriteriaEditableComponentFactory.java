@@ -42,6 +42,7 @@ import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CKeyField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
@@ -79,8 +80,7 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
             return new CComboBoxBoolean();
         } else {
             if (EditorType.phone.equals(mm.getEditorType())) {
-                CPhoneField comp = new CPhoneField();
-                comp.setFormat(new CPhoneField.PhoneSearchFormat());
+                CPhoneField comp = new CPhoneField(PhoneType.search);
                 return comp;
             } else {
                 return new CTextField();

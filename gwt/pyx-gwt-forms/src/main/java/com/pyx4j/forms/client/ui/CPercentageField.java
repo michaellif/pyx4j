@@ -21,8 +21,13 @@
 package com.pyx4j.forms.client.ui;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
+import com.google.gwt.i18n.client.NumberFormat;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -32,7 +37,7 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
 
     public CPercentageField() {
         super();
-        setFormat(new PercentageFormat("#.##"));
+        setFormatter(new PercentageFormat("#.##"));
         addComponentValidator(new TextBoxParserValidator<BigDecimal>());
         setNativeComponent(new NTextBox<BigDecimal>(this));
         asWidget().setWidth("100%");
@@ -40,6 +45,45 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
     }
 
     public void setPercentageFormat(String pattern) {
-        setFormat(new PercentageFormat(pattern));
+        setFormatter(new PercentageFormat(pattern));
+    }
+
+    public static class PercentageFormat implements IFormatter<BigDecimal> {
+
+        private final NumberFormat nf;
+
+        public PercentageFormat() {
+            this("#.##");
+        }
+
+        public PercentageFormat(String pattern) {
+            nf = NumberFormat.getFormat(pattern);
+        }
+
+        @Override
+        public String format(BigDecimal value) {
+            if (value == null) {
+                return "";
+            } else {
+                return nf.format(value.multiply(new BigDecimal("100"))) + "%";
+            }
+        }
+    }
+
+    public static class PercentageParser implements IParser<BigDecimal> {
+
+        @Override
+        public BigDecimal parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
+            try {
+                string = string.replaceAll("[,%]+", "");
+                return new BigDecimal(string).divide(new BigDecimal("100"));
+            } catch (NumberFormatException e) {
+                throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
+            }
+        }
+
     }
 }

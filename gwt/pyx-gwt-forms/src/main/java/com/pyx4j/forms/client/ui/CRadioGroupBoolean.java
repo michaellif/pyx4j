@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Arrays;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
@@ -32,7 +32,7 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
     public CRadioGroupBoolean(RadioGroup.Layout layout) {
         super(layout);
-        setFormat(new IFormat<Boolean>() {
+        setFormat(new IFormatter<Boolean>() {
 
             @Override
             public String format(Boolean value) {
@@ -45,10 +45,6 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
                 }
             }
 
-            @Override
-            public Boolean parse(String string) {
-                return null;
-            }
         });
         setNativeComponent(new NRadioGroup<Boolean>(this));
         super.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));

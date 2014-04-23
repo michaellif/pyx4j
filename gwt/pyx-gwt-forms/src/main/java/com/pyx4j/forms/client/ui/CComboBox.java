@@ -20,14 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
@@ -42,7 +41,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     private NotInOptionsPolicy policy;
 
-    private IFormat<E> format;
+    private IFormatter<E> format;
 
     public enum NotInOptionsPolicy {
         KEEP, DISCARD;
@@ -58,7 +57,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     public CComboBox(NotInOptionsPolicy policy) {
-        this(policy, new IFormat<E>() {
+        this(policy, new IFormatter<E>() {
 
             @Override
             public String format(E o) {
@@ -70,15 +69,10 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
             }
 
-            @Override
-            public E parse(String string) throws ParseException {
-                // TODO Auto-generated method stub
-                return null;
-            }
         });
     }
 
-    public CComboBox(NotInOptionsPolicy policy, IFormat<E> format) {
+    public CComboBox(NotInOptionsPolicy policy, IFormatter<E> format) {
         super();
         this.format = format;
         if (policy == null) {
@@ -172,7 +166,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         return format.format(o);
     }
 
-    public void setFormat(IFormat<E> format) {
+    public void setFormat(IFormatter<E> format) {
         this.format = format;
         setValue(getValue(), false);
         getNativeComponent().refreshOptions();

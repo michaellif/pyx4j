@@ -24,7 +24,8 @@ import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.forms.client.events.HasAsyncValue;
@@ -41,7 +42,8 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
 
     public CLocationCriteriaTextField() {
         super();
-        setFormat(new GeoCriteriaFormat());
+        setFormatter(new GeoCriteriaFormat());
+        setParser(new GeoCriteriaParser());
         setNativeComponent(new NTextBox<GeoCriteria>(this));
         asWidget().setWidth("100%");
     }
@@ -76,12 +78,15 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
         }
     }
 
-    private static class GeoCriteriaFormat implements IFormat<GeoCriteria> {
+    private static class GeoCriteriaFormat implements IFormatter<GeoCriteria> {
 
         @Override
         public String format(GeoCriteria value) {
             return value.location().getStringView();
         }
+    }
+
+    private static class GeoCriteriaParser implements IParser<GeoCriteria> {
 
         @Override
         public GeoCriteria parse(String string) {

@@ -23,7 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.PersonalIdentityFormatter;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
@@ -42,9 +43,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     private static final I18n i18n = I18n.get(CPersonalIdentityField.class);
 
-    private final Class<T> entityClass;
-
-    public interface PersonalIdentityIFormat<V extends IPersonalIdentity> extends IFormat<V> {
+    public interface IPersonalIdentityFormat<V extends IPersonalIdentity> extends IFormatter<V> {
 
         String obfuscate(String data);
 
@@ -60,7 +59,6 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     public CPersonalIdentityField(Class<T> entityClass, PersonalIdentityFormatter formatter, boolean mandatory) {
         super();
-        this.entityClass = entityClass;
         setMandatory(mandatory);
         setPersonalIdentityFormatter(formatter);
         setNativeComponent(new NPersonalIdentityField<T>(this));
@@ -68,14 +66,9 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     }
 
     public void setPersonalIdentityFormatter(PersonalIdentityFormatter formatter) {
-        setFormat(new PersonalIdentityFormat<T>(this, formatter));
+        setFormatter(new PersonalIdentityFormat<T>(formatter));
+        setParser(new PersonalIdentityParser<T>(this, formatter));
         addComponentValidator(new TextBoxParserValidator<T>());
-    }
-
-    @Override
-    public void setFormat(IFormat<T> format) {
-        assert format instanceof PersonalIdentityIFormat;
-        super.setFormat(format);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {
@@ -128,7 +121,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     public void postprocess() {
         IPersonalIdentity value = getValue();
         if (value != null && !value.newNumber().isNull()) {
-            value.obfuscatedNumber().setValue(((PersonalIdentityIFormat<T>) getFormat()).obfuscate(value.newNumber().getValue()));
+            value.obfuscatedNumber().setValue(((IPersonalIdentityFormat<T>) getFormatter()).obfuscate(value.newNumber().getValue()));
             value.newNumber().setValue(null);
         }
     }
@@ -140,14 +133,11 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         super.setValueByString(name);
     }
 
-    private static class PersonalIdentityFormat<E extends IPersonalIdentity> implements PersonalIdentityIFormat<E> {
+    private static class PersonalIdentityFormat<E extends IPersonalIdentity> implements IPersonalIdentityFormat<E> {
 
-        private final CPersonalIdentityField<E> component;
+        final PersonalIdentityFormatter formatter;
 
-        private final PersonalIdentityFormatter formatter;
-
-        public PersonalIdentityFormat(CPersonalIdentityField<E> component, PersonalIdentityFormatter formatter) {
-            this.component = component;
+        public PersonalIdentityFormat(PersonalIdentityFormatter formatter) {
             this.formatter = formatter;
         }
 
@@ -164,6 +154,17 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         @Override
         public String obfuscate(String data) {
             return formatter.obfuscate(data);
+        }
+
+    }
+
+    private static class PersonalIdentityParser<E extends IPersonalIdentity> extends PersonalIdentityFormat<E> implements IParser<E> {
+
+        private final CPersonalIdentityField<E> component;
+
+        public PersonalIdentityParser(CPersonalIdentityField<E> component, PersonalIdentityFormatter formatter) {
+            super(formatter);
+            this.component = component;
         }
 
         @Override

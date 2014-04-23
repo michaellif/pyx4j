@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -43,7 +43,7 @@ public class CBooleanLabel extends CLabel<Boolean> {
     }
 
     public CBooleanLabel() {
-        setFormat(new IFormat<Boolean>() {
+        setFormatter(new IFormatter<Boolean>() {
 
             @Override
             public String format(Boolean value) {
@@ -56,10 +56,6 @@ public class CBooleanLabel extends CLabel<Boolean> {
                 }
             }
 
-            @Override
-            public Boolean parse(String string) {
-                return null;
-            }
         });
 
     }

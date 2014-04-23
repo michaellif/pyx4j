@@ -25,7 +25,8 @@ import java.text.ParseException;
 import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,7 +47,7 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
         setNativeComponent(new NTextBox<Key>(this));
         asWidget().setWidth("100%");
 
-        setFormat(new IFormat<Key>() {
+        setFormatter(new IFormatter<Key>() {
 
             @Override
             public String format(Key value) {
@@ -56,7 +57,9 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
                     return getNumberFormat().format(value.asLong());
                 }
             }
+        });
 
+        setParser(new IParser<Key>() {
             @Override
             public Key parse(String string) throws ParseException {
                 if (CommonsStringUtils.isEmpty(string)) {

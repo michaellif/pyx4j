@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
@@ -37,7 +37,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
 
     private final RadioGroup.Layout layout;
 
-    private IFormat<E> format;
+    private IFormatter<E> format;
 
     private List<E> options;
 
@@ -120,11 +120,11 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
         return addHandler(handler, OptionsChangeEvent.getType());
     }
 
-    public final IFormat<E> getFormat() {
+    public final IFormatter<E> getFormat() {
         return format;
     }
 
-    public void setFormat(IFormat<E> format) {
+    public final void setFormat(IFormatter<E> format) {
         this.format = format;
     }
 

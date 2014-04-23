@@ -24,7 +24,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CBigDecimalField extends CNumberField<BigDecimal> {
@@ -33,7 +34,7 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
 
     public CBigDecimalField() {
         super();
-        setFormat(new IFormat<BigDecimal>() {
+        setFormatter(new IFormatter<BigDecimal>() {
 
             @Override
             public String format(BigDecimal value) {
@@ -43,6 +44,10 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
                     return getNumberFormat().format(value);
                 }
             }
+
+        });
+
+        setParser(new IParser<BigDecimal>() {
 
             @Override
             public BigDecimal parse(String string) throws ParseException {

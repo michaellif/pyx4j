@@ -36,7 +36,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.ConverterUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
@@ -77,7 +78,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
         super();
         this.entityClass = entityClass;
         this.criteria = new EntityQueryCriteria<E>(entityClass);
-        setFormat(new EntitySuggestFormat());
+        setFormatter(new EntitySuggestFormatter());
+        setParser(new EntitySuggestParser());
         retriveOptions(null);
     }
 
@@ -279,7 +281,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
         }
     }
 
-    class EntitySuggestFormat implements IFormat<E> {
+    class EntitySuggestFormatter implements IFormatter<E> {
 
         @Override
         public String format(E value) {
@@ -289,6 +291,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
                 return value.getStringView();
             }
         }
+    }
+
+    class EntitySuggestParser implements IParser<E> {
 
         @Override
         public E parse(String string) {
@@ -312,7 +317,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
         if (getValue() == null || super.isValueEmpty() || getValue().isNull()) {
             return true;
         }
-        return CommonsStringUtils.isEmpty(getFormat().format(getValue()));
+        return CommonsStringUtils.isEmpty(getFormatter().format(getValue()));
     }
 
 }

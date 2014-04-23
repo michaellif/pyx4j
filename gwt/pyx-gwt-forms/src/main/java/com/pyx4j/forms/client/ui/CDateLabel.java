@@ -12,7 +12,7 @@ import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 
 public class CDateLabel extends CLabel<Date> {
 
@@ -23,18 +23,13 @@ public class CDateLabel extends CLabel<Date> {
 
     public void setDateFormat(final String format) {
         if (format != null) {
-            setFormat(new IFormat<Date>() {
+            setFormatter(new IFormatter<Date>() {
 
                 DateTimeFormat formatter = DateTimeFormat.getFormat(format);
 
                 @Override
                 public String format(Date value) {
                     return formatter.format(value);
-                }
-
-                @Override
-                public Date parse(String string) {
-                    return null;
                 }
 
             });

@@ -26,7 +26,8 @@ import java.util.Date;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -47,14 +48,15 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     public CDatePicker() {
         super();
-        setFormat(new DateFormat(defaultDateFormat));
+        setFormatter(new DateFormatter(defaultDateFormat));
+        setParser(new DateParser(defaultDateFormat));
         addComponentValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeComponent(new NDatePicker(this));
         asWidget().setWidth("100%");
     }
 
     public void setDateFormat(String pattern) {
-        setFormat(new DateFormat(pattern));
+        setFormatter(new DateFormatter(pattern));
     }
 
     public void setDateConditionValidationMessage(String dateConditionValidationMessage) {
@@ -100,20 +102,27 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     }
 
-    static class DateFormat implements IFormat<LogicalDate> {
-
-        private final DateTimeFormat parser;
+    public static class DateFormatter implements IFormatter<LogicalDate> {
 
         private final DateTimeFormat formatter;
 
-        DateFormat(String format) {
-            parser = DateTimeFormat.getFormat(format);
+        DateFormatter(String format) {
             formatter = DateTimeFormat.getFormat(format);
         }
 
         @Override
         public String format(LogicalDate value) {
             return formatter.format(value);
+        }
+
+    }
+
+    public static class DateParser implements IParser<LogicalDate> {
+
+        private final DateTimeFormat parser;
+
+        DateParser(String format) {
+            parser = DateTimeFormat.getFormat(format);
         }
 
         @Override

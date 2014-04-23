@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,21 +44,13 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
     public CEmailField(boolean mandatory) {
         super();
         this.setMandatory(mandatory);
-        setFormat(new EmailFormat());
+        setParser(new EmailParser());
         addComponentValidator(new TextBoxParserValidator<String>());
         setNativeComponent(new NTextBox<String>(this));
         asWidget().setWidth("100%");
     }
 
-    public static class EmailFormat implements IFormat<String> {
-
-        public EmailFormat() {
-        }
-
-        @Override
-        public String format(String value) {
-            return value;
-        }
+    public static class EmailParser implements IParser<String> {
 
         @Override
         public String parse(String string) throws ParseException {

@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Map;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.RadioGroup;
 
 public class CRadioGroupInteger extends CRadioGroup<Integer> {
@@ -32,17 +32,13 @@ public class CRadioGroupInteger extends CRadioGroup<Integer> {
     public CRadioGroupInteger(RadioGroup.Layout layout, Map<Integer, String> options) {
         super(layout);
         this.options = options;
-        setFormat(new IFormat<Integer>() {
+        setFormat(new IFormatter<Integer>() {
 
             @Override
             public String format(Integer value) {
                 return value == null ? "" : CRadioGroupInteger.this.options.get(value);
             }
 
-            @Override
-            public Integer parse(String string) {
-                return null;
-            }
         });
         setNativeComponent(new NRadioGroup<Integer>(this));
         super.setOptions(options.keySet());

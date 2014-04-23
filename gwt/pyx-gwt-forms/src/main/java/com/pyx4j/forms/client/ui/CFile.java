@@ -20,14 +20,14 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
 
 public class CFile extends CField<IFile<?>, NFile> {
 
-    private IFormat<IFile<?>> format;
+    private IFormatter<IFile<?>> format;
 
     private final UploadService<?, ?> service;
 
@@ -40,25 +40,19 @@ public class CFile extends CField<IFile<?>, NFile> {
 
         setNativeComponent(new NFile(this));
 
-        setFormat(new IFormat<IFile<?>>() {
+        setFormat(new IFormatter<IFile<?>>() {
             @Override
             public String format(IFile<?> value) {
                 return value.fileName().getStringView();
             }
-
-            @Override
-            public IFile<?> parse(String string) {
-                return getValue();
-            }
         });
-
     }
 
-    public void setFormat(IFormat<IFile<?>> format) {
+    public void setFormat(IFormatter<IFile<?>> format) {
         this.format = format;
     }
 
-    public IFormat<IFile<?>> getFormat() {
+    public IFormatter<IFile<?>> getFormat() {
         return format;
     }
 

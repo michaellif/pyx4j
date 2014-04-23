@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.prime.misc;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.site.client.AppSite;
@@ -85,7 +85,7 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
     public CEntityCollectionCrudHyperlink(final AppPlaceBuilder<E> placeBuilder) {
         super();
         this.placeBuilder = placeBuilder;
-        setFormat(new IFormat<E>() {
+        setFormatter(new IFormatter<E>() {
             @Override
             public String format(E value) {
                 if (value != null) {
@@ -95,10 +95,6 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
                 }
             }
 
-            @Override
-            public E parse(String string) {
-                return null;
-            }
         });
 
     }

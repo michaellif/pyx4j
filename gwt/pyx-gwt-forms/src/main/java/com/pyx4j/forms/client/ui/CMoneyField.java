@@ -21,9 +21,16 @@
 package com.pyx4j.forms.client.ui;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
 
-import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
+import com.google.gwt.i18n.client.NumberFormat;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
+import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
@@ -34,9 +41,49 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
 
     public CMoneyField() {
         super();
-        setFormat(new MoneyFormat());
+        setFormatter(new MoneyFormat());
+        setParser(new MoneyParser());
         addComponentValidator(new TextBoxParserValidator<BigDecimal>());
         setNativeComponent(new NTextBox<BigDecimal>(this));
         asWidget().setWidth("100%");
+    }
+
+    public static class MoneyFormat implements IFormatter<BigDecimal> {
+
+        final NumberFormat nf;
+
+        @I18nContext(javaFormatFlag = true)
+        public MoneyFormat() {
+            nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
+        }
+
+        @Override
+        public String format(BigDecimal value) {
+            if (value == null) {
+                return "";
+            } else {
+                return symbol + nf.format(value);
+            }
+        }
+    }
+
+    public static class MoneyParser extends MoneyFormat implements IParser<BigDecimal> {
+
+        @Override
+        public BigDecimal parse(String string) throws ParseException {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null; // empty value case
+            }
+            try {
+                string = string.trim();
+                if (string.startsWith(CMoneyField.symbol)) {
+                    string = string.substring(1);
+                }
+                return new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
+            } catch (NumberFormatException e) {
+                throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
+            }
+        }
+
     }
 }

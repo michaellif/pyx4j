@@ -23,17 +23,19 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 
 public class CSuggestStringBox extends CAbstractSuggestBox<String> {
 
     public CSuggestStringBox() {
         super();
-        setFormat(new SuggestFormat());
+        setFormatter(new SuggestFormat());
+        setParser(new SuggestParser());
         asWidget().setWidth("100%");
     }
 
-    static class SuggestFormat implements IFormat<String> {
+    static class SuggestFormat implements IFormatter<String> {
 
         @Override
         public String format(String value) {
@@ -42,6 +44,9 @@ public class CSuggestStringBox extends CAbstractSuggestBox<String> {
             }
             return value.toString();
         }
+    }
+
+    static class SuggestParser implements IParser<String> {
 
         @Override
         public String parse(String string) throws ParseException {

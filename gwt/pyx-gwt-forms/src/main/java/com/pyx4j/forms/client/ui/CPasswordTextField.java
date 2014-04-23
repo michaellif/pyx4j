@@ -23,14 +23,16 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
 public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox> {
 
     public CPasswordTextField() {
         super();
-        setFormat(new StringFormat());
+        setFormatter(new StringFormat());
+        setParser(new StringParser());
         setNativeComponent(new NPasswordTextBox(this));
         asWidget().setWidth("100%");
     }
@@ -49,7 +51,7 @@ public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox>
         return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
     }
 
-    static class StringFormat implements IFormat<String> {
+    static class StringFormat implements IFormatter<String> {
 
         @Override
         public String format(String value) {
@@ -58,6 +60,9 @@ public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox>
             }
             return value;
         }
+    }
+
+    static class StringParser implements IParser<String> {
 
         @Override
         public String parse(String string) throws ParseException {

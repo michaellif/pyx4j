@@ -26,7 +26,8 @@ import java.text.ParseException;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -46,14 +47,15 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
     }
 
     public void setTimeFormat(String format) {
-        setFormat(new TimeFormat(format));
+        setFormatter(new TimeFormat(format));
+        setParser(new TimeParser(format));
     }
 
-    public static class TimeFormat implements IFormat<Time> {
+    public static class TimeFormat implements IFormatter<Time> {
 
-        private final String timeFormat;
+        final String timeFormat;
 
-        private final DateTimeFormat parser;
+        final DateTimeFormat parser;
 
         public TimeFormat(final String format) {
             this.timeFormat = format;
@@ -66,6 +68,13 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
                 return null;
             }
             return parser.format(value);
+        }
+    }
+
+    public static class TimeParser extends TimeFormat implements IParser<Time> {
+
+        public TimeParser(final String format) {
+            super(format);
         }
 
         @Override

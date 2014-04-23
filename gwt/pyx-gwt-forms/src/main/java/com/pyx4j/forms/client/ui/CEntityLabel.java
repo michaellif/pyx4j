@@ -20,15 +20,14 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 
 public class CEntityLabel<E extends IEntity> extends CLabel<E> {
 
     public CEntityLabel() {
         super();
-        this.setFormat(new IFormat<E>() {
-
+        this.setFormatter(new IFormatter<E>() {
             @Override
             public String format(E value) {
                 if (value != null) {
@@ -36,11 +35,6 @@ public class CEntityLabel<E extends IEntity> extends CLabel<E> {
                 } else {
                     return null;
                 }
-            }
-
-            @Override
-            public E parse(String string) {
-                return null;
             }
         });
     }

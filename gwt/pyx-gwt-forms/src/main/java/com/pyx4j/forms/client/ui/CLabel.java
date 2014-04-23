@@ -20,31 +20,40 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 
 public class CLabel<E> extends CField<E, NLabel<E>> {
 
-    private IFormat<E> format;
+    private IFormatter<E> formatter;
 
     public CLabel() {
         super();
-        setFormat(new LabelFormat());
+        setFormatter(new IFormatter<E>() {
+            @Override
+            public String format(E value) {
+                if (value == null) {
+                    return null;
+                } else {
+                    return value.toString();
+                }
+            }
+        });
         setNativeComponent(new NLabel<E>(this));
         setEditable(false);
     }
 
-    public void setFormat(IFormat<E> format) {
-        this.format = format;
+    public void setFormatter(IFormatter<E> formatter) {
+        this.formatter = formatter;
     }
 
-    public IFormat<E> getFormat() {
-        return format;
+    public IFormatter<E> getFormatter() {
+        return formatter;
     }
 
     protected String format(E value) {
         String text = null;
         try {
-            text = getFormat().format(value);
+            text = getFormatter().format(value);
         } catch (Exception ignore) {
         }
         return text == null ? "" : text;
@@ -54,19 +63,4 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
         return format(getValue());
     }
 
-    class LabelFormat implements IFormat<E> {
-        @Override
-        public String format(E value) {
-            if (value == null) {
-                return null;
-            } else {
-                return value.toString();
-            }
-        }
-
-        @Override
-        public E parse(String string) {
-            return null;
-        }
-    }
 }

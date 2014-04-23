@@ -20,11 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 
 public class CHtml extends CField<String, NHtml> {
 
-    private IFormat<String> format;
+    private IFormatter<String> format;
 
     public CHtml() {
         super();
@@ -32,11 +32,11 @@ public class CHtml extends CField<String, NHtml> {
         setNativeComponent(new NHtml(this));
     }
 
-    public void setFormat(IFormat<String> format) {
+    public void setFormat(IFormatter<String> format) {
         this.format = format;
     }
 
-    public IFormat<String> getFormat() {
+    public IFormatter<String> getFormat() {
         return format;
     }
 
@@ -53,7 +53,7 @@ public class CHtml extends CField<String, NHtml> {
         return format(getValue());
     }
 
-    class HtmlFormat implements IFormat<String> {
+    class HtmlFormat implements IFormatter<String> {
         @Override
         public String format(String value) {
             if (value == null) {
@@ -63,9 +63,5 @@ public class CHtml extends CField<String, NHtml> {
             }
         }
 
-        @Override
-        public String parse(String string) {
-            return null;
-        }
     }
 }

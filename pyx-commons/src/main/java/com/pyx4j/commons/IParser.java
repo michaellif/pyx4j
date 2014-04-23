@@ -22,9 +22,7 @@ package com.pyx4j.commons;
 
 import java.text.ParseException;
 
-public interface IFormat<E> {
-
-    public String format(E value);
+public interface IParser<E> {
 
     /**
      * Note on triple logic return/except behaviour:

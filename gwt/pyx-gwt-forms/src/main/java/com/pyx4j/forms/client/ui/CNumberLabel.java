@@ -12,7 +12,7 @@ import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 
 public class CNumberLabel extends CLabel<Number> {
@@ -20,14 +20,14 @@ public class CNumberLabel extends CLabel<Number> {
     public void setNumberFormat(String format, boolean useMessageFormat) {
         if (format != null) {
             if (useMessageFormat) {
-                setFormat(new ViewNumberSimpleMessageFormat<Number>(format));
+                setFormatter(new ViewNumberSimpleMessageFormat<Number>(format));
             } else {
-                setFormat(new ViewNumberFormat<Number>(format));
+                setFormatter(new ViewNumberFormat<Number>(format));
             }
         }
     }
 
-    public static class ViewNumberFormat<T extends Number> implements IFormat<T> {
+    public static class ViewNumberFormat<T extends Number> implements IFormatter<T> {
 
         private final NumberFormat formatter;
 
@@ -40,13 +40,9 @@ public class CNumberLabel extends CLabel<Number> {
             return formatter.format(value);
         }
 
-        @Override
-        public T parse(String string) throws ParseException {
-            return null;
-        }
     }
 
-    public static class ViewNumberSimpleMessageFormat<T extends Number> implements IFormat<T> {
+    public static class ViewNumberSimpleMessageFormat<T extends Number> implements IFormatter<T> {
 
         private final String format;
 
@@ -59,10 +55,6 @@ public class CNumberLabel extends CLabel<Number> {
             return SimpleMessageFormat.format(format, value);
         }
 
-        @Override
-        public T parse(String string) throws ParseException {
-            return null;
-        }
     }
 
 }

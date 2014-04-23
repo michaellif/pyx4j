@@ -12,7 +12,7 @@ import java.sql.Time;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 
 public class CTimeLabel extends CLabel<Time> {
 
@@ -23,18 +23,13 @@ public class CTimeLabel extends CLabel<Time> {
 
     public void setTimeFormat(final String format) {
         if (format != null) {
-            setFormat(new IFormat<Time>() {
+            setFormatter(new IFormatter<Time>() {
 
                 DateTimeFormat formatter = DateTimeFormat.getFormat(format);
 
                 @Override
                 public String format(Time value) {
                     return formatter.format(value);
-                }
-
-                @Override
-                public Time parse(String string) {
-                    return null;
                 }
 
             });
