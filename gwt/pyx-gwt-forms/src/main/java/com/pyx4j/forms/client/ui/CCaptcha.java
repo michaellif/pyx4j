@@ -36,13 +36,6 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
         setNativeComponent(new NCaptcha(this));
     }
 
-    public void retrieveValue() {
-        //TODO validate if that code is needed
-        if (isVisible()) {
-            setValue(getNativeComponent().getNativeValue());
-        }
-    }
-
     @Override
     public boolean isValueEmpty() {
         if (isVisible()) {
