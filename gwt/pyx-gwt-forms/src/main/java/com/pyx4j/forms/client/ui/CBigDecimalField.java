@@ -34,7 +34,7 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
 
     public CBigDecimalField() {
         super();
-        setFormatter(new IFormatter<BigDecimal>() {
+        setFormatter(new IFormatter<BigDecimal, String>() {
 
             @Override
             public String format(BigDecimal value) {

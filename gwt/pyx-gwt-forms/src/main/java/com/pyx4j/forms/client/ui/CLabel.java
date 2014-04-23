@@ -24,29 +24,25 @@ import com.pyx4j.commons.IFormatter;
 
 public class CLabel<E> extends CField<E, NLabel<E>> {
 
-    private IFormatter<E> formatter;
+    private IFormatter<E, String> formatter;
 
     public CLabel() {
         super();
-        setFormatter(new IFormatter<E>() {
+        setFormatter(new IFormatter<E, String>() {
             @Override
             public String format(E value) {
-                if (value == null) {
-                    return null;
-                } else {
-                    return value.toString();
-                }
+                return value == null ? null : value.toString();
             }
         });
         setNativeComponent(new NLabel<E>(this));
         setEditable(false);
     }
 
-    public void setFormatter(IFormatter<E> formatter) {
+    public void setFormatter(IFormatter<E, String> formatter) {
         this.formatter = formatter;
     }
 
-    public IFormatter<E> getFormatter() {
+    public IFormatter<E, String> getFormatter() {
         return formatter;
     }
 

@@ -20,8 +20,8 @@
  */
 package com.pyx4j.commons;
 
-public interface IFormatter<E> {
+public interface IFormatter<DATA_TYPE, FORMAT_TYPE> {
 
-    public String format(E value);
+    public FORMAT_TYPE format(DATA_TYPE value);
 
 }

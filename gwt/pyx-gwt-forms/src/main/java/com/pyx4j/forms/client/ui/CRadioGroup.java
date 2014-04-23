@@ -37,7 +37,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
 
     private final RadioGroup.Layout layout;
 
-    private IFormatter<E> format;
+    private IFormatter<E, String> format;
 
     private List<E> options;
 
@@ -120,11 +120,11 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
         return addHandler(handler, OptionsChangeEvent.getType());
     }
 
-    public final IFormatter<E> getFormat() {
+    public final IFormatter<E, String> getFormat() {
         return format;
     }
 
-    public final void setFormat(IFormatter<E> format) {
+    public final void setFormat(IFormatter<E, String> format) {
         this.format = format;
     }
 

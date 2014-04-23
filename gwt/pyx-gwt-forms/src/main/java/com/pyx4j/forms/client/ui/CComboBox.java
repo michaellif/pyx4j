@@ -41,7 +41,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     private NotInOptionsPolicy policy;
 
-    private IFormatter<E> format;
+    private IFormatter<E, String> format;
 
     public enum NotInOptionsPolicy {
         KEEP, DISCARD;
@@ -57,7 +57,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     public CComboBox(NotInOptionsPolicy policy) {
-        this(policy, new IFormatter<E>() {
+        this(policy, new IFormatter<E, String>() {
 
             @Override
             public String format(E o) {
@@ -72,7 +72,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         });
     }
 
-    public CComboBox(NotInOptionsPolicy policy, IFormatter<E> format) {
+    public CComboBox(NotInOptionsPolicy policy, IFormatter<E, String> format) {
         super();
         this.format = format;
         if (policy == null) {
@@ -166,7 +166,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         return format.format(o);
     }
 
-    public void setFormat(IFormatter<E> format) {
+    public void setFormat(IFormatter<E, String> format) {
         this.format = format;
         setValue(getValue(), false);
         getNativeComponent().refreshOptions();

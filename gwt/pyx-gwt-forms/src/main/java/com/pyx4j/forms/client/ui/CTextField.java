@@ -51,7 +51,7 @@ public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
         return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
     }
 
-    static class StringFormat implements IFormatter<String> {
+    static class StringFormat implements IFormatter<String, String> {
 
         @Override
         public String format(String value) {

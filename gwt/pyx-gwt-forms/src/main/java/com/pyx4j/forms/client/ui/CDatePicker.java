@@ -102,7 +102,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     }
 
-    public static class DateFormatter implements IFormatter<LogicalDate> {
+    public static class DateFormatter implements IFormatter<LogicalDate, String> {
 
         private final DateTimeFormat formatter;
 

@@ -85,7 +85,7 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
     public CEntityCollectionCrudHyperlink(final AppPlaceBuilder<E> placeBuilder) {
         super();
         this.placeBuilder = placeBuilder;
-        setFormatter(new IFormatter<E>() {
+        setFormatter(new IFormatter<E, String>() {
             @Override
             public String format(E value) {
                 if (value != null) {

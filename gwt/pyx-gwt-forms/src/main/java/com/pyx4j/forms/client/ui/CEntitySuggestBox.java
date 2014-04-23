@@ -281,7 +281,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
         }
     }
 
-    class EntitySuggestFormatter implements IFormatter<E> {
+    class EntitySuggestFormatter implements IFormatter<E, String> {
 
         @Override
         public String format(E value) {

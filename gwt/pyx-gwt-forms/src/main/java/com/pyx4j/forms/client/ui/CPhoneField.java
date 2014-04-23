@@ -65,7 +65,7 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
         }
     }
 
-    public static class PhoneFormatter implements IFormatter<String> {
+    public static class PhoneFormatter implements IFormatter<String, String> {
 
         final PhoneType phoneType;
 
@@ -163,7 +163,7 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
 
             }
 
-            return format(string);
+            return string;
         }
     }
 

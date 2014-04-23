@@ -78,7 +78,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
         }
     }
 
-    private static class GeoCriteriaFormat implements IFormatter<GeoCriteria> {
+    private static class GeoCriteriaFormat implements IFormatter<GeoCriteria, String> {
 
         @Override
         public String format(GeoCriteria value) {

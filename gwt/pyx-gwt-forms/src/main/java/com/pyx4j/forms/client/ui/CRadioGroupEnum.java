@@ -34,7 +34,7 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
 
     public CRadioGroupEnum(Class<E> optionsClass, Collection<E> opt, RadioGroup.Layout layout) {
         super(layout);
-        setFormat(new IFormatter<E>() {
+        setFormat(new IFormatter<E, String>() {
             @Override
             public String format(E value) {
                 if (value != null) {

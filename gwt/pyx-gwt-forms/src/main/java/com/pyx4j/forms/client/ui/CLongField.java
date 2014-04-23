@@ -33,7 +33,7 @@ public class CLongField extends CNumberField<Long> {
 
     public CLongField() {
         super();
-        setFormatter(new IFormatter<Long>() {
+        setFormatter(new IFormatter<Long, String>() {
 
             @Override
             public String format(Long value) {

@@ -23,7 +23,7 @@ public class CTimeLabel extends CLabel<Time> {
 
     public void setTimeFormat(final String format) {
         if (format != null) {
-            setFormatter(new IFormatter<Time>() {
+            setFormatter(new IFormatter<Time, String>() {
 
                 DateTimeFormat formatter = DateTimeFormat.getFormat(format);
 

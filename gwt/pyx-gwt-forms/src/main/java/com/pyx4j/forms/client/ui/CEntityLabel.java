@@ -27,7 +27,7 @@ public class CEntityLabel<E extends IEntity> extends CLabel<E> {
 
     public CEntityLabel() {
         super();
-        this.setFormatter(new IFormatter<E>() {
+        this.setFormatter(new IFormatter<E, String>() {
             @Override
             public String format(E value) {
                 if (value != null) {

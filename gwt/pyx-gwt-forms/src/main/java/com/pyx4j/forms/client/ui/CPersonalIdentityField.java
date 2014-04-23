@@ -43,7 +43,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     private static final I18n i18n = I18n.get(CPersonalIdentityField.class);
 
-    public interface IPersonalIdentityFormat<V extends IPersonalIdentity> extends IFormatter<V> {
+    public interface IPersonalIdentityFormat<V extends IPersonalIdentity> extends IFormatter<V, String> {
 
         String obfuscate(String data);
 

@@ -43,7 +43,7 @@ public class CBooleanLabel extends CLabel<Boolean> {
     }
 
     public CBooleanLabel() {
-        setFormatter(new IFormatter<Boolean>() {
+        setFormatter(new IFormatter<Boolean, String>() {
 
             @Override
             public String format(Boolean value) {

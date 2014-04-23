@@ -51,7 +51,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
         setParser(new TimeParser(format));
     }
 
-    public static class TimeFormat implements IFormatter<Time> {
+    public static class TimeFormat implements IFormatter<Time, String> {
 
         final String timeFormat;
 

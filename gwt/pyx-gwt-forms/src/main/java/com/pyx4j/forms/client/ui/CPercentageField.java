@@ -48,7 +48,7 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
         setFormatter(new PercentageFormat(pattern));
     }
 
-    public static class PercentageFormat implements IFormatter<BigDecimal> {
+    public static class PercentageFormat implements IFormatter<BigDecimal, String> {
 
         private final NumberFormat nf;
 

@@ -33,7 +33,7 @@ public class CDoubleField extends CNumberField<Double> {
 
     public CDoubleField() {
         super();
-        setFormatter(new IFormatter<Double>() {
+        setFormatter(new IFormatter<Double, String>() {
 
             @Override
             public String format(Double value) {

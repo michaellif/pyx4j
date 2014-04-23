@@ -23,7 +23,7 @@ public class CDateLabel extends CLabel<Date> {
 
     public void setDateFormat(final String format) {
         if (format != null) {
-            setFormatter(new IFormatter<Date>() {
+            setFormatter(new IFormatter<Date, String>() {
 
                 DateTimeFormat formatter = DateTimeFormat.getFormat(format);
 

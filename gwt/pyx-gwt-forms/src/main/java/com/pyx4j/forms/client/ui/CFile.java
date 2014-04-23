@@ -27,7 +27,7 @@ import com.pyx4j.gwt.shared.IFileURLBuilder;
 
 public class CFile extends CField<IFile<?>, NFile> {
 
-    private IFormatter<IFile<?>> format;
+    private IFormatter<IFile<?>, String> format;
 
     private final UploadService<?, ?> service;
 
@@ -40,7 +40,7 @@ public class CFile extends CField<IFile<?>, NFile> {
 
         setNativeComponent(new NFile(this));
 
-        setFormat(new IFormatter<IFile<?>>() {
+        setFormat(new IFormatter<IFile<?>, String>() {
             @Override
             public String format(IFile<?> value) {
                 return value.fileName().getStringView();
@@ -48,11 +48,11 @@ public class CFile extends CField<IFile<?>, NFile> {
         });
     }
 
-    public void setFormat(IFormatter<IFile<?>> format) {
+    public void setFormat(IFormatter<IFile<?>, String> format) {
         this.format = format;
     }
 
-    public IFormatter<IFile<?>> getFormat() {
+    public IFormatter<IFile<?>, String> getFormat() {
         return format;
     }
 

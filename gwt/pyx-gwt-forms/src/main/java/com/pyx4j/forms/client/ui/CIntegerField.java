@@ -33,7 +33,7 @@ public class CIntegerField extends CNumberField<Integer> {
 
     public CIntegerField() {
         super();
-        setFormatter(new IFormatter<Integer>() {
+        setFormatter(new IFormatter<Integer, String>() {
 
             @Override
             public String format(Integer value) {

@@ -32,7 +32,7 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
     public CRadioGroupBoolean(RadioGroup.Layout layout) {
         super(layout);
-        setFormat(new IFormatter<Boolean>() {
+        setFormat(new IFormatter<Boolean, String>() {
 
             @Override
             public String format(Boolean value) {

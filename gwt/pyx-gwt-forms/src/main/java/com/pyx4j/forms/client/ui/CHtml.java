@@ -20,48 +20,46 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+
 import com.pyx4j.commons.IFormatter;
 
-public class CHtml extends CField<String, NHtml> {
+public class CHtml<E> extends CField<E, NHtml<E>> {
 
-    private IFormatter<String> format;
+    private IFormatter<E, SafeHtml> formatter;
 
     public CHtml() {
         super();
-        setFormat(new HtmlFormat());
-        setNativeComponent(new NHtml(this));
+        setFormatter(new IFormatter<E, SafeHtml>() {
+            @Override
+            public SafeHtml format(E value) {
+                SafeHtmlBuilder builder = new SafeHtmlBuilder();
+                if (value != null) {
+                    builder.appendHtmlConstant(value.toString());
+                }
+                return builder.toSafeHtml();
+            }
+
+        });
+        setNativeComponent(new NHtml<E>(this));
+        setEditable(false);
     }
 
-    public void setFormat(IFormatter<String> format) {
-        this.format = format;
+    public void setFormatter(IFormatter<E, SafeHtml> formatter) {
+        this.formatter = formatter;
     }
 
-    public IFormatter<String> getFormat() {
-        return format;
+    public IFormatter<E, SafeHtml> getFormatter() {
+        return formatter;
     }
 
-    protected String format(String value) {
-        String text = null;
-        try {
-            text = getFormat().format(value);
-        } catch (Exception ignore) {
-        }
-        return text == null ? "" : text;
+    protected SafeHtml format(E value) {
+        return getFormatter().format(value);
     }
 
-    public String getFormattedValue() {
+    public SafeHtml getFormattedValue() {
         return format(getValue());
     }
 
-    class HtmlFormat implements IFormatter<String> {
-        @Override
-        public String format(String value) {
-            if (value == null) {
-                return null;
-            } else {
-                return value.toString();
-            }
-        }
-
-    }
 }

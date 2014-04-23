@@ -37,14 +37,14 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<DATA>> extends CTextComponent<DATA, WIDGET> implements IAcceptText,
         HasNValueChangeHandlers<String> {
 
-    private IFormatter<DATA> formatter;
+    private IFormatter<DATA, String> formatter;
 
     private IParser<DATA> parser;
 
     public CTextFieldBase() {
         super();
 
-        setFormatter(new IFormatter<DATA>() {
+        setFormatter(new IFormatter<DATA, String>() {
             @Override
             public String format(DATA value) {
                 if (value == null) {
@@ -57,11 +57,11 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     }
 
-    public final void setFormatter(IFormatter<DATA> formatter) {
+    public final void setFormatter(IFormatter<DATA, String> formatter) {
         this.formatter = formatter;
     }
 
-    public final IFormatter<DATA> getFormatter() {
+    public final IFormatter<DATA, String> getFormatter() {
         return formatter;
     }
 

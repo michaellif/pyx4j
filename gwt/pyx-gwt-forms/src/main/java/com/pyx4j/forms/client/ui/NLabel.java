@@ -24,14 +24,14 @@ import java.text.ParseException;
 
 import com.pyx4j.widgets.client.Label;
 
-public class NLabel<DATA> extends NField<DATA, Label, CLabel<DATA>, Label> {
+public class NLabel<E> extends NField<E, Label, CLabel<E>, Label> {
 
-    public NLabel(CLabel<DATA> cComponent) {
+    public NLabel(CLabel<E> cComponent) {
         super(cComponent);
     }
 
     @Override
-    public void setNativeValue(DATA value) {
+    public void setNativeValue(E value) {
         String newValue = getCComponent().format(value);
         if (isViewable()) {
             getViewer().setText(newValue);
@@ -43,7 +43,7 @@ public class NLabel<DATA> extends NField<DATA, Label, CLabel<DATA>, Label> {
     }
 
     @Override
-    public DATA getNativeValue() throws ParseException {
+    public E getNativeValue() throws ParseException {
         throw new IllegalStateException("getNativeValue() shouldn't be called in viewable mode");
     }
 

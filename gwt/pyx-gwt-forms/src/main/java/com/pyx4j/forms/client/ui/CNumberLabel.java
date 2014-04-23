@@ -8,8 +8,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
-
 import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.commons.IFormatter;
@@ -27,7 +25,7 @@ public class CNumberLabel extends CLabel<Number> {
         }
     }
 
-    public static class ViewNumberFormat<T extends Number> implements IFormatter<T> {
+    public static class ViewNumberFormat<T extends Number> implements IFormatter<T, String> {
 
         private final NumberFormat formatter;
 
@@ -42,7 +40,7 @@ public class CNumberLabel extends CLabel<Number> {
 
     }
 
-    public static class ViewNumberSimpleMessageFormat<T extends Number> implements IFormatter<T> {
+    public static class ViewNumberSimpleMessageFormat<T extends Number> implements IFormatter<T, String> {
 
         private final String format;
 

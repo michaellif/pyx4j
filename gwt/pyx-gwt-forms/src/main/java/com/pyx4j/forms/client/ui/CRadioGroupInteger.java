@@ -32,7 +32,7 @@ public class CRadioGroupInteger extends CRadioGroup<Integer> {
     public CRadioGroupInteger(RadioGroup.Layout layout, Map<Integer, String> options) {
         super(layout);
         this.options = options;
-        setFormat(new IFormatter<Integer>() {
+        setFormat(new IFormatter<Integer, String>() {
 
             @Override
             public String format(Integer value) {

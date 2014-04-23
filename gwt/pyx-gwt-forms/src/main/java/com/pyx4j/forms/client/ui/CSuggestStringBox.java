@@ -35,7 +35,7 @@ public class CSuggestStringBox extends CAbstractSuggestBox<String> {
         asWidget().setWidth("100%");
     }
 
-    static class SuggestFormat implements IFormatter<String> {
+    static class SuggestFormat implements IFormatter<String, String> {
 
         @Override
         public String format(String value) {

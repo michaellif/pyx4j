@@ -27,7 +27,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     private static final I18n i18n = I18n.get(CRadioGroupBoolean.class);
 
-    private IFormatter<Boolean> format;
+    private IFormatter<Boolean, String> format;
 
     private Alignment alignment;
 
@@ -39,7 +39,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
         super();
         alignment = Alignment.left;
         populate(false);
-        setFormat(new IFormatter<Boolean>() {
+        setFormat(new IFormatter<Boolean, String>() {
             @Override
             public String format(Boolean value) {
                 if (value == null || !value) {
@@ -54,11 +54,11 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
         setNativeComponent(new NCheckBox(this));
     }
 
-    public IFormatter<Boolean> getFormat() {
+    public IFormatter<Boolean, String> getFormat() {
         return format;
     }
 
-    public void setFormat(IFormatter<Boolean> format) {
+    public void setFormat(IFormatter<Boolean, String> format) {
         this.format = format;
     }
 

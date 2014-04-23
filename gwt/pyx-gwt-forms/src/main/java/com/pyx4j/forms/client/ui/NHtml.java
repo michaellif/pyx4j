@@ -22,17 +22,20 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+
 import com.pyx4j.widgets.client.Label;
 
-public class NHtml extends NField<String, Label, CHtml, Label> {
+public class NHtml<E> extends NField<E, Label, CHtml<E>, Label> {
 
-    public NHtml(CHtml cComponent) {
+    public NHtml(CHtml<E> cComponent) {
         super(cComponent);
+        addStyleName("TESTTEST");
     }
 
     @Override
-    public void setNativeValue(String value) {
-        String newValue = getCComponent().format(value);
+    public void setNativeValue(E value) {
+        SafeHtml newValue = getCComponent().format(value);
         if (isViewable()) {
             getViewer().setHTML(newValue);
         } else {
@@ -43,7 +46,7 @@ public class NHtml extends NField<String, Label, CHtml, Label> {
     }
 
     @Override
-    public String getNativeValue() throws ParseException {
+    public E getNativeValue() throws ParseException {
         throw new IllegalStateException("getNativeValue() shouldn't be called in viewable mode");
     }
 
