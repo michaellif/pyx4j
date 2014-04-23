@@ -90,7 +90,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     }
 
     @Override
-    public IsWidget getContent() {
+    public final IsWidget getContent() {
         return contentPanel;
     }
 

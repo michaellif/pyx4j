@@ -25,7 +25,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public class CCaptcha extends CField<Pair<String, String>, NativeCaptcha> {
+public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
 
@@ -33,7 +33,7 @@ public class CCaptcha extends CField<Pair<String, String>, NativeCaptcha> {
 
     public CCaptcha() {
         setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
-        setNativeComponent(new NativeCaptcha(this));
+        setNativeComponent(new NCaptcha(this));
     }
 
     public void retrieveValue() {

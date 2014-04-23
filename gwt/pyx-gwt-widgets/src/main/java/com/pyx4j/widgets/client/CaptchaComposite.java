@@ -24,10 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -49,7 +53,7 @@ import com.pyx4j.i18n.shared.I18n;
  * @see <a href="http://code.google.com/apis/recaptcha/docs/customization.html">Customization</a>
  * 
  */
-public class CaptchaComposite extends SimplePanel {
+public class CaptchaComposite extends SimplePanel implements IFocusWidget {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
 
@@ -204,6 +208,7 @@ public class CaptchaComposite extends SimplePanel {
         return CommonsStringUtils.isStringSet(publicKey);
     }
 
+    @Override
     public void setFocus(boolean focused) {
         response.setFocus(focused);
     }
@@ -337,6 +342,57 @@ public class CaptchaComposite extends SimplePanel {
 
     public TextBox getResponseTextBox() {
         return response;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+    }
+
+    @Override
+    public boolean isEditable() {
+        return true;
+    }
+
+    @Override
+    public int getTabIndex() {
+        return 0;
+    }
+
+    @Override
+    public void setAccessKey(char key) {
+    }
+
+    @Override
+    public void setTabIndex(int index) {
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return null;
     }
 
 }
