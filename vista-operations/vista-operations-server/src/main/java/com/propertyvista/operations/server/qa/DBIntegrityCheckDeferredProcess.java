@@ -180,6 +180,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
                         }
                         int keys = Persistence.service().count(EntityQueryCriteria.create(entityClass));
                         tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
+                        RDBUtils.validateTable(entityClass);
                     }
                 }
                 for (Entry<String, Integer> entry : tablesMap.entrySet()) {
