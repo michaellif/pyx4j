@@ -74,6 +74,7 @@ public interface DirectDebitRecord extends IEntity {
     IPrimitive<Date> receivedDate();
 
     @NotNull
+    @Indexed(group = { "m,2" })
     IPrimitive<DirectDebitRecordProcessingStatus> processingStatus();
 
     DirectDebitRecordTrace trace();
