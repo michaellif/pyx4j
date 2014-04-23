@@ -13,14 +13,19 @@
  */
 package com.propertyvista.crm.client.activity.tools.legal.n4;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
@@ -30,6 +35,9 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.tools.common.DeferredProcessController;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorState;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel.MultiSelectorCellModelFactory;
 import com.propertyvista.crm.client.ui.tools.legal.n4.N4CreateBatchView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
@@ -46,9 +54,21 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
 
     protected Vector<LegalNoticeCandidateDTO> items;
 
+    private MultiSelectionModel<LegalNoticeCandidateDTO> selectionModel;
+
+    private MultiSelectorCellModelFactory selectionStatesModelFactory;
+
     public N4CreateBatchActivityMk2(CrudAppPlace crudPlace) {
         service = GWT.<N4CreateBatchService> create(N4CreateBatchService.class);
         view = CrmSite.getViewFactory().getView(N4CreateBatchView.class);
+        selectionStatesModelFactory = new MultiSelectorCellModelFactory(new ArrayList<>());
+
+        selectionModel = new MultiSelectionModel<LegalNoticeCandidateDTO>(new ProvidesKey<LegalNoticeCandidateDTO>() {
+            @Override
+            public Object getKey(LegalNoticeCandidateDTO item) {
+                return item.leaseId().getPrimaryKey();
+            }
+        });
         searchResultsProvider = new ListDataProvider<LegalNoticeCandidateDTO>(new LinkedList<LegalNoticeCandidateDTO>(), this);
         deferredProcessContoller = new DeferredProcessController();
     }
@@ -64,6 +84,8 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         searchResultsProvider.addDataDisplay(view.searchResults());
+        ((AbstractHasData<LegalNoticeCandidateDTO>) view.searchResults()).setSelectionModel(selectionModel,
+                DefaultSelectionEventManager.<LegalNoticeCandidateDTO> createCheckboxManager(0));
         panel.setWidget(view);
     }
 
@@ -97,6 +119,40 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
                 });
             }
         }, view.getSearchCriteria());
+    }
+
+    @Override
+    public SelectionPresetModel getSelectionState() {
+        if (getSelectionModel() != null && getSelectionModel() instanceof MultiSelectionModel) {
+            MultiSelectionModel<LegalNoticeCandidateDTO> selectionModel = (getSelectionModel());
+            MultiSelectorState state = selectionModel.getSelectedSet().size() > 0 ? MultiSelectorState.Some : MultiSelectorState.None;
+            state = selectionModel.getSelectedSet().size() == searchResultsProvider.getList().size() ? MultiSelectorState.All : state;
+
+            if (state == MultiSelectorState.All) {
+                return selectionStatesModelFactory.makeAll();
+            } else if (state == MultiSelectorState.Some) {
+                return selectionStatesModelFactory.makeSome();
+            }
+            return selectionStatesModelFactory.makeNone();
+
+        } else {
+            return selectionStatesModelFactory.makeNone();
+        }
+    }
+
+    @Override
+    public void updateSelection(SelectionPresetModel value) {
+        if (value.getState() == MultiSelectorState.None || value.getState() == MultiSelectorState.Some) {
+            selectionModel.clear();
+        } else {
+            for (LegalNoticeCandidateDTO c : searchResultsProvider.getList()) {
+                selectionModel.setSelected(c, false);
+            }
+        }
+    }
+
+    public MultiSelectionModel<LegalNoticeCandidateDTO> getSelectionModel() {
+        return selectionModel;
     }
 
     @Override

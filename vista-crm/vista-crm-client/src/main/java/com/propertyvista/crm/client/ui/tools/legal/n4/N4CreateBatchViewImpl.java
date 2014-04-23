@@ -107,6 +107,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
     @Override
     public void setPresenter(N4CreateBatchView.Presenter presenter) {
         this.presenter = presenter;
+        searchCandidateDataGrid.setPresenter(presenter);
     }
 
     @Override

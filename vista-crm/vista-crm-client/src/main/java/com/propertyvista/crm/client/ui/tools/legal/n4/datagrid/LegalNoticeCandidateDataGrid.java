@@ -13,21 +13,29 @@
  */
 package com.propertyvista.crm.client.ui.tools.legal.n4.datagrid;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.NumberCell;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.Header;
 
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel.MultiSelectorCellModelFactory;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGrid;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
+import com.propertyvista.crm.client.ui.tools.legal.n4.N4CreateBatchView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 
 public class LegalNoticeCandidateDataGrid extends VistaDataGrid<LegalNoticeCandidateDTO> {
@@ -39,12 +47,19 @@ public class LegalNoticeCandidateDataGrid extends VistaDataGrid<LegalNoticeCandi
     private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
     //@formatter:on
 
+    private N4CreateBatchView.Presenter presenter;
+
     public LegalNoticeCandidateDataGrid() {
         super(LegalNoticeCandidateDTO.class, false);
         initColumns();
     }
 
+    public void setPresenter(N4CreateBatchView.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
     private void initColumns() {
+        initSelectionColumn();
         initBuildingColumn();
         initUnitColumn();
         // TODO initAddressColumn(); 
@@ -53,6 +68,36 @@ public class LegalNoticeCandidateDataGrid extends VistaDataGrid<LegalNoticeCandi
         initMoveOutColumn();
         initAmountOwedColumn();
         initN4IssuedColumn();
+    }
+
+    private void initSelectionColumn() {
+
+        Column<LegalNoticeCandidateDTO, Boolean> selectionColumn = new Column<LegalNoticeCandidateDTO, Boolean>(new CheckboxCell(true, false)) {
+            @Override
+            public Boolean getValue(LegalNoticeCandidateDTO object) {
+                return getSelectionModel() != null ? getSelectionModel().isSelected(object) : false;
+            }
+        };
+
+        Header<SelectionPresetModel> selectionColumnHeader = new Header<SelectionPresetModel>(new MultiSelectorCell(new MultiSelectorCellModelFactory(
+                new ArrayList<Object>()))) {
+            @Override
+            public SelectionPresetModel getValue() {
+                return LegalNoticeCandidateDataGrid.this.presenter.getSelectionState();
+            }
+        };
+        selectionColumnHeader.setUpdater(new ValueUpdater<SelectionPresetModel>() {
+            @Override
+            public void update(SelectionPresetModel value) {
+                if (LegalNoticeCandidateDataGrid.this.presenter != null) {
+                    LegalNoticeCandidateDataGrid.this.presenter.updateSelection(value);
+                }
+            }
+        });
+
+        this.addColumn(selectionColumn, selectionColumnHeader);
+        this.setColumnWidth(selectionColumn, 40, Unit.PX);
+
     }
 
     private void initBuildingColumn() {
@@ -105,4 +150,5 @@ public class LegalNoticeCandidateDataGrid extends VistaDataGrid<LegalNoticeCandi
         c.setSortable(true);
         c.setDataStoreName(proto().n4Issued().getPath().toString());
     }
+
 }
