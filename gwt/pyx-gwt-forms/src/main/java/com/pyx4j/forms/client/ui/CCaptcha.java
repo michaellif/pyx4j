@@ -29,8 +29,6 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
 
-    private String watermark;
-
     public CCaptcha() {
         setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
         setNativeComponent(new NCaptcha(this));
@@ -50,12 +48,7 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
     }
 
     public void setWatermark(String watermark) {
-        this.watermark = watermark;
         ((WatermarkComponent) asWidget()).setWatermark(watermark);
-    }
-
-    public String getWatermark() {
-        return watermark;
     }
 
 }
