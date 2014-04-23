@@ -57,7 +57,7 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedAgreementConf
             CLabel<String> caption = new CLabel<String>();
             caption.asWidget().addStyleName(FlexFormPanelTheme.StyleName.FormFlexPanelH1Label.name());
             mainPanel.setWidget(++row, 0, inject(proto().term().title(), caption));
-            mainPanel.setWidget(++row, 0, inject(proto().term().body(), new CHtml()));
+            mainPanel.setWidget(++row, 0, inject(proto().term().body(), new CHtml<String>()));
 
             mainPanel.setWidget(
                     ++row,

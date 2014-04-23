@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
-import java.text.ParseException;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
@@ -43,7 +41,7 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
             content.setH2(++row, 0, 1, i18n.tr("Occupancy:"));
 
             content.setWidget(++row, 0, inject(proto().occupiedUnits(), new CLabel<Integer>(), new FieldDecoratorBuilder().componentWidth(15).build()));
-            ((CLabel<Integer>) get(proto().occupiedUnits())).setFormatter(new IFormatter<Integer>() {
+            ((CLabel<Integer>) get(proto().occupiedUnits())).setFormatter(new IFormatter<Integer, String>() {
 
                 @Override
                 public String format(Integer value) {

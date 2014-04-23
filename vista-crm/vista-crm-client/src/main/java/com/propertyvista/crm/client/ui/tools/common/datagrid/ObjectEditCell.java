@@ -83,7 +83,7 @@ public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors>
 
     }
 
-    protected final IFormatter<E> format;
+    protected final IFormatter<E, String> format;
 
     protected final IParser<E> parser;
 
@@ -104,7 +104,7 @@ public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors>
      * @param style
      *            Optional. sets styles for the input cell
      */
-    public ObjectEditCell(IFormatter<E> format, IParser<E> parser, Style style) {
+    public ObjectEditCell(IFormatter<E, String> format, IParser<E> parser, Style style) {
         super(BrowserEvents.BLUR, BrowserEvents.MOUSEOVER, BrowserEvents.MOUSEOUT);
         this.template = GWT.create(Template.class);
         this.style = (style != null) ? style : new DefaultStyle();

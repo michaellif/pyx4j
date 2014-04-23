@@ -37,7 +37,7 @@ public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
             }
         });
 
-        setFormatter(new IFormatter<LeaseTermV>() {
+        setFormatter(new IFormatter<LeaseTermV, String>() {
             @Override
             public String format(LeaseTermV value) {
                 if (value != null) {

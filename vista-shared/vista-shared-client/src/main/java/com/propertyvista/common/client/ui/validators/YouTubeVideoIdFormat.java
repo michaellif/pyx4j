@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.IFormatter;
 
-public class YouTubeVideoIdFormat implements IFormatter<String> {
+public class YouTubeVideoIdFormat implements IFormatter<String, String> {
 
     @Override
     public String format(String value) {

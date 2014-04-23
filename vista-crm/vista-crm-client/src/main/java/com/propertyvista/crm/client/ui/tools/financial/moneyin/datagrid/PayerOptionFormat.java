@@ -17,7 +17,7 @@ import com.pyx4j.commons.IFormatter;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
-public class PayerOptionFormat implements IFormatter<MoneyInLeaseParticipantDTO> {
+public class PayerOptionFormat implements IFormatter<MoneyInLeaseParticipantDTO, String> {
 
     @Override
     public String format(MoneyInLeaseParticipantDTO value) {

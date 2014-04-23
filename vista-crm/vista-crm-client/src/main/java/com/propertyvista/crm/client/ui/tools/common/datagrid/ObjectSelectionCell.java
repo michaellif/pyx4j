@@ -48,14 +48,14 @@ public class ObjectSelectionCell<E> extends AbstractInputCell<ObjectSelectionSta
 
     private static Template template = null;
 
-    private IFormatter<E> format;
+    private IFormatter<E, String> format;
 
-    public ObjectSelectionCell(IFormatter<E> format) {
+    public ObjectSelectionCell(IFormatter<E, String> format) {
         super(BrowserEvents.CHANGE);
         if (template == null) {
             template = GWT.create(Template.class);
         }
-        this.format = format != null ? format : new IFormatter<E>() {
+        this.format = format != null ? format : new IFormatter<E, String>() {
             @Override
             public String format(E value) {
                 return value.toString();

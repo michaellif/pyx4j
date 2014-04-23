@@ -22,7 +22,7 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
 
     public PapBillableItemLabel() {
         super();
-        setFormatter(new IFormatter<BillableItem>() {
+        setFormatter(new IFormatter<BillableItem, String>() {
             @Override
             public String format(BillableItem value) {
                 if (value != null) {

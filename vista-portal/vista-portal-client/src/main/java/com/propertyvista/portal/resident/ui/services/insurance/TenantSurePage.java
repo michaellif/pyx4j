@@ -78,7 +78,7 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         mainPanel.setWidget(++row, 0, inject(proto().certificate().liabilityCoverage(), new FieldDecoratorBuilder(150).build()));
         mainPanel.setWidget(++row, 0, inject(proto().contentsCoverage(), new FieldDecoratorBuilder(150).build()));
 
-        IFormatter<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
+        IFormatter<BigDecimal, String> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
         ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormatter(currencyFormat);
         ((CTextFieldBase<BigDecimal, ?>) get(proto().contentsCoverage())).setFormatter(currencyFormat);
 

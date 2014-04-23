@@ -68,7 +68,7 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
 
     boolean suggestionsInUse;
 
-    public SuperSuggestiveSelector(IFormatter<DataType> format, IParser<DataType> parser, Cell<DataType> cell,
+    public SuperSuggestiveSelector(IFormatter<DataType, String> format, IParser<DataType> parser, Cell<DataType> cell,
             SuggestionsProvider<DataType> suggestionsProvider, boolean alwaysSuggest) {
         super(format, parser);
         this.alwaysSuggest = alwaysSuggest;

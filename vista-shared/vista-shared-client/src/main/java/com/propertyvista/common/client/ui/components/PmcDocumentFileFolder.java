@@ -65,7 +65,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
                         Window.open(MediaUtils.createPmcDocumentUrl(((PmcDocumentFileForm) getParent()).getValue()), "_blank", null);
                     }
                 });
-                cmp.setFormatter(new IFormatter<String>() {
+                cmp.setFormatter(new IFormatter<String, String>() {
                     @Override
                     public String format(String value) {
                         if (value == null || value.equals("")) {

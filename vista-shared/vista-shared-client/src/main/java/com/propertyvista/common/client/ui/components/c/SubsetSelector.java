@@ -67,7 +67,7 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
      *            set of options that can be selected (please note that <code>options</code> of ITEM_TYPE are expected to be immutable)
      */
     public SubsetSelector(Layout layout, Set<OPTION_TYPE> options) {
-        this(layout, options, new IFormatter<OPTION_TYPE>() {
+        this(layout, options, new IFormatter<OPTION_TYPE, String>() {
 
             @Override
             public String format(OPTION_TYPE value) {
@@ -77,7 +77,7 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
         });
     }
 
-    public SubsetSelector(Layout layout, Set<OPTION_TYPE> options, IFormatter<OPTION_TYPE> format) {
+    public SubsetSelector(Layout layout, Set<OPTION_TYPE> options, IFormatter<OPTION_TYPE, String> format) {
         if (layout == Layout.Horizontal) {
             this.panel = new HorizontalPanel();
         } else if (layout == Layout.Vertical) {

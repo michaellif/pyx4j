@@ -36,7 +36,7 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
             return new CSignature(mm.getCaption());
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> comp = new CEntitySuggestBox<Country>(Country.class);
-            comp.setFormatter(new IFormatter<Country>() {
+            comp.setFormatter(new IFormatter<Country, String>() {
 
                 @Override
                 public String format(Country value) {

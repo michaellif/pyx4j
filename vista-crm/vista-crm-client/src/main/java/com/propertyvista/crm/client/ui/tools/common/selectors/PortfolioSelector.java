@@ -24,7 +24,7 @@ import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 public class PortfolioSelector extends SuperSuggestiveSelector<PortfolioForSelectionDTO> {
 
     public PortfolioSelector() {
-        super(new IFormatter<PortfolioForSelectionDTO>() {
+        super(new IFormatter<PortfolioForSelectionDTO, String>() {
             @Override
             public String format(PortfolioForSelectionDTO value) {
                 return value.name().getValue();

@@ -23,7 +23,7 @@ import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 public class CEnumSubsetSelector<E extends Enum<E>> extends CSubsetSelector<E> {
 
     public CEnumSubsetSelector(Set<E> options, Layout layout) {
-        super(layout, new IFormatter<E>() {
+        super(layout, new IFormatter<E, String>() {
             @Override
             public String format(E value) {
                 if (value != null) {

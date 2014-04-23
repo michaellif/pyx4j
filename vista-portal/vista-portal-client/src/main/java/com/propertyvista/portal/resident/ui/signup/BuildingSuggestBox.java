@@ -35,7 +35,7 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
         setParser(new BuildingSuggestParser());
     }
 
-    class BuildingSuggestFormatter implements IFormatter<SelfRegistrationBuildingDTO> {
+    class BuildingSuggestFormatter implements IFormatter<SelfRegistrationBuildingDTO, String> {
 
         @Override
         public String format(SelfRegistrationBuildingDTO value) {

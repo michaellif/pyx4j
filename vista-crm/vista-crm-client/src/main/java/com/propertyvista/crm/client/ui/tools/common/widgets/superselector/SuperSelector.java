@@ -64,7 +64,7 @@ public abstract class SuperSelector<DataType> extends Composite {
 
     private final int minInputBoxWidth = 50;
 
-    private final IFormatter<DataType> format;
+    private final IFormatter<DataType, String> format;
 
     private final IParser<DataType> parser;
 
@@ -80,7 +80,7 @@ public abstract class SuperSelector<DataType> extends Composite {
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
      */
-    public SuperSelector(IFormatter<DataType> format, IParser<DataType> parser, boolean allowSame, boolean inlineInput) {
+    public SuperSelector(IFormatter<DataType, String> format, IParser<DataType> parser, boolean allowSame, boolean inlineInput) {
         this.format = format;
         this.parser = parser;
 
@@ -175,7 +175,7 @@ public abstract class SuperSelector<DataType> extends Composite {
         selectedWidgets = new LinkedList<SelectedItemHolder<DataType>>();
     }
 
-    public SuperSelector(IFormatter<DataType> format, IParser<DataType> parser) {
+    public SuperSelector(IFormatter<DataType, String> format, IParser<DataType> parser) {
         this(format, parser, false, true);
     }
 

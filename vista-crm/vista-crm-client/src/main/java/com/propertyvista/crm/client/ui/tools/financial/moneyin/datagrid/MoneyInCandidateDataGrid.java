@@ -250,7 +250,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
     }
 
     private Column<MoneyInCandidateDTO, String> initCheckNumberColumn() {
-        IFormatter<String> checkFormat = new IFormatter<String>() {
+        IFormatter<String, String> checkFormat = new IFormatter<String, String>() {
             @Override
             public String format(String value) {
                 return value == null ? "" : value;

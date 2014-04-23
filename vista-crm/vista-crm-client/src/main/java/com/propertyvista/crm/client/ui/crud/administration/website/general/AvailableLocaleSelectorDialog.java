@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.general;
 
-import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,7 +53,7 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
         localeSelector.asWidget().setWidth("100%");
-        localeSelector.setFormat(new IFormatter<AvailableLocale>() {
+        localeSelector.setFormat(new IFormatter<AvailableLocale, String>() {
 
             @Override
             public String format(AvailableLocale value) {

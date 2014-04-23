@@ -111,7 +111,7 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
 
     }
 
-    public class GeoNumberFormatter implements IFormatter<Double> {
+    public class GeoNumberFormatter implements IFormatter<Double, String> {
 
         @Override
         public String format(Double value) {

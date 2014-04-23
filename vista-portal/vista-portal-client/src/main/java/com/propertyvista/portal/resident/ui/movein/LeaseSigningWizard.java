@@ -48,7 +48,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
-        buildingLabel.setFormatter(new IFormatter<Building>() {
+        buildingLabel.setFormatter(new IFormatter<Building, String>() {
 
             @Override
             public String format(Building value) {

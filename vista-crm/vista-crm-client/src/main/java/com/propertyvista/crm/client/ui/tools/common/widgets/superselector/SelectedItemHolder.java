@@ -47,7 +47,7 @@ public class SelectedItemHolder<C> extends Composite {
         SuperSelectedItemHolder
     }
 
-    public SelectedItemHolder(IFormatter<C> format, SuperSelector<C> parent, C item) {
+    public SelectedItemHolder(IFormatter<C, String> format, SuperSelector<C> parent, C item) {
         this.parent = parent;
         this.item = item;
 

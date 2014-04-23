@@ -26,9 +26,9 @@ import com.pyx4j.forms.client.ui.NFocusField;
 
 public class NSubsetSelector<OPTION_TYPE> extends NFocusField<Set<OPTION_TYPE>, SubsetSelector<OPTION_TYPE>, CSubsetSelector<OPTION_TYPE>, HTML> {
 
-    private final IFormatter<OPTION_TYPE> format;
+    private final IFormatter<OPTION_TYPE, String> format;
 
-    public NSubsetSelector(CSubsetSelector<OPTION_TYPE> cComponent, IFormatter<OPTION_TYPE> format) {
+    public NSubsetSelector(CSubsetSelector<OPTION_TYPE> cComponent, IFormatter<OPTION_TYPE, String> format) {
         super(cComponent);
         this.format = format;
     }

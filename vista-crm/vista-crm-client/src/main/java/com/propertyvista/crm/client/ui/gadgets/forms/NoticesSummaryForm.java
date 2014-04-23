@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
-import java.text.ParseException;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
@@ -46,7 +44,7 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
                     0,
                     inject(proto().vacantUnits(), new CLabel<Integer>(), new FieldDecoratorBuilder().customLabel(i18n.tr("Units Vacant")).componentWidth(15)
                             .build()));
-            ((CLabel<Integer>) get(proto().vacantUnits())).setFormatter(new IFormatter<Integer>() {
+            ((CLabel<Integer>) get(proto().vacantUnits())).setFormatter(new IFormatter<Integer, String>() {
 
                 @Override
                 public String format(Integer value) {

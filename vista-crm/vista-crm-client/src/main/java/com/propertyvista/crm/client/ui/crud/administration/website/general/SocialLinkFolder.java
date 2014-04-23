@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.general;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -91,7 +90,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
             VerticalPanel panel = new VerticalPanel();
             CComboBox<SocialSite> selector = new CComboBox<SocialSite>();
-            selector.setFormat(new IFormatter<SocialLink.SocialSite>() {
+            selector.setFormat(new IFormatter<SocialLink.SocialSite, String>() {
 
                 @Override
                 public String format(SocialSite value) {

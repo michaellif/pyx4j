@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.components.tenantinsurance;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
@@ -30,7 +29,7 @@ public class MoneyComboBox extends CComboBox<BigDecimal> {
 
     public static final NumberFormat CANADIAN_CURRENCY_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0 CAD"));
 
-    public static class MoneyComboBoxFormat implements IFormatter<BigDecimal> {
+    public static class MoneyComboBoxFormat implements IFormatter<BigDecimal, String> {
         @Override
         public String format(BigDecimal value) {
             if (value == null || value.compareTo(BigDecimal.ZERO) == 0) {

@@ -21,7 +21,7 @@ import com.pyx4j.commons.IParser;
 
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class PostalCodeFormat implements IFormatter<String>, IParser<String> {
+public class PostalCodeFormat implements IFormatter<String, String>, IParser<String> {
 
     /** returns country name in English converted to lower case */
     interface ICountryContextProvider {

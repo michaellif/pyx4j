@@ -24,7 +24,7 @@ import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 public class BuildingSelector extends SuperSuggestiveSelector<BuildingForSelectionDTO> {
 
     public BuildingSelector() {
-        super(new IFormatter<BuildingForSelectionDTO>() {
+        super(new IFormatter<BuildingForSelectionDTO, String>() {
             @Override
             public String format(BuildingForSelectionDTO value) {
                 if (!value.name().isNull()) {

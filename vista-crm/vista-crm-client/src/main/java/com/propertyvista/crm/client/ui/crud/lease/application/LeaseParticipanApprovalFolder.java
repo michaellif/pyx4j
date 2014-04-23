@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -144,7 +144,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             CLabel<Key> creditCheckReport = new CLabel<Key>();
             creditCheckReport.setTitle(i18n.tr("View Full Report"));
-            creditCheckReport.setFormatter(new IFormatter<Key>() {
+            creditCheckReport.setFormatter(new IFormatter<Key, String>() {
                 @Override
                 public String format(Key value) {
                     if (value != null) {

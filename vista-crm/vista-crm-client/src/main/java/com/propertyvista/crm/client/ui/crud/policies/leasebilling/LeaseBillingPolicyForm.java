@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -33,8 +32,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
@@ -299,7 +298,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 super(LeaseBillingTypePolicyItem.class);
 
                 startDay = new CComboBox<Integer>();
-                startDay.setFormat(new IFormatter<Integer>() {
+                startDay.setFormat(new IFormatter<Integer, String>() {
 
                     @Override
                     public String format(Integer value) {

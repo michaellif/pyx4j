@@ -52,7 +52,6 @@ public class SignatureDecorator extends FlowPanel implements IFieldDecorator {
         validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
         add(validationLabel);
 
-        init(component);
     }
 
     @Override

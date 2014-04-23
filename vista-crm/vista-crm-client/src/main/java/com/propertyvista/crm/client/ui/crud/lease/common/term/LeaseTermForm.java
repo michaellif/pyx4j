@@ -36,8 +36,8 @@ import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -261,7 +261,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             final CEntityCrudHyperlink<Lease> leaseHyperlink = new CEntityCrudHyperlink<Lease>(null);
 
-            leaseHyperlink.setFormatter(new IFormatter<Lease>() {
+            leaseHyperlink.setFormatter(new IFormatter<Lease, String>() {
                 @Override
                 public String format(Lease value) {
                     return ((value != null) ? value.leaseId().getStringView() : null);

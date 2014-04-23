@@ -25,11 +25,11 @@ public class CSubsetSelector<OPTION_TYPE> extends CFocusComponent<Set<OPTION_TYP
 
     private final Layout layout;
 
-    private final IFormatter<OPTION_TYPE> format;
+    private final IFormatter<OPTION_TYPE, String> format;
 
     private final Set<OPTION_TYPE> options;
 
-    public CSubsetSelector(SubsetSelector.Layout layout, IFormatter<OPTION_TYPE> format, Set<OPTION_TYPE> options) {
+    public CSubsetSelector(SubsetSelector.Layout layout, IFormatter<OPTION_TYPE, String> format, Set<OPTION_TYPE> options) {
         this.layout = layout;
         this.format = format;
         this.options = options;

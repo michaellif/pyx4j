@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.reports.eft;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -162,7 +161,7 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
     private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
         CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>();
-        orderByComboBox.setFormat(new IFormatter<ReportOrderColumnMetadata>() {
+        orderByComboBox.setFormat(new IFormatter<ReportOrderColumnMetadata, String>() {
 
             @Override
             public String format(ReportOrderColumnMetadata o) {
