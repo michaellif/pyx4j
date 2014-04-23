@@ -51,7 +51,7 @@ public class NCaptcha extends NFocusField<Pair<String, String>, CaptchaComposite
     }
 
     public void setWatermark(String text) {
-        captchaComposite.getResponseTextBox().setWatermark(text);
+        captchaComposite.setWatermark(text);
     }
 
     @Override

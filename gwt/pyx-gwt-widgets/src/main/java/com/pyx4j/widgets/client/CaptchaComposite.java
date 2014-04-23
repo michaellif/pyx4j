@@ -340,9 +340,9 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         }
     }
 
-    public TextBox getResponseTextBox() {
-        return response;
-    }
+    public void setWatermark(String text) {
+        response.setWatermark(text);
+    };
 
     @Override
     public void setEnabled(boolean enabled) {
