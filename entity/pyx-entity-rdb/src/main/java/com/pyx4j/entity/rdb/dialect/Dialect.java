@@ -250,6 +250,10 @@ public abstract class Dialect {
         throw new Error("Dialect does not support sequences");
     }
 
+    public String getSequenceCurentValueSql(String sequenceName) {
+        throw new Error("Dialect does not support sequences");
+    }
+
     public String getCreateSequenceSql(String sequenceName, int identityOffset) {
         throw new Error("Dialect does not support sequences");
     }

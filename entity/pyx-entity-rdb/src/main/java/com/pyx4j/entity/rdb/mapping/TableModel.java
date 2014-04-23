@@ -48,13 +48,13 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.ObjectClassType;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.entity.core.meta.MemberMeta;
-import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.PersistenceTrace;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -390,6 +390,33 @@ public class TableModel {
     public void debugErrors(PersistenceContext persistenceContext, Throwable throwable) {
         if (throwable instanceof SQLNonTransientConnectionException) {
             PersistenceContext.debugOpenSessions();
+        }
+    }
+
+    public Long getCurrentSequenceValue(PersistenceContext persistenceContext) {
+        String sequenceName = dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName());
+        if (mappings.sharedSequencesSchema() != null) {
+            sequenceName = mappings.sharedSequencesSchema() + "." + sequenceName;
+        }
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = null;
+        try {
+            sql = dialect.getSequenceCurentValueSql(sequenceName);
+            stmt = persistenceContext.getConnection().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            log.error("{} SQL: {}", tableName, sql, e);
+            debugErrors(persistenceContext, e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(stmt);
         }
     }
 
@@ -1241,6 +1268,11 @@ public class TableModel {
             }
         };
 
+    }
+
+    public <T extends IEntity> Number selectMax(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, IObject<?> member) {
+        String sqlName = entityOperationsMeta.getMember(member.getPath().toString()).sqlName();
+        return (Number) aggregate(persistenceContext, criteria, SQLAggregateFunctions.MAX, "m1." + sqlName);
     }
 
     public <T extends IEntity> Object aggregate(PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria, SQLAggregateFunctions func, String args) {

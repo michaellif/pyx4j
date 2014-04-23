@@ -74,6 +74,15 @@ public class HSQLDialect extends Dialect {
     }
 
     @Override
+    public String getSequenceCurentValueSql(String sequenceName) {
+        if (sequencesBaseIdentity) {
+            return "CURRENT VALUE FOR " + sequenceName;
+        } else {
+            throw new Error("Configuration does not support sequences");
+        }
+    }
+
+    @Override
     public String sqlSequenceMetaData() {
         return "SELECT sequence_name FROM INFORMATION_SCHEMA.SEQUENCES";
     }

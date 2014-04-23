@@ -31,6 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -192,6 +193,8 @@ public interface IEntityPersistenceService {
     public <T extends IEntity> ICursorIterator<Key> queryKeys(String encodedCursorReference, EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
+
+    public <T extends IEntity> Number selectMax(EntityQueryCriteria<T> criteria, IObject<?> member);
 
     public <T extends IEntity> boolean exists(Class<T> entityClass, Key primaryKey);
 
