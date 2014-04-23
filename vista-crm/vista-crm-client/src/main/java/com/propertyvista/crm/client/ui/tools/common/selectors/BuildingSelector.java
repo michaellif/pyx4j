@@ -15,7 +15,8 @@ package com.propertyvista.crm.client.ui.tools.common.selectors;
 
 import java.text.ParseException;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
@@ -23,8 +24,7 @@ import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 public class BuildingSelector extends SuperSuggestiveSelector<BuildingForSelectionDTO> {
 
     public BuildingSelector() {
-        super(new IFormat<BuildingForSelectionDTO>() {
-
+        super(new IFormatter<BuildingForSelectionDTO>() {
             @Override
             public String format(BuildingForSelectionDTO value) {
                 if (!value.name().isNull()) {
@@ -32,14 +32,12 @@ public class BuildingSelector extends SuperSuggestiveSelector<BuildingForSelecti
                 } else {
                     return value.propertyCode().getValue();
                 }
-
             }
-
+        }, new IParser<BuildingForSelectionDTO>() {
             @Override
             public BuildingForSelectionDTO parse(String string) throws ParseException {
                 return null;
             }
-
         }, new BuildingForSelectionCell(), new BuildingSuggestionsProvider(), true);
     }
 

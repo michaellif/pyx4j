@@ -14,9 +14,8 @@
 package com.propertyvista.portal.resident.ui.movein;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -49,12 +48,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
-        buildingLabel.setFormat(new IFormat<Building>() {
-
-            @Override
-            public Building parse(String string) throws ParseException {
-                return null;
-            }
+        buildingLabel.setFormatter(new IFormatter<Building>() {
 
             @Override
             public String format(Building value) {
@@ -71,8 +65,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
         panel.setWidget(++row, 0,
                 inject(proto().leaseTerm().termFrom(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease From")).build()));
-        panel.setWidget(++row, 0,
-                inject(proto().leaseTerm().termTo(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
+        panel.setWidget(++row, 0, inject(proto().leaseTerm().termTo(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
 
         panel.setWidget(
                 ++row,

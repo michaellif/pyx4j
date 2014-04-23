@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
@@ -91,11 +91,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
             VerticalPanel panel = new VerticalPanel();
             CComboBox<SocialSite> selector = new CComboBox<SocialSite>();
-            selector.setFormat(new IFormat<SocialLink.SocialSite>() {
-                @Override
-                public SocialSite parse(String string) throws ParseException {
-                    return null;
-                }
+            selector.setFormat(new IFormatter<SocialLink.SocialSite>() {
 
                 @Override
                 public String format(SocialSite value) {

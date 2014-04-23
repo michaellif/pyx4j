@@ -17,7 +17,7 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,12 +43,7 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
             content.setH2(++row, 0, 1, i18n.tr("Occupancy:"));
 
             content.setWidget(++row, 0, inject(proto().occupiedUnits(), new CLabel<Integer>(), new FieldDecoratorBuilder().componentWidth(15).build()));
-            ((CLabel<Integer>) get(proto().occupiedUnits())).setFormat(new IFormat<Integer>() {
-
-                @Override
-                public Integer parse(String string) throws ParseException {
-                    return null; // not supposed to be used
-                }
+            ((CLabel<Integer>) get(proto().occupiedUnits())).setFormatter(new IFormatter<Integer>() {
 
                 @Override
                 public String format(Integer value) {

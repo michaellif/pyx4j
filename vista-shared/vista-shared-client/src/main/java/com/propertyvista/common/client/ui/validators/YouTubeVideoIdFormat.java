@@ -13,11 +13,9 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.text.ParseException;
+import com.pyx4j.commons.IFormatter;
 
-import com.pyx4j.commons.IFormat;
-
-public class YouTubeVideoIdFormat implements IFormat<String> {
+public class YouTubeVideoIdFormat implements IFormatter<String> {
 
     @Override
     public String format(String value) {
@@ -38,22 +36,4 @@ public class YouTubeVideoIdFormat implements IFormat<String> {
         return null;
     }
 
-    @Override
-    public String parse(String value) throws ParseException {
-        if (value == null) {
-            return null;
-        }
-        for (String p : new String[] { "watch?v=", "watch#!v=", "/vi/", "/?v=", "/v/" }) {
-            String v = extract(value, p);
-            if (v != null) {
-                value = v;
-                break;
-            }
-        }
-        value = value.trim();
-        if (!value.matches("[a-zA-Z0-9_-]{11}")) {
-            throw new ParseException("Not a valid YouTube Video ID!..", 0);
-        }
-        return value;
-    }
 }

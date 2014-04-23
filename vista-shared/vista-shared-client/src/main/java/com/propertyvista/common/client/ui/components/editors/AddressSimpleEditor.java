@@ -80,7 +80,7 @@ public class AddressSimpleEditor extends CForm<AddressSimple> {
 
         CField<String, ?> postalCode = (CField<String, ?>) inject(proto().postalCode(), decorator(10).build());
         if (postalCode instanceof CTextFieldBase) {
-            ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
+            ((CTextFieldBase<String, ?>) postalCode).setFormatter(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
         main.setWidget(++row, col, postalCode);
 

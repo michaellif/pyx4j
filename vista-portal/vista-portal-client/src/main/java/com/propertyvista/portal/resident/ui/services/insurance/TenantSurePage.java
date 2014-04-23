@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -78,9 +78,9 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         mainPanel.setWidget(++row, 0, inject(proto().certificate().liabilityCoverage(), new FieldDecoratorBuilder(150).build()));
         mainPanel.setWidget(++row, 0, inject(proto().contentsCoverage(), new FieldDecoratorBuilder(150).build()));
 
-        IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
-        ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormat(currencyFormat);
-        ((CTextFieldBase<BigDecimal, ?>) get(proto().contentsCoverage())).setFormat(currencyFormat);
+        IFormatter<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
+        ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormatter(currencyFormat);
+        ((CTextFieldBase<BigDecimal, ?>) get(proto().contentsCoverage())).setFormatter(currencyFormat);
 
         mainPanel.setH3(++row, 0, 1, i18n.tr("Annual Payment"));
         mainPanel.setWidget(++row, 0, inject(proto().annualPaymentDetails(), new TenantSurePaymentViewer()));

@@ -13,22 +13,14 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import java.text.ParseException;
-
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.forms.client.ui.CPersonalIdentityField;
-import com.pyx4j.forms.client.ui.CPersonalIdentityField.PersonalIdentityIFormat;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField.IPersonalIdentityFormat;
 
 import com.propertyvista.domain.security.PasswordIdentity;
 
-public class PasswordIdentityFormat implements PersonalIdentityIFormat<PasswordIdentity> {
+public class PasswordIdentityFormat implements IPersonalIdentityFormat<PasswordIdentity> {
 
-    private final CPersonalIdentityField<PasswordIdentity> component;
-
-    public PasswordIdentityFormat(CPersonalIdentityField<PasswordIdentity> component) {
+    public PasswordIdentityFormat() {
         super();
-        this.component = component;
     }
 
     @Override
@@ -42,33 +34,6 @@ public class PasswordIdentityFormat implements PersonalIdentityIFormat<PasswordI
             return "***************";
         } else {
             return "";
-        }
-    }
-
-    @Override
-    public PasswordIdentity parse(String string) throws ParseException {
-        PasswordIdentity value = component.getValue();
-        if (CommonsStringUtils.isEmpty(string)) {
-            // empty input means no change to the model object
-            // TODO - need a way to clear value
-            return value;
-        } else {
-            // not empty string could be either new user input or obfuscated value (formatted) of existing entity
-            // check if we are parsing user input or obfuscated value
-            boolean userInput = (value == null || value.obfuscatedNumber().isNull());
-            // populate resulting value
-            if (value == null) {
-                value = EntityFactory.create(PasswordIdentity.class);
-            }
-            if (userInput) {
-                // if no obfuscated value then we are getting new user input
-                value.newNumber().setValue(string);
-                value.obfuscatedNumber().setValue(null);
-            } else {
-                value.newNumber().setValue(null);
-                value.obfuscatedNumber().setValue(string);
-            }
-            return value;
         }
     }
 

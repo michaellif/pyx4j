@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -37,7 +37,7 @@ public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
             }
         });
 
-        setFormat(new IFormat<LeaseTermV>() {
+        setFormatter(new IFormatter<LeaseTermV>() {
             @Override
             public String format(LeaseTermV value) {
                 if (value != null) {
@@ -47,10 +47,6 @@ public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
                 }
             }
 
-            @Override
-            public LeaseTermV parse(String string) {
-                return null;
-            }
         });
     }
 }

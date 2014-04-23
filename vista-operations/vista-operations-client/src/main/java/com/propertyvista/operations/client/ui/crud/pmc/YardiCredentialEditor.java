@@ -31,6 +31,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
+import com.propertyvista.common.client.ui.components.PasswordIdentityParser;
 import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.operations.rpc.services.dev.PmcYardiCredentialService;
@@ -61,7 +62,8 @@ class YardiCredentialEditor extends CForm<PmcYardiCredential> {
         content.setWidget(++row, 0, 2, inject(proto().username(), new FieldDecoratorBuilder(30, true).build()));
 
         CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
-        password.setFormat(new PasswordIdentityFormat(password));
+        password.setFormatter(new PasswordIdentityFormat());
+        password.setParser(new PasswordIdentityParser(password));
         content.setWidget(++row, 0, 2, inject(proto().password(), password, new FieldDecoratorBuilder(30, true).build()));
         content.setWidget(++row, 0, 2, inject(proto().serverName(), new FieldDecoratorBuilder(30, true).build()));
         content.setWidget(++row, 0, 2, inject(proto().database(), new FieldDecoratorBuilder(30, true).build()));

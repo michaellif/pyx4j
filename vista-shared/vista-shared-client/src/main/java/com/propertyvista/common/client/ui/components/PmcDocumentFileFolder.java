@@ -20,11 +20,12 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
@@ -64,7 +65,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
                         Window.open(MediaUtils.createPmcDocumentUrl(((PmcDocumentFileForm) getParent()).getValue()), "_blank", null);
                     }
                 });
-                cmp.setFormat(new IFormat<String>() {
+                cmp.setFormatter(new IFormatter<String>() {
                     @Override
                     public String format(String value) {
                         if (value == null || value.equals("")) {
@@ -73,7 +74,9 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
                             return value;
                         }
                     }
+                });
 
+                cmp.setParser(new IParser<String>() {
                     @Override
                     public String parse(String string) throws ParseException {
                         return string;

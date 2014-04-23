@@ -13,7 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
@@ -35,13 +36,15 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
             return new CSignature(mm.getCaption());
         } else if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> comp = new CEntitySuggestBox<Country>(Country.class);
-            comp.setFormat(new IFormat<Country>() {
+            comp.setFormatter(new IFormatter<Country>() {
 
                 @Override
                 public String format(Country value) {
                     return value.getStringView();
                 }
+            });
 
+            comp.setParser(new IParser<Country>() {
                 @Override
                 public Country parse(String string) {
                     for (Country option : comp.getOptions()) {

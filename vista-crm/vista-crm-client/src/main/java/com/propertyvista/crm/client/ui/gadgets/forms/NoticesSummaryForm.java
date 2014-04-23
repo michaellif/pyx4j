@@ -17,7 +17,7 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,11 +46,7 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
                     0,
                     inject(proto().vacantUnits(), new CLabel<Integer>(), new FieldDecoratorBuilder().customLabel(i18n.tr("Units Vacant")).componentWidth(15)
                             .build()));
-            ((CLabel<Integer>) get(proto().vacantUnits())).setFormat(new IFormat<Integer>() {
-                @Override
-                public Integer parse(String string) throws ParseException {
-                    return null; // NOT supposed to be used
-                }
+            ((CLabel<Integer>) get(proto().vacantUnits())).setFormatter(new IFormatter<Integer>() {
 
                 @Override
                 public String format(Integer value) {

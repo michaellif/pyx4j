@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -47,7 +47,7 @@ public class SelectedItemHolder<C> extends Composite {
         SuperSelectedItemHolder
     }
 
-    public SelectedItemHolder(IFormat<C> format, SuperSelector<C> parent, C item) {
+    public SelectedItemHolder(IFormatter<C> format, SuperSelector<C> parent, C item) {
         this.parent = parent;
         this.item = item;
 

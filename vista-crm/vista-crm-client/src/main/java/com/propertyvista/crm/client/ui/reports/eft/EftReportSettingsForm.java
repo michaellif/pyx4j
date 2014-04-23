@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.meta.EntityMeta;
@@ -162,11 +162,7 @@ public class EftReportSettingsForm extends CForm<EftReportMetadata> {
 
     private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
         CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>();
-        orderByComboBox.setFormat(new IFormat<ReportOrderColumnMetadata>() {
-            @Override
-            public ReportOrderColumnMetadata parse(String string) throws ParseException {
-                return null;
-            }
+        orderByComboBox.setFormat(new IFormatter<ReportOrderColumnMetadata>() {
 
             @Override
             public String format(ReportOrderColumnMetadata o) {

@@ -36,8 +36,10 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.ProvidesKey;
 
-import com.pyx4j.commons.IFormat;
-import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
+import com.pyx4j.forms.client.ui.CMoneyField.MoneyFormat;
+import com.pyx4j.forms.client.ui.CMoneyField.MoneyParser;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
@@ -209,7 +211,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
     }
 
     private Column<MoneyInCandidateDTO, BigDecimal> initAmountToPayColumn() {
-        amountToPayCell = new ObjectEditCell<BigDecimal>(new MoneyFormat(), moneyEditCellStyle);
+        amountToPayCell = new ObjectEditCell<BigDecimal>(new MoneyFormat(), new MoneyParser(), moneyEditCellStyle);
         Column<MoneyInCandidateDTO, BigDecimal> amountToPayColumn = new Column<MoneyInCandidateDTO, BigDecimal>(amountToPayCell) {
             @Override
             public BigDecimal getValue(MoneyInCandidateDTO object) {
@@ -248,12 +250,15 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
     }
 
     private Column<MoneyInCandidateDTO, String> initCheckNumberColumn() {
-        IFormat<String> checkFormat = new IFormat<String>() {
+        IFormatter<String> checkFormat = new IFormatter<String>() {
             @Override
             public String format(String value) {
                 return value == null ? "" : value;
             }
 
+        };
+
+        IParser<String> checkParser = new IParser<String>() {
             @Override
             public String parse(String string) throws ParseException {
                 if (string == null || !string.trim().matches("[0-9]*")) {
@@ -262,7 +267,8 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
                 return string;
             }
         };
-        checkNumberCell = new ObjectEditCell<String>(checkFormat, moneyEditCellStyle);
+
+        checkNumberCell = new ObjectEditCell<String>(checkFormat, checkParser, moneyEditCellStyle);
         Column<MoneyInCandidateDTO, String> checkNumberColumn = new Column<MoneyInCandidateDTO, String>(checkNumberCell) {
             @Override
             public String getValue(MoneyInCandidateDTO object) {

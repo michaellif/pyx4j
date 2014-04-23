@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.c;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CFocusComponent;
 
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
@@ -25,11 +25,11 @@ public class CSubsetSelector<OPTION_TYPE> extends CFocusComponent<Set<OPTION_TYP
 
     private final Layout layout;
 
-    private final IFormat<OPTION_TYPE> format;
+    private final IFormatter<OPTION_TYPE> format;
 
     private final Set<OPTION_TYPE> options;
 
-    public CSubsetSelector(SubsetSelector.Layout layout, IFormat<OPTION_TYPE> format, Set<OPTION_TYPE> options) {
+    public CSubsetSelector(SubsetSelector.Layout layout, IFormatter<OPTION_TYPE> format, Set<OPTION_TYPE> options) {
         this.layout = layout;
         this.format = format;
         this.options = options;

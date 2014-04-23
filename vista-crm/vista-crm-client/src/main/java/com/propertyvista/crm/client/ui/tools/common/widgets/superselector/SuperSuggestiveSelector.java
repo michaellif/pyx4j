@@ -30,7 +30,8 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.view.client.AbstractDataProvider;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.css.IStyleName;
 
 public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<DataType> {
@@ -67,8 +68,9 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
 
     boolean suggestionsInUse;
 
-    public SuperSuggestiveSelector(IFormat<DataType> format, Cell<DataType> cell, SuggestionsProvider<DataType> suggestionsProvider, boolean alwaysSuggest) {
-        super(format);
+    public SuperSuggestiveSelector(IFormatter<DataType> format, IParser<DataType> parser, Cell<DataType> cell,
+            SuggestionsProvider<DataType> suggestionsProvider, boolean alwaysSuggest) {
+        super(format, parser);
         this.alwaysSuggest = alwaysSuggest;
         this.cell = cell;
         this.suggestionsProvider = suggestionsProvider;

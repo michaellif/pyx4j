@@ -19,7 +19,8 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -37,6 +38,8 @@ import com.propertyvista.domain.GeoLocation.LongitudeType;
 public class GeoLocationEditor extends CForm<GeoLocation> {
 
     private static final I18n i18n = I18n.get(GeoLocationEditor.class);
+
+    private final NumberFormat nf = NumberFormat.getFormat(i18n.tr("#0.000000"));
 
     public GeoLocationEditor() {
         super(GeoLocation.class);
@@ -58,7 +61,8 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
 
     @Override
     public void addValidations() {
-        ((CTextFieldBase<Double, ?>) get(proto().latitude())).setFormat(new GeoNumberFormat());
+        ((CTextFieldBase<Double, ?>) get(proto().latitude())).setFormatter(new GeoNumberFormatter());
+        ((CTextFieldBase<Double, ?>) get(proto().latitude())).setParser(new GeoNumberParser());
 
         get(proto().latitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
@@ -81,7 +85,8 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
         });
         get(proto().latitudeType()).addValueChangeHandler(new RevalidationTrigger<LatitudeType>(get(proto().latitude())));
 
-        ((CTextFieldBase<Double, ?>) get(proto().longitude())).setFormat(new GeoNumberFormat());
+        ((CTextFieldBase<Double, ?>) get(proto().longitude())).setFormatter(new GeoNumberFormatter());
+        ((CTextFieldBase<Double, ?>) get(proto().longitude())).setParser(new GeoNumberParser());
 
         get(proto().longitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
@@ -106,9 +111,7 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
 
     }
 
-    public static class GeoNumberFormat implements IFormat<Double> {
-
-        private final NumberFormat nf = NumberFormat.getFormat(i18n.tr("#0.000000"));
+    public class GeoNumberFormatter implements IFormatter<Double> {
 
         @Override
         public String format(Double value) {
@@ -118,6 +121,9 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
                 return "";
             }
         }
+    }
+
+    public class GeoNumberParser implements IParser<Double> {
 
         @Override
         public Double parse(String string) throws ParseException {

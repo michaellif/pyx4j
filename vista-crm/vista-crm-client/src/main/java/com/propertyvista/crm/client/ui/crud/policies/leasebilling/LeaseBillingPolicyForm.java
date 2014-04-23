@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
@@ -299,12 +299,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 super(LeaseBillingTypePolicyItem.class);
 
                 startDay = new CComboBox<Integer>();
-                startDay.setFormat(new IFormat<Integer>() {
-
-                    @Override
-                    public Integer parse(String string) throws ParseException {
-                        return null;
-                    }
+                startDay.setFormat(new IFormatter<Integer>() {
 
                     @Override
                     public String format(Integer value) {

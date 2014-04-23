@@ -13,18 +13,17 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
-import java.text.ParseException;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
 
 public class CEnumSubsetSelector<E extends Enum<E>> extends CSubsetSelector<E> {
 
     public CEnumSubsetSelector(Set<E> options, Layout layout) {
-        super(layout, new IFormat<E>() {
+        super(layout, new IFormatter<E>() {
             @Override
             public String format(E value) {
                 if (value != null) {
@@ -34,10 +33,6 @@ public class CEnumSubsetSelector<E extends Enum<E>> extends CSubsetSelector<E> {
                 }
             }
 
-            @Override
-            public E parse(String string) throws ParseException {
-                return null; // shouldn't matter
-            }
         }, options);
     }
 

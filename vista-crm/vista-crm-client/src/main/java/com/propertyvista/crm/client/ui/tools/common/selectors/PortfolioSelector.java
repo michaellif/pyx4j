@@ -15,7 +15,8 @@ package com.propertyvista.crm.client.ui.tools.common.selectors;
 
 import java.text.ParseException;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
@@ -23,12 +24,12 @@ import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 public class PortfolioSelector extends SuperSuggestiveSelector<PortfolioForSelectionDTO> {
 
     public PortfolioSelector() {
-        super(new IFormat<PortfolioForSelectionDTO>() {
+        super(new IFormatter<PortfolioForSelectionDTO>() {
             @Override
             public String format(PortfolioForSelectionDTO value) {
                 return value.name().getValue();
             }
-
+        }, new IParser<PortfolioForSelectionDTO>() {
             @Override
             public PortfolioForSelectionDTO parse(String string) throws ParseException {
                 return null;

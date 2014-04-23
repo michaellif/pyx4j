@@ -13,7 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -22,7 +22,7 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
 
     public PapBillableItemLabel() {
         super();
-        setFormat(new IFormat<BillableItem>() {
+        setFormatter(new IFormatter<BillableItem>() {
             @Override
             public String format(BillableItem value) {
                 if (value != null) {
@@ -40,10 +40,6 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
                 return null;
             }
 
-            @Override
-            public BillableItem parse(String string) {
-                return null;
-            }
         });
     }
 

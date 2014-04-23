@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,7 +36,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IFocusWidget;
@@ -68,21 +67,17 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
      *            set of options that can be selected (please note that <code>options</code> of ITEM_TYPE are expected to be immutable)
      */
     public SubsetSelector(Layout layout, Set<OPTION_TYPE> options) {
-        this(layout, options, new IFormat<OPTION_TYPE>() {
+        this(layout, options, new IFormatter<OPTION_TYPE>() {
 
             @Override
             public String format(OPTION_TYPE value) {
                 return value.toString();
             }
 
-            @Override
-            public OPTION_TYPE parse(String string) throws ParseException {
-                throw new IllegalStateException("not required");
-            }
         });
     }
 
-    public SubsetSelector(Layout layout, Set<OPTION_TYPE> options, IFormat<OPTION_TYPE> format) {
+    public SubsetSelector(Layout layout, Set<OPTION_TYPE> options, IFormatter<OPTION_TYPE> format) {
         if (layout == Layout.Horizontal) {
             this.panel = new HorizontalPanel();
         } else if (layout == Layout.Vertical) {

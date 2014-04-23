@@ -25,7 +25,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
@@ -258,38 +258,31 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             idHolder.add(inject(proto().lease().leaseApplication().applicationId(), new FieldDecoratorBuilder(15).build()));
             flexPanel.setWidget(++rightRow, 1, idHolder);
         } else {
-            flexPanel.setWidget(++rightRow, 1, inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
+
+            final CEntityCrudHyperlink<Lease> leaseHyperlink = new CEntityCrudHyperlink<Lease>(null);
+
+            leaseHyperlink.setFormatter(new IFormatter<Lease>() {
                 @Override
-                public void setNavigationCommand(Command command) {
-                    super.setNavigationCommand(new Command() {
-                        @Override
-                        public void execute() {
-                            if (getValue().getPrimaryKey() != null) {
-                                if (getValue().status().getValue() == Lease.Status.Application) {
-                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getValue().getPrimaryKey()));
-                                } else {
-                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getValue().getPrimaryKey()));
-                                }
-                            }
-                        }
-                    });
+                public String format(Lease value) {
+                    return ((value != null) ? value.leaseId().getStringView() : null);
                 }
 
-                @Override
-                public void setFormat(IFormat<Lease> format) {
-                    super.setFormat(new IFormat<Lease>() {
-                        @Override
-                        public String format(Lease value) {
-                            return ((value != null) ? value.leaseId().getStringView() : null);
-                        }
+            });
 
-                        @Override
-                        public Lease parse(String string) {
-                            return null;
+            leaseHyperlink.setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    if (getValue().getPrimaryKey() != null) {
+                        if (leaseHyperlink.getValue().status().getValue() == Lease.Status.Application) {
+                            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getValue().getPrimaryKey()));
+                        } else {
+                            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getValue().getPrimaryKey()));
                         }
-                    });
+                    }
                 }
-            }, new FieldDecoratorBuilder(15).build()));
+            });
+
+            flexPanel.setWidget(++rightRow, 1, injectAndDecorate(proto().lease(), leaseHyperlink, 15));
         }
         flexPanel.setWidget(++rightRow, 1,
                 inject(proto().lease().type(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Lease Type")).build()));

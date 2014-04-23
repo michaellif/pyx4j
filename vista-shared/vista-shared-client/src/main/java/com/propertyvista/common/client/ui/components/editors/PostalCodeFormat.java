@@ -16,14 +16,12 @@ package com.propertyvista.common.client.ui.components.editors;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class PostalCodeFormat implements IFormat<String> {
-
-    private static final I18n i18n = I18n.get(PostalCodeFormat.class);
+public class PostalCodeFormat implements IFormatter<String>, IParser<String> {
 
     /** returns country name in English converted to lower case */
     interface ICountryContextProvider {

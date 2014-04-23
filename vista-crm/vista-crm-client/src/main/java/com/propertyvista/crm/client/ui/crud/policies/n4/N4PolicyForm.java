@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,16 +22,14 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.IFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -52,37 +49,6 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private ARCodeFolder arCodeFolder;
 
-    public static final IFormat<String> PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT = new IFormat<String>() {
-
-        private final IFormat<String> phoneFormat = new CPhoneField.PhoneFormat();
-
-        private final String regex = "^[\\s\\d\\(\\)-]+$";
-
-        private final String errorMessage = i18n.tr("Invalid phone format. Use (123) 456-7890 format");
-
-        @Override
-        public String format(String value) {
-            return phoneFormat.format(value);
-        }
-
-        @Override
-        public String parse(String string) throws ParseException {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null;
-            }
-            String parsed = null;
-            if (!string.matches(regex)) {
-                throw new ParseException(errorMessage, 0);
-            }
-            try {
-                parsed = phoneFormat.parse(string);
-            } catch (ParseException e) {
-                throw new ParseException(errorMessage, 0);
-            }
-            return parsed;
-        }
-    };
-
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
     }
@@ -97,34 +63,14 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
         TwoColumnFlexFormPanel companyNameAndPhonesPanel = new TwoColumnFlexFormPanel();
         int row = -1;
-        signaturePanel.setWidget(++row, 0, 2, inject(proto().includeSignature(), new FieldDecoratorBuilder().build()));
+        signaturePanel.setWidget(++row, 0, 2, injectAndDecorate(proto().includeSignature()));
         signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
 
         int subRow = -1;
-        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, inject(proto().companyName(), new FieldDecoratorBuilder().build()));
-        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, inject(proto().emailAddress(), new FieldDecoratorBuilder().build()));
-
-        CPhoneField phoneNumberField = (CPhoneField) inject(proto().phoneNumber(), new CPhoneField() {
-            @Override
-            public IFormat<String> getFormat() {
-                return PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;
-            }
-        });
-        phoneNumberField.setWatermark("(___) ___-____");
-        phoneNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        phoneNumberField.setDecorator(new FieldDecoratorBuilder().build());
-        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, phoneNumberField);
-
-        CPhoneField faxNumberField = (CPhoneField) inject(proto().faxNumber(), new CPhoneField() {
-            @Override
-            public IFormat<String> getFormat() {
-                return PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT;
-            }
-        });
-        faxNumberField.setWatermark("(___) ___-____");
-        faxNumberField.setFormat(PHONE_NUMBER_WITHOUT_EXTENSION_FORMAT); // TODO y setFormat not working?
-        faxNumberField.setDecorator(new FieldDecoratorBuilder().build());
-        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, faxNumberField);
+        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, injectAndDecorate(proto().companyName()));
+        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, injectAndDecorate(proto().emailAddress()));
+        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, injectAndDecorate(proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)));
+        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, injectAndDecorate(proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)));
 
         signaturePanel.setWidget(++row, 0, 1, companyNameAndPhonesPanel);
         signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
@@ -140,13 +86,13 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
         row = -1;
         deliveryPanel.setH1(++row, 0, 2, i18n.tr("Termination date calculation:"));
-        deliveryPanel.setWidget(++row, 0, 1, inject(proto().terminationDateAdvanceDaysLongRentPeriod(), new FieldDecoratorBuilder().build()));
-        deliveryPanel.setWidget(++row, 0, 1, inject(proto().terminationDateAdvanceDaysShortRentPeriod(), new FieldDecoratorBuilder().build()));
+        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().terminationDateAdvanceDaysLongRentPeriod()));
+        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().terminationDateAdvanceDaysShortRentPeriod()));
 
         deliveryPanel.setH1(++row, 0, 2, i18n.tr("Additional advance days based on delivery method:"));
-        deliveryPanel.setWidget(++row, 0, 1, inject(proto().handDeliveryAdvanceDays(), new FieldDecoratorBuilder().build()));
-        deliveryPanel.setWidget(++row, 0, 1, inject(proto().mailDeliveryAdvanceDays(), new FieldDecoratorBuilder().build()));
-        deliveryPanel.setWidget(++row, 0, 1, inject(proto().courierDeliveryAdvanceDays(), new FieldDecoratorBuilder().build()));
+        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().handDeliveryAdvanceDays()));
+        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().mailDeliveryAdvanceDays()));
+        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().courierDeliveryAdvanceDays()));
 
         return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel, createAutoCancellationPanel());
     }
@@ -154,8 +100,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     private TwoColumnFlexFormPanel createAutoCancellationPanel() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Auto Cancellation"));
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().cancellationThreshold(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().expiryDays(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().cancellationThreshold()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().expiryDays()));
 
         return panel;
     }

@@ -31,7 +31,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.widgets.client.Label;
 
@@ -82,7 +83,9 @@ public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors>
 
     }
 
-    protected final IFormat<E> format;
+    protected final IFormatter<E> format;
+
+    protected final IParser<E> parser;
 
     private final Template template;
 
@@ -101,11 +104,12 @@ public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors>
      * @param style
      *            Optional. sets styles for the input cell
      */
-    public ObjectEditCell(IFormat<E> format, Style style) {
+    public ObjectEditCell(IFormatter<E> format, IParser<E> parser, Style style) {
         super(BrowserEvents.BLUR, BrowserEvents.MOUSEOVER, BrowserEvents.MOUSEOUT);
         this.template = GWT.create(Template.class);
         this.style = (style != null) ? style : new DefaultStyle();
         this.format = format;
+        this.parser = parser;
     }
 
     @Override
@@ -137,7 +141,7 @@ public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors>
                     String unparsedValue = input.getValue();
                     E parsedValue = null;
                     try {
-                        parsedValue = format.parse(unparsedValue);
+                        parsedValue = parser.parse(unparsedValue);
                     } catch (ParseException parseException) {
                         // TODO show a popup with error 
                     }

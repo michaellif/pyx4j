@@ -27,7 +27,7 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.IStyleName;
 
 public class ObjectSelectionCell<E> extends AbstractInputCell<ObjectSelectionState<E>, ObjectSelectionState<E>> {
@@ -48,23 +48,19 @@ public class ObjectSelectionCell<E> extends AbstractInputCell<ObjectSelectionSta
 
     private static Template template = null;
 
-    private IFormat<E> format;
+    private IFormatter<E> format;
 
-    public ObjectSelectionCell(IFormat<E> format) {
+    public ObjectSelectionCell(IFormatter<E> format) {
         super(BrowserEvents.CHANGE);
         if (template == null) {
             template = GWT.create(Template.class);
         }
-        this.format = format != null ? format : new IFormat<E>() {
+        this.format = format != null ? format : new IFormatter<E>() {
             @Override
             public String format(E value) {
                 return value.toString();
             }
 
-            @Override
-            public E parse(String string) throws ParseException {
-                return null; // not used in this
-            }
         };
     }
 

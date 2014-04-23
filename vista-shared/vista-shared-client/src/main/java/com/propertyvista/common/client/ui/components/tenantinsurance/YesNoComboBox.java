@@ -13,10 +13,9 @@
  */
 package com.propertyvista.common.client.ui.components.tenantinsurance;
 
-import java.text.ParseException;
 import java.util.Arrays;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -25,26 +24,13 @@ public class YesNoComboBox extends CComboBox<Boolean> {
     private static final I18n i18n = I18n.get(YesNoComboBox.class);
 
     public YesNoComboBox() {
-        super(null, new IFormat<Boolean>() {
+        super(null, new IFormatter<Boolean>() {
             @Override
             public String format(Boolean value) {
                 if (value == null) {
                     return i18n.tr("Unknown");
                 } else {
                     return value == true ? i18n.tr("Yes") : i18n.tr("No");
-                }
-            }
-
-            @Override
-            public Boolean parse(String string) throws ParseException {
-                if (i18n.tr("unknown").equals(string.toLowerCase())) {
-                    return null;
-                } else if (i18n.tr("yes").equals(string.toLowerCase())) {
-                    return true;
-                } else if (i18n.tr("no").equals(string.toLowerCase())) {
-                    return false;
-                } else {
-                    throw new ParseException(i18n.tr("The acceptable values are 'Yes', 'No' and Unknown"), 0);
                 }
             }
 

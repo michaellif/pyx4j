@@ -21,14 +21,14 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.NFocusField;
 
 public class NSubsetSelector<OPTION_TYPE> extends NFocusField<Set<OPTION_TYPE>, SubsetSelector<OPTION_TYPE>, CSubsetSelector<OPTION_TYPE>, HTML> {
 
-    private final IFormat<OPTION_TYPE> format;
+    private final IFormatter<OPTION_TYPE> format;
 
-    public NSubsetSelector(CSubsetSelector<OPTION_TYPE> cComponent, IFormat<OPTION_TYPE> format) {
+    public NSubsetSelector(CSubsetSelector<OPTION_TYPE> cComponent, IFormatter<OPTION_TYPE> format) {
         super(cComponent);
         this.format = format;
     }

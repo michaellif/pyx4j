@@ -36,6 +36,7 @@ import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
+import com.propertyvista.common.client.ui.components.PasswordIdentityParser;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -221,11 +222,13 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
         CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
-        memberNumber.setFormat(new PasswordIdentityFormat(memberNumber));
+        memberNumber.setFormatter(new PasswordIdentityFormat());
+        memberNumber.setParser(new PasswordIdentityParser(memberNumber));
         content.setWidget(++row, 0, inject(proto().equifaxInfo().memberNumber(), memberNumber, new FieldDecoratorBuilder().build()));
 
         CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
-        securityCode.setFormat(new PasswordIdentityFormat(securityCode));
+        securityCode.setFormatter(new PasswordIdentityFormat());
+        securityCode.setParser(new PasswordIdentityParser(securityCode));
         content.setWidget(++row, 0, inject(proto().equifaxInfo().securityCode(), securityCode, new FieldDecoratorBuilder().build()));
 
         content.setWidget(++row, 0, inject(proto().equifaxInfo().customerCode(), new FieldDecoratorBuilder().build()));

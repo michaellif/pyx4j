@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
@@ -144,7 +144,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             CLabel<Key> creditCheckReport = new CLabel<Key>();
             creditCheckReport.setTitle(i18n.tr("View Full Report"));
-            creditCheckReport.setFormat(new IFormat<Key>() {
+            creditCheckReport.setFormatter(new IFormatter<Key>() {
                 @Override
                 public String format(Key value) {
                     if (value != null) {
@@ -154,10 +154,6 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     }
                 }
 
-                @Override
-                public Key parse(String string) {
-                    return null;
-                }
             });
             creditCheckReport.setNavigationCommand(new Command() {
                 @Override

@@ -13,22 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
-import java.text.ParseException;
-
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
-public class PayerOptionFormat implements IFormat<MoneyInLeaseParticipantDTO> {
+public class PayerOptionFormat implements IFormatter<MoneyInLeaseParticipantDTO> {
 
     @Override
     public String format(MoneyInLeaseParticipantDTO value) {
         return value.name().getValue();
-    }
-
-    @Override
-    public MoneyInLeaseParticipantDTO parse(String string) throws ParseException {
-        return null; // should not be used 
     }
 
 }

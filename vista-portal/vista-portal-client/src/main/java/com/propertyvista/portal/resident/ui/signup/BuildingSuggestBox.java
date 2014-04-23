@@ -21,21 +21,21 @@ import java.util.List;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.NSuggestBox;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
 public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuildingDTO> {
-    private static final I18n i18n = I18n.get(BuildingSuggestBox.class);
 
     public BuildingSuggestBox() {
-        setFormat(new BuildingSuggestFormat());
+        setFormatter(new BuildingSuggestFormatter());
+        setParser(new BuildingSuggestParser());
     }
 
-    class BuildingSuggestFormat implements IFormat<SelfRegistrationBuildingDTO> {
+    class BuildingSuggestFormatter implements IFormatter<SelfRegistrationBuildingDTO> {
 
         @Override
         public String format(SelfRegistrationBuildingDTO value) {
@@ -44,6 +44,9 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
             }
             return value.address().getValue();
         }
+    }
+
+    class BuildingSuggestParser implements IParser<SelfRegistrationBuildingDTO> {
 
         @Override
         public SelfRegistrationBuildingDTO parse(String string) throws ParseException {

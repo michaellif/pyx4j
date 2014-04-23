@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
@@ -54,12 +54,7 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
         localeSelector.asWidget().setWidth("100%");
-        localeSelector.setFormat(new IFormat<AvailableLocale>() {
-
-            @Override
-            public AvailableLocale parse(String string) throws ParseException {
-                return null;
-            }
+        localeSelector.setFormat(new IFormatter<AvailableLocale>() {
 
             @Override
             public String format(AvailableLocale value) {

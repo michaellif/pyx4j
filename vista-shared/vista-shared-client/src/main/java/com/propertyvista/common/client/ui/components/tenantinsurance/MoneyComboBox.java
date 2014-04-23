@@ -18,7 +18,7 @@ import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -30,7 +30,7 @@ public class MoneyComboBox extends CComboBox<BigDecimal> {
 
     public static final NumberFormat CANADIAN_CURRENCY_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0 CAD"));
 
-    public static class MoneyComboBoxFormat implements IFormat<BigDecimal> {
+    public static class MoneyComboBoxFormat implements IFormatter<BigDecimal> {
         @Override
         public String format(BigDecimal value) {
             if (value == null || value.compareTo(BigDecimal.ZERO) == 0) {
@@ -40,10 +40,6 @@ public class MoneyComboBox extends CComboBox<BigDecimal> {
             }
         }
 
-        @Override
-        public BigDecimal parse(String string) throws ParseException {
-            throw new Error("this should never happen");
-        }
     }
 
     public MoneyComboBox() {

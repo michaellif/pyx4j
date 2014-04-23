@@ -60,7 +60,7 @@ public abstract class AddressStructuredEditor<A extends AddressStructured> exten
         if (postalCode instanceof CTextFieldBase) {
             @SuppressWarnings("unchecked")
             CTextFieldBase<String, ?> comp = ((CTextFieldBase<String, ?>) postalCode);
-            comp.setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
+            comp.setFormatter(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
 
         int row = -1;

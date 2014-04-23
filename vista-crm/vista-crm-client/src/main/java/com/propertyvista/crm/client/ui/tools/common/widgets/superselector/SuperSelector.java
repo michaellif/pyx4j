@@ -44,7 +44,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
-import com.pyx4j.commons.IFormat;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.css.IStyleName;
 
 public abstract class SuperSelector<DataType> extends Composite {
@@ -63,7 +64,9 @@ public abstract class SuperSelector<DataType> extends Composite {
 
     private final int minInputBoxWidth = 50;
 
-    private final IFormat<DataType> format;
+    private final IFormatter<DataType> format;
+
+    private final IParser<DataType> parser;
 
     private final boolean allowSame;
 
@@ -77,8 +80,10 @@ public abstract class SuperSelector<DataType> extends Composite {
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
      */
-    public SuperSelector(IFormat<DataType> format, boolean allowSame, boolean inlineInput) {
+    public SuperSelector(IFormatter<DataType> format, IParser<DataType> parser, boolean allowSame, boolean inlineInput) {
         this.format = format;
+        this.parser = parser;
+
         this.allowSame = allowSame;
         this.inlineInput = inlineInput;
 
@@ -170,8 +175,8 @@ public abstract class SuperSelector<DataType> extends Composite {
         selectedWidgets = new LinkedList<SelectedItemHolder<DataType>>();
     }
 
-    public SuperSelector(IFormat<DataType> format) {
-        this(format, false, true);
+    public SuperSelector(IFormatter<DataType> format, IParser<DataType> parser) {
+        this(format, parser, false, true);
     }
 
     public void setInput(String input) {
@@ -266,7 +271,7 @@ public abstract class SuperSelector<DataType> extends Composite {
 
     private void addItemFromInputBox() {
         try {
-            addItem(format.parse(inputTextBox.getText()));
+            addItem(parser.parse(inputTextBox.getText()));
             inputTextBox.setText("");
         } catch (ParseException e) {
             // TODO deal with this (i.e. render a popup or something like that
