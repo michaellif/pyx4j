@@ -42,7 +42,7 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
             if (value == null) {
                 return "";
             }
-            return value.address().getValue();
+            return value.address().getValue().trim();
         }
     }
 
@@ -51,7 +51,7 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
         @Override
         public SelfRegistrationBuildingDTO parse(String string) throws ParseException {
             for (SelfRegistrationBuildingDTO option : getOptions()) {
-                if (getOptionName(option).equals(string)) {
+                if (getOptionName(option).equals(string.trim())) {
                     return option;
                 }
             }
@@ -62,7 +62,7 @@ public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuil
 
     @Override
     public String getOptionName(SelfRegistrationBuildingDTO o) {
-        return o.address().getValue();
+        return o.address().getValue().trim();
     }
 
     @Override
