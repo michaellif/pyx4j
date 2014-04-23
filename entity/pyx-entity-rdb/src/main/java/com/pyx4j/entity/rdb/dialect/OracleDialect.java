@@ -108,6 +108,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public String getSequenceCurentValueSql(String sequenceName) {
+        return "SELECT  " + sequenceName + ".currval FROM dual";
+    }
+
+    @Override
     public String getCreateSequenceSql(String sequenceName, int identityOffset) {
         return "CREATE SEQUENCE " + sequenceName + ((identityOffset != 0) ? (" START WITH " + identityOffset) : "");
     }

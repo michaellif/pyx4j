@@ -35,7 +35,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -314,6 +316,30 @@ public class RDBUtils implements Closeable {
                 if (keys.size() > 0) {
                     log.info("delete {} rows from table {}", keys.size(), meta.getEntityClass().getName());
                     srv.delete(entityClass, keys);
+                }
+            }
+        }
+    }
+
+    /**
+     * Test Table Primary Key Sequence
+     */
+    public static void validateTable(Class<? extends IEntity> entityClass) {
+        PrimaryKeyStrategy primaryKeyStrategy;
+        Table tableAnnotation = entityClass.getAnnotation(Table.class);
+        if (tableAnnotation != null) {
+            primaryKeyStrategy = tableAnnotation.primaryKeyStrategy();
+        } else {
+            primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO;
+        }
+        if (primaryKeyStrategy == Table.PrimaryKeyStrategy.AUTO) {
+            EntityQueryCriteria<? extends IEntity> criteria = EntityQueryCriteria.create(entityClass);
+            Number maxId = Persistence.service().selectMax(criteria, criteria.proto().id());
+            if (maxId != null) {
+                Long sequenceValue = ((EntityPersistenceServiceRDB) Persistence.service()).getCurrentSequenceValue(entityClass);
+                if (sequenceValue.longValue() < maxId.longValue()) {
+                    log.error("{}: maxId {}, sequenceValue {}", entityClass, maxId, sequenceValue);
+                    throw new UserRuntimeException("Sequence of table " + entityClass.getName() + " was not set to proper value");
                 }
             }
         }

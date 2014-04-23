@@ -76,6 +76,15 @@ public class DerbyDialect extends Dialect {
     }
 
     @Override
+    public String getSequenceCurentValueSql(String sequenceName) {
+        if (sequencesBaseIdentity) {
+            return "CURRENT VALUE FOR " + sequenceName;
+        } else {
+            throw new Error("Configuration does not support sequences");
+        }
+    }
+
+    @Override
     public String sqlSequenceMetaData() {
         return "SELECT SEQUENCENAME FROM SYS.SYSSEQUENCES";
     }

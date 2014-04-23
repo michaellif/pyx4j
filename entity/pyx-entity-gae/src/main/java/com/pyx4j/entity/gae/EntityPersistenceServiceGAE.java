@@ -1758,6 +1758,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
+    @Override
+    public <T extends IEntity> Number selectMax(EntityQueryCriteria<T> criteria, IObject<?> member) {
+        //TODO implement this
+        throw new Error("implement this");
+    }
+
     private void getAllKeysForDelete(List<Key> keys, IEntity iEntity) {
         nextValue: for (Map.Entry<String, Serializable> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {

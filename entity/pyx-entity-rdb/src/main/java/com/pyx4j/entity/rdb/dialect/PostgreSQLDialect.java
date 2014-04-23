@@ -87,6 +87,11 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public String getSequenceCurentValueSql(String sequenceName) {
+        return "SELECT last_value FROM " + sequenceName;
+    }
+
+    @Override
     public String sqlSequenceMetaData() {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT relname ");

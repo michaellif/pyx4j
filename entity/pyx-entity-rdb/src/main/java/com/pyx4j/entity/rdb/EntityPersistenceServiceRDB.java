@@ -53,6 +53,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.ICollection;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
@@ -551,6 +552,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             return TableMetadata.getTableMetadata(getPersistenceContext(), configuration,
                     TableModel.getTableName(getPersistenceContext().getDialect(), entityMeta));
+        } finally {
+            endCallContext();
+        }
+    }
+
+    public Long getCurrentSequenceValue(Class<? extends IEntity> entityClass) {
+        startCallContext(ConnectionReason.forRead);
+        try {
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(entityClass));
+            return tm.getCurrentSequenceValue(getPersistenceContext());
         } finally {
             endCallContext();
         }
@@ -1804,6 +1815,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             } else {
                 return count.intValue();
             }
+        } finally {
+            endCallContext();
+        }
+    }
+
+    @Override
+    public <T extends IEntity> Number selectMax(EntityQueryCriteria<T> criteria, IObject<?> member) {
+        startCallContext(ConnectionReason.forRead);
+        try {
+            TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+            return tm.selectMax(getPersistenceContext(), criteria, member);
         } finally {
             endCallContext();
         }
