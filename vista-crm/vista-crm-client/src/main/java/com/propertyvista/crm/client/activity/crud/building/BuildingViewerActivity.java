@@ -241,10 +241,11 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                     public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                         super.onDeferredSuccess(result);
                         populate();
-                        if (!CommonsStringUtils.isEmpty(result.getMessage())) {
-                            hide();
-                            MessageDialog.warn(this.dialog.getTitle(), result.getMessage());
-                        }
+                        if (false)
+                            if (!CommonsStringUtils.isEmpty(result.getMessage())) {
+                                hide();
+                                MessageDialog.warn(getTitle(), result.getMessage());
+                            }
                     }
                 };
                 d.show();
@@ -272,10 +273,11 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                     public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                         super.onDeferredSuccess(result);
                         populate();
-                        if (!CommonsStringUtils.isEmpty(result.getMessage())) {
-                            hide();
-                            MessageDialog.warn(this.dialog.getTitle(), result.getMessage());
-                        }
+                        if (false)
+                            if (!CommonsStringUtils.isEmpty(result.getMessage())) {
+                                hide();
+                                MessageDialog.warn(getTitle(), result.getMessage());
+                            }
                     }
                 };
                 d.show();

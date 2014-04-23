@@ -60,6 +60,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.ExecutionMonitor.IterationProgressCounter;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
@@ -210,7 +211,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
-                    updateProductCatalog(yc, building, getBuildingDepositInfo(building, properties));
+                    updateProductCatalog(yc, building, getBuildingDepositInfo(building, properties), executionMonitor);
                 }
             }
 
@@ -267,16 +268,17 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    public void updateProductCatalog(PmcYardiCredential yc, Building building) throws YardiServiceException {
+    public void updateProductCatalog(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {
         YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
         PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, building.propertyCode().getValue());
-        updateProductCatalog(yc, building, getBuildingDepositInfo(building, Arrays.asList(propertyMarketing)));
+        updateProductCatalog(yc, building, getBuildingDepositInfo(building, Arrays.asList(propertyMarketing)), executionMonitor);
     }
 
-    public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo) throws YardiServiceException {
+    public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo, ExecutionMonitor executionMonitor)
+            throws YardiServiceException {
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
-        importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo);
+        importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo, executionMonitor);
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
@@ -331,6 +333,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         List<Property> properties = getProperties(transaction);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
+            if (executionMonitor != null) {
+                IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Unit");
+                if (expectedTotal == null) {
+                    executionMonitor.setIterationProgressCounter("Unit", new IterationProgressCounter(properties.size(), property.getRTCustomer().size()));
+                } else {
+                    expectedTotal.onIterationCompleted(property.getRTCustomer().size());
+                }
+            }
+
             String propertyId = null;
             if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
                 propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
@@ -372,12 +383,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             LeaseFinancialStats stats = importLease(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
                             executionMonitor.addProcessedEvent("Charges", stats.getCharges());
                             executionMonitor.addProcessedEvent("Payments", stats.getPayments());
-                            executionMonitor.addProcessedEvent("Lease");
+                            executionMonitor.addProcessedEvent("Transactions");
                         } catch (YardiServiceException e) {
-                            executionMonitor.addFailedEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
+                            executionMonitor
+                                    .addFailedEvent("Transactions", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
                             interfaceLog.logRecordedTracastions();
                         } catch (Throwable t) {
-                            executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
+                            executionMonitor.addErredEvent("Transactions", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
                             interfaceLog.logRecordedTracastions();
                         }
 
@@ -566,11 +578,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private void importProductCatalog(final Key yardiInterfaceId, final Building building, final RentableItems rentableItems,
-            final Map<String, BigDecimal> depositInfo) throws YardiServiceException {
+            final Map<String, BigDecimal> depositInfo, final ExecutionMonitor executionMonitor) throws YardiServiceException {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor(new ExecutionMonitor());
+                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor(executionMonitor);
 
                 processor.processCatalog(building, rentableItems, yardiInterfaceId);
                 processor.updateUnits(building, depositInfo);
@@ -623,6 +635,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         List<Property> properties = getProperties(leaseCharges);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
+            if (executionMonitor != null) {
+                IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Lease");
+                if (expectedTotal == null) {
+                    executionMonitor.setIterationProgressCounter("Lease", new IterationProgressCounter(properties.size(), property.getRTCustomer().size()));
+                } else {
+                    expectedTotal.onIterationCompleted(property.getRTCustomer().size());
+                }
+            }
+
             String propertyCode = null;
             try {
                 // make sure we have non-empty leases and transactions
@@ -658,6 +679,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             removeLease(activeLeases, leaseId);
                             importLeaseCharges(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
                         }
+                        executionMonitor.addProcessedEvent("Lease");
                     } catch (Throwable t) {
                         String msg = SimpleMessageFormat.format("Lease {0}", leaseId == null ? "undefined" : leaseId);
                         executionMonitor.addErredEvent("Lease", msg, t);
@@ -818,6 +840,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("PropertyMarketing: import started...");
 
         for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
+            if (executionMonitor != null) {
+                IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Availability");
+                if (expectedTotal == null) {
+                    executionMonitor.setIterationProgressCounter("Availability", new IterationProgressCounter(propertyInfo.getProperty().size(), property
+                            .getILSUnit().size()));
+                } else {
+                    expectedTotal.onIterationCompleted(property.getILSUnit().size());
+                }
+            }
+
             String propertyCode = property.getPropertyID().getIdentification().getPrimaryID();
 
             try {
@@ -843,7 +875,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         updateAvailabilityReport(aptUnit, ilsUnit, executionMonitor);
                     }
                     excludedUnits.remove(aptUnit);
-                    executionMonitor.addProcessedEvent("Unit");
+                    executionMonitor.addProcessedEvent("Availability");
                 }
 
                 // clear unit availability for excluded units

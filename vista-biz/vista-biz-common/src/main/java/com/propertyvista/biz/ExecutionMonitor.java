@@ -195,6 +195,46 @@ public class ExecutionMonitor {
         }
     }
 
+    public long getTotalCounter(String sectionName) {
+        long total = 0;
+        for (CompletionType type : CompletionType.values()) {
+            Long counter = getCounter(sectionName, type);
+            total += (counter == null ? 0 : counter);
+        }
+        return total;
+    }
+
+    public void setExpectedTotal(String sectionName, long total) {
+        ReportSectionId id = new ReportSectionId(sectionName, CompletionType.processed);
+        ReportSection section = sections.get(id);
+        if (section == null) {
+            sections.put(id, section = new ReportSection());
+            section.expectedTotal = new IterationProgressCounter(1, total);
+        }
+        section.expectedTotal.onIterationCompleted(total);
+    }
+
+    public Long getExpectedTotal(String sectionName) {
+        ReportSectionId id = new ReportSectionId(sectionName, CompletionType.processed);
+        ReportSection section = sections.get(id);
+        return section != null ? section.expectedTotal.getExpectedTotal() : null;
+    }
+
+    public IterationProgressCounter getIterationProgressCounter(String sectionName) {
+        ReportSectionId id = new ReportSectionId(sectionName, CompletionType.processed);
+        ReportSection section = sections.get(id);
+        return (section == null || section.expectedTotal == null) ? null : section.expectedTotal;
+    }
+
+    public void setIterationProgressCounter(String sectionName, IterationProgressCounter counter) {
+        ReportSectionId id = new ReportSectionId(sectionName, CompletionType.processed);
+        ReportSection section = sections.get(id);
+        if (section == null) {
+            sections.put(id, section = new ReportSection());
+        }
+        section.expectedTotal = counter;
+    }
+
     public void addEvent(String sectionName, CompletionType type, String message) {
         addEvent(sectionName, type, null, message);
     }
@@ -328,6 +368,8 @@ public class ExecutionMonitor {
 
         long counter;
 
+        IterationProgressCounter expectedTotal;
+
         ExecutionReportSection executionReportSection;
 
         ReportSection() {
@@ -400,35 +442,34 @@ public class ExecutionMonitor {
         }
     }
 
-    public void updateExecutionReport(ExecutionReport executionReport) {
-        updateExecutionReportMajorStats(executionReport);
+    public void updateExecutionReport(ExecutionReport dbReport) {
+        updateExecutionReportMajorStats(dbReport);
 
         //  copy executionReport.details()  to sections
-        for (ExecutionReportSection executionReportSection : executionReport.details()) {
-            ReportSectionId id = new ReportSectionId(executionReportSection.name().getValue(), executionReportSection.type().getValue());
+        for (ExecutionReportSection dbReportSection : dbReport.details()) {
+            ReportSectionId id = new ReportSectionId(dbReportSection.name().getValue(), dbReportSection.type().getValue());
             ReportSection section = sections.get(id);
             if (section == null) {
                 sections.put(id, section = new ReportSection());
             }
-            section.executionReportSection = executionReportSection;
-
-            section.counter += executionReportSection.counter().getValue();
+            section.executionReportSection = dbReportSection;
+            section.counter += dbReportSection.counter().getValue();
             if (section.accumulator != null) {
-                if (!executionReportSection.value().isNull()) {
-                    section.accumulator = section.accumulator.add(executionReportSection.value().getValue());
+                if (!dbReportSection.value().isNull()) {
+                    section.accumulator = section.accumulator.add(dbReportSection.value().getValue());
                 }
             } else {
-                section.accumulator = executionReportSection.value().getValue();
+                section.accumulator = dbReportSection.value().getValue();
             }
         }
 
-        executionReport.message().setValue(message);
+        dbReport.message().setValue(message);
 
         for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
             ExecutionReportSection executionReportSection = section.getValue().executionReportSection;
             if (executionReportSection == null) {
                 executionReportSection = EntityFactory.create(ExecutionReportSection.class);
-                executionReport.details().add(executionReportSection);
+                dbReport.details().add(executionReportSection);
             }
 
             executionReportSection.name().setValue(section.getKey().name);
@@ -490,4 +531,27 @@ public class ExecutionMonitor {
                         .append("erredCount", erredCount);
     }
 
+    /** Allows to adjust expected total based on the actual iteration total known upon entering each iteration */
+    public static class IterationProgressCounter {
+        private final long estimated;
+
+        private long expectedTotal;
+
+        public IterationProgressCounter(long iterations, long estimated) {
+            this.estimated = estimated;
+            expectedTotal = iterations * estimated;
+        }
+
+        public void onIterationCompleted(long actual) {
+            long newTotal = expectedTotal - estimated + actual;
+            // update when new total is lower, as we can only advance progress bar forward
+            if (newTotal < expectedTotal) {
+                expectedTotal = newTotal;
+            }
+        }
+
+        public long getExpectedTotal() {
+            return expectedTotal;
+        }
+    }
 }

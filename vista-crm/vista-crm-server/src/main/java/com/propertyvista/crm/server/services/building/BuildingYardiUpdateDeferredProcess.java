@@ -72,9 +72,35 @@ class BuildingYardiUpdateDeferredProcess extends AbstractDeferredProcess {
     @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = super.status();
+        String message = null;
         if (!r.isCompleted() && !r.isCanceled()) {
-            r.setMessage("Errors: " + monitor.getErred());
-            r.setProgress(0);
+            int progress = 0;
+            // unit progress
+            Long currentCounter = monitor.getTotalCounter("Unit");
+            Long expectedTotal = monitor.getExpectedTotal("Unit");
+            if (currentCounter != null && expectedTotal != null && expectedTotal > 0) {
+                progress += (int) (40 * currentCounter / expectedTotal);
+                message = "Updating Transactions";
+            }
+            // lease progress
+            currentCounter = monitor.getTotalCounter("Lease");
+            expectedTotal = monitor.getExpectedTotal("Lease");
+            if (currentCounter != null && expectedTotal != null && expectedTotal > 0) {
+                progress += (int) (40 * currentCounter / expectedTotal);
+                message = "Updating Lease Charges";
+            }
+            // availability progress
+            currentCounter = monitor.getTotalCounter("Availability");
+            expectedTotal = monitor.getExpectedTotal("Availability");
+            if (currentCounter != null && expectedTotal != null && expectedTotal > 0) {
+                progress += (int) (20 * currentCounter / expectedTotal);
+                message = "Updating Unit Availability";
+            }
+            r.setProgressMaximum(100);
+            r.setProgress(progress);
+            if (message != null) {
+                r.setMessage(message + " - Errors: " + monitor.getErred());
+            }
         } else if (monitor.getErred() > 0) {
             r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
         } else {
