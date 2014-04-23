@@ -124,7 +124,13 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                                     .componentWidth("350px").build()));
 
             if (viewOnly) {
-                panel.setWidget(++row, 0, 2, inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer()));
+                panel.setWidget(
+                        ++row,
+                        0,
+                        2,
+                        inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer(),
+                                new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants"))
+                                        .componentWidth("350px").build()));
             } else {
                 panel.setWidget(
                         ++row,
