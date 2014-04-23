@@ -34,7 +34,7 @@ public class CViewer<E> extends CField<E, NViewer<E>> {
         setFormatter(new IFormatter<E, IsWidget>() {
             @Override
             public IsWidget format(E value) {
-                return new Label(value.toString());
+                return new Label(value == null ? null : value.toString());
             }
 
         });
