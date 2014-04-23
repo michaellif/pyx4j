@@ -20,104 +20,42 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.text.ParseException;
-
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.widgets.client.Label;
 
-public abstract class CViewer<E> extends CComponent<CViewer<E>, E, IDecorator<CViewer<E>>> {
+public class CViewer<E> extends CField<E, NViewer<E>> {
 
-    private final NViewer<E> nativeComponent;
+    private IFormatter<E, IsWidget> formatter;
 
     public CViewer() {
         super();
-        nativeComponent = new NViewer<E>(this);
+        setFormatter(new IFormatter<E, IsWidget>() {
+            @Override
+            public IsWidget format(E value) {
+                return new Label(value.toString());
+            }
+
+        });
+        setNativeComponent(new NViewer<E>(this));
+        setEditable(false);
     }
 
-    @Override
-    public final INativeComponent<E> getNativeComponent() {
-        return nativeComponent;
+    public void setFormatter(IFormatter<E, IsWidget> formatter) {
+        this.formatter = formatter;
     }
 
-    public abstract IsWidget createContent(E value);
-
-    class NViewer<DATA> extends SimplePanel implements INativeViewer<DATA> {
-
-        private final CViewer<DATA> cComponent;
-
-        private final SimplePanel contentPanel;
-
-        public NViewer(CViewer<DATA> cComponent) {
-            this.cComponent = cComponent;
-            contentPanel = new SimplePanel();
-            setWidget(contentPanel);
-        }
-
-        @Override
-        public void setNativeValue(DATA value) {
-            IsWidget widget = getCComponent().createContent(value);
-            contentPanel.setWidget(widget);
-        }
-
-        @Override
-        public void setEnabled(boolean enabled) {
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return false;
-        }
-
-        @Override
-        public void setEditable(boolean editable) {
-        }
-
-        @Override
-        public boolean isEditable() {
-            return false;
-        }
-
-        @Override
-        public CViewer<DATA> getCComponent() {
-            return cComponent;
-        }
-
-        @Override
-        public SimplePanel getContentHolder() {
-            return this;
-        }
-
-        @Override
-        public IsWidget getContent() {
-            return contentPanel;
-        }
+    public IFormatter<E, IsWidget> getFormatter() {
+        return formatter;
     }
 
-    @Override
-    public Widget asWidget() {
-        return nativeComponent;
+    protected IsWidget format(E value) {
+        return getFormatter().format(value);
     }
 
-    @Override
-    protected void setDebugId(IDebugId debugId) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void setEditorValue(E value) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected E getEditorValue() throws ParseException {
-        // TODO Auto-generated method stub
-        return null;
+    public IsWidget getFormattedValue() {
+        return format(getValue());
     }
 
 }

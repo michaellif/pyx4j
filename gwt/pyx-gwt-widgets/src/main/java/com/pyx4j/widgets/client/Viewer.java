@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2013 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,15 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 21, 2014
+ * Created on Jan 28, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.decorators;
+package com.pyx4j.widgets.client;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.CViewer;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface IViewerDecorator<E extends IEntity> extends IDecorator<CViewer<E>> {
+public class Viewer extends SimplePanel implements IWidget {
+
+    public Viewer() {
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
 }
