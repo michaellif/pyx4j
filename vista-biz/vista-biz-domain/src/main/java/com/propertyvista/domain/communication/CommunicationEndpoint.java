@@ -14,27 +14,10 @@
 package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 
 @Inheritance
 @AbstractEntity
 public interface CommunicationEndpoint extends IEntity {
-
-    @NotNull
-    @ToString
-    @Indexed
-    IPrimitive<String> name();
-
-    @Editor(type = EditorType.email)
-    @Length(64)
-    @Indexed(uniqueConstraint = true, ignoreCase = true)
-    IPrimitive<String> email();
 }

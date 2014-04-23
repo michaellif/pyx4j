@@ -17,14 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.dto.CommunicationMessageDTO;
 
 public interface CommunicationMessageEditorView extends IEditor<CommunicationMessageDTO> {
 
     interface Presenter extends IEditor.Presenter {
 
-        void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message);
+        void saveMessage(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO message);
     }
 
 }

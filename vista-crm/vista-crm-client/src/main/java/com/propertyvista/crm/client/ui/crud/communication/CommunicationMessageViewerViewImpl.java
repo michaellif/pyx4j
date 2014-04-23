@@ -62,7 +62,7 @@ public class CommunicationMessageViewerViewImpl extends CrmViewerViewImplBase<Co
     @Override
     public void populate(CommunicationMessageDTO value) {
         super.populate(value);
-        setActionVisible(takeOwnershipAction, value.thread().responsible().isNull() || value.thread().responsible().isEmpty());
+        setActionVisible(takeOwnershipAction, value.threadDTO().responsible().isNull() || value.threadDTO().responsible().isEmpty());
     }
 
 }

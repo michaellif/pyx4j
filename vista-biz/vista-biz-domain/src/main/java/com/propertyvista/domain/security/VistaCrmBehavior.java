@@ -70,6 +70,8 @@ public enum VistaCrmBehavior implements Behavior {
     //Onboarding
     PropertyVistaAccountOwner,
 
+    Commandant,
+
     PropertyVistaSupport;
 
     @Override

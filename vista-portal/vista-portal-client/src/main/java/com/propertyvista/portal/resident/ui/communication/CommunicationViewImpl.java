@@ -38,8 +38,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
@@ -144,7 +144,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             });
             messageField = new Label(message.text().getStringView());
             dateField = new Label(message.date().getStringView());
-            senderField = new Label(message.sender().name().getStringView());
+            senderField = new Label(message.sender().getStringView());
 
             setWidget(0, 0, photoImage);
             getFlexCellFormatter().setRowSpan(0, 0, 2);

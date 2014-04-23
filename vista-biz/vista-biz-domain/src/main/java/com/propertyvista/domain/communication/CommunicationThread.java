@@ -16,6 +16,8 @@ package com.propertyvista.domain.communication;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -42,4 +44,8 @@ public interface CommunicationThread extends IEntity {
 
     @Detached
     CommunicationEndpoint responsible();
+
+    @NotNull
+    @Editor(type = EditorType.combo)
+    IPrimitive<Boolean> attentionRequiried();
 }

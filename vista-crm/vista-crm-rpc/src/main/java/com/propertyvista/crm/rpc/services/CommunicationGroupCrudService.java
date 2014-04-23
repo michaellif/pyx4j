@@ -7,23 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 24, 2014
+ * Created on Jan 31, 2014
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.domain.communication;
+package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-@DiscriminatorValue("AutomateEndpoint")
-public interface SystemEndpoint extends CommunicationEndpoint {
+import com.propertyvista.domain.communication.CommunicationGroup;
 
-    public enum EndpointType {
-        automate, unassigned
-    }
+public interface CommunicationGroupCrudService extends AbstractCrudService<CommunicationGroup> {
 
-    @NotNull
-    IPrimitive<EndpointType> type();
 }

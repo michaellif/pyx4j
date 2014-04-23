@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui.communication;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
 
 public interface CommunicationMessagePageView extends IEditorView<CommunicationMessageDTO> {

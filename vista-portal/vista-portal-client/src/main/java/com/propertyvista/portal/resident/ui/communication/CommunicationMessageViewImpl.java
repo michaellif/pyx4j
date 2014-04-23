@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,8 +28,8 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
-import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 
@@ -83,8 +85,16 @@ public class CommunicationMessageViewImpl extends SimplePanel implements Communi
             super(CommunicationMessageDTO.class, false, false);
             setSelectable(true);
             getDataTablePanel().setFilteringEnabled(false);
-            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().isRead()).build(), new MemberColumnDescriptor.Builder(proto().subject()).build(),
+            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().isRead()).build(),
+                    new MemberColumnDescriptor.Builder(proto().isHighImportance()).build(), new MemberColumnDescriptor.Builder(proto().star()).build(),
+                    new MemberColumnDescriptor.Builder(proto().sender()).build(), new MemberColumnDescriptor.Builder(proto().subject()).build(),
                     new MemberColumnDescriptor.Builder(proto().date()).build());
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().isHighImportance(), true), new Sort(
+                    proto().isHighImportance(), true));
         }
     }
 

@@ -13,9 +13,10 @@
  */
 package com.propertyvista.biz.communication;
 
-import com.propertyvista.domain.communication.SystemEndpoint;
-import com.propertyvista.domain.communication.SystemEndpoint.EndpointType;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
 
 public interface CommunicationMessageFacade {
-    public SystemEndpoint getSystemEndpointFromCache(EndpointType epType);
+
+    public CommunicationGroup getCommunicationGroupFromCache(EndpointGroup epType);
 }

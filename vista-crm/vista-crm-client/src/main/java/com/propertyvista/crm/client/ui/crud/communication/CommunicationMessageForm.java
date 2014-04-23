@@ -13,14 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import java.util.Arrays;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -28,8 +30,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
@@ -39,7 +40,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationMessage;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.CommunicationMessageDTO;
 
 public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessageDTO> {
@@ -60,13 +61,17 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
     }
 
     public void reply() {
+        IList<CommunicationEndpointDTO> to = messagesFolder.getValue().get(0).to();
         messagesFolder.addItem();
+        CommunicationMessageDTO newMessage = messagesFolder.getItem(messagesFolder.getItemCount() - 1).getValue();
+        newMessage.to().addAll(to);
+        messagesFolder.getItem(messagesFolder.getItemCount() - 1).setValue(newMessage);
     }
 
     public void takeOwnership() {
-        ((CommunicationMessageViewerView.Presenter) getParentView().getPresenter()).takeOwnership(new DefaultAsyncCallback<CommunicationMessage>() {
+        ((CommunicationMessageViewerView.Presenter) getParentView().getPresenter()).takeOwnership(new DefaultAsyncCallback<CommunicationMessageDTO>() {
             @Override
-            public void onSuccess(CommunicationMessage result) {
+            public void onSuccess(CommunicationMessageDTO result) {
                 getValue().setPrimaryKey(result.getPrimaryKey());
                 refresh(false);
             }
@@ -76,30 +81,25 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
     public BasicFlexFormPanel createGeneralForm() {
         BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().thread().created(), new CLabel<String>(), 20));
-        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().subject(), 20));
-        mainPanel.setWidget(++row, 0, inject(proto().thread().content(), messagesFolder));
+        mainPanel.setWidget(++row, 0, inject(proto().threadDTO().created(), new FieldDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().threadDTO().content(), messagesFolder));
         mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;
     }
 
-    private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessage> {
+    private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessageDTO> {
         public OpenMessageFolder() {
-            super(CommunicationMessage.class, false);
+            super(CommunicationMessageDTO.class, false);
             setAddable(true);
         }
 
         @Override
-        public IFolderItemDecorator<CommunicationMessage> createItemDecorator() {
-            BoxFolderItemDecorator<CommunicationMessage> decor = (BoxFolderItemDecorator<CommunicationMessage>) super.createItemDecorator();
+        public IFolderItemDecorator<CommunicationMessageDTO> createItemDecorator() {
+            BoxFolderItemDecorator<CommunicationMessageDTO> decor = (BoxFolderItemDecorator<CommunicationMessageDTO>) super.createItemDecorator();
             decor.setExpended(false);
             return decor;
-        }
-
-        @Override
-        protected CForm<CommunicationMessage> createItemForm(IObject<?> member) {
-            return new MessageFolderItem();
         }
 
         @Override
@@ -108,14 +108,19 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         }
 
         @Override
-        public void removeItem(CFolderItem<CommunicationMessage> item) {
+        public void removeItem(CFolderItem<CommunicationMessageDTO> item) {
             super.removeItem(item);
 
         }
 
+        @Override
+        protected CForm<? extends CommunicationMessageDTO> createItemForm(IObject<?> member) {
+            return new MessageFolderItem();
+        }
+
     }
 
-    public class MessageFolderItem extends CForm<CommunicationMessage> {
+    public class MessageFolderItem extends CForm<CommunicationMessageDTO> {
         private Anchor btnSend;
 
         private final CommunicationEndpointFolder receiverSelector;
@@ -123,7 +128,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         private Anchor btnCancel;
 
         public MessageFolderItem() {
-            super(CommunicationMessage.class, new VistaViewersComponentFactory());
+            super(CommunicationMessageDTO.class, new VistaViewersComponentFactory());
             receiverSelector = new CommunicationEndpointFolder(CommunicationMessageForm.this);
 
             inheritEditable(false);
@@ -132,14 +137,17 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         }
 
         @Override
-        protected IsWidget createContent() {
+        public IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, injectAndDecorate(proto().date(), new CLabel<String>(), 20));
-            content.setWidget(++row, 0, injectAndDecorate(proto().text(), 20));
+            content.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder(20).build()));
+            CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
+            cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+            content.setWidget(++row, 0, inject(proto().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(20).build()));
             content.setH1(++row, 0, 1, "From");
-            content.setWidget(++row, 0, injectAndDecorate(proto().sender(), new SenderLabel(), 20));
+            content.setWidget(++row, 0, inject(proto().sender(), new FieldDecoratorBuilder(20).build()));
             content.setH1(++row, 0, 1, "To");
             content.setWidget(++row, 0, inject(proto().to(), receiverSelector));
 
@@ -150,40 +158,29 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
             return content;
         }
 
-        @Override
-        protected CommunicationMessage preprocessValue(CommunicationMessage value, boolean fireEvent, boolean populate) {
-            if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
-                if (!value.isRead().getValue() && userInList(ClientContext.getUserVisit(), value.to())) {
-                    value.isRead().setValue(true);
-                    BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
-                    d.setExpended(true);
-                    ((CommunicationMessageViewerView.Presenter) CommunicationMessageForm.this.getParentView().getPresenter()).saveMessage(
-                            new DefaultAsyncCallback<CommunicationMessage>() {
-                                @Override
-                                public void onSuccess(CommunicationMessage result) {
-                                }
-                            }, value);
-                }
-
-            } else {
-                value.isRead().setValue(false);
-            }
-            return super.preprocessValue(value, fireEvent, populate);
-        }
-
-        private boolean userInList(UserVisit user, IList<CommunicationEndpoint> list) {
-            if (list == null || list.isNull()) {
-                return false;
-            }
-
-            for (CommunicationEndpoint ep : list) {
-                if (user.getPrincipalPrimaryKey().equals(ep.getPrimaryKey())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
+        /*
+         * @Override
+         * protected CommunicationMessageDTO preprocessValue(CommunicationMessageDTO value, boolean fireEvent, boolean populate) {
+         * if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
+         * if (!value.isRead().getValue() && ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(value.recipient().getPrimaryKey())) {
+         * value.isRead().setValue(true);
+         * BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
+         * d.setExpended(true);
+         * ((CommunicationMessageViewerView.Presenter) CommunicationMessageForm.this.getParentView().getPresenter()).saveMessage(
+         * new DefaultAsyncCallback<CommunicationMessageDTO>() {
+         * 
+         * @Override
+         * public void onSuccess(CommunicationMessageDTO result) {
+         * }
+         * }, value);
+         * }
+         * 
+         * } else {
+         * value.isRead().setValue(false);
+         * }
+         * return super.preprocessValue(value, fireEvent, populate);
+         * }
+         */
         protected Toolbar createLowerToolbar() {
             Toolbar tb = new Toolbar();
 
@@ -197,18 +194,18 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
                         com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getParentView().getPresenter();
                         if (p instanceof CommunicationMessageEditorView.Presenter) {
 
-                            ((CommunicationMessageEditorView.Presenter) p).saveMessage(new DefaultAsyncCallback<CommunicationMessage>() {
+                            ((CommunicationMessageEditorView.Presenter) p).saveMessage(new DefaultAsyncCallback<CommunicationMessageDTO>() {
                                 @Override
-                                public void onSuccess(CommunicationMessage result) {
+                                public void onSuccess(CommunicationMessageDTO result) {
                                     getValue().setPrimaryKey(result.getPrimaryKey());
                                     refresh(false);
                                 }
                             }, getValue());
                         } else {
 
-                            ((CommunicationMessageViewerView.Presenter) p).saveMessage(new DefaultAsyncCallback<CommunicationMessage>() {
+                            ((CommunicationMessageViewerView.Presenter) p).saveMessage(new DefaultAsyncCallback<CommunicationMessageDTO>() {
                                 @Override
-                                public void onSuccess(CommunicationMessage result) {
+                                public void onSuccess(CommunicationMessageDTO result) {
                                     getValue().setPrimaryKey(result.getPrimaryKey());
                                     refresh(false);
                                 }
@@ -221,7 +218,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
             btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
                 @Override
                 public void execute() {
-                    ((OpenMessageFolder) getParent().getParent()).removeItem((CFolderItem<CommunicationMessage>) getParent());
+                    ((OpenMessageFolder) getParent().getParent()).removeItem((CFolderItem<CommunicationMessageDTO>) getParent());
                 }
             });
 
@@ -236,7 +233,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             if (getValue().isPrototype() || getValue().text() == null || getValue().text().isNull()) {
-                BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
+                BoxFolderItemDecorator<CommunicationMessageDTO> d = (BoxFolderItemDecorator<CommunicationMessageDTO>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
                 setEditable(true);
@@ -264,13 +261,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
             if (value == null) {
                 return "";
             } else {
-                StringBuilder result = new StringBuilder();
-
-                result.append(value.name().getStringView());
-                result.append(", ");
-                result.append(value.email().getStringView());
-
-                return result.toString();
+                return value.getStringView();
             }
         }
     }

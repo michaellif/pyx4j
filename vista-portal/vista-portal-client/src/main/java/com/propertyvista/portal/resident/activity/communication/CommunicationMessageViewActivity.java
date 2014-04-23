@@ -21,9 +21,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.dto.MessagesDTO;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessageView;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessagesDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
 
 public class CommunicationMessageViewActivity extends AbstractActivity implements CommunicationMessageView.Presenter {

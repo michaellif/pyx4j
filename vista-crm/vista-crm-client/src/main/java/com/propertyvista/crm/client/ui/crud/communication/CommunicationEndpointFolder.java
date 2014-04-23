@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -37,34 +38,41 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.services.selections.SelectCommunicationGroupListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerUserListService;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationGroup.ContactType;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.dto.CommunicationMessageDTO.ContactType;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 
-public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationEndpoint> {
+public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationEndpointDTO> {
     private final CrmEntityForm<?> parent;
 
     private static final I18n i18n = I18n.get(CommunicationEndpointFolder.class);
 
     public CommunicationEndpointFolder(CrmEntityForm<?> parent) {
-        super(CommunicationEndpoint.class, i18n.tr("To"), true);
+        super(CommunicationEndpointDTO.class, i18n.tr("To"), false);
+        setAddable(true);
+        setRemovable(true);
+        setOrderable(true);
+
         this.parent = parent;
     }
 
     @Override
     public List<FolderColumnDescriptor> columns() {
         ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
-        columns.add(new FolderColumnDescriptor(proto().name(), "20em"));
-        columns.add(new FolderColumnDescriptor(proto().email(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().type(), "20em", true));
+        columns.add(new FolderColumnDescriptor(proto().name(), "20em", true));
         return columns;
     }
 
     @Override
-    protected IFolderDecorator<CommunicationEndpoint> createFolderDecorator() {
-        return new VistaTableFolderDecorator<CommunicationEndpoint>(this, true) {
+    protected IFolderDecorator<CommunicationEndpointDTO> createFolderDecorator() {
+        return new VistaTableFolderDecorator<CommunicationEndpointDTO>(this, true) {
             {
                 setShowHeader(true);
             }
@@ -72,14 +80,8 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
     }
 
     @Override
-    protected CForm<? extends CommunicationEndpoint> createItemForm(IObject<?> member) {
-        if (member instanceof CrmUser) {
-            return new CommunicationEndpointEditor<CrmUser>(CrmUser.class);
-        } else if (member instanceof CustomerUser) {
-            return new CommunicationEndpointEditor<CustomerUser>(CustomerUser.class);
-        } else {
-            throw new Error("Can't create editor");
-        }
+    protected CForm<? extends CommunicationEndpointDTO> createItemForm(IObject<?> member) {
+        return new CommunicationEndpointEditor();
     }
 
     @Override
@@ -89,7 +91,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
             public boolean onClickOk() {
                 final ContactType type = getSelectedType();
                 if (type != null) {
-                    if (type.equals(ContactType.crmUser)) {
+                    if (type.equals(ContactType.Employee)) {
                         new CommunicationEndpointSelectorDialog<CrmUser>(parent.getParentView(), CrmUser.class) {
 
                             @Override
@@ -97,12 +99,20 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
                                 return GWT.<AbstractListService<CrmUser>> create(SelectCrmUserListService.class);
                             }
                         }.show();
-                    } else if (type.equals(ContactType.customerUser)) {
+                    } else if (type.equals(ContactType.Tenants)) {
                         new CommunicationEndpointSelectorDialog<CustomerUser>(parent.getParentView(), CustomerUser.class) {
 
                             @Override
                             protected AbstractListService<CustomerUser> getSelectService() {
                                 return GWT.<AbstractListService<CustomerUser>> create(SelectCustomerUserListService.class);
+                            }
+                        }.show();
+                    } else if (type.equals(ContactType.Group)) {
+                        new CommunicationGroupSelectorDialog(parent.getParentView()) {
+
+                            @Override
+                            protected AbstractListService<CommunicationGroup> getSelectService() {
+                                return GWT.<AbstractListService<CommunicationGroup>> create(SelectCommunicationGroupListService.class);
                             }
                         }.show();
                     }
@@ -117,14 +127,14 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
         }.show();
     }
 
-    private class CommunicationEndpointEditor<E extends CommunicationEndpoint> extends CFolderRowEditor<E> {
+    private class CommunicationEndpointEditor extends CFolderRowEditor<CommunicationEndpointDTO> {
 
-        public CommunicationEndpointEditor(Class<E> clazz) {
-            super(clazz, columns());
+        public CommunicationEndpointEditor() {
+            super(CommunicationEndpointDTO.class, columns());
         }
     }
 
-    private abstract class CommunicationEndpointSelectorDialog<E extends CommunicationEndpoint> extends EntitySelectorTableVisorController<E> {
+    private abstract class CommunicationEndpointSelectorDialog<E extends AbstractPmcUser> extends EntitySelectorTableVisorController<E> {
 
         public CommunicationEndpointSelectorDialog(IPane parentView, Class<E> entityClass) {
             super(parentView, entityClass, true, i18n.tr("Select User"));
@@ -132,10 +142,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
 
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().email(), true).build()
-            ); //@formatter:on
+            return Arrays.asList(new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build());
         }
 
         @Override
@@ -146,8 +153,43 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
         @Override
         public void onClickOk() {
             if (!getSelectedItems().isEmpty()) {
-                for (CommunicationEndpoint selected : getSelectedItems()) {
-                    addItem(selected);
+                for (AbstractPmcUser selected : getSelectedItems()) {
+                    CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+                    proto.name().set(selected.name());
+                    proto.type().setValue(selected.getInstanceValueClass().equals(CustomerUser.class) ? ContactType.Tenants : ContactType.Employee);
+                    proto.endpoint().set(selected);
+                    addItem(proto);
+                }
+            }
+        }
+    }
+
+    private abstract class CommunicationGroupSelectorDialog extends EntitySelectorTableVisorController<CommunicationGroup> {
+
+        public CommunicationGroupSelectorDialog(IPane parentView) {
+            super(parentView, CommunicationGroup.class, true, i18n.tr("Select Communication Group"));
+        }
+
+        @Override
+        protected List<ColumnDescriptor> defineColumnDescriptors() {
+            return Arrays.asList(new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build(), new MemberColumnDescriptor.Builder(proto()
+                    .isPredefined()).searchable(true).build());
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().name(), false));
+        }
+
+        @Override
+        public void onClickOk() {
+            if (!getSelectedItems().isEmpty()) {
+                for (CommunicationGroup selected : getSelectedItems()) {
+                    CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+                    proto.name().set(selected.name());
+                    proto.type().setValue(ContactType.Group);
+                    proto.endpoint().set(selected);
+                    addItem(proto);
                 }
             }
         }

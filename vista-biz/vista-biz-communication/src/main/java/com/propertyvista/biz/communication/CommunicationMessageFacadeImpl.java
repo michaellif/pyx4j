@@ -19,32 +19,32 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.communication.SystemEndpoint;
-import com.propertyvista.domain.communication.SystemEndpoint.EndpointType;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
 
 public class CommunicationMessageFacadeImpl implements CommunicationMessageFacade {
-    private static class SystemEndpointCacheKey {
-        static String getCacheKey(EndpointType epType) {
-            return String.format("%s_%s", SystemEndpoint.class.getName(), epType);
+    private static class CommunicationGroupCacheKey {
+        static String getCacheKey(EndpointGroup epType) {
+            return String.format("%s_%s", CommunicationGroup.class.getName(), epType);
         }
     }
 
     public CommunicationMessageFacadeImpl() {
-        cacheSystemEndpoints();
+        cacheCommunicationGroups();
     }
 
-    private void cacheSystemEndpoints() {
-        EntityQueryCriteria<SystemEndpoint> criteria = EntityQueryCriteria.create(SystemEndpoint.class);
-        List<SystemEndpoint> predefinedEps = Persistence.service().query(criteria);
+    private void cacheCommunicationGroups() {
+        EntityQueryCriteria<CommunicationGroup> criteria = EntityQueryCriteria.create(CommunicationGroup.class);
+        List<CommunicationGroup> predefinedEps = Persistence.service().query(criteria);
         if (predefinedEps != null) {
-            for (SystemEndpoint ep : predefinedEps)
-                CacheService.put(SystemEndpointCacheKey.getCacheKey(ep.type().getValue()), ep);
+            for (CommunicationGroup ep : predefinedEps)
+                CacheService.put(CommunicationGroupCacheKey.getCacheKey(ep.type().getValue()), ep);
         }
     }
 
     @Override
-    public SystemEndpoint getSystemEndpointFromCache(EndpointType epType) {
-        SystemEndpoint ep = CacheService.get(SystemEndpointCacheKey.getCacheKey(epType));
+    public CommunicationGroup getCommunicationGroupFromCache(EndpointGroup epType) {
+        CommunicationGroup ep = CacheService.get(CommunicationGroupCacheKey.getCacheKey(epType));
         return ep;
     }
 }

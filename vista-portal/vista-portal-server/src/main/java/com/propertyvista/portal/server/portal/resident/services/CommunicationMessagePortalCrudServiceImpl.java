@@ -25,20 +25,18 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
 import com.propertyvista.domain.communication.CommunicationMessage;
+import com.propertyvista.domain.communication.CommunicationMessageData;
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.domain.communication.SystemEndpoint.EndpointType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.common.AbstractUser;
-import com.propertyvista.dto.CommunicationMessageDTO;
-import com.propertyvista.dto.MessagesDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessagesDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
@@ -56,11 +54,11 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
 
     @Override
     protected CommunicationMessageDTO init(InitializationData initializationData) {
-        CommunicationMessageDTO dto = EntityFactory.create(CommunicationMessageDTO.class);
+        CommunicationMessageDTO dto = super.init(initializationData);
         dto.date().setValue(SystemDateManager.getDate());
         dto.isRead().setValue(false);
         dto.sender().set(ResidentPortalContext.getCurrentUser());
-        dto.to().add(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned));
+        dto.recipient().add(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
         return dto;
     }
 
@@ -70,16 +68,22 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
             bo.created().setValue(SystemDateManager.getDate());
         }
 
+        CommunicationMessageData c = EntityFactory.create(CommunicationMessageData.class);
         CommunicationMessage m = EntityFactory.create(CommunicationMessage.class);
         m.isRead().setValue(false);
-        m.attachments().set(to.attachments());
-        m.date().setValue(SystemDateManager.getDate());
-        m.sender().set(ResidentPortalContext.getCurrentUser());
-        m.to().add(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned));
+        c.attachments().set(to.attachments());
+        c.date().setValue(SystemDateManager.getDate());
+        c.sender().set(ResidentPortalContext.getCurrentUser());
+        m.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
 
-        m.text().set(to.text());
+        c.text().set(to.text());
+        c.isHighImportance().set(to.isHighImportance());
+        Persistence.service().persist(c);
+        m.data().set(c);
         bo.subject().set(to.subject());
         bo.content().add(m);
+        bo.attentionRequiried().setValue(true);
+
         return super.persist(bo, to);
     }
 
@@ -90,10 +94,12 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         to.thread().set(bo);
         to.subject().set(bo.subject());
         if (bo.content() != null && !bo.content().isNull() && bo.content().size() > 0) {
-            to.text().set(bo.content().get(0).text());
-            to.date().set(bo.content().get(0).date());
+            to.text().set(bo.content().get(0).data().text());
+            to.isHighImportance().set(bo.content().get(0).data().isHighImportance());
+            to.star().set(bo.content().get(0).star());
+            to.date().set(bo.content().get(0).data().date());
             to.attachments().setAttachLevel(AttachLevel.Attached);
-            to.attachments().set(bo.content().get(0).attachments());
+            to.attachments().set(bo.content().get(0).data().attachments());
         }
     }
 
@@ -111,12 +117,15 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         IList<CommunicationMessage> ms = dbo.content();
         if (ms != null && !ms.isNull()) {
             for (CommunicationMessage m : ms) {
-                Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(m.data(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(m.data().attachments(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(m.data().sender(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(m.recipient(), AttachLevel.Attached);
 
-                if (userInList(ResidentPortalContext.getCurrentUser(), m.to())) {
-                    m.isRead().set(m.isRead());
-                } else {
+                if (ResidentPortalContext.getCurrentUser().equals(m.data().sender())) {
                     m.isRead().setValue(true);
+                } else {
+                    m.isRead().set(m.isRead());
                 }
             }
         }
@@ -135,18 +144,13 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         }
 
         EntityQueryCriteria<CommunicationMessage> messageCriteria = EntityQueryCriteria.create(CommunicationMessage.class);
+        messageCriteria.desc(messageCriteria.proto().data().date());
+
         if (newOnly) {
             messageCriteria.eq(messageCriteria.proto().isRead(), false);
+            messageCriteria.eq(messageCriteria.proto().recipient(), ResidentPortalContext.getCurrentUser());
         }
-        messageCriteria.desc(messageCriteria.proto().date());
-        if (newOnly) {
-            messageCriteria.eq(messageCriteria.proto().to(), ResidentPortalContext.getCurrentUser());
-        } else {
-            OrCriterion or = messageCriteria.or();
-            or.left().eq(messageCriteria.proto().sender(), ResidentPortalContext.getCurrentUser());
-            or.right().eq(messageCriteria.proto().to(), ResidentPortalContext.getCurrentUser());
-        }
-        List<CommunicationMessage> ms = Persistence.service().query(messageCriteria);
+        List<CommunicationMessage> ms = Persistence.secureQuery(messageCriteria);
 
         if (ms == null || ms.isEmpty()) {
             callback.onSuccess(null);
@@ -157,9 +161,18 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         MessagesDTO data = EntityFactory.create(MessagesDTO.class);
         for (CommunicationMessage m : ms) {
             Persistence.ensureRetrieve(m.thread(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(m.data(), AttachLevel.Attached);
             if (visitedThreads.containsKey(m.thread().id().getValue())) {
                 CommunicationMessageDTO thread = visitedThreads.get(m.thread().id().getValue());
-                if (ResidentPortalContext.getCurrentUser().equals(m.sender())) {
+
+                if (m.star().getValue(false)) {
+                    thread.star().setValue(true);
+                }
+
+                if (m.data().isHighImportance().getValue()) {
+                    thread.isHighImportance().setValue(m.data().isHighImportance().getValue());
+                }
+                if (ResidentPortalContext.getCurrentUser().equals(m.data().sender())) {
                     continue;
                 }
                 if (!m.isRead().getValue(false)) {
@@ -170,18 +183,18 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
 
             CommunicationMessageDTO message = EntityFactory.create(CommunicationMessageDTO.class);
             message.subject().set(m.thread().subject());
-            message.text().set(m.text());
-            message.date().set(m.date());
+            message.text().set(m.data().text());
+            message.date().set(m.data().date());
             message.thread().setAttachLevel(AttachLevel.Attached);
             message.thread().set(m.thread());
-            Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(m.data().sender(), AttachLevel.Attached);
             message.sender().setAttachLevel(AttachLevel.Attached);
-            message.sender().set(m.sender());
-            message.to().set(m.to());
-            if (userInList(ResidentPortalContext.getCurrentUser(), m.to())) {
-                message.isRead().set(m.isRead());
-            } else {
+            message.sender().set(m.data().sender());
+            message.recipient().add(m.recipient());
+            if (ResidentPortalContext.getCurrentUser().equals(m.data().sender())) {
                 message.isRead().setValue(true);
+            } else {
+                message.isRead().set(m.isRead());
             }
 
             visitedThreads.put(m.thread().id().getValue(), message);
@@ -194,30 +207,18 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
 
     @Override
     public void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message) {
-        if (message.date().isNull()) {
-            message.date().setValue(SystemDateManager.getDate());
+        if (message.data().date().isNull()) {
+            message.data().date().setValue(SystemDateManager.getDate());
         }
-        if (message.to().isNull() || message.to().isEmpty()) {
-            message.to().add(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(EndpointType.unassigned));
+        if (message.recipient().isNull() || message.recipient().isEmpty()) {
+            message.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
         }
-        if (message.sender().isNull()) {
-            message.sender().set(ResidentPortalContext.getCurrentUser());
+        if (message.data().sender().isNull()) {
+            message.data().sender().set(ResidentPortalContext.getCurrentUser());
         }
+        Persistence.service().persist(message.data());
         Persistence.service().persist(message);
         Persistence.service().commit();
         callback.onSuccess(message);
-    }
-
-    private static boolean userInList(AbstractUser user, IList<CommunicationEndpoint> list) {
-        if (list == null || list.isNull()) {
-            return false;
-        }
-
-        for (CommunicationEndpoint ep : list) {
-            if (user.equals(ep)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -41,6 +41,8 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
 
     public static final String DEFAULT_SUPPORT_ROLE_NAME = "PropertyVista Support";
 
+    public static final String DEFAULT_COMMANDANT_ROLE_NAME = "Commandant";
+
     private final static Logger log = LoggerFactory.getLogger(CrmRolesPreloader.class);
 
     private int rolesCount;
@@ -77,6 +79,15 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
 
     }
 
+    public static CrmRole getCommandantRole() {
+        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_COMMANDANT_ROLE_NAME));
+        CrmRole role = Persistence.service().retrieve(criteria);
+        assert (role != null);
+        return role;
+
+    }
+
     public static CrmRole getPropertyVistaAccountOwnerRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().name(), VistaCrmBehavior.PropertyVistaAccountOwner.name()));
@@ -103,6 +114,8 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole("Asset Manager", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
         createRole("BR", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Maintenance, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole(DEFAULT_COMMANDANT_ROLE_NAME, VistaCrmBehavior.Tenants, VistaCrmBehavior.Commandant, VistaCrmBehavior.Emergency,
+                VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Maintenance, VistaCrmBehavior.Reports);
         createRole("Executive", VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
         createRole("Leasing", VistaCrmBehavior.Tenants, VistaCrmBehavior.Equifax, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Reports);
         createRole("Legal", VistaCrmBehavior.Equifax, VistaCrmBehavior.Reports);

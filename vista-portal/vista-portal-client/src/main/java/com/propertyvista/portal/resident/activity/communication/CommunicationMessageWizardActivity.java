@@ -21,11 +21,11 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
-import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessageWizardView;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessageWizardView.CommunicationMessageWizardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 

@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
+import java.util.Arrays;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -28,22 +31,21 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView.CommunicationMessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMessageDTO> {
 
@@ -51,7 +53,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
 
     private final Button btnReplay;
 
-    private final OpenMessageFolder messagesFolder = new OpenMessageFolder();
+    private final OpenMessageFolder messagesFolder;
 
     public CommunicationMessagePage(CommunicationMessagePageView view) {
         super(CommunicationMessageDTO.class, view, "Message", ThemeColor.contrast5);
@@ -63,6 +65,12 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
             }
         });
 
+        messagesFolder = new OpenMessageFolder();
+        inheritEditable(false);
+        inheritViewable(false);
+        inheritEnabled(false);
+        setEditable(true);
+        setEnabled(true);
         asWidget().setStyleName(com.propertyvista.portal.shared.themes.EntityViewTheme.StyleName.EntityView.name());
     }
 
@@ -77,7 +85,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
     }
 
     @Override
-    protected IsWidget createContent() {
+    public IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
         mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
@@ -88,16 +96,18 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         return mainPanel;
     }
 
-    private class OpenMessageFolder extends PortalBoxFolder<CommunicationMessage> {
+    private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessage> {
 
         public OpenMessageFolder() {
-            super(CommunicationMessage.class, true);
-            setExpended(false);
+            super(CommunicationMessage.class, false);
+            setAddable(true);
         }
 
         @Override
-        protected CForm<CommunicationMessage> createItemForm(IObject<?> member) {
-            return new MessageFolderItem(this);
+        public BoxFolderItemDecorator<CommunicationMessage> createItemDecorator() {
+            BoxFolderItemDecorator<CommunicationMessage> decor = (BoxFolderItemDecorator<CommunicationMessage>) super.createItemDecorator();
+            decor.setExpended(false);
+            return decor;
         }
 
         @Override
@@ -111,6 +121,11 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
 
         }
 
+        @Override
+        protected CForm<? extends CommunicationMessage> createItemForm(IObject<?> member) {
+            return new MessageFolderItem(this);
+        }
+
     }
 
     public class MessageFolderItem extends CForm<CommunicationMessage> {
@@ -119,6 +134,10 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         private Anchor btnCancel;
 
         private Anchor btnmarkAsUnread;
+
+        private Anchor star;
+
+        CComboBoxBoolean cmbStar;
 
         private final OpenMessageFolder parent;
 
@@ -131,15 +150,23 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        protected IsWidget createContent() {
+        public IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, inject(proto().date(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
-            content.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(250).build()));
+            content.setWidget(++row, 0, inject(proto().data().date(), new CLabel<String>(), new FieldDecoratorBuilder(20).build()));
+            cmbStar = new CComboBoxBoolean();
+            cmbStar.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+            CComboBoxBoolean cmbBoolean2 = new CComboBoxBoolean();
+            cmbBoolean2.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+
+            content.setWidget(++row, 0, inject(proto().star(), cmbStar, new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().data().isHighImportance(), cmbBoolean2, new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().data().sender(), new SenderLabel(), new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, inject(proto().data().text(), new FieldDecoratorBuilder(20).build()));
             content.setBR(++row, 0, 1);
             content.setH1(++row, 0, 1, "Attachments");
-            content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));
+            content.setWidget(++row, 0, inject(proto().data().attachments(), new CommunicationMessageAttachmentFolder()));
             content.setWidget(++row, 0, 2, createLowerToolbar());
             return content;
         }
@@ -160,7 +187,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                                     public void onSuccess(CommunicationMessage result) {
                                         getValue().setPrimaryKey(result.getPrimaryKey());
                                         getValue().isRead().setValue(false);
-                                        getValue().date().setValue(result.date().getValue());
+                                        getValue().data().date().setValue(result.data().date().getValue());
                                         refresh(false);
                                     }
                                 }, getValue());
@@ -191,9 +218,26 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                 }
             });
 
+            star = new Anchor(i18n.tr("Star"), new Command() {
+                @Override
+                public void execute() {
+                    CommunicationMessage m = getValue();
+
+                    m.star().setValue(!m.star().getValue(false));
+                    cmbStar.setValue(m.star().getValue(false));
+                    ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
+                            new DefaultAsyncCallback<CommunicationMessage>() {
+                                @Override
+                                public void onSuccess(CommunicationMessage result) {
+                                    //AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView());
+                                }
+                            }, m);
+                }
+            });
             tb.addItem(btnSend);
             tb.addItem(btnCancel);
             tb.addItem(btnmarkAsUnread);
+            tb.addItem(star);
             btnSend.setVisible(false);
             btnCancel.setVisible(false);
             btnmarkAsUnread.setVisible(false);
@@ -204,7 +248,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         @Override
         protected CommunicationMessage preprocessValue(CommunicationMessage value, boolean fireEvent, boolean populate) {
             if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
-                if (!value.isRead().getValue() && userInList(ClientContext.getUserVisit(), value.to())) {
+                if (!value.isRead().getValue() && ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(value.recipient().getPrimaryKey())) {
                     value.isRead().setValue(true);
                     BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
                     d.setExpended(true);
@@ -225,7 +269,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            if (getValue().isPrototype() || getValue().id().isNull()) {
+            if (getValue().isPrototype() || getValue().data().text() == null || getValue().data().text().isNull()) {
                 BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
@@ -233,31 +277,35 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                 setEnabled(true);
                 btnSend.setVisible(true);
                 btnCancel.setVisible(true);
+                star.setVisible(false);
                 btnmarkAsUnread.setVisible(false);
-                get(proto().date()).setVisible(false);
+                get(proto().data().date()).setVisible(false);
+                get(proto().star()).setVisible(false);
+                get(proto().data().sender()).setVisible(false);
             } else {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                get(proto().date()).setVisible(true);
-                btnmarkAsUnread.setVisible(userInList(ClientContext.getUserVisit(), getValue().to()));
+                get(proto().data().date()).setVisible(true);
+                get(proto().data().sender()).setVisible(true);
+                get(proto().star()).setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
+                btnmarkAsUnread.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
+                star.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
             }
         }
 
-        private boolean userInList(UserVisit user, IList<CommunicationEndpoint> list) {
-            if (list == null || list.isNull()) {
-                return false;
-            }
+        public class SenderLabel extends CEntityLabel<CommunicationEndpoint> {
 
-            for (CommunicationEndpoint ep : list) {
-                if (user.getPrincipalPrimaryKey().equals(ep.getPrimaryKey())) {
-                    return true;
+            @Override
+            public String format(CommunicationEndpoint value) {
+                if (value == null) {
+                    return "";
+                } else {
+                    return value.getStringView();
                 }
             }
-            return false;
         }
-
     }
 }

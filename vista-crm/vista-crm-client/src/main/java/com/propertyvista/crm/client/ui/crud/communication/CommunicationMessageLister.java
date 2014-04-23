@@ -35,13 +35,15 @@ public class CommunicationMessageLister extends AbstractLister<CommunicationMess
     public static ColumnDescriptor[] createColumnDescriptors() {
         CommunicationMessageDTO proto = EntityFactory.getEntityPrototype(CommunicationMessageDTO.class);
 
-        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.isRead()).build(), new MemberColumnDescriptor.Builder(proto.date()).build(),
-                new MemberColumnDescriptor.Builder(proto.subject()).build() };
+        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.isRead()).build(),
+                new MemberColumnDescriptor.Builder(proto.isHighImportance()).build(),
+                //new MemberColumnDescriptor.Builder(proto.sender()).build(),
+                new MemberColumnDescriptor.Builder(proto.date()).build(), new MemberColumnDescriptor.Builder(proto.subject()).build() };
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false));
+        return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().isHighImportance(), true));
     }
 
 }

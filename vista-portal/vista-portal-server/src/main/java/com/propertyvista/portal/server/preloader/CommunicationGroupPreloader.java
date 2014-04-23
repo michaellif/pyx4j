@@ -17,22 +17,26 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.domain.communication.SystemEndpoint;
-import com.propertyvista.domain.communication.SystemEndpoint.EndpointType;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
+import com.propertyvista.domain.security.CrmRole;
 
-public class SystemEnpointPreloader extends AbstractDataPreloader {
+public class CommunicationGroupPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        createEnpoint(EndpointType.automate);
-        createEnpoint(EndpointType.unassigned);
+        createEnpoint(EndpointGroup.Commandant, CrmRolesPreloader.getCommandantRole());
         return null;
     }
 
-    private void createEnpoint(EndpointType epType) {
-        SystemEndpoint ep = EntityFactory.create(SystemEndpoint.class);
+    private void createEnpoint(EndpointGroup epType, CrmRole defaultRole) {
+        CommunicationGroup ep = EntityFactory.create(CommunicationGroup.class);
         ep.type().setValue(epType);
         ep.name().setValue(epType.toString());
+        ep.isPredefined().setValue(true);
+        if (defaultRole != null) {
+            ep.roles().add(defaultRole);
+        }
         PersistenceServicesFactory.getPersistenceService().persist(ep);
     }
 

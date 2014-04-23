@@ -21,9 +21,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView.CommunicationMessagePagePresenter;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 

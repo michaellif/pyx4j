@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
 
 public class CommunicationMessageWizardViewImpl extends AbstractWizardFormView<CommunicationMessageDTO> implements CommunicationMessageWizardView {

@@ -24,7 +24,6 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationMessageViewerView;
 import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.CommunicationMessageDTO;
 
@@ -34,11 +33,10 @@ public class CommunicationMessageViewerActivity extends CrmViewerActivity<Commun
 
         super(place, CrmSite.getViewFactory().getView(CommunicationMessageViewerView.class), (AbstractCrudService<CommunicationMessageDTO>) GWT
                 .create(CommunicationMessageCrudService.class));
-        // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message) {
+    public void saveMessage(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO message) {
         ((CommunicationMessageCrudService) getService()).saveMessage(callback, message);
 
     }
@@ -49,7 +47,7 @@ public class CommunicationMessageViewerActivity extends CrmViewerActivity<Commun
     }
 
     @Override
-    public void takeOwnership(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message) {
+    public void takeOwnership(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO message) {
         ((CommunicationMessageCrudService) getService()).takeOwnership(callback, message);
     }
 }

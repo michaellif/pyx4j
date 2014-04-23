@@ -22,7 +22,6 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationMessageEditorView;
 import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.dto.CommunicationMessageDTO;
 
 public class CommunicationMessageEditorActivity extends CrmEditorActivity<CommunicationMessageDTO> implements CommunicationMessageEditorView.Presenter {
@@ -33,7 +32,7 @@ public class CommunicationMessageEditorActivity extends CrmEditorActivity<Commun
     }
 
     @Override
-    public void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message) {
+    public void saveMessage(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO message) {
         ((CommunicationMessageCrudService) getService()).saveMessage(callback, message);
 
     }

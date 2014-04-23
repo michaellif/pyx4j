@@ -113,6 +113,9 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewer
 import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageListerActivity;
 import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationSettingsEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationSettingsListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.CommunicationSettingsViewActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
@@ -268,6 +271,7 @@ import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActiv
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusViewerActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
 import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentWizardActivity;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Account;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
@@ -1435,7 +1439,20 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
                     }
                     // CRUD APP PLACE IF ENDS HERE
-
+                    else if ((crudPlace instanceof CrmSiteMap.Administration.Settings.CommunicationSettings)) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new CommunicationSettingsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new CommunicationSettingsViewActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new CommunicationSettingsListerActivity(crudPlace);
+                            break;
+                        }
+                        // Dashboard related stuff again
+                    }
                     // Dashboard related stuff again
                 } else if (place instanceof Dashboard.View) {
                     activity = new DashboardActivity((Dashboard.View) place);

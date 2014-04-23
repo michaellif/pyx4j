@@ -94,6 +94,7 @@ import com.propertyvista.portal.server.security.access.prospect.ProofOfIncomeDoc
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementCoveredItemTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.BillTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.CommunicationMessageAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
@@ -244,7 +245,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CreditCardValidationService.class));
 
-        // Tenant Insurance and TenantSure        
+        // Tenant Insurance and TenantSure
         grant(PortalResidentBehavior.Resident, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
         grant(PortalResidentBehavior.Resident, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
@@ -275,7 +276,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
             grant(new IServiceExecutePermission(MockDataGenerator.class));
         }
 
-        // Data Access       
+        // Data Access
         grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.ResidentInPortal);
         grant(VistaDataAccessBehavior.ResidentInPortal, new CustomerPictureTenantDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new PaymentRecordTenantDatasetAccessRule(), PaymentRecord.class);
@@ -286,6 +287,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.ResidentInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestTenantDatasetAccessRule(), MaintenanceRequest.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new CommunicationMessageAccessRule(), CommunicationMessage.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestPictureTenantDatasetAccessRule(), MaintenanceRequestPicture.class);
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);

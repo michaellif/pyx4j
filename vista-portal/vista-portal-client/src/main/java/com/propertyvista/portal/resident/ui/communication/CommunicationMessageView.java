@@ -18,7 +18,7 @@ import java.util.List;
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 
 public interface CommunicationMessageView extends IsView {
 

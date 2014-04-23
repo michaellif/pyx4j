@@ -18,7 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -29,9 +28,9 @@ public interface CommunicationMessageCrudService extends AbstractCrudService<Com
 
     void retreiveCommunicationMessages(AsyncCallback<MessagesDTO> callback, boolean newOnly);
 
-    void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage source);
+    void saveMessage(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO source);
 
-    void takeOwnership(AsyncCallback<CommunicationMessage> callback, CommunicationMessage source);
+    void takeOwnership(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO source);
 
     @Transient
     interface CommunicationMessageInitializationData extends InitializationData {

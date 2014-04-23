@@ -26,6 +26,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.communication.CommunicationMessage;
+import com.propertyvista.domain.communication.CommunicationMessageData;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
@@ -133,13 +134,16 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             thread = parent;
 
         CommunicationMessage m = EntityFactory.create(CommunicationMessage.class);
-        m.isHighImportance().setValue(highImportance);
-        m.to().add(to);
-        m.sender().set(from);
-        m.text().setValue(msgContent);
-        m.date().setValue(new Date());
+        m.data().isHighImportance().setValue(highImportance);
+        m.recipient().set(to);
         m.isRead().setValue(isRead);
+        CommunicationMessageData c = EntityFactory.create(CommunicationMessageData.class);
+        c.sender().set(from);
+        c.text().setValue(msgContent);
+        c.date().setValue(new Date());
+        m.data().set(c);
         m.thread().set(thread);
+        PersistenceServicesFactory.getPersistenceService().persist(c);
         PersistenceServicesFactory.getPersistenceService().persist(m);
         thread.content().add(m);
         PersistenceServicesFactory.getPersistenceService().persist(thread);

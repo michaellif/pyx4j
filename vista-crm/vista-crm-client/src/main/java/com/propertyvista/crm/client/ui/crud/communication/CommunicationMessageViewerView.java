@@ -17,15 +17,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.dto.CommunicationMessageDTO;
 
 public interface CommunicationMessageViewerView extends IViewer<CommunicationMessageDTO> {
 
     interface Presenter extends IViewer.Presenter {
 
-        void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message);
+        void saveMessage(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO message);
 
-        void takeOwnership(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message);
+        void takeOwnership(AsyncCallback<CommunicationMessageDTO> callback, CommunicationMessageDTO message);
     }
 }

@@ -13,9 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import java.util.Arrays;
+
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -41,14 +45,18 @@ public class CommunicationMessageEditForm extends CrmEntityForm<CommunicationMes
     public BasicFlexFormPanel createGeneralForm() {
         BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().subject(), 20));
+        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(20).build()));
         mainPanel.setH1(++row, 0, 1, "To");
         mainPanel.setWidget(++row, 0, inject(proto().to(), receiverSelector));
         mainPanel.setH1(++row, 0, 1, "Message");
-        mainPanel.setWidget(++row, 0, injectAndDecorate(proto().text(), 20));
+        CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
+        cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+        mainPanel.setWidget(++row, 0, inject(proto().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
+        mainPanel.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(20).build()));
         mainPanel.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));
         mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;
     }
+
 }

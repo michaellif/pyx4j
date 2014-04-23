@@ -13,16 +13,18 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CommunicationMessageWizard extends CPortalEntityWizard<CommunicationMessageDTO> {
 
@@ -45,8 +47,12 @@ public class CommunicationMessageWizard extends CPortalEntityWizard<Communicatio
         int row = -1;
 
         content.setH1(++row, 0, 1, "Details");
-        content.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(250).build()));
-        content.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(250).build()));
+        content.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(20).build()));
+        CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
+        cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+
+        content.setWidget(++row, 0, inject(proto().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
+        content.setWidget(++row, 0, (inject(proto().text(), new FieldDecoratorBuilder(20).build())));
         content.setBR(++row, 0, 1);
         content.setH1(++row, 0, 1, "Attachments");
         content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));

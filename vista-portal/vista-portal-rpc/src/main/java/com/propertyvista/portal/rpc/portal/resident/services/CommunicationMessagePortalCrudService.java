@@ -18,8 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.dto.CommunicationMessageDTO;
-import com.propertyvista.dto.MessagesDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessagesDTO;
 
 public interface CommunicationMessagePortalCrudService extends AbstractCrudService<CommunicationMessageDTO> {
     void retreiveCommunicationMessages(AsyncCallback<MessagesDTO> callback, boolean newOnly);

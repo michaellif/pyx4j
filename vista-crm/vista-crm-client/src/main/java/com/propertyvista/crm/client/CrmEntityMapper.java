@@ -18,6 +18,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
@@ -30,6 +31,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Tenants;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.domain.communication.CommunicationGroup;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -208,5 +210,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(MoneyInBatchDTO.class, Finance.MoneyIn.Batch.class, defaultImage);
 
         AppPlaceEntityMapper.register(CommunicationMessageDTO.class, Communication.CommunicationMessage.class, defaultImage);
+        AppPlaceEntityMapper.register(CommunicationGroup.class, CrmSiteMap.Administration.Settings.CommunicationSettings.class, defaultImage);
     }
 }

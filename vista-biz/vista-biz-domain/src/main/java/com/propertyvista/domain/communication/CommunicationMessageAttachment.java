@@ -28,7 +28,7 @@ public interface CommunicationMessageAttachment extends IHasFile<CommunicationMe
     @Detached
     @JoinColumn
     @ReadOnly
-    CommunicationMessage message();
+    CommunicationMessageData message();
 
     IPrimitive<String> description();
 
