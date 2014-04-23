@@ -22,12 +22,12 @@ package com.pyx4j.tester.svg.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.tester.svg.client.config.ChartXYTestConfiguration;
 
-public class ChartXYTestForm extends CEntityForm<ChartXYTestConfiguration> {
+public class ChartXYTestForm extends CForm<ChartXYTestConfiguration> {
 
     public ChartXYTestForm() {
         super(ChartXYTestConfiguration.class);
