@@ -226,19 +226,23 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
 
     public static class TenantSureMessagesViewer extends CViewer<IList<TenantSureMessageDTO>> {
 
-        @Override
-        public IsWidget createContent(IList<TenantSureMessageDTO> value) {
-            FlowPanel panel = new FlowPanel();
-            panel.setStyleName(TenantSureTheme.StyleName.TenantSureMessages.name());
-            if (value != null && !value.isEmpty()) {
-                for (TenantSureMessageDTO message : value) {
-                    Label messageLabel = new Label(message.messageText().getValue());
-                    messageLabel.setStyleName(TenantSureTheme.StyleName.TenantSureMessage.name());
-                    panel.add(messageLabel);
-                }
-            }
+        public TenantSureMessagesViewer() {
+            setFormatter(new IFormatter<IList<TenantSureMessageDTO>, IsWidget>() {
+                @Override
+                public IsWidget format(IList<TenantSureMessageDTO> value) {
+                    FlowPanel panel = new FlowPanel();
+                    panel.setStyleName(TenantSureTheme.StyleName.TenantSureMessages.name());
+                    if (value != null && !value.isEmpty()) {
+                        for (TenantSureMessageDTO message : value) {
+                            Label messageLabel = new Label(message.messageText().getValue());
+                            messageLabel.setStyleName(TenantSureTheme.StyleName.TenantSureMessage.name());
+                            panel.add(messageLabel);
+                        }
+                    }
 
-            return panel;
+                    return panel;
+                }
+            });
         }
 
     }

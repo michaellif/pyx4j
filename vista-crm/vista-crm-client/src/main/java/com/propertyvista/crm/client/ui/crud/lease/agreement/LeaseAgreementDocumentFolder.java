@@ -19,12 +19,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
@@ -184,15 +185,20 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
 
     public static class LeaseAgreementSignedParticipantsViewer extends CViewer<IList<LeaseTermParticipant<?>>> {
 
-        @Override
-        public IsWidget createContent(IList<LeaseTermParticipant<?>> value) {
-            FlowPanel panel = new FlowPanel();
-            for (LeaseTermParticipant<?> participant : value) {
-                String signerStringView = formatParticipant(participant);
-                panel.add(new Label(signerStringView));
-            }
-            return panel;
+        public LeaseAgreementSignedParticipantsViewer() {
+            setFormatter(new IFormatter<IList<LeaseTermParticipant<?>>, IsWidget>() {
+                @Override
+                public IsWidget format(IList<LeaseTermParticipant<?>> value) {
+                    FlowPanel panel = new FlowPanel();
+                    for (LeaseTermParticipant<?> participant : value) {
+                        String signerStringView = formatParticipant(participant);
+                        panel.add(new Label(signerStringView));
+                    }
+                    return panel;
+                }
+            });
         }
+
     }
 
     public abstract class LeaseAgreementDocumentUploadDialog extends OkCancelDialog {

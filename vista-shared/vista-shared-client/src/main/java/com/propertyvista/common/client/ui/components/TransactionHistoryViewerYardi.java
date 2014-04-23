@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
@@ -58,42 +59,44 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
 
     public TransactionHistoryViewerYardi(String moneyFormat) {
         this(moneyFormat, moneyFormat);
+        setFormatter(new IFormatter<TransactionHistoryDTO, IsWidget>() {
+
+            @Override
+            public IsWidget format(TransactionHistoryDTO value) {
+                TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
+                if (value != null) {
+                    List<YardiPayment> unappliedPayments = new ArrayList<YardiPayment>();
+                    List<YardiDebit> outstangingCharges = new ArrayList<YardiDebit>();
+                    List<YardiCredit> accountCredits = new ArrayList<YardiCredit>();
+
+                    for (InvoiceLineItem invoiceLineItem : value.lineItems()) {
+                        if (invoiceLineItem.isInstanceOf(YardiPayment.class)) {
+                            unappliedPayments.add((YardiPayment) invoiceLineItem);
+                        } else if (invoiceLineItem.isInstanceOf(YardiDebit.class)) {
+                            outstangingCharges.add((YardiDebit) invoiceLineItem);
+                        } else if (invoiceLineItem.isInstanceOf(YardiCredit.class)) {
+                            accountCredits.add((YardiCredit) invoiceLineItem);
+                        }
+                    }
+
+                    int row = -1;
+                    contentPanel.setH1(++row, 0, 2, i18n.tr("Outstanding Charges"));
+                    contentPanel.setWidget(++row, 0, 2, renderLineItems(outstangingCharges, chargeFormat, i18n.tr("Due Date")));
+
+                    contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Account Credits"));
+                    contentPanel.setWidget(++row, 0, 2, renderLineItems(accountCredits, paymentFormat, null));
+
+                    contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Unapplied Payments"));
+                    contentPanel.setWidget(++row, 0, 2, renderLineItems(unappliedPayments, paymentFormat, null));
+                }
+                return contentPanel;
+            }
+        });
     }
 
     public TransactionHistoryViewerYardi() {
         // use CR suffix for negative charges and inverse sign for payments shown in Payments sections
         this(i18n.tr("$#,##0.00;# CR"), i18n.tr("-$#,##0.00;$#,##0.00;"));
-    }
-
-    @Override
-    public IsWidget createContent(TransactionHistoryDTO value) {
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
-        if (value != null) {
-            List<YardiPayment> unappliedPayments = new ArrayList<YardiPayment>();
-            List<YardiDebit> outstangingCharges = new ArrayList<YardiDebit>();
-            List<YardiCredit> accountCredits = new ArrayList<YardiCredit>();
-
-            for (InvoiceLineItem invoiceLineItem : value.lineItems()) {
-                if (invoiceLineItem.isInstanceOf(YardiPayment.class)) {
-                    unappliedPayments.add((YardiPayment) invoiceLineItem);
-                } else if (invoiceLineItem.isInstanceOf(YardiDebit.class)) {
-                    outstangingCharges.add((YardiDebit) invoiceLineItem);
-                } else if (invoiceLineItem.isInstanceOf(YardiCredit.class)) {
-                    accountCredits.add((YardiCredit) invoiceLineItem);
-                }
-            }
-
-            int row = -1;
-            contentPanel.setH1(++row, 0, 2, i18n.tr("Outstanding Charges"));
-            contentPanel.setWidget(++row, 0, 2, renderLineItems(outstangingCharges, chargeFormat, i18n.tr("Due Date")));
-
-            contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Account Credits"));
-            contentPanel.setWidget(++row, 0, 2, renderLineItems(accountCredits, paymentFormat, null));
-
-            contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Unapplied Payments"));
-            contentPanel.setWidget(++row, 0, 2, renderLineItems(unappliedPayments, paymentFormat, null));
-        }
-        return contentPanel;
     }
 
     private <E extends InvoiceLineItem> FlexTable renderLineItems(List<E> items, NumberFormat format, String dateHdr) {

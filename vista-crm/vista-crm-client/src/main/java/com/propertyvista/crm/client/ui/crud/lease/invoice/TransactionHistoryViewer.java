@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
@@ -56,21 +57,25 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
 
     public final static NumberFormat NUMBER_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0.00"));
 
-    @Override
-    public IsWidget createContent(TransactionHistoryDTO value) {
+    public TransactionHistoryViewer() {
+        setFormatter(new IFormatter<TransactionHistoryDTO, IsWidget>() {
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        if (value != null) {
-            content.setH1(++row, 0, 2, i18n.tr("Transactions History"));
-            content.setWidget(++row, 0, 2, createLineItems(value.lineItems()));
+            @Override
+            public IsWidget format(TransactionHistoryDTO value) {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                int row = -1;
+                if (value != null) {
+                    content.setH1(++row, 0, 2, i18n.tr("Transactions History"));
+                    content.setWidget(++row, 0, 2, createLineItems(value.lineItems()));
 
-            content.setBR(++row, 0, 2);
-            content.setH1(++row, 0, 2, i18n.tr("Arrears"));
-            content.setWidget(++row, 0, 2, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
+                    content.setBR(++row, 0, 2);
+                    content.setH1(++row, 0, 2, i18n.tr("Arrears"));
+                    content.setWidget(++row, 0, 2, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
 
-        }
-        return content;
+                }
+                return content;
+            }
+        });
     }
 
     private IsWidget createLineItems(List<InvoiceLineItem> items) {

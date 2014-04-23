@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.shared.rpc.LegalTermTO;
@@ -35,32 +35,34 @@ public class LegalTermsContentViewer extends CViewer<LegalTermTO> {
 
     public LegalTermsContentViewer(String contentHeight) {
         this.contentHeight = contentHeight;
+
+        setFormatter(new LegalTermsContentFormatter());
+
     }
 
-    @Override
-    public IsWidget createContent(LegalTermTO legalTermsContent) {
-        FlowPanel contentPanel = new FlowPanel();
-        Label caption = new Label();
-        caption.addStyleName(Styles.LegalTermsContentViewerCaption.name());
-        caption.setText(legalTermsContent.caption().getValue());
+    class LegalTermsContentFormatter implements IFormatter<LegalTermTO, IsWidget> {
 
-        contentPanel.add(caption);
+        @Override
+        public IsWidget format(LegalTermTO legalTermsContent) {
+            FlowPanel contentPanel = new FlowPanel();
+            Label caption = new Label();
+            caption.addStyleName(Styles.LegalTermsContentViewerCaption.name());
+            caption.setText(legalTermsContent.caption().getValue());
 
-        HTML content = new HTML();
-        content.addStyleName(Styles.LegalTermsContentViewerContent.name());
-        content.setHTML(legalTermsContent.content().getValue());
+            contentPanel.add(caption);
 
-        ScrollPanel contentHolder = new ScrollPanel();
-        contentHolder.addStyleName(Styles.LegalTermsContentViewerHolder.name());
-        contentHolder.setHeight(contentHeight);
-        contentHolder.setWidget(content);
-        contentPanel.add(contentHolder);
+            HTML content = new HTML();
+            content.addStyleName(Styles.LegalTermsContentViewerContent.name());
+            content.setHTML(legalTermsContent.content().getValue());
 
-        return contentPanel;
-    }
+            ScrollPanel contentHolder = new ScrollPanel();
+            contentHolder.addStyleName(Styles.LegalTermsContentViewerHolder.name());
+            contentHolder.setHeight(contentHeight);
+            contentHolder.setWidget(content);
+            contentPanel.add(contentHolder);
 
-    @Override
-    public ValidationResults getValidationResults() {
-        return new ValidationResults();
+            return contentPanel;
+        }
+
     }
 }

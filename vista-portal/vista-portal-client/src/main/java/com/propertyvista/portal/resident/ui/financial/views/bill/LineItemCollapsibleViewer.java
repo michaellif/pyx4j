@@ -22,9 +22,10 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.decorators.ViewerCollapsableDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldCollapsableDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
@@ -53,38 +54,41 @@ public class LineItemCollapsibleViewer extends CViewer<InvoiceLineItemGroupDTO> 
 
     public LineItemCollapsibleViewer() {
         setDecorator(new LineItemCollapsibleDecorator(VistaImages.INSTANCE));
+
+        setFormatter(new IFormatter<InvoiceLineItemGroupDTO, IsWidget>() {
+
+            @Override
+            public IsWidget format(InvoiceLineItemGroupDTO value) {
+                FlowPanel mainPanel = new FlowPanel();
+                mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+                collapsedPanel = new SimplePanel();
+//                collapsedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
+                collapsedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                collapsedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+                mainPanel.add(collapsedPanel);
+
+                expandedPanel = new SimplePanel();
+//                expandedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
+                expandedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                expandedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+                mainPanel.add(expandedPanel);
+
+                collapsedPanel.setWidget(createCollapsedContent(value));
+                expandedPanel.setWidget(createExpandedContent(value));
+                setExpended(false);
+
+                return mainPanel;
+            }
+        });
     }
 
-    class LineItemCollapsibleDecorator extends ViewerCollapsableDecorator {
+    class LineItemCollapsibleDecorator extends FieldCollapsableDecorator<InvoiceLineItemGroupDTO> {
         public LineItemCollapsibleDecorator(WidgetsImages images) {
             super(images);
             addToggleHandler(LineItemCollapsibleViewer.this);
 
         }
-    }
-
-    @Override
-    public final IsWidget createContent(InvoiceLineItemGroupDTO value) {
-        FlowPanel mainPanel = new FlowPanel();
-        mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        collapsedPanel = new SimplePanel();
-//        collapsedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
-        collapsedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        collapsedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-        mainPanel.add(collapsedPanel);
-
-        expandedPanel = new SimplePanel();
-//        expandedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
-        expandedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        expandedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-        mainPanel.add(expandedPanel);
-
-        collapsedPanel.setWidget(createCollapsedContent(value));
-        expandedPanel.setWidget(createExpandedContent(value));
-        setExpended(false);
-
-        return mainPanel;
     }
 
     private void setExpended(boolean expended) {

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,37 +37,40 @@ public class PapReviewCaptionViewer extends CViewer<PapReviewCaptionDTO> {
     public PapReviewCaptionViewer() {
         setViewable(true);
         setEditable(false);
-    }
 
-    @Override
-    public IsWidget createContent(PapReviewCaptionDTO value) {
-        FlowPanel papCaptionPanel = new FlowPanel();
-        papCaptionPanel.setStyleName(Styles.AutoPayReviewCaptionPanel.name());
-        HTML caption = new HTML(//@formatter:off
-                i18n.tr("{0} {1} {2} {3,choice,null#|!null#(Expected Move Out: {3,date,MM/dd/yyyy})}: {4} {5}. Due {6,date,MM/dd/yyyy}",
-                        value.building().getValue(),
-                        value.unit().getValue(),
-                        value.lease().getValue(),
-                        value.expectedMoveOut().getValue(),
-                        value.tenant().getValue(),
-                        value.paymentMethod().getValue(),
-                        value.paymentDue().getValue()
-        ));//@formatter:on
-        caption.setStyleName(Styles.AutoPayReviewCaption.name());
-        papCaptionPanel.add(caption);
+        setFormatter(new IFormatter<PapReviewCaptionDTO, IsWidget>() {
 
-        if (value.changedByTenant().getValue(false)) {
-            HTML changedByTenantWarning = new HTML(i18n.tr("Tenant Defined"));
-            changedByTenantWarning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
-            papCaptionPanel.add(changedByTenantWarning);
-        }
+            @Override
+            public IsWidget format(PapReviewCaptionDTO value) {
+                FlowPanel papCaptionPanel = new FlowPanel();
+                papCaptionPanel.setStyleName(Styles.AutoPayReviewCaptionPanel.name());
+                HTML caption = new HTML(//@formatter:off
+                        i18n.tr("{0} {1} {2} {3,choice,null#|!null#(Expected Move Out: {3,date,MM/dd/yyyy})}: {4} {5}. Due {6,date,MM/dd/yyyy}",
+                                value.building().getValue(),
+                                value.unit().getValue(),
+                                value.lease().getValue(),
+                                value.expectedMoveOut().getValue(),
+                                value.tenant().getValue(),
+                                value.paymentMethod().getValue(),
+                                value.paymentDue().getValue()
+                ));//@formatter:on
+                caption.setStyleName(Styles.AutoPayReviewCaption.name());
+                papCaptionPanel.add(caption);
 
-        if (value.hasLeaseWithOtherPaps().getValue(false)) {
-            HTML hasOtherPapsWarning = new HTML(i18n.tr("This lease has more than one AutoPay"));
-            hasOtherPapsWarning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
-            papCaptionPanel.add(hasOtherPapsWarning);
-        }
-        return papCaptionPanel;
+                if (value.changedByTenant().getValue(false)) {
+                    HTML changedByTenantWarning = new HTML(i18n.tr("Tenant Defined"));
+                    changedByTenantWarning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
+                    papCaptionPanel.add(changedByTenantWarning);
+                }
+
+                if (value.hasLeaseWithOtherPaps().getValue(false)) {
+                    HTML hasOtherPapsWarning = new HTML(i18n.tr("This lease has more than one AutoPay"));
+                    hasOtherPapsWarning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
+                    papCaptionPanel.add(hasOtherPapsWarning);
+                }
+                return papCaptionPanel;
+            }
+        });
     }
 
 }
