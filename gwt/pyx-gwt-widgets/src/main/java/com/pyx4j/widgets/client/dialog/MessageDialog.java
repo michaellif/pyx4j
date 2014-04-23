@@ -193,13 +193,13 @@ public class MessageDialog extends Dialog {
         super.layout();
     }
 
-    class MessagePanel extends FlowPanel {
+    protected class MessagePanel extends FlowPanel {
 
         private final ScrollPanel htmlScroll;
 
         private final HTML htmlMessage;
 
-        MessagePanel(final String message, Type type) {
+        public MessagePanel(final String message, Type type) {
             super();
             getElement().getStyle().setProperty("display", "table");
 

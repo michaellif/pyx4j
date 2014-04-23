@@ -23,32 +23,30 @@ package com.pyx4j.gwt.client.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.CloseOption;
-import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class DeferredProcessDialog extends SimplePanel implements CloseOption, CancelOption, DeferredProgressListener {
+public class DeferredProcessDialog extends MessageDialog implements CloseOption, CancelOption, DeferredProgressListener {
 
     private static final Logger log = LoggerFactory.getLogger(DeferredProcessDialog.class);
 
     protected long deferredProcessStartTime;
-
-    protected final Dialog dialog;
-
-    private boolean canceled = false;
 
     VerticalPanel messagePanel = new VerticalPanel();
 
     private final DeferredProgressPanel deferredProgressPanel;
 
     public DeferredProcessDialog(String title, String initialMessage, boolean executeByUserRequests) {
-        this.setWidget(messagePanel = new VerticalPanel());
+        super(title, initialMessage, Type.Info, null);
+        setDialogOptions(this);
+
+        setBody(messagePanel = new VerticalPanel());
         messagePanel.setWidth("100%");
 
         deferredProgressPanel = new DeferredProgressPanel(initialMessage, executeByUserRequests, this);
@@ -57,16 +55,11 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         deferredProgressPanel.setVisible(false);
         messagePanel.add(deferredProgressPanel);
 
-        dialog = new Dialog(title, this, this);
-        dialog.getCloseButton().setVisible(false);
-    }
-
-    public void show() {
-        dialog.show();
+        getCloseButton().setVisible(false);
     }
 
     public void hide() {
-        dialog.hide(false);
+        hide(false);
     }
 
     @Override
@@ -76,7 +69,6 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     @Override
     public boolean onClickCancel() {
-        canceled = true;
         cancelProgress();
         return true;
     }
@@ -93,15 +85,13 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     @Override
     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
         onDeferredCompleate();
+        setStatusMessage(result.getMessage(), Type.Warning);
     }
 
     @Override
     public void onDeferredError(DeferredProcessProgressResponse result) {
         onDeferredCompleate();
-        hide();
-        if (!canceled) {
-            MessageDialog.error(dialog.getTitle(), result.getMessage());
-        }
+        setStatusMessage(result.getMessage(), Type.Error);
     }
 
     @Override
@@ -110,8 +100,15 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     }
 
     protected void onDeferredCompleate() {
-        dialog.getCancelButton().setVisible(false);
-        dialog.getCloseButton().setVisible(true);
-        log.info("Deferred " + dialog.getTitle() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
+        getCancelButton().setVisible(false);
+        getCloseButton().setVisible(true);
+        log.info("Deferred " + getTitle() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
+    }
+
+    private void setStatusMessage(String message, MessageDialog.Type type) {
+        ScrollPanel scrollPanel = new ScrollPanel(new MessagePanel(message, type));
+        scrollPanel.getElement().getStyle().setProperty("maxHeight", "400px");
+        messagePanel.add(scrollPanel);
+        layout();
     }
 }

@@ -116,10 +116,10 @@ public class ReportDialog extends DeferredProcessDialog {
             log.debug("DownloadLink link {} {}", downloadServletPath, downloadUrl);
             if (useDownloadFrame()) {
                 new DownloadFrame(downloadServletPath + downloadUrl);
-                dialog.hide(false);
+                hide();
             } else {
                 VerticalPanel vp = new VerticalPanel();
-                this.setWidget(vp);
+                this.setBody(vp);
                 vp.add(new HTML(i18n.tr("Report creation completed")));
                 Anchor downloadLink = new Anchor(i18n.tr("Download"), downloadServletPath + downloadUrl, "_blank");
                 downloadLink.ensureDebugId("reportDownloadLink");
@@ -127,7 +127,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        dialog.hide(false);
+                        hide();
                     }
                 });
                 vp.add(downloadLink);

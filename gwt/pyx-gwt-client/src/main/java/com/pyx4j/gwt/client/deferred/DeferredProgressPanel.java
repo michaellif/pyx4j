@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -66,8 +65,6 @@ public class DeferredProgressPanel extends VerticalPanel {
 
     private Label messageBar;
 
-    private HTML statusBar;
-
     public DeferredProgressPanel(boolean executeByUserRequests, DeferredProgressListener listener) {
         this("Connecting...", executeByUserRequests, listener);
     }
@@ -79,7 +76,6 @@ public class DeferredProgressPanel extends VerticalPanel {
 
         add(messageBar = new Label(initialMessage));
         add(progressBar = new ProgressBar());
-        add(statusBar = new HTML());
     }
 
     public void startProgress(final String deferredCorrelationId) {
@@ -158,13 +154,11 @@ public class DeferredProgressPanel extends VerticalPanel {
                         completed = true;
                     }
                     messageBar.setHTML("Failed");
-                    statusBar.setHTML(result.getMessage());
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else if (result.isCompleted()) {
                     progressBar.setProgress(progressBar.getMaxProgress());
                     messageBar.setHTML("Complete");
-                    statusBar.setHTML(result.getMessage());
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
                     if (!completed) {
                         listener.onDeferredSuccess(result);
@@ -174,7 +168,6 @@ public class DeferredProgressPanel extends VerticalPanel {
                     progressTimer = null;
                 } else {
                     messageBar.setHTML(CommonsStringUtils.isEmpty(result.getMessage()) ? "In Progress..." : result.getMessage());
-                    statusBar.setHTML("");
                     progressBar.setMaxProgress(result.getProgressMaximum());
                     progressBar.setProgress(result.getProgress());
                     if (progressTimer != null) {
