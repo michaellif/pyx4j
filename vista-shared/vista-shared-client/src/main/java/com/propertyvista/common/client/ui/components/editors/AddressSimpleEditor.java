@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -66,19 +67,19 @@ public class AddressSimpleEditor extends CForm<AddressSimple> {
         int row = -1;
         int col = (oneColumn ? 0 : 1);
 
-        main.setWidget(++row, 0, inject(proto().street1(), decorator(maxCompWidth).build()));
-        main.setWidget(++row, 0, inject(proto().street2(), decorator(maxCompWidth).build()));
-        main.setWidget(++row, 0, inject(proto().city(), decorator(maxCompWidth).build()));
+        main.setWidget(++row, 0, inject(proto().street1(), decorator(maxCompWidth)));
+        main.setWidget(++row, 0, inject(proto().street2(), decorator(maxCompWidth)));
+        main.setWidget(++row, 0, inject(proto().city(), decorator(maxCompWidth)));
 
         row = (oneColumn ? row : -1);
 
-        CField<Province, ?> province = (CField<Province, ?>) inject(proto().province(), decorator(maxCompWidth).build());
+        CField<Province, ?> province = (CField<Province, ?>) inject(proto().province(), decorator(maxCompWidth));
         main.setWidget(++row, col, province);
 
-        final CField<Country, ?> country = (CField<Country, ?>) inject(proto().country(), decorator(maxCompWidth).build());
+        final CField<Country, ?> country = (CField<Country, ?>) inject(proto().country(), decorator(maxCompWidth));
         main.setWidget(++row, col, country);
 
-        CField<String, ?> postalCode = (CField<String, ?>) inject(proto().postalCode(), decorator(10).build());
+        CField<String, ?> postalCode = (CField<String, ?>) inject(proto().postalCode(), decorator(10));
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormatter(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
@@ -108,7 +109,7 @@ public class AddressSimpleEditor extends CForm<AddressSimple> {
         });
     }
 
-    private FieldDecoratorBuilder decorator(double compWidth) {
-        return new FieldDecoratorBuilder(labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
+    private FieldDecorator decorator(double compWidth) {
+        return new FieldDecoratorBuilder(labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth).build();
     }
 }

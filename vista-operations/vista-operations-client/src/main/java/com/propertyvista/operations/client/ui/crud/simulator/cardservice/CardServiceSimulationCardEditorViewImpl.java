@@ -18,35 +18,28 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.entity.core.ISet;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.misc.CreditCardNumberGenerator;
-import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister;
@@ -103,17 +96,17 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
             TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
             int row = 0;
-            contentPanel.setWidget(row++, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 1, inject(proto().updated(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 1, injectAndDecorate(proto().created()));
+            contentPanel.setWidget(row++, 1, injectAndDecorate(proto().updated()));
 
             row = 0;
-            contentPanel.setWidget(row++, 0, inject(proto().cardType(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().number(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().expiryDate(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().creditLimit(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().balance(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().reserved(), new FieldDecoratorBuilder().build()));
-            contentPanel.setWidget(row++, 0, inject(proto().responseCode(), new FieldDecoratorBuilder().build()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().cardType()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().number()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().expiryDate()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().creditLimit()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().balance()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().reserved()));
+            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().responseCode()));
 
             contentPanel.setH2(row++, 0, 2, "Tokens");
             contentPanel.setWidget(row++, 0, 2, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));

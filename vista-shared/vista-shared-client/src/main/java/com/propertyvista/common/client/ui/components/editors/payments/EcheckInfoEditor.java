@@ -18,12 +18,10 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
@@ -33,9 +31,7 @@ import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.shared.util.EcheckFormatter;
 
-public class EcheckInfoEditor extends CForm<EcheckInfo> {
-
-    private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
+public class EcheckInfoEditor extends AccessoryEntityForm<EcheckInfo> {
 
     protected final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(
             AccountNumberIdentity.class, new EcheckFormatter());
@@ -49,11 +45,11 @@ public class EcheckInfoEditor extends CForm<EcheckInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().accountNo(), accountEditor, new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().nameOn(), 20));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().accountNo(), accountEditor, 20));
 
-        panel.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().bankId(), new FieldDecoratorBuilder(3).build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().branchTransitNumber(), 5));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().bankId(), 3));
 
         if (!isViewable() && isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());

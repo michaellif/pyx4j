@@ -15,15 +15,14 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.domain.company.Company;
 
-public class CompanyEditor extends CForm<Company> {
+public class CompanyEditor extends AccessoryEntityForm<Company> {
 
     public CompanyEditor() {
         super(Company.class);
@@ -34,13 +33,13 @@ public class CompanyEditor extends CForm<Company> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
 
 // TODO : design representation for:
 //      main.add(parent.inject(proto.addresses()), 15);
 
         main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        main.setWidget(++row, 0, inject(proto().website(), new FieldDecoratorBuilder(22).build()));
+        main.setWidget(++row, 0, injectAndDecorate(proto().website(), 22));
 
         main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
 

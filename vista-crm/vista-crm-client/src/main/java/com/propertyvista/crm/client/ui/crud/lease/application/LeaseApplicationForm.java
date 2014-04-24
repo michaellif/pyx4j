@@ -139,22 +139,22 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Approval"));
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().status(), new CEnumLabel(), new FieldDecoratorBuilder(15, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decidedBy(), new FieldDecoratorBuilder(25, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decisionDate(), new FieldDecoratorBuilder(10, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().decisionReason(), new FieldDecoratorBuilder(50, true).build()));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().status(), new CEnumLabel(), 15, true));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().decidedBy(), 25, true));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().decisionDate(), 10, true));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().decisionReason(), 50, true));
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             main.setBR(++row, 0, 2);
 
             main.setH1(++row, 0, 2, i18n.tr("Credit Check"));
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().percenrtageApproved(), new FieldDecoratorBuilder(5, true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().totalAmountApproved(), new FieldDecoratorBuilder(10, true).build()));
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().rentAmount(), new FieldDecoratorBuilder(10, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().percenrtageApproved(), 5, true));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().totalAmountApproved(), 10, true));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().rentAmount(), 10, true));
 
             main.setBR(++row, 0, 2);
 
-            main.setWidget(++row, 0, 2, inject(proto().leaseApproval().suggestedDecision(), new FieldDecoratorBuilder(50, true).build()));
+            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().suggestedDecision(), 50, true));
         }
 
         main.setBR(++row, 0, 2);
@@ -169,8 +169,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Online Status Details"));
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().leaseApplication().onlineApplication().status(), new FieldDecoratorBuilder(20, 15, 20).build()));
-        main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().progress(), new FieldDecoratorBuilder(20, 5, 20).build()));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().onlineApplication().status(), 20, 15, 20));
+        main.setWidget(++row, 0, 2, injectAndDecorate(proto().masterApplicationStatus().progress(), 20, 5, 20));
 
         main.setBR(++row, 0, 2);
         main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));

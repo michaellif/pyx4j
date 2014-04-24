@@ -36,19 +36,18 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
 
         TwoColumnFlexFormPanel detailsTab = new TwoColumnFlexFormPanel();
         int row = -1;
-        detailsTab.setWidget(++row, 0, inject(proto().userName(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(row, 1, inject(proto().remoteAddr(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(++row, 0, inject(proto().userKey(), new CLabel<Key>(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(row, 1, inject(proto().sessionId(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(++row, 0, inject(proto().event(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(row, 1, inject(proto().when(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(++row, 0, inject(proto().namespace(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(row, 1, inject(proto().worldTime(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(++row, 0,
-                inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FieldDecoratorBuilder(10).build()));
-        detailsTab.setWidget(++row, 0, inject(proto().application(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(row, 1, inject(proto().targetEntity(), new FieldDecoratorBuilder().build()));
-        detailsTab.setWidget(++row, 0, 2, inject(proto().details(), new FieldDecoratorBuilder(true).build()));
+        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().userName()));
+        detailsTab.setWidget(row, 1, injectAndDecorate(proto().remoteAddr()));
+        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().userKey(), new CLabel<Key>()));
+        detailsTab.setWidget(row, 1, injectAndDecorate(proto().sessionId()));
+        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().event()));
+        detailsTab.setWidget(row, 1, injectAndDecorate(proto().when()));
+        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().namespace()));
+        detailsTab.setWidget(row, 1, injectAndDecorate(proto().worldTime()));
+        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), 10));
+        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().application()));
+        detailsTab.setWidget(row, 1, injectAndDecorate(proto().targetEntity()));
+        detailsTab.setWidget(++row, 0, 2, injectAndDecorate(proto().details(), true));
 
         selectTab(addTab(detailsTab));
 

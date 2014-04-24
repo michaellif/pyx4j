@@ -31,7 +31,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
@@ -40,7 +39,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
@@ -52,7 +51,7 @@ import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.shared.util.CreditCardFormatter;
 
-public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
+public class CreditCardInfoEditor extends AccessoryEntityForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
@@ -78,12 +77,12 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().cardType(), typeSelector, new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().nameOn(), 20));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().cardType(), typeSelector, 20));
 
-        panel.setWidget(++row, 0, inject(proto().card(), cardEditor, new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().expiryDate(), monthYearPicker, new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().securityCode(), new FieldDecoratorBuilder(3).build()));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().card(), cardEditor, 20));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().expiryDate(), 20));
+        panel.setWidget(++row, 0, injectAndDecorate(proto().securityCode(), 3));
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

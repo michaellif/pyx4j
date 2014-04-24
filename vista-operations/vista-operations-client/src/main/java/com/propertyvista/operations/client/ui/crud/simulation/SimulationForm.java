@@ -51,18 +51,18 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         int row = -1;
 
         content.setH2(++row, 0, 2, i18n.tr("Cache"));
-        content.setWidget(++row, 0, 2, inject(proto().generalCacheEnabled(), new FieldDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().entityCacheServiceEnabled(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().generalCacheEnabled(), 5, true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().entityCacheServiceEnabled(), 5, true));
 
         content.setH2(++row, 0, 2, i18n.tr("Network Simulation"));
 
-        content.setWidget(++row, 0, 2, inject(proto().networkSimulation().enabled(), new FieldDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().networkSimulation().delay(), new FieldDecoratorBuilder(10, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().networkSimulation().enabled(), 5, true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().networkSimulation().delay(), 10, true));
 
         content.setH2(++row, 0, 2, i18n.tr("New Session duration"));
-        content.setWidget(++row, 0, 2, inject(proto().devSessionDuration(), new FieldDecoratorBuilder(10, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().applicationSessionDuration(), new FieldDecoratorBuilder(10, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().containerSessionTimeout(), new CLabel<String>(), new FieldDecoratorBuilder(10, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().devSessionDuration(), 10, true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().applicationSessionDuration(), 10, true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().containerSessionTimeout(), new CLabel<String>(), 10, true));
 
         return content;
     }
@@ -72,11 +72,11 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         int row = -1;
 
         content.setH2(++row, 0, 2, i18n.tr("Funds Transfer"));
-        content.setWidget(++row, 0, 2, inject(proto().systems().useFundsTransferSimulator(), new FieldDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().systems().useDirectBankingSimulator(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useFundsTransferSimulator(), 5, true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useDirectBankingSimulator(), 5, true));
 
         content.setH2(++row, 0, 2, i18n.tr("Credit Cards"));
-        content.setWidget(++row, 0, 2, inject(proto().systems().useCardServiceSimulator(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useCardServiceSimulator(), 5, true));
 
         return content;
     }
@@ -85,12 +85,12 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
         int row = -1;
 
-        content.setWidget(++row, 0, 2, inject(proto().systems().yardiAllTenantsToHaveEmails(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiAllTenantsToHaveEmails(), 5, true));
 
         content.setH2(++row, 0, 2, i18n.tr("Yardi Network Simulation"));
 
-        content.setWidget(++row, 0, 2, inject(proto().systems().yardiInterfaceNetworkSimulation().enabled(), new FieldDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().systems().yardiInterfaceNetworkSimulation().delay(), new FieldDecoratorBuilder(10, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiInterfaceNetworkSimulation().enabled(), 5, true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiInterfaceNetworkSimulation().delay(), 10, true));
 
         return content;
     }
@@ -99,11 +99,11 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
         int row = -1;
 
-        content.setWidget(++row, 0, 2, inject(proto().systems().useEquifaxSimulator(), new FieldDecoratorBuilder(5, true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useEquifaxSimulator(), 5, true));
 
-        content.setWidget(++row, 0, 2, inject(proto().equifax().approve().xml(), new FieldDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().equifax().decline().xml(), new FieldDecoratorBuilder(true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().equifax().moreInfo().xml(), new FieldDecoratorBuilder(true).build()));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().equifax().approve().xml(), true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().equifax().decline().xml(), true));
+        content.setWidget(++row, 0, 2, injectAndDecorate(proto().equifax().moreInfo().xml(), true));
 
         return content;
     }

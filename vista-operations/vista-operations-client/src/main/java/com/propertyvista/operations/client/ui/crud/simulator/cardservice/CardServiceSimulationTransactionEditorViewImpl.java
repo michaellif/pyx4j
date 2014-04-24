@@ -41,15 +41,15 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             tabPanel.setWidget(++row, 0, inject(proto().merchant(), //
                     OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class), new FieldDecoratorBuilder(18).build()));
 
-            tabPanel.setWidget(++row, 0, inject(proto().transactionType(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().scheduledSimulatedResponce(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().convenienceFee(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().reference(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().responseCode(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().authorizationNumber(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().voided(), new FieldDecoratorBuilder().build()));
-            tabPanel.setWidget(++row, 0, inject(proto().transactionDate(), new FieldDecoratorBuilder().build()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().transactionType()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().scheduledSimulatedResponce()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().amount()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().convenienceFee()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().reference()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().responseCode()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().authorizationNumber()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().voided()));
+            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().transactionDate()));
 
             selectTab(addTab(tabPanel));
         }
