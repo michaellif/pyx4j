@@ -49,6 +49,7 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.oapi.rs.OpenApiRsApplication;
 import com.propertyvista.operations.server.services.VistaConfigInfoServlet;
 import com.propertyvista.operations.server.services.simulator.CardServiceSimulationServlet;
+import com.propertyvista.operations.server.servlet.VistaStackTraceViewServlet;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
@@ -261,6 +262,11 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("VistaConfigInfoServlet", VistaConfigInfoServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.operations, "/config"));
+            }
+
+            {
+                ServletRegistration.Dynamic sc = ctx.addServlet("VistaStackTraceViewServlet", VistaStackTraceViewServlet.class);
+                sc.addMapping(urlPattern(VistaApplication.operations, "/stack/*"));
             }
 
             //TODO if Not production
