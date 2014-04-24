@@ -226,7 +226,7 @@ BEGIN TRANSACTION;
     
     UPDATE  greenwin.insurance_policy
     SET     status = 'Moved'
-    WHERE   id IN (SELECT id FROM _dba_.insurance_certificate);
+    WHERE   id IN (SELECT id FROM _dba_.insurance_policy);
     
     
     UPDATE  _admin_.tenant_sure_subscribers AS a 
