@@ -74,6 +74,7 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     /**
      * PK in TenantSure API of the accepted quote that was bound to the owner client/tenant.
      */
+    @MemberColumn(notNull = true)
     IPrimitive<String> quoteId();
 
     IPrimitive<TenantSureStatus> status();

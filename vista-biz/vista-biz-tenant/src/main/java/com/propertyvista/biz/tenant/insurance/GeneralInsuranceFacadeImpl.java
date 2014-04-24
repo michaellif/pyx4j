@@ -29,9 +29,6 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
         GeneralInsurancePolicy policy = EntityFactory.create(GeneralInsurancePolicy.class);
         policy.tenant().set(tenantId);
 
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-        Persistence.service().retrieve(tenant.customer().user());
-        policy.user().set(tenant.customer().user());
         policy.certificate().set(certificate);
         policy.isDeleted().setValue(false);
         Persistence.secureSave(policy);
@@ -41,7 +38,7 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
     public void deleteGeneralInsurance(GeneralInsuranceCertificate deletedCertificateId) {
         EntityQueryCriteria<GeneralInsurancePolicy> criteria = EntityQueryCriteria.create(GeneralInsurancePolicy.class);
         criteria.eq(criteria.proto().certificate(), deletedCertificateId);
-        GeneralInsurancePolicy policy = Persistence.service().retrieve(criteria);
+        GeneralInsurancePolicy policy = Persistence.secureRetrieve(criteria);
         if (policy == null) {
             throw new IllegalArgumentException("insurance policy that owns certificate id " + deletedCertificateId + " was not found");
         }

@@ -27,19 +27,19 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 @DiscriminatorValue("InsurancePolicy")
-public interface InsurancePolicy<INSURANCE_CERTIFICATE extends InsuranceCertificate<?>> extends IEntity, IUserEntity {
+public interface InsurancePolicy<INSURANCE_CERTIFICATE extends InsuranceCertificate<?>> extends IEntity {
 
     @Caption(name = "Owned By")
     @Owner
     @JoinColumn
     @ReadOnly
     @Detached
+    @MemberColumn(notNull = true)
     Tenant tenant();
 
     @Owned
