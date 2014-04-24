@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -704,14 +706,19 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     @SuppressWarnings("unchecked")
-    public void setDecorator(DECORATOR_TYPE decorator) {
+    public void setDecorator(final DECORATOR_TYPE decorator) {
         this.decorator = decorator;
         if (decorator == null) {
             getNativeComponent().getContentHolder().setWidget(getNativeComponent().getContent());
         } else {
             getNativeComponent().getContentHolder().setWidget(decorator);
             decorator.setContent(getNativeComponent().getContent());
-            decorator.init((SELF_TYPE) this);
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    decorator.init((SELF_TYPE) CComponent.this);
+                }
+            });
         }
     }
 

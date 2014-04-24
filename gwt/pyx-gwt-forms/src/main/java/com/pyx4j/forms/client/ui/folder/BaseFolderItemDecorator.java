@@ -63,6 +63,8 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
             }
         });
 
+        adoptItemActionsBar();
+
         onSetDebugId(folderItem.getDebugId());
     }
 

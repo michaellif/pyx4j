@@ -123,12 +123,6 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
 
     protected abstract CForm<? extends E> createItemForm(IObject<?> member);
 
-    @Override
-    public void setDecorator(IFolderItemDecorator<E> decorator) {
-        super.setDecorator(decorator);
-        ((IFolderItemDecorator) decorator).adoptItemActionsBar();
-    }
-
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {
         actionsBar.addAction(action, title, images, command);
         initActionBar();

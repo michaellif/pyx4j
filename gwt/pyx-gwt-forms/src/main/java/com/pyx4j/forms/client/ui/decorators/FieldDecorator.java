@@ -74,27 +74,27 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
     private CField<?, ?> component;
 
-    private final Label label;
+    private Label label;
 
-    private final SpaceHolder mandatoryImageHolder;
+    private SpaceHolder mandatoryImageHolder;
 
-    private final SimplePanel infoImageHolder;
+    private SimplePanel infoImageHolder;
 
-    private final SimplePanel assistantWidgetHolder;
+    private SimplePanel assistantWidgetHolder;
 
     private Image mandatoryImage;
 
-    private final HTML validationLabel;
+    private HTML validationLabel;
 
-    private final Label noteLabel;
+    private Label noteLabel;
 
-    private final SimplePanel labelHolder;
+    private SimplePanel labelHolder;
 
-    private final FlowPanel contentPanel;
+    private FlowPanel contentPanel;
 
-    private final FlexTable containerPanel;
+    private FlexTable containerPanel;
 
-    private final SimplePanel componentHolder;
+    private final SimplePanel contentHolder;
 
     private final Builder builder;
 
@@ -104,9 +104,21 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
     protected FieldDecorator(final Builder builder) {
         this.builder = builder;
-
         setStyleName(WidgetDecorator.name());
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        contentHolder = new SimplePanel();
+    }
+
+    @Override
+    public void setContent(IsWidget content) {
+        contentHolder.setWidget(content);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public void init(CField<?, ?> component) {
+        this.component = component;
 
         label = new Label();
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -133,12 +145,11 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         labelHolder.setWidth(builder.labelWidth);
         labelHolder.setWidget(labelContent);
 
-        componentHolder = new SimplePanel();
-        componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
-        componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
-        componentHolder.setWidth(builder.componentWidth);
+        contentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        contentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
+        contentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        contentHolder.setWidth(builder.componentWidth);
 
         validationLabel = new HTML();
         validationLabel.setVisible(false);
@@ -160,7 +171,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         contentPanel.setWidth(builder.contentWidth);
-        contentPanel.add(componentHolder);
+        contentPanel.add(contentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
 
@@ -181,17 +192,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
         containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
         containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
-    }
-
-    @Override
-    public void setContent(IsWidget content) {
-        componentHolder.setWidget(content);
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Override
-    public void init(CField component) {
-        this.component = component;
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
