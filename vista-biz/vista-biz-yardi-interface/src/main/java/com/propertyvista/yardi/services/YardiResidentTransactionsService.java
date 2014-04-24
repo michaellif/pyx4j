@@ -227,6 +227,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateLease(PmcYardiCredential yc, Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         // Each DB update function called in this method should be UnitOfWork, Unable to wrap here because for dual exception thrown.
         //This transaction should not update Lease, only in child unit of work
+        if (executionMonitor == null) {
+            executionMonitor = new ExecutionMonitor();
+        }
         executionMonitor.setExpectedTotal(4L);
 
         final Key yardiInterfaceId = yc.getPrimaryKey();
