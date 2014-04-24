@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -27,6 +26,7 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class BillForm extends CForm<BillDTO> {
+public class BillForm extends AccessoryEntityForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
@@ -70,24 +70,24 @@ public class BillForm extends CForm<BillDTO> {
 
         if (!justPreviewBill) {
             content.setH1(++row, 0, span, i18n.tr("Info"));
-            content.setWidget(++row, 0, inject(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().billingCycle().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().billingCycle().building(), new CEntityLabel<Building>()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel()));
 
             int row2 = oneColumn ? row : 0;
-            content.setWidget(++row2, col, inject(proto().billingCycle().billingCycleStartDate(), new CDateLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row2, col, inject(proto().billingCycle().billingCycleEndDate(), new CDateLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row2, col, inject(proto().billingCycle().targetBillExecutionDate(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row2, col, injectAndDecorate(proto().billingCycle().billingCycleStartDate(), new CDateLabel()));
+            content.setWidget(++row2, col, injectAndDecorate(proto().billingCycle().billingCycleEndDate(), new CDateLabel()));
+            content.setWidget(++row2, col, injectAndDecorate(proto().billingCycle().targetBillExecutionDate(), new CDateLabel()));
             row = oneColumn ? row2 : row;
 
             content.setH1(++row, 0, span, i18n.tr("Status"));
-            content.setWidget(++row, 0, inject(proto().billSequenceNumber(), new CNumberLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().dueDate(), new CDateLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().rejectReason(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().billSequenceNumber(), new CNumberLabel()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().dueDate(), new CDateLabel()));
+            content.setWidget(++row, 0, injectAndDecorate(proto().rejectReason(), new CEnumLabel()));
 
             row2 = oneColumn ? row : row2 + 1;
-            content.setWidget(++row2, col, inject(proto().billType(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row2, col, inject(proto().billStatus(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
+            content.setWidget(++row2, col, injectAndDecorate(proto().billType(), new CEnumLabel()));
+            content.setWidget(++row2, col, injectAndDecorate(proto().billStatus(), new CEnumLabel()));
             row = oneColumn ? row2 : row;
         }
 
