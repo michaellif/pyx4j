@@ -227,6 +227,16 @@ BEGIN TRANSACTION;
     SET     status = 'Moved'
     WHERE   id IN (SELECT id FROM _dba_.insurance_certificate);
     
+    UPDATE  _admin_.tenant_sure_subscribers AS a 
+    SET     pmc = p.id 
+    FROM    _admin_.admin_pmc p 
+    WHERE   p.namespace = 'dms'
+    AND     a.certificate_number IN 
+            (SELECT insurance_certificate_number
+            FROM    dms.insurance_certificate
+            WHERE   id_discriminator = 'InsuranceTenantSure');
+    
+    
     SET CONSTRAINTS ALL IMMEDIATE;
     
     ALTER TABLE dms.insurance_policy DROP COLUMN old_id;

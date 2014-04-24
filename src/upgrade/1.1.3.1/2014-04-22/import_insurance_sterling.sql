@@ -30,7 +30,7 @@ BEGIN TRANSACTION;
         JOIN    greenwin.building b ON (b.id = a.building)
         LEFT JOIN   greenwin.customer_user cu ON (cu.id = i.user_id) 
         WHERE   b.property_code IN ('aven2171','west2292','dund0015','well0077',
-                'well0077','well0155','well0080','stjo0016','west2220','west2222',
+                'well0155','well0080','stjo0016','west2220','west2222',
                 'carl0400')
         AND     COALESCE(i.status,'') != 'Moved'
     );
@@ -77,7 +77,7 @@ BEGIN TRANSACTION;
         JOIN    greenwin.province p ON (p.id = pm.billing_address_province)
         JOIN    greenwin.country c ON (c.id = pm.billing_address_country)
         WHERE   b.property_code IN ('aven2171','west2292','dund0015','well0077',
-                'well0077','well0155','well0080','stjo0016','west2220','west2222',
+                'well0155','well0080','stjo0016','west2220','west2222',
                 'carl0400')
     );
     
@@ -228,6 +228,16 @@ BEGIN TRANSACTION;
     UPDATE  greenwin.insurance_policy
     SET     status = 'Moved'
     WHERE   id IN (SELECT id FROM _dba_.insurance_certificate);
+    
+    
+    UPDATE  _admin_.tenant_sure_subscribers AS a 
+    SET     pmc = p.id 
+    FROM    _admin_.admin_pmc p 
+    WHERE   p.namespace = 'sterling'
+    AND     a.certificate_number IN 
+            (SELECT insurance_certificate_number
+            FROM    sterling.insurance_certificate
+            WHERE   id_discriminator = 'InsuranceTenantSure');
     
     SET CONSTRAINTS ALL IMMEDIATE;
     
