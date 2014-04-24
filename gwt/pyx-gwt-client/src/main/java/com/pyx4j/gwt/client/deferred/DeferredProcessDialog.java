@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -106,6 +107,9 @@ public class DeferredProcessDialog extends MessageDialog implements CloseOption,
     }
 
     private void setStatusMessage(String message, MessageDialog.Type type) {
+        if (CommonsStringUtils.isEmpty(message)) {
+            return;
+        }
         ScrollPanel scrollPanel = new ScrollPanel(new MessagePanel(message, type));
         scrollPanel.getElement().getStyle().setProperty("maxHeight", "400px");
         messagePanel.add(scrollPanel);
