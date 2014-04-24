@@ -92,7 +92,7 @@ class MoneyInBatchManager {
                 // TODO unify RunningProcess  and ExecutionMonitor
                 final ExecutionMonitor executionMonitor = new ExecutionMonitor() {
                     @Override
-                    protected void onEventAdded() {
+                    protected void onEventAdded(ExecutionEvent event) {
                         progress.progress.set(this.getProcessed().intValue());
                     }
                 };

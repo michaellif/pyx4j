@@ -124,6 +124,23 @@ public class ExecutionMonitor {
         this.expectedTotal = expectedTotal;
     }
 
+    public static class ExecutionEvent {
+        public final String sectionName;
+
+        public final CompletionType type;
+
+        public final BigDecimal value;
+
+        public final String message;
+
+        public ExecutionEvent(String sectionName, CompletionType type, BigDecimal value, String message) {
+            this.sectionName = sectionName;
+            this.type = type;
+            this.value = value;
+            this.message = message;
+        }
+    }
+
     public void addEvent(String sectionName, CompletionType type, BigDecimal value, String message) {
         ReportSectionId id = new ReportSectionId(sectionName, type);
         ReportSection section = sections.get(id);
@@ -158,11 +175,11 @@ public class ExecutionMonitor {
 
         log.debug("Execution event [sectionName={} type={} value={} message={}]", sectionName, type, value, message);
         dirty = true;
-        onEventAdded();
+        onEventAdded(new ExecutionEvent(sectionName, type, value, message));
     }
 
     //TODO unify RunningProcess  and ExecutionMonitor
-    protected void onEventAdded() {
+    protected void onEventAdded(ExecutionEvent event) {
     }
 
     public List<String> getSectionNames(CompletionType type) {

@@ -35,7 +35,7 @@ public interface YardiARFacade {
      */
     void setLeaseChargesComaptibleIds(Lease lease);
 
-    void updateLease(Lease lease) throws YardiServiceException, RemoteException;
+    void updateLease(Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 
     void updateBuilding(Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 

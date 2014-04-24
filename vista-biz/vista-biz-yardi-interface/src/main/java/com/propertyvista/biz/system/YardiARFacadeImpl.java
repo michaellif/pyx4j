@@ -56,12 +56,12 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
     }
 
     @Override
-    public void updateLease(Lease lease) throws YardiServiceException, RemoteException {
+    public void updateLease(Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
 
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
-        YardiResidentTransactionsService.getInstance().updateLease(getPmcYardiCredential(lease), lease);
+        YardiResidentTransactionsService.getInstance().updateLease(getPmcYardiCredential(lease), lease, executionMonitor);
     }
 
     @Override

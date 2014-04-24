@@ -224,22 +224,24 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("Update completed.");
     }
 
-    public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+    public void updateLease(PmcYardiCredential yc, Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         // Each DB update function called in this method should be UnitOfWork, Unable to wrap here because for dual exception thrown.
         //This transaction should not update Lease, only in child unit of work
+        executionMonitor.setExpectedTotal(4L);
 
         final Key yardiInterfaceId = yc.getPrimaryKey();
         String propertyCode = lease.unit().building().propertyCode().getValue();
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        ExecutionMonitor executionMonitor = new ExecutionMonitor();
 
         ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
+        executionMonitor.addProcessedEvent("ResidentTransactions Request");
         if (transaction != null && !transaction.getProperty().isEmpty()) {
             Property property = transaction.getProperty().iterator().next();
             if (!property.getRTCustomer().isEmpty()) {
                 importLease(yardiInterfaceId, propertyCode, property.getRTCustomer().iterator().next(), executionMonitor);
             }
         }
+        executionMonitor.addProcessedEvent("Import Lease");
 
         // import lease charges
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
@@ -253,6 +255,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 terminateLeaseCharges(lease, executionMonitor);
             }
         }
+        executionMonitor.addProcessedEvent("LeaseCharges Request");
         if (leaseCharges != null) {
             boolean processed = false;
             // we should just get one element in the list for the requested leaseId
@@ -266,6 +269,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 terminateLeaseCharges(lease, executionMonitor);
             }
         }
+        executionMonitor.addProcessedEvent("Import LeaseCharges");
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {

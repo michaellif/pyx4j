@@ -83,7 +83,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         try {
             // Do not update Lease in Batch posting process, It is done as separate process
             if (paymentBatchContext == null) {
-                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
+                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
             }
             ServerSideFactory.create(YardiARFacade.class).postReceipt(receipt, paymentBatchContext);
         } catch (RemoteException e) {
@@ -96,7 +96,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         if (paymentBatchContext == null) {
             try {
-                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
+                ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
             } catch (Throwable ignoreDataRetrivalFromYardy) {
                 // We ignore error here because it will require unnecessary transaction reject 
                 log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
@@ -157,7 +157,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         try {
             Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-            ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
+            ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease(), null);
         } catch (Throwable ignoreDataRetrivalFromYardy) {
             // We ignore error here because it will require unnecessary transaction reject
             log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);

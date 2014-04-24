@@ -24,9 +24,11 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 
 class LeaseYardiUpdateDeferredProcess extends AbstractDeferredProcess {
     private static final long serialVersionUID = 1L;
@@ -35,8 +37,11 @@ class LeaseYardiUpdateDeferredProcess extends AbstractDeferredProcess {
 
     private final Lease lease;
 
+    private final ExecutionMonitor monitor;
+
     LeaseYardiUpdateDeferredProcess(Lease lease) {
         this.lease = lease;
+        monitor = new ExecutionMonitor();
     }
 
     @Override
@@ -45,7 +50,7 @@ class LeaseYardiUpdateDeferredProcess extends AbstractDeferredProcess {
             @Override
             public Void execute() {
                 try {
-                    ServerSideFactory.create(YardiARFacade.class).updateLease(lease);
+                    ServerSideFactory.create(YardiARFacade.class).updateLease(lease, monitor);
                 } catch (RemoteException e) {
                     throw new UserRuntimeException(i18n.tr("Yardi connection problem"), e);
                 } catch (YardiServiceException e) {
@@ -67,7 +72,12 @@ class LeaseYardiUpdateDeferredProcess extends AbstractDeferredProcess {
         DeferredProcessProgressResponse r = super.status();
         if (!r.isCompleted() && !r.isCanceled()) {
             r.setMessage(i18n.tr("Updating Lease..."));
-            r.setProgress(0);
+            r.setProgressMaximum(100);
+            r.setProgress((int) (100 * monitor.getProcessed() / monitor.getExpectedTotal()));
+        } else if (monitor.getErred() > 0) {
+            r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
+        } else {
+            r.setMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
         }
         return r;
     }
