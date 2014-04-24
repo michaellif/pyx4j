@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.WatermarkComponent;
 
 public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
 
@@ -48,7 +47,7 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
     }
 
     public void setWatermark(String watermark) {
-        ((WatermarkComponent) asWidget()).setWatermark(watermark);
+        getNativeComponent().setWatermark(watermark);
     }
 
 }
