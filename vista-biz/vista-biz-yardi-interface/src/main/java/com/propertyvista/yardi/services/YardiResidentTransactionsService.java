@@ -43,6 +43,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -200,8 +201,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
-                    // process each property info
-                    importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
+                    // process each property info - import new buildings only
+                    List<String> newBuildings = importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
+                    executionMonitor.addInfoEvent(
+                            "ILSPropertyMarketing",
+                            SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|>0# [{1}]}", newBuildings.size(),
+                                    ConverterUtils.convertStringCollection(newBuildings)));
                 }
             }
 
@@ -392,11 +397,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             executionMonitor.addProcessedEvent("Payments", stats.getPayments());
                             executionMonitor.addProcessedEvent("Transactions");
                         } catch (YardiServiceException e) {
-                            executionMonitor
-                                    .addFailedEvent("Transactions", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
+                            executionMonitor.addFailedEvent("Transactions",
+                                    SimpleMessageFormat.format("Lease for customer {0} ({1})", rtCustomer.getCustomerID(), propertyCode), e);
                             interfaceLog.logRecordedTracastions();
                         } catch (Throwable t) {
-                            executionMonitor.addErredEvent("Transactions", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
+                            executionMonitor.addErredEvent("Transactions",
+                                    SimpleMessageFormat.format("Lease for customer {0} ({1})", rtCustomer.getCustomerID(), propertyCode), t);
                             interfaceLog.logRecordedTracastions();
                         }
 
@@ -768,7 +774,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             public Void execute() throws YardiServiceException {
                 // expire current billable items
                 if (new YardiLeaseProcessor(executionMonitor).expireLeaseProducts(leaseId)) {
-                    String msg = SimpleMessageFormat.format("charges expired for lease {0}", leaseId.leaseId());
+                    Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
+                    String msg = SimpleMessageFormat.format("charges expired for lease {0} ({1})", leaseId.leaseId(), leaseId.unit().building().propertyCode()
+                            .getValue());
                     log.info(msg);
                     if (executionMonitor != null) {
                         executionMonitor.addInfoEvent("chargesExpired", msg);
@@ -833,19 +841,20 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 if (propertyMarketing != null) {
                     marketingInfo.add(propertyMarketing);
                 }
-                executionMonitor.addInfoEvent("ILSPropertyMarketing", propertyListCode);
+                executionMonitor.addInfoEvent("ILSPropertyMarketing", "accessing building info: " + propertyListCode);
             } catch (YardiServiceException e) {
-                executionMonitor.addFailedEvent("ILSPropertyMarketing", propertyListCode, e);
+                executionMonitor.addErredEvent("ILSPropertyMarketing", "accessing building info: " + propertyListCode, e);
             }
         }
 
         return marketingInfo;
     }
 
-    private void importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
+    private List<String> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
             final ExecutionMonitor executionMonitor) {
         log.info("PropertyMarketing: import started...");
 
+        List<String> newProperties = new ArrayList<String>();
         for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
             if (executionMonitor != null) {
                 IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Availability");
@@ -866,6 +875,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
                 if (building == null || !importedBuildings.contains(building)) {
                     building = importProperty(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
+                    newProperties.add(propertyCode);
                 }
                 executionMonitor.addProcessedEvent("Building");
 
@@ -897,6 +907,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 break;
             }
         }
+        return newProperties;
     }
 
     private void clearUnitAvailability(final Set<AptUnit> units, ExecutionMonitor executionMonitor) throws YardiServiceException {

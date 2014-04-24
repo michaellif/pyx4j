@@ -200,7 +200,9 @@ public class YardiLeaseProcessor {
             log.debug("        >> Finalizing lease! <<");
 
             if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
-                String msg = SimpleMessageFormat.format("charges changed for lease {0}", leaseId.leaseId());
+                Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
+                String msg = SimpleMessageFormat.format("charges changed for lease {0} ({1})", leaseId.leaseId(), leaseId.unit().building().propertyCode()
+                        .getValue());
 
                 log.info(msg);
                 executionMonitor.addInfoEvent("chargesChanged", msg);
