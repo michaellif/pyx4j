@@ -133,6 +133,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 LogicalDate today = SystemDateManager.getLogicalDate();
                 while (skippedIterator.hasNext()) {
                     TenantSureInsurancePolicy ts = skippedIterator.next();
+                    Persistence.ensureRetrieve(ts.tenant(), AttachLevel.IdOnly);
                     if (gracePeriodEnd(ts).compareTo(today) < 0) {
                         String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                         try {

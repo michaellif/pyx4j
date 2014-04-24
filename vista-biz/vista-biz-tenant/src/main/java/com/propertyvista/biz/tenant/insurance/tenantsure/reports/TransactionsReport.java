@@ -73,6 +73,7 @@ public class TransactionsReport implements Report {
 
                         TenantSureCcTaransactionsReportLineDTO transactionReportLine = EntityFactory.create(TenantSureCcTaransactionsReportLineDTO.class);
                         transactionReportLine.date().setValue(transaction.transactionDate().getValue());
+                        Persistence.ensureRetrieve(transaction.insurance().tenant(), AttachLevel.Attached);
                         transactionReportLine.tenant().setValue(transaction.insurance().tenant().customer().person().name().getStringView());
                         transactionReportLine.insuranceCertificateNumber().setValue(
                                 transaction.insurance().certificate().insuranceCertificateNumber().getValue());

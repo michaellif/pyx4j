@@ -66,6 +66,8 @@ public class InsuranceStatusReport implements Report {
         try {
             while (iterator.hasNext()) {
                 TenantSureInsurancePolicyReport reportedStatusHolder = iterator.next();
+                Persistence.ensureRetrieve(reportedStatusHolder.insurance().client().tenant(), AttachLevel.Attached);
+
                 reportedStatusHolder = updateReportStatus(reportedStatusHolder);
 
                 TenantSureReportStatusData data = EntityFactory.create(TenantSureReportStatusData.class);
