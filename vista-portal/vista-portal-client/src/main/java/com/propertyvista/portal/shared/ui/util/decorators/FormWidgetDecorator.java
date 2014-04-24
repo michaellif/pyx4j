@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
@@ -29,12 +30,13 @@ public class FormWidgetDecorator extends FieldDecorator {
     }
 
     @Override
-    protected void onLoad() {
+    public void init(CField<?, ?> component) {
+        super.init(component);
         if (getLabelPosition() != LabelPosition.hidden) {
             builder.labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
             updateLabelPosition();
         }
-    };
+    }
 
     @Override
     protected void updateViewable() {
