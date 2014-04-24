@@ -38,6 +38,8 @@ public interface N4CreateBatchView extends IPrimePane, HasMessages {
 
         void updateSelection(SelectionPresetModel value);
 
+        void cancelDownload(String reportUrl);
+
     }
 
     void setPresenter(Presenter presenter);
@@ -47,5 +49,7 @@ public interface N4CreateBatchView extends IPrimePane, HasMessages {
     N4CandidateSearchCriteriaDTO getSearchCriteria();
 
     void setProgress(int progress, int maxiumumProgress, String message);
+
+    void displayN4GenerationReportDownloadLink(String downloadUrl);
 
 }

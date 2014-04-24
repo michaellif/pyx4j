@@ -14,7 +14,10 @@
 package com.propertyvista.crm.client.ui.tools.legal.n4;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -24,6 +27,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -31,6 +35,7 @@ import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
+import com.propertyvista.crm.client.ui.tools.common.LinkDialog;
 import com.propertyvista.crm.client.ui.tools.common.SimpleProgressWidget;
 import com.propertyvista.crm.client.ui.tools.common.view.AbstractPrimePaneWithMessagesPopup;
 import com.propertyvista.crm.client.ui.tools.legal.n4.datagrid.LegalNoticeCandidateDataGrid;
@@ -57,6 +62,8 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
 
     private SimpleProgressWidget progressWidget;
 
+    private Button createBatchButton;
+
     public N4CreateBatchViewImpl() {
         setCaption(i18n.tr("N4: Create N4's"));
 
@@ -74,7 +81,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         {
             LayoutPanel foundHolder = new LayoutPanel();
             gridsHolder.add(foundHolder);
-            gridsHolder.setWidgetTopBottom(foundHolder, 0, Unit.PX, 0, Unit.PCT);
+            gridsHolder.setWidgetTopBottom(foundHolder, 0, Unit.PX, 51, Unit.PX);
             gridsHolder.setWidgetLeftRight(foundHolder, 0, Unit.PX, 0, Unit.PX);
 
             foundHolder.add(searchCandidateDataGrid = new LegalNoticeCandidateDataGrid() {
@@ -102,6 +109,37 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
             foundHolder.setWidgetLeftRight(searchResultsPagerHolder, 0, Unit.PX, 0, Unit.PX);
         }
 
+        {
+            LayoutPanel selectedHolder = new LayoutPanel();
+            gridsHolder.add(selectedHolder);
+            gridsHolder.setWidgetBottomHeight(selectedHolder, 0, Unit.PX, 50, Unit.PX);
+            gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
+
+            // selected:
+            Widget selectedHeader = initSelectedItemsHeaderPanel();
+            selectedHeader.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+            selectedHeader.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+            selectedHolder.add(selectedHeader);
+            selectedHolder.setWidgetTopBottom(selectedHeader, 0, Unit.PX, 0, Unit.PX);
+            selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
+        }
+
+    }
+
+    private Widget initSelectedItemsHeaderPanel() {
+        createBatchButton = new Button(i18n.tr("Issue N4's"), new Command() {
+            @Override
+            public void execute() {
+                N4CreateBatchViewImpl.this.presenter.createBatch();
+            }
+        });
+        SimplePanel createBatchButtonHolder = new SimplePanel(); // this panel is to apply 'toolbar style' to the button
+        createBatchButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        createBatchButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        createBatchButtonHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        createBatchButtonHolder.setWidget(createBatchButton);
+        return createBatchButtonHolder;
     }
 
     @Override
@@ -125,6 +163,23 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
     @Override
     public N4CandidateSearchCriteriaDTO getSearchCriteria() {
         return searchCriteriaForm.getValue();
+    }
+
+    @Override
+    public void displayN4GenerationReportDownloadLink(final String reportUrl) {
+        new LinkDialog(i18n.tr("Some of N4 failed"), i18n.tr("Download Errors"), reportUrl) {
+            @Override
+            public boolean onClickCancel() {
+                presenter.cancelDownload(reportUrl);
+                return false;
+            }
+
+            @Override
+            public void hide(boolean autoClosed) {
+                super.hide(autoClosed);
+                presenter.search();
+            };
+        }.show();
     }
 
     private LayoutPanel initViewPanel() {
