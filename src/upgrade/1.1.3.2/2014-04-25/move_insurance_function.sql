@@ -12,6 +12,9 @@
 CREATE OR REPLACE FUNCTION _dba_.move_insurance(v_new_schema TEXT,v_prop_list TEXT[]) RETURNS VOID 
 AS
 $$
+DECLARE 
+        v_lease_id      TEXT;
+        v_errors        INT;
 BEGIN
 
     EXECUTE 'SET search_path = '||v_new_schema;
@@ -227,9 +230,9 @@ BEGIN
             ||'FROM    _dba_.tenant_sure_insurance_policy_report t '
             ||'JOIN    '||v_new_schema||'.insurance_policy i ON (i.old_id = t.insurance))';
     
-    UPDATE  greenwin.insurance_policy
-    SET     status = 'Moved'
-    WHERE   id IN (SELECT id FROM _dba_.insurance_policy);
+    EXECUTE 'UPDATE  greenwin.insurance_policy '
+            ||'SET     status = ''Moved'' '
+            ||'WHERE   id IN (SELECT old_id FROM '||v_new_schema||'.insurance_policy) ';
     
     EXECUTE 'UPDATE  _admin_.tenant_sure_subscribers AS a '
             ||'SET     pmc = p.id '
@@ -242,6 +245,38 @@ BEGIN
     
     
     SET CONSTRAINTS ALL IMMEDIATE;
+    
+    
+    /**
+    *** ================================================================
+    ***
+    ***     Check for errors
+    ***
+    *** ================================================================
+    **/
+    
+    FOR v_lease_id IN 
+    SELECT  lp.participant_id
+    FROM    greenwin.insurance_policy i
+    JOIN    greenwin.lease_participant lp ON (lp.id = i.tenant)
+    JOIN    greenwin.lease l ON (l.id = lp.lease)
+    JOIN    greenwin.apt_unit a ON (a.id = l.unit)
+    JOIN    greenwin.building b ON (b.id = a.building)
+    WHERE   b.property_code IN (SELECT UNNEST(v_prop_list))
+    AND     COALESCE(i.status,'') != 'Moved'
+    LOOP
+        v_errors := v_errors+1;
+        
+        RAISE NOTICE 'Insurance for lease % not migrated ',v_lease_id;
+    END LOOP;
+    
+    IF (v_errors > 0 )
+    THEN
+        
+        RAISE ERROR 'Errors detected in insurance migration';
+    END IF;
+    
+    
     
     ALTER TABLE insurance_policy DROP COLUMN old_id;
     ALTER TABLE insurance_certificate DROP COLUMN old_id;
