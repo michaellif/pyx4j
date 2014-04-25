@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
@@ -104,26 +105,7 @@ public class FormPanel implements IsWidget {
         flexPanel.setH4(row, col, span, caption, actionWidget);
     }
 
-    public void insert(int row, int col, int span, IsWidget widget) {
-        flexPanel.setWidget(row, col, span, widget);
-    }
-
     public void insert(int row, int col, int span, Widget widget) {
-        flexPanel.setWidget(row, col, span, widget);
-    }
-
-    public void insert(int row, int col, Widget widget) {
-        flexPanel.setWidget(row, col, widget);
-    }
-
-    public void insert(int row, int col, IsWidget widget) {
-        flexPanel.setWidget(row, col, widget);
-    }
-
-    public CompOptions insert(int row, int col, int span, IObject<?> member) {
-        CField<?, ?> comp = parent.inject(member);
-        flexPanel.setWidget(row, col, span, comp);
-
         if (span == 1) {
             if (col == 0) {
                 flexPanel.getFlexCellFormatter().setStyleName(row, col, FlexFormPanelTheme.StyleName.FormFlexPanelLeftCell.name());
@@ -133,12 +115,52 @@ public class FormPanel implements IsWidget {
         } else if (span == 2) {
             flexPanel.getFlexCellFormatter().setStyleName(row, col, FlexFormPanelTheme.StyleName.FormFlexPanelTwoRows.name());
         }
+        flexPanel.setWidget(row, col, span, widget);
+    }
 
+    public void insert(int row, int col, int span, IsWidget widget) {
+        insert(row, col, span, widget.asWidget());
+    }
+
+    public void insert(int row, int col, Widget widget) {
+        insert(row, col, 1, widget);
+    }
+
+    public void insert(int row, int col, IsWidget widget) {
+        insert(row, col, 1, widget);
+    }
+
+    public CompOptions insert(int row, int col, int span, IObject<?> member) {
+        CField<?, ?> comp = parent.inject(member);
+        insert(row, col, span, comp);
         return new CompOptions(comp, span == 2);
     }
 
     public CompOptions insert(int row, int col, IObject<?> member) {
         return insert(row, col, 1, member);
+    }
+
+    public CompOptions insert(int row, int col, int span, IObject<?> member, CField<?, ?> comp) {
+        comp = parent.inject(member, comp);
+        insert(row, col, span, comp);
+        return new CompOptions(comp, span == 2);
+    }
+
+    public CompOptions insert(int row, int col, IObject<?> member, CField<?, ?> comp) {
+        return insert(row, col, 1, member, comp);
+    }
+
+    public void insert(int row, int col, int span, IObject<?> member, CComponent<?, ?, ?> comp) {
+        comp = parent.inject(member, comp);
+        insert(row, col, span, comp);
+    }
+
+    public void insert(int row, int col, IObject<?> member, CComponent<?, ?, ?> comp) {
+        insert(row, col, 1, member, comp);
+    }
+
+    public int getRowCount() {
+        return flexPanel.getRowCount();
     }
 
     public class CompOptions {
