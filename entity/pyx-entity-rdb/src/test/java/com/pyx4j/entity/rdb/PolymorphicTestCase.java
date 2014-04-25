@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Task;
@@ -450,6 +451,46 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
         }
     }
 
+    public void testQueryByPolymorphicEntityAbstractMemeber() {
+        String testId = uniqueString();
+
+        // Prepare data
+        Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
+        ent11.testId().setValue(testId);
+        ent11.nameC1().setValue("c1:" + uniqueString());
+        srv.persist(ent11);
+
+        ReferenceNotOwnerEntity ent1 = EntityFactory.create(ReferenceNotOwnerEntity.class);
+        ent1.testId().setValue(testId);
+        ent1.reference().set(ent11);
+        srv.persist(ent1);
+
+        {
+            EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.eq(criteria.proto().reference(), ent11);
+            List<ReferenceNotOwnerEntity> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+            Assert.assertEquals(ent11, found.get(0).reference());
+        }
+
+        {
+            List<Concrete1Entity> inValues;
+            {
+                EntityQueryCriteria<Concrete1Entity> criteria = EntityQueryCriteria.create(Concrete1Entity.class);
+                criteria.eq(criteria.proto().testId(), testId);
+                inValues = srv.query(criteria);
+            }
+
+            EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().reference(), inValues);
+            List<ReferenceNotOwnerEntity> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+            Assert.assertEquals(ent11, found.get(0).reference());
+        }
+    }
+
     public void testQueryByPolymorphicEntityInList() {
         String testId = uniqueString();
 
@@ -490,6 +531,45 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             Assert.assertEquals(ent1, found);
             Assert.assertEquals(ent11, found.references().get(0));
         }
+    }
+
+    public void testQueryByPolymorphicEntityComplex() {
+        String testId = uniqueString();
+
+        // Prepare data
+        Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
+        ent11.testId().setValue(testId);
+        ent11.nameC1().setValue("c1:" + uniqueString());
+        srv.persist(ent11);
+
+        Concrete2Entity ent21 = EntityFactory.create(Concrete2Entity.class);
+        ent21.nameC2().setValue("c2:" + uniqueString());
+        srv.persist(ent21);
+
+        ReferenceNotOwnerEntity ent1 = EntityFactory.create(ReferenceNotOwnerEntity.class);
+        ent1.testId().setValue(testId);
+
+        ent1.reference().set(ent11);
+
+        ent1.references().add(ent21);
+        ent1.references().add(ent11);
+
+        srv.persist(ent1);
+
+        {
+            EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().reference(), ent11);
+            OrCriterion or2 = or.right().or();
+            or2.left().eq(criteria.proto().reference(), ent21);
+            or2.right().eq(criteria.proto().reference(), ent11);
+
+            List<ReferenceNotOwnerEntity> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+            Assert.assertEquals(ent11, found.get(0).reference());
+        }
+
     }
 
     public void testSingleTablePersist() {
