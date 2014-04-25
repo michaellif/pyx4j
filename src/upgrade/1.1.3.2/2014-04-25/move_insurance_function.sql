@@ -4,6 +4,7 @@
 ***             @version $Revision$ ($Author$) $Date$
 ***
 ***             Function to move insurance from greenwin to other pmc
+***             Usage: SELECT _dba_.move_insurance('dms',ARRAY['mark0150','mark0155','mark0160','quee0297','firs0053','huro2465']);
 ***
 ***     ======================================================================================================================
 **/
@@ -230,14 +231,14 @@ BEGIN
     SET     status = 'Moved'
     WHERE   id IN (SELECT id FROM _dba_.insurance_policy);
     
-    UPDATE  _admin_.tenant_sure_subscribers AS a 
-    SET     pmc = p.id 
-    FROM    _admin_.admin_pmc p 
-    WHERE   p.namespace = v_new_schema
-    AND     a.certificate_number IN 
-            (SELECT insurance_certificate_number
-            FROM    dms.insurance_certificate
-            WHERE   id_discriminator = 'InsuranceTenantSure');
+    EXECUTE 'UPDATE  _admin_.tenant_sure_subscribers AS a '
+            ||'SET     pmc = p.id '
+            ||'FROM    _admin_.admin_pmc p '
+            ||'WHERE   p.namespace = '''||v_new_schema||''' '
+            ||'AND     a.certificate_number IN '
+            ||'             (SELECT insurance_certificate_number '
+            ||'             FROM    '||v_new_schema||'.insurance_certificate '
+            ||'             WHERE   id_discriminator = ''InsuranceTenantSure'') ';
     
     
     SET CONSTRAINTS ALL IMMEDIATE;
