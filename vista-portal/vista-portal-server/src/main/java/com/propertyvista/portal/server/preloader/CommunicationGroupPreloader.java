@@ -25,17 +25,19 @@ public class CommunicationGroupPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        createEnpoint(EndpointGroup.Commandant, CrmRolesPreloader.getCommandantRole());
+
+        createEnpoint(EndpointGroup.Commandant, CrmRolesPreloader.getDefaultRole(), CrmRolesPreloader.getCommandantRole());
         return null;
     }
 
-    private void createEnpoint(EndpointGroup epType, CrmRole defaultRole) {
+    private void createEnpoint(EndpointGroup epType, CrmRole... defaultRole) {
         CommunicationGroup ep = EntityFactory.create(CommunicationGroup.class);
         ep.type().setValue(epType);
         ep.name().setValue(epType.toString());
         ep.isPredefined().setValue(true);
-        if (defaultRole != null) {
-            ep.roles().add(defaultRole);
+        if (defaultRole != null && defaultRole.length > 0) {
+            for (int i = 0; i < defaultRole.length; ++i)
+                ep.roles().add(defaultRole[i]);
         }
         PersistenceServicesFactory.getPersistenceService().persist(ep);
     }
