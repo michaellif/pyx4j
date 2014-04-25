@@ -60,6 +60,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiConstants;
+import com.propertyvista.yardi.mappers.TenantMapper;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
@@ -487,7 +488,7 @@ public class YardiGuestManagementService extends YardiAbstractService {
                 if (!property.getRTCustomer().isEmpty()) {
                     result = new HashMap<String, String>();
                     for (YardiCustomer customer : property.getRTCustomer().iterator().next().getCustomers().getCustomer()) {
-                        result.put(getNameKey(customer.getName()), customer.getCustomerID());
+                        result.put(getNameKey(customer.getName()), TenantMapper.getCustomerID(customer));
                     }
                 }
             }

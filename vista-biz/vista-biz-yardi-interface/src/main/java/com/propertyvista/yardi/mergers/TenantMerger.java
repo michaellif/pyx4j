@@ -55,7 +55,7 @@ public class TenantMerger {
         }
 
         for (YardiCustomer customer : yardiCustomers) {
-            if (findParticipant(tenants, guarantors, customer.getCustomerID()) == null) {
+            if (findParticipant(tenants, guarantors, TenantMapper.getCustomerID(customer)) == null) {
                 return true;
             }
         }
@@ -74,9 +74,9 @@ public class TenantMerger {
         Set<String> currentCustomerIDs = new HashSet<String>();
 
         for (YardiCustomer customer : yardiCustomers) {
-            currentCustomerIDs.add(customer.getCustomerID());
+            currentCustomerIDs.add(TenantMapper.getCustomerID(customer));
 
-            if (findParticipant(term.version().tenants(), term.version().guarantors(), customer.getCustomerID()) == null) {
+            if (findParticipant(term.version().tenants(), term.version().guarantors(), TenantMapper.getCustomerID(customer)) == null) {
                 // New tenant,  TODO implement new guarantor
                 term.version().tenants().add(new TenantMapper(executionMonitor).createTenant(customer, term.version().tenants()));
             }
@@ -106,7 +106,8 @@ public class TenantMerger {
         boolean updated = false;
 
         for (YardiCustomer customer : yardiCustomers) {
-            LeaseTermParticipant<?> participant = findParticipant(term.version().tenants(), term.version().guarantors(), customer.getCustomerID());
+            LeaseTermParticipant<?> participant = findParticipant(term.version().tenants(), term.version().guarantors(),
+                    TenantMapper.getCustomerID(customer));
 
             if (new TenantMapper(executionMonitor).updateCustomerData(customer, participant.leaseParticipant().customer())) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(participant.leaseParticipant().customer());

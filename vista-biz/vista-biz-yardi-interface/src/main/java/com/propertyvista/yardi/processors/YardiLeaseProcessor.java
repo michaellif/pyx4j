@@ -91,12 +91,12 @@ public class YardiLeaseProcessor {
     }
 
     public Lease processLease(RTCustomer rtCustomer, Key yardiInterfaceId, String propertyCode) {
-        Lease existingLease = findLease(yardiInterfaceId, propertyCode, getLeaseId(rtCustomer));
+        Lease existingLease = findLease(yardiInterfaceId, propertyCode, getLeaseID(rtCustomer));
         if (existingLease != null) {
-            log.info("      = Updating lease {} {}", yardiInterfaceId, getLeaseId(rtCustomer));
+            log.info("      = Updating lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
             return updateLease(rtCustomer, yardiInterfaceId, propertyCode, existingLease);
         } else {
-            log.info("      = Creating new lease {} {}", yardiInterfaceId, getLeaseId(rtCustomer));
+            log.info("      = Creating new lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
             return createLease(yardiInterfaceId, propertyCode, rtCustomer);
         }
     }
@@ -244,8 +244,8 @@ public class YardiLeaseProcessor {
         // @formatter:on
     }
 
-    public static String getLeaseId(RTCustomer rtCustomer) {
-        return rtCustomer.getCustomerID();
+    public static String getLeaseID(RTCustomer rtCustomer) {
+        return rtCustomer.getCustomerID().toLowerCase();
     }
 
     public static boolean isCurrentLease(RTCustomer rtCustomer) {
@@ -330,12 +330,12 @@ public class YardiLeaseProcessor {
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
 
         AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
-        log.debug("creating lease {} for unit {}", getLeaseId(rtCustomer), unit.getStringView());
+        log.debug("creating lease {} for unit {}", getLeaseID(rtCustomer), unit.getStringView());
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
 
         Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
-        lease.leaseId().setValue(getLeaseId(rtCustomer));
+        lease.leaseId().setValue(getLeaseID(rtCustomer));
         lease.type().setValue(ARCode.Type.Residential);
         lease.integrationSystemId().setValue(yardiInterfaceId);
 
@@ -410,7 +410,7 @@ public class YardiLeaseProcessor {
         if (leaseMove || (!unitNumber.equals(lease.unit().info().number().getValue()))) {
             Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
             AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
-            log.debug("updating unit {} for lease {}", unit.getStringView(), getLeaseId(rtCustomer));
+            log.debug("updating unit {} for lease {}", unit.getStringView(), getLeaseID(rtCustomer));
 
             lease = new LeaseMerger().updateUnit(unit, lease);
             toPersist = true;

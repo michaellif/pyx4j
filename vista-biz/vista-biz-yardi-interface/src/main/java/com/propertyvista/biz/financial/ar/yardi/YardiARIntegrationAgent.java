@@ -75,7 +75,7 @@ public class YardiARIntegrationAgent {
     }
 
     public static String getPropertyId(Identification identification) {
-        return identification != null ? (identification.getPrimaryID()) : null;
+        return identification != null ? (identification.getPrimaryID().toLowerCase()) : null;
     }
 
     public static String getUnitId(RTCustomer customer) {

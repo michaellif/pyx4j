@@ -86,6 +86,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.yardi.beans.Properties;
+import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
 import com.propertyvista.yardi.processors.YardiChargeProcessor;
@@ -315,7 +316,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private Map<String, BigDecimal> getBuildingDepositInfo(Building building, List<PhysicalProperty> marketingInfo) {
         for (PhysicalProperty propertyInfo : marketingInfo) {
             for (com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
-                String propertyCode = property.getPropertyID().getIdentification().getPrimaryID();
+                String propertyCode = BuildingsMapper.getPropertyID(property.getPropertyID());
                 if (propertyCode != null && propertyCode.equals(building.propertyCode().getValue())) {
                     return new YardiILSMarketingProcessor().getDepositInfo(property);
                 }
@@ -356,7 +357,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             String propertyId = null;
             if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
-                propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
+                propertyId = BuildingsMapper.getPropertyID(property.getPropertyID().get(0));
             }
 
             try {
@@ -866,7 +867,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            String propertyCode = property.getPropertyID().getIdentification().getPrimaryID();
+            String propertyCode = BuildingsMapper.getPropertyID(property.getPropertyID());
 
             try {
                 log.info("  Processing building: {}", propertyCode);

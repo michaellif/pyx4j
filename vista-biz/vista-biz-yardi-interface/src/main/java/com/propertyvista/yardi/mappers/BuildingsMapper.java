@@ -33,6 +33,10 @@ public class BuildingsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingsMapper.class);
 
+    static public String getPropertyID(PropertyIDType propertyID) {
+        return propertyID.getIdentification().getPrimaryID().toLowerCase();
+    }
+
     /**
      * Maps property from YARDI System to building
      * 
@@ -44,7 +48,7 @@ public class BuildingsMapper {
         Building building = EntityFactory.create(Building.class);
 
         Identification identification = propertyID.getIdentification();
-        building.propertyCode().setValue(identification.getPrimaryID());
+        building.propertyCode().setValue(getPropertyID(propertyID));
         building.info().name().setValue(identification.getLegalName());
         building.marketing().name().setValue(identification.getMarketingName());
         building.defaultProductCatalog().setValue(false);

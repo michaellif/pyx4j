@@ -56,6 +56,10 @@ public class TenantMapper {
         ignoredEmailLocalParts.add("nobody");
     }
 
+    static public String getCustomerID(YardiCustomer yardiCustomer) {
+        return yardiCustomer.getCustomerID().toLowerCase();
+    }
+
     public TenantMapper() {
         this(null);
     }
@@ -77,7 +81,7 @@ public class TenantMapper {
         }
 
         tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, customer));
-        tenant.leaseParticipant().participantId().setValue(yardiCustomer.getCustomerID());
+        tenant.leaseParticipant().participantId().setValue(getCustomerID(yardiCustomer));
 
         if (yardiCustomer.getLease().isResponsibleForLease()) {
             tenant.role().setValue(isApplicantExists(tenants) ? Role.CoApplicant : Role.Applicant);
@@ -227,7 +231,7 @@ public class TenantMapper {
         }
         // Mass email testing
         if (!VistaDeployment.isVistaProduction() && VistaSystemsSimulationConfig.getConfiguration().yardiAllTenantsToHaveEmails().getValue(false)) {
-            return yardiCustomer.getCustomerID() + "@pyx4j.com";
+            return TenantMapper.getCustomerID(yardiCustomer) + "@pyx4j.com";
         } else {
             return null;
         }
