@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -26,6 +27,8 @@ import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.domain.settings.PmcCompanyInfoContact;
 
 public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
+
+    private static final I18n i18n = I18n.get(PmcCompanyInfoForm.class);
 
     public PmcCompanyInfoForm(IForm<PmcCompanyInfoDTO> view) {
         super(PmcCompanyInfoDTO.class, view);
@@ -38,7 +41,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
         content.setH1(++row, 0, 2, proto().contacts().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().contacts(), new PmcCompanyInfoContactFolder()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
         setTabBarVisible(false);
     }
 

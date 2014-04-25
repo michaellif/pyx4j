@@ -31,7 +31,7 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
 
     PasswordResetRequestWizard(PasswordResetRequestWizardViewImpl view) {
         super(PasswordRetrievalRequest.class, view, i18n.tr("Reset Password"), i18n.tr("Submit"), ThemeColor.contrast3);
-        addStep(createStep());
+        addStep(createStep(), i18n.tr("General"));
     }
 
     public BasicFlexFormPanel createStep() {

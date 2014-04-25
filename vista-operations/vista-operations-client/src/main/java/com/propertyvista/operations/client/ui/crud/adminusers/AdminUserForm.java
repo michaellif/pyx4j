@@ -59,7 +59,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
     }
 
     public void createTabs() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
         content.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(true).build()));
@@ -79,7 +79,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
         content.setWidget(++row, 0, 2, inject(proto().credentialUpdated(), new FieldDecoratorBuilder(true).build()));
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

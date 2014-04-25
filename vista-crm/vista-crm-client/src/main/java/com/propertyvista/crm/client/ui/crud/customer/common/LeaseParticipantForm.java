@@ -133,8 +133,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         });
     }
 
-    protected TwoColumnFlexFormPanel createDetailsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    protected TwoColumnFlexFormPanel createDetailsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         String participant = null;
         if (rootClass.equals(TenantDTO.class)) {
@@ -221,8 +221,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         return main;
     }
 
-    protected TwoColumnFlexFormPanel createPaymentMethodsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    protected TwoColumnFlexFormPanel createPaymentMethodsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, 2, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")

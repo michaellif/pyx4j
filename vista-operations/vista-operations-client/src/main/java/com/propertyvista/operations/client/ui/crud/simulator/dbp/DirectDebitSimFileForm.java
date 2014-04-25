@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -28,6 +29,8 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile.
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 
 public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimFile> {
+
+    private static final I18n i18n = I18n.get(DirectDebitSimFileForm.class);
 
     public static class DirectDebitSimRecordTableFolder extends VistaTableFolder<DirectDebitSimRecord> {
 
@@ -64,7 +67,7 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
         formPanel.setWidget(++row, 0, 2, inject(proto().records(), new DirectDebitSimRecordTableFolder()));
         
         setTabBarVisible(false);
-        selectTab(addTab(formPanel));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
     }
     

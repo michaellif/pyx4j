@@ -39,15 +39,11 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
     public ApplicationDocumentationPolicyForm(IForm<ApplicationDocumentationPolicyDTO> view) {
         super(ApplicationDocumentationPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createEdtorFormTab());
+        addTab(createEdtorFormTab(), i18n.tr("Settings"));
     }
 
     private TwoColumnFlexFormPanel createEdtorFormTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, inject(proto().numberOfRequiredIDs(), new FieldDecoratorBuilder(3).build()));

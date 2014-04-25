@@ -87,7 +87,7 @@ public class UnitStep extends ApplicationWizardStep {
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().unitSelection().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder().build()));

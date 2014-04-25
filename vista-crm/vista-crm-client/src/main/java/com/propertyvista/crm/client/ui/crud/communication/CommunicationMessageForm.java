@@ -53,7 +53,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         super(CommunicationMessageDTO.class, view);
         messagesFolder = new OpenMessageFolder();
 
-        selectTab(addTab(createGeneralForm()));
+        selectTab(addTab(createGeneralForm(), i18n.tr("General")));
         inheritEditable(true);
         inheritViewable(false);
         inheritEnabled(true);
@@ -79,7 +79,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
     }
 
     public BasicFlexFormPanel createGeneralForm() {
-        BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         mainPanel.setWidget(++row, 0, inject(proto().threadDTO().created(), new FieldDecoratorBuilder(20).build()));
         mainPanel.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(20).build()));

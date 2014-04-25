@@ -14,14 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -47,17 +46,17 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         createCommonContent();
 
-        addTab(createInfoTab());
+        addTab(createInfoTab(), i18n.tr("Information"));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            chargesTab = addTab(createChargesTab());
+            chargesTab = addTab(createChargesTab(), i18n.tr("Potential Charges"));
         }
         addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-        addTab(createFinancialTab());
-        addTab(createApprovalTab());
-        addTab(createApplicationDocumentsTab());
+        addTab(createFinancialTab(), i18n.tr("Financial"));
+        addTab(createApprovalTab(), i18n.tr("Approval"));
+        addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"));
 
         if (VistaFeatures.instance().onlineApplication()) {
-            onlineStatusTab = addTab(createOnlineStatusTab());
+            onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
         }
     }
 
@@ -80,13 +79,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
     }
 
-    @Override
-    protected String getChargesTabTitle() {
-        return i18n.tr("Potential Charges");
-    }
-
     private TwoColumnFlexFormPanel createInfoTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Information"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, 2, inject(proto().tenantInfo(), createTenantView()));
 
@@ -94,7 +88,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private TwoColumnFlexFormPanel createFinancialTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Financial"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, 2, inject(proto().tenantFinancials(), createFinancialView()));
 
@@ -136,7 +130,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private TwoColumnFlexFormPanel createApprovalTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Approval"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().status(), new CEnumLabel(), 15, true));
@@ -166,7 +160,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private TwoColumnFlexFormPanel createOnlineStatusTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Online Status Details"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().onlineApplication().status(), 20, 15, 20));
@@ -180,7 +174,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private BasicFlexFormPanel createApplicationDocumentsTab() {
         int row = -1;
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Application Documents"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         panel.setWidget(++row, 0, 2, inject(proto().applicationDocuments(), new LeaseApplicationDocumentFolder()));
         return panel;
     }

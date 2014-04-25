@@ -47,7 +47,7 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
             content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(10).build()));

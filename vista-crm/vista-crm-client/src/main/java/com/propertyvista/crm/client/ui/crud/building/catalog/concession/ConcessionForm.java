@@ -23,12 +23,15 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionForm extends CrmEntityForm<Concession> {
+
+    private static final I18n i18n = I18n.get(ConcessionForm.class);
 
     private final SimplePanel valueHolder = new SimplePanel();
 
@@ -62,7 +65,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
             }
         });
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("Concession")));
         setTabBarVisible(false);
     }
 

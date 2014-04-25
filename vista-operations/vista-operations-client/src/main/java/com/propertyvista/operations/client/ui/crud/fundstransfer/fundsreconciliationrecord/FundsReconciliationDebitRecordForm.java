@@ -57,7 +57,7 @@ public class FundsReconciliationDebitRecordForm extends OperationsEntityForm<Fun
         panel.setWidget(++row, 0, 1, inject(proto().debitRecord().processed(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().debitRecord().processingStatus(), new FieldDecoratorBuilder().build()));
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

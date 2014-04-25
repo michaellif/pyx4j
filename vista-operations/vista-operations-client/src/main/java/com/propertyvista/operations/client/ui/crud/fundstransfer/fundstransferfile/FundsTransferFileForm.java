@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferf
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -32,6 +33,8 @@ import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
 public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFileDTO> {
+
+    private static final I18n i18n = I18n.get(FundsTransferFileForm.class);
 
     public FundsTransferFileForm(IForm<FundsTransferFileDTO> view) {
         super(FundsTransferFileDTO.class, view);
@@ -88,7 +91,7 @@ public class FundsTransferFileForm extends OperationsEntityForm<FundsTransferFil
             panel.setWidget(++row, 0, 1, inject(proto().batches(), link, new FieldDecoratorBuilder().build()));
         }
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

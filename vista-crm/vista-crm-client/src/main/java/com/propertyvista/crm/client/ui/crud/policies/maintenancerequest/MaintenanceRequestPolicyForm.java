@@ -13,13 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.maintenancerequest;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -37,15 +34,11 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
     public MaintenanceRequestPolicyForm(IForm<MaintenanceRequestPolicyDTO> view) {
         super(MaintenanceRequestPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createGeneralPanel());
+        addTab(createGeneralPanel(), i18n.tr("General"));
     }
 
     private TwoColumnFlexFormPanel createGeneralPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setH1(++row, 0, 2, proto().permissionToEnterNote().getMeta().getCaption());
@@ -62,7 +55,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
         @Override
         public IsWidget createEditorContent(CForm<PermissionToEnterNote> editor) {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
             int row = -1;
 
             panel.setWidget(++row, 0, 2, editor.inject(proto().locale(), new CEntityLabel<AvailableLocale>(), new FieldDecoratorBuilder(10, true).build()));

@@ -67,7 +67,7 @@ public class RunForm extends OperationsEntityForm<Run> {
         content.setWidget(++row, 0, 2, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
     }
 

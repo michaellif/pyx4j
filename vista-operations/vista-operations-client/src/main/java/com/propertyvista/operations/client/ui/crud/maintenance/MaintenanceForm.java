@@ -35,7 +35,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
     public MaintenanceForm(IForm<VistaSystemMaintenanceState> view) {
         super(VistaSystemMaintenanceState.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, inject(proto().systemIdentification(), new FieldDecoratorBuilder(10).build()));
@@ -54,18 +54,19 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
         }
         ((CComboBox<String>) get(proto().systemIdentification())).setOptions(opt);
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
-        TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel(i18n.tr("Vista Interfaces"));
+        TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel();
         row = -1;
         tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableTenantSureMaintenance(), new FieldDecoratorBuilder(5, true).build()));
         tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableFundsTransferMaintenance(), new FieldDecoratorBuilder(5, true).build()));
         tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableCreditCardMaintenance(), new FieldDecoratorBuilder(5, true).build()));
-        tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableCreditCardConvenienceFeeMaintenance(), new FieldDecoratorBuilder(5, true).build()));
+        tenantSureMaintenanceTab
+                .setWidget(++row, 0, 2, inject(proto().enableCreditCardConvenienceFeeMaintenance(), new FieldDecoratorBuilder(5, true).build()));
         tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableInteracMaintenance(), new FieldDecoratorBuilder(5, true).build()));
         tenantSureMaintenanceTab.setWidget(++row, 0, 2, inject(proto().enableEquifaxMaintenance(), new FieldDecoratorBuilder(5, true).build()));
 
-        addTab(tenantSureMaintenanceTab);
+        addTab(tenantSureMaintenanceTab, i18n.tr("Vista Interfaces"));
 
     }
 }

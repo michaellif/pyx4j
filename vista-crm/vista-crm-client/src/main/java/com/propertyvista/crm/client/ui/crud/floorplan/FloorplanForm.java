@@ -26,8 +26,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CFolder;
@@ -62,10 +62,10 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     public FloorplanForm(IForm<FloorplanDTO> view) {
         super(FloorplanDTO.class, view);
 
-        Tab tab = addTab(createGeneralTab(i18n.tr("General")));
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
         selectTab(tab);
 
-        addTab(createMarketingTab(i18n.tr("Marketing")));
+        addTab(createMarketingTab(), i18n.tr("Marketing"));
 
     }
 
@@ -82,8 +82,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         };
     }
 
-    private TwoColumnFlexFormPanel createMarketingTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createMarketingTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
@@ -125,8 +125,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int leftRow = -1;
         int rightRow = -1;

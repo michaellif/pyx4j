@@ -51,16 +51,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
-    }
 
-    public void setARCodeOptions(List<ARCode> arCodeOptions) {
-        arCodeFolder.setARCodeOptions(arCodeOptions);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-
-        TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
+        TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel();
         TwoColumnFlexFormPanel companyNameAndPhonesPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         signaturePanel.setWidget(++row, 0, 2, injectAndDecorate(proto().includeSignature()));
@@ -78,12 +70,12 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         AddressStructuredEditor addressEditor = new AddressStructuredEditor();
         signaturePanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), addressEditor));
 
-        TwoColumnFlexFormPanel arCodesPanel = new TwoColumnFlexFormPanel(i18n.tr("AR Codes"));
+        TwoColumnFlexFormPanel arCodesPanel = new TwoColumnFlexFormPanel();
         row = -1;
         arCodesPanel.setH1(++row, 0, 2, i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
         arCodesPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), arCodeFolder = new ARCodeFolder()));
 
-        TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
+        TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel();
         row = -1;
         deliveryPanel.setH1(++row, 0, 2, i18n.tr("Termination date calculation:"));
         deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().terminationDateAdvanceDaysLongRentPeriod()));
@@ -94,11 +86,18 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().mailDeliveryAdvanceDays()));
         deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().courierDeliveryAdvanceDays()));
 
-        return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel, createAutoCancellationPanel());
+        addTab(signaturePanel, i18n.tr("Signature"));
+        addTab(arCodesPanel, i18n.tr("AR Codes"));
+        addTab(deliveryPanel, i18n.tr("Delivery"));
+        addTab(createAutoCancellationPanel(), i18n.tr("Auto Cancellation"));
+    }
+
+    public void setARCodeOptions(List<ARCode> arCodeOptions) {
+        arCodeFolder.setARCodeOptions(arCodeOptions);
     }
 
     private TwoColumnFlexFormPanel createAutoCancellationPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Auto Cancellation"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, injectAndDecorate(proto().cancellationThreshold()));
         panel.setWidget(++row, 0, injectAndDecorate(proto().expiryDays()));

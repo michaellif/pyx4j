@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -23,6 +24,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 
 public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupRequestDTO> {
+
+    private static final I18n i18n = I18n.get(EquifaxApprovalForm.class);
 
     public EquifaxApprovalForm(IForm<EquifaxSetupRequestDTO> view) {
         super(EquifaxSetupRequestDTO.class, view);
@@ -41,7 +44,7 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         panel.setH1(++row, 0, 1, "Personal Information");
         panel.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, i18n.tr("General")));
     }
 
 }

@@ -26,7 +26,7 @@ public class GuarantorForm extends LeaseParticipantForm<GuarantorDTO> {
     public GuarantorForm(IForm<GuarantorDTO> view) {
         super(GuarantorDTO.class, view);
 
-        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
+        selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
+        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
     }
 }

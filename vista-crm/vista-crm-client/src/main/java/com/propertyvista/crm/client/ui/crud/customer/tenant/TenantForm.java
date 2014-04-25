@@ -26,8 +26,8 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -41,7 +41,6 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -62,16 +61,14 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private Label noRequirementsLabel;
 
-    private final Tab paymentMethodsTab, autoPaymentsTab, insuranceTab;
-
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
-        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        addTab(createContactsTab(i18n.tr("Emergency Contacts")));
-        paymentMethodsTab = addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
-        autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(i18n.tr("Auto Payments")));
-        insuranceTab = addTab(createTenantInsuranceTab(i18n.tr("Insurance")));
+        selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
+        addTab(createContactsTab(), i18n.tr("Emergency Contacts"));
+        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
+        addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"));
+        addTab(createTenantInsuranceTab(), i18n.tr("Insurance"));
     }
 
     @Override
@@ -108,16 +105,16 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         });
     }
 
-    private TwoColumnFlexFormPanel createContactsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createContactsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, 2, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         return main;
     }
 
-    protected TwoColumnFlexFormPanel createPreauthorizedPaymentsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    protected TwoColumnFlexFormPanel createPreauthorizedPaymentsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
         main.setWidget(++row, 0, 2, inject(proto().nextScheduledPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(true).labelWidth("20em").build()));
@@ -128,8 +125,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createTenantInsuranceTab(String title) {
-        TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createTenantInsuranceTab() {
+        TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         tabPanel.setH1(++row, 0, 2, i18n.tr("Requirements"));

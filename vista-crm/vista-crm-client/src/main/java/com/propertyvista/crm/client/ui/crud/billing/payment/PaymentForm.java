@@ -103,7 +103,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple,?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
                         new DefaultAsyncCallback<AddressSimple>() {
@@ -179,7 +179,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
         setTabBarVisible(false);
     }
 
@@ -251,8 +251,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         right.setWidget(++row, 1, injectAndDecorate(proto().notes(), 22));
 
         // tweak UI:
-        CComponent<?, ?,?> comp = get(proto().leaseTermParticipant());
-        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>,?>) comp)
+        CComponent<?, ?, ?> comp = get(proto().leaseTermParticipant());
+        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp)
                 .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseTermParticipant<? extends LeaseParticipant<?>>> event) {

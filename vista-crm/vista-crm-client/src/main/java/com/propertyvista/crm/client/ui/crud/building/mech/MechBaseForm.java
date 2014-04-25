@@ -32,7 +32,7 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
     protected MechBaseForm(Class<E> entityClass, IForm<E> view) {
         super(entityClass, view);
 
-        Tab tab = addTab(createGeneralTab());
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
         selectTab(tab);
 
         addTab(createWarrantyTab(), i18n.tr("Warranty"));

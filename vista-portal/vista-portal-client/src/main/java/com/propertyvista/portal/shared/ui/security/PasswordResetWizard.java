@@ -45,12 +45,12 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         super(PasswordChangeRequest.class, view, i18n.tr("Create New Password"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
-        addStep(createStep());
+        addStep(createStep(), i18n.tr("General"));
     }
 
     @Override
     protected WizardDecorator<PasswordChangeRequest> createDecorator() {
-        WizardDecorator<PasswordChangeRequest> decorator = (WizardDecorator<PasswordChangeRequest>) super.createDecorator();
+        WizardDecorator<PasswordChangeRequest> decorator = super.createDecorator();
         decorator.getBtnCancel().setVisible(false);
         return decorator;
     }

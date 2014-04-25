@@ -51,7 +51,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         super(GeneralInsurancePolicyDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
 
-        addStep(createDetailsStep());
+        addStep(createDetailsStep(), i18n.tr("General"));
     }
 
     public BasicFlexFormPanel createDetailsStep() {

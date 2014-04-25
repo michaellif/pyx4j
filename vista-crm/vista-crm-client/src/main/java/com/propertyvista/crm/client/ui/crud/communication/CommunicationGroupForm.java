@@ -29,7 +29,7 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
 
     private static final I18n i18n = I18n.get(CommunicationGroupForm.class);
 
-    private final TwoColumnFlexFormPanel mainTab = new TwoColumnFlexFormPanel();
+    private final TwoColumnFlexFormPanel mainTab;
 
     private final CrmRoleFolder roleFolder;
 
@@ -37,23 +37,24 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
         super(CommunicationGroup.class, view);
 
         roleFolder = new CrmRoleFolder(this);
-        selectTab(addTab(createInfoTab(i18n.tr("Communication Settings"))));
+        selectTab(addTab(createInfoTab(), i18n.tr("Communication Settings")));
+
+        mainTab = createInfoTab();
     }
 
-    private TwoColumnFlexFormPanel createInfoTab(String title) {
+    private TwoColumnFlexFormPanel createInfoTab() {
         int row = -1;
-        mainTab.setTitle(title);
-        mainTab.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
-        mainTab.setWidget(++row, 0, 2, inject(proto().isPredefined(), new CBooleanLabel(), new FieldDecoratorBuilder(20).build()));
-        mainTab.setH1(++row, 0, 2, i18n.tr("CRM User Roles"));
-        mainTab.setWidget(++row, 0, 2, inject(proto().roles(), roleFolder));
-        mainTab.setH1(++row, 0, 2, i18n.tr("Contact Associated With"));
-        mainTab.setH3(++row, 0, 2, i18n.tr("Buildings"));
-        mainTab.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(this.getParentView(), true)));
-        mainTab.setH3(++row, 0, 2, i18n.tr("Portfolios"));
-        mainTab.setWidget(++row, 0, 2, inject(proto().portfolios(), new PortfolioFolder(this.getParentView(), true)));
-
-        return mainTab;
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        panel.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
+        panel.setWidget(++row, 0, 2, inject(proto().isPredefined(), new CBooleanLabel(), new FieldDecoratorBuilder(20).build()));
+        panel.setH1(++row, 0, 2, i18n.tr("CRM User Roles"));
+        panel.setWidget(++row, 0, 2, inject(proto().roles(), roleFolder));
+        panel.setH1(++row, 0, 2, i18n.tr("Contact Associated With"));
+        panel.setH3(++row, 0, 2, i18n.tr("Buildings"));
+        panel.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(this.getParentView(), true)));
+        panel.setH3(++row, 0, 2, i18n.tr("Portfolios"));
+        panel.setWidget(++row, 0, 2, inject(proto().portfolios(), new PortfolioFolder(this.getParentView(), true)));
+        return panel;
     }
 
     @Override

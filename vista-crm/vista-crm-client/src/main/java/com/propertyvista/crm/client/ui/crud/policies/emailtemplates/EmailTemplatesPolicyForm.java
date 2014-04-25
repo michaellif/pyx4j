@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.emailtemplates;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,15 +61,14 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
     public EmailTemplatesPolicyForm(IForm<EmailTemplatesPolicyDTO> view) {
         super(EmailTemplatesPolicyDTO.class, view);
-    }
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createEmailTemplatesPanel(), createEmailTemplatesHeaderFooterPanel());
+        addTab(createEmailTemplatesPanel(), i18n.tr("Templates"));
+
+        addTab(createEmailTemplatesHeaderFooterPanel(), i18n.tr("Header and Footer"));
     }
 
     private TwoColumnFlexFormPanel createEmailTemplatesHeaderFooterPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Header and Footer"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, 2, inject(proto().header(), new FieldDecoratorBuilder(true).build()));
@@ -80,7 +78,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     private TwoColumnFlexFormPanel createEmailTemplatesPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Templates"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, 2, inject(proto().templates(), new EmailTemplateEditorFolder()));

@@ -37,7 +37,7 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
 
     public CreditCheckStatusForm(IForm<CreditCheckStatusDTO> view) {
         super(CreditCheckStatusDTO.class, view);
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel(i18n.tr("Credit Check Status"));
+        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         Label poweredByLabel = new Label();
         poweredByLabel.setText(i18n.tr("Powered By"));
@@ -62,7 +62,7 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
         contentPanel.setWidget(++row, 0, inject(proto().perApplicantFee(), new FieldDecoratorBuilder().build()));
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-        selectTab(addTab(contentPanel));
+        selectTab(addTab(contentPanel, i18n.tr("Credit Check Status")));
     }
 
     @Override

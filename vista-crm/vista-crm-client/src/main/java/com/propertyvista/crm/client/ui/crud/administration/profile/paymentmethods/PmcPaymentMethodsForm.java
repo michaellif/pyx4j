@@ -36,7 +36,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     public PmcPaymentMethodsForm(IForm<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Payment Methods"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         noPaymentMethodsMessage = new Label();
@@ -47,7 +47,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
         content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
         setTabBarVisible(false);
 
     }

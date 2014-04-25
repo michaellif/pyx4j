@@ -41,7 +41,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
     public GeneralForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
 
         content.setH1(row++, 0, 2, i18n.tr("Web Skin"));
@@ -66,27 +66,27 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
         content.setWidget(row++, 0, injectAndDecorate(proto().residentPortalEnabled(), 10));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
         // =====================================================================================================================
 
-        content = new TwoColumnFlexFormPanel(proto().locales().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
-        addTab(content);
+        addTab(content, proto().locales().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel(proto().pmcInfo().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().pmcInfo(), new RichTextContentFolder(isEditable())));
-        addTab(content);
+        addTab(content, proto().pmcInfo().getMeta().getCaption());
 
-        addTab(createCrmLogoTab());
+        addTab(createCrmLogoTab(), proto().crmLogo().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel(proto().socialLinks().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
-        addTab(content);
+        addTab(content, proto().socialLinks().getMeta().getCaption());
     }
 
     private TwoColumnFlexFormPanel createCrmLogoTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         CImage file = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
         file.setImageSize(150, 100);

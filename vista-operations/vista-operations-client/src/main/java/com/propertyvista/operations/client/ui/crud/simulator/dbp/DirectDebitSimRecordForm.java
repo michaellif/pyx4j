@@ -17,6 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -25,6 +26,8 @@ import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimRecord;
 
 public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSimRecord> {
+
+    private static final I18n i18n = I18n.get(DirectDebitSimRecordForm.class);
 
     public DirectDebitSimRecordForm(IForm<DirectDebitSimRecord> view) {
         super(DirectDebitSimRecord.class, view);
@@ -47,7 +50,7 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
         formPanel.setWidget(++row, 0, 2, inject(proto().file(), fileLink, new FieldDecoratorBuilder(true).build()));
 
         setTabBarVisible(false);
-        selectTab(addTab(formPanel));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 
     protected void onGoToFile() {

@@ -64,12 +64,12 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     public PmcForm(IForm<PmcDTO> view) {
         super(PmcDTO.class, view);
 
-        selectTab(addTab(createGeneralTab()));
-        setTabEnabled(addTab(createOnboardingMerchantAccountsTab()), !isEditable());
-        addTab(createEquifaxlTab());
-        addTab(createYardiTab());
-        addTab(createFundsTransferTab());
-        setTabEnabled(addTab(createDirectDebitTab()), !isEditable());
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        setTabEnabled(addTab(createOnboardingMerchantAccountsTab(), i18n.tr("Merchant Accounts")), !isEditable());
+        addTab(createEquifaxlTab(), i18n.tr("Equifax"));
+        addTab(createYardiTab(), i18n.tr("Yardi"));
+        addTab(createFundsTransferTab(), i18n.tr("Funds Transfer"));
+        setTabEnabled(addTab(createDirectDebitTab(), i18n.tr("Direct Debit Records")), !isEditable());
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
@@ -106,7 +106,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
@@ -197,13 +197,13 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     }
 
     private TwoColumnFlexFormPanel createOnboardingMerchantAccountsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Merchant Accounts"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         panel.setWidget(0, 0, 2, onboardingMerchantAccountsLister = new MerchantAccountsLister());
         return panel;
     }
 
     private TwoColumnFlexFormPanel createEquifaxlTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
@@ -253,14 +253,14 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     }
 
     private TwoColumnFlexFormPanel createYardiTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setWidget(++row, 0, 2, inject(proto().yardiCredentials(), new YardiCredentialFolder()));
         return content;
     }
 
     private TwoColumnFlexFormPanel createFundsTransferTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
         content.setH2(row, 0, 1, i18n.tr("Default"));
         content.setH2(row, 1, 1, i18n.tr("Override"));
@@ -273,7 +273,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     }
 
     private TwoColumnFlexFormPanel createDirectDebitTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Direct Debit Records"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
         content.setWidget(++row, 0, 2, directDebitRecordLister = new DirectDebitRecordLister(false));
 

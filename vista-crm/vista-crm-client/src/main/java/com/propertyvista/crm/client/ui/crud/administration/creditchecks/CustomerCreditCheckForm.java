@@ -32,7 +32,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
     public CustomerCreditCheckForm(IForm<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 
@@ -51,7 +51,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         content.setWidget(++row, 0, injectAndDecorate(proto().transaction().amount()));
         content.setWidget(++row, 0, injectAndDecorate(proto().transactionRef()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

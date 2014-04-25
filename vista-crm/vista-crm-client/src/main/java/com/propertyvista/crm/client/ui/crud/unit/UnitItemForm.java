@@ -53,7 +53,7 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
         main.setWidget(++row, 1, inject(proto().cabinetsValue(), new FieldDecoratorBuilder(9).build()));
 
         setTabBarVisible(false);
-        selectTab(addTab(main));
+        selectTab(addTab(main, i18n.tr("Unit Item")));
     }
 
     @Override

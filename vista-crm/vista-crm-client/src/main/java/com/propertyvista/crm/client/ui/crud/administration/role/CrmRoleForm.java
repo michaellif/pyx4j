@@ -64,7 +64,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         });
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("Crm Role")));
     }
 
     @Override

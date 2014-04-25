@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -30,15 +27,11 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
 
     public DepositPolicyForm(IForm<DepositPolicyDTO> view) {
         super(DepositPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createItemsPanel());
+        addTab(createItemsPanel(), i18n.tr("Details"));
     }
 
     private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().annualInterestRate(), new FieldDecoratorBuilder().build()));

@@ -66,33 +66,25 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final static I18n i18n = I18n.get(LeaseBillingPolicyForm.class);
 
-    private SimplePanel baseFeeHolder;
+    private final SimplePanel baseFeeHolder;
 
-    private SimplePanel maxFeeHolder;
+    private final SimplePanel maxFeeHolder;
 
     public LeaseBillingPolicyForm(IForm<LeaseBillingPolicyDTO> view) {
         super(LeaseBillingPolicyDTO.class, view);
-    }
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         baseFeeHolder = new SimplePanel();
         maxFeeHolder = new SimplePanel();
-        if (VistaFeatures.instance().yardiIntegration()) {
-            return Arrays.asList(//@formatter:off
-                    createBillingPanel()
-            );//@formatter:on
-        } else {
-            return Arrays.asList(//@formatter:off
-                    createBillingPanel(),
-                    createLateFeesPanel(),
-                    createNsfFeesPanel()
-            );//@formatter:on
+
+        addTab(createBillingPanel(), i18n.tr("Billing"));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addTab(createLateFeesPanel(), i18n.tr("Late Fee"));
+            addTab(createNsfFeesPanel(), i18n.tr("NSF Fee"));
         }
     }
 
     private TwoColumnFlexFormPanel createBillingPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Billing"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
@@ -111,7 +103,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     private TwoColumnFlexFormPanel createLateFeesPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Late Fee"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         panel.setWidget(++row, 0, inject(proto().lateFee().baseFeeType(), new FieldDecoratorBuilder(10).build()));
@@ -137,7 +129,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     private TwoColumnFlexFormPanel createNsfFeesPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("NSF Fee"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         panel.setWidget(0, 0, 2, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
 

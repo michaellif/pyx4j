@@ -94,7 +94,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {

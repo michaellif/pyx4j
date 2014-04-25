@@ -38,13 +38,13 @@ public class ServiceForm extends CrmEntityForm<Service> {
     public ServiceForm(IForm<Service> view) {
         super(Service.class, view);
 
-        selectTab(addTab(createGeneralTab()));
-        addTab(createItemsTab());
-        addTab(createEligibilityTab());
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        addTab(createItemsTab(), i18n.tr("Items"));
+        addTab(createEligibilityTab(), i18n.tr("Eligibility"));
     }
 
     public TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -96,7 +96,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
     }
 
     public TwoColumnFlexFormPanel createItemsTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.setWidget(0, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
 
@@ -104,7 +104,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
     }
 
     public TwoColumnFlexFormPanel createEligibilityTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Eligibility"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("Features"));

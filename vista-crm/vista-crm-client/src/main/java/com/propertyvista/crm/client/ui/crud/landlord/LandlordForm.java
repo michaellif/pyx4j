@@ -45,15 +45,15 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
     public LandlordForm(IForm<LandlordDTO> view) {
         super(LandlordDTO.class, view);
 
-        Tab tab = addTab(createGeneralPanel(i18n.tr("General")));
+        Tab tab = addTab(createGeneralPanel(), i18n.tr("General"));
         selectTab(tab);
 
-        addTab(createBuildingsPanel(i18n.tr("Buildings")));
+        addTab(createBuildingsPanel(), i18n.tr("Buildings"));
 
     }
 
-    private TwoColumnFlexFormPanel createGeneralPanel(String title) {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createGeneralPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = 0;
         panel.setWidget(row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));
@@ -79,8 +79,8 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createBuildingsPanel(String title) {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createBuildingsPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         panel.setWidget(0, 0, 2, inject(proto().buildings(), new LandlordBuildingFolder(this)));
 

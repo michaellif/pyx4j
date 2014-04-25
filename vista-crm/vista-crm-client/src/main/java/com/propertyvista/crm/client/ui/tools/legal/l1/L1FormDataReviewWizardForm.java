@@ -45,14 +45,14 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
 
     public L1FormDataReviewWizardForm(IWizard<? extends IEntity> view) {
         super(L1FormDataReviewWizardDTO.class, view);
-        addStep(createRentalUnitAddressStep());
-        addStep(createRelatedFilesStep());
-        addStep(createTenantsStep());
-        addStep(createReasonForApplicationStep());
-        addStep(createDetailsOfLandlordsClaimStep());
-        addStep(createLandlordContactInfoStep());
-        addStep(createAgentsSignatureStep());
-        addStep(createPaymentAndSchedulingStep());
+        addStep(createRentalUnitAddressStep(), i18n.tr("Rental Unit Address"));
+        addStep(createRelatedFilesStep(), i18n.tr("Related Files"));
+        addStep(createTenantsStep(), i18n.tr("Tenants"));
+        addStep(createReasonForApplicationStep(), i18n.tr("Reason for Application"));
+        addStep(createDetailsOfLandlordsClaimStep(), i18n.tr("Details of Landlord's Claim"));
+        addStep(createLandlordContactInfoStep(), i18n.tr("Landlord(s) Details"));
+        addStep(createAgentsSignatureStep(), i18n.tr("Signature"));
+        addStep(createPaymentAndSchedulingStep(), i18n.tr("Payment and Scheduling"));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     }
 
     private TwoColumnFlexFormPanel createRentalUnitAddressStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Rental Unit Address"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         editToggleButton = new Button("");
         editToggleButton.setCommand(new Command() {
@@ -87,7 +87,7 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     }
 
     private TwoColumnFlexFormPanel createRelatedFilesStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Related Files"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber1(), new FieldDecoratorBuilder().labelWidth("20em").build()));
         panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber2(), new FieldDecoratorBuilder().labelWidth("20em").build()));
@@ -95,7 +95,7 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     }
 
     private TwoColumnFlexFormPanel createTenantsStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Tenants"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Tenants"));
         panel.setWidget(++row, 0, 2, inject(proto().formData().tenants(), new L1TenantInfoFolder()));
@@ -105,14 +105,14 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     }
 
     private TwoColumnFlexFormPanel createReasonForApplicationStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Reason for Application"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, inject(proto().formData().reasonForApplication(), new L1ReasonForApplicationForm()));
         return panel;
     }
 
     private TwoColumnFlexFormPanel createDetailsOfLandlordsClaimStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details of Landlord's Claim"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Rent Owing")));
         panel.setWidget(++row, 0, 2, inject(proto().formData().owedRent(), new LtbOwedRentForm() {
@@ -138,14 +138,14 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     }
 
     private TwoColumnFlexFormPanel createLandlordContactInfoStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Landlord(s) Details"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 2, inject(proto().formData().landlordsContactInfos(), new L1LandlordsContactInfoFolder()));
         return panel;
     }
 
     private TwoColumnFlexFormPanel createAgentsSignatureStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2,
                 i18n.tr("If the person who signs this application is an agent or an officer of a corporation, you must provide the following information:"));
@@ -156,7 +156,7 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
     }
 
     private TwoColumnFlexFormPanel createPaymentAndSchedulingStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment and Scheduling"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 2, inject(proto().formData().scheduleAndPayment(), new L1ScheduleAndPaymentForm()));
         return panel;

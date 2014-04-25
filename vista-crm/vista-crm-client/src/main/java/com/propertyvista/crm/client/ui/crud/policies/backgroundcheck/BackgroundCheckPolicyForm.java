@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -34,17 +31,11 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
 
     public BackgroundCheckPolicyForm(IForm<BackgroundCheckPolicyDTO> view) {
         super(BackgroundCheckPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                createItemsPanel()
-        );//@formatter:on
+        addTab(createItemsPanel(), i18n.tr("Policy"));
     }
 
     private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Policy"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().version().bankruptcy(), new FieldDecoratorBuilder(5).build()));

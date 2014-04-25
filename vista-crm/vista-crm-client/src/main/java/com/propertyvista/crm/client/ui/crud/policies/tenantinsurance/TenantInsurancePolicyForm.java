@@ -14,8 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -36,17 +34,11 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
 
     public TenantInsurancePolicyForm(IForm<TenantInsurancePolicyDTO> view) {
         super(TenantInsurancePolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                createInsuranceRequirementsTab()
-        );//@formatter:on
+        addTab(createInsuranceRequirementsTab(), i18n.tr("Insurance Requirements"));
     }
 
     private TwoColumnFlexFormPanel createInsuranceRequirementsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Insurance Requirements"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, 2, inject(proto().requireMinimumLiability(), new FieldDecoratorBuilder(5, true).build()));
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {

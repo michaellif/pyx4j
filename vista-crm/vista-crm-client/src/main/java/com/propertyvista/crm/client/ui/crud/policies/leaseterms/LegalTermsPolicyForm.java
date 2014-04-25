@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -26,38 +23,33 @@ public class LegalTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalTermsP
 
     public LegalTermsPolicyForm(IForm<LegalTermsPolicyDTO> view) {
         super(LegalTermsPolicyDTO.class, view);
-    }
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList( //
-                createResidentPortalTermsAndConditionsPanel(), //
-                createResidentPortalPrivacyPolicyPanel(), //
-                createProspectPortalTermsAndConditionsPanel(), //
-                createProspectPortalPrivacyPolicyPanel() //
-                );
+        addTab(createResidentPortalTermsAndConditionsPanel(), proto().residentPortalTermsAndConditions().getMeta().getCaption());
+        addTab(createResidentPortalPrivacyPolicyPanel(), proto().residentPortalPrivacyPolicy().getMeta().getCaption());
+        addTab(createProspectPortalTermsAndConditionsPanel(), proto().prospectPortalTermsAndConditions().getMeta().getCaption());
+        addTab(createProspectPortalPrivacyPolicyPanel(), proto().prospectPortalPrivacyPolicy().getMeta().getCaption());
     }
 
     private TwoColumnFlexFormPanel createResidentPortalTermsAndConditionsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().residentPortalTermsAndConditions().getMeta().getCaption());
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
         container.setWidget(0, 0, 2, inject(proto().residentPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createResidentPortalPrivacyPolicyPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().residentPortalPrivacyPolicy().getMeta().getCaption());
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
         container.setWidget(0, 0, 2, inject(proto().residentPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createProspectPortalTermsAndConditionsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().prospectPortalTermsAndConditions().getMeta().getCaption());
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
         container.setWidget(0, 0, 2, inject(proto().prospectPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createProspectPortalPrivacyPolicyPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().prospectPortalPrivacyPolicy().getMeta().getCaption());
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
         container.setWidget(0, 0, 2, inject(proto().prospectPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable())));
         return container;
     }

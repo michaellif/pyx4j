@@ -28,12 +28,12 @@ public class ILSConfigForm extends CrmEntityForm<ILSConfigDTO> {
     public ILSConfigForm(IForm<ILSConfigDTO> view) {
         super(ILSConfigDTO.class, view);
 
-        Tab tab = addTab(createProvidersTab());
+        Tab tab = addTab(createProvidersTab(), i18n.tr("ILS Settings"));
         selectTab(tab);
     }
 
     private TwoColumnFlexFormPanel createProvidersTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("ILS Settings"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setH1(++row, 0, 2, proto().vendors().getMeta().getCaption());

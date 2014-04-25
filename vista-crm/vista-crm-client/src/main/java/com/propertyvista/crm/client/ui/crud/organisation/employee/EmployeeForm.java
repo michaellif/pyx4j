@@ -70,10 +70,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
 
-        selectTab(addTab(createInfoTab(i18n.tr("Personal Information"))));
-        privilegesTab = addTab(createPrivilegesTab(i18n.tr("Privileges")));
-        auditingTab = addTab(createAuditingConfigurationTab(i18n.tr("Auditing")));
-        alertsTab = addTab(createAlertsTab(i18n.tr("Alerts")));
+        selectTab(addTab(createInfoTab(), i18n.tr("Personal Information")));
+        privilegesTab = addTab(createPrivilegesTab(), i18n.tr("Privileges"));
+        auditingTab = addTab(createAuditingConfigurationTab(), i18n.tr("Auditing"));
+        alertsTab = addTab(createAlertsTab(), i18n.tr("Alerts"));
     }
 
     @Override
@@ -132,8 +132,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         alertsTab.setTabVisible(isSelfEditor || isManager);
     }
 
-    private TwoColumnFlexFormPanel createInfoTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createInfoTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().employeeId(), new FieldDecoratorBuilder(10).build()));
@@ -163,8 +163,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createPrivilegesTab(String title) {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createPrivilegesTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -213,16 +213,16 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return content;
     }
 
-    private TwoColumnFlexFormPanel createAuditingConfigurationTab(String title) {
-        TwoColumnFlexFormPanel tabContent = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createAuditingConfigurationTab() {
+        TwoColumnFlexFormPanel tabContent = new TwoColumnFlexFormPanel();
 
         tabContent.setWidget(0, 0, 2, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
 
         return tabContent;
     }
 
-    private TwoColumnFlexFormPanel createAlertsTab(String title) {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createAlertsTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.setWidget(0, 0, inject(proto().notifications(), new NotificationFolder()));
 
@@ -265,7 +265,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
                 content.setWidget(++row, 0, 2, inject(proto().type(), new CEnumLabel(), new FieldDecoratorBuilder(22, true).build()));

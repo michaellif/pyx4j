@@ -46,8 +46,8 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     public TenantSurePaymentMethodWizard(IWizardView<InsurancePaymentMethodDTO> view) {
         super(InsurancePaymentMethodDTO.class, view, i18n.tr("TenantSure Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast3);
 
-        addStep(createDisplayCurrentPaymentMethodStep());
-        addStep(createInputNewPaymentMethodStep());
+        addStep(createDisplayCurrentPaymentMethodStep(), i18n.tr("Current Payment Method"));
+        addStep(createInputNewPaymentMethodStep(), i18n.tr("New Payment Method"));
     }
 
     public void setPresenter(TenantSurePaymentMethodWizardView.Persenter presenter) {
@@ -61,11 +61,10 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     }
 
     private BasicFlexFormPanel createDisplayCurrentPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Current Payment Method"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, inject(proto().currentPaymentMethod().creationDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-        panel.setWidget(++row, 0,
-                inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0,
                 inject(proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FieldDecoratorBuilder().build()));
 
@@ -73,7 +72,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     }
 
     private BasicFlexFormPanel createInputNewPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("New Payment Method"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         panel.setWidget(0, 0, inject(proto().newPaymentMethod(), paymentMethodForm));
 

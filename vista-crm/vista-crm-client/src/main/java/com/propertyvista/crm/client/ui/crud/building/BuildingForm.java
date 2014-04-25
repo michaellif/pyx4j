@@ -33,10 +33,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
@@ -52,6 +52,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -100,9 +101,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
 
-        selectTab(addTab(createGeneralTab()));
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
 
-        addTab(createDetailsTab());
+        addTab(createDetailsTab(), i18n.tr("Details"));
 
         setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans")),
                 !isEditable());
@@ -110,17 +111,17 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units")),
                 !isEditable());
 
-        setTabEnabled(addTab(createMachanicalsTab()), !isEditable());
+        setTabEnabled(addTab(createMachanicalsTab(), i18n.tr("Mechanicals")), !isEditable());
 
-        setTabEnabled(addTab(createAddOnsTab()), !isEditable());
+        setTabEnabled(addTab(createAddOnsTab(), i18n.tr("Add-Ons")), !isEditable());
 
-        financialTab = addTab(createFinancialTab());
+        financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
 
-        addTab(createMarketingTab());
+        addTab(createMarketingTab(), i18n.tr("Marketing"));
 
-        setTabEnabled(catalogTab = addTab(createCatalogTab()), !isEditable());
+        setTabEnabled(catalogTab = addTab(createCatalogTab(), i18n.tr("Product Catalog")), !isEditable());
 
-        addTab(createContactTab());
+        addTab(createContactTab(), i18n.tr("Contacts"));
 
         billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(),
                 i18n.tr("Billing Cycles"));
@@ -179,59 +180,51 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         });
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+    private FormPanel createGeneralTab() {
+        FormPanel formPanel = new FormPanel(this);
 
         int row = 0;
-        flexPanel.setH1(row++, 0, 2, i18n.tr("Building Summary"));
-        flexPanel.setWidget(row, 0, injectAndDecorate(proto().propertyCode(), 12));
+        formPanel.h1(row++, 0, 2, i18n.tr("Building Summary"));
+        formPanel.insert(row, 0, proto().propertyCode()).decorate().componentWidth(120);
+        formPanel.insert(row++, 1, proto().info().shape()).decorate().componentWidth(70);
 
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().info().shape(), 7));
+        formPanel.insert(row, 0, proto().info().name()).decorate().componentWidth(150);
+        formPanel.insert(row++, 1, injectAndDecorate(proto().info().totalStoreys(), 5));
 
-        flexPanel.setWidget(row, 0, injectAndDecorate(proto().info().name(), 15));
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().info().totalStoreys(), 5));
+        formPanel.insert(row, 0, injectAndDecorate(proto().info().type(), 12));
+        formPanel.insert(row++, 1, injectAndDecorate(proto().info().residentialStoreys(), 5));
 
-        flexPanel.setWidget(row, 0, injectAndDecorate(proto().info().type(), 12));
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().info().residentialStoreys(), 5));
-
-        flexPanel.setWidget(row, 0, injectAndDecorate(proto().propertyManager(), 16));
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().externalId(), 15));
+        formPanel.insert(row, 0, injectAndDecorate(proto().propertyManager(), 16));
+        formPanel.insert(row++, 1, injectAndDecorate(proto().externalId(), 15));
 
         if (isEditable()) {
-            flexPanel.setWidget(row, 0, injectAndDecorate(proto().complex(), new CEntityLabel<Complex>(), 15));
+            formPanel.insert(row, 0, injectAndDecorate(proto().complex(), new CEntityLabel<Complex>(), 15));
         } else {
-            flexPanel.setWidget(row, 0,
+            formPanel.insert(row, 0,
                     injectAndDecorate(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class)), 15));
         }
 
-        flexPanel.setWidget(row++, 0,
+        formPanel.insert(row++, 0,
                 injectAndDecorate(proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class)), 15));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            flexPanel.setWidget(row++, 1, injectAndDecorate(proto().defaultProductCatalog(), 5));
+            formPanel.insert(row++, 1, injectAndDecorate(proto().defaultProductCatalog(), 5));
         }
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().suspended(), 5));
+        formPanel.insert(row++, 1, injectAndDecorate(proto().suspended(), 5));
 
-        flexPanel.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        flexPanel.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
+        formPanel.h1(row++, 0, 2, proto().info().address().getMeta().getCaption());
+        formPanel.insert(row++, 0, 2, inject(proto().info().address(), new AddressStructuredEditor(false)));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
-        flexPanel.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        flexPanel.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
-//        if (isEditable()) {
-        flexPanel.setWidget(row, 0, inject(proto().geoLocation(), new GeoLocationEditor()));
-//        } else {
-//            main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
-//        }
-        flexPanel.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        return flexPanel;
+        formPanel.h1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
+        formPanel.insert(row++, 0, 2, inject(proto().geoLocation(), new GeoLocationEditor()));
+        return formPanel;
     }
 
     private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -289,7 +282,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private TwoColumnFlexFormPanel createMachanicalsTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Mechanicals"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
@@ -303,7 +296,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private TwoColumnFlexFormPanel createAddOnsTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Add-Ons"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
@@ -315,7 +308,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private TwoColumnFlexFormPanel createFinancialTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Financial"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = 0;
         flexPanel.setBR(row++, 0, 2);
@@ -343,7 +336,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private TwoColumnFlexFormPanel createMarketingTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Marketing"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
@@ -389,7 +382,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private TwoColumnFlexFormPanel createCatalogTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Product Catalog"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
@@ -405,7 +398,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private TwoColumnFlexFormPanel createContactTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Contacts"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         flexPanel.setH1(++row, 0, 2, proto().contacts().organizationContacts().getMeta().getCaption());

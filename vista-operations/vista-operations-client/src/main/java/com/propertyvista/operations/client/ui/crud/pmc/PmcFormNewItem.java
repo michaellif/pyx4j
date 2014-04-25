@@ -32,7 +32,7 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
     public PmcFormNewItem(IForm<PmcDTO> view) {
         super(PmcDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
@@ -45,7 +45,7 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().features(), new PmcFeaturesForm()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

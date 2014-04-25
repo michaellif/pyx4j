@@ -38,7 +38,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
     public MerchantAccountForm(IForm<MerchantAccount> view) {
         super(MerchantAccount.class, view);
 
-        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel();
 
         int row = -1;
         general.setWidget(++row, 0, injectAndDecorate(proto().paymentsStatus(), new CEnumLabel(), 25));
@@ -48,7 +48,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         general.setWidget(++row, 0, injectAndDecorate(proto().accountName()));
         general.setWidget(++row, 0, injectAndDecorate(proto().chargeDescription(), 40));
 
-        selectTab(addTab(general));
+        selectTab(addTab(general, i18n.tr("General")));
 
         Tab buildingsTab = addTab(isEditable() ? new HTML() : ((MerchantAccountViewerView) getParentView()).getBuildingListerView().asWidget(),
                 i18n.tr("Buildings"));

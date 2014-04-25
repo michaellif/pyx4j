@@ -32,7 +32,7 @@ public class PadSimFileForm extends OperationsEntityForm<PadSimFile> {
     public PadSimFileForm(IForm<PadSimFile> view) {
         super(PadSimFile.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setH1(++row, 0, 1, i18n.tr("File Details"));
@@ -42,7 +42,7 @@ public class PadSimFileForm extends OperationsEntityForm<PadSimFile> {
             content.setH1(++row, 0, 1, i18n.tr("Batches"));
             content.setWidget(++row, 0, ((PadSimFileViewerView) getParentView()).getBatchListerView().asWidget());
         }
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     private Widget createDetailsTab() {

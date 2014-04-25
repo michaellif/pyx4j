@@ -32,7 +32,6 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -51,7 +50,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
     public ShowingForm(IForm<ShowingDTO> view) {
         super(ShowingDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
@@ -63,8 +62,8 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
             content.setWidget(
                     ++row,
                     0,
-                    inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)), new FieldDecoratorBuilder(
-                            20).build()));
+                    inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)),
+                            new FieldDecoratorBuilder(20).build()));
         }
         if (isEditable()) {
             content.setWidget(++row, 0, inject(proto().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder(20).build()));
@@ -151,8 +150,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
             }
         });
 
-        Tab tab = addTab(content);
-        selectTab(tab);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

@@ -30,13 +30,13 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     public AppointmentForm(IForm<Appointment> view) {
         super(Appointment.class, view);
-        selectTab(addTab(createGeneralTab(i18n.tr("General"))));
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
 
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder(9).build()));

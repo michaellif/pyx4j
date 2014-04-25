@@ -37,13 +37,13 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     public LeaseSigningWizard(LeaseSigningWizardView view) {
         super(LeaseAgreementDTO.class, view, i18n.tr("Move-In Wizard"), i18n.tr("Submit"), ThemeColor.contrast2);
 
-        addStep(createDetailsStep());
-        addStep(createAgreementStep());
-        addStep(createConfirmationStep());
+        addStep(createDetailsStep(), i18n.tr("Lease Details"));
+        addStep(createAgreementStep(), i18n.tr("Lease Agreement"));
+        addStep(createConfirmationStep(), i18n.tr("Confirmation"));
     }
 
     public BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Details"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
@@ -83,7 +83,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     }
 
     public BasicFlexFormPanel createAgreementStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Agreement"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
@@ -93,7 +93,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     }
 
     public BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 

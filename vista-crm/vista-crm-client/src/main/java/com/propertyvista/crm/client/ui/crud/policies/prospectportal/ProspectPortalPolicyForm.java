@@ -34,15 +34,12 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
 
     public ProspectPortalPolicyForm(IForm<ProspectPortalPolicyDTO> view) {
         super(ProspectPortalPolicyDTO.class, view);
-    }
+        addTab(createDetailsTab(), i18n.tr("Details"));
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createDetailsTab());
     }
 
     private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, 2, inject(proto().unitAvailabilitySpan(), new FieldDecoratorBuilder(5, true).build()));

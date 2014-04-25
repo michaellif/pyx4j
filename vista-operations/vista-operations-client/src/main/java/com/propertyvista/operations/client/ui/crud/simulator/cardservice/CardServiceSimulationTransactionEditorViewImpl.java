@@ -32,7 +32,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
         public CardServiceSimulationTransactionForm(IForm<CardServiceSimulationTransaction> view) {
             super(CardServiceSimulationTransaction.class, view);
 
-            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel("General Transaction Data");
+            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
             int row = -1;
 
             tabPanel.setWidget(++row, 0, inject(proto().card(), // 
@@ -51,7 +51,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             tabPanel.setWidget(++row, 0, injectAndDecorate(proto().voided()));
             tabPanel.setWidget(++row, 0, injectAndDecorate(proto().transactionDate()));
 
-            selectTab(addTab(tabPanel));
+            selectTab(addTab(tabPanel, "Card Service Simulation"));
         }
     }
 

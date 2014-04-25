@@ -28,8 +28,8 @@ public class PortalForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         PortalBannerImageFolder imageFolder = new PortalBannerImageFolder(isEditable());
         imageFolder.setImageSize(600, 100);
-        content = new TwoColumnFlexFormPanel(proto().portalBanner().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().portalBanner(), imageFolder));
-        selectTab(addTab(content));
+        selectTab(addTab(content, proto().portalBanner().getMeta().getCaption()));
     }
 }

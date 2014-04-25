@@ -66,7 +66,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
         content.setWidget(++row, 0, 2, yardiIntegrationPanel);
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("AR Code")));
     }
 
     @Override

@@ -41,8 +41,8 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
         main.setWidget(++row, 0, 2, inject(proto().version().caption(), new FieldDecoratorBuilder(10, true).build()));
         main.setWidget(++row, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
 
+        selectTab(addTab(main, i18n.tr("General")));
         setTabBarVisible(false);
-        selectTab(addTab(main));
     }
 
     class VistaTermsDocumentFolder extends VistaBoxFolder<LegalDocument> {
@@ -65,7 +65,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             // locale

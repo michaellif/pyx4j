@@ -60,13 +60,13 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     public CustomerScreeningForm(IForm<LeaseParticipantScreeningTO> view) {
         super(LeaseParticipantScreeningTO.class, view);
 
-        Tab tab = addTab(createIdentificationDocumentsTab(i18n.tr("Identification Documents")));
+        Tab tab = addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents"));
         selectTab(tab);
 
-        addTab(createAddressesTab(i18n.tr("Addresses")));
-        addTab(createlegalQuestionsTab(proto().screening().version().legalQuestions().getMeta().getCaption()));
-        addTab(createIncomesTab(i18n.tr("Incomes")));
-        addTab(createAssetsTab(i18n.tr("Assets")));
+        addTab(createAddressesTab(), i18n.tr("Addresses"));
+        addTab(createlegalQuestionsTab(), proto().screening().version().legalQuestions().getMeta().getCaption());
+        addTab(createIncomesTab(), i18n.tr("Incomes"));
+        addTab(createAssetsTab(), i18n.tr("Assets"));
 
     }
 
@@ -122,8 +122,8 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
                 i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
     }
 
-    private TwoColumnFlexFormPanel createIdentificationDocumentsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createIdentificationDocumentsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, 2, inject(proto().screening().version().documents(), fileUpload));
@@ -131,8 +131,8 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         return main;
     }
 
-    private TwoColumnFlexFormPanel createAddressesTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createAddressesTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 2, proto().screening().version().currentAddress().getMeta().getCaption());
@@ -145,8 +145,8 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         return main;
     }
 
-    private TwoColumnFlexFormPanel createlegalQuestionsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createlegalQuestionsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = 0;
         main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().suedForRent(), legalQuestionDecorator()));
@@ -186,16 +186,16 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
 // Financial: ------------------------------------------------------------------------------------------------
 
-    private TwoColumnFlexFormPanel createIncomesTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createIncomesTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, 2, inject(proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return main;
     }
 
-    private TwoColumnFlexFormPanel createAssetsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createAssetsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, 2, inject(proto().screening().version().assets(), new PersonalAssetFolder(isEditable())));
 

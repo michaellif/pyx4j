@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -28,6 +28,8 @@ import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsDTO> {
+
+    private static final I18n i18n = I18n.get(AuditRecordForm.class);
 
     public AuditRecordForm(IForm<AuditRecordOperationsDTO> view) {
         super(AuditRecordOperationsDTO.class, view);
@@ -49,7 +51,7 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
         detailsTab.setWidget(row, 1, injectAndDecorate(proto().targetEntity()));
         detailsTab.setWidget(++row, 0, 2, injectAndDecorate(proto().details(), true));
 
-        selectTab(addTab(detailsTab));
+        selectTab(addTab(detailsTab, i18n.tr("Audit Record")));
 
         get(proto().details()).asWidget().setStyleName(OperationsTheme.OperationsStyles.TextFieldPreformatted.name(), true);
 

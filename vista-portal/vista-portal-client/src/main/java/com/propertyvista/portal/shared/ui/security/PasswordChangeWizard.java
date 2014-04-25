@@ -47,7 +47,7 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
         super(PasswordChangeRequest.class, view, i18n.tr("Change Password"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
-        addStep(createStep());
+        addStep(createStep(), i18n.tr("General"));
 
     }
 

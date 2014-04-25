@@ -60,6 +60,6 @@ public class VendorForm extends CrmEntityForm<Vendor> {
         }));
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

@@ -61,7 +61,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     }
 
     protected void createCommonContent() {
-        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
+        selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
     }
 
     @Override
@@ -119,8 +119,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab(String title) {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
 
         // Lease details: ---------------------------------------------------------------------------------------------------------------------------
@@ -250,12 +250,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return content;
     }
 
-    protected String getChargesTabTitle() {
-        return i18n.tr("Charges");
-    }
-
     protected TwoColumnFlexFormPanel createChargesTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(getChargesTabTitle());
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 

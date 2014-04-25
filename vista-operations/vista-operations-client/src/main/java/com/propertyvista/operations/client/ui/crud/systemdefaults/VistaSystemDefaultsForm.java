@@ -35,14 +35,14 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     }
 
     private void createTabs() {
-        selectTab(addTab(makeEquifaxSettingsTab()));
-        addTab(makeMistaMerchantAccountTab());
-        addTab(makePaymentSettingsTab());
-        addTab(makeTenantSureSettingsTab());
+        selectTab(addTab(makeEquifaxSettingsTab(), i18n.tr("Equifax")));
+        addTab(makeMistaMerchantAccountTab(), i18n.tr("Vista Accounts"));
+        addTab(makePaymentSettingsTab(), i18n.tr("Funds Transfer"));
+        addTab(makeTenantSureSettingsTab(), i18n.tr("TenantSure"));
     }
 
     private TwoColumnFlexFormPanel makeEquifaxSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Default Fees"));
         panel.setWidget(++row, 0, 2, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
@@ -55,7 +55,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     }
 
     private TwoColumnFlexFormPanel makeMistaMerchantAccountTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Vista Accounts"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account, Payments BMO"));
         panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccountPayments(), new MerchantAccountForm()));
@@ -66,7 +66,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     }
 
     private TwoColumnFlexFormPanel makePaymentSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Default Fees"));
         panel.setWidget(++row, 0, 2, inject(proto().paymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class)));
@@ -74,7 +74,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     }
 
     private TwoColumnFlexFormPanel makeTenantSureSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("TenantSure"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr("Merchant Account"));
         panel.setWidget(++row, 0, 2, inject(proto().tenantSureMerchantAccount(), new MerchantAccountForm()));

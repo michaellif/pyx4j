@@ -39,12 +39,12 @@ public class FeatureForm extends CrmEntityForm<Feature> {
     public FeatureForm(IForm<Feature> view) {
         super(Feature.class, view);
 
-        selectTab(addTab(createGeneralTab()));
-        addTab(createItemsTab());
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        addTab(createItemsTab(), i18n.tr("Items"));
     }
 
     public TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -98,7 +98,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
     }
 
     public TwoColumnFlexFormPanel createItemsTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.setWidget(0, 0, 2, inject(proto().version().items(), new FeatureItemFolder(this)));
 

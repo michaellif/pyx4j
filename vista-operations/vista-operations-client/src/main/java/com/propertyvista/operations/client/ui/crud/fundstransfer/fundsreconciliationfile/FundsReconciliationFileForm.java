@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -29,6 +30,8 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
 
 public class FundsReconciliationFileForm extends OperationsEntityForm<FundsReconciliationFileDTO> {
+
+    private static final I18n i18n = I18n.get(FundsReconciliationFileForm.class);
 
     public FundsReconciliationFileForm(IForm<FundsReconciliationFileDTO> view) {
         super(FundsReconciliationFileDTO.class, view);
@@ -60,7 +63,7 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
 
         panel.setWidget(++row, 0, 2, ((FundsReconciliationFileViewerView) getParentView()).getSummaryListerView().getLister());
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

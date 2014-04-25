@@ -58,10 +58,10 @@ public class LeadForm extends CrmEntityForm<Lead> {
     public LeadForm(IForm<Lead> view) {
         super(Lead.class, view);
 
-        Tab tab = addTab(createGuestsTab(i18n.tr("Guests")));
+        Tab tab = addTab(createGuestsTab(), i18n.tr("Guests"));
         selectTab(tab);
 
-        addTab(createDetailsTab(i18n.tr("Details")));
+        addTab(createDetailsTab(), i18n.tr("Details"));
 
         tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
         setTabEnabled(tab, !isEditable());
@@ -95,8 +95,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         });
     }
 
-    private TwoColumnFlexFormPanel createGuestsTab(String title) {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createGuestsTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         flexPanel.setWidget(++row, 0, 2, inject(proto().guests(), new GuestFolder(isEditable())));
@@ -109,8 +109,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         return flexPanel;
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().leadId(), new FieldDecoratorBuilder(20).build()));

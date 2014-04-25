@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ComplexDTO;
@@ -35,15 +34,14 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
     public ComplexForm(IForm<ComplexDTO> view) {
         super(ComplexDTO.class, view);
 
-        Tab tab = addTab(createGeneralPanel(i18n.tr("General")));
-        selectTab(tab);
+        selectTab(addTab(createGeneralPanel(), i18n.tr("General")));
 
-        addTab(createBuildingsPanel(i18n.tr("Buildings")));
+        addTab(createBuildingsPanel(), i18n.tr("Buildings"));
 
     }
 
-    private TwoColumnFlexFormPanel createGeneralPanel(String title) {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createGeneralPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         panel.setWidget(0, 0, injectAndDecorate(proto().name()));
         panel.setWidget(0, 1, injectAndDecorate(proto().website()));
@@ -79,8 +77,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createBuildingsPanel(String title) {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createBuildingsPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         panel.setWidget(0, 0, 2, inject(proto().buildings(), new ComplexBuildingFolder(this)));
 

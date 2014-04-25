@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.onlineapplication;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -37,27 +34,25 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     public LeaseApplicationPolicyForm(IForm<LeaseApplicationPolicyDTO> view) {
         super(LeaseApplicationPolicyDTO.class, view);
-    }
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        TwoColumnFlexFormPanel legalTermsPanel = new TwoColumnFlexFormPanel(i18n.tr("Legal Step"));
+        TwoColumnFlexFormPanel legalTermsPanel = new TwoColumnFlexFormPanel();
 
         {
             int row = -1;
             legalTermsPanel.setH1(++row, 0, 2, proto().legalTerms().getMeta().getCaption());
             legalTermsPanel.setWidget(++row, 0, 2, inject(proto().legalTerms(), new LegalTermFolder(isEditable())));
         }
+        addTab(legalTermsPanel, i18n.tr("Legal Step"));
 
-        TwoColumnFlexFormPanel confirmationTermsPanel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation Step"));
+        TwoColumnFlexFormPanel confirmationTermsPanel = new TwoColumnFlexFormPanel();
 
         {
             int row = -1;
             confirmationTermsPanel.setH1(++row, 0, 2, proto().confirmationTerms().getMeta().getCaption());
             confirmationTermsPanel.setWidget(++row, 0, 2, inject(proto().confirmationTerms(), new ConfirmationTermFolder(isEditable())));
         }
+        addTab(confirmationTermsPanel, i18n.tr("Confirmation Step"));
 
-        return Arrays.asList(legalTermsPanel, confirmationTermsPanel);
     }
 
     private static class LegalTermFolder extends VistaBoxFolder<LeaseApplicationLegalTerm> {

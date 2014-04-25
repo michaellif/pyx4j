@@ -31,7 +31,7 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
 
     @Override
     protected TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));

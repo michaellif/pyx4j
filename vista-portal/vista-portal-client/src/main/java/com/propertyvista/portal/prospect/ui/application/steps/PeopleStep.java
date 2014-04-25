@@ -52,7 +52,7 @@ public class PeopleStep extends ApplicationWizardStep {
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, new HTML(i18n.tr("Everyone living in the residence must be listed below.")));

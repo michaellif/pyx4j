@@ -33,7 +33,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
     public UnitOccupancyForm(IForm<AptUnitOccupancySegment> view) {
         super(AptUnitOccupancySegment.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, inject(proto().dateFrom(), new FieldDecoratorBuilder(9).build()));
@@ -54,7 +54,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
         get(proto().offMarket()).setVisible(false);
         get(proto().lease()).setVisible(false);
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
     }
 

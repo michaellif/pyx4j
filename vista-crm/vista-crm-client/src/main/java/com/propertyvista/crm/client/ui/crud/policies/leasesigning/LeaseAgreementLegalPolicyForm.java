@@ -37,15 +37,14 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
 
     public LeaseAgreementLegalPolicyForm(IForm<LeaseAgreementLegalPolicyDTO> view) {
         super(LeaseAgreementLegalPolicyDTO.class, view);
-    }
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createTermsPanel(), createConfirmationPanel());
+        addTab(createTermsPanel(), i18n.tr("Agreement Step"));
+        addTab(createConfirmationPanel(), i18n.tr("Confirmation Step"));
+
     }
 
     private TwoColumnFlexFormPanel createTermsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Agreement Step"));
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
         int row = -1;
 
         container.setH1(++row, 0, 2, proto().legal().getMeta().getCaption());
@@ -55,7 +54,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
     }
 
     private TwoColumnFlexFormPanel createConfirmationPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Confirmation Step"));
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
         int row = -1;
 
         container.setH1(++row, 0, 2, proto().confirmation().getMeta().getCaption());

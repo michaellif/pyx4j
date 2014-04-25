@@ -31,7 +31,7 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
     public PadSimBatchForm(IForm<PadSimBatch> view) {
         super(PadSimBatch.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
@@ -96,6 +96,6 @@ public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
         content.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

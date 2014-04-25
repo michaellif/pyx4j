@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
@@ -44,11 +41,8 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
 
     public PaymentTypeSelectionPolicyForm(IForm<PaymentTypeSelectionPolicyDTO> view) {
         super(PaymentTypeSelectionPolicyDTO.class, view);
-    }
+        addTab(createMiscPoliciesTab(), i18n.tr("General"));
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createMiscPoliciesTab());
     }
 
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
@@ -131,7 +125,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentInterac(), decorator()));
 
         // put all together:
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Selection"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
         main.setWidget(++row, 0, 2, accepted);

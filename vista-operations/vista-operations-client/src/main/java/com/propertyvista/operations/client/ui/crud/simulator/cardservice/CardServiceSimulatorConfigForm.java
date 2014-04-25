@@ -51,7 +51,7 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
 
         });
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, "Card Service Simulator"));
     }
 
     @Override

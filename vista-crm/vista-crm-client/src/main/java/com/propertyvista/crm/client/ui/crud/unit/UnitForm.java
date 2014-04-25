@@ -67,7 +67,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     public UnitForm(IForm<AptUnitDTO> view) {
         super(AptUnitDTO.class, view);
 
-        Tab tab = addTab(createGeneralTab());
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
@@ -78,7 +78,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
             setTabEnabled(tab, !isEditable());
         }
 
-        addTab(createLegalAddresslTab());
+        addTab(createLegalAddresslTab(), i18n.tr("Legal Address"));
 
         // TODO Hided till further investigation:
         // addTab(createMarketingTab(), i18n.tr("Marketing"));
@@ -114,7 +114,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private TwoColumnFlexFormPanel createGeneralTab() {
 
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int leftRow = -1;
 
@@ -163,7 +163,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private BasicFlexFormPanel createLegalAddresslTab() {
-        BasicFlexFormPanel main = new BasicFlexFormPanel(i18n.tr("Legal Address"));
+        BasicFlexFormPanel main = new BasicFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, 2, inject(proto().info().legalAddressOverride(), new FieldDecoratorBuilder().labelWidth("360px").build()));

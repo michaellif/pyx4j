@@ -71,7 +71,7 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
         content.setWidget(
                 ++row,
                 0,
-                reviewOfPapLink = (CLabel<Key>) inject(proto().reviewOfPap().id(), new CLabel<Key>(),
+                reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>(),
                         new FieldDecoratorBuilder(5).customLabel(i18n.tr("Reviewed AutoPay")).build()));
         reviewOfPapLink.setNavigationCommand(new Command() {
             @Override
@@ -82,7 +82,7 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
         });
         content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("AutoPay")));
         setTabBarVisible(false);
     }
 

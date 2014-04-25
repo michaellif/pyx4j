@@ -106,8 +106,8 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     public PaymentMethodWizard(IWizardView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
-        addStep(createPaymentMethodStep());
-        comfirmationStep = addStep(createConfirmationStep());
+        addStep(createPaymentMethodStep(), i18n.tr("Payment Method"));
+        comfirmationStep = addStep(createConfirmationStep(), i18n.tr("Confirmation"));
     }
 
     public void setPresenter(PaymentMethodWizardView.Presenter presenter) {
@@ -119,7 +119,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     }
 
     private BasicFlexFormPanel createPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
@@ -127,7 +127,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     }
 
     private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);

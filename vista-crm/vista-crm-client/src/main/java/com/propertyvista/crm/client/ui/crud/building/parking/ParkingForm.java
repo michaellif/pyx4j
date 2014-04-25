@@ -30,15 +30,15 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
     public ParkingForm(IForm<ParkingDTO> view) {
         super(ParkingDTO.class, view);
 
-        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((ParkingViewerView) getParentView()).getSpotView().asWidget(), i18n.tr("Spots"));
         setTabEnabled(tab, !isEditable());
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));

@@ -30,7 +30,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
     }
 
     public void createTabs() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, injectAndDecorate(proto().paymentDate(), 10));
@@ -65,7 +65,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         content.setH3(++row, 0, 1, proto().rejectedBatchPayments().getMeta().getCaption());
         content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
     }
 }

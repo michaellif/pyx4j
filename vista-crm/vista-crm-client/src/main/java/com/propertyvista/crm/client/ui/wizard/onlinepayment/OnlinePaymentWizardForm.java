@@ -64,12 +64,12 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         super(OnlinePaymentSetupDTO.class, view);
         this.onTermsOfServiceDisplayRequest = onTermsOfServiceDisplayRequest;
 
-        addStep(createPricingStep(i18n.tr("Pricing")));
-        addStep(createBusinessInfoStep(i18n.tr("Business Information")));
-        addStep(createPersonalInfoStep(i18n.tr("Personal Information")));
-        addStep(createPropertyAndBankingStep(i18n.tr("Property and Banking")));
-        addStep(createConfirmationStep(CONFIRMATION_STEP_TITLE));
-        addStep(createSignatureStep(SIGNATURE_STEP_TITLE));
+        addStep(createPricingStep(), i18n.tr("Pricing"));
+        addStep(createBusinessInfoStep(), i18n.tr("Business Information"));
+        addStep(createPersonalInfoStep(), i18n.tr("Personal Information"));
+        addStep(createPropertyAndBankingStep(), i18n.tr("Property and Banking"));
+        addStep(createConfirmationStep(), CONFIRMATION_STEP_TITLE);
+        addStep(createSignatureStep(), SIGNATURE_STEP_TITLE);
 
     }
 
@@ -104,16 +104,16 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         }
     }
 
-    private TwoColumnFlexFormPanel createPricingStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createPricingStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = 0;
         main.setH1(++row, 0, 1, i18n.tr("Pricing Information for Online Payments"));
         main.setWidget(++row, 0, onlinePaymentPricingTab = new OnlinePaymentPricingTab());
         return main;
     }
 
-    private TwoColumnFlexFormPanel createBusinessInfoStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createBusinessInfoStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Business Information"));
         Label collectionOfBusinessInformation = new Label();
@@ -123,8 +123,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createPersonalInfoStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createPersonalInfoStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
         main.setH1(++row, 0, 1, i18n.tr("Personal Information"));
@@ -135,9 +135,9 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createPropertyAndBankingStep(String title) {
+    private TwoColumnFlexFormPanel createPropertyAndBankingStep() {
         // TODO add 'refundable deposit'? or not?
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Property and Banking"));
         main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
@@ -154,22 +154,22 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createConfirmationStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
         main.setWidget(++row, 0, makeServiceAgreementLabel());
         return main;
     }
 
-    private TwoColumnFlexFormPanel createSignatureStep(String title) {
+    private TwoColumnFlexFormPanel createSignatureStep() {
         // TODO need to add actual signature, but pending the following questions:
         //     - the full text of the agreements is required
         //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla> 
         final int TOP_I_AGREE_PANEL_PADDING = 20;
         final int AGREEMENTS_SEPARATOR_PADDING = 20;
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Signature"));
 

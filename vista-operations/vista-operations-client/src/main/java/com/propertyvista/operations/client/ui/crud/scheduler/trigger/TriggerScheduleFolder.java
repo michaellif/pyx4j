@@ -56,7 +56,7 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
             content.setWidget(++row, 0, inject(proto().repeatType(), new FieldDecoratorBuilder(12).build()));

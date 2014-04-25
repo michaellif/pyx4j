@@ -89,7 +89,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setH1(++row, 0, 2, i18n.tr("INQUIRIES"));
         main.setWidget(++row, 0, 2, inject(proto().inquiries(), new InquiryFolder()));
 
-        selectTab(addTab(main));
+        selectTab(addTab(main, i18n.tr("Customer Credit Check")));
         setTabBarVisible(false);
 
         // Add do not print marker:

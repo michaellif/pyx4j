@@ -43,7 +43,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         depositsTab = addTab(((LeaseViewerView) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
         adjustmentsTab = addTab(((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            chargesTab = addTab(createChargesTab());
+            chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
         }
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Receipts"));

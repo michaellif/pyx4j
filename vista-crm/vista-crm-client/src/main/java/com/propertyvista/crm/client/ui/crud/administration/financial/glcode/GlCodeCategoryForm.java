@@ -14,12 +14,15 @@
 package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
+
+    private static final I18n i18n = I18n.get(GlCodeCategoryForm.class);
 
     public GlCodeCategoryForm(IForm<GlCodeCategory> view) {
         super(GlCodeCategory.class, view);
@@ -34,6 +37,6 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
         content.setWidget(row++, 0, 2, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

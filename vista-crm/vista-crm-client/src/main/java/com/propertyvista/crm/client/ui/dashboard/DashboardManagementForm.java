@@ -41,7 +41,7 @@ public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
         content.setWidget(++row, 0,
                 inject(proto().ownerUser().name(), new CLabel<String>(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Owner")).build()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
         setTabBarVisible(false);
     }
 

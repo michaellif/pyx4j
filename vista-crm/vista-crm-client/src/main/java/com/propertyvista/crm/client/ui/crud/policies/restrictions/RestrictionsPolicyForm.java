@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -30,15 +27,11 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
 
     public RestrictionsPolicyForm(IForm<RestrictionsPolicyDTO> view) {
         super(RestrictionsPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createMiscPoliciesTab());
+        addTab(createMiscPoliciesTab(), i18n.tr("Restrictions"));
     }
 
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Restrictions"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         String lbw = "220px";
         content.setWidget(++row, 0, 2, inject(proto().maxParkingSpots(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));

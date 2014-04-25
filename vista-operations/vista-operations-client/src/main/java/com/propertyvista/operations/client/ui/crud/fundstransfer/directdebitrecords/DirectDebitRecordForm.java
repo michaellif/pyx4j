@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -21,6 +22,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 
 public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecord> {
+
+    private static final I18n i18n = I18n.get(DirectDebitRecordForm.class);
 
     public DirectDebitRecordForm(IForm<DirectDebitRecord> view) {
         super(DirectDebitRecord.class, view);
@@ -45,7 +48,7 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
         panel.setWidget(++row, 0, 1, inject(proto().trace().sourceCode(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().trace().traceNumber(), new FieldDecoratorBuilder().build()));
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 }

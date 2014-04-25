@@ -48,15 +48,12 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
     public ProductTaxPolicyForm(IForm<ProductTaxPolicyDTO> view) {
         super(ProductTaxPolicyDTO.class, view);
-    }
+        addTab(createItemsPanel(), i18n.tr("Items"));
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createItemsPanel());
     }
 
     private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable())));

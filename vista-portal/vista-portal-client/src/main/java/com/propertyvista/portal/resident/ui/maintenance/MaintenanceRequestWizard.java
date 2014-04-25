@@ -79,7 +79,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     public MaintenanceRequestWizard(MaintenanceRequestWizardView view) {
         super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
 
-        addStep(createDetailsStep());
+        addStep(createDetailsStep(), i18n.tr("General"));
     }
 
     @Override
@@ -182,8 +182,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         int panelRow = -1;
         statusPanel.setH1(++panelRow, 0, 1, i18n.tr("Status"));
-        statusPanel.setWidget(++panelRow, 0,
-                inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>(), new FieldDecoratorBuilder(100).build()));
+        statusPanel.setWidget(++panelRow, 0, inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>(), new FieldDecoratorBuilder(100).build()));
         statusPanel.setWidget(++panelRow, 0, inject(proto().updated(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
         statusPanel.setWidget(++panelRow, 0, inject(proto().submitted(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
         statusPanel.setBR(++panelRow, 0, 1);

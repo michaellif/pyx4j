@@ -128,7 +128,7 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
                     .<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class)));
 
             setTabBarVisible(false);
-            selectTab(addTab(contentPanel));
+            selectTab(addTab(contentPanel, "Card Service Simulation"));
 
         }
 

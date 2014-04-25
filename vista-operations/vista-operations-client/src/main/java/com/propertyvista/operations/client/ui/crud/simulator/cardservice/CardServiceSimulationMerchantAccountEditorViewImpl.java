@@ -42,7 +42,7 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
             tabPanel.setWidget(++row, 0, injectAndDecorate(proto().visaDebitConvenienceFee()));
 
             setTabBarVisible(false);
-            selectTab(addTab(tabPanel));
+            selectTab(addTab(tabPanel, "Card Service Simulation"));
         }
     }
 

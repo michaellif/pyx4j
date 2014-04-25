@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -32,15 +29,11 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
 
     public ARPolicyForm(IForm<ARPolicyDTO> view) {
         super(ARPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createARPoliciesTab());
+        addTab(createARPoliciesTab(), i18n.tr("AR Settings"));
     }
 
     private TwoColumnFlexFormPanel createARPoliciesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("AR Settings"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setWidget(++row, 0, injectAndDecorate(proto().creditDebitRule(), 15));
 

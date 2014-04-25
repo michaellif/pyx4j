@@ -74,9 +74,9 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
 
-        addStep(createPersonalInfoStep());
-        addStep(createInsuranceCoverageStep());
-        addStep(createPaymentMethodStep());
+        addStep(createPersonalInfoStep(), i18n.tr("Personal Info"));
+        addStep(createInsuranceCoverageStep(), i18n.tr("Insurance Coverage"));
+        addStep(createPaymentMethodStep(), i18n.tr("Payment Method"));
 
     }
 
@@ -223,7 +223,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     @Override
     protected WizardDecorator<TenantSureInsurancePolicyDTO> createDecorator() {
-        wizardDecorator = (WizardDecorator<TenantSureInsurancePolicyDTO>) super.createDecorator();
+        wizardDecorator = super.createDecorator();
         return wizardDecorator;
     }
 }

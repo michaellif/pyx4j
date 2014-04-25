@@ -35,7 +35,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
     public TriggerForm(IForm<TriggerDTO> view) {
         super(TriggerDTO.class, view);
 
-        Tab tab = addTab(createDetailsTab());
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((TriggerViewerView) getParentView()).getRunListerView().asWidget(), i18n.tr("Runs"));
@@ -44,7 +44,7 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
     }
 
     private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));

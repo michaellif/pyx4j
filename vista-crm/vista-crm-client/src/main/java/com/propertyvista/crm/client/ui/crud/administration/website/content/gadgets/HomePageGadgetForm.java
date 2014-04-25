@@ -54,7 +54,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         panelMap.put(GadgetType.testimonials, getTestimContentEditor());
         panelMap.put(GadgetType.promo, getPromoContentEditor());
 
-        TwoColumnFlexFormPanel generalPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel generalPanel = new TwoColumnFlexFormPanel();
 
         int row = 0;
         generalPanel.setH1(row++, 0, 2, i18n.tr("General"));
@@ -63,7 +63,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().status(), 10, true));
         generalPanel.setWidget(row++, 0, 2, mainPanel);
 
-        selectTab(addTab(generalPanel));
+        selectTab(addTab(generalPanel, i18n.tr("General")));
 
     }
 

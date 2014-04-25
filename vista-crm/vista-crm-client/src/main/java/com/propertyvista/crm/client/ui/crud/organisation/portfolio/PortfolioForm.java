@@ -29,7 +29,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
     public PortfolioForm(IForm<Portfolio> view) {
         super(Portfolio.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -40,6 +40,6 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
         content.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(getParentView(), isEditable())));
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

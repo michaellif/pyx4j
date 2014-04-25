@@ -28,7 +28,7 @@ public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
     public DebitRecordEditor(IForm<PadSimDebitRecord> view) {
         super(PadSimDebitRecord.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(10).build()));
@@ -52,6 +52,6 @@ public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
 
         content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder().build()));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

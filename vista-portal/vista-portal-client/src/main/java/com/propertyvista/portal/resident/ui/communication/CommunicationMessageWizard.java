@@ -35,7 +35,7 @@ public class CommunicationMessageWizard extends CPortalEntityWizard<Communicatio
     public CommunicationMessageWizard(CommunicationMessageWizardView view) {
         super(CommunicationMessageDTO.class, view, i18n.tr("New Message"), i18n.tr("Submit"), ThemeColor.contrast5);
 
-        addStep(createDetailsStep());
+        addStep(createDetailsStep(), i18n.tr("General"));
     }
 
     public void setDestinationMeta(List<PropertyContact> meta) {

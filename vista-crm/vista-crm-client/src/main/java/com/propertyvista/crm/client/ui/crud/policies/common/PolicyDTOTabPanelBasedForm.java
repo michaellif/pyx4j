@@ -65,16 +65,12 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IForm<POLICY_DTO> view) {
         super(policyDTOClass, view);
 
-        selectTab(addTab(createScopeTab(i18n.tr("Scope"))));
-        for (TwoColumnFlexFormPanel customTab : createCustomTabPanels()) {
-            addTab(customTab);
-        }
+        selectTab(addTab(createScopeTab(), i18n.tr("Scope")));
+
     }
 
-    protected abstract List<TwoColumnFlexFormPanel> createCustomTabPanels();
-
-    private TwoColumnFlexFormPanel createScopeTab(String title) {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createScopeTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         content.setHeight("3em");
         int row = -1;
 

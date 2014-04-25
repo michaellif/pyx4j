@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -29,10 +28,10 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     public SimulationForm(IForm<SimulationDTO> view) {
         super(SimulationDTO.class, view);
 
-        selectTab(addTab(createGeneralTab()));
-        addTab(createCaledonTab());
-        addTab(createYardiTab());
-        addTab(createEquifaxTab());
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        addTab(createCaledonTab(), i18n.tr("Payments"));
+        addTab(createYardiTab(), i18n.tr("Yardi"));
+        addTab(createEquifaxTab(), i18n.tr("Equifax"));
     }
 
     @Override
@@ -47,7 +46,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setH2(++row, 0, 2, i18n.tr("Cache"));
@@ -68,7 +67,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private TwoColumnFlexFormPanel createCaledonTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Payments"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setH2(++row, 0, 2, i18n.tr("Funds Transfer"));
@@ -82,7 +81,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private TwoColumnFlexFormPanel createYardiTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiAllTenantsToHaveEmails(), 5, true));
@@ -96,7 +95,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private TwoColumnFlexFormPanel createEquifaxTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useEquifaxSimulator(), 5, true));

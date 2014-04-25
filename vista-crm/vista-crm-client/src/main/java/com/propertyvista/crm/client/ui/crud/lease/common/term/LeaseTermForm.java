@@ -118,10 +118,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         super(LeaseTermDTO.class, view);
 
         setTabBarVisible(false);
-        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
+        selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab(String title) {
+    private TwoColumnFlexFormPanel createDetailsTab() {
         // Lease details: -------------------------------------------------------------------------------------------------------
         TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 

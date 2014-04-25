@@ -35,7 +35,7 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
     public TriggerScheduleForm(IForm<TriggerSchedule> view) {
         super(TriggerSchedule.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, inject(proto().repeatType(), new FieldDecoratorBuilder(12).build()));
@@ -52,7 +52,7 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
             ((CComboBox<ScheduleType>) get(proto().repeatType())).setOptions(ScheduleType.uiSet());
         }
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

@@ -41,15 +41,11 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
 
     public IdAssignmentPolicyForm(IForm<IdAssignmentPolicyDTO> view) {
         super(IdAssignmentPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createItemsPanel());
+        addTab(createItemsPanel(), i18n.tr("Items"));
     }
 
     private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, 2, inject(proto().editableItems(), new IdAssignmentItemFolder(isEditable())));

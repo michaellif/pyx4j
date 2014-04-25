@@ -73,7 +73,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
         content.setWidget(++row, 0, 2, reportSectionLister);
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
     }
 

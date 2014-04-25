@@ -32,41 +32,41 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         TwoColumnFlexFormPanel content;
 
-        content = new TwoColumnFlexFormPanel(proto().siteTitles().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
-        selectTab(addTab(content));
+        selectTab(addTab(content, proto().siteTitles().getMeta().getCaption()));
 
-        content = new TwoColumnFlexFormPanel(i18n.tr("Site Logos"));
+        content = new TwoColumnFlexFormPanel();
         content.setH4(0, 0, 2, i18n.tr("Recommended Logo size not to exceed: small - {0}, large - {1} pixels", "160x80", "300x90"));
         content.setWidget(1, 0, 2, inject(proto().logo(), new SiteImageResourceFolder(isEditable())));
-        addTab(content);
+        addTab(content, i18n.tr("Site Logos"));
 
-        content = new TwoColumnFlexFormPanel(proto().slogan().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
-        addTab(content);
+        addTab(content, proto().slogan().getMeta().getCaption());
 
         SiteImageSetFolder imageFolder = new SiteImageSetFolder(isEditable());
         imageFolder.setImageSize(690, 300);
         imageFolder.setThumbSize(230, 100);
-        content = new TwoColumnFlexFormPanel(proto().banner().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().banner(), imageFolder));
-        addTab(content);
+        addTab(content, proto().banner().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel(proto().metaTags().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
-        addTab(content);
+        addTab(content, proto().metaTags().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel(proto().childPages().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().childPages(), new PageDescriptorFolder(this)));
-        selectTab(addTab(content));
+        selectTab(addTab(content, proto().childPages().getMeta().getCaption()));
 
-        content = new TwoColumnFlexFormPanel(i18n.tr("Home Page Gadgets"));
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, createGadgetPanel());
-        addTab(content);
+        addTab(content, i18n.tr("Home Page Gadgets"));
 
-        content = new TwoColumnFlexFormPanel(proto().cityIntroPages().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel();
         content.setWidget(0, 0, 2, inject(proto().cityIntroPages(), new CityIntroPageFolder(this)));
-        addTab(content);
+        addTab(content, proto().cityIntroPages().getMeta().getCaption());
     }
 
     private Widget createGadgetPanel() {

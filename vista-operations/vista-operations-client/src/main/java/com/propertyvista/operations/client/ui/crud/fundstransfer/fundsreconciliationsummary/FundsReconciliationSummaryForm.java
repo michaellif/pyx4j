@@ -17,6 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -27,6 +28,8 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
 public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsReconciliationSummaryDTO> {
+
+    private static final I18n i18n = I18n.get(FundsReconciliationSummaryForm.class);
 
     public FundsReconciliationSummaryForm(IForm<FundsReconciliationSummaryDTO> view) {
         super(FundsReconciliationSummaryDTO.class, view);
@@ -65,6 +68,6 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
 
         panel.setWidget(++i, 0, 2, inject(proto().processingStatus(), new FieldDecoratorBuilder().build()));
 
-        selectTab(addTab(panel));
+        selectTab(addTab(panel, i18n.tr("General")));
     }
 }

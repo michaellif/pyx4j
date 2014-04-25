@@ -49,7 +49,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
             content.setWidget(++row, 0, inject(proto().version().type(), new FieldDecoratorBuilder(12).build()));

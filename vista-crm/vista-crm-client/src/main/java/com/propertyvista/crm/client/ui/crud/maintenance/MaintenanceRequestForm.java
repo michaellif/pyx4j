@@ -124,9 +124,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
 
-        selectTab(addTab(createGeneralTab()));
-        addTab(createWorkHistoryTab());
-        addTab(createStatusHistoryTab());
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        addTab(createWorkHistoryTab(), proto().workHistory().getMeta().getCaption());
+        addTab(createStatusHistoryTab(), proto().statusHistory().getMeta().getCaption());
     }
 
     private void ensureBuilding() {
@@ -170,7 +170,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().reportedDate(), new FieldDecoratorBuilder(10).build()));
@@ -404,13 +404,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private TwoColumnFlexFormPanel createWorkHistoryTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(proto().workHistory().getMeta().getCaption());
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         panel.setWidget(0, 0, 2, inject(proto().workHistory(), new MaintenanceRequestScheduleFolder()));
         return panel;
     }
 
     private TwoColumnFlexFormPanel createStatusHistoryTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(proto().statusHistory().getMeta().getCaption());
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         panel.setWidget(0, 0, 2, inject(proto().statusHistory(), new StatusHistoryFolder()));
         return panel;
     }

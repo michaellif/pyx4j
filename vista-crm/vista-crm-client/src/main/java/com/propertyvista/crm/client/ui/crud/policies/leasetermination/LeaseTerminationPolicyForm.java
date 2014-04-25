@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -30,15 +27,13 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     public LeaseTerminationPolicyForm(IForm<LeaseTerminationPolicyDTO> view) {
         super(LeaseTerminationPolicyDTO.class, view);
-    }
 
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel();
         int row = -1;
 
         general.setWidget(++row, 0, inject(proto().periodOfNotice(), new FieldDecoratorBuilder(5).build()));
 
-        return Arrays.asList(general);
+        addTab(general, i18n.tr("General"));
     }
+
 }

@@ -32,7 +32,7 @@ public abstract class LegalStep extends ApplicationWizardStep {
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(getStepTitle());
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder()));

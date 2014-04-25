@@ -57,7 +57,7 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel(i18n.tr("Details"));
+            BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
             content.setWidget(++row, 0,

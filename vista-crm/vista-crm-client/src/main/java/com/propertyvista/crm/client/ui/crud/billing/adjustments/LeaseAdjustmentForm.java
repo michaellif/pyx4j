@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -43,6 +44,8 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.TaxType;
 
 public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
+
+    private static final I18n i18n = I18n.get(LeaseAdjustmentForm.class);
 
     private final SimplePanel taxHolder = new SimplePanel();
 
@@ -132,7 +135,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             content.setWidget(row, 1, injectAndDecorate(proto().status(), 10));
         }
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
         setTabBarVisible(false);
     }
 

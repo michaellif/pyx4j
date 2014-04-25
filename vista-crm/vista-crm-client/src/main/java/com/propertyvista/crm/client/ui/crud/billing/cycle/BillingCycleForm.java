@@ -69,7 +69,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setWidget(row, 1, new ViewPadLink());
 
         setTabBarVisible(false);
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("Billing Cycle")));
     }
 
     // builder specifically for this form (enlarge default label width)

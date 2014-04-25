@@ -27,13 +27,13 @@ public class ParkingSpotForm extends CrmEntityForm<ParkingSpot> {
     public ParkingSpotForm(IForm<ParkingSpot> view) {
         super(ParkingSpot.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, injectAndDecorate(proto().name(), 10));
         content.setWidget(++row, 0, injectAndDecorate(proto().type(), 10));
 
-        selectTab(addTab(content));
+        selectTab(addTab(content, i18n.tr("General")));
 
     }
 }

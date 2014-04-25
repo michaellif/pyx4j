@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.misc;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -35,15 +32,11 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
 
     public DatesPolicyForm(IForm<DatesPolicyDTO> view) {
         super(DatesPolicyDTO.class, view);
-    }
-
-    @Override
-    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        return Arrays.asList(createMiscPoliciesTab());
+        addTab(createMiscPoliciesTab(), i18n.tr("Misc. Settings"));
     }
 
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Misc. Settings"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, 2, inject(proto().yearRangeStart(), new FieldDecoratorBuilder(5, true).build()));

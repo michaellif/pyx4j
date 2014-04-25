@@ -67,10 +67,10 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
     public CreditCheckWizardForm(IWizard<CreditCheckSetupDTO> view, Command onDisplayTermsOfServiceRequest) {
         super(CreditCheckSetupDTO.class, view);
         this.onDisplayTermsOfServiceRequest = onDisplayTermsOfServiceRequest;
-        addStep(createPricingStep(PRICING_STEP_NAME));
-        addStep(createBusinessInfoStep(BUSINESS_INFO_STEP_NAME));
-        addStep(createPersonalInfoStep(PERSONAL_INFO_STEP_NAME));
-        addStep(createConfirmationStep(CONFIRMATION_STEP_NAME));
+        addStep(createPricingStep(), PRICING_STEP_NAME);
+        addStep(createBusinessInfoStep(), BUSINESS_INFO_STEP_NAME);
+        addStep(createPersonalInfoStep(), PERSONAL_INFO_STEP_NAME);
+        addStep(createConfirmationStep(), CONFIRMATION_STEP_NAME);
     }
 
     public void setPricingOptions(AbstractEquifaxFee creditCheckFees) {
@@ -111,8 +111,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         }
     }
 
-    private TwoColumnFlexFormPanel createPricingStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createPricingStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Pricing"));
         main.setWidget(++row, 0,
@@ -122,8 +122,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createBusinessInfoStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createBusinessInfoStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Business & Corporate Information"));
 
@@ -136,8 +136,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createPersonalInfoStep(String title) {
-        personalInfoStepPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createPersonalInfoStep() {
+        personalInfoStepPanel = new TwoColumnFlexFormPanel();
         int row = 0;
         personalInfoStepPanel.setH1(++row, 0, 2, i18n.tr("Personal Information"));
 
@@ -154,8 +154,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         return personalInfoStepPanel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createConfirmationStep() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Confirmation and Payment Information"));
 

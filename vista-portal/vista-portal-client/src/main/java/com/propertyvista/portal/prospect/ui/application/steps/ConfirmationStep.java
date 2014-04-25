@@ -61,7 +61,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
 
     @Override
     public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel(getStepTitle());
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
         content.setH3(++row, 0, 1, i18n.tr("Payment Details"));

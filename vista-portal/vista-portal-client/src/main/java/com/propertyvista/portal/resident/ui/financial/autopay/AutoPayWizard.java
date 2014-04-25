@@ -127,20 +127,18 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private final CComponent<?, ?, ?> totalWidget;
 
-    private AutoPayWizardView.Presenter presenter;
-
     public AutoPayWizard(AutoPayWizardView view) {
         super(AutoPayDTO.class, view, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
-        detailsStep = addStep(createDetailsStep());
-        addStep(createSelectPaymentMethodStep());
-        comfirmationStep = addStep(createConfirmationStep());
+        detailsStep = addStep(createDetailsStep(), i18n.tr("Details"));
+        addStep(createSelectPaymentMethodStep(), i18n.tr("Payment Method Selection"));
+        comfirmationStep = addStep(createConfirmationStep(), i18n.tr("Confirmation"));
 
         totalWidget = inject(proto().total(), new FieldDecoratorBuilder(100).build());
     }
 
     private BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Details"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>(), new FieldDecoratorBuilder(200).build()));
@@ -163,7 +161,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private BasicFlexFormPanel createSelectPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(
@@ -235,7 +233,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
