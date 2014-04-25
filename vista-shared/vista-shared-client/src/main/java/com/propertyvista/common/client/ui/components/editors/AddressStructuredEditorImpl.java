@@ -22,8 +22,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.site.client.ui.prime.form.FormPanel;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -46,38 +46,35 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         this.showUnit = showUnit;
     }
 
-    protected TwoColumnFlexFormPanel internalCreateContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    protected FormPanel internalCreateContent() {
+        FormPanel content = new FormPanel(this);
 
-        @SuppressWarnings("unchecked")
-        final CComponent<?, Country, ?> country = (CComponent<?, Country, ?>) inject(proto().country(), new FieldDecoratorBuilder(15).build());
-        @SuppressWarnings("unchecked")
-        final CComponent<?, Province, ?> province = (CComponent<?, Province, ?>) inject(proto().province(), new FieldDecoratorBuilder(15).build());
-        @SuppressWarnings("unchecked")
-        final CComponent<?, String, ?> postalCode = (CComponent<?, String, ?>) inject(proto().postalCode(), new FieldDecoratorBuilder(10).build());
+        int row = -1;
+        if (showUnit) {
+            content.insert(++row, 0, proto().suiteNumber()).decorate().componentWidth(100);
+        }
+        content.insert(++row, 0, proto().streetNumber()).decorate().componentWidth(100);
+        content.insert(++row, 0, proto().streetNumberSuffix()).decorate().componentWidth(100);
+        content.insert(++row, 0, proto().streetName()).decorate().componentWidth(160);
+        content.insert(++row, 0, proto().streetType()).decorate().componentWidth(100);
+        content.insert(++row, 0, proto().streetDirection()).decorate().componentWidth(100);
+
+        row = -1;
+        content.insert(++row, 1, proto().city()).decorate().componentWidth(150);
+        content.insert(++row, 1, proto().county()).decorate().componentWidth(150);
+        content.insert(++row, 1, proto().province()).decorate().componentWidth(150);
+        content.insert(++row, 1, proto().country()).decorate().componentWidth(150);
+        content.insert(++row, 1, proto().postalCode()).decorate().componentWidth(100);
+
+        CComponent<?, Country, ?> country = get(proto().country());
+        CComponent<?, Province, ?> province = get(proto().province());
+        CComponent<?, String, ?> postalCode = get(proto().postalCode());
+
         if (postalCode instanceof CTextFieldBase) {
             @SuppressWarnings("unchecked")
             CTextFieldBase<String, ?> comp = ((CTextFieldBase<String, ?>) postalCode);
             comp.setFormatter(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-
-        int row = -1;
-        if (showUnit) {
-            content.setWidget(++row, 0, inject(proto().suiteNumber(), new FieldDecoratorBuilder(10).build()));
-        }
-        content.setWidget(++row, 0, inject(proto().streetNumber(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().streetNumberSuffix(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().streetName(), new FieldDecoratorBuilder(16).build()));
-        content.setWidget(++row, 0, inject(proto().streetType(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().streetDirection(), new FieldDecoratorBuilder(10).build()));
-
-        row = -1;
-
-        content.setWidget(++row, 1, inject(proto().city(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 1, inject(proto().county(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 1, province);
-        content.setWidget(++row, 1, country);
-        content.setWidget(++row, 1, postalCode);
 
         // tweaks:
         attachFilters(proto(), province, country, postalCode);

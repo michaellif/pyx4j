@@ -186,34 +186,34 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         int row = 0;
         formPanel.h1(row++, 0, 2, i18n.tr("Building Summary"));
         formPanel.insert(row, 0, proto().propertyCode()).decorate().componentWidth(120);
-        formPanel.insert(row++, 1, proto().info().shape()).decorate().componentWidth(70);
+        formPanel.insert(row++, 1, proto().info().shape()).decorate().componentWidth(90);
 
         formPanel.insert(row, 0, proto().info().name()).decorate().componentWidth(150);
-        formPanel.insert(row++, 1, injectAndDecorate(proto().info().totalStoreys(), 5));
+        formPanel.insert(row++, 1, proto().info().totalStoreys()).decorate().componentWidth(50);
 
-        formPanel.insert(row, 0, injectAndDecorate(proto().info().type(), 12));
-        formPanel.insert(row++, 1, injectAndDecorate(proto().info().residentialStoreys(), 5));
+        formPanel.insert(row, 0, proto().info().type()).decorate().componentWidth(120);
+        formPanel.insert(row++, 1, proto().info().residentialStoreys()).decorate().componentWidth(50);
 
-        formPanel.insert(row, 0, injectAndDecorate(proto().propertyManager(), 16));
-        formPanel.insert(row++, 1, injectAndDecorate(proto().externalId(), 15));
+        formPanel.insert(row, 0, proto().propertyManager()).decorate().componentWidth(160);
+        formPanel.insert(row++, 1, proto().externalId()).decorate().componentWidth(150);
 
         if (isEditable()) {
-            formPanel.insert(row, 0, injectAndDecorate(proto().complex(), new CEntityLabel<Complex>(), 15));
+            formPanel.insert(row, 0, proto().complex(), new CEntityLabel<Complex>()).decorate().componentWidth(150);
         } else {
-            formPanel.insert(row, 0,
-                    injectAndDecorate(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class)), 15));
+            formPanel.insert(row, 0, proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))).decorate()
+                    .componentWidth(150);
         }
 
-        formPanel.insert(row++, 0,
-                injectAndDecorate(proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class)), 15));
+        formPanel.insert(row++, 0, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate()
+                .componentWidth(150);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            formPanel.insert(row++, 1, injectAndDecorate(proto().defaultProductCatalog(), 5));
+            formPanel.insert(row++, 1, proto().defaultProductCatalog()).decorate().componentWidth(50);
         }
-        formPanel.insert(row++, 1, injectAndDecorate(proto().suspended(), 5));
+        formPanel.insert(row++, 1, proto().suspended()).decorate().componentWidth(50);
 
         formPanel.h1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        formPanel.insert(row++, 0, 2, inject(proto().info().address(), new AddressStructuredEditor(false)));
+        formPanel.insert(row++, 0, 2, proto().info().address(), new AddressStructuredEditor(false));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
