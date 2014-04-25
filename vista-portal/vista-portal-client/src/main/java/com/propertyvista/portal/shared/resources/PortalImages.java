@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,7 +27,7 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 
-    // ==================================  
+    // ==================================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add.png")
@@ -196,6 +196,14 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("MyApplication-Icon-Security.png")
     ImageResource signUpSec();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("full-star.png")
+    ImageResource fullStar();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("no-star.png")
+    ImageResource noStar();
 
     //=============== Menu ====================
 
@@ -403,4 +411,5 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
         @Source("MyApplication-Button-SelectUnit-Active.png")
         ImageResource active();
     }
+
 }

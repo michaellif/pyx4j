@@ -15,7 +15,10 @@ package com.propertyvista.portal.resident.ui.communication;
 
 import java.util.Arrays;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -45,6 +48,8 @@ import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView.CommunicationMessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
 public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMessageDTO> {
@@ -135,9 +140,9 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
 
         private Anchor btnmarkAsUnread;
 
-        private Anchor star;
-
         CComboBoxBoolean cmbStar;
+
+        Image starImage;
 
         private final OpenMessageFolder parent;
 
@@ -153,20 +158,39 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         public IsWidget createContent() {
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
+            inject(proto().star());
+            starImage = new Image(PortalImages.INSTANCE.noStar());
+            starImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
+            starImage.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    CommunicationMessage m = getValue();
+                    m.star().setValue(!m.star().getValue(false));
+                    if (m.star().getValue(false)) {
+                        starImage.setResource(PortalImages.INSTANCE.fullStar());
+                    } else {
+                        starImage.setResource(PortalImages.INSTANCE.noStar());
+                    }
+                    ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
+                            new DefaultAsyncCallback<CommunicationMessage>() {
+                                @Override
+                                public void onSuccess(CommunicationMessage result) {
+                                }
+                            }, m);
+                }
+            });
+            content.setWidget(++row, 0, 1, starImage);
             content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, inject(proto().data().date(), new CLabel<String>(), new FieldDecoratorBuilder(20).build()));
-            cmbStar = new CComboBoxBoolean();
-            cmbStar.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-            CComboBoxBoolean cmbBoolean2 = new CComboBoxBoolean();
-            cmbBoolean2.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+            content.setWidget(++row, 0, 1, inject(proto().data().date(), new CLabel<String>(), new FieldDecoratorBuilder(20).build()));
+            CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
+            cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
 
-            content.setWidget(++row, 0, inject(proto().star(), cmbStar, new FieldDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, inject(proto().data().isHighImportance(), cmbBoolean2, new FieldDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, inject(proto().data().sender(), new SenderLabel(), new FieldDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, inject(proto().data().text(), new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, 1, inject(proto().data().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, 1, inject(proto().data().sender(), new SenderLabel(), new FieldDecoratorBuilder(20).build()));
+            content.setWidget(++row, 0, 1, inject(proto().data().text(), new FieldDecoratorBuilder(20).build()));
             content.setBR(++row, 0, 1);
             content.setH1(++row, 0, 1, "Attachments");
-            content.setWidget(++row, 0, inject(proto().data().attachments(), new CommunicationMessageAttachmentFolder()));
+            content.setWidget(++row, 0, 1, inject(proto().data().attachments(), new CommunicationMessageAttachmentFolder()));
             content.setWidget(++row, 0, 2, createLowerToolbar());
             return content;
         }
@@ -218,26 +242,9 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                 }
             });
 
-            star = new Anchor(i18n.tr("Star"), new Command() {
-                @Override
-                public void execute() {
-                    CommunicationMessage m = getValue();
-
-                    m.star().setValue(!m.star().getValue(false));
-                    cmbStar.setValue(m.star().getValue(false));
-                    ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
-                            new DefaultAsyncCallback<CommunicationMessage>() {
-                                @Override
-                                public void onSuccess(CommunicationMessage result) {
-                                    //AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView());
-                                }
-                            }, m);
-                }
-            });
             tb.addItem(btnSend);
             tb.addItem(btnCancel);
             tb.addItem(btnmarkAsUnread);
-            tb.addItem(star);
             btnSend.setVisible(false);
             btnCancel.setVisible(false);
             btnmarkAsUnread.setVisible(false);
@@ -277,7 +284,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                 setEnabled(true);
                 btnSend.setVisible(true);
                 btnCancel.setVisible(true);
-                star.setVisible(false);
+                starImage.setVisible(false);
                 btnmarkAsUnread.setVisible(false);
                 get(proto().data().date()).setVisible(false);
                 get(proto().star()).setVisible(false);
@@ -292,7 +299,12 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                 get(proto().data().sender()).setVisible(true);
                 get(proto().star()).setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
                 btnmarkAsUnread.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
-                star.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
+                starImage.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
+                if (get(proto().star()).getValue()) {
+                    starImage.setResource(PortalImages.INSTANCE.fullStar());
+                } else {
+                    starImage.setResource(PortalImages.INSTANCE.noStar());
+                }
             }
         }
 
