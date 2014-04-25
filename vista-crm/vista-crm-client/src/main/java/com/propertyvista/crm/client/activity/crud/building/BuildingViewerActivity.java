@@ -18,7 +18,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
@@ -37,7 +36,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.crm.client.CrmSite;
@@ -241,11 +239,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                     public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                         super.onDeferredSuccess(result);
                         populate();
-                        if (false)
-                            if (!CommonsStringUtils.isEmpty(result.getMessage())) {
-                                hide();
-                                MessageDialog.warn(getTitle(), result.getMessage());
-                            }
                     }
                 };
                 d.show();
@@ -273,11 +266,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                     public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                         super.onDeferredSuccess(result);
                         populate();
-                        if (false)
-                            if (!CommonsStringUtils.isEmpty(result.getMessage())) {
-                                hide();
-                                MessageDialog.warn(getTitle(), result.getMessage());
-                            }
                     }
                 };
                 d.show();

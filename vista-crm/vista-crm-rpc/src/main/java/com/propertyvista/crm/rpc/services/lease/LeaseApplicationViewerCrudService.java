@@ -41,7 +41,7 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
 
     void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseTermParticipant<?>> users);
 
-    void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
+    void applicationAction(AsyncCallback<String> callback, LeaseApplicationActionDTO actionDTO);
 
     void getCreditCheckServiceStatus(AsyncCallback<PmcEquifaxStatus> callback);
 

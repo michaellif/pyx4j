@@ -23,13 +23,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -394,17 +393,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         MessageDialog.info(message);
     }
 
-    @Override
-    public void reportApplicationApprovalSuccess() {
-        MessageDialog.info(i18n.tr("Application has been approved successfully"));
-    }
-
-    @Override
-    public void reportApplicationApprovalFailure(UserRuntimeException caught) {
-        MessageDialog.info(caught.getMessage());
-
-    }
-
     public void reportCreditCheckServiceInactive() {
         MessageDialog.info(i18n.tr("No credit check service for this account has been set activated."));
     }
@@ -552,8 +540,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     ++row,
                     0,
                     inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseApplicationDocument.class)), new FieldDecoratorBuilder().componentWidth("200px")
-                            .customLabel(i18n.tr("Agreement Document File")).build()));
+                            LeaseApplicationDocument.class)),
+                            new FieldDecoratorBuilder().componentWidth("200px").customLabel(i18n.tr("Agreement Document File")).build()));
             panel.setWidget(++row, 0, inject(proto().signedBy(), signedByCombo, new FieldDecoratorBuilder().componentWidth("200px").build()));
             return panel;
         }

@@ -25,6 +25,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -164,23 +166,21 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void applicationAction(final LeaseApplicationActionDTO action) {
-        ((LeaseApplicationViewerCrudService) getService()).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseApplicationViewerCrudService) getService()).applicationAction(new DefaultAsyncCallback<String>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                if (action.action().getValue() == Action.Approve) {
-                    setEntityIdAsCurrentKey();
-                    ((LeaseApplicationViewerView) getView()).reportApplicationApprovalSuccess();
-                }
-                populate();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (action.action().getValue() == Action.Approve & (caught instanceof UserRuntimeException)) {
-                    ((LeaseApplicationViewerView) getView()).reportApplicationApprovalFailure((UserRuntimeException) caught);
-                } else {
-                    super.onFailure(caught);
-                }
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("{0} Application", action.action().getValue()), null, false) {
+                    @Override
+                    public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        if (action.action().getValue() == Action.Approve) {
+                            setEntityIdAsCurrentKey();
+                        }
+                        populate();
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
             }
         }, action);
     }

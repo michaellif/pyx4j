@@ -17,7 +17,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
@@ -69,9 +68,5 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
     void reportInviteUsersActionFailure(String message);
 
     void reportCreditCheckActionResult(String message);
-
-    void reportApplicationApprovalSuccess();
-
-    void reportApplicationApprovalFailure(UserRuntimeException caught);
 
 }

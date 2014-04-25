@@ -65,11 +65,6 @@ class BuildingYardiUpdateDeferredProcess extends AbstractDeferredProcess {
     }
 
     @Override
-    public void cancel() {
-        canceled = true;
-    }
-
-    @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse r = super.status();
         String message = null;

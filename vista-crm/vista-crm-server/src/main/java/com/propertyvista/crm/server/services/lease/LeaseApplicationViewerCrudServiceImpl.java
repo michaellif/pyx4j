@@ -25,10 +25,8 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -37,6 +35,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
@@ -60,6 +59,7 @@ import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.server.common.util.TenantConverter;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationViewerCrudService {
 
@@ -301,32 +301,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    public void applicationAction(AsyncCallback<VoidSerializable> callback, final LeaseApplicationActionDTO actionDTO) {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-            @Override
-            public Void execute() throws RuntimeException {
-                switch (actionDTO.action().getValue()) {
-                case Approve:
-                    ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                            actionDTO.decisionReason().getValue());
-                    break;
-                case Decline:
-                    ServerSideFactory.create(LeaseFacade.class).declineApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                            actionDTO.decisionReason().getValue());
-                    break;
-                case Cancel:
-                    ServerSideFactory.create(LeaseFacade.class).cancelApplication(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
-                            actionDTO.decisionReason().getValue());
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-                }
-                return null;
-            }
-
-        });
-        callback.onSuccess(null);
+    public void applicationAction(AsyncCallback<String> callback, final LeaseApplicationActionDTO actionDTO) {
+        long maxExpectedTimeMs = VistaFeatures.instance().yardiIntegration() ? 15000 : 1000;
+        callback.onSuccess(DeferredProcessRegistry.fork(new LeaseApplicationActionDeferredProcess(actionDTO, maxExpectedTimeMs), ThreadPoolNames.IMPORTS));
     }
 
     @Override
