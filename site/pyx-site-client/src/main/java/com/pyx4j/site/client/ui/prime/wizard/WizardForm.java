@@ -107,14 +107,8 @@ public abstract class WizardForm<E extends IEntity> extends CForm<E> implements 
         return wizardPanel;
     }
 
-    public WizardStep addStep(final TwoColumnFlexFormPanel panel) {
-        final WizardStep step = addStep(panel, panel.getTitle());
-        return step;
-    }
-
     public WizardStep addStep(Widget content, String tabTitle) {
-        WizardStep step = null;
-        step = new WizardStep(content, tabTitle);
+        WizardStep step = new WizardStep(content, tabTitle);
         wizardPanel.addTab(step);
         return step;
     }

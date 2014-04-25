@@ -24,14 +24,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TwoColumnFlexFormPanel extends BasicFlexFormPanel {
 
-    public TwoColumnFlexFormPanel(String title) {
-        super(title);
+    public TwoColumnFlexFormPanel() {
+        super();
         getColumnFormatter().setStyleName(0, FlexFormPanelTheme.StyleName.FormFlexPanelLeftColumn.name());
         getColumnFormatter().setStyleName(1, FlexFormPanelTheme.StyleName.FormFlexPanelRightColumn.name());
-    }
-
-    public TwoColumnFlexFormPanel() {
-        this(null);
     }
 
     @Override

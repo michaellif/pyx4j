@@ -59,15 +59,8 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 
 public class BasicFlexFormPanel extends FlexTable implements IValidatable {
 
-    private final String title;
-
-    public BasicFlexFormPanel(String title) {
-        this.title = title;
-        setStyleName(FormFlexPanel.name());
-    }
-
     public BasicFlexFormPanel() {
-        this(null);
+        setStyleName(FormFlexPanel.name());
     }
 
     public void setHR(int row, int col, int span) {
@@ -188,11 +181,6 @@ public class BasicFlexFormPanel extends FlexTable implements IValidatable {
             }
         }
         return components;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
     }
 
     @Override

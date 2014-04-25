@@ -106,10 +106,6 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     }
 
-    public WizardStep addStep(final BasicFlexFormPanel panel) {
-        return addStep(panel, panel.getTitle());
-    }
-
     public WizardStep addStep(Widget content, String tabTitle) {
         WizardStep step = new WizardStep(content, tabTitle);
         addStep(step);
