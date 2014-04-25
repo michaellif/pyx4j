@@ -83,7 +83,11 @@ public class LegalNoticeCandidateDataGrid extends VistaDataGrid<LegalNoticeCandi
                 new ArrayList<Object>()))) {
             @Override
             public SelectionPresetModel getValue() {
-                return LegalNoticeCandidateDataGrid.this.presenter.getSelectionState();
+                if (LegalNoticeCandidateDataGrid.this.presenter != null) {
+                    return LegalNoticeCandidateDataGrid.this.presenter.getSelectionState();
+                } else {
+                    return new MultiSelectorCellModelFactory(new ArrayList<Object>()).makeNone();
+                }
             }
         };
         selectionColumnHeader.setUpdater(new ValueUpdater<SelectionPresetModel>() {
