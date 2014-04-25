@@ -37,9 +37,9 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
         super(CommunicationGroup.class, view);
 
         roleFolder = new CrmRoleFolder(this);
-        selectTab(addTab(createInfoTab(), i18n.tr("Communication Settings")));
-
         mainTab = createInfoTab();
+        selectTab(addTab(mainTab, i18n.tr("Communication Settings")));
+
     }
 
     private TwoColumnFlexFormPanel createInfoTab() {
