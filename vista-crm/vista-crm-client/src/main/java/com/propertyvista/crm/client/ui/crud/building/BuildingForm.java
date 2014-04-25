@@ -41,6 +41,8 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -52,7 +54,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.ui.prime.form.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -183,66 +184,72 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     private FormPanel createGeneralTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        formPanel.h1(row++, 0, 2, i18n.tr("Building Summary"));
-        formPanel.insert(row, 0, proto().propertyCode()).decorate().componentWidth(120);
-        formPanel.insert(row++, 1, proto().info().shape()).decorate().componentWidth(90);
+        formPanel.h1(i18n.tr("Building Summary"));
+        formPanel.append(Location.Left, proto().propertyCode()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().info().shape()).decorate().componentWidth(90);
 
-        formPanel.insert(row, 0, proto().info().name()).decorate().componentWidth(150);
-        formPanel.insert(row++, 1, proto().info().totalStoreys()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().info().name()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().totalStoreys()).decorate().componentWidth(50);
 
-        formPanel.insert(row, 0, proto().info().type()).decorate().componentWidth(120);
-        formPanel.insert(row++, 1, proto().info().residentialStoreys()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().info().type()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().info().residentialStoreys()).decorate().componentWidth(50);
 
-        formPanel.insert(row, 0, proto().propertyManager()).decorate().componentWidth(160);
-        formPanel.insert(row++, 1, proto().externalId()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().propertyManager()).decorate().componentWidth(160);
+        formPanel.append(Location.Right, proto().externalId()).decorate().componentWidth(150);
 
         if (isEditable()) {
-            formPanel.insert(row, 0, proto().complex(), new CEntityLabel<Complex>()).decorate().componentWidth(150);
+            formPanel.append(Location.Left, proto().complex(), new CEntityLabel<Complex>()).decorate().componentWidth(150);
         } else {
-            formPanel.insert(row, 0, proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))).decorate()
+            formPanel.append(Location.Left, proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))).decorate()
                     .componentWidth(150);
         }
 
-        formPanel.insert(row++, 0, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate()
+        formPanel.append(Location.Left, proto().landlord(), new CEntityCrudHyperlink<Landlord>(AppPlaceEntityMapper.resolvePlace(Landlord.class))).decorate()
                 .componentWidth(150);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            formPanel.insert(row++, 1, proto().defaultProductCatalog()).decorate().componentWidth(50);
+            formPanel.append(Location.Right, proto().defaultProductCatalog()).decorate().componentWidth(50);
         }
-        formPanel.insert(row++, 1, proto().suspended()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().suspended()).decorate().componentWidth(50);
 
-        formPanel.h1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        formPanel.insert(row++, 0, 2, proto().info().address(), new AddressStructuredEditor(false));
+        formPanel.h1(proto().info().address().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().info().address(), new AddressStructuredEditor(false));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
 
-        formPanel.h1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
-        formPanel.insert(row++, 0, 2, inject(proto().geoLocation(), new GeoLocationEditor()));
+        formPanel.h1(proto().geoLocation().getMeta().getCaption());
+        formPanel.append(Location.Full, inject(proto().geoLocation(), new GeoLocationEditor()));
         return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private FormPanel createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        flexPanel.setH1(++row, 0, 2, i18n.tr("Information"));
-        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().structureType(), 15));
-        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().structureBuildYear(), 10));
-        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().constructionType(), 15));
-        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().foundationType(), 15));
-        flexPanel.setWidget(++row, 0, injectAndDecorate(proto().info().floorType(), 15));
+        formPanel.h1(i18n.tr("Information"));
 
-        row = 0;
-        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().landArea(), 15));
-        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().waterSupply(), 15));
-        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().centralAir(), 15));
-        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().centralHeat(), 15));
-        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().hasSprinklers(), 15));
-        flexPanel.setWidget(++row, 1, injectAndDecorate(proto().info().hasFireAlarm(), 15));
+        formPanel.append(Location.Left, proto().info().structureType()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().info().structureBuildYear()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().info().constructionType()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().info().foundationType()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().info().floorType()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().contacts().website()).decorate().componentWidth(200);
 
-        flexPanel.setWidget(++row, 0, 2, injectAndDecorate(proto().contacts().website(), true));
+        formPanel.append(Location.Right, proto().info().landArea()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().waterSupply()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().centralAir()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().centralHeat()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().hasSprinklers()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().hasFireAlarm()).decorate().componentWidth(150);
+
+        formPanel.h1(proto().amenities().getMeta().getCaption());
+
+        formPanel.append(Location.Full, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
+
+        formPanel.h1(proto().utilities().getMeta().getCaption());
+
+        formPanel.append(Location.Full, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
+
         get(proto().contacts().website()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
@@ -272,57 +279,46 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         });
 
-        flexPanel.setH1(++row, 0, 2, proto().amenities().getMeta().getCaption());
-        flexPanel.setWidget(++row, 0, 2, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
-
-        flexPanel.setH1(++row, 0, 2, proto().utilities().getMeta().getCaption());
-        flexPanel.setWidget(++row, 0, 2, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
-
-        return flexPanel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createMachanicalsTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private FormPanel createMachanicalsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Boilers"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Roofs"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+        formPanel.h4(i18n.tr("Elevators"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
+        formPanel.h4(i18n.tr("Boilers"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
+        formPanel.h4(i18n.tr("Roofs"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
 
-        return flexPanel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createAddOnsTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private FormPanel createAddOnsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+        formPanel.h4(i18n.tr("Parking"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
+        formPanel.h4(i18n.tr("Locker Areas"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
 
-        return flexPanel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createFinancialTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private FormPanel createFinancialTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        flexPanel.setBR(row++, 0, 2);
-        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().financial().dateAcquired(), 9));
-        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().financial().purchasePrice(), 10));
-        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().financial().marketPrice(), 10));
-        flexPanel.setBR(row++, 0, 1);
-        flexPanel.setWidget(row++, 0, injectAndDecorate(proto().merchantAccount(), 15));
+        formPanel.append(Location.Left, proto().financial().dateAcquired()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().financial().purchasePrice()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().financial().marketPrice()).decorate().componentWidth(100);
 
-        row = 1;
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalDate(), 9));
-        flexPanel.setWidget(row++, 1, injectAndDecorate(proto().financial().lastAppraisalValue(), 10));
-        flexPanel.setWidget(row++, 1,
-                inject(proto().financial().currency().name(), new FieldDecoratorBuilder(10).customLabel(i18n.tr("Currency Name")).build()));
+        formPanel.append(Location.Right, proto().financial().lastAppraisalDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().financial().lastAppraisalValue()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().financial().currency().name()).decorate().componentWidth(100).customLabel(i18n.tr("Currency Name"));
+
+        formPanel.br();
+        formPanel.append(Location.Left, injectAndDecorate(proto().merchantAccount(), 15));
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
@@ -332,22 +328,21 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             }
         });
 
-        return flexPanel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createMarketingTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private FormPanel createMarketingTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor(this)));
+        formPanel.h1(i18n.tr("Marketing Summary"));
+        formPanel.append(Location.Full, inject(proto().marketing(), new MarketingEditor(this)));
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-            flexPanel.setH1(++row, 0, 2, proto().ilsSummary().getMeta().getCaption());
-            flexPanel.setWidget(++row, 0, 2, inject(proto().ilsSummary(), new ILSSummaryFolder()));
+            formPanel.h1(proto().ilsSummary().getMeta().getCaption());
+            formPanel.append(Location.Full, inject(proto().ilsSummary(), new ILSSummaryFolder()));
         }
 
-        flexPanel.setH1(++row, 0, 2, i18n.tr("Images"));
+        formPanel.h1(i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
                 GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder()) {
             @Override
@@ -368,17 +363,17 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             }
         };
         imageSlider.setImageSize(240, 160);
-        flexPanel.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
+        formPanel.append(Location.Full, inject(proto().media(), imageSlider));
 
         ilsEmailProfilePanel = createILSEmailProfilePanel();
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-            flexPanel.setH1(++row, 0, 2, i18n.tr("ILS Vendor Profile"));
-            flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
+            formPanel.h1(i18n.tr("ILS Vendor Profile"));
+            formPanel.append(Location.Full, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
 
-            flexPanel.setWidget(++row, 0, 2, ilsEmailProfilePanel);
+            formPanel.append(Location.Full, ilsEmailProfilePanel);
         }
 
-        return flexPanel;
+        return formPanel;
     }
 
     private TwoColumnFlexFormPanel createCatalogTab() {

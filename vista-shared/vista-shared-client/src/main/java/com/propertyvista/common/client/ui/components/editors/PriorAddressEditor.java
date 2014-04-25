@@ -19,8 +19,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.ui.prime.form.FormPanel;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
@@ -39,15 +40,10 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
     protected IsWidget createContent() {
         FormPanel main = internalCreateContent();
 
-        int row0 = main.getRowCount();
+        main.hr();
 
-        int row1 = row0 + 1;
-        main.hr(++row0, 0, 2);
-
-        main.insert(++row0, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(10).build()));
-        main.insert(++row0, 0, inject(proto().moveOutDate(), new FieldDecoratorBuilder(10).build()));
-
-        int col = 1;
+        main.append(Location.Left, inject(proto().moveInDate(), new FieldDecoratorBuilder(10).build()));
+        main.append(Location.Left, inject(proto().moveOutDate(), new FieldDecoratorBuilder(10).build()));
 
         CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) inject(proto().rented(), new FieldDecoratorBuilder(15).build());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
@@ -57,12 +53,12 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
             }
         });
 
-        main.insert(++row1, col, rentedComponent);
-        main.insert(++row1, col, inject(proto().payment(), new FieldDecoratorBuilder(8).build()));
-        main.insert(++row1, col, inject(proto().propertyCompany(), new FieldDecoratorBuilder(20).build()));
-        main.insert(++row1, col, inject(proto().managerName(), new FieldDecoratorBuilder(20).build()));
-        main.insert(++row1, col, inject(proto().managerPhone(), new FieldDecoratorBuilder(20).build()));
-        main.insert(++row1, col, inject(proto().managerEmail(), new FieldDecoratorBuilder(20).build()));
+        main.append(Location.Right, rentedComponent);
+        main.append(Location.Right, inject(proto().payment(), new FieldDecoratorBuilder(8).build()));
+        main.append(Location.Right, inject(proto().propertyCompany(), new FieldDecoratorBuilder(20).build()));
+        main.append(Location.Right, inject(proto().managerName(), new FieldDecoratorBuilder(20).build()));
+        main.append(Location.Right, inject(proto().managerPhone(), new FieldDecoratorBuilder(20).build()));
+        main.append(Location.Right, inject(proto().managerEmail(), new FieldDecoratorBuilder(20).build()));
 
         return main;
     }

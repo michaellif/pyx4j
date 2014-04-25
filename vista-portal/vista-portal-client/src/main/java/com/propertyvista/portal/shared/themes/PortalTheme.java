@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
+import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -182,6 +183,13 @@ public class PortalTheme extends Theme {
                 style.addProperty("font-style", "italic");
                 addStyle(style);
 
+            }
+        });
+
+        addTheme(new FormPanelTheme() {
+            @Override
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
         });
 

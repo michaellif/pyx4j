@@ -21,7 +21,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
@@ -62,19 +64,17 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        main.setWidth("100%");
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 16));
-        main.setWidget(row, 1, injectAndDecorate(proto().visibility(), 10));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
+        formPanel.append(Location.Right, proto().visibility()).decorate().componentWidth(100);
 
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+        formPanel.append(Location.Full, proto().description()).decorate();
 
         // marketing address
-        main.setH1(++row, 0, 2, proto().marketingAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().useCustomAddress(), true));
-        main.setWidget(++row, 0, 2, inject(proto().marketingAddress(), addressEditor));
+        formPanel.h1(proto().marketingAddress().getMeta().getCaption());
+        formPanel.append(Location.Full, injectAndDecorate(proto().useCustomAddress(), true));
+        formPanel.append(Location.Full, inject(proto().marketingAddress(), addressEditor));
         get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -83,12 +83,14 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
         });
 
         // marketing contacts
-        main.setH1(++row, 0, 2, proto().marketingContacts().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
-        main.setWidget(++row, 0, 2, inject(proto().marketingContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
-        main.setWidget(++row, 0, 2, inject(proto().marketingContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
+        formPanel.h1(proto().marketingContacts().getMeta().getCaption());
+        formPanel.append(Location.Full, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
+        formPanel.append(Location.Full,
+                inject(proto().marketingContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
+        formPanel.append(Location.Full,
+                inject(proto().marketingContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
 
-        return main;
+        return formPanel;
     }
 
     private void setAddressEditorState(boolean useCustomizedAddress) {

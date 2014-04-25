@@ -22,8 +22,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.ui.prime.form.FormPanel;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -49,22 +50,20 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
     protected FormPanel internalCreateContent() {
         FormPanel content = new FormPanel(this);
 
-        int row = -1;
         if (showUnit) {
-            content.insert(++row, 0, proto().suiteNumber()).decorate().componentWidth(100);
+            content.append(Location.Left, proto().suiteNumber()).decorate().componentWidth(100);
         }
-        content.insert(++row, 0, proto().streetNumber()).decorate().componentWidth(100);
-        content.insert(++row, 0, proto().streetNumberSuffix()).decorate().componentWidth(100);
-        content.insert(++row, 0, proto().streetName()).decorate().componentWidth(160);
-        content.insert(++row, 0, proto().streetType()).decorate().componentWidth(100);
-        content.insert(++row, 0, proto().streetDirection()).decorate().componentWidth(100);
+        content.append(Location.Left, proto().streetNumber()).decorate().componentWidth(100);
+        content.append(Location.Left, proto().streetNumberSuffix()).decorate().componentWidth(100);
+        content.append(Location.Left, proto().streetName()).decorate().componentWidth(160);
+        content.append(Location.Left, proto().streetType()).decorate().componentWidth(100);
+        content.append(Location.Left, proto().streetDirection()).decorate().componentWidth(100);
 
-        row = -1;
-        content.insert(++row, 1, proto().city()).decorate().componentWidth(150);
-        content.insert(++row, 1, proto().county()).decorate().componentWidth(150);
-        content.insert(++row, 1, proto().province()).decorate().componentWidth(150);
-        content.insert(++row, 1, proto().country()).decorate().componentWidth(150);
-        content.insert(++row, 1, proto().postalCode()).decorate().componentWidth(100);
+        content.append(Location.Right, proto().city()).decorate().componentWidth(150);
+        content.append(Location.Right, proto().county()).decorate().componentWidth(150);
+        content.append(Location.Right, proto().province()).decorate().componentWidth(150);
+        content.append(Location.Right, proto().country()).decorate().componentWidth(150);
+        content.append(Location.Right, proto().postalCode()).decorate().componentWidth(100);
 
         CComponent<?, Country, ?> country = get(proto().country());
         CComponent<?, Province, ?> province = get(proto().province());
