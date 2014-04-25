@@ -206,4 +206,20 @@ public class DateUtils extends TimeUtils {
         }
         throw new RuntimeException("undetected date format [" + str + "]");
     }
+
+    public static Date detectDateformat(String str, String... patterns) throws ParseException {
+        for (String pattern : patterns) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                Date dateObj = dateFormat.parse(str);
+                if (!str.equals(dateFormat.format(dateObj))) {
+                    continue;
+                }
+                return dateObj;
+            } catch (ParseException ignore) {
+                continue;
+            }
+        }
+        throw new ParseException("Undetected date format [" + str + "]", 0);
+    }
 }
