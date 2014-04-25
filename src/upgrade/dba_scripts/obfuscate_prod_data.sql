@@ -109,7 +109,7 @@ BEGIN
         WHERE   usr = 6;
         
         UPDATE  _admin_.admin_pmc_yardi_credential
-        SET     service_urlbase = 'http://yardi.birchwoodsoftwaregroup.com/Voyager60/',
+        SET     service_urlbase = 'http://yardi.birchwoodsoftwaregroup.com:8080/voyager6008sp17/',
                 resident_transactions_service_url = NULL,
                 sys_batch_service_url = NULL,
                 maintenance_requests_service_url = NULL;
@@ -128,8 +128,9 @@ BEGIN
            
                 
         FOR v_schema_name IN 
-        SELECT  namespace 
-        FROM    _admin_.admin_pmc
+        SELECT  a.namespace 
+        FROM    _admin_.admin_pmc a
+        JOIN    pg_catalog.pg_namespace n ON (a.namespace = n.nspname)
         WHERE   status != 'Created'
         LOOP
         
