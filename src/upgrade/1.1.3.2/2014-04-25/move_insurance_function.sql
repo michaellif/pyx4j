@@ -273,7 +273,7 @@ BEGIN
     IF (v_errors > 0 )
     THEN
         
-        RAISE ERROR 'Errors detected in insurance migration';
+        RAISE EXCEPTION 'Errors detected in insurance migration';
     END IF;
     
     
