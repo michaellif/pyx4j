@@ -49,7 +49,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
@@ -74,61 +73,64 @@ public class FormPanel implements IsWidget {
         return fluidPanel.asWidget();
     }
 
-    public void hr() {
+    public Widget hr() {
         HTML space = new HTML("&nbsp;");
         space.setStyleName(FormPanelHR.name());
         fluidPanel.append(Location.Full, space);
+        return space;
     }
 
-    public void br() {
-        fluidPanel.append(Location.Full, new HTML("&nbsp;"));
+    public Widget br() {
+        HTML space = new HTML("&nbsp;");
+        fluidPanel.append(Location.Full, space);
+        return space;
     }
 
-    public void h1(String caption) {
-        h1(caption, null);
+    public Widget h1(String caption) {
+        return h1(caption, null);
     }
 
-    public void h1(ImageResource image, String caption) {
-        h1(image, caption, null);
+    public Widget h1(ImageResource image, String caption) {
+        return h1(image, caption, null);
     }
 
-    public void h1(String caption, Widget actionWidget) {
-        h1(null, caption, actionWidget);
+    public Widget h1(String caption, Widget actionWidget) {
+        return h1(null, caption, actionWidget);
     }
 
-    public void h1(ImageResource image, String caption, Widget actionWidget) {
-        hx(image, caption, actionWidget, FormPanelH1Image, FormPanelH1Label, FormPanelH1);
+    public Widget h1(ImageResource image, String caption, Widget actionWidget) {
+        return hx(image, caption, actionWidget, FormPanelH1Image, FormPanelH1Label, FormPanelH1);
     }
 
-    public void h2(String caption) {
-        h2(caption, null);
+    public Widget h2(String caption) {
+        return h2(caption, null);
     }
 
-    public void h2(String caption, Widget actionWidget) {
-        hx(caption, actionWidget, null, FormPanelH2Label, FormPanelH2);
+    public Widget h2(String caption, Widget actionWidget) {
+        return hx(caption, actionWidget, null, FormPanelH2Label, FormPanelH2);
     }
 
-    public void h3(String caption) {
-        h3(caption, null);
+    public Widget h3(String caption) {
+        return h3(caption, null);
     }
 
-    public void h3(String caption, Widget actionWidget) {
-        hx(caption, actionWidget, null, FormPanelH3Label, FormPanelH3);
+    public Widget h3(String caption, Widget actionWidget) {
+        return hx(caption, actionWidget, null, FormPanelH3Label, FormPanelH3);
     }
 
-    public void h4(String caption) {
-        h4(caption, null);
+    public Widget h4(String caption) {
+        return h4(caption, null);
     }
 
-    public void h4(String caption, Widget actionWidget) {
-        hx(caption, actionWidget, null, FormPanelH4Label, FormPanelH4);
+    public Widget h4(String caption, Widget actionWidget) {
+        return hx(caption, actionWidget, null, FormPanelH4Label, FormPanelH4);
     }
 
-    private void hx(String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
-        hx(null, caption, actionWidget, imageStyle, labelStyle, headerStyle);
+    private Widget hx(String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
+        return hx(null, caption, actionWidget, imageStyle, labelStyle, headerStyle);
     }
 
-    private void hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
+    private Widget hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
         header.getElement().getStyle().setTextAlign(TextAlign.LEFT);
@@ -157,6 +159,7 @@ public class FormPanel implements IsWidget {
         }
 
         fluidPanel.append(Location.Full, header);
+        return header;
     }
 
     public void append(Location location, IsWidget widget) {
