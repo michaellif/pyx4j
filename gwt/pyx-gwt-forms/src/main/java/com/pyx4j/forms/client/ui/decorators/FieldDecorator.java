@@ -36,7 +36,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
@@ -92,17 +91,17 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
     private FlowPanel contentPanel;
 
-    private FlexTable containerPanel;
+    private FlowPanel containerPanel;
 
     private final SimplePanel contentHolder;
 
-    private final Builder builder;
+    private final Builder<?> builder;
 
     public FieldDecorator() {
-        this(new Builder());
+        this(new Builder<>());
     }
 
-    protected FieldDecorator(final Builder builder) {
+    protected FieldDecorator(final Builder<?> builder) {
         this.builder = builder;
         setStyleName(WidgetDecorator.name());
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -175,23 +174,20 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
 
-        containerPanel = new FlexTable();
+        containerPanel = new FlowPanel();
         containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        containerPanel.setWidget(0, 1, contentPanel);
-        containerPanel.setWidget(1, 1, validationLabel);
-        containerPanel.setWidget(2, 1, noteLabel);
+        containerPanel.add(contentPanel);
+        containerPanel.add(validationLabel);
+        containerPanel.add(noteLabel);
 
         add(labelHolder);
         add(containerPanel);
 
+        //TODO implement component alignment
         HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
                 : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
-
-        containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
-        containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
-        containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
@@ -409,11 +405,11 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
     }
 
-    protected Builder getBuilder() {
+    protected Builder<?> getBuilder() {
         return builder;
     }
 
-    public static class Builder {
+    public static class Builder<E extends Builder<E>> {
 
         public enum Alignment {
             left, right, center
@@ -454,65 +450,65 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         }
 
         @Deprecated
-        public Builder labelWidth(double labelWidth) {
+        public E labelWidth(double labelWidth) {
             this.labelWidth = labelWidth + "em";
-            return this;
+            return (E) this;
         }
 
         @Deprecated
-        public Builder componentWidth(double componentWidth) {
+        public E componentWidth(double componentWidth) {
             this.componentWidth = componentWidth + "em";
-            return this;
+            return (E) this;
         }
 
-        public Builder labelWidth(String labelWidth) {
+        public E labelWidth(String labelWidth) {
             this.labelWidth = labelWidth;
-            return this;
+            return (E) this;
         }
 
-        public Builder labelAlignment(Alignment labelAlignment) {
+        public E labelAlignment(Alignment labelAlignment) {
             this.labelAlignment = labelAlignment;
-            return this;
+            return (E) this;
         }
 
-        public Builder labelPosition(LabelPosition position) {
+        public E labelPosition(LabelPosition position) {
             this.labelPosition = position;
-            return this;
+            return (E) this;
         }
 
-        public Builder customLabel(String customLabel) {
+        public E customLabel(String customLabel) {
             this.customLabel = customLabel;
-            return this;
+            return (E) this;
         }
 
-        public Builder contentWidth(String contentWidth) {
+        public E contentWidth(String contentWidth) {
             this.contentWidth = contentWidth;
-            return this;
+            return (E) this;
         }
 
-        public Builder componentWidth(String componentWidth) {
+        public E componentWidth(String componentWidth) {
             this.componentWidth = componentWidth;
-            return this;
+            return (E) this;
         }
 
-        public Builder componentAlignment(Alignment componentAlignment) {
+        public E componentAlignment(Alignment componentAlignment) {
             this.componentAlignment = componentAlignment;
-            return this;
+            return (E) this;
         }
 
-        public Builder mandatoryMarker(boolean visible) {
+        public E mandatoryMarker(boolean visible) {
             this.mandatoryMarker = visible;
-            return this;
+            return (E) this;
         }
 
-        public Builder useLabelSemicolon(boolean useLabelSemicolon) {
+        public E useLabelSemicolon(boolean useLabelSemicolon) {
             this.useLabelSemicolon = useLabelSemicolon;
-            return this;
+            return (E) this;
         }
 
-        public Builder assistantWidget(Widget assistantWidget) {
+        public E assistantWidget(Widget assistantWidget) {
             this.assistantWidget = assistantWidget;
-            return this;
+            return (E) this;
         }
 
     }

@@ -99,6 +99,10 @@ public class FluidPanel implements IsWidget {
         return contentPanel;
     }
 
+    public void setVisible(boolean visible) {
+        contentPanel.setVisible(visible);
+    }
+
     protected class CellPanel extends FlowPanel {
 
         private Location location;

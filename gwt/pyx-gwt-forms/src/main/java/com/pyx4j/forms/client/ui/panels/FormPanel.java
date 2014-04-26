@@ -180,6 +180,10 @@ public class FormPanel implements IsWidget {
         append(location, comp);
     }
 
+    public void setVisible(boolean visible) {
+        fluidPanel.setVisible(visible);
+    }
+
     public class CompOptions {
 
         private final CField<?, ?> comp;
@@ -215,7 +219,7 @@ public class FormPanel implements IsWidget {
         }
     }
 
-    public class FieldDecoratorOptions extends FieldDecorator.Builder {
+    public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
 
         public static final int LABEL_WIDTH = 180;
 
@@ -230,9 +234,18 @@ public class FormPanel implements IsWidget {
             componentWidth(dual ? CONTENT_WIDTH_DUAL + "px" : CONTENT_WIDTH + "px");
         }
 
-        public Builder componentWidth(int componentWidthPx) {
+        public FieldDecoratorOptions componentWidth(int componentWidthPx) {
             return componentWidth(componentWidthPx + "px");
         }
+
+        public FieldDecoratorOptions labelWidth(int labelWidthPx) {
+            return labelWidth(labelWidthPx + "px");
+        }
+
+        public FieldDecoratorOptions contentWidth(int contentWidthPx) {
+            return contentWidth(contentWidthPx + "px");
+        }
+
     }
 
 }
