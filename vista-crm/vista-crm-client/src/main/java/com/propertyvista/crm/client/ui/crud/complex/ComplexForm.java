@@ -18,7 +18,9 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,11 +42,12 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     }
 
-    private TwoColumnFlexFormPanel createGeneralPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private FormPanel createGeneralPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(0, 0, injectAndDecorate(proto().name()));
-        panel.setWidget(0, 1, injectAndDecorate(proto().website()));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Right, proto().website()).decorate();
+
         get(proto().website()).addComponentValidator(new AbstractComponentValidator<String>() {
 
             @Override
@@ -74,14 +77,14 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
             }
         });
 
-        return panel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createBuildingsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private FormPanel createBuildingsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(0, 0, 2, inject(proto().buildings(), new ComplexBuildingFolder(this)));
+        formPanel.append(Location.Full, proto().buildings(), new ComplexBuildingFolder(this));
 
-        return panel;
+        return formPanel;
     }
 }
