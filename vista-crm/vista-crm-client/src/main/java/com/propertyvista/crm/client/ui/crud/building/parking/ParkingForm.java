@@ -15,7 +15,8 @@ package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -37,23 +38,21 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
         setTabEnabled(tab, !isEditable());
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private FormPanel createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
-        main.setWidget(++row, 0, injectAndDecorate(proto().type(), 10));
-        main.setWidget(++row, 0, injectAndDecorate(proto().levels(), 3));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().levels()).decorate().componentWidth(50);
 
-        row = -1;
-        main.setWidget(++row, 1, injectAndDecorate(proto().totalSpaces(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().regularSpaces(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().disabledSpaces(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().wideSpaces(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().narrowSpaces(), 3));
+        formPanel.append(Location.Right, proto().totalSpaces()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().regularSpaces()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().disabledSpaces()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().wideSpaces()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().narrowSpaces()).decorate().componentWidth(50);
 
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+        formPanel.append(Location.Full, proto().description()).decorate();
 
-        return main;
+        return formPanel;
     }
 }

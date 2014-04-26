@@ -19,7 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
@@ -54,18 +55,16 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            main.setWidget(++row, 0, injectAndDecorate(proto().person()));
-            main.setWidget(++row, 0, injectAndDecorate(proto().person().email()));
+            formPanel.append(Location.Left, proto().person()).decorate();
+            formPanel.append(Location.Left, proto().person().email()).decorate();
 
-            row = -1;
-            main.setWidget(++row, 1, injectAndDecorate(proto().person().workPhone()));
-            main.setWidget(++row, 1, injectAndDecorate(proto().person().mobilePhone()));
-            main.setWidget(++row, 1, injectAndDecorate(proto().person().homePhone()));
+            formPanel.append(Location.Right, proto().person().workPhone()).decorate();
+            formPanel.append(Location.Right, proto().person().mobilePhone()).decorate();
+            formPanel.append(Location.Right, proto().person().homePhone()).decorate();
 
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+            formPanel.append(Location.Full, proto().description()).decorate();
 
             // repopulate related fields from selected employee:
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {
@@ -82,7 +81,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
                 }
             });
 
-            return main;
+            return formPanel;
         }
     }
 }

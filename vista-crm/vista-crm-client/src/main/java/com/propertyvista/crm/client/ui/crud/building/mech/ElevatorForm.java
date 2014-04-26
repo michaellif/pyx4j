@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,24 +31,22 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
     }
 
     @Override
-    protected TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    protected FormPanel createGeneralTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, injectAndDecorate(proto().type(), 15));
-        main.setWidget(++row, 0, injectAndDecorate(proto().make(), 15));
-        main.setWidget(++row, 0, injectAndDecorate(proto().model(), 15));
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+        formPanel.h1(i18n.tr("Information"));
+        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(160);
+        formPanel.append(Location.Left, proto().make()).decorate().componentWidth(160);
+        formPanel.append(Location.Left, proto().model()).decorate().componentWidth(160);
+        formPanel.append(Location.Right, proto().build()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().isForMoveInOut()).decorate().componentWidth(80);
 
-        main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().license(), new LicenseEditor()));
+        formPanel.append(Location.Full, proto().description()).decorate();
 
-        row = 0;
-        main.setWidget(++row, 1, injectAndDecorate(proto().build(), 9));
-        main.setWidget(++row, 1, injectAndDecorate(proto().isForMoveInOut(), 5));
+        formPanel.h1(proto().license().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().license(), new LicenseEditor());
 
-        return main;
+        return formPanel;
     }
 
     @Override

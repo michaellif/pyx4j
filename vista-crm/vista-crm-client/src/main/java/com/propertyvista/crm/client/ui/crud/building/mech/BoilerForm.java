@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,23 +33,21 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
     }
 
     @Override
-    protected TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    protected IsWidget createGeneralTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, injectAndDecorate(proto().type(), 15));
-        main.setWidget(++row, 0, injectAndDecorate(proto().make(), 15));
-        main.setWidget(++row, 0, injectAndDecorate(proto().model(), 15));
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+        formPanel.h1(i18n.tr("Information"));
+        formPanel.append(Location.Left, injectAndDecorate(proto().type(), 15));
+        formPanel.append(Location.Left, injectAndDecorate(proto().make(), 15));
+        formPanel.append(Location.Left, injectAndDecorate(proto().model(), 15));
+        formPanel.append(Location.Full, injectAndDecorate(proto().description(), true));
 
-        main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().license(), new LicenseEditor()));
+        formPanel.h1(proto().license().getMeta().getCaption());
+        formPanel.append(Location.Full, inject(proto().license(), new LicenseEditor()));
 
-        row = 0;
-        main.setWidget(++row, 1, injectAndDecorate(proto().build(), 9));
+        formPanel.append(Location.Right, injectAndDecorate(proto().build(), 9));
 
-        return main;
+        return formPanel;
     }
 
     @Override

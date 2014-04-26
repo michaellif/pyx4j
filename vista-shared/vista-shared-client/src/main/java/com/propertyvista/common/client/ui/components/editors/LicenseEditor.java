@@ -16,7 +16,9 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.property.vendor.License;
@@ -29,15 +31,13 @@ public class LicenseEditor extends CForm<License> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().number(), new FieldDecoratorBuilder(15).build()));
+        formPanel.append(Location.Left, proto().number()).decorate().componentWidth(150);
 
-        row = -1;
-        main.setWidget(++row, 1, inject(proto().expiration(), new FieldDecoratorBuilder(9).build()));
-        main.setWidget(++row, 1, inject(proto().renewal(), new FieldDecoratorBuilder(9).build()));
+        formPanel.append(Location.Right, proto().expiration()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().renewal()).decorate().componentWidth(120);
 
-        return main;
+        return formPanel;
     }
 }

@@ -15,15 +15,13 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
@@ -149,19 +147,16 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                content.setWidget(++row, 0, injectAndDecorate(proto().eventDate()));
-                content.setWidget(++row, 0, injectAndDecorate(proto().startTime()));
-                content.setWidget(++row, 0, injectAndDecorate(proto().endTime()));
-                content.setWidget(++row, 0, injectAndDecorate(proto().appointmentRequired()));
+                formPanel.append(Location.Left, proto().eventDate()).decorate();
+                formPanel.append(Location.Left, proto().startTime()).decorate();
+                formPanel.append(Location.Left, proto().endTime()).decorate();
+                formPanel.append(Location.Left, proto().appointmentRequired()).decorate();
 
-                content.setWidget(0, 1, injectAndDecorate(proto().details()));
-                content.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
-                content.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+                formPanel.append(Location.Right, proto().details()).decorate();
 
-                return content;
+                return formPanel;
             }
         }
     }

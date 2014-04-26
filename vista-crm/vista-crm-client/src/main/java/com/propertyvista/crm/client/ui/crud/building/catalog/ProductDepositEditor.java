@@ -25,7 +25,8 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.domain.financial.ARCode;
@@ -42,20 +43,18 @@ public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
         CEntityComboBox<ARCode> chargeCodeSelector;
 
-        int row = -1;
-        content.setWidget(++row, 0, injectAndDecorate(proto().enabled(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().depositType()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)));
+        formPanel.append(Location.Left, proto().enabled()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().depositType()).decorate();
+        formPanel.append(Location.Left, proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)).decorate();
 
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+        formPanel.append(Location.Right, proto().valueType()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, valueHolder);
 
-        row = 0;
-        content.setWidget(++row, 1, injectAndDecorate(proto().valueType(), 10));
-        content.setWidget(++row, 1, valueHolder);
+        formPanel.append(Location.Full, proto().description()).decorate();
 
         // tweaks:
         chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
@@ -74,7 +73,7 @@ public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
             }
         });
 
-        return content;
+        return formPanel;
     }
 
     private void setStateEnabled(boolean enabled) {

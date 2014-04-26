@@ -15,7 +15,8 @@ package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -37,21 +38,19 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         setTabEnabled(tab, !isEditable());
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private FormPanel createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
-        main.setWidget(++row, 0, injectAndDecorate(proto().levels(), 3));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().levels()).decorate().componentWidth(30);
 
-        row = -1;
-        main.setWidget(++row, 1, injectAndDecorate(proto().totalLockers(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().regularLockers(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().largeLockers(), 3));
-        main.setWidget(++row, 1, injectAndDecorate(proto().smallLockers(), 3));
+        formPanel.append(Location.Right, proto().totalLockers()).decorate().componentWidth(30);
+        formPanel.append(Location.Right, proto().regularLockers()).decorate().componentWidth(30);
+        formPanel.append(Location.Right, proto().largeLockers()).decorate().componentWidth(30);
+        formPanel.append(Location.Right, proto().smallLockers()).decorate().componentWidth(30);
 
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().description(), true));
+        formPanel.append(Location.Full, proto().description()).decorate();
 
-        return main;
+        return formPanel;
     }
 }
