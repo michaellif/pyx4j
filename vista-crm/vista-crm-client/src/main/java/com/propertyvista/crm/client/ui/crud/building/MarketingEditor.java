@@ -122,13 +122,12 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
 
-            content.setWidget(++row, 0, injectAndDecorate(proto().value()));
-            content.setWidget(row, 1, injectAndDecorate(proto().description()));
+            formPanel.append(Location.Left, proto().value()).decorate();
+            formPanel.append(Location.Right, proto().description()).decorate();
 
-            return content;
+            return formPanel;
         }
     }
 

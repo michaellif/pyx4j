@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -53,7 +52,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -97,7 +95,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private Tab catalogTab = null;
 
-    private TwoColumnFlexFormPanel ilsEmailProfilePanel;
+    private FormPanel ilsEmailProfilePanel;
 
     public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
@@ -352,14 +350,13 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(entryForm);
 
-                int row = -1;
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().caption(), new FieldDecoratorBuilder(8, 15, 16).build()));
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(8, 15, 16).build()));
-                main.setWidget(++row, 0, 2, entryForm.inject(entryForm.proto().visibility(), new FieldDecoratorBuilder(8, 7, 16).build()));
+                formPanel.append(Location.Full, entryForm.proto().caption()).decorate().labelWidth(80).componentWidth(150).contentWidth(160);
+                formPanel.append(Location.Full, entryForm.proto().description()).decorate().labelWidth(80).componentWidth(150).contentWidth(160);
+                formPanel.append(Location.Full, entryForm.proto().visibility()).decorate().labelWidth(80).componentWidth(70).contentWidth(160);
 
-                return main;
+                return formPanel.asWidget();
             }
         };
         imageSlider.setImageSize(240, 160);
@@ -376,31 +373,29 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createCatalogTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private FormPanel createCatalogTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Features"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
+        formPanel.h4(i18n.tr("Services"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
+        formPanel.h4(i18n.tr("Features"));
+        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            flexPanel.setH4(row++, 0, 2, i18n.tr("Concessions"));
-            flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+            formPanel.h4(i18n.tr("Concessions"));
+            formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         }
 
-        return flexPanel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createContactTab() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private FormPanel createContactTab() {
+        FormPanel flexPanel = new FormPanel(this);
 
-        flexPanel.setH1(++row, 0, 2, proto().contacts().organizationContacts().getMeta().getCaption());
-        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable(), this)));
+        flexPanel.h1(proto().contacts().organizationContacts().getMeta().getCaption());
+        flexPanel.append(Location.Full, proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable(), this));
 
-        flexPanel.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
-        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
+        flexPanel.h1(proto().contacts().propertyContacts().getMeta().getCaption());
+        flexPanel.append(Location.Full, proto().contacts().propertyContacts(), new PropertyContactFolder());
 
         return flexPanel;
     }
@@ -473,29 +468,27 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
                 CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 160);
 
-                content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
-                content.setWidget(0, 1, injectAndDecorate(proto().title(), 10, 50, 55));
-                content.setWidget(1, 0, injectAndDecorate(proto().description(), 10, 50, 55));
-                content.getFlexCellFormatter().setRowSpan(0, 0, 2);
+                formPanel.append(Location.Left, inject(proto().frontImage().file(), frontImage));
+                formPanel.append(Location.Right, injectAndDecorate(proto().title(), 10, 50, 55));
+                formPanel.append(Location.Full, injectAndDecorate(proto().description(), 10, 50, 55));
 
-                return content;
+                return formPanel;
             }
         }
     }
 
-    private TwoColumnFlexFormPanel createILSEmailProfilePanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private FormPanel createILSEmailProfilePanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setH1(++row, 0, 2, i18n.tr("ILS Email Profile"));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().ilsEmail().maxAds(), 5));
-        panel.setWidget(row, 1, injectAndDecorate(proto().ilsEmail().disabled()));
-        return panel;
+        formPanel.h1(i18n.tr("ILS Email Profile"));
+        formPanel.append(Location.Left, proto().ilsEmail().maxAds()).decorate().componentWidth(60);
+        formPanel.append(Location.Right, proto().ilsEmail().disabled()).decorate();
+        return formPanel;
     }
 
     private class ILSProfileBuildingFolder extends VistaBoxFolder<ILSProfileBuilding> {
@@ -546,22 +539,21 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                content.setWidget(++row, 0, 2, injectAndDecorate(proto().vendor(), new CEnumLabel(), true));
-                content.setWidget(++row, 0, injectAndDecorate(proto().maxAds(), 5));
-                content.setWidget(row, 1, injectAndDecorate(proto().disabled()));
+                formPanel.append(Location.Full, proto().vendor(), new CEnumLabel()).decorate();
+                formPanel.append(Location.Left, proto().maxAds()).decorate().componentWidth(50);
+                formPanel.append(Location.Right, proto().disabled()).decorate();
 
-                content.setH1(++row, 0, 2, proto().preferredContacts().getMeta().getCaption());
-                content.setWidget(++row, 0, 2,
+                formPanel.h1(proto().preferredContacts().getMeta().getCaption());
+                formPanel.append(Location.Full,
                         inject(proto().preferredContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
-                content.setWidget(++row, 0, 2,
+                formPanel.append(Location.Full,
                         inject(proto().preferredContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
-                content.setWidget(++row, 0, 2,
+                formPanel.append(Location.Full,
                         inject(proto().preferredContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
 
-                return content;
+                return formPanel;
             }
         }
     }
