@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -28,12 +28,9 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
     public LeaseTerminationPolicyForm(IForm<LeaseTerminationPolicyDTO> view) {
         super(LeaseTerminationPolicyDTO.class, view);
 
-        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel();
-        int row = -1;
-
-        general.setWidget(++row, 0, inject(proto().periodOfNotice(), new FieldDecoratorBuilder(5).build()));
-
-        addTab(general, i18n.tr("General"));
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().periodOfNotice()).decorate().componentWidth(80);
+        addTab(formPanel, i18n.tr("General"));
     }
 
 }
