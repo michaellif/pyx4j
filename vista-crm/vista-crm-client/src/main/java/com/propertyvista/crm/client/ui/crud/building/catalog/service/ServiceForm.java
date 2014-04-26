@@ -16,7 +16,8 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -43,39 +44,33 @@ public class ServiceForm extends CrmEntityForm<Service> {
         addTab(createEligibilityTab(), i18n.tr("Eligibility"));
     }
 
-    public TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    public FormPanel createGeneralTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, injectAndDecorate(proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class)), 20));
-        content.setWidget(++row, 0, injectAndDecorate(proto().version().name(), 20));
-        content.setWidget(++row, 0, injectAndDecorate(proto().version().description(), 20));
+        formPanel.h1(i18n.tr("Information"));
+        formPanel.append(Location.Left, proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))).decorate()
+                .componentWidth(200);
+        formPanel.append(Location.Left, proto().version().name()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().version().description()).decorate().componentWidth(200);
 
-        int rrow = 0;
-        content.setWidget(++rrow, 1, injectAndDecorate(proto().expiredFrom(), 10));
-        content.setWidget(++rrow, 1, injectAndDecorate(proto().version().price(), 10));
-        content.setWidget(++rrow, 1, injectAndDecorate(proto().version().availableOnline(), 4));
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            content.setWidget(++rrow, 0, injectAndDecorate(proto().defaultCatalogItem(), new CBooleanLabel(), 4));
+            formPanel.append(Location.Left, proto().defaultCatalogItem(), new CBooleanLabel()).decorate().componentWidth(40);
         }
 
-        row = Math.max(row, rrow);
-        content.setH1(++row, 0, 2, i18n.tr("Deposits"));
-        headerDeposits = content.getWidget(row, 0);
+        formPanel.append(Location.Right, proto().expiredFrom()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().version().price()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().version().availableOnline()).decorate().componentWidth(40);
 
-        content.setH3(++row, 0, 2, i18n.tr("Last Month Rent"));
-        headerLMR = content.getWidget(row, 0);
-        content.setWidget(++row, 0, 2, inject(proto().version().depositLMR(), new ProductDepositEditor()));
+        headerDeposits = formPanel.h1(i18n.tr("Deposits"));
+        headerLMR = formPanel.h3(i18n.tr("Last Month Rent"));
+        formPanel.append(Location.Full, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            content.setH3(++row, 0, 2, i18n.tr("Move In"));
-            headerMoveIn = content.getWidget(row, 0);
-            content.setWidget(++row, 0, 2, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
+            headerMoveIn = formPanel.h3(i18n.tr("Move In"));
+            formPanel.append(Location.Full, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
 
-            content.setH3(++row, 0, 2, i18n.tr("Security"));
-            headerSecurity = content.getWidget(row, 0);
-            content.setWidget(++row, 0, 2, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
+            headerSecurity = formPanel.h3(i18n.tr("Security"));
+            formPanel.append(Location.Full, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
         }
 
         // tweaks:
@@ -92,29 +87,28 @@ public class ServiceForm extends CrmEntityForm<Service> {
             dpe.get(dpe.proto().depositType()).setEditable(false);
         }
 
-        return content;
+        return formPanel;
     }
 
-    public TwoColumnFlexFormPanel createItemsTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    public FormPanel createItemsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(0, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
+        formPanel.append(Location.Full, proto().version().items(), new ServiceItemFolder(this));
 
-        return content;
+        return formPanel;
     }
 
-    public TwoColumnFlexFormPanel createEligibilityTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    public FormPanel createEligibilityTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setH1(++row, 0, 1, i18n.tr("Features"));
-        content.setWidget(++row, 0, inject(proto().version().features(), new ServiceFeatureFolder(isEditable(), this)));
+        formPanel.h1(i18n.tr("Features"));
+        formPanel.append(Location.Full, proto().version().features(), new ServiceFeatureFolder(isEditable(), this));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            content.setH1(++row, 0, 1, i18n.tr("Concessions"));
-            content.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
+            formPanel.h1(i18n.tr("Concessions"));
+            formPanel.append(Location.Full, proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this));
         }
-        return content;
+        return formPanel;
     }
 
     @Override

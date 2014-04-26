@@ -19,10 +19,9 @@ import java.util.List;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
@@ -86,6 +85,8 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 break;
             case Locker:
                 buildingElementClass = LockerArea.class;
+                break;
+            default:
                 break;
             }
 
