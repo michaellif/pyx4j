@@ -17,15 +17,17 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -42,17 +44,16 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         addTab(createEdtorFormTab(), i18n.tr("Settings"));
     }
 
-    private TwoColumnFlexFormPanel createEdtorFormTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    private IsWidget createEdtorFormTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().numberOfRequiredIDs(), new FieldDecoratorBuilder(3).build()));
-        content.setWidget(row, 1, inject(proto().mandatoryProofOfIncome(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().numberOfRequiredIDs()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().mandatoryProofOfIncome()).decorate().componentWidth(120);
 
-        content.setH3(++row, 0, 2, proto().allowedIDs().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));
+        formPanel.h3(proto().allowedIDs().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().allowedIDs(), new IdentificationDocumentFolder());
 
-        return content;
+        return formPanel;
     }
 
     @Override

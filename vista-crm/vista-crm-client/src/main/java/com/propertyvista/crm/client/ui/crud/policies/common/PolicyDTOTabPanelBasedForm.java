@@ -34,7 +34,9 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -69,10 +71,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
     }
 
-    private TwoColumnFlexFormPanel createScopeTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        content.setHeight("3em");
-        int row = -1;
+    private IsWidget createScopeTab() {
+        FormPanel formPanel = new FormPanel(this);
 
         selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
@@ -102,8 +102,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         });
         selectPolicyScopeBox.setDecorator(new FieldDecoratorBuilder(10).customLabel(i18n.tr("Scope")).labelWidth(8).build());
 
-        content.setWidget(++row, 0, selectPolicyScopeBox);
-        content.setWidget(++row, 0, inject(proto().node(), new PolicyNodeEditor()));
+        formPanel.append(Location.Left, selectPolicyScopeBox);
+        formPanel.append(Location.Left, proto().node(), new PolicyNodeEditor());
         if (isEditable()) {
             get(proto().node()).inheritViewable(false);
         }
@@ -143,7 +143,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             }
         });
 
-        return content;
+        return formPanel;
     }
 
     @Override
