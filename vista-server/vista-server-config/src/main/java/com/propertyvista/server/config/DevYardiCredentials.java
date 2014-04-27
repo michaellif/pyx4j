@@ -22,7 +22,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class DevYardiCredentials {
 
-    enum YardiCredential {
+    public static enum YardiCredentialId {
         localNew( //
                 "gran0002, aven2175", //
                 "http://yardi.birchwoodsoftwaregroup.com:8080/Voyager6008sp17", //
@@ -48,6 +48,28 @@ public class DevYardiCredentials {
                 "52673", //
                 "aspdb04", //
                 "afqoml_live" //
+
+        ),
+
+        prod(//
+             // ".pvcogir", //
+                ".pvgreen", //
+                "https://yardi.starlightinvest.com/voyager6008sp17", //
+                "propvist", //
+                "file://yardi-starlight-prod-credentials.properties", //
+                "SLDB02", //
+                "starlight" //
+
+        ),
+
+        sterlingTest(//
+                ".ssres", //
+                "http://yardi.sterlingkaramar.com/Voysp17/", //
+                "propvist", //
+                "file://yardi-sterling-test-credentials.properties", //
+                "skyardidb", //
+                "Sandbox_020614" //
+
         );
 
         final String propertyListCodes;
@@ -62,7 +84,7 @@ public class DevYardiCredentials {
 
         final String database;
 
-        private YardiCredential( //
+        private YardiCredentialId( //
                 String propertyListCodes, //
                 String serviceURLBase, //
                 String username, //
@@ -80,10 +102,10 @@ public class DevYardiCredentials {
     }
 
     public static PmcYardiCredential getTestPmcYardiCredential() {
-        return getTestPmcYardiCredential(YardiCredential.localNew);
+        return getTestPmcYardiCredential(YardiCredentialId.localNew);
     }
 
-    public static PmcYardiCredential getTestPmcYardiCredential(YardiCredential yc) {
+    public static PmcYardiCredential getTestPmcYardiCredential(YardiCredentialId yc) {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
         if (yc != null) {
@@ -101,7 +123,7 @@ public class DevYardiCredentials {
 
     public static List<PmcYardiCredential> getTestPmcYardiCredentialList() {
         List<PmcYardiCredential> ycList = new ArrayList<PmcYardiCredential>();
-        for (YardiCredential yc : YardiCredential.values()) {
+        for (YardiCredentialId yc : YardiCredentialId.values()) {
             PmcYardiCredential cr = getTestPmcYardiCredential(yc);
             // to go by wire
             cr.password().obfuscatedNumber().set(cr.password().number());

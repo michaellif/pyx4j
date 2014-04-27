@@ -72,12 +72,12 @@ public class SystemConfig extends HostConfig {
         }
     }
 
-    private ProxyConfig defaultProxy() {
+    public static ProxyConfig getDevProxy() {
         return new ProxyConfig("dev.birchwoodsoftwaregroup.com", 8888, "sys-dev-env", "he8rEcr9");
     }
 
     private void setVistaCaledonProxy() {
-        this.caledonProxy = defaultProxy();
+        this.caledonProxy = getDevProxy();
         log.info("Caledon proxy defined {}:{} ", this.getCaledonProxy().getHost(), this.getCaledonProxy().getPort());
     }
 
@@ -86,7 +86,7 @@ public class SystemConfig extends HostConfig {
     }
 
     private void setVistaEquifaxProxy() {
-        this.equifaxProxy = defaultProxy();
+        this.equifaxProxy = getDevProxy();
         log.info("Equifax proxy defined {}:{} ", this.getEquifaxProxy().getHost(), this.getEquifaxProxy().getPort());
     }
 
