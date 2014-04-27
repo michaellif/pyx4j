@@ -342,44 +342,46 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
                 }
-                boolean first = true;
-                for (Object item : items) {
-                    if (first) {
+                if (items.isEmpty()) {
+                    criterionSql.append(" FALSE ");
+                } else {
+                    boolean first = true;
+                    for (Object item : items) {
+                        if (first) {
 
-                        if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
-                            // Add Discriminator parameter
-                            criterionSql.append(" = ? ");
+                            if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
+                                // Add Discriminator parameter
+                                criterionSql.append(" = ? ");
 
-                            // TODO make a better access to DiscriminatorQueryValueBindAdapter
-                            IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
+                                // TODO make a better access to DiscriminatorQueryValueBindAdapter
+                                IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
 
-                            BindHolder itemBindHolder = new BindHolder();
-                            itemBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
-                                    propertyCriterion.getRestriction(), entityProto);
+                                BindHolder itemBindHolder = new BindHolder();
+                                itemBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
+                                        propertyCriterion.getRestriction(), entityProto);
 
-                            itemBindHolder.bindValue = entityProto;
-                            bindParams.add(itemBindHolder);
+                                itemBindHolder.bindValue = entityProto;
+                                bindParams.add(itemBindHolder);
 
-                            criterionSql.append(" AND ").append(secondPersistenceName);
+                                criterionSql.append(" AND ").append(secondPersistenceName);
 
-                            // Replace the adapter for values.
-                            bindHolder.adapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
+                                // Replace the adapter for values.
+                                bindHolder.adapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
+                            }
+
+                            criterionSql.append(" IN (");
+
+                            first = false;
+                        } else {
+                            criterionSql.append(",");
                         }
+                        criterionSql.append(" ? ");
 
-                        criterionSql.append(" IN (");
-
-                        first = false;
-                    } else {
-                        criterionSql.append(",");
+                        BindHolder itemBindHolder = new BindHolder();
+                        itemBindHolder.adapter = bindHolder.adapter;
+                        itemBindHolder.bindValue = item;
+                        bindParams.add(itemBindHolder);
                     }
-                    criterionSql.append(" ? ");
-
-                    BindHolder itemBindHolder = new BindHolder();
-                    itemBindHolder.adapter = bindHolder.adapter;
-                    itemBindHolder.bindValue = item;
-                    bindParams.add(itemBindHolder);
-                }
-                if (!first) {
                     criterionSql.append(")");
                 }
                 return;

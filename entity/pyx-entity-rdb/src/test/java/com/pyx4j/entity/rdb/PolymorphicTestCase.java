@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -488,6 +489,17 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             List<ReferenceNotOwnerEntity> found = srv.query(criteria);
             Assert.assertEquals("retrieved size", 1, found.size());
             Assert.assertEquals(ent11, found.get(0).reference());
+        }
+
+        // Empty IN condition
+        if (false) {
+            List<Concrete1Entity> inValues = Collections.emptyList();
+
+            EntityQueryCriteria<ReferenceNotOwnerEntity> criteria = EntityQueryCriteria.create(ReferenceNotOwnerEntity.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().reference(), inValues);
+            List<ReferenceNotOwnerEntity> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 0, found.size());
         }
     }
 

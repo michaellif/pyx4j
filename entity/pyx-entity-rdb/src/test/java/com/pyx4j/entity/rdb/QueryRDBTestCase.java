@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -104,6 +105,15 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
             List<Employee> empsRetrived = srv.query(criteria);
             Assert.assertEquals("result set size", dataSize, empsRetrived.size());
+        }
+
+        if (false) {
+            List<Employee> noEmps = Collections.emptyList();
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.in(criteria.proto().id(), noEmps);
+
+            List<Employee> empsRetrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 0, empsRetrived.size());
         }
     }
 
