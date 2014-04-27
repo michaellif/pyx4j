@@ -177,6 +177,10 @@ public abstract class HostConfig {
         this.proxy.password = password;
     }
 
+    public void setProxy(ProxyConfig proxy) {
+        this.proxy = proxy;
+    }
+
     public ProxyConfig getProxyConfig() {
         return proxy;
     }
