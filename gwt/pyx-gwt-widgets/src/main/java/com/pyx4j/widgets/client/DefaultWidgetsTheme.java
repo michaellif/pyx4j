@@ -307,7 +307,7 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
     }
