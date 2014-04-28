@@ -32,7 +32,8 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -134,13 +135,12 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
             CLabel<String> site = new CLabel<String>();
             site.setEditable(false);
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().socialSite(), site, 10, true));
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().siteUrl(), 35, true));
+            formPanel.append(Location.Left, proto().socialSite(), site).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().siteUrl()).decorate();
             get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
                 public FieldValidationError isValid() {
@@ -152,7 +152,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
                     return null;
                 }
             });
-            return main;
+            return formPanel;
         }
     }
 }

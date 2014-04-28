@@ -20,7 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
@@ -41,59 +42,59 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
     public GeneralForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = 0;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setH1(row++, 0, 2, i18n.tr("Web Skin"));
+        formPanel.h1(i18n.tr("Web Skin"));
 
         CComboBox<Skin> skinComp = new CComboBox<Skin>();
         skinComp.setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
-        content.setWidget(row++, 0, injectAndDecorate(proto().skin(), skinComp, 10));
-        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().object1(), 10));
-        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().object2(), 10));
-        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().contrast1(), 10));
-        content.setWidget(row++, 0, injectAndDecorate(proto().sitePalette().contrast2(), 10));
+        formPanel.append(Location.Left, proto().skin(), skinComp).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().object1()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().object2()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().contrast1()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().sitePalette().contrast2()).decorate().componentWidth(120);
 
         // ---------------------------------------------------------------------------------------------------------------
 
-        content.setH1(row++, 0, 2, i18n.tr("Website"));
-        content.setWidget(row++, 0, injectAndDecorate(proto().enabled(), publicPortalSwitch, 10));
-        content.setWidget(row++, 0, injectAndDecorate(proto().disableMapView(), 10));
-        content.setWidget(row++, 0, injectAndDecorate(proto().disableBuildingDetails(), 10));
+        formPanel.h1(i18n.tr("Website"));
+
+        formPanel.append(Location.Left, proto().enabled(), publicPortalSwitch).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().disableMapView()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().disableBuildingDetails()).decorate().componentWidth(120);
 
         // --------------------------------------------------------------------------------------------------------------------
 
-        content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
-        content.setWidget(row++, 0, injectAndDecorate(proto().residentPortalEnabled(), 10));
+        formPanel.h1(i18n.tr("Resident Portal"));
+        formPanel.append(Location.Left, proto().residentPortalEnabled()).decorate().componentWidth(120);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
         // =====================================================================================================================
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
-        addTab(content, proto().locales().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().locales(), new AvailableLocaleFolder(isEditable()));
+        addTab(formPanel, proto().locales().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().pmcInfo(), new RichTextContentFolder(isEditable())));
-        addTab(content, proto().pmcInfo().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().pmcInfo(), new RichTextContentFolder(isEditable()));
+        addTab(formPanel, proto().pmcInfo().getMeta().getCaption());
 
         addTab(createCrmLogoTab(), proto().crmLogo().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
-        addTab(content, proto().socialLinks().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().socialLinks(), new SocialLinkFolder(isEditable()));
+        addTab(formPanel, proto().socialLinks().getMeta().getCaption());
     }
 
-    private TwoColumnFlexFormPanel createCrmLogoTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    private FormPanel createCrmLogoTab() {
+        FormPanel formPanel = new FormPanel(this);
 
         CImage file = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
         file.setImageSize(150, 100);
         file.setScaleMode(ScaleMode.Contain);
 
-        content.setWidget(0, 0, injectAndDecorate(proto().crmLogo().file(), file, 20));
+        formPanel.append(Location.Left, proto().crmLogo().file(), file).decorate();
 
-        return content;
+        return formPanel;
     }
 }

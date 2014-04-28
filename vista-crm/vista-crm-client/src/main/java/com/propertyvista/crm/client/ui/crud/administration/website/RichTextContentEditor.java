@@ -20,7 +20,8 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
@@ -46,25 +47,24 @@ public class RichTextContentEditor extends AccessoryEntityForm<HtmlContent> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
         if (selectableLocale) {
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, 10, true));
+            formPanel.append(Location.Left, proto().locale(), locale).decorate().componentWidth(120);
         } else {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, 10, true));
+            formPanel.append(Location.Left, proto().locale(), locale).decorate().componentWidth(120);
         }
         if (isEditable()) {
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().html(), editor, 60, true));
+            formPanel.append(Location.Full, proto().html(), editor).decorate();
         } else {
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().html(), new CLabel<String>(), 60, true));
+            formPanel.append(Location.Full, proto().html(), new CLabel<String>()).decorate();
         }
 
-        return main;
+        return formPanel;
     }
 }
