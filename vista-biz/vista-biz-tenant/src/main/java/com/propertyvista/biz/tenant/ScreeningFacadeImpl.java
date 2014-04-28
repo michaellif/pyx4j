@@ -115,7 +115,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
 
         if (rentAmount.compareTo(BigDecimal.ZERO) == 0) {
-            leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+            leaseApproval.recomendedDecision().setValue(SuggestedDecision.ManualReview);
             return;
         }
 
@@ -136,7 +136,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
 
         if (creditCheckCount == 0) {
-            leaseApproval.suggestedDecision().setValue(SuggestedDecision.RunCreditCheck);
+            leaseApproval.recomendedDecision().setValue(SuggestedDecision.RunCreditCheck);
         } else {
             leaseApproval.totalAmountApproved().setValue(amountApproved);
             BigDecimal percenrtageApproved = amountApproved.divide(rentAmount, RoundingMode.DOWN);
@@ -146,21 +146,21 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             leaseApproval.percenrtageApproved().setValue(percenrtageApproved);
 
             if (creditCheckResults.contains(CreditCheckResult.Decline)) {
-                leaseApproval.suggestedDecision().setValue(SuggestedDecision.Decline);
+                leaseApproval.recomendedDecision().setValue(SuggestedDecision.Decline);
             } else {
                 if (amountApproved.compareTo(rentAmount) >= 0) {
                     if (creditCheckResults.contains(CreditCheckResult.Review)) {
-                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+                        leaseApproval.recomendedDecision().setValue(SuggestedDecision.ManualReview);
                     } else {
-                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.Approve);
+                        leaseApproval.recomendedDecision().setValue(SuggestedDecision.Approve);
                     }
                 } else {
                     if (creditCheckResults.contains(CreditCheckResult.Review)) {
-                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+                        leaseApproval.recomendedDecision().setValue(SuggestedDecision.ManualReview);
                     } else if (creditCheckResults.contains(CreditCheckResult.ReviewNoInformationAvalable)) {
-                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.ManualReview);
+                        leaseApproval.recomendedDecision().setValue(SuggestedDecision.ManualReview);
                     } else {
-                        leaseApproval.suggestedDecision().setValue(SuggestedDecision.RequestGuarantor);
+                        leaseApproval.recomendedDecision().setValue(SuggestedDecision.RequestGuarantor);
                     }
                 }
             }
