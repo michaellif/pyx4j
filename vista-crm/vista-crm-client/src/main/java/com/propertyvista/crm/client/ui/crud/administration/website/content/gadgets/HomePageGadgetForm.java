@@ -23,6 +23,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -54,16 +56,14 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         panelMap.put(GadgetType.testimonials, getTestimContentEditor());
         panelMap.put(GadgetType.promo, getPromoContentEditor());
 
-        TwoColumnFlexFormPanel generalPanel = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n.tr("General"));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().status()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, mainPanel);
 
-        int row = 0;
-        generalPanel.setH1(row++, 0, 2, i18n.tr("General"));
-        generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().name(), 10, true));
-        generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().area(), 10, true));
-        generalPanel.setWidget(row++, 0, 2, injectAndDecorate(proto().status(), 10, true));
-        generalPanel.setWidget(row++, 0, 2, mainPanel);
-
-        selectTab(addTab(generalPanel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
     }
 
@@ -97,11 +97,10 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<CustomGadgetContent> editor = new CForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = 0;
-                main.setH1(row++, 0, 2, proto().htmlContent().getMeta().getCaption());
-                main.setWidget(row++, 0, 2, inject(proto().htmlContent(), new RichTextContentEditor(true)));
-                return main;
+                FormPanel formPanel = new FormPanel(this);
+                formPanel.h1(proto().htmlContent().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().htmlContent(), new RichTextContentEditor(true));
+                return formPanel;
             }
         };
         return editor;
@@ -111,11 +110,10 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<NewsGadgetContent> editor = new CForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = 0;
-                main.setH1(row++, 0, 2, proto().news().getMeta().getCaption());
-                main.setWidget(row++, 0, 2, inject(proto().news(), new NewsFolder(isEditable())));
-                return main;
+                FormPanel formPanel = new FormPanel(this);
+                formPanel.h1(proto().news().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().news(), new NewsFolder(isEditable()));
+                return formPanel;
             }
         };
         return editor;
@@ -125,11 +123,10 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<TestimonialsGadgetContent> editor = new CForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = 0;
-                main.setH1(row++, 0, 2, proto().testimonials().getMeta().getCaption());
-                main.setWidget(row++, 0, 2, inject(proto().testimonials(), new TestimonialFolder(isEditable())));
-                return main;
+                FormPanel formPanel = new FormPanel(this);
+                formPanel.h1(proto().testimonials().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().testimonials(), new TestimonialFolder(isEditable()));
+                return formPanel;
             }
         };
         return editor;
@@ -139,11 +136,10 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<PromoGadgetContent> editor = new CForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = 0;
-                main.setH1(row++, 0, 2, i18n.tr("Promotions"));
-                main.setWidget(row++, 0, 2, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
-                return main;
+                FormPanel formPanel = new FormPanel(this);
+                formPanel.h1(i18n.tr("Promotions"));
+                formPanel.append(Location.Full, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
+                return formPanel;
             }
         };
         return editor;

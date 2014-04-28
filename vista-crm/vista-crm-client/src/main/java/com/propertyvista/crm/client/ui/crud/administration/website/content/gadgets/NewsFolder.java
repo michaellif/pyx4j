@@ -17,7 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -42,15 +43,14 @@ public class NewsFolder extends VistaBoxFolder<News> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), 10));
-            main.setWidget(++row, 0, injectAndDecorate(proto().caption(), 20));
-            main.setWidget(++row, 0, injectAndDecorate(proto().content(), 50));
-            main.setWidget(++row, 0, injectAndDecorate(proto().date(), 9));
+            formPanel.append(Location.Left, proto().locale()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().caption()).decorate();
+            formPanel.append(Location.Left, proto().content()).decorate();
+            formPanel.append(Location.Left, proto().date()).decorate().componentWidth(120);
 
-            return main;
+            return formPanel;
         }
     }
 }
