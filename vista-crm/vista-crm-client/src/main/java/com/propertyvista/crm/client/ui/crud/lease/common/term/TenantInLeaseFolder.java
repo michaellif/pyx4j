@@ -30,8 +30,8 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -317,6 +317,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 @Override
                 public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
                     get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
+                    if (getParentForm() instanceof LeaseTermForm) {
+                        ((LeaseTermForm) getParentForm()).getGuarantorsFolder().updateTenantList();
+                    }
                 }
             });
 

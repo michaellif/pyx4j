@@ -52,6 +52,7 @@ import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
@@ -243,17 +244,19 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(enforceAgeOfMajority);
         }
 
+        @SuppressWarnings("unchecked")
         void updateTenantList() {
             if (get(proto().tenant()) instanceof CComboBox<?>) {
-                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
-                combo.setOptions(getLeaseCustomerTenants());
+                ((CComboBox<Tenant>) get(proto().tenant())).setOptions(getLeaseTenants());
             }
         }
 
-        private List<Tenant> getLeaseCustomerTenants() {
+        private List<Tenant> getLeaseTenants() {
             List<Tenant> tenants = new ArrayList<Tenant>();
             for (LeaseTermTenant t : getLeaseTermTenants()) {
-                tenants.add(t.leaseParticipant());
+                if (!Role.Dependent.equals(t.role().getValue())) {
+                    tenants.add(t.leaseParticipant());
+                }
             }
             return tenants;
         }

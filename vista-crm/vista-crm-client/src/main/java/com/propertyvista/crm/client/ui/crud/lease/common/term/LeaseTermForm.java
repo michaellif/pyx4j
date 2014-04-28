@@ -121,6 +121,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
     }
 
+    public TenantInLeaseFolder getTenantsFolder() {
+        return tenantsFolder;
+    }
+
+    public GuarantorInLeaseFolder getGuarantorsFolder() {
+        return guarantorsFolder;
+    }
+
     private TwoColumnFlexFormPanel createDetailsTab() {
         // Lease details: -------------------------------------------------------------------------------------------------------
         TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();

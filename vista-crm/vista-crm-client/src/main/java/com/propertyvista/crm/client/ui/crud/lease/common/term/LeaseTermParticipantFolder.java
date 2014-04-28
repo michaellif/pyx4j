@@ -46,6 +46,10 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         setOrderable(false);
     }
 
+    protected CrmEntityForm<?> getParentForm() {
+        return parentForm;
+    }
+
     @Override
     public IFolderItemDecorator<E> createItemDecorator() {
         BoxFolderItemDecorator<E> decor = (BoxFolderItemDecorator<E>) super.createItemDecorator();
