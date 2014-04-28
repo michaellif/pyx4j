@@ -59,21 +59,21 @@ public class BillForm extends AccessoryEntityForm<BillDTO> {
 
         if (!justPreviewBill) {
             formPanel.h1(i18n.tr("Info"));
-            formPanel.append(Location.Left, injectAndDecorate(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>()));
-            formPanel.append(Location.Left, injectAndDecorate(proto().billingCycle().building(), new CEntityLabel<Building>()));
-            formPanel.append(Location.Left, injectAndDecorate(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel()));
+            formPanel.append(Location.Left, proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>()).decorate();
+            formPanel.append(Location.Left, proto().billingCycle().building(), new CEntityLabel<Building>()).decorate();
+            formPanel.append(Location.Left, proto().billingCycle().billingType().billingPeriod(), new CEnumLabel()).decorate();
 
-            formPanel.append(Location.Right, injectAndDecorate(proto().billingCycle().billingCycleStartDate(), new CDateLabel()));
-            formPanel.append(Location.Right, injectAndDecorate(proto().billingCycle().billingCycleEndDate(), new CDateLabel()));
-            formPanel.append(Location.Right, injectAndDecorate(proto().billingCycle().targetBillExecutionDate(), new CDateLabel()));
+            formPanel.append(Location.Right, proto().billingCycle().billingCycleStartDate(), new CDateLabel()).decorate();
+            formPanel.append(Location.Right, proto().billingCycle().billingCycleEndDate(), new CDateLabel()).decorate();
+            formPanel.append(Location.Right, proto().billingCycle().targetBillExecutionDate(), new CDateLabel()).decorate();
 
             formPanel.h1(i18n.tr("Status"));
-            formPanel.append(Location.Left, injectAndDecorate(proto().billSequenceNumber(), new CNumberLabel()));
-            formPanel.append(Location.Left, injectAndDecorate(proto().dueDate(), new CDateLabel()));
-            formPanel.append(Location.Left, injectAndDecorate(proto().rejectReason(), new CEnumLabel()));
+            formPanel.append(Location.Left, proto().billSequenceNumber(), new CNumberLabel()).decorate();
+            formPanel.append(Location.Left, proto().dueDate(), new CDateLabel()).decorate();
+            formPanel.append(Location.Left, proto().rejectReason(), new CEnumLabel()).decorate();
 
-            formPanel.append(Location.Right, injectAndDecorate(proto().billType(), new CEnumLabel()));
-            formPanel.append(Location.Right, injectAndDecorate(proto().billStatus(), new CEnumLabel()));
+            formPanel.append(Location.Right, proto().billType(), new CEnumLabel()).decorate();
+            formPanel.append(Location.Right, proto().billStatus(), new CEnumLabel()).decorate();
         }
 
         if (!justPreviewBill) {
