@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseadjustment;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -22,9 +21,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -45,13 +44,10 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
     }
 
-    private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable())));
-
-        return panel;
+    private IsWidget createItemsPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable()));
+        return formPanel;
     }
 
     class LeaseAdjustmentPolicyItemFolder extends VistaBoxFolder<LeaseAdjustmentPolicyItem> {
@@ -96,16 +92,15 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                content.setWidget(++row, 0, 2, inject(proto().code(), new FieldDecoratorBuilder(20, true).build()));
+                formPanel.append(Location.Left, proto().code()).decorate().componentWidth(250);
                 get(proto().code()).setEditable(false);
 
-                content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(LeaseAdjustmentPolicyForm.this)));
+                formPanel.h3(proto().taxes().getMeta().getCaption());
+                formPanel.append(Location.Left, proto().taxes(), new TaxFolder(LeaseAdjustmentPolicyForm.this));
 
-                return content;
+                return formPanel;
             }
         }
     }

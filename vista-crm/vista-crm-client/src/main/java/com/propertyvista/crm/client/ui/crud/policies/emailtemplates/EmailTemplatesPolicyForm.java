@@ -38,9 +38,9 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
@@ -67,23 +67,21 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         addTab(createEmailTemplatesHeaderFooterPanel(), i18n.tr("Header and Footer"));
     }
 
-    private TwoColumnFlexFormPanel createEmailTemplatesHeaderFooterPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createEmailTemplatesHeaderFooterPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 2, inject(proto().header(), new FieldDecoratorBuilder(true).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().footer(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Full, proto().header()).decorate();
+        formPanel.append(Location.Full, proto().footer()).decorate();
 
-        return panel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createEmailTemplatesPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createEmailTemplatesPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 2, inject(proto().templates(), new EmailTemplateEditorFolder()));
+        formPanel.append(Location.Full, proto().templates(), new EmailTemplateEditorFolder());
 
-        return panel;
+        return formPanel;
     }
 
     private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {
@@ -122,17 +120,15 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
-
+                FormPanel formPanel = new FormPanel(this);
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, inject(proto().type(), new FieldDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, 2, inject(proto().subject(), new FieldDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, 2, inject(proto().useHeader(), new FieldDecoratorBuilder(true).build()));
-                content.setWidget(++row, 0, 2, inject(proto().useFooter(), new FieldDecoratorBuilder(true).build()));
+                formPanel.append(Location.Full, proto().type()).decorate();
+                formPanel.append(Location.Full, proto().subject()).decorate();
+                formPanel.append(Location.Full, proto().useHeader()).decorate();
+                formPanel.append(Location.Full, proto().useFooter()).decorate();
                 CRichTextArea editor = new CRichTextArea();
                 editor.setImageProvider(new SiteImageResourceProvider());
-                content.setWidget(++row, 0, 2, inject(proto().content(), editor, new FieldDecoratorBuilder(true).build()));
+                formPanel.append(Location.Full, proto().content(), editor).decorate();
                 if (isEditable()) {
                     // create variable selection button
                     final PushButton pb = editor.getNativeComponent().getEditor().getCustomButton();
@@ -174,7 +170,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                         }
                     });
                 }
-                return content;
+                return formPanel;
             }
 
             static class TemplateVarSelector extends PopupPanel {

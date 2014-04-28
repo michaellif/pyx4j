@@ -13,9 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -30,13 +32,12 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         addTab(createItemsPanel(), i18n.tr("Details"));
     }
 
-    private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createItemsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, inject(proto().annualInterestRate(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().securityDepositRefundWindow(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().annualInterestRate()).decorate();
+        formPanel.append(Location.Left, proto().securityDepositRefundWindow()).decorate();
 
-        return panel;
+        return formPanel;
     }
 }

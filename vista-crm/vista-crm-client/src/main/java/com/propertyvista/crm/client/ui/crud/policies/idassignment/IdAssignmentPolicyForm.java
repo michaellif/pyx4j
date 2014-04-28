@@ -14,18 +14,19 @@
 package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -44,13 +45,12 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         addTab(createItemsPanel(), i18n.tr("Items"));
     }
 
-    private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createItemsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, 2, inject(proto().editableItems(), new IdAssignmentItemFolder(isEditable())));
+        formPanel.append(Location.Left, proto().editableItems(), new IdAssignmentItemFolder(isEditable()));
 
-        return panel;
+        return formPanel;
     }
 
     private static class IdAssignmentItemFolder extends VistaTableFolder<IdAssignmentItem> {

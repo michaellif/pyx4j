@@ -38,7 +38,8 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -83,57 +84,51 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
     }
 
-    private TwoColumnFlexFormPanel createBillingPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private IsWidget createBillingPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().prorationMethod()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().confirmationMethod()).decorate().componentWidth(120);
 
-        int row = -1;
-
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().prorationMethod(), 10, true));
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().confirmationMethod(), 10, true));
-
-        panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
-        panel.setWidget(++row, 0, 2, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
+        formPanel.h3(proto().availableBillingTypes().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().availableBillingTypes(), new LeaseBillingTypeFolder());
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().prorationMethod()).setVisible(false);
             get(proto().confirmationMethod()).setVisible(false);
         }
 
-        return panel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createLateFeesPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private IsWidget createLateFeesPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        panel.setWidget(++row, 0, inject(proto().lateFee().baseFeeType(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().lateFee().baseFeeType()).decorate().componentWidth(120);
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.BaseFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<BaseFeeType> event) {
                 bindBaseFeeEditor(event.getValue(), false);
             }
         });
-        panel.setWidget(++row, 0, baseFeeHolder);
+        formPanel.append(Location.Left, baseFeeHolder);
 
-        row = -1;
-        panel.setWidget(++row, 1, inject(proto().lateFee().maxTotalFeeType(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().lateFee().maxTotalFeeType()).decorate().componentWidth(120);
         get(proto().lateFee().maxTotalFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.MaxTotalFeeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<MaxTotalFeeType> event) {
                 bindMaxFeeEditor(event.getValue(), false);
             }
         });
-        panel.setWidget(++row, 1, maxFeeHolder);
+        formPanel.append(Location.Left, maxFeeHolder);
 
-        return panel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createNsfFeesPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private IsWidget createNsfFeesPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().nsfFees(), new NsfFeeItemFolder(isEditable()));
 
-        panel.setWidget(0, 0, 2, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
-
-        return panel;
+        return formPanel;
     }
 
     @Override
@@ -305,20 +300,18 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
-                content.setWidget(++row, 0, inject(proto().billingPeriod(), new CLabel<BillingPeriod>(), new FieldDecoratorBuilder(15).labelWidth(20).build()));
-
-                content.setWidget(++row, 0, inject(proto().billingCycleStartDay(), startDay, new FieldDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().paymentDueDayOffset(), dueDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().finalDueDayOffset(), finalDueDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().billExecutionDayOffset(), billDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
-                content.setWidget(++row, 0, inject(proto().autopayExecutionDayOffset(), padExecDayOffset, new FieldDecoratorBuilder(15).labelWidth(20).build()));
+                FormPanel formPanel = new FormPanel(this);
+                formPanel.append(Location.Left, proto().billingPeriod(), new CLabel<BillingPeriod>()).decorate().componentWidth(200).labelWidth(250);
+                formPanel.append(Location.Left, proto().billingCycleStartDay(), startDay).decorate().componentWidth(200).labelWidth(250);
+                formPanel.append(Location.Left, proto().paymentDueDayOffset(), dueDayOffset).decorate().componentWidth(200).labelWidth(250);
+                formPanel.append(Location.Left, proto().finalDueDayOffset(), finalDueDayOffset).decorate().componentWidth(200).labelWidth(250);
+                formPanel.append(Location.Left, proto().billExecutionDayOffset(), billDayOffset).decorate().componentWidth(200).labelWidth(250);
+                formPanel.append(Location.Left, proto().autopayExecutionDayOffset(), padExecDayOffset).decorate().componentWidth(200).labelWidth(250);
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
                     get(proto().finalDueDayOffset()).setVisible(false);
                 }
-                return content;
+                return formPanel;
             }
 
             @Override

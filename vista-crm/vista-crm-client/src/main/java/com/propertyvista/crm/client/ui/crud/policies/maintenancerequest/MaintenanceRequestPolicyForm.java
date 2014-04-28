@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,9 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.components.boxes.LocalizedContentFolderBase;
@@ -37,14 +37,13 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
         addTab(createGeneralPanel(), i18n.tr("General"));
     }
 
-    private TwoColumnFlexFormPanel createGeneralPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createGeneralPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setH1(++row, 0, 2, proto().permissionToEnterNote().getMeta().getCaption());
-        panel.setWidget(++row, 0, 2, inject(proto().permissionToEnterNote(), new PermissionToEnterNoteFolder(isEditable())));
+        formPanel.h1(proto().permissionToEnterNote().getMeta().getCaption());
+        formPanel.append(Location.Left, proto().permissionToEnterNote(), new PermissionToEnterNoteFolder(isEditable()));
 
-        return panel;
+        return formPanel;
     }
 
     class PermissionToEnterNoteFolder extends LocalizedContentFolderBase<PermissionToEnterNote> {
@@ -55,13 +54,12 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
         @Override
         public IsWidget createEditorContent(CForm<PermissionToEnterNote> editor) {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(editor);
 
-            panel.setWidget(++row, 0, 2, editor.inject(proto().locale(), new CEntityLabel<AvailableLocale>(), new FieldDecoratorBuilder(10, true).build()));
-            panel.setWidget(++row, 0, 2, editor.inject(proto().text(), new FieldDecoratorBuilder(50, true).build()));
+            formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().text()).decorate();
 
-            return panel;
+            return formPanel;
         }
     }
 }

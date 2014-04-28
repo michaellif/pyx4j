@@ -15,10 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.resources.CrmResources;
@@ -34,19 +35,20 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         addTab(createItemsPanel(), i18n.tr("Policy"));
     }
 
-    private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createItemsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setWidget(++row, 0, inject(proto().version().bankruptcy(), new FieldDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().version().judgment(), new FieldDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().version().collection(), new FieldDecoratorBuilder(5).build()));
-        panel.setWidget(++row, 0, inject(proto().version().chargeOff(), new FieldDecoratorBuilder(5).build()));
+        formPanel.append(Location.Left, proto().version().bankruptcy()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().version().judgment()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().version().collection()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().version().chargeOff()).decorate().componentWidth(60);
 
-        panel.setH3(++row, 0, 2, i18n.tr("Help"));
-        panel.setWidget(++row, 0, 2, new HTML(CrmResources.INSTANCE.backgroundCheckHelp().getText()));
-        panel.getWidget(row, 0).getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        formPanel.h3(i18n.tr("Help"));
 
-        return panel;
+        HTML backgroundCheckHelp = new HTML(CrmResources.INSTANCE.backgroundCheckHelp().getText());
+        formPanel.append(Location.Left, backgroundCheckHelp);
+        backgroundCheckHelp.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+
+        return formPanel;
     }
 }

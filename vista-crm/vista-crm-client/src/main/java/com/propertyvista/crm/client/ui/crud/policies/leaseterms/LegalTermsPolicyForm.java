@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -30,28 +33,28 @@ public class LegalTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalTermsP
         addTab(createProspectPortalPrivacyPolicyPanel(), proto().prospectPortalPrivacyPolicy().getMeta().getCaption());
     }
 
-    private TwoColumnFlexFormPanel createResidentPortalTermsAndConditionsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
-        container.setWidget(0, 0, 2, inject(proto().residentPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable())));
-        return container;
+    private IsWidget createResidentPortalTermsAndConditionsPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().residentPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable()));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createResidentPortalPrivacyPolicyPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
-        container.setWidget(0, 0, 2, inject(proto().residentPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable())));
-        return container;
+    private IsWidget createResidentPortalPrivacyPolicyPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().residentPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable()));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createProspectPortalTermsAndConditionsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
-        container.setWidget(0, 0, 2, inject(proto().prospectPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable())));
-        return container;
+    private IsWidget createProspectPortalTermsAndConditionsPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().prospectPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable()));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createProspectPortalPrivacyPolicyPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
-        container.setWidget(0, 0, 2, inject(proto().prospectPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable())));
-        return container;
+    private IsWidget createProspectPortalPrivacyPolicyPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().prospectPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable()));
+        return formPanel;
     }
 
 }

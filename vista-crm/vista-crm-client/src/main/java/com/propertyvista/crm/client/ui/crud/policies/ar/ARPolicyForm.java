@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -32,14 +34,13 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
         addTab(createARPoliciesTab(), i18n.tr("AR Settings"));
     }
 
-    private TwoColumnFlexFormPanel createARPoliciesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setWidget(++row, 0, injectAndDecorate(proto().creditDebitRule(), 15));
+    private IsWidget createARPoliciesTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().creditDebitRule()).decorate().componentWidth(200);
 
-        content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, 2, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
+        formPanel.br();
+        formPanel.append(Location.Left, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
 
-        return content;
+        return formPanel;
     }
 }

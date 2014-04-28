@@ -13,13 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -43,24 +42,22 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
 
     }
 
-    private TwoColumnFlexFormPanel createTermsPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createTermsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        container.setH1(++row, 0, 2, proto().legal().getMeta().getCaption());
-        container.setWidget(++row, 0, 2, inject(proto().legal(), new LegalTermFolder(isEditable())));
+        formPanel.h1(proto().legal().getMeta().getCaption());
+        formPanel.append(Location.Left, proto().legal(), new LegalTermFolder(isEditable()));
 
-        return container;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationPanel() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createConfirmationPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        container.setH1(++row, 0, 2, proto().confirmation().getMeta().getCaption());
-        container.setWidget(++row, 0, 2, inject(proto().confirmation(), new ConfirmationTermFolder(isEditable())));
+        formPanel.h1(proto().confirmation().getMeta().getCaption());
+        formPanel.append(Location.Left, inject(proto().confirmation(), new ConfirmationTermFolder(isEditable())));
 
-        return container;
+        return formPanel;
     }
 
     private static class LegalTermFolder extends VistaBoxFolder<LeaseAgreementLegalTerm> {
@@ -82,13 +79,12 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().body(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FieldDecoratorBuilder(35).build()));
-                return main;
+                formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(250);
+                return formPanel;
             }
         }
     }
