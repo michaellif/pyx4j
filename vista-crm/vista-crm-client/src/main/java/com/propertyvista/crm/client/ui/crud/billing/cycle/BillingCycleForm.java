@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -35,51 +35,40 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     public BillingCycleForm(IForm<BillingCycleDTO> view) {
         super(BillingCycleDTO.class, view);
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().billingType()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().billingCycleStartDate()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().billingCycleEndDate()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().targetBillExecutionDate()));
+        formPanel.append(Location.Left, proto().billingType()).decorate();
+        formPanel.append(Location.Left, proto().billingCycleStartDate()).decorate();
+        formPanel.append(Location.Left, proto().billingCycleEndDate()).decorate();
+        formPanel.append(Location.Left, proto().targetBillExecutionDate()).decorate();
 
-        content.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        content.setWidget(++row, 0, injectAndDecorate(proto().stats().failed()));
-        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Failed));
+        formPanel.h2(i18n.tr("Statistics"));
+        formPanel.append(Location.Left, proto().stats().failed()).decorate();
+        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Failed));
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().stats().rejected()));
-        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Rejected));
+        formPanel.append(Location.Left, proto().stats().rejected()).decorate();
+        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Rejected));
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().stats().notConfirmed()));
-        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Finished));
+        formPanel.append(Location.Left, proto().stats().notConfirmed()).decorate();
+        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Finished));
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().stats().confirmed()));
-        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Confirmed));
+        formPanel.append(Location.Left, proto().stats().confirmed()).decorate();
+        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Confirmed));
 
-        content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, injectAndDecorate(proto().total()));
-        content.setWidget(row, 1, new ViewLeasesLink(false));
-        content.setWidget(++row, 0, injectAndDecorate(proto().notRun()));
-        content.setWidget(row, 1, new ViewLeasesLink(true));
+        formPanel.br();
+        formPanel.append(Location.Left, proto().total()).decorate();
+        formPanel.append(Location.Left, new ViewLeasesLink(false));
+        formPanel.append(Location.Left, proto().notRun()).decorate();
+        formPanel.append(Location.Left, new ViewLeasesLink(true));
 
-        content.setH2(++row, 0, 2, i18n.tr("AutoPay"));
-        content.setWidget(++row, 0, injectAndDecorate(proto().actualAutopayExecutionDate()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().targetAutopayExecutionDate()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().pads()));
-        content.setWidget(row, 1, new ViewPadLink());
+        formPanel.h2(i18n.tr("AutoPay"));
+        formPanel.append(Location.Left, proto().actualAutopayExecutionDate()).decorate();
+        formPanel.append(Location.Left, proto().targetAutopayExecutionDate()).decorate();
+        formPanel.append(Location.Left, proto().pads()).decorate();
+        formPanel.append(Location.Left, new ViewPadLink());
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("Billing Cycle")));
-    }
-
-    // builder specifically for this form (enlarge default label width)
-    protected class DecoratorBuilder extends FieldDecorator.Builder {
-
-        public DecoratorBuilder() {
-            super();
-            labelWidth(20);
-            componentWidth(15);
-        }
+        selectTab(addTab(formPanel, i18n.tr("Billing Cycle")));
     }
 
     private class ViewBillsLink extends Anchor {
