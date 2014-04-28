@@ -17,15 +17,16 @@ import java.math.BigDecimal;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -52,10 +53,9 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     public LeaseAdjustmentForm(IForm<LeaseAdjustment> view) {
         super(LeaseAdjustment.class, view);
 
-        BasicFlexFormPanel left = new BasicFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        left.setWidget(++row, 0, injectAndDecorate(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
+        formPanel.append(Location.Left, proto().code(), new CEntitySelectorHyperlink<ARCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(ARCode.class, getValue().getPrimaryKey());
@@ -73,26 +73,23 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                     }
                 };
             }
-        }, 25));
-        left.setWidget(++row, 0, injectAndDecorate(proto().amount(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().executionType(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().targetDate(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().receivedDate(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().description(), 25));
+        }).decorate();
+        formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().executionType()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().targetDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().receivedDate(), new CDateLabel()).decorate().componentWidth(90);
 
-        BasicFlexFormPanel right = new BasicFlexFormPanel();
-        row = -1;
-        right.setWidget(++row, 0, injectAndDecorate(proto().overwriteDefaultTax(), 5));
-        right.setWidget(++row, 0, taxHolder);
-        right.setWidget(++row, 0, injectAndDecorate(proto().taxType(), 10));
+        formPanel.append(Location.Right, proto().overwriteDefaultTax()).decorate().componentWidth(80);
+        formPanel.append(Location.Right, taxHolder);
+        formPanel.append(Location.Right, proto().taxType()).decorate().componentWidth(120);
         if (!isEditable()) {
-            right.setBR(++row, 0, 1);
-            right.setBR(++row, 0, 1);
-            right.setWidget(++row, 0, injectAndDecorate(proto()._total(), 10));
+            formPanel.append(Location.Right, new HTML("&nbsp;"));
+            formPanel.append(Location.Right, proto()._total()).decorate().componentWidth(120);
         }
 
+        formPanel.append(Location.Full, proto().description()).decorate();
+
         // tweak:
-        get(proto().receivedDate()).setViewable(true);
         get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<ExecutionType>() {
             @Override
             public void onValueChange(ValueChangeEvent<ExecutionType> event) {
@@ -118,24 +115,17 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             }
         });
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-
-        content.setWidget(0, 0, left);
-        content.setWidget(0, 1, right);
-        content.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        content.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
         if (!isEditable()) {
-            row = 0;
-            content.setHR(++row, 0, 2);
-            content.setWidget(++row, 0, injectAndDecorate(proto().created(), 10));
-            content.setWidget(row, 1, injectAndDecorate(proto().updated(), 10));
+            formPanel.hr();
 
-            content.setWidget(++row, 0, injectAndDecorate(proto().createdBy(), 25));
-            content.setWidget(row, 1, injectAndDecorate(proto().status(), 10));
+            formPanel.append(Location.Left, injectAndDecorate(proto().created(), 10));
+            formPanel.append(Location.Right, injectAndDecorate(proto().updated(), 10));
+
+            formPanel.append(Location.Left, injectAndDecorate(proto().createdBy(), 25));
+            formPanel.append(Location.Right, injectAndDecorate(proto().status(), 10));
         }
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 
