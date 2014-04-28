@@ -13,9 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,57 +31,56 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
     public SiteForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        TwoColumnFlexFormPanel content;
+        FormPanel formPanel;
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
-        selectTab(addTab(content, proto().siteTitles().getMeta().getCaption()));
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().siteTitles(), new SiteTitlesFolder(isEditable()));
+        selectTab(addTab(formPanel, proto().siteTitles().getMeta().getCaption()));
 
-        content = new TwoColumnFlexFormPanel();
-        content.setH4(0, 0, 2, i18n.tr("Recommended Logo size not to exceed: small - {0}, large - {1} pixels", "160x80", "300x90"));
-        content.setWidget(1, 0, 2, inject(proto().logo(), new SiteImageResourceFolder(isEditable())));
-        addTab(content, i18n.tr("Site Logos"));
+        formPanel = new FormPanel(this);
+        formPanel.h4(i18n.tr("Recommended Logo size not to exceed: small - {0}, large - {1} pixels", "160x80", "300x90"));
+        formPanel.append(Location.Full, proto().logo(), new SiteImageResourceFolder(isEditable()));
+        addTab(formPanel, i18n.tr("Site Logos"));
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
-        addTab(content, proto().slogan().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().slogan(), new RichTextContentFolder(isEditable()));
+        addTab(formPanel, proto().slogan().getMeta().getCaption());
 
         SiteImageSetFolder imageFolder = new SiteImageSetFolder(isEditable());
         imageFolder.setImageSize(690, 300);
         imageFolder.setThumbSize(230, 100);
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().banner(), imageFolder));
-        addTab(content, proto().banner().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().banner(), imageFolder);
+        addTab(formPanel, proto().banner().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
-        addTab(content, proto().metaTags().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().metaTags(), new MetaTagsFolder(isEditable()));
+        addTab(formPanel, proto().metaTags().getMeta().getCaption());
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().childPages(), new PageDescriptorFolder(this)));
-        selectTab(addTab(content, proto().childPages().getMeta().getCaption()));
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().childPages(), new PageDescriptorFolder(this));
+        selectTab(addTab(formPanel, proto().childPages().getMeta().getCaption()));
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, createGadgetPanel());
-        addTab(content, i18n.tr("Home Page Gadgets"));
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, createGadgetPanel());
+        addTab(formPanel, i18n.tr("Home Page Gadgets"));
 
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().cityIntroPages(), new CityIntroPageFolder(this)));
-        addTab(content, proto().cityIntroPages().getMeta().getCaption());
+        formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().cityIntroPages(), new CityIntroPageFolder(this));
+        addTab(formPanel, proto().cityIntroPages().getMeta().getCaption());
     }
 
-    private Widget createGadgetPanel() {
-        TwoColumnFlexFormPanel gadgetPanel = new TwoColumnFlexFormPanel();
-        int row = 0;
+    private IsWidget createGadgetPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        gadgetPanel.setH4(row++, 0, 2, i18n.tr("Narrow Page Gadgets:"));
-        gadgetPanel.setWidget(row++, 0, 2, inject(proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable())));
+        formPanel.h4(i18n.tr("Narrow Page Gadgets:"));
+        formPanel.append(Location.Full, proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable()));
 
-        gadgetPanel.setBR(row++, 0, 2);
+        formPanel.br();
 
-        gadgetPanel.setH4(row++, 0, 2, i18n.tr("Wide Page Gadgets:"));
-        gadgetPanel.setWidget(row++, 0, 2, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
+        formPanel.h4(i18n.tr("Wide Page Gadgets:"));
+        formPanel.append(Location.Full, proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable()));
 
-        return gadgetPanel;
+        return formPanel;
     }
 }
