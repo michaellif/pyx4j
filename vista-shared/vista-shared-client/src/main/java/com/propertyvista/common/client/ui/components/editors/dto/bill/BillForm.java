@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.editors.dto.bill;
 import java.math.BigDecimal;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -24,10 +23,10 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
@@ -42,20 +41,13 @@ public class BillForm extends AccessoryEntityForm<BillDTO> {
 
     private final boolean justPreviewBill;
 
-    private final boolean oneColumn;
-
     public BillForm() {
         this(false);
     }
 
     public BillForm(boolean justCurrentBill) {
-        this(justCurrentBill, false);
-    }
-
-    public BillForm(boolean justCurrentBill, boolean oneColumn) {
         super(BillDTO.class);
         this.justPreviewBill = justCurrentBill;
-        this.oneColumn = oneColumn;
 
         setEditable(false);
         setViewable(true);
@@ -63,80 +55,66 @@ public class BillForm extends AccessoryEntityForm<BillDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        int col = oneColumn ? 0 : 1;
-        int span = oneColumn ? 1 : 2;
+        FormPanel formPanel = new FormPanel(this);
 
         if (!justPreviewBill) {
-            content.setH1(++row, 0, span, i18n.tr("Info"));
-            content.setWidget(++row, 0, injectAndDecorate(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>()));
-            content.setWidget(++row, 0, injectAndDecorate(proto().billingCycle().building(), new CEntityLabel<Building>()));
-            content.setWidget(++row, 0, injectAndDecorate(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel()));
+            formPanel.h1(i18n.tr("Info"));
+            formPanel.append(Location.Left, injectAndDecorate(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>()));
+            formPanel.append(Location.Left, injectAndDecorate(proto().billingCycle().building(), new CEntityLabel<Building>()));
+            formPanel.append(Location.Left, injectAndDecorate(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel()));
 
-            int row2 = oneColumn ? row : 0;
-            content.setWidget(++row2, col, injectAndDecorate(proto().billingCycle().billingCycleStartDate(), new CDateLabel()));
-            content.setWidget(++row2, col, injectAndDecorate(proto().billingCycle().billingCycleEndDate(), new CDateLabel()));
-            content.setWidget(++row2, col, injectAndDecorate(proto().billingCycle().targetBillExecutionDate(), new CDateLabel()));
-            row = oneColumn ? row2 : row;
+            formPanel.append(Location.Right, injectAndDecorate(proto().billingCycle().billingCycleStartDate(), new CDateLabel()));
+            formPanel.append(Location.Right, injectAndDecorate(proto().billingCycle().billingCycleEndDate(), new CDateLabel()));
+            formPanel.append(Location.Right, injectAndDecorate(proto().billingCycle().targetBillExecutionDate(), new CDateLabel()));
 
-            content.setH1(++row, 0, span, i18n.tr("Status"));
-            content.setWidget(++row, 0, injectAndDecorate(proto().billSequenceNumber(), new CNumberLabel()));
-            content.setWidget(++row, 0, injectAndDecorate(proto().dueDate(), new CDateLabel()));
-            content.setWidget(++row, 0, injectAndDecorate(proto().rejectReason(), new CEnumLabel()));
+            formPanel.h1(i18n.tr("Status"));
+            formPanel.append(Location.Left, injectAndDecorate(proto().billSequenceNumber(), new CNumberLabel()));
+            formPanel.append(Location.Left, injectAndDecorate(proto().dueDate(), new CDateLabel()));
+            formPanel.append(Location.Left, injectAndDecorate(proto().rejectReason(), new CEnumLabel()));
 
-            row2 = oneColumn ? row : row2 + 1;
-            content.setWidget(++row2, col, injectAndDecorate(proto().billType(), new CEnumLabel()));
-            content.setWidget(++row2, col, injectAndDecorate(proto().billStatus(), new CEnumLabel()));
-            row = oneColumn ? row2 : row;
+            formPanel.append(Location.Right, injectAndDecorate(proto().billType(), new CEnumLabel()));
+            formPanel.append(Location.Right, injectAndDecorate(proto().billStatus(), new CEnumLabel()));
         }
 
         if (!justPreviewBill) {
-            content.setH1(++row, 0, span, i18n.tr("Previous Bill"));
-            content.setWidget(++row, 0,
-                    inject(proto().balanceForwardAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
-            content.setWidget(++row, 0,
-                    inject(proto().carryForwardCredit(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
+            formPanel.h1(i18n.tr("Previous Bill"));
+            formPanel.append(Location.Left, proto().balanceForwardAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+            formPanel.append(Location.Left, proto().carryForwardCredit(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
 
-            content.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
-            content.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
-            content.setWidget(++row, 0, inject(proto().previousChargeRefundLineItems(), new LineItemCollapsibleViewer()));
-            content.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsibleViewer()));
-            content.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsibleViewer()));
-            content.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
-            content.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsibleViewer()));
+            formPanel.append(Location.Left, proto().depositRefundLineItems(), new LineItemCollapsibleViewer());
+            formPanel.append(Location.Left, proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer());
+            formPanel.append(Location.Left, proto().previousChargeRefundLineItems(), new LineItemCollapsibleViewer());
+            formPanel.append(Location.Left, proto().nsfChargeLineItems(), new LineItemCollapsibleViewer());
+            formPanel.append(Location.Left, proto().withdrawalLineItems(), new LineItemCollapsibleViewer());
+            formPanel.append(Location.Left, proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer());
+            formPanel.append(Location.Left, proto().paymentLineItems(), new LineItemCollapsibleViewer());
 
-            Widget lastBillTotal = inject(proto().pastDueAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build())
-                    .asWidget();
-            lastBillTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-            content.setWidget(++row, 0, lastBillTotal);
+            CMoneyLabel lastBillTotal = new CMoneyLabel();
+            lastBillTotal.asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
+            formPanel.append(Location.Left, proto().pastDueAmount(), lastBillTotal).decorate().componentAlignment(Alignment.right);
         }
 
-        content.setH1(++row, 0, span, i18n.tr("Current Bill"));
+        formPanel.h1(i18n.tr("Current Bill"));
         if (justPreviewBill) {
-            content.setWidget(++row, 0,
-                    inject(proto().pastDueAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
+            formPanel.append(Location.Left, proto().pastDueAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
         }
-        content.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsibleViewer()));
-        content.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
-        content.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
-        content.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
-        content.setWidget(++row, 0,
-                inject(proto().latePaymentFees(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
-        content.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsibleViewer()));
-        content.setWidget(++row, 0,
-                inject(proto().productCreditAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
+        formPanel.append(Location.Left, proto().serviceChargeLineItems(), new LineItemCollapsibleViewer());
+        formPanel.append(Location.Left, proto().recurringFeatureChargeLineItems(), new LineItemCollapsibleViewer());
+        formPanel.append(Location.Left, proto().onetimeFeatureChargeLineItems(), new LineItemCollapsibleViewer());
+        formPanel.append(Location.Left, proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsibleViewer());
+        formPanel.append(Location.Left, proto().latePaymentFees(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().depositLineItems(), new LineItemCollapsibleViewer());
+        formPanel.append(Location.Left, proto().productCreditAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
 
-        content.setWidget(++row, 0, inject(proto().currentAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
-        content.setWidget(++row, 0, inject(proto().taxes(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build()));
+        formPanel.append(Location.Left, proto().currentAmount(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
+        formPanel.append(Location.Left, proto().taxes(), new CMoneyLabel()).decorate().componentAlignment(Alignment.right);
 
         // Dues:
-        Widget grandTotal = inject(proto().totalDueAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().componentAlignment(Alignment.right).build())
-                .asWidget();
-        grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-        content.setWidget(++row, 0, grandTotal);
+        CMoneyLabel grandTotal = new CMoneyLabel();
+        grandTotal.asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
+        formPanel.append(Location.Left, proto().totalDueAmount(), grandTotal).decorate().componentAlignment(Alignment.right);
 
-        return content;
+        return formPanel;
     }
 
     @Override
