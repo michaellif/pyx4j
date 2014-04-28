@@ -101,6 +101,7 @@ public class TenantPadParser {
             this.setHeadersMatchMinimum(3);
             this.setVerifyRequiredHeaders(true);
             this.setVerifyRequiredValues(true);
+            this.setTrimValues(true);
         }
 
         @Override
