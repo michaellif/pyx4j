@@ -325,7 +325,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         Persistence.secureRetrieve(Lease.class, doc.lease().getPrimaryKey()); // security enforcement
 
         doc.uploader().set(CrmAppContext.getCurrentUser());
-        doc.isSignedByInk().setValue(false);
+        doc.isSignedByInk().setValue(true);
 
         Persistence.service().persist(doc);
         Persistence.service().commit();
