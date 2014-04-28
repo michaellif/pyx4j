@@ -13,14 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.widgets.selectorfolder;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 
 public abstract class SelectorFolder<E extends IEntity> extends CFolder<E> {
 
-    public SelectorFolder(Class<E> rowClass) {
+    private final IFormatter<E, String> formatter;
+
+    private final IParser<E> parser;
+
+    public SelectorFolder(Class<E> rowClass, IFormatter<E, String> formatter, IParser<E> parser) {
         super(rowClass);
+        this.formatter = formatter;
+        this.parser = parser;
     }
 
     @Override
@@ -30,7 +38,7 @@ public abstract class SelectorFolder<E extends IEntity> extends CFolder<E> {
 
     @Override
     protected IFolderDecorator<E> createFolderDecorator() {
-        return new SelectorFolderDecorator<>();
+        return new SelectorFolderDecorator<>(formatter, parser);
 
     }
 }
