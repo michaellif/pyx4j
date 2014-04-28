@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IShowable;
@@ -30,17 +31,16 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
     private static final I18n i18n = I18n.get(ARCodeForm.class);
 
-    private final TwoColumnFlexFormPanel yardiIntegrationPanel;
+    private final FormPanel yardiIntegrationPanel;
 
     public ARCodeForm(IForm<ARCode> view) {
         super(ARCode.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, injectAndDecorate(proto().name(), 25));
-        content.setWidget(++row, 0, injectAndDecorate(proto().type(), 25));
-        content.setWidget(++row, 0, injectAndDecorate(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(GlCode.class).formViewerPlace(getValue().glCodeCategory().getPrimaryKey());
@@ -57,16 +57,16 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
                     }
                 };
             }
-        }, 25));
+        }).decorate().componentWidth(250);
 
-        yardiIntegrationPanel = new TwoColumnFlexFormPanel();
-        yardiIntegrationPanel.setH1(0, 0, 2, i18n.tr("Yardi Integration"));
-        yardiIntegrationPanel.setWidget(1, 0, 2, inject(proto().yardiChargeCodes(), new YardiChargeCodeFolder()));
+        yardiIntegrationPanel = new FormPanel(this);
+        yardiIntegrationPanel.h1(i18n.tr("Yardi Integration"));
+        yardiIntegrationPanel.append(Location.Full, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
 
-        content.setWidget(++row, 0, 2, yardiIntegrationPanel);
+        formPanel.append(Location.Full, yardiIntegrationPanel);
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("AR Code")));
+        selectTab(addTab(formPanel, i18n.tr("AR Code")));
     }
 
     @Override

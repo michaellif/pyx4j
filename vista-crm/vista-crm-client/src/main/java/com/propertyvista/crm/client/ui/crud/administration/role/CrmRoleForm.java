@@ -25,7 +25,8 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -47,15 +48,14 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
     public CrmRoleForm(IForm<CrmRole> view) {
         super(CrmRole.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, injectAndDecorate(proto().name(), 20));
-        content.setWidget(++row, 0, injectAndDecorate(proto().description(), 40));
-        content.setWidget(++row, 0, injectAndDecorate(proto().requireTwoStepVerificationOnLogin(), 3));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().description()).decorate();
+        formPanel.append(Location.Left, proto().requireTwoStepVerificationOnLogin()).decorate().componentWidth(50);
 
-        content.setH1(++row, 0, 2, proto().permissions().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, inject(proto().permissions(), new CrmRolePermissionsFolder()));
+        formPanel.h1(proto().permissions().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().permissions(), new CrmRolePermissionsFolder());
         get(proto().permissions()).addValueChangeHandler(new ValueChangeHandler<List<VistaCrmBehaviorDTO>>() {
             @Override
             public void onValueChange(ValueChangeEvent<List<VistaCrmBehaviorDTO>> event) {
@@ -64,7 +64,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         });
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("Crm Role")));
+        selectTab(addTab(formPanel, i18n.tr("Crm Role")));
     }
 
     @Override

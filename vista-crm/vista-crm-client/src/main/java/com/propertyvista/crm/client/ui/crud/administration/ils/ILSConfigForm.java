@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.ils;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -32,16 +35,15 @@ public class ILSConfigForm extends CrmEntityForm<ILSConfigDTO> {
         selectTab(tab);
     }
 
-    private TwoColumnFlexFormPanel createProvidersTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createProvidersTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        panel.setH1(++row, 0, 2, proto().vendors().getMeta().getCaption());
-        panel.setWidget(++row, 0, 2, inject(proto().vendors(), new ILSVendorConfigEditorFolder()));
+        formPanel.h1(proto().vendors().getMeta().getCaption());
+        formPanel.append(Location.Full, inject(proto().vendors(), new ILSVendorConfigEditorFolder()));
 
-        panel.setH1(++row, 0, 2, proto().emailFeeds().getMeta().getCaption());
-        panel.setWidget(++row, 0, 2, inject(proto().emailFeeds(), new ILSEmailConfigEditorFolder()));
+        formPanel.h1(proto().emailFeeds().getMeta().getCaption());
+        formPanel.append(Location.Full, inject(proto().emailFeeds(), new ILSEmailConfigEditorFolder()));
 
-        return panel;
+        return formPanel;
     }
 }

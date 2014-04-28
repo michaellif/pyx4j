@@ -23,7 +23,9 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -74,13 +76,12 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
 
-            content.setWidget(++row, 0, 2, injectAndDecorate(proto().vendor(), new CEnumLabel(), true));
-            content.setWidget(++row, 0, 2, injectAndDecorate(proto().maxDailyAds(), 10, true));
+            formPanel.append(Location.Left, proto().vendor(), new CEnumLabel()).decorate();
+            formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(120);
 
-            return content;
+            return formPanel;
         }
     }
 }

@@ -17,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -33,15 +34,14 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     public PmcCompanyInfoForm(IForm<PmcCompanyInfoDTO> view) {
         super(PmcCompanyInfoDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().companyName(), 20));
+        formPanel.append(Location.Left, proto().companyName()).decorate();
 
-        content.setH1(++row, 0, 2, proto().contacts().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, inject(proto().contacts(), new PmcCompanyInfoContactFolder()));
+        formPanel.h1(proto().contacts().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().contacts(), new PmcCompanyInfoContactFolder());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 

@@ -17,7 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -42,14 +44,13 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
 
-            content.setWidget(++row, 0, 2, injectAndDecorate(proto().frequency(), 10, true));
-            content.setWidget(++row, 0, 2, injectAndDecorate(proto().email(), 20, true));
-            content.setWidget(++row, 0, 2, injectAndDecorate(proto().maxDailyAds(), 10, true));
+            formPanel.append(Location.Left, proto().frequency()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().email()).decorate().componentWidth(220);
+            formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(120);
 
-            return content;
+            return formPanel;
         }
     }
 }

@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -24,12 +25,11 @@ public class PortalForm extends CrmEntityForm<SiteDescriptorDTO> {
     public PortalForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        TwoColumnFlexFormPanel content;
-
         PortalBannerImageFolder imageFolder = new PortalBannerImageFolder(isEditable());
         imageFolder.setImageSize(600, 100);
-        content = new TwoColumnFlexFormPanel();
-        content.setWidget(0, 0, 2, inject(proto().portalBanner(), imageFolder));
-        selectTab(addTab(content, proto().portalBanner().getMeta().getCaption()));
+
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().portalBanner(), imageFolder);
+        selectTab(addTab(formPanel, proto().portalBanner().getMeta().getCaption()));
     }
 }

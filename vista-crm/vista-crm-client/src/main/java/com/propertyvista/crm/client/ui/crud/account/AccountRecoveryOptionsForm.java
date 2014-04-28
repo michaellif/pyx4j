@@ -22,7 +22,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.domain.security.SecurityQuestion;
@@ -38,12 +40,11 @@ public class AccountRecoveryOptionsForm extends AccessoryEntityForm<AccountRecov
     @Override
     protected IsWidget createContent() {
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().recoveryEmail()));
+        formPanel.append(Location.Left, proto().recoveryEmail()).decorate();
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().useSecurityQuestionChallengeForPasswordReset()));
+        formPanel.append(Location.Left, proto().useSecurityQuestionChallengeForPasswordReset()).decorate();
         get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
         get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -53,12 +54,12 @@ public class AccountRecoveryOptionsForm extends AccessoryEntityForm<AccountRecov
             }
         });
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().securityQuestion()));
+        formPanel.append(Location.Left, proto().securityQuestion()).decorate();
         get(proto().securityQuestion()).setVisible(false);
-        content.setWidget(++row, 0, injectAndDecorate(proto().securityAnswer(), new CPasswordTextField()));
+        formPanel.append(Location.Left, proto().securityAnswer(), new CPasswordTextField()).decorate();
         get(proto().securityAnswer()).setVisible(false);
 
-        return content;
+        return formPanel;
     }
 
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {

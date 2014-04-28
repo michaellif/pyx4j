@@ -17,7 +17,8 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -38,17 +39,16 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
     public MerchantAccountForm(IForm<MerchantAccount> view) {
         super(MerchantAccount.class, view);
 
-        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        general.setWidget(++row, 0, injectAndDecorate(proto().paymentsStatus(), new CEnumLabel(), 25));
-        general.setWidget(++row, 0, injectAndDecorate(proto().bankId(), new CLabel<String>(), 5));
-        general.setWidget(++row, 0, injectAndDecorate(proto().branchTransitNumber(), new CLabel<String>(), 5));
-        general.setWidget(++row, 0, injectAndDecorate(proto().accountNumber(), new CLabel<String>(), 15));
-        general.setWidget(++row, 0, injectAndDecorate(proto().accountName()));
-        general.setWidget(++row, 0, injectAndDecorate(proto().chargeDescription(), 40));
+        formPanel.append(Location.Left, proto().paymentsStatus(), new CEnumLabel()).decorate();
+        formPanel.append(Location.Left, proto().bankId(), new CLabel<String>()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().branchTransitNumber(), new CLabel<String>()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().accountNumber(), new CLabel<String>()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().accountName()).decorate().componentWidth(180);
+        formPanel.append(Location.Full, proto().chargeDescription()).decorate();
 
-        selectTab(addTab(general, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
         Tab buildingsTab = addTab(isEditable() ? new HTML() : ((MerchantAccountViewerView) getParentView()).getBuildingListerView().asWidget(),
                 i18n.tr("Buildings"));

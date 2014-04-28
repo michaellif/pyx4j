@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content.cityintro;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -27,15 +28,14 @@ public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
     public CityIntroPageForm(IForm<CityIntroPage> view) {
         super(CityIntroPage.class, view);
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        main.setWidget(row++, 0, injectAndDecorate(proto().cityName(), 25));
-        main.setWidget(row++, 0, injectAndDecorate(proto().province(), 25));
+        formPanel.append(Location.Left, proto().cityName()).decorate();
+        formPanel.append(Location.Left, proto().province()).decorate();
 
-        main.setH1(row++, 0, 2, i18n.tr("Page Content"));
-        main.setWidget(row++, 0, 2, inject(proto().content(), new RichTextContentFolder(isEditable())));
+        formPanel.h1(i18n.tr("Page Content"));
+        formPanel.append(Location.Full, proto().content(), new RichTextContentFolder(isEditable()));
 
-        selectTab(addTab(main, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }

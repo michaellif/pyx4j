@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.tax;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -27,15 +28,13 @@ public class TaxForm extends CrmEntityForm<Tax> {
     public TaxForm(IForm<Tax> view) {
         super(Tax.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-
-        int row = -1;
-        content.setWidget(++row, 0, injectAndDecorate(proto().name(), 25));
-        content.setWidget(++row, 0, injectAndDecorate(proto().authority(), 25));
-        content.setWidget(++row, 0, injectAndDecorate(proto().rate(), 7));
-        content.setWidget(++row, 0, injectAndDecorate(proto().compound(), 5));
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().authority()).decorate();
+        formPanel.append(Location.Left, proto().rate()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().compound()).decorate().componentWidth(80);
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }

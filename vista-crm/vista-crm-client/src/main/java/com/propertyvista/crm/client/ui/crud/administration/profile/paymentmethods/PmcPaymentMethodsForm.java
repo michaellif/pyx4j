@@ -15,9 +15,8 @@ package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmetho
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,18 +35,16 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     public PmcPaymentMethodsForm(IForm<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
         noPaymentMethodsMessage = new Label();
         noPaymentMethodsMessage.setText(i18n.tr("There are no payment methods. Click 'Edit' to add a new payment method"));
         noPaymentMethodsMessage.setVisible(false);
-        content.setWidget(++row, 0, noPaymentMethodsMessage);
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-        content.setWidget(++row, 0, inject(proto().paymentMethods(), new PmcPaymentMethodFolder()));
+        formPanel.append(Location.Full, noPaymentMethodsMessage);
+        formPanel.append(Location.Full, proto().paymentMethods(), new PmcPaymentMethodFolder());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
 
     }

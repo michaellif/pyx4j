@@ -29,7 +29,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -119,15 +121,14 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().locale(), locale, true));
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().image().file(), imageHolder, true));
+            formPanel.append(Location.Full, proto().locale(), locale).decorate();
+            formPanel.append(Location.Full, proto().image().file(), imageHolder).decorate();
 
-            return main;
+            return formPanel;
         }
     }
 

@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.creditchecks;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -32,26 +33,25 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
     public CustomerCreditCheckForm(IForm<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 
-        content.setH1(++row, 0, 1, i18n.tr("Details"));
-        content.setWidget(++row, 0, injectAndDecorate(proto().creditCheckDate()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())));
-        content.setWidget(++row, 0, injectAndDecorate(proto().amountChecked()));
+        formPanel.h1(i18n.tr("Details"));
+        formPanel.append(Location.Left, injectAndDecorate(proto().creditCheckDate()));
+        formPanel.append(Location.Left, injectAndDecorate(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())));
+        formPanel.append(Location.Left, injectAndDecorate(proto().amountChecked()));
 
-        content.setH1(++row, 0, 1, i18n.tr("Results From Equifax"));
-        content.setWidget(++row, 0, injectAndDecorate(proto().riskCode()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().creditCheckResult()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().amountApproved()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().reason()));
+        formPanel.h1(i18n.tr("Results From Equifax"));
+        formPanel.append(Location.Left, injectAndDecorate(proto().riskCode()));
+        formPanel.append(Location.Left, injectAndDecorate(proto().creditCheckResult()));
+        formPanel.append(Location.Left, injectAndDecorate(proto().amountApproved()));
+        formPanel.append(Location.Left, injectAndDecorate(proto().reason()));
 
-        content.setH1(++row, 0, 1, i18n.tr("Fees"));
-        content.setWidget(++row, 0, injectAndDecorate(proto().transaction().amount()));
-        content.setWidget(++row, 0, injectAndDecorate(proto().transactionRef()));
+        formPanel.h1(i18n.tr("Fees"));
+        formPanel.append(Location.Left, injectAndDecorate(proto().transaction().amount()));
+        formPanel.append(Location.Left, injectAndDecorate(proto().transactionRef()));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 
     @Override

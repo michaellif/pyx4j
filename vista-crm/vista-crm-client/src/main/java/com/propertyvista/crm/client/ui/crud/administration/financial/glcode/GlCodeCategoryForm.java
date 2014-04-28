@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.financial.glcode;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -27,16 +28,15 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
     public GlCodeCategoryForm(IForm<GlCodeCategory> view) {
         super(GlCodeCategory.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = 0;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(row++, 0, injectAndDecorate(proto().categoryId(), 7));
-        content.setWidget(row++, 0, injectAndDecorate(proto().description(), 25));
+        formPanel.append(Location.Left, proto().categoryId()).decorate().componentWidth(90);
+        formPanel.append(Location.Left, proto().description()).decorate().componentWidth(250);
 
-        content.setH3(row++, 0, 2, proto().glCodes().getMeta().getCaption());
-        content.setWidget(row++, 0, 2, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
+        formPanel.h3(proto().glCodes().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().glCodes(), new GlCodeFolder(isEditable()));
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }
