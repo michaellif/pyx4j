@@ -90,6 +90,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     private boolean verifyRequiredValues = false;
 
+    private boolean trimValues = false;
+
     private int headerLinesCountMin = 1;
 
     private int headerLinesCountMax = 1;
@@ -196,6 +198,14 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         this.verifyRequiredValues = verifyRequiredValues;
     }
 
+    public boolean isTrimValues() {
+        return trimValues;
+    }
+
+    public void setTrimValues(boolean trimValues) {
+        this.trimValues = trimValues;
+    }
+
     public EntityCSVReciver<E> verifyRequiredValues(boolean verifyRequiredValues) {
         setVerifyRequiredValues(verifyRequiredValues);
         return this;
@@ -285,6 +295,14 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     protected String trimHeader(String header) {
         return header.replace((char) 0xA0, ' ').trim();
+    }
+
+    protected String trimValue(String value) {
+        if (value == null) {
+            return null;
+        } else {
+            return value.replace((char) 0xA0, ' ').trim();
+        }
     }
 
     private String[] trimHeaders(String[] headers) {
@@ -442,33 +460,39 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onRow(String[] value) {
+    public void onRow(String[] values) {
         currentRow++;
         //log.debug("value line {}", (Object) value);
         E entity = EntityFactory.create(entityClass);
 
-        if (value.length != 0) {
+        if (values.length != 0) {
             int i = 0;
             for (Path path : headersPath) {
                 if (path != null) {
+
+                    String value = values[i];
+                    if (isTrimValues()) {
+                        trimValue(value);
+                    }
+
                     IObject<?> member = entity.getMember(path);
                     switch (member.getMeta().getObjectClassType()) {
                     case Primitive:
                         @SuppressWarnings("rawtypes")
                         IPrimitive primitive = (IPrimitive<?>) member;
-                        primitive.setValue(parsePrimitive(primitive, primitive.getValueClass(), value[i]));
+                        primitive.setValue(parsePrimitive(primitive, primitive.getValueClass(), value));
                         break;
                     case PrimitiveSet:
                         @SuppressWarnings("rawtypes")
                         IPrimitiveSet primitiveSet = (IPrimitiveSet<?>) member;
-                        primitiveSet.setCollectionValue(parsCollectionValue(primitiveSet, value[i]));
+                        primitiveSet.setCollectionValue(parsCollectionValue(primitiveSet, value));
                         break;
                     default:
                         throw new Error("TODO implement this");
                     }
                 }
                 i++;
-                if (i >= value.length) {
+                if (i >= values.length) {
                     break;
                 }
             }
