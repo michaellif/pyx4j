@@ -16,6 +16,8 @@ package com.propertyvista.yardi.mock;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.yardi.entity.guestcard40.MarketingSources;
+import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
@@ -23,6 +25,8 @@ import com.yardi.entity.resident.Transactions;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
+import com.propertyvista.yardi.beans.Properties;
+import com.propertyvista.yardi.beans.Property;
 import com.propertyvista.yardi.mock.updater.CoTenantUpdateEvent;
 import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
 import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
@@ -81,6 +85,31 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
             throw new RuntimeException("Access disabled for " + propertyId);
         }
         return propertyManager;
+    }
+
+    public Properties getPropertyConfigurations() {
+        Properties properties = new Properties();
+
+        for (PropertyManager propertyManager : propertyManagers.values()) {
+            Property property = new Property();
+            property.setCode(propertyManager.getPropertyId());
+            properties.getProperties().add(property);
+        }
+
+        return properties;
+    }
+
+    public MarketingSources getMarketingSources(String propertyId) {
+        MarketingSources marketingSources = new MarketingSources();
+
+        PropertyMarketingSources propertyMarketingSources = new PropertyMarketingSources();
+
+        PropertyManager propertyManager = getExistingPropertyManager(propertyId);
+
+        propertyMarketingSources.setPropertyCode(propertyManager.getPropertyId());
+
+        marketingSources.getProperty().add(propertyMarketingSources);
+        return marketingSources;
     }
 
     public ResidentTransactions getAllResidentTransactions(String propertyId) {

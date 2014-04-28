@@ -41,6 +41,15 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     public void logRecordedTracastions() {
     }
 
+    public static <T> T dumpXml(String contextName, T data) {
+        try {
+            TransactionLog.log(TransactionLog.getNextNumber(), contextName, MarshallUtil.marshall(data), ".xml");
+        } catch (JAXBException e) {
+            log.error("writing data dump error", e);
+        }
+        return data;
+    }
+
     @Override
     public String ping(PmcYardiCredential yc) throws AxisFault {
         // TODO Auto-generated method stub
@@ -49,16 +58,7 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
-        return null;
-    }
-
-    public static <T> T dumpXml(String contextName, T data) {
-        try {
-            TransactionLog.log(TransactionLog.getNextNumber(), contextName, MarshallUtil.marshall(data), ".xml");
-        } catch (JAXBException e) {
-            log.error("writing data dump error", e);
-        }
-        return data;
+        return dumpXml("getPropertyConfigurations", YardiMockServer.instance().getPropertyConfigurations());
     }
 
     @Override

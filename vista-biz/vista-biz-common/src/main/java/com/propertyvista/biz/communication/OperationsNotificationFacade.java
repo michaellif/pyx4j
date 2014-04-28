@@ -16,6 +16,7 @@ package com.propertyvista.biz.communication;
 import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 
@@ -31,5 +32,7 @@ public interface OperationsNotificationFacade {
     void sendTenantSureCfcOperationProblem(Throwable error);
 
     void newMerchantAccountRequested(MerchantAccount merchantAccount);
+
+    public void buildingSuspended(Building building);
 
 }

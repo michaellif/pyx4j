@@ -26,6 +26,7 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
@@ -68,6 +69,11 @@ public class OperationsNotificationFacadeImpl implements OperationsNotificationF
     @Override
     public void sendTenantSureCfcOperationProblem(Throwable error) {
         Mail.queueUofW(OperationsNotificationManager.createCfcErrorMessage(error), null, getMailConfig());
+    }
+
+    @Override
+    public void buildingSuspended(Building building) {
+        Mail.queueUofW(OperationsNotificationManager.createBuildingSuspendedEmail(building), null, getMailConfig());
     }
 
     private void sendOrFaile(MailMessage m) throws UserRuntimeException {

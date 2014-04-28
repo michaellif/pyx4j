@@ -33,6 +33,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
@@ -108,6 +109,23 @@ public class OperationsNotificationManager {
 
         template.variable("${link}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
                 new OperationsSiteMap.Management.PmcMerchantAccount().formViewerPlace(macc.getPrimaryKey())));
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
+    public static MailMessage createBuildingSuspendedEmail(Building building) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        email.addToList("leonard@propertyvista.com, support@propertyvista.com");
+        email.setSubject(i18n.tr("Building {0} Suspended in PMC {1}", building.propertyCode(), pmc.name()));
+
+        MessageTemplate template = new MessageTemplate();
+        template.setBodyTemplate("Building ${propertyCode} Suspended.<br/>\nPlease confirm with customer ${pmc}!");
+
+        template.variable("${propertyCode}", building.propertyCode());
+        template.variable("${pmc}", pmc.name());
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;

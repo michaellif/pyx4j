@@ -15,6 +15,8 @@ package com.propertyvista.biz.system.yardi;
 
 import java.util.List;
 
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
@@ -44,4 +46,7 @@ public interface YardiConfigurationFacade {
 
     /** read Yardi execution time and remove the timer */
     long stopYardiTimer();
+
+    List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException;
+
 }

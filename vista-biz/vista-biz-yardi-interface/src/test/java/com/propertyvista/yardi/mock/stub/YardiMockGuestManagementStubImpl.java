@@ -66,8 +66,7 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
 
     @Override
     public MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        return dumpXml("getYMarketingSources", YardiMockServer.instance().getMarketingSources(propertyId));
     }
 
     @Override
@@ -113,9 +112,8 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
     }
 
     @Override
-    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
+        return dumpXml("getPropertyConfigurations", YardiMockServer.instance().getPropertyConfigurations());
     }
 
 }

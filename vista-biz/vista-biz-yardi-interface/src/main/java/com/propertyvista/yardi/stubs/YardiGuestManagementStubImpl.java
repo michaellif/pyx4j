@@ -15,8 +15,6 @@ package com.propertyvista.yardi.stubs;
 
 import java.rmi.RemoteException;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
@@ -71,7 +69,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
     private final static Logger log = LoggerFactory.getLogger(YardiGuestManagementStubImpl.class);
 
     @Override
-    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
         try {
             init(Action.GetPropertyConfigurations);
 
@@ -106,7 +104,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             }
 
             return MarshallUtil.unmarshal(Properties.class, xml);
-        } catch (JAXBException e) {
+        } catch (Throwable e) {
             throw new Error(e);
         }
     }

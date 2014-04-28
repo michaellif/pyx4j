@@ -13,10 +13,21 @@
  */
 package com.propertyvista.biz.system.yardi;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.yardi.entity.guestcard40.PropertyMarketingSources;
+
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
@@ -53,6 +64,54 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
     @Override
     public long stopYardiTimer() {
         return YardiExecutionTimer.stop();
+    }
+
+    @Override
+    public List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException {
+        // create master-list of all configured properties (this assumes that ILS is the master interface for property configurations)
+        List<String> masterPropertyList = new ArrayList<>();
+
+        YardiGuestManagementStub ilsStub = ServerSideFactory.create(YardiGuestManagementStub.class);
+        for (com.propertyvista.yardi.beans.Property property : ilsStub.getPropertyConfigurations(yc).getProperties()) {
+            masterPropertyList.add(property.getCode());
+        }
+
+        List<String> propertyCodes = new ArrayList<>();
+        if (yc.propertyListCodes().isNull()) {
+            propertyCodes.addAll(masterPropertyList);
+        } else {
+            // validate and  convert property list codes into a list of property codes
+            for (String propertyListCode : yc.propertyListCodes().getValue().trim().split("\\s*,\\s*")) {
+                for (PropertyMarketingSources sources : ilsStub.getYardiMarketingSources(yc, propertyListCode).getProperty()) {
+                    String propertyCode = sources.getPropertyCode();
+                    if (!masterPropertyList.contains(propertyCode)) {
+                        executionMonitor.addErredEvent("YardiConfig", "Property code not found in the properties configured for ILS: " + propertyCode);
+                    }
+                    propertyCodes.add(propertyCode);
+                }
+            }
+        }
+
+        // B&P sanity check - ensure selected properties available in B&P PropertyConfigurations
+        YardiResidentTransactionsStub bpStub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        try {
+            List<String> bpPropertyList = new ArrayList<>();
+            for (com.propertyvista.yardi.beans.Property property : bpStub.getPropertyConfigurations(yc).getProperties()) {
+                bpPropertyList.add(property.getCode());
+            }
+
+            for (Iterator<String> it = propertyCodes.iterator(); it.hasNext();) {
+                String propertyCode = it.next();
+                if (!bpPropertyList.contains(propertyCode)) {
+                    executionMonitor.addErredEvent("YardiConfig", "Property code configured for ILS not found in the B&P property list: " + propertyCode);
+                    it.remove();
+                }
+            }
+        } catch (RemoteException e) {
+            throw new YardiServiceException(e);
+        }
+
+        return propertyCodes;
     }
 
 }

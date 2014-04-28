@@ -23,6 +23,7 @@ package com.propertyvista.biz.asset;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.communication.OperationsNotificationFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -87,6 +88,7 @@ public class BuildingFacadeImpl implements BuildingFacade {
     public void suspend(Building building) {
         building.suspended().setValue(true);
         Persistence.service().merge(building);
+        ServerSideFactory.create(OperationsNotificationFacade.class).buildingSuspended(building);
     }
 
 }
