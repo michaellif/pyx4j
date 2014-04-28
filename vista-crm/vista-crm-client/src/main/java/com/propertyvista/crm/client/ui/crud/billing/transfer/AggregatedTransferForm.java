@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,42 +31,41 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
     }
 
     public void createTabs() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, injectAndDecorate(proto().paymentDate(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().status(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().merchantAccount(), 20));
-        content.setWidget(++row, 0, injectAndDecorate(proto().fundsTransferType(), 20));
+        formPanel.append(Location.Left, proto().paymentDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().status()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(240);
+        formPanel.append(Location.Left, proto().fundsTransferType()).decorate().componentWidth(240);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().netAmount(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().adjustments(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().previousBalance(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().merchantBalance(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().fundsReleased(), 10));
+        formPanel.append(Location.Left, proto().netAmount()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().adjustments()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().previousBalance()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().merchantBalance()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().fundsReleased()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().grossPaymentAmount(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().grossPaymentFee(), 10));
-        content.setWidget(++row, 0, injectAndDecorate(proto().grossPaymentCount(), 10));
+        formPanel.append(Location.Left, proto().grossPaymentAmount()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().grossPaymentFee()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().grossPaymentCount()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().rejectItemsAmount(), 10));
-        content.setWidget(row, 1, injectAndDecorate(proto().returnItemsAmount(), 10));
+        formPanel.append(Location.Right, proto().rejectItemsAmount()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().returnItemsAmount()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().rejectItemsFee(), 10));
-        content.setWidget(row, 1, injectAndDecorate(proto().returnItemsFee(), 10));
+        formPanel.append(Location.Right, proto().rejectItemsFee()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().returnItemsFee()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, injectAndDecorate(proto().rejectItemsCount(), 5));
-        content.setWidget(row, 1, injectAndDecorate(proto().returnItemsCount(), 5));
+        formPanel.append(Location.Right, proto().rejectItemsCount()).decorate().componentWidth(60);
+        formPanel.append(Location.Right, proto().returnItemsCount()).decorate().componentWidth(60);
 
-        content.setH3(++row, 0, 1, proto().payments().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
-        content.setH3(++row, 0, 1, proto().returnedPayments().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
+        formPanel.h3(proto().payments().getMeta().getCaption());
+        formPanel.append(Location.Full, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
+        formPanel.h3(proto().returnedPayments().getMeta().getCaption());
+        formPanel.append(Location.Full, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
 
-        content.setH3(++row, 0, 1, proto().rejectedBatchPayments().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
+        formPanel.h3(proto().rejectedBatchPayments().getMeta().getCaption());
+        formPanel.append(Location.Full, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
     }
 }

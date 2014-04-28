@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.forms.client.ui.CBooleanLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -29,7 +32,7 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
 
     private static final I18n i18n = I18n.get(CommunicationGroupForm.class);
 
-    private final TwoColumnFlexFormPanel mainTab;
+    private final IsWidget mainTab;
 
     private final CrmRoleFolder roleFolder;
 
@@ -42,19 +45,18 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
 
     }
 
-    private TwoColumnFlexFormPanel createInfoTab() {
-        int row = -1;
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, 2, inject(proto().isPredefined(), new CBooleanLabel(), new FieldDecoratorBuilder(20).build()));
-        panel.setH1(++row, 0, 2, i18n.tr("CRM User Roles"));
-        panel.setWidget(++row, 0, 2, inject(proto().roles(), roleFolder));
-        panel.setH1(++row, 0, 2, i18n.tr("Contact Associated With"));
-        panel.setH3(++row, 0, 2, i18n.tr("Buildings"));
-        panel.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(this.getParentView(), true)));
-        panel.setH3(++row, 0, 2, i18n.tr("Portfolios"));
-        panel.setWidget(++row, 0, 2, inject(proto().portfolios(), new PortfolioFolder(this.getParentView(), true)));
-        return panel;
+    private IsWidget createInfoTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().isPredefined(), new CBooleanLabel()).decorate();
+        formPanel.h1(i18n.tr("CRM User Roles"));
+        formPanel.append(Location.Full, proto().roles(), roleFolder);
+        formPanel.h1(i18n.tr("Contact Associated With"));
+        formPanel.h3(i18n.tr("Buildings"));
+        formPanel.append(Location.Full, proto().buildings(), new BuildingFolder(this.getParentView(), true));
+        formPanel.h3(i18n.tr("Portfolios"));
+        formPanel.append(Location.Full, proto().portfolios(), new PortfolioFolder(this.getParentView(), true));
+        return formPanel;
     }
 
     @Override
@@ -65,9 +67,6 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
         if (se == null) {
             return;
         }
-
         setEditable(!se.isPredefined().getValue(false));
-
-        mainTab.setTitle(i18n.tr(se.getStringView()));
     }
 }

@@ -24,23 +24,22 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,6 +49,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -155,20 +155,17 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     public PaymentForm(IForm<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0, 1, noticeViewer.getNoticePanel());
+        formPanel.append(Location.Full, noticeViewer.getNoticePanel());
 
-        content.setWidget(++row, 0, createDetailsPanel());
+        formPanel.append(Location.Full, createDetailsPanel());
 
-        content.setH1(++row, 0, 1, i18n.tr("Preauthorized Payment"));
-        preauthorizedPaymentMethodViewerHeader = content.getWidget(row, 0);
-        content.setWidget(++row, 0, inject(proto().preauthorizedPayment(), new PreauthorizedPaymentViewer()));
+        preauthorizedPaymentMethodViewerHeader = formPanel.h1(i18n.tr("Preauthorized Payment"));
+        formPanel.append(Location.Full, proto().preauthorizedPayment(), new PreauthorizedPaymentViewer());
 
-        content.setH1(++row, 0, 1, i18n.tr("Payment Method"));
-        paymentMethodEditorHeader = content.getWidget(row, 0);
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        paymentMethodEditorHeader = formPanel.h1(i18n.tr("Payment Method"));
+        formPanel.append(Location.Full, proto().paymentMethod(), paymentMethodEditor);
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -179,76 +176,68 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);
     }
 
     @SuppressWarnings("unchecked")
     private IsWidget createDetailsPanel() {
-        TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        left.setWidget(++row, 0, injectAndDecorate(proto().id(), new CNumberLabel(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().propertyCode(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().unitNumber(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().leaseId(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().leaseStatus(), 10));
-        left.setWidget(++row, 0, injectAndDecorate(proto().billingAccount().accountNumber(), new CLabel<String>(), 10));
+        formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().propertyCode()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().unitNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().leaseId()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().leaseStatus()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().billingAccount().accountNumber(), new CLabel<String>()).decorate().componentWidth(120);
 
-        left.setWidget(++row, 0,
-                injectAndDecorate(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
+        formPanel.append(Location.Left, proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                if (getValue().isInstanceOf(LeaseTermTenant.class)) {
+                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
+                } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
+                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
+                } else {
+                    throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
+                }
+            }
+
+            @Override
+            protected IShowable getSelectorDialog() {
+                return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"), false,
+                        PaymentForm.this.getValue().participants()) {
                     @Override
-                    protected AppPlace getTargetPlace() {
-                        if (getValue().isInstanceOf(LeaseTermTenant.class)) {
-                            return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
-                        } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
-                            return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
-                        } else {
-                            throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
-                        }
+                    public boolean onClickOk() {
+                        CComponent<?, ?, ?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
+                        ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
+                        return true;
                     }
+                };
+            }
+        }).decorate();
 
-                    @Override
-                    protected IShowable getSelectorDialog() {
-                        return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"), false,
-                                PaymentForm.this.getValue().participants()) {
-                            @Override
-                            public boolean onClickOk() {
-                                CComponent<?, ?, ?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
-                                ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
-                                return true;
-                            }
-                        };
-                    }
-                }, 22));
+        formPanel.append(Location.Left, proto().selectPaymentMethod(),
+                new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)).decorate();
 
-        left.setWidget(
-                ++row,
-                0,
-                injectAndDecorate(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL)));
+        formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();
+        formPanel.append(Location.Left, proto().storeInProfile()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().convenienceFee()).decorate().componentWidth(120);
 
-        left.setWidget(++row, 0, injectAndDecorate(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, 30));
-        left.setWidget(++row, 0, injectAndDecorate(proto().storeInProfile(), 3));
-        left.setWidget(++row, 0, injectAndDecorate(proto().convenienceFee(), new CMoneyLabel(), 10));
-
-        TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
-        row = -1;
-
-        right.setWidget(++row, 1, injectAndDecorate(proto().amount(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().createdDate(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().updated(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().receivedDate(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().targetDate(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().finalizeDate(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().paymentStatus(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().rejectedWithNSF(), 5));
-        right.setWidget(++row, 1, injectAndDecorate(proto().lastStatusChangeDate(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().transactionAuthorizationNumber(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().convenienceFeeTransactionAuthorizationNumber(), 10));
-        right.setWidget(++row, 1, injectAndDecorate(proto().transactionErrorMessage(), 22));
-        right.setWidget(++row, 1, injectAndDecorate(proto().notes(), 22));
+        formPanel.append(Location.Right, proto().amount()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().finalizeDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().paymentStatus()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().rejectedWithNSF()).decorate().componentWidth(60);
+        formPanel.append(Location.Right, proto().lastStatusChangeDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().transactionAuthorizationNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().convenienceFeeTransactionAuthorizationNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().transactionErrorMessage()).decorate();
+        formPanel.append(Location.Right, proto().notes()).decorate();
 
         // tweak UI:
         CComponent<?, ?, ?> comp = get(proto().leaseTermParticipant());
@@ -321,13 +310,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 }
             }
         });
-
-        TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
-
-        formPanel.setWidget(0, 0, left);
-        formPanel.setWidget(0, 1, right);
-        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
         return formPanel;
     }
@@ -536,7 +518,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private class PreauthorizedPaymentViewer extends CForm<AutopayAgreement> {
+    private class PreauthorizedPaymentViewer extends AccessoryEntityForm<AutopayAgreement> {
 
         public PreauthorizedPaymentViewer() {
             super(AutopayAgreement.class);
@@ -545,11 +527,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
 
             CNumberLabel comp;
-            content.setWidget(++row, 0, injectAndDecorate(proto().id(), comp = new CNumberLabel(), 10));
+            formPanel.append(Location.Left, proto().id(), comp = new CNumberLabel()).decorate().componentWidth(120);
             comp.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
@@ -559,16 +540,16 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 }
             });
 
-            content.setWidget(++row, 0, injectAndDecorate(proto().creationDate(), 9));
-            content.setWidget(row, 1, injectAndDecorate(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), 22));
+            formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
 
-            content.setWidget(++row, 0, injectAndDecorate(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), 22));
+            formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate();
 
-            content.setBR(++row, 0, 2);
+            formPanel.br();
 
-            content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+            formPanel.append(Location.Full, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
-            return content;
+            return formPanel;
         }
 
         @Override
