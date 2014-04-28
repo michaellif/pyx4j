@@ -27,10 +27,10 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
@@ -111,17 +111,15 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 5, 20, 20));
-            main.setWidget(row, 1, inject(proto().large().file(), largeLogo, new FieldDecoratorBuilder(5, 20, 20).customLabel(i18n.tr("Large Logo")).build()));
-            main.getFlexCellFormatter().setRowSpan(row, 1, 2);
-            main.setWidget(++row, 0, inject(proto().small().file(), smallLogo, new FieldDecoratorBuilder(5, 20, 20).customLabel(i18n.tr("Small Logo")).build()));
+            formPanel.append(Location.Left, proto().locale()).decorate();
+            formPanel.append(Location.Left, proto().small().file(), smallLogo).decorate().customLabel(i18n.tr("Small Logo"));
+            formPanel.append(Location.Full, proto().large().file(), largeLogo).decorate().customLabel(i18n.tr("Large Logo"));
 
-            return main;
+            return formPanel;
         }
 
     }

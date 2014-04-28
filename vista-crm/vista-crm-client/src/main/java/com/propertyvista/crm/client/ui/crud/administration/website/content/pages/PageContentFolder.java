@@ -24,10 +24,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -125,22 +126,21 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 10));
-            main.setWidget(++row, 0, injectAndDecorate(proto()._caption().caption(), 20));
-            main.setWidget(++row, 0, injectAndDecorate(proto()._caption().secondaryCaption(), 20));
+            formPanel.append(Location.Left, proto().locale(), locale).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto()._caption().caption()).decorate();
+            formPanel.append(Location.Left, proto()._caption().secondaryCaption()).decorate();
 
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, injectAndDecorate(proto().content(), editor, 60));
+            formPanel.append(Location.Full, proto().content(), editor).decorate();
 
             // TODO
             // main.setWidget(++row, 0, inject(proto().image(), new CFileUploader(), new FormDecoratorBuilder( 60).build()));
-            return main;
+            return formPanel;
         }
 
         @Override
