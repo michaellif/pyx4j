@@ -15,11 +15,12 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import java.util.Arrays;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -42,21 +43,22 @@ public class CommunicationMessageEditForm extends CrmEntityForm<CommunicationMes
         setEnabled(true);
     }
 
-    public BasicFlexFormPanel createGeneralForm() {
-        BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(20).build()));
-        mainPanel.setH1(++row, 0, 1, "To");
-        mainPanel.setWidget(++row, 0, inject(proto().to(), receiverSelector));
-        mainPanel.setH1(++row, 0, 1, "Message");
+    public IsWidget createGeneralForm() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Left, proto().subject()).decorate();
+
+        formPanel.h1("To");
+        formPanel.append(Location.Left, proto().to(), receiverSelector);
+
+        formPanel.h1("Message");
         CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
         cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        mainPanel.setWidget(++row, 0, inject(proto().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(20).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));
-        mainPanel.setBR(++row, 0, 1);
+        formPanel.append(Location.Left, proto().isHighImportance(), cmbBoolean).decorate();
+        formPanel.append(Location.Left, proto().text()).decorate();
+        formPanel.append(Location.Left, proto().attachments(), new CommunicationMessageAttachmentFolder());
+        formPanel.br();
 
-        return mainPanel;
+        return formPanel;
     }
-
 }

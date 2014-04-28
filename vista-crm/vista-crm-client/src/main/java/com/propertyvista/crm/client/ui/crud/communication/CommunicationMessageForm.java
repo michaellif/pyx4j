@@ -26,11 +26,10 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
@@ -78,15 +77,15 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
         }, getValue());
     }
 
-    public BasicFlexFormPanel createGeneralForm() {
-        BasicFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        mainPanel.setWidget(++row, 0, inject(proto().threadDTO().created(), new FieldDecoratorBuilder(20).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().subject(), new FieldDecoratorBuilder(20).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().threadDTO().content(), messagesFolder));
-        mainPanel.setBR(++row, 0, 1);
+    public IsWidget createGeneralForm() {
+        FormPanel formPanel = new FormPanel(this);
 
-        return mainPanel;
+        formPanel.append(Location.Left, proto().threadDTO().created()).decorate();
+        formPanel.append(Location.Left, proto().subject()).decorate();
+        formPanel.append(Location.Full, proto().threadDTO().content(), messagesFolder);
+        formPanel.br();
+
+        return formPanel;
     }
 
     private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessageDTO> {
@@ -138,24 +137,25 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
 
         @Override
         public IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
-            content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder(20).build()));
+            FormPanel formPanel = new FormPanel(this);
+
+            formPanel.h1("Details");
+            formPanel.append(Location.Left, proto().date()).decorate();
             CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
             cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-            content.setWidget(++row, 0, inject(proto().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, inject(proto().text(), new FieldDecoratorBuilder(20).build()));
-            content.setH1(++row, 0, 1, "From");
-            content.setWidget(++row, 0, inject(proto().sender(), new FieldDecoratorBuilder(20).build()));
-            content.setH1(++row, 0, 1, "To");
-            content.setWidget(++row, 0, inject(proto().to(), receiverSelector));
+            formPanel.append(Location.Left, proto().isHighImportance(), cmbBoolean).decorate();
+            formPanel.append(Location.Left, proto().text()).decorate();
 
-            content.setBR(++row, 0, 1);
-            content.setH1(++row, 0, 1, "Attachments");
-            content.setWidget(++row, 0, inject(proto().attachments(), new CommunicationMessageAttachmentFolder()));
-            content.setWidget(++row, 0, 2, createLowerToolbar());
-            return content;
+            formPanel.h1("From");
+            formPanel.append(Location.Left, proto().sender()).decorate();
+            formPanel.h1("To");
+            formPanel.append(Location.Left, proto().to(), receiverSelector);
+
+            formPanel.br();
+            formPanel.h1("Attachments");
+            formPanel.append(Location.Full, proto().attachments(), new CommunicationMessageAttachmentFolder());
+            formPanel.append(Location.Full, createLowerToolbar());
+            return formPanel;
         }
 
         /*
