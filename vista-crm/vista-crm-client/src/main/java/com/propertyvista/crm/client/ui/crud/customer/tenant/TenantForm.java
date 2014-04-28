@@ -41,6 +41,7 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -61,13 +62,15 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private Label noRequirementsLabel;
 
+    private final Tab autoPaymentsTab;
+
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
         selectTab(addTab(createDetailsTab(), i18n.tr("Details")));
         addTab(createContactsTab(), i18n.tr("Emergency Contacts"));
         addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
-        addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"));
+        autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(), i18n.tr("Auto Payments"));
         addTab(createTenantInsuranceTab(), i18n.tr("Insurance"));
     }
 
@@ -83,9 +86,11 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 //        setTabVisible(autoPaymentsTab, financialyEligible && !getValue().lease().status().getValue().isNoAutoPay());
 //        setTabVisible(insuranceTab, financialyEligible && (leaseStatus.isDraft() || leaseStatus.isCurrent()));
 
+        setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
         updateTenantInsuranceTabControls();
+
     }
 
     @Override
