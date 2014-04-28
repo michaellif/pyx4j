@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.rpc.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -20,6 +21,9 @@ import com.propertyvista.operations.domain.scheduler.Trigger;
 
 @Transient
 public interface TriggerDTO extends Trigger {
+
+    @Caption(name = "Run Timeout ", description = "Run will be automatically terminated after specified interval\nSpecify value in hours,  minutes , seconds")
+    IPrimitive<String> timeout();
 
     IPrimitive<String> schedule();
 }

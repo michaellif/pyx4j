@@ -68,7 +68,10 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
                 return Arrays.asList(//@formatter:off                    
                         new MemberColumnDescriptor.Builder(proto().name()).build(),
                         new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
-                        new MemberColumnDescriptor.Builder(proto().created()).build()
+                        new MemberColumnDescriptor.Builder(proto().created()).build(),
+                        new MemberColumnDescriptor.Builder(proto().features().yardiIntegration()).build(),
+                        new MemberColumnDescriptor.Builder(proto().features().onlineApplication()).build(),
+                        new MemberColumnDescriptor.Builder(proto().features().yardiMaintenance()).build()
                 ); //@formatter:on
             }
 

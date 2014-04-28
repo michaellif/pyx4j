@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
@@ -77,20 +78,31 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
         if (bo != null) {
             JobUtils.getScheduleDetails(to);
         }
+
+        if (!bo.runTimeout().isNull()) {
+            to.timeout().setValue(TimeUtils.durationFormatSeconds(bo.runTimeout().getValue()));
+        }
     }
 
     @Override
-    protected void create(Trigger entity, TriggerDTO dto) {
-        super.create(entity, dto);
-        JobUtils.createJobDetail(entity);
-        JobUtils.updateSchedule(null, entity);
+    protected void create(Trigger bo, TriggerDTO to) {
+        super.create(bo, to);
+        JobUtils.createJobDetail(bo);
+        JobUtils.updateSchedule(null, bo);
     }
 
     @Override
-    protected boolean save(Trigger entity, TriggerDTO dto) {
-        Trigger origProcess = Persistence.service().retrieve(Trigger.class, entity.getPrimaryKey());
-        boolean updated = super.save(entity, dto);
-        JobUtils.updateSchedule(origProcess, entity);
+    protected boolean save(Trigger bo, TriggerDTO to) {
+        Trigger origProcess = Persistence.service().retrieve(Trigger.class, bo.getPrimaryKey());
+
+        if (to.timeout().isNull()) {
+            bo.runTimeout().setValue(null);
+        } else {
+            bo.runTimeout().setValue(TimeUtils.durationParseSeconds(to.timeout().getValue()));
+        }
+
+        boolean updated = super.save(bo, to);
+        JobUtils.updateSchedule(origProcess, bo);
         return updated;
     }
 

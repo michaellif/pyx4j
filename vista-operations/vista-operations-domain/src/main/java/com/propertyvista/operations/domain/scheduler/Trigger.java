@@ -51,6 +51,9 @@ public interface Trigger extends IEntity {
     @Caption(name = "Number of Threads")
     IPrimitive<Integer> threads();
 
+    @Caption(name = "Run Timeout (sec)")
+    IPrimitive<Integer> runTimeout();
+
     @NotNull
     IPrimitive<TriggerPmcSelectionType> populationType();
 
