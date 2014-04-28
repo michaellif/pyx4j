@@ -30,5 +30,5 @@ public interface SiteTitles extends IEntity {
 
     IPrimitive<String> copyright();
 
-    IPrimitive<String> residentPortalPromotions();
+    IPrimitive<String> sitePromoTitle();
 }

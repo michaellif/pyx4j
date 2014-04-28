@@ -155,7 +155,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 titles.prospectPortalTitle().setValue(pmcName());
                 titles.copyright().setValue(copyright());
 
-                titles.residentPortalPromotions().setValue(li.i18n.tr("Featured Apartments"));
+                titles.sitePromoTitle().setValue(li.i18n.tr("Featured Apartments"));
 
                 site.siteTitles().add(titles);
 

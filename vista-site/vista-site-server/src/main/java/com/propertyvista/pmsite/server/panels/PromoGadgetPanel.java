@@ -63,7 +63,7 @@ public class PromoGadgetPanel extends Panel {
         super.onInitialize();
 
         add(new Label("promoTitle", ((PMSiteWebRequest) getRequest()).getContentManager().getSiteTitles(((PMSiteWebRequest) getRequest()).getSiteLocale())
-                .residentPortalPromotions().getStringView()));
+                .sitePromoTitle().getStringView()));
 
         // add City-Province drop-down
         final Map<String, List<String>> provCityMap = ((PMSiteWebRequest) getRequest()).getContentManager().getProvinceCityMap(true);

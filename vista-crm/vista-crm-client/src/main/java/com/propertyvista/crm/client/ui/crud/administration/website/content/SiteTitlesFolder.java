@@ -25,7 +25,9 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -89,18 +91,17 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, injectAndDecorate(proto().locale(), locale, 10));
-            main.setWidget(++row, 0, injectAndDecorate(proto().crmHeader(), 35));
-            main.setWidget(++row, 0, injectAndDecorate(proto().prospectPortalTitle(), 35));
-            main.setWidget(++row, 0, injectAndDecorate(proto().residentPortalTitle(), 35));
-            main.setWidget(++row, 0, injectAndDecorate(proto().residentPortalPromotions(), 35));
-            main.setWidget(++row, 0, injectAndDecorate(proto().copyright(), 35));
-            return main;
+            formPanel.append(Location.Left, proto().locale()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().crmHeader()).decorate();
+            formPanel.append(Location.Left, proto().prospectPortalTitle()).decorate();
+            formPanel.append(Location.Left, proto().residentPortalTitle()).decorate();
+            formPanel.append(Location.Left, proto().sitePromoTitle()).decorate();
+            formPanel.append(Location.Left, proto().copyright()).decorate();
+            return formPanel;
         }
     }
 }
