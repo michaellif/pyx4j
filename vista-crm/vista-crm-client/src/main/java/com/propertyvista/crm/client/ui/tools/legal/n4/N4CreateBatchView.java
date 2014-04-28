@@ -50,6 +50,10 @@ public interface N4CreateBatchView extends IPrimePane, HasMessages {
 
     void setProgress(int progress, int maxiumumProgress, String message);
 
+    void setSearchEnabled(boolean isEnabled);
+
+    void setCreateBatchEnabled(boolean isEnabled);
+
     void displayN4GenerationReportDownloadLink(String downloadUrl);
 
 }

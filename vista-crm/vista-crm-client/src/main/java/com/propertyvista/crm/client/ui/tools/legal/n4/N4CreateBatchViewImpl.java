@@ -64,6 +64,8 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
 
     private Button createBatchButton;
 
+    private Button searchButton;
+
     public N4CreateBatchViewImpl() {
         setCaption(i18n.tr("N4: Create N4's"));
 
@@ -127,21 +129,6 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
 
     }
 
-    private Widget initSelectedItemsHeaderPanel() {
-        createBatchButton = new Button(i18n.tr("Issue N4's"), new Command() {
-            @Override
-            public void execute() {
-                N4CreateBatchViewImpl.this.presenter.createBatch();
-            }
-        });
-        SimplePanel createBatchButtonHolder = new SimplePanel(); // this panel is to apply 'toolbar style' to the button
-        createBatchButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        createBatchButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        createBatchButtonHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
-        createBatchButtonHolder.setWidget(createBatchButton);
-        return createBatchButtonHolder;
-    }
-
     @Override
     public void setPresenter(N4CreateBatchView.Presenter presenter) {
         this.presenter = presenter;
@@ -182,6 +169,16 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         }.show();
     }
 
+    @Override
+    public void setSearchEnabled(boolean isEnabled) {
+        searchButton.setEnabled(isEnabled);
+    }
+
+    @Override
+    public void setCreateBatchEnabled(boolean isEnabled) {
+        createBatchButton.setEnabled(isEnabled);
+    }
+
     private LayoutPanel initViewPanel() {
         LayoutPanel viewPanel = new LayoutPanel();
         setContentPane(viewPanel);
@@ -210,7 +207,7 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         searchToolbar.getElement().getStyle().setProperty("display", "table-cell");
         searchToolbar.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        Button searchButton = new Button(i18n.tr("Search"), new Command() {
+        searchButton = new Button(i18n.tr("Search"), new Command() {
             @Override
             public void execute() {
                 presenter.search();
@@ -226,6 +223,21 @@ public class N4CreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup im
         searchBar.setWidgetTopBottom(searchToolbarHolder, 0, Unit.PX, 0, Unit.PX);
         searchBar.setWidgetRightWidth(searchToolbarHolder, 0, Unit.PX, 100, Unit.PX);
         return searchBar;
+    }
+
+    private Widget initSelectedItemsHeaderPanel() {
+        createBatchButton = new Button(i18n.tr("Issue N4's..."), new Command() {
+            @Override
+            public void execute() {
+                N4CreateBatchViewImpl.this.presenter.createBatch();
+            }
+        });
+        SimplePanel createBatchButtonHolder = new SimplePanel(); // this panel is to apply 'toolbar style' to the button
+        createBatchButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        createBatchButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        createBatchButtonHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        createBatchButtonHolder.setWidget(createBatchButton);
+        return createBatchButtonHolder;
     }
 
 }

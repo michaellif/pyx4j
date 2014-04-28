@@ -27,6 +27,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
@@ -91,6 +92,12 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
                 return item.leaseId().getPrimaryKey();
             }
         });
+        selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+            @Override
+            public void onSelectionChange(SelectionChangeEvent event) {
+                view.setCreateBatchEnabled(!selectionModel.getSelectedSet().isEmpty());
+            }
+        });
         searchResultsProvider = new ListDataProvider<LegalNoticeCandidateDTO>(new LinkedList<LegalNoticeCandidateDTO>(), this);
         deferredProcessContoller = new DeferredProcessController();
     }
@@ -108,10 +115,13 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
             @Override
             public void onSuccess(N4CandidateSearchCriteriaDTO result) {
                 N4CreateBatchActivityMk2.this.view.setPresenter(N4CreateBatchActivityMk2.this);
+                N4CreateBatchActivityMk2.this.view.setSearchEnabled(true);
+                N4CreateBatchActivityMk2.this.view.setCreateBatchEnabled(false);
                 N4CreateBatchActivityMk2.this.searchResultsProvider.addDataDisplay(view.searchResults());
                 ((AbstractHasData<LegalNoticeCandidateDTO>) N4CreateBatchActivityMk2.this.view.searchResults()).setSelectionModel(selectionModel,
                         DefaultSelectionEventManager.<LegalNoticeCandidateDTO> createCheckboxManager(0));
                 panel.setWidget(view);
+
             }
         });
     }
@@ -123,6 +133,7 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
 
     @Override
     public void search() {
+        view.setSearchEnabled(false);
         searchResultsProvider.getList().clear();
         searchResultsProvider.flush();
         N4CreateBatchActivityMk2.this.view.setProgress(0, 0, i18n.tr("Starting search..."));
@@ -143,6 +154,7 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
                     @Override
                     public void onDeferredError(DeferredProcessProgressResponse result) {
                         N4CreateBatchActivityMk2.this.view.displayMessage(result.getMessage(), Type.Error);
+                        N4CreateBatchActivityMk2.this.view.setSearchEnabled(true);
                         N4CreateBatchActivityMk2.this.searchResultsProvider.setList(new ArrayList<LegalNoticeCandidateDTO>());
                     }
                 });
@@ -245,7 +257,9 @@ public class N4CreateBatchActivityMk2 extends AbstractActivity implements N4Crea
         service.getFoundItems(new DefaultAsyncCallback<Vector<LegalNoticeCandidateDTO>>() {
             @Override
             public void onSuccess(Vector<LegalNoticeCandidateDTO> result) {
+                selectionModel.clear();
                 searchResultsProvider.setList(result);
+                view.setSearchEnabled(true);
             }
         });
     }
