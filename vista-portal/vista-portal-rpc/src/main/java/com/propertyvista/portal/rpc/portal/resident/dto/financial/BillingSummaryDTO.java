@@ -36,4 +36,6 @@ public interface BillingSummaryDTO extends IEntity {
     IPrimitive<LogicalDate> dueDate();
 
     IPrimitive<Status> leaseStatus();
+
+    IPrimitive<Boolean> isAutoPaySet();
 }
