@@ -17,12 +17,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -50,19 +50,16 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
 
         @Override
         protected IsWidget createContent() {
-            int row = -1;
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(
-                    ++row,
-                    0,
-                    2,
-                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseApplicationDocument.class)),
-                            new FieldDecoratorBuilder().componentWidth("350px").customLabel(i18n.tr("Agreement Document File")).build()));
-            panel.setWidget(++row, 0, 2, inject(proto().isSignedByInk(), new FieldDecoratorBuilder().componentWidth("350px").build()));
-            panel.setWidget(++row, 0, 2, inject(proto().signedBy(), new FieldDecoratorBuilder().componentWidth("350px").build()));
-            panel.setWidget(++row, 0, 2, inject(proto().uploader(), new FieldDecoratorBuilder().componentWidth("350px").build()));
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel
+                    .append(Location.Full,
+                            proto().file(),
+                            new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
+                                    LeaseApplicationDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File"));
+            formPanel.append(Location.Full, proto().isSignedByInk()).decorate();
+            formPanel.append(Location.Full, proto().signedBy()).decorate();
+            formPanel.append(Location.Full, proto().uploader()).decorate();
+            return formPanel;
         }
 
         @Override
