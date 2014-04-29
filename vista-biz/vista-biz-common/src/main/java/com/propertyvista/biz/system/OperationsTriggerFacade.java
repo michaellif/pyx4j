@@ -28,4 +28,6 @@ public interface OperationsTriggerFacade {
 
     public Run startProcess(Trigger triggerId, Pmc pmcId, LogicalDate executionDate);
 
+    public void stopRun(Run runId);
+
 }

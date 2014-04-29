@@ -16,6 +16,11 @@ package com.propertyvista.biz.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+
 public class VistaSystemFacadeImpl implements VistaSystemFacade {
 
     private final static Logger log = LoggerFactory.getLogger(VistaSystemFacadeImpl.class);
@@ -33,6 +38,12 @@ public class VistaSystemFacadeImpl implements VistaSystemFacade {
     @Override
     public boolean isCommunicationsDisabled() {
         return communicationsDisabled;
+    }
+
+    @Override
+    public void healthMonitor(ExecutionMonitor executionMonitor) {
+        new SystemHealthMonitor(executionMonitor).heathMonitor();
+        ServerSideFactory.create(PaymentProcessFacade.class).healthMonitor(executionMonitor);
     }
 
 }

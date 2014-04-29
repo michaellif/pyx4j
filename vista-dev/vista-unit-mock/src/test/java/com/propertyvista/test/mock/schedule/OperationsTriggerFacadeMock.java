@@ -52,4 +52,9 @@ public class OperationsTriggerFacadeMock implements OperationsTriggerFacade {
     public Run startProcess(Trigger triggerId, Pmc pmc, LogicalDate executionDate) {
         throw new Error("Not supported");
     }
+
+    @Override
+    public void stopRun(Run runId) {
+        throw new Error("Not supported");
+    }
 }

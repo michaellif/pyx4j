@@ -33,6 +33,7 @@ import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.server.proc.JobUtils;
+import com.propertyvista.operations.server.proc.PmcProcessMonitor;
 
 public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
 
@@ -138,6 +139,18 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
             throw new UserRuntimeException("Can't find started run");
         }
         return run;
+    }
+
+    @Override
+    public void stopRun(Run runId) {
+        if (PmcProcessMonitor.isRunning(runId)) {
+            PmcProcessMonitor.requestExecutionTermination(runId);
+        } else {
+            Run run = Persistence.service().retrieve(Run.class, runId.getPrimaryKey());
+            run.status().setValue(RunStatus.Terminated);
+            Persistence.service().persist(run);
+            Persistence.service().commit();
+        }
     }
 
 }

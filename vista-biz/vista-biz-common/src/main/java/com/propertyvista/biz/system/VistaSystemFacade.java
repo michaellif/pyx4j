@@ -13,9 +13,13 @@
  */
 package com.propertyvista.biz.system;
 
+import com.propertyvista.biz.ExecutionMonitor;
+
 public interface VistaSystemFacade {
 
     void setCommunicationsDisabled(boolean disabled);
 
     boolean isCommunicationsDisabled();
+
+    void healthMonitor(ExecutionMonitor executionMonitor);
 }

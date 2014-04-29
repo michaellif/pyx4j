@@ -31,11 +31,11 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecordProcessingStatus;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-class PaymentHeathMonitor {
+class PaymentHealthMonitor {
 
     private final ExecutionMonitor executionMonitor;
 
-    public PaymentHeathMonitor(ExecutionMonitor executionMonitor) {
+    public PaymentHealthMonitor(ExecutionMonitor executionMonitor) {
         this.executionMonitor = executionMonitor;
     }
 

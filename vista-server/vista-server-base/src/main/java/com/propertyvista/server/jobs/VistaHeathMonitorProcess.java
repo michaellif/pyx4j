@@ -15,14 +15,14 @@ package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class VistaHeathMonitorProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).heathMonitor(context.getExecutionMonitor());
+        ServerSideFactory.create(VistaSystemFacade.class).healthMonitor(context.getExecutionMonitor());
         return true;
     }
 

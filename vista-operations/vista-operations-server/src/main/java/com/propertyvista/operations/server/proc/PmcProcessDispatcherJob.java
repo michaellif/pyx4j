@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -119,7 +120,7 @@ public class PmcProcessDispatcherJob implements Job {
         } else {
             run = EntityFactory.create(Run.class);
         }
-        run.started().setValue(new Date());
+        run.started().setValue(SystemDateManager.getDate());
         run.status().setValue(RunStatus.Running);
         if (operationsUserKey != null) {
             run.startedBy().setPrimaryKey(new Key(operationsUserKey));
@@ -161,7 +162,7 @@ public class PmcProcessDispatcherJob implements Job {
         }
 
         if (run.status().getValue() != RunStatus.Sleeping) {
-            run.completed().setValue(new Date());
+            run.completed().setValue(SystemDateManager.getDate());
         }
         Persistence.service().persist(run);
 
