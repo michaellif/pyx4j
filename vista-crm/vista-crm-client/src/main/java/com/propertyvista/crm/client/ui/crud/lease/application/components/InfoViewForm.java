@@ -21,18 +21,18 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -51,14 +51,14 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
-    private final TwoColumnFlexFormPanel previousAddress;
+    private final FormPanel previousAddress;
 
     private IdUploaderFolder fileUpload;
 
     public InfoViewForm() {
         super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
 
-        previousAddress = new TwoColumnFlexFormPanel() {
+        previousAddress = new FormPanel(this) {
             @Override
             public void setVisible(boolean visible) {
                 get(proto().version().previousAddress()).setVisible(visible);
@@ -78,53 +78,43 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        InfoViewFormPanel formPanel = new InfoViewFormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
+        formPanel.append(Location.Full, proto().person().name(), new NameEditor(i18n.tr("Person")));
 
-        main.setWidget(++row, 0, inject(proto().person().sex(), new FieldDecoratorBuilder(7).build()));
-        main.setWidget(++row, 0, inject(proto().person().birthDate(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(++row, 0, inject(proto().person().email(), new FieldDecoratorBuilder(25).build()));
+        formPanel.append(Location.Left, proto().person().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().person().birthDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().person().email()).decorate().componentWidth(300);
 
-        row -= 3;
-        main.setWidget(++row, 1, inject(proto().person().homePhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++row, 1, inject(proto().person().mobilePhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++row, 1, inject(proto().person().workPhone(), new FieldDecoratorBuilder(15).build()));
+        formPanel.append(Location.Right, proto().person().homePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().person().mobilePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().person().workPhone()).decorate().componentWidth(180);
 
-        main.setH1(++row, 0, 2, i18n.tr("Identification Documents"));
-        main.setWidget(++row, 0, 2, inject(proto().version().documents(), fileUpload = new IdUploaderFolder()));
+        formPanel.h1(i18n.tr("Identification Documents"));
+        formPanel.append(Location.Full, proto().version().documents(), fileUpload = new IdUploaderFolder());
 
-        main.setH1(++row, 0, 2, proto().version().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().version().currentAddress(), new PriorAddressEditor()));
+        formPanel.h1(proto().version().currentAddress().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().version().currentAddress(), new PriorAddressEditor());
 
-        previousAddress.setH1(0, 0, 2, proto().version().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, 2, inject(proto().version().previousAddress(), new PriorAddressEditor()));
-        main.setWidget(++row, 0, 2, previousAddress);
+        previousAddress.h1(proto().version().previousAddress().getMeta().getCaption());
+        previousAddress.append(Location.Full, proto().version().previousAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Full, previousAddress);
 
-        TwoColumnFlexFormPanel questionary = new TwoColumnFlexFormPanel();
-        questionary.setH1(++row, 0, 2, proto().version().legalQuestions().getMeta().getCaption());
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().suedForRent(), createLegalQuestionDecorator()));
-        questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().suedForDamages(), createLegalQuestionDecorator()));
-        questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().everEvicted(), createLegalQuestionDecorator()));
-        questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().defaultedOnLease(), createLegalQuestionDecorator()));
-        questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().convictedOfFelony(), createLegalQuestionDecorator()));
-        questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().legalTroubles(), createLegalQuestionDecorator()));
-        questionary.setHR(++row, 0, 2);
-        questionary.setWidget(++row, 0, 2, inject(proto().version().legalQuestions().filedBankruptcy(), createLegalQuestionDecorator()));
-        main.setWidget(++row, 0, 2, questionary);
+        formPanel.h1(proto().version().legalQuestions().getMeta().getCaption());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().suedForRent());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().suedForDamages());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().everEvicted());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().defaultedOnLease());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().convictedOfFelony());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().legalTroubles());
+        formPanel.appendLegalQuestion(proto().version().legalQuestions().filedBankruptcy());
 
         if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
-            main.setH1(++row, 0, 2, proto().emergencyContacts().getMeta().getCaption());
-            main.setWidget(++row, 0, 2, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
+            formPanel.h1(proto().emergencyContacts().getMeta().getCaption());
+            formPanel.append(Location.Full, proto().emergencyContacts(), new EmergencyContactFolder(isEditable()));
         }
 
-        return main;
+        return formPanel;
     }
 
     @Override
@@ -230,7 +220,14 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         });
     }
 
-    private FieldDecorator createLegalQuestionDecorator() {
-        return new FieldDecoratorBuilder(60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+    class InfoViewFormPanel extends FormPanel {
+
+        public InfoViewFormPanel(CForm<?> parent) {
+            super(parent);
+        }
+
+        void appendLegalQuestion(IObject<?> member) {
+            append(Location.Full, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
+        }
     }
 }

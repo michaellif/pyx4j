@@ -17,7 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,18 +46,17 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
+        formPanel.append(Location.Full, proto().person().name(), new NameEditor(i18n.tr("Person")));
 
-        main.setH1(++row, 0, 2, proto().incomes().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
+        formPanel.h1(proto().incomes().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().incomes(), new PersonalIncomeFolder(isEditable()));
 
-        main.setH1(++row, 0, 2, proto().assets().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
+        formPanel.h1(proto().assets().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().assets(), new PersonalAssetFolder(isEditable()));
 
-        return main;
+        return formPanel;
     }
 
     @Override

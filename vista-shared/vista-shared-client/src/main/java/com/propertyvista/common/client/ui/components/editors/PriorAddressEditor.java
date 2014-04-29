@@ -53,8 +53,8 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
             }
         });
 
-        main.append(Location.Right, rentedComponent);
-        main.append(Location.Right, inject(proto().payment(), new FieldDecoratorBuilder(8).build()));
+        main.append(Location.Left, rentedComponent);
+        main.append(Location.Left, inject(proto().payment(), new FieldDecoratorBuilder(8).build()));
         main.append(Location.Right, inject(proto().propertyCompany(), new FieldDecoratorBuilder(20).build()));
         main.append(Location.Right, inject(proto().managerName(), new FieldDecoratorBuilder(20).build()));
         main.append(Location.Right, inject(proto().managerPhone(), new FieldDecoratorBuilder(20).build()));

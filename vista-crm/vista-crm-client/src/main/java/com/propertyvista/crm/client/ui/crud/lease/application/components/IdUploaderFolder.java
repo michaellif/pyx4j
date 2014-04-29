@@ -26,10 +26,14 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -157,12 +161,11 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().idType(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().idNumber(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().notes(), new FieldDecoratorBuilder().build()));
+            formPanel.append(Location.Left, proto().idType(), new CEntityLabel<>()).decorate();
+            formPanel.append(Location.Left, proto().idNumber()).decorate();
+            formPanel.append(Location.Left, proto().notes()).decorate();
 
             IdentificationDocumentFileUploaderFolder docPagesFolder = new IdentificationDocumentFileUploaderFolder();
             if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
@@ -178,12 +181,9 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
                 });
             }
 
-            // Tune ups:
-            get(proto().idType()).setViewable(true);
-
-            content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().files(), docPagesFolder));
-            return content;
+            formPanel.h3(i18n.tr("Files"));
+            formPanel.append(Location.Full, proto().files(), docPagesFolder);
+            return formPanel;
         }
 
         @Override

@@ -16,10 +16,9 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -36,30 +35,23 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel main = (new TwoColumnFlexFormPanel());
-        int row = -1;
-        int col = (1);
+        FormPanel formPanel = new FormPanel(this);
 
-        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"))));
-        main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(7).build()));
+        formPanel.append(Location.Full, proto().name(), new NameEditor(i18n.tr("Person")));
+        formPanel.append(Location.Left, proto().relationship()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().birthDate()).decorate().componentWidth(120);
 
-        row = (row - 1);
-        main.setWidget(++row, col, inject(proto().birthDate(), new FieldDecoratorBuilder(10).build()));
+        formPanel.h3(i18n.tr("Contact Info"));
+        formPanel.append(Location.Left, proto().homePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().mobilePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().workPhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(250);
 
-        main.setH3(++row, 0, 2, i18n.tr("Contact Info"));
-        main.setWidget(++row, 0, inject(proto().homePhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().mobilePhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().workPhone(), new FieldDecoratorBuilder(15).build()));
+        formPanel.h3(i18n.tr("Address"));
+        formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
 
-        row = (row - 3);
-        main.setWidget(++row, col, inject(proto().relationship(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++row, col, inject(proto().email(), new FieldDecoratorBuilder(22).build()));
-
-        row = (row + 1);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
-
-        return main;
+        return formPanel;
     }
 
     @Override
