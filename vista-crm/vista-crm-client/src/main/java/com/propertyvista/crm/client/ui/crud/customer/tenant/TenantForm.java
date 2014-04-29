@@ -34,14 +34,12 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -207,17 +205,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
-
-                content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(15).build()));
-                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
-
-                content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(15).build()));
-
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, TenantForm.this.getValue()
@@ -229,13 +220,17 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                }, new FieldDecoratorBuilder().componentWidth("35em").build()));
+                }).decorate();
 
-                content.setBR(++row, 0, 2);
+                formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
+                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+                formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
 
-                content.setWidget(++row, 0, 2, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
+                formPanel.br();
 
-                return content;
+                formPanel.append(Location.Full, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
+
+                return formPanel;
             }
 
             @Override

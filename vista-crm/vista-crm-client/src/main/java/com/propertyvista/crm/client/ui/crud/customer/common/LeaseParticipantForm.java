@@ -150,9 +150,11 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
+        formPanel.append(Location.Left, proto().customer().picture().file(), imageHolder).decorate().customLabel("");
+
+        formPanel.br();
         formPanel.append(Location.Left, proto().participantId()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().yardiApplicantId()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().customer().picture().file(), imageHolder).decorate().customLabel("");
+        formPanel.append(Location.Right, proto().yardiApplicantId()).decorate().componentWidth(120);
 
         formPanel.append(Location.Full, proto().customer().person().name(), new NameEditor(participant));
         get(proto().customer().person().name()).setEditable(!VistaFeatures.instance().yardiIntegration());
@@ -172,8 +174,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         if (rootClass.equals(TenantDTO.class)) {
 
-            formPanel.append(Location.Left, ((TenantDTO) proto()).role(), new CEnumLabel()).decorate().componentWidth(150);
-            formPanel.append(Location.Left, ((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()).decorate().componentWidth(50);
+            formPanel.append(Location.Right, ((TenantDTO) proto()).role(), new CEnumLabel()).decorate().componentWidth(150);
+            formPanel.append(Location.Right, ((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()).decorate().componentWidth(50);
         }
 
         formPanel.hr(); // lease/application(s) info:
@@ -189,7 +191,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                     return place;
                 }
             });
-            formPanel.append(Location.Right, proto().leasesOfThisCustomer(), link).decorate().componentWidth(50);
+            formPanel.append(Location.Left, proto().leasesOfThisCustomer(), link).decorate().componentWidth(50);
         }
         {
             CEntityCollectionCrudHyperlink<IList<Lease>> link = new CEntityCollectionCrudHyperlink<IList<Lease>>(new AppPlaceBuilder<IList<Lease>>() {
