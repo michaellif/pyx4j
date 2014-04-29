@@ -472,7 +472,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
                     String value = values[i];
                     if (isTrimValues()) {
-                        trimValue(value);
+                        value = trimValue(value);
                     }
 
                     IObject<?> member = entity.getMember(path);
