@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
@@ -45,13 +46,13 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final Button termsButton;
 
-    protected final Button papsButton;
+    private final Button papsButton;
 
-    protected final Button.ButtonMenuBar papsMenu;
+    private final Button.ButtonMenuBar papsMenu;
 
-    protected final MenuItem viewFutureTerm;
+    private final MenuItem viewFutureTerm;
 
-    protected final MenuItem viewHistoricTerms;
+    private final MenuItem viewHistoricTerms;
 
     private final MenuItem reserveUnit;
 
@@ -60,76 +61,87 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
     public LeaseViewerViewImplBase() {
         super(true);
 
-        termsButton = new Button(i18n.tr("Terms"));
-        Button.ButtonMenuBar termsMenu = termsButton.createMenu();
-        termsButton.setMenu(termsMenu);
-        addHeaderToolbarItem(termsButton.asWidget());
+        // Buttons:
 
-        MenuItem viewCurrentTerm = new MenuItem(i18n.tr("Current"), new Command() {
+        termsButton = new Button(i18n.tr("Terms"));
+        Button.ButtonMenuBar termsMenu = new ButtonMenuBar();
+
+        termsMenu.addItem(new MenuItem(i18n.tr("Current"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().currentTerm());
             }
-        });
-        termsMenu.addItem(viewCurrentTerm);
+        }));
 
-        viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
+        termsMenu.addItem(viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().nextTerm());
             }
-        });
-        termsMenu.addItem(viewFutureTerm);
+        }));
 
-        viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
+        termsMenu.addItem(viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
             @Override
             public void execute() {
-                new LeaseTermSelectorDialog(LeaseViewerViewImplBase.this) {
-                    {
-                        setParentFiltering(getForm().getValue().getPrimaryKey());
-                        addFilter(PropertyCriterion.ne(proto().status(), LeaseTerm.Status.Offer));
-                    }
-
-                    @Override
-                    public void onClickOk() {
-                        if (!getSelectedItem().isNull()) {
-                            ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItem());
-                        }
-                    }
-                }.show();
+                viewHistoricTermsExecuter();
             }
-        });
-        termsMenu.addItem(viewHistoricTerms);
+        }));
+
+        termsButton.setMenu(termsMenu);
+        addHeaderToolbarItem(termsButton.asWidget());
+
+        // ----------------------------------------------------------------------------------------
 
         papsButton = new Button(i18n.tr("Auto Payments"));
-        papsButton.setMenu(papsMenu = papsButton.createMenu());
+        papsButton.setMenu(papsMenu = new ButtonMenuBar());
         addHeaderToolbarItem(papsButton.asWidget());
 
-        reserveUnit = new MenuItem(i18n.tr("Reserve Unit"), new Command() {
+        // Actions:
+
+        addAction(reserveUnit = new MenuItem(i18n.tr("Reserve Unit"), new Command() {
             @Override
             public void execute() {
-                new UnitReserveBox() {
-                    @Override
-                    public boolean onClickOk() {
-                        if (getDuration() != null) {
-                            ((LeaseViewerViewBase.Presenter) getPresenter()).reserveUnit(getDuration());
-                            return true;
-                        }
-                        return false;
-                    }
-                }.show();
+                reserveUnitExecuter();
             }
-        });
-        addAction(reserveUnit);
+        }));
 
-        unreserveUnit = new MenuItem(i18n.tr("Unreserve Unit"), new Command() {
+        addAction(unreserveUnit = new MenuItem(i18n.tr("Unreserve Unit"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).unreserveUnit();
             }
-        });
-        addAction(unreserveUnit);
+        }));
+
         addActionSeparator();
+    }
+
+    private void viewHistoricTermsExecuter() {
+        new LeaseTermSelectorDialog(LeaseViewerViewImplBase.this) {
+            {
+                setParentFiltering(getForm().getValue().getPrimaryKey());
+                addFilter(PropertyCriterion.ne(proto().status(), LeaseTerm.Status.Offer));
+            }
+
+            @Override
+            public void onClickOk() {
+                if (!getSelectedItem().isNull()) {
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getSelectedItem());
+                }
+            }
+        }.show();
+    }
+
+    private void reserveUnitExecuter() {
+        new UnitReserveBox() {
+            @Override
+            public boolean onClickOk() {
+                if (getDuration() != null) {
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).reserveUnit(getDuration());
+                    return true;
+                }
+                return false;
+            }
+        }.show();
     }
 
     @Override

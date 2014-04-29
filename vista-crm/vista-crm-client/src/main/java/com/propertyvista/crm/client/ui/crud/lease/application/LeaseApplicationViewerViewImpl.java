@@ -111,8 +111,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         Button applicationDocumentButton = new Button(i18n.tr("Documents"));
         ButtonMenuBar applicationDocumentMenu = new ButtonMenuBar();
-        applicationDocumentButton.setMenu(applicationDocumentMenu);
-        addHeaderToolbarItem(applicationDocumentButton.asWidget());
 
         applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Manually Sign Application..."), new Command() {
             @Override
@@ -134,6 +132,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).downloadDraftLeaseAgreement();
             }
         }));
+
+        applicationDocumentButton.setMenu(applicationDocumentMenu);
+        addHeaderToolbarItem(applicationDocumentButton.asWidget());
 
         // ------------------------------------------------------------------------------------------------------------
 

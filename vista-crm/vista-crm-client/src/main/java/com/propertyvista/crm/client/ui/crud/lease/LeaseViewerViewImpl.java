@@ -101,10 +101,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem viewApplication;
 
-    private final MenuItem viewDeletedPaps;
-
-    private final MenuItem viewLegalState;
-
     private final MenuItem sendMailAction;
 
     private final MenuItem newPaymentAction;
@@ -133,7 +129,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem renewAction;
 
-    private final Button renewButton;
+    private Button renewButton;
 
     private MenuItem offerAction;
 
@@ -142,8 +138,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem maintenanceAction;
 
     private final MenuItem yardiImportAction;
-
-    private MenuItem uploadSignedAgreementItem;
 
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
@@ -160,52 +154,61 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         });
 
+        // Buttons:
+
+        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement"));
+        ButtonMenuBar leaseAgreementDocumentMenu = new ButtonMenuBar();
+
+        leaseAgreementDocumentMenu.addItem(new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).signingProgressOrUploadAgreement();
+            }
+        }));
+
+        leaseAgreementDocumentMenu.addSeparator();
+
+        leaseAgreementDocumentMenu.addItem(new MenuItem(i18n.tr("Download for Signing"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).downloadAgreementForSigning();
+            }
+        }));
+
+        leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
+        addHeaderToolbarItem(leaseAgreementDocument);
+
         // Views:
 
-        viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
+        addView(viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewApplication();
             }
-        });
-        addView(viewApplication);
+        }));
 
-        viewLegalState = new MenuItem(i18n.tr("View Legal State"), new Command() {
+        addView(new MenuItem(i18n.tr("View Legal State"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).legalState();
             }
-        });
-        addView(viewLegalState);
+        }));
 
-        viewDeletedPaps = new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
+        addView(new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
             }
-        });
-        addView(viewDeletedPaps);
+        }));
 
         // Actions:
 
-        sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
+        addAction(sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
-                    @Override
-                    public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                        new SendMailBox(result) {
-                            @Override
-                            public boolean onClickOk() {
-                                ((LeaseViewerView.Presenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
-                                return true;
-                            }
-                        }.show();
-                    }
-                });
+                sendMailActionExecuter();
             }
-        });
-        addAction(sendMailAction);
+        }));
 
         runBillAction = new MenuItem(i18n.tr("Run Bill"), new Command() {
             @Override
@@ -227,30 +230,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             addAction(newPaymentAction);
         }
 
-        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+        addAction(maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
-        });
-        addAction(maintenanceAction);
+        }));
 
-        addActionSeparator();
+        addActionSeparator(); // ----------------------------------------------
 
         noticeAction = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override
             public void execute() {
-                new TermLeaseBox(CompletionType.Notice) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (!isValid()) {
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice,
-                                getValue().moveOutSubmissionDate().getValue(), getValue().expectedMoveOut().getValue(), null);
-                        return true;
-                    }
-                }.show();
+                noticeActionExecuter();
             }
         });
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -270,17 +262,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         evictAction = new MenuItem(i18n.tr("Evict..."), new Command() {
             @Override
             public void execute() {
-                new TermLeaseBox(CompletionType.Eviction) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (!isValid()) {
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutSubmissionDate()
-                                .getValue(), getValue().expectedMoveOut().getValue(), null);
-                        return true;
-                    }
-                }.show();
+                evictActionExecuter();
             }
         });
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -300,17 +282,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         terminateAction = new MenuItem(i18n.tr("Terminate..."), new Command() {
             @Override
             public void execute() {
-                new TermLeaseBox(CompletionType.Termination) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (!isValid()) {
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutSubmissionDate()
-                                .getValue(), getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
-                        return true;
-                    }
-                }.show();
+                terminateActionExecuter();
             }
         });
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -362,17 +334,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Close Lease")) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (CommonsStringUtils.isEmpty(getReason())) {
-                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).closeLease(getReason());
-                        return true;
-                    }
-                }.show();
+                closeActionExecuter();
             }
         });
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -382,44 +344,23 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                new ReasonBox(i18n.tr("Cancel Lease")) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (CommonsStringUtils.isEmpty(getReason())) {
-                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
-                            return false;
-                        }
-                        ((LeaseViewerView.Presenter) getPresenter()).cancelLease(getReason());
-                        return true;
-                    }
-                }.show();
+                cancelActionExecuter();
             }
         });
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelAction);
         }
 
-        // Renewing stuff : ---------------------------------------------------------------------------------------------------
+        // Renewing stuff : ---------------------------------------------------
 
-        renewButton = new Button(i18n.tr("Renew"));
         if (VistaTODO.VISTA_1789_Renew_Lease) {
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                addHeaderToolbarItem(renewButton.asWidget());
-            }
-
+            renewButton = new Button(i18n.tr("Renew"));
             Button.ButtonMenuBar renewMenu = renewButton.createMenu();
-            renewButton.setMenu(renewMenu);
 
             offerAction = new MenuItem(i18n.tr("Create Offer"), new Command() {
                 @Override
                 public void execute() {
-                    new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), LeaseTerm.Type.renew()) {
-                        @Override
-                        public boolean onClickOk() {
-                            ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
-                            return true;
-                        }
-                    }.show();
+                    offerActionExecuter();
                 }
             });
             renewMenu.addItem(offerAction);
@@ -427,54 +368,160 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             viewOfferedTerms = new MenuItem(i18n.tr("View Offers..."), new Command() {
                 @Override
                 public void execute() {
-                    new LeaseTermSelectorDialog(LeaseViewerViewImpl.this) {
-                        {
-                            setParentFiltering(getForm().getValue().getPrimaryKey());
-                            addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
-                        }
-
-                        @Override
-                        public void onClickOk() {
-                            if (!getSelectedItem().isNull()) {
-                                ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItem());
-                            }
-                        }
-                    }.show();
+                    viewOfferedTermsExecuter();
                 }
             });
             renewMenu.addItem(viewOfferedTerms);
+
+            renewButton.setMenu(renewMenu);
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                addHeaderToolbarItem(renewButton.asWidget());
+            }
 
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
 
             renewAction = new MenuItem(i18n.tr("Renew"), new Command() {
                 @Override
                 public void execute() {
-                    new RenewLeaseBox() {
-                        @Override
-                        public boolean onClickOk() {
-                            LogicalDate newDate = getEndLeaseDate();
-
-                            if (newDate == null) {
-                                MessageDialog.error(i18n.tr("Error"), i18n.tr("Please select the date!"));
-                                return false;
-                            }
-                            if (!getForm().getValue().currentTerm().termTo().getValue().before(newDate)) {
-                                MessageDialog.error(i18n.tr("Error"), i18n.tr("New Lease End date should be greater then current one!"));
-                                return false;
-                            }
-
-                            ((LeaseViewerView.Presenter) getPresenter()).simpleLeaseRenew(newDate);
-                            return true;
-                        }
-                    }.show();
+                    renewActionExecuter();
                 }
             });
             if (!VistaFeatures.instance().yardiIntegration()) {
                 addAction(renewAction);
             }
         }
+    }
 
-        addAgreementDocumentMenu();
+    private void sendMailActionExecuter() {
+        ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+            @Override
+            public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                new SendMailBox(result) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseViewerView.Presenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+    }
+
+    private void noticeActionExecuter() {
+        new TermLeaseBox(CompletionType.Notice) {
+            @Override
+            public boolean onClickOk() {
+                if (!isValid()) {
+                    return false;
+                }
+                ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Notice, getValue().moveOutSubmissionDate().getValue(),
+                        getValue().expectedMoveOut().getValue(), null);
+                return true;
+            }
+        }.show();
+    }
+
+    private void evictActionExecuter() {
+        new TermLeaseBox(CompletionType.Eviction) {
+            @Override
+            public boolean onClickOk() {
+                if (!isValid()) {
+                    return false;
+                }
+                ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Eviction, getValue().moveOutSubmissionDate().getValue(),
+                        getValue().expectedMoveOut().getValue(), null);
+                return true;
+            }
+        }.show();
+    }
+
+    private void terminateActionExecuter() {
+        new TermLeaseBox(CompletionType.Termination) {
+            @Override
+            public boolean onClickOk() {
+                if (!isValid()) {
+                    return false;
+                }
+                ((LeaseViewerView.Presenter) getPresenter()).createCompletionEvent(CompletionType.Termination, getValue().moveOutSubmissionDate().getValue(),
+                        getValue().expectedMoveOut().getValue(), getValue().terminationLeaseTo().getValue());
+                return true;
+            }
+        }.show();
+    }
+
+    private void closeActionExecuter() {
+        new ReasonBox(i18n.tr("Close Lease")) {
+            @Override
+            public boolean onClickOk() {
+                if (CommonsStringUtils.isEmpty(getReason())) {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                    return false;
+                }
+                ((LeaseViewerView.Presenter) getPresenter()).closeLease(getReason());
+                return true;
+            }
+        }.show();
+    }
+
+    private void cancelActionExecuter() {
+        new ReasonBox(i18n.tr("Cancel Lease")) {
+            @Override
+            public boolean onClickOk() {
+                if (CommonsStringUtils.isEmpty(getReason())) {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                    return false;
+                }
+                ((LeaseViewerView.Presenter) getPresenter()).cancelLease(getReason());
+                return true;
+            }
+        }.show();
+    }
+
+    private void offerActionExecuter() {
+        new SelectEnumDialog<LeaseTerm.Type>(i18n.tr("Select Term Type"), LeaseTerm.Type.renew()) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseViewerView.Presenter) getPresenter()).createOffer(getSelectedType());
+                return true;
+            }
+        }.show();
+    }
+
+    private void viewOfferedTermsExecuter() {
+        new LeaseTermSelectorDialog(LeaseViewerViewImpl.this) {
+            {
+                setParentFiltering(getForm().getValue().getPrimaryKey());
+                addFilter(PropertyCriterion.eq(proto().status(), LeaseTerm.Status.Offer));
+            }
+
+            @Override
+            public void onClickOk() {
+                if (!getSelectedItem().isNull()) {
+                    ((LeaseViewerView.Presenter) getPresenter()).viewTerm(getSelectedItem());
+                }
+            }
+        }.show();
+    }
+
+    private void renewActionExecuter() {
+        new RenewLeaseBox() {
+            @Override
+            public boolean onClickOk() {
+                LogicalDate newDate = getEndLeaseDate();
+
+                if (newDate == null) {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("Please select the date!"));
+                    return false;
+                }
+                if (!getForm().getValue().currentTerm().termTo().getValue().before(newDate)) {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("New Lease End date should be greater then current one!"));
+                    return false;
+                }
+
+                ((LeaseViewerView.Presenter) getPresenter()).simpleLeaseRenew(newDate);
+                return true;
+            }
+        }.show();
     }
 
     @Override
@@ -832,32 +879,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             };
         }.show();
-    }
-
-    private void addAgreementDocumentMenu() {
-        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement"));
-        ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
-
-        uploadSignedAgreementItem = new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).signingProgressOrUploadAgreement();
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(uploadSignedAgreementItem);
-
-        leaseAgreementDocumentMenu.addSeparator();
-
-        MenuItem downloadBlankAgreementItem = new MenuItem(i18n.tr("Download for Signing"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).downloadAgreementForSigning();
-            }
-        });
-        leaseAgreementDocumentMenu.addItem(downloadBlankAgreementItem);
-
-        leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
-        addHeaderToolbarItem(leaseAgreementDocument);
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {
