@@ -60,6 +60,7 @@ public class PaymentRecordListServiceImpl extends AbstractCrudServiceDtoImpl<Pay
         Persistence.service().retrieve(to.billingAccount().lease());
         Persistence.service().retrieve(to.billingAccount().lease().unit().building());
         Persistence.service().retrieve(to.paymentMethod().customer());
+        Persistence.ensureRetrieve(to.leaseTermParticipant(), AttachLevel.Attached);
 
         Persistence.ensureRetrieve(bo.invoicePaymentBackOut(), AttachLevel.Attached);
         if (!bo.invoicePaymentBackOut().isNull()) {
