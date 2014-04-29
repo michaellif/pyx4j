@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -24,25 +23,14 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CListBox;
-import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
-import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.rpc.services.lease.LeaseTermAgreementDocumentUploadService;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermAgreementDocument;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -93,89 +81,6 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
         onDocumentsChanged();
     }
 
-    public static class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument> {
-
-        private final boolean viewOnly;
-
-        private CListBox<LeaseTermParticipant<?>> signedParticipantsListBox;
-
-        public LeaseAgreementDocumentForm(boolean viewOnly) {
-            super(LeaseTermAgreementDocument.class);
-            if (viewOnly) {
-                setViewable(true);
-                setEditable(false);
-            }
-            this.viewOnly = viewOnly;
-        }
-
-        @Override
-        protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidth("100%");
-
-            int row = -1;
-            panel.setWidget(
-                    ++row,
-                    0,
-                    2,
-                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseTermAgreementDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseTermAgreementDocument.class)),
-                            new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Agreement Document File"))
-                                    .componentWidth("350px").build()));
-
-            if (viewOnly) {
-                panel.setWidget(
-                        ++row,
-                        0,
-                        2,
-                        inject(proto().signedParticipants(), new LeaseAgreementSignedParticipantsViewer(),
-                                new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participants"))
-                                        .componentWidth("350px").build()));
-            } else {
-                panel.setWidget(
-                        ++row,
-                        0,
-                        2,
-                        inject(proto().signedParticipants(), signedParticipantsListBox = new CListBox<LeaseTermParticipant<?>>(SelectionMode.SINGLE_PANEL) {
-                            @Override
-                            public String getItemName(LeaseTermParticipant<?> pariticipant) {
-                                return formatParticipant(pariticipant);
-                            }
-                        }, new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Participant")).componentWidth("350px")
-                                .build()));
-            }
-            panel.setWidget(
-                    ++row,
-                    0,
-                    2,
-                    inject(proto().signedEmployeeUploader().name(),
-                            new FieldDecoratorBuilder().labelPosition(LabelPosition.top).customLabel(i18n.tr("Signed Employee / Uploader"))
-                                    .componentWidth("350px").build()));
-            get(proto().signedEmployeeUploader().name()).setViewable(true);
-            return panel;
-        }
-
-        public void setParticipantOptions(List<LeaseTermParticipant<?>> participant) {
-            signedParticipantsListBox.setOptions(participant);
-        }
-
-        @Override
-        public void addValidations() {
-            super.addValidations();
-            get(proto().file()).setMandatory(true);
-            get(proto().signedParticipants()).addComponentValidator(new AbstractComponentValidator<List<LeaseTermParticipant<?>>>() {
-
-                @Override
-                public FieldValidationError isValid() {
-                    if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Please select signed lease participants"));
-                    }
-                    return null;
-                }
-            });
-        }
-    }
-
     public void setParticipantOptions(List<LeaseTermParticipant<?>> participantOptions) {
         this.participantOptions = participantOptions;
     }
@@ -196,9 +101,11 @@ public class LeaseAgreementDocumentFolder extends VistaBoxFolder<LeaseTermAgreem
                 @Override
                 public IsWidget format(IList<LeaseTermParticipant<?>> value) {
                     FlowPanel panel = new FlowPanel();
-                    for (LeaseTermParticipant<?> participant : value) {
-                        String signerStringView = formatParticipant(participant);
-                        panel.add(new Label(signerStringView));
+                    if (value != null) {
+                        for (LeaseTermParticipant<?> participant : value) {
+                            String signerStringView = formatParticipant(participant);
+                            panel.add(new Label(signerStringView));
+                        }
                     }
                     return panel;
                 }

@@ -22,7 +22,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,7 +31,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.crm.client.ui.crud.lease.agreement.LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
@@ -59,18 +59,20 @@ public class LeaseAgreementDocumentSigningForm extends CForm<LeaseAgreementDocum
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidth("100%");
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Signing Progress"));
-        panel.setWidget(++row, 0, 2, inject(proto().signingProgress().stackholdersProgressBreakdown(), new LeaseAgreementSigningProgressFolder()));
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.h1(i18n.tr("Signing Progress"));
+
+        formPanel.append(Location.Full, proto().signingProgress().stackholdersProgressBreakdown(), new LeaseAgreementSigningProgressFolder());
         get(proto().signingProgress().stackholdersProgressBreakdown()).setViewable(true);
 
-        panel.setH1(++row, 0, 2, i18n.tr("Digitally Signed Agreement Document"));
-        panel.setWidget(++row, 0, 2,
-                inject(proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentFolder.LeaseAgreementDocumentForm(true)));
-        panel.setWidget(++row, 0, 2, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will appear here when every party signs digitally")));
-        panel.setWidget(++row, 0, 2, signDigitallyButton = new Button(i18n.tr("Sign Digitally"), new Command() {
+        formPanel.h1(i18n.tr("Digitally Signed Agreement Document"));
+
+        formPanel.append(Location.Full, proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentForm(true));
+
+        formPanel.append(Location.Full, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will appear here when every party signs digitally")));
+
+        formPanel.append(Location.Full, signDigitallyButton = new Button(i18n.tr("Sign Digitally"), new Command() {
             @Override
             public void execute() {
                 MessageDialog.confirm(i18n.tr("Sign Agreement Document"), i18n.tr("Are you sure?"), new Command() {
@@ -82,22 +84,24 @@ public class LeaseAgreementDocumentSigningForm extends CForm<LeaseAgreementDocum
             }
         }));
         signDigitallyButton.getElement().getStyle().setMarginTop(2, Unit.EM);
-        panel.setWidget(++row, 0, 2,
+
+        formPanel.append(Location.Full,
                 signDigitallyExplanation = new Label(i18n.tr("Once every lease participant signs, the document will be ready for signing by Landlord")));
 
         sigingProgressPanelHolder = new VerticalPanel();
         sigingProgressPanelHolder.setWidth("100%");
-        panel.setWidget(++row, 0, 2, sigingProgressPanelHolder);
+        formPanel.append(Location.Full, sigingProgressPanelHolder);
 
-        panel.setH1(++row, 0, 2, i18n.tr("Ink Signed Agreement Documents"));
-        panel.setWidget(++row, 0, 2, inject(proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder() {
+        formPanel.h1(i18n.tr("Ink Signed Agreement Documents"));
+
+        formPanel.append(Location.Full, proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder() {
             @Override
             public void onDocumentsChanged() {
                 LeaseAgreementDocumentSigningForm.this.onDocumentsChanged();
             }
-        }));
+        });
 
-        return panel;
+        return formPanel;
     }
 
     public void setLeaseTermParticipantsOptions(List<LeaseTermParticipant<?>> participantsOptions) {
