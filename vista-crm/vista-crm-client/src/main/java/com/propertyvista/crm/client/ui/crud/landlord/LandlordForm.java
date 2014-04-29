@@ -17,15 +17,16 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -52,39 +53,35 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
 
     }
 
-    private TwoColumnFlexFormPanel createGeneralPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private IsWidget createGeneralPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = 0;
-        panel.setWidget(row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(row, 1, inject(proto().website(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Right, proto().website()).decorate();
 
-        panel.setH1(++row, 0, 2, proto().address().getMeta().getCaption());
-        panel.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor(false)));
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.h1(proto().address().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().address(), new AddressStructuredEditor(false));
 
-        panel.setBR(++row, 0, 2);
+        formPanel.br();
         CImage logo = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));
         logo.setScaleMode(ScaleMode.Contain);
         logo.setImageSize(368, 60);
-        panel.setWidget(++row, 0, 2, inject(proto().logo().file(), logo, new FieldDecoratorBuilder(true).customLabel(i18n.tr("Logo")).build()));
+        formPanel.append(Location.Full, proto().logo().file(), logo).decorate().customLabel(i18n.tr("Logo"));
 
-        panel.setBR(++row, 0, 2);
+        formPanel.br();
         CImage signature = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        panel.setWidget(++row, 0, 2, inject(proto().signature().file(), signature, new FieldDecoratorBuilder(true).customLabel(i18n.tr("Signature")).build()));
+        formPanel.append(Location.Full, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
 
-        return panel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createBuildingsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-
-        panel.setWidget(0, 0, 2, inject(proto().buildings(), new LandlordBuildingFolder(this)));
-
-        return panel;
+    private IsWidget createBuildingsPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().buildings(), new LandlordBuildingFolder(this));
+        return formPanel;
     }
 
     @Override
