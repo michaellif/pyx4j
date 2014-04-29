@@ -20,12 +20,12 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -48,31 +48,26 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
     }
 
     public void createTabs() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>(), new FieldDecoratorBuilder(22).build()));
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(22).build()));
+        formPanel.append(Location.Left, proto().tenant(), new CEntityLabel<Tenant>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(250);
 
-        content.setWidget(++row, 0, inject(proto().effectiveFrom(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().expiredFrom(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().effectiveFrom(), new CDateLabel()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().expiredFrom(), new CDateLabel()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
-        content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(15).build()));
+        formPanel.append(Location.Left, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
 
-        content.setWidget(++row, 0, inject(proto().updatedByTenant(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().updatedBySystem(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Right, proto().updatedByTenant()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().updatedBySystem()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().isDeleted(), new FieldDecoratorBuilder(5).build()));
-        CLabel<Key> reviewOfPapLink;
-        content.setWidget(
-                ++row,
-                0,
-                reviewOfPapLink = inject(proto().reviewOfPap().id(), new CLabel<Key>(),
-                        new FieldDecoratorBuilder(5).customLabel(i18n.tr("Reviewed AutoPay")).build()));
+        formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().isDeleted()).decorate().componentWidth(70);
+        CLabel<Key> reviewOfPapLink = new CLabel<Key>();
+        formPanel.append(Location.Right, proto().reviewOfPap().id(), reviewOfPapLink).decorate().componentWidth(150).customLabel(i18n.tr("Reviewed AutoPay"));
         reviewOfPapLink.setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -80,9 +75,9 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
                 AppSite.getPlaceController().goTo(place);
             }
         });
-        content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        formPanel.append(Location.Full, proto().coveredItems(), new PapCoveredItemFolder());
 
-        selectTab(addTab(content, i18n.tr("AutoPay")));
+        selectTab(addTab(formPanel, i18n.tr("AutoPay")));
         setTabBarVisible(false);
     }
 
