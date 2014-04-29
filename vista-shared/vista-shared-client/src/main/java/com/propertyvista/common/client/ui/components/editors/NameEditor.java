@@ -21,9 +21,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -38,30 +37,24 @@ public class NameEditor extends AccessoryEntityForm<Name> {
 
     private final CrudAppPlace linkPlace;
 
-    private boolean oneColumn = false;
+    private final String customViewLabel;
 
     public NameEditor() {
         this(null);
     }
 
     public NameEditor(String customViewLabel) {
-        this(customViewLabel, null, false);
-    }
-
-    public NameEditor(String customViewLabel, boolean oneColumn) {
-        this(customViewLabel, null, oneColumn);
+        this(customViewLabel, null);
     }
 
     @SuppressWarnings("rawtypes")
-    public NameEditor(String customViewLabel, Class<? extends IEntity> linkType, boolean oneColumn) {
+    public NameEditor(String customViewLabel, Class<? extends IEntity> linkType) {
         super(Name.class);
-        this.oneColumn = oneColumn;
+
+        this.customViewLabel = customViewLabel;
 
         viewComp = new CEntityLabel<Name>();
         viewComp.setViewable(true);
-        viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-
-        viewComp.setDecorator(new FieldDecoratorBuilder(15, !oneColumn).customLabel(customViewLabel).build());
 
         linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         if (linkPlace != null) {
@@ -85,30 +78,23 @@ public class NameEditor extends AccessoryEntityForm<Name> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel main = new TwoColumnFlexFormPanel();
-        if (BrowserType.isIE()) {
-            // IE won't set table width based on the width of colgroup.col elements
-            // (see FormFlexPanelLeftColumn, FormFlexPanelRightColumn classes).
-            main.setWidth("90em");
-        }
-        int row = -1;
-        int col = (oneColumn ? 0 : 1);
-        int span = (oneColumn ? 1 : 2);
+        FormPanel formPanel = new FormPanel(this);
 
         if (!isViewable()) {
-            main.setWidget(++row, 0, injectAndDecorate(proto().firstName(), 18));
-            main.setWidget(++row, 0, injectAndDecorate(proto().lastName(), 18));
-            main.setWidget(++row, 0, injectAndDecorate(proto().middleName(), 5));
+            formPanel.append(Location.Left, proto().firstName()).decorate().componentWidth(220);
+            formPanel.append(Location.Left, proto().lastName()).decorate().componentWidth(220);
+            formPanel.append(Location.Left, proto().middleName()).decorate().componentWidth(80);
 
-            row = (oneColumn ? row : -1);
-            main.setWidget(++row, col, injectAndDecorate(proto().namePrefix(), 5));
-            main.setWidget(++row, col, injectAndDecorate(proto().nameSuffix(), 5));
-            main.setWidget(++row, col, injectAndDecorate(proto().maidenName(), 15));
+            formPanel.append(Location.Right, proto().namePrefix()).decorate().componentWidth(80);
+            formPanel.append(Location.Right, proto().nameSuffix()).decorate().componentWidth(80);
+            formPanel.append(Location.Right, proto().maidenName()).decorate().componentWidth(180);
         } else {
-            main.setWidget(0, 0, span, viewComp);
+            viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+            viewComp.setDecorator(new FieldDecoratorBuilder(15, true).customLabel(customViewLabel).build());
+            formPanel.append(Location.Full, viewComp);
         }
 
-        return main;
+        return formPanel;
     }
 
     @Override

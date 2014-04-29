@@ -140,13 +140,12 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
             int row = -1;
             main.setWidget(++row, 0, inject(proto().leaseParticipant().participantId(), new FieldDecoratorBuilder(7).build()));
-            main.setWidget(++row, 0, 2,
-                    inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class, false) {
-                        @Override
-                        public Key getLinkKey() {
-                            return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
-                        }
-                    }));
+            main.setWidget(++row, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
+                @Override
+                public Key getLinkKey() {
+                    return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
+                }
+            }));
             main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().sex(), new FieldDecoratorBuilder(7).build()));
             main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().birthDate(), new FieldDecoratorBuilder(9).build()));
             if (isEditable()) {

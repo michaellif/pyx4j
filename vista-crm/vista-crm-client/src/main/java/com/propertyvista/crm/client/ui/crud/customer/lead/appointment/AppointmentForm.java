@@ -14,11 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -35,27 +36,26 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createGeneralTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder(9).build()));
-        main.setWidget(++row, 0, inject(proto().time(), new FieldDecoratorBuilder(7).build()));
-        main.setWidget(++row, 0, inject(proto().address(), new FieldDecoratorBuilder(25).build()));
-        main.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(9).build()));
-        main.setWidget(++row, 0, inject(proto().closeReason(), new FieldDecoratorBuilder(25).build()));
-        main.setWidget(++row, 0, inject(proto().notes(), new FieldDecoratorBuilder(25).build()));
+        formPanel.append(Location.Left, proto().date()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().time()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().address()).decorate();
+        formPanel.append(Location.Left, proto().status()).decorate().componentWidth(120);
 
-        row = -1;
-        main.setWidget(++row, 1, inject(proto().agent(), new FieldDecoratorBuilder(20).build()));
-        main.setWidget(++row, 1, inject(proto().phone(), new FieldDecoratorBuilder(20).customLabel(i18n.tr("Agent Phone")).build()));
-        main.setWidget(++row, 1, inject(proto().email(), new FieldDecoratorBuilder(20).customLabel(i18n.tr("Agent Email")).build()));
+        formPanel.append(Location.Right, proto().agent()).decorate();
+        formPanel.append(Location.Right, proto().phone()).decorate().componentWidth(150).customLabel(i18n.tr("Agent Phone"));
+        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200).customLabel(i18n.tr("Agent Email"));
+
+        formPanel.append(Location.Full, proto().closeReason()).decorate();
+        formPanel.append(Location.Full, proto().notes()).decorate();
 
         // tweak UI:
         get(proto().status()).setEditable(false);
         get(proto().closeReason()).setEditable(false);
 
-        return main;
+        return formPanel;
     }
 
     private Widget createShowingsTab() {

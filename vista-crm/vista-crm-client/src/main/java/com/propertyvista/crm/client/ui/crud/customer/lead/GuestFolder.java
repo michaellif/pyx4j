@@ -20,7 +20,9 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -77,20 +79,18 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel right = new BasicFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
 
-            right.setWidget(++row, 0, injectAndDecorate(proto().person().email(), 22));
-            right.setWidget(++row, 0, injectAndDecorate(proto().person().homePhone(), 15));
-            right.setWidget(++row, 0, injectAndDecorate(proto().person().mobilePhone(), 15));
-            right.setWidget(++row, 0, injectAndDecorate(proto().person().workPhone(), 15));
+            formPanel.append(Location.Full, proto().person().name(), new NameEditor(i18n.tr("Person")));
 
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-            main.setWidget(0, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"), true)));
-            main.setWidget(0, 1, right);
-            main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+            formPanel.br();
 
-            return main;
+            formPanel.append(Location.Left, injectAndDecorate(proto().person().homePhone(), 15));
+            formPanel.append(Location.Left, injectAndDecorate(proto().person().mobilePhone(), 15));
+            formPanel.append(Location.Left, injectAndDecorate(proto().person().workPhone(), 15));
+            formPanel.append(Location.Right, injectAndDecorate(proto().person().email(), 22));
+
+            return formPanel;
         }
     }
 }

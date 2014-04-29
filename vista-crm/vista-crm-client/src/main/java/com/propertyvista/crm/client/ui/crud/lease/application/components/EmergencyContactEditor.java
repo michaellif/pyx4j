@@ -40,7 +40,7 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
         int row = -1;
         int col = (1);
 
-        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"), false)));
+        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"))));
         main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(7).build()));
 
         row = (row - 1);
