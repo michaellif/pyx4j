@@ -21,7 +21,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -29,7 +28,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyField.MoneyFormat;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
@@ -130,15 +130,13 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Requirements"));
-
-        CLabel<BigDecimal> minimumRequiredLiability = new CLabel<>();
-        minimumRequiredLiability.setFormatter(new IFormatter<BigDecimal, String>() {
+        formPanel.append(Location.Left, proto().minimumRequiredLiability(), new CMoneyLabel()).decorate().componentWidth(150);
+        ((CMoneyLabel) get(proto().minimumRequiredLiability())).setFormatter(new MoneyFormat() {
             @Override
             public String format(BigDecimal value) {
-                return value == null ? "None" : value.toString();
+                return (value == null ? "None" : super.format(value));
             }
         });
-        formPanel.append(Location.Left, proto().minimumRequiredLiability(), minimumRequiredLiability).decorate().componentWidth(150);
 
         formPanel.h1(i18n.tr("Insurance Certificates"));
         formPanel.append(Location.Full, proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null));

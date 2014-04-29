@@ -73,13 +73,13 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         fillPreauthorizedPayments(to, retrieveTarget);
         fillInsuranceCertificates(to);
 
-        if (retrieveTarget == RetrieveTarget.Edit) {
-            TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
-                    TenantInsurancePolicy.class);
-            if (insurancePolicy.requireMinimumLiability().getValue(false)) {
-                to.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
-            }
+        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
+                TenantInsurancePolicy.class);
+        if (insurancePolicy.requireMinimumLiability().getValue(false)) {
+            to.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
+        }
 
+        if (retrieveTarget == RetrieveTarget.Edit) {
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     RestrictionsPolicy.class);
             if (restrictionsPolicy.enforceAgeOfMajority().getValue(false)) {

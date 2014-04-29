@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -36,7 +37,8 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 
     IPrimitive<Boolean> isPotentialTenant();
 
-    @Editor(type = Editor.EditorType.money)
+    @Format("#,##0.00")
+    @Editor(type = Editor.EditorType.moneylabel)
     @Caption(description = "This is the minimum liability that was set by tenant insurance policy")
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
