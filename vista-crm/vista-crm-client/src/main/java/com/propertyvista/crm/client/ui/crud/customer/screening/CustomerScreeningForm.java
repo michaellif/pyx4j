@@ -15,16 +15,17 @@ package com.propertyvista.crm.client.ui.crud.customer.screening;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -47,7 +48,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private static final I18n i18n = I18n.get(CustomerScreeningForm.class);
 
-    private final TwoColumnFlexFormPanel previousAddress = new TwoColumnFlexFormPanel() {
+    private final FormPanel previousAddress = new FormPanel(this) {
         @Override
         public void setVisible(boolean visible) {
             get(proto().screening().version().previousAddress()).setVisible(visible);
@@ -122,46 +123,33 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
                 i18n.tr("Current Move In date should be within 1 month of previous Move Out date"));
     }
 
-    private TwoColumnFlexFormPanel createIdentificationDocumentsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().screening().version().documents(), fileUpload));
-
-        return main;
+    private IsWidget createIdentificationDocumentsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().screening().version().documents(), fileUpload);
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createAddressesTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createAddressesTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(proto().screening().version().currentAddress().getMeta().getCaption());
+        formPanel.append(Location.Full, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
 
-        int row = -1;
-        main.setH1(++row, 0, 2, proto().screening().version().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
+        previousAddress.h1(proto().screening().version().previousAddress().getMeta().getCaption());
+        previousAddress.append(Location.Full, proto().screening().version().previousAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Full, previousAddress);
 
-        previousAddress.setH1(0, 0, 2, proto().screening().version().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, 2, inject(proto().screening().version().previousAddress(), new PriorAddressEditor()));
-        main.setWidget(++row, 0, 2, previousAddress);
-
-        return main;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createlegalQuestionsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        int row = 0;
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().suedForRent(), legalQuestionDecorator()));
-        main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().suedForDamages(), legalQuestionDecorator()));
-        main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().everEvicted(), legalQuestionDecorator()));
-        main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().defaultedOnLease(), legalQuestionDecorator()));
-        main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().convictedOfFelony(), legalQuestionDecorator()));
-        main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().legalTroubles(), legalQuestionDecorator()));
-        main.setHR(row++, 0, 2);
-        main.setWidget(row++, 0, 2, inject(proto().screening().version().legalQuestions().filedBankruptcy(), legalQuestionDecorator()));
+    private IsWidget createlegalQuestionsTab() {
+        QuestionsFormPanel formPanel = new QuestionsFormPanel(this);
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().suedForRent());
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().suedForDamages());
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().everEvicted());
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().defaultedOnLease());
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().convictedOfFelony());
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().legalTroubles());
+        formPanel.appendQuestion(proto().screening().version().legalQuestions().filedBankruptcy());
 
         if (VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
             get(proto().screening().version().legalQuestions().suedForRent()).setMandatory(false);
@@ -173,11 +161,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
             get(proto().screening().version().legalQuestions().filedBankruptcy()).setMandatory(false);
         }
 
-        return main;
-    }
-
-    private FieldDecorator legalQuestionDecorator() {
-        return new FieldDecoratorBuilder(60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+        return formPanel;
     }
 
     private void enablePreviousAddress() {
@@ -186,19 +170,27 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
 // Financial: ------------------------------------------------------------------------------------------------
 
-    private TwoColumnFlexFormPanel createIncomesTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createIncomesTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable()));
 
-        main.setWidget(0, 0, 2, inject(proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable())));
-
-        return main;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createAssetsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        main.setWidget(0, 0, 2, inject(proto().screening().version().assets(), new PersonalAssetFolder(isEditable())));
-
-        return main;
+    private IsWidget createAssetsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().screening().version().assets(), new PersonalAssetFolder(isEditable()));
+        return formPanel;
     }
+
+    class QuestionsFormPanel extends FormPanel {
+
+        public QuestionsFormPanel(CForm<?> parent) {
+            super(parent);
+        }
+
+        public void appendQuestion(IObject<?> member) {
+            append(Location.Full, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
+        }
+    };
 }

@@ -13,14 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -28,8 +29,11 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -59,8 +63,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantForm.class);
-
-    private Label noRequirementsLabel;
 
     private final Tab autoPaymentsTab;
 
@@ -110,48 +112,43 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         });
     }
 
-    private TwoColumnFlexFormPanel createContactsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        main.setWidget(0, 0, 2, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
-
-        return main;
+    private IsWidget createContactsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable()));
+        return formPanel;
     }
 
-    protected TwoColumnFlexFormPanel createPreauthorizedPaymentsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
+    protected IsWidget createPreauthorizedPaymentsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        main.setWidget(++row, 0, 2, inject(proto().nextScheduledPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(true).labelWidth("20em").build()));
+        formPanel.append(Location.Left, proto().nextScheduledPaymentDate(), new CDateLabel()).decorate().componentWidth(120);
+        formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().preauthorizedPayments(), new PreauthorizedPaymentFolder());
 
-        main.setH3(++row, 0, 2, proto().preauthorizedPayments().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
-
-        return main;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createTenantInsuranceTab() {
-        TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createTenantInsuranceTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        tabPanel.setH1(++row, 0, 2, i18n.tr("Requirements"));
-        tabPanel.setWidget(++row, 0, 2, inject(proto().minimumRequiredLiability(), new FieldDecoratorBuilder(true).build()));
-        get(proto().minimumRequiredLiability()).setEditable(false);
+        formPanel.h1(i18n.tr("Requirements"));
 
-        noRequirementsLabel = new Label(i18n.tr("None"));
-        noRequirementsLabel.setVisible(false);
-        tabPanel.setWidget(++row, 0, 2, noRequirementsLabel);
+        CLabel<BigDecimal> minimumRequiredLiability = new CLabel<>();
+        minimumRequiredLiability.setFormatter(new IFormatter<BigDecimal, String>() {
+            @Override
+            public String format(BigDecimal value) {
+                return value == null ? "None" : value.toString();
+            }
+        });
+        formPanel.append(Location.Left, proto().minimumRequiredLiability(), minimumRequiredLiability).decorate().componentWidth(150);
 
-        tabPanel.setH1(++row, 0, 2, i18n.tr("Insurance Certificates"));
-        tabPanel.setWidget(++row, 0, 2, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
+        formPanel.h1(i18n.tr("Insurance Certificates"));
+        formPanel.append(Location.Full, proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null));
 
-        return tabPanel;
+        return formPanel;
     }
 
     private void updateTenantInsuranceTabControls() {
-        (get(proto().minimumRequiredLiability())).setVisible(!getValue().minimumRequiredLiability().isNull());
-        noRequirementsLabel.setVisible(getValue().minimumRequiredLiability().isNull());
-
         if (!isEditable() & VistaFeatures.instance().yardiIntegration()) {
             get(proto().leaseTermV()).setVisible(!getValue().isPotentialTenant().getValue(false));
         }
@@ -252,4 +249,5 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             }
         }
     }
+
 }
