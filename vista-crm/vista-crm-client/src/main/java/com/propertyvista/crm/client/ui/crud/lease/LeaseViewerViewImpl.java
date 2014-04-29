@@ -103,6 +103,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem viewDeletedPaps;
 
+    private final MenuItem viewLegalState;
+
     private final MenuItem sendMailAction;
 
     private final MenuItem newPaymentAction;
@@ -129,6 +131,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem cancelAction;
 
+    private final MenuItem renewAction;
+
     private final Button renewButton;
 
     private MenuItem offerAction;
@@ -139,11 +143,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem yardiImportAction;
 
-    private MenuItem downloadSignedAgreementItem;
-
     private MenuItem uploadSignedAgreementItem;
-
-    private MenuItem signingProgressItem;
 
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
@@ -170,13 +170,20 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addView(viewApplication);
 
+        viewLegalState = new MenuItem(i18n.tr("View Legal State"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).legalState();
+            }
+        });
+        addView(viewLegalState);
+
         viewDeletedPaps = new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
             }
         });
-
         addView(viewDeletedPaps);
 
         // Actions:
@@ -395,11 +402,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            addHeaderToolbarItem(renewButton.asWidget());
-        }
-
         if (VistaTODO.VISTA_1789_Renew_Lease) {
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                addHeaderToolbarItem(renewButton.asWidget());
+            }
+
             Button.ButtonMenuBar renewMenu = renewButton.createMenu();
             renewButton.setMenu(renewMenu);
 
@@ -439,11 +446,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
 
-            renewButton.setCommand(new Command() {
+            renewAction = new MenuItem(i18n.tr("Renew"), new Command() {
                 @Override
                 public void execute() {
-                    // TODO Auto-generated method stub
-
                     new RenewLeaseBox() {
                         @Override
                         public boolean onClickOk() {
@@ -464,11 +469,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     }.show();
                 }
             });
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                addAction(renewAction);
+            }
         }
 
         addAgreementDocumentMenu();
-        addLegalStatusMenu();
-
     }
 
     @Override
@@ -534,7 +540,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
-            renewButton.setVisible(status == Status.Active && completion == null);
+            setActionVisible(renewAction, status == Status.Active && completion == null);
         }
 
     }
@@ -829,7 +835,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     private void addAgreementDocumentMenu() {
-        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement Document"));
+        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement"));
         ButtonMenuBar leaseAgreementDocumentMenu = leaseAgreementDocument.createMenu();
 
         uploadSignedAgreementItem = new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
@@ -854,17 +860,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         addHeaderToolbarItem(leaseAgreementDocument);
     }
 
-    private void addLegalStatusMenu() {
-        Button legalStatusButton = new Button(i18n.tr("Legal"));
-        legalStatusButton.setCommand(new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).legalState();
-            }
-        });
-        addHeaderToolbarItem(legalStatusButton);
-    }
-
     private abstract class RenewLeaseBox extends OkCancelDialog {
 
         private final CDatePicker endLeaseDate = new CDatePicker();
@@ -873,6 +868,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             super(i18n.tr("Renew Lease"));
 
             setBody(createBody());
+            setDialogPixelWidth(250);
 
             endLeaseDate.setValue(getForm().getValue().currentTerm().termTo().getValue());
             endLeaseDate.asWidget().setWidth("9em");
@@ -881,10 +877,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         protected Widget createBody() {
             VerticalPanel body = new VerticalPanel();
             body.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            body.add(new HTML(i18n.tr("Select new Lease End date:")));
-            body.add(endLeaseDate);
             body.setWidth("100%");
             body.setSpacing(4);
+
+            body.add(new HTML(i18n.tr("Select new Lease End date:")));
+            body.add(endLeaseDate);
+
             return body;
         }
 
