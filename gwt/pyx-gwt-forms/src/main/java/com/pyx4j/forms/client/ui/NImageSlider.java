@@ -38,6 +38,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IHasFile;
+import com.pyx4j.entity.shared.IListWrapper;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
@@ -71,8 +72,6 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
     private final ImageSlider imageSlider;
 
     private int organizerWidth;
-
-    protected IEditableComponentFactory factory = new BaseEditableComponentFactory();
 
     public NImageSlider(CImageSlider<E> cComponent) {
         super(cComponent);
@@ -170,17 +169,39 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
         organizerWidth = width;
     }
 
-    class ImageOrganizer extends CFolder<E> {
+    class ImageOrganizer extends CForm<IListWrapper> {
+
+        private final ImageOrganizerFolder imgFolder;
+
+        public ImageOrganizer(Class<E> imgClass, FolderImages folderIcons) {
+            super(IListWrapper.class);
+            imgFolder = new ImageOrganizerFolder(imgClass, folderIcons);
+            init();
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            inject(proto().items(), imgFolder);
+            return imgFolder.asWidget();
+        }
+
+        public void show() {
+            imgFolder.setValue(getCComponent().getValue());
+            ((Dialog) imgFolder.getDecorator()).show();
+        }
+
+    }
+
+    class ImageOrganizerFolder extends CFolder<E> {
 
         private final Class<E> imgClass;
 
         private final FolderImages folderIcons;
 
-        public ImageOrganizer(Class<E> imgClass, FolderImages folderIcons) {
+        public ImageOrganizerFolder(Class<E> imgClass, FolderImages folderIcons) {
             super(imgClass);
             this.imgClass = imgClass;
             this.folderIcons = folderIcons;
-            init();
         }
 
         public void addNewImage() {
@@ -192,11 +213,6 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
             for (CComponent<?, ?, ?> item : new ArrayList<CComponent<?, ?, ?>>(getComponents())) {
                 removeItem((CFolderItem<E>) item);
             }
-        }
-
-        public void show() {
-            setValue(getCComponent().getValue());
-            ((Dialog) getDecorator()).show();
         }
 
         @Override
@@ -222,7 +238,6 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
                         thumb.setImage(new Image(getCComponent().getImageUrl(getValue())));
                     }
                 }
-
             };
         }
 
@@ -347,5 +362,4 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
 
         }
     }
-
 }

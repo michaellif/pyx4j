@@ -277,7 +277,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     @Override
     public CField<?, ?> create(IObject<?> member) {
-        assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
+        assert (getParent() != null) : "Flex Component " + this.getClass().getName() + " is not bound";
         return getParent().create(member);
     }
 
