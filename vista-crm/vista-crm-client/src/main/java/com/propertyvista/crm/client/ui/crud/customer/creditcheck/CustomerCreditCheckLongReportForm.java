@@ -16,12 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.creditcheck;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.core.IObject;
@@ -31,6 +26,8 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -54,46 +51,47 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckLongReportForm.class);
 
+    @SuppressWarnings("unused")
     public CustomerCreditCheckLongReportForm(IForm<CustomerCreditCheckLongReportDTO> view) {
         super(CustomerCreditCheckLongReportDTO.class, view);
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        main.setH1(++row, 0, 2, i18n.tr("QUICK SUMMARY"));
-        main.setWidget(++row, 0, 2, createQuickSummary());
+        formPanel.h1(i18n.tr("QUICK SUMMARY"));
+        formPanel.append(Location.Full, createQuickSummary());
 
-        main.setH1(++row, 0, 2, i18n.tr("IDENTITY"));
-        main.setWidget(++row, 0, 2, createIdentity());
+        formPanel.h1(i18n.tr("IDENTITY"));
+        formPanel.append(Location.Full, createIdentity());
 
-        main.setH1(++row, 0, 2, i18n.tr("ACCOUNTS"));
-        main.setWidget(++row, 0, 2, inject(proto().accounts(), new AccountFolder()));
+        formPanel.h1(i18n.tr("ACCOUNTS"));
+        formPanel.append(Location.Full, proto().accounts(), new AccountFolder());
 
-        main.setH1(++row, 0, 2, i18n.tr("COURT JUDGEMENTS"));
-        main.setWidget(++row, 0, 2, inject(proto().judgements(), new JudgementFolder()));
+        formPanel.h1(i18n.tr("COURT JUDGEMENTS"));
+        formPanel.append(Location.Full, proto().judgements(), new JudgementFolder());
 
-        main.setH1(++row, 0, 2, i18n.tr("PROPOSALS AND BANKRUPTCIES"));
-        main.setWidget(++row, 0, 2, inject(proto().proposals(), new ProposalFolder()));
+        formPanel.h1(i18n.tr("PROPOSALS AND BANKRUPTCIES"));
+        formPanel.append(Location.Full, proto().proposals(), new ProposalFolder());
 
-// Not implemented in Equifax:
-//        
-//        main.setH1(++row, 0, 2, i18n.tr("EVICTIONS"));
-//        main.setWidget(++row, 0, 2, inject(proto().evictions(), new EvictionFolder()));
-//
-//        main.setH1(++row, 0, 2, i18n.tr("RENT HISTORY"));
-//        main.setWidget(++row, 0, 2, inject(proto().rents(), new RentFolder()));
+        // Not implemented in Equifax:
+        if (false) {
+            formPanel.h1(i18n.tr("EVICTIONS"));
+            formPanel.append(Location.Full, inject(proto().evictions(), new EvictionFolder()));
 
-        main.setH1(++row, 0, 2, i18n.tr("COLLECTIONS"));
-        main.setWidget(++row, 0, 2, inject(proto().collections(), new CollectionFolder()));
+            formPanel.h1(i18n.tr("RENT HISTORY"));
+            formPanel.append(Location.Full, inject(proto().rents(), new RentFolder()));
+        }
 
-        main.setH1(++row, 0, 2, i18n.tr("INQUIRIES"));
-        main.setWidget(++row, 0, 2, inject(proto().inquiries(), new InquiryFolder()));
+        formPanel.h1(i18n.tr("COLLECTIONS"));
+        formPanel.append(Location.Full, proto().collections(), new CollectionFolder());
 
-        selectTab(addTab(main, i18n.tr("Customer Credit Check")));
+        formPanel.h1(i18n.tr("INQUIRIES"));
+        formPanel.append(Location.Full, proto().inquiries(), new InquiryFolder());
+
+        selectTab(addTab(formPanel, i18n.tr("Customer Credit Check")));
         setTabBarVisible(false);
 
         // Add do not print marker:
-        main.getElement().addClassName(StyleManager.DO_NOT_PRINT_CLASS_NAME);
+        formPanel.asWidget().addStyleName(StyleManager.DO_NOT_PRINT_CLASS_NAME);
     }
 
     @Override
@@ -103,114 +101,85 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         get(proto().identity().deathDate()).setVisible(!getValue().identity().deathDate().isNull());
     }
 
-    private Widget createQuickSummary() {
-        TwoColumnFlexFormPanel summary = new TwoColumnFlexFormPanel();
+    @SuppressWarnings("unused")
+    private IsWidget createQuickSummary() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        summary.setWidget(++row, 0, inject(proto().percentOfRentCovered(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().totalAccounts(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().totalOutstandingBalance(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().outstandingRevolvingDebt(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 0, inject(proto().outstandingCollectionsBalance(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Left, inject(proto().percentOfRentCovered(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Left, inject(proto().totalAccounts(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Left, inject(proto().totalOutstandingBalance(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Left, inject(proto().outstandingRevolvingDebt(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Left, inject(proto().outstandingCollectionsBalance(), new FieldDecoratorBuilder(20, 10, 20).build()));
 
-        row = 0;
-        summary.setWidget(++row, 1, inject(proto().accountsWithNoLatePayments(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 1, inject(proto().numberOfLegalItems(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 1, inject(proto().numberOfBancruptciesOrActs(), new FieldDecoratorBuilder(20, 10, 20).build()));
-        summary.setWidget(++row, 1, inject(proto().landlordCollectionsFiled(), new FieldDecoratorBuilder(20, 10, 20).build()));
-// Not implemented in Equifax:
-//      summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfEvictions()), 20, 10, 20).build());
+        formPanel.append(Location.Right, inject(proto().accountsWithNoLatePayments(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Right, inject(proto().numberOfLegalItems(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Right, inject(proto().numberOfBancruptciesOrActs(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        formPanel.append(Location.Right, inject(proto().landlordCollectionsFiled(), new FieldDecoratorBuilder(20, 10, 20).build()));
 
-        BasicFlexFormPanel accounts = new BasicFlexFormPanel();
-        int col = -1;
-        accounts.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Accounts paid late:") + "</i>"));
-        accounts.getWidget(0, col).setWidth("15em");
-        accounts.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        // Not implemented in Equifax
+        if (false) {
+            formPanel.append(Location.Right, inject(proto().numberOfEvictions(), new FieldDecoratorBuilder(20, 10, 20).build()));
+        }
 
-        accounts.setWidget(0, ++col, inject(proto().latePayments1_30days(), decorator(20)));
-        accounts.setWidget(0, ++col, inject(proto().latePayments31_60days(), decorator(20)));
-        accounts.setWidget(0, ++col, inject(proto().latePayments61_90days(), decorator(20)));
+        formPanel.h1(i18n.tr("Accounts paid late"));
 
-        BasicFlexFormPanel equiifax = new BasicFlexFormPanel();
-        col = -1;
-        equiifax.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Equifax:") + "</i>"));
-        equiifax.getWidget(0, col).setWidth("15em");
-        equiifax.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        formPanel.append(Location.Left, proto().latePayments1_30days()).decorate();
+        formPanel.append(Location.Left, proto().latePayments31_60days()).decorate();
+        formPanel.append(Location.Left, proto().latePayments61_90days()).decorate();
 
-        equiifax.setWidget(0, ++col, inject(proto().equifaxCheckScore(), decorator(20)));
-        equiifax.setWidget(0, ++col, inject(proto().equifaxRatingLevel(), decorator(20)));
-        equiifax.setWidget(0, ++col, inject(proto().equifaxRiskLevel(), decorator(20)));
+        formPanel.h1(i18n.tr("Equifax"));
 
-        BasicFlexFormPanel raitings = new BasicFlexFormPanel();
-        col = -1;
-        raitings.setWidget(0, ++col, inject(proto().rating1(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating2(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating3(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating4(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating5(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating6(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating7(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating8(), decorator(8)));
-        raitings.setWidget(0, ++col, inject(proto().rating9(), decorator(8)));
+        formPanel.append(Location.Left, proto().equifaxCheckScore()).decorate();
+        formPanel.append(Location.Left, proto().equifaxRatingLevel()).decorate();
+        formPanel.append(Location.Left, proto().equifaxRiskLevel()).decorate();
 
-        // put all together:
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        row = -1;
+        formPanel.h1(i18n.tr("Ratings"));
 
-        main.setWidget(++row, 0, 2, summary);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, accounts);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, equiifax);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, raitings);
+        formPanel.append(Location.Left, proto().rating1()).decorate();
+        formPanel.append(Location.Left, proto().rating2()).decorate();
+        formPanel.append(Location.Left, proto().rating3()).decorate();
+        formPanel.append(Location.Left, proto().rating4()).decorate();
+        formPanel.append(Location.Left, proto().rating5()).decorate();
+        formPanel.append(Location.Right, proto().rating6()).decorate();
+        formPanel.append(Location.Right, proto().rating7()).decorate();
+        formPanel.append(Location.Right, proto().rating8()).decorate();
+        formPanel.append(Location.Right, proto().rating9()).decorate();
 
-        return main;
+        return formPanel;
     }
 
-    private Widget createIdentity() {
-        BasicFlexFormPanel name = new BasicFlexFormPanel();
+    private IsWidget createIdentity() {
+        FormPanel formPanel = new FormPanel(this);
 
-        name.setWidget(0, 0, 2, inject(proto().identity().name(), new NameEditor(i18n.tr("Name"))));
+        formPanel.append(Location.Full, proto().identity().name(), new NameEditor(i18n.tr("Name")));
 
-        name.setWidget(1, 0, inject(proto().identity().SIN(), new FieldDecoratorBuilder(20).build()));
-        name.setWidget(2, 0, inject(proto().identity().maritalStatus(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().identity().SIN()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().identity().maritalStatus()).decorate().componentWidth(120);
 
-        name.setWidget(1, 1, inject(proto().identity().birthDate(), new FieldDecoratorBuilder(10).build()));
-        name.setWidget(2, 1, inject(proto().identity().deathDate(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Right, proto().identity().birthDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().identity().deathDate()).decorate().componentWidth(120);
 
-        BasicFlexFormPanel address = new BasicFlexFormPanel();
-        address.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
-        address.getWidget(0, 0).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        address.setWidget(1, 0, inject(proto().identity().currentAddress(), new AddressSimpleEditor()));
+        formPanel.h2(i18n.tr("Addresses"));
 
-        address.setWidget(0, 1, new HTML("<i>" + i18n.tr("Former:") + "</i>"));
-        address.getWidget(0, 1).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        address.setWidget(1, 1, inject(proto().identity().formerAddress(), new AddressSimpleEditor()));
+        formPanel.h3(i18n.tr("Current Addresses"));
 
-        BasicFlexFormPanel employement = new BasicFlexFormPanel();
-        employement.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
-        employement.getWidget(0, 0).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        employement.setWidget(1, 0, inject(proto().identity().currentEmployer(), new FieldDecoratorBuilder(20).build()));
-        employement.setWidget(4, 0, inject(proto().identity().currentOccupation(), new FieldDecoratorBuilder(20).build()));
+        formPanel.append(Location.Full, proto().identity().currentAddress(), new AddressSimpleEditor());
 
-        employement.setWidget(0, 1, new HTML("<i>" + i18n.tr("Former:") + "</i>"));
-        employement.getWidget(0, 1).getElement().getStyle().setPaddingRight(4, Unit.EM);
-        employement.setWidget(1, 1, inject(proto().identity().formerEmployer(), new FieldDecoratorBuilder(20).build()));
-        employement.setWidget(2, 1, inject(proto().identity().formerOccupation(), new FieldDecoratorBuilder(20).build()));
+        formPanel.h3(i18n.tr("Former Addresses"));
 
-        // put all together:
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        formPanel.append(Location.Full, proto().identity().formerAddress(), new AddressSimpleEditor());
 
-        main.setWidget(0, 0, name);
+        formPanel.h2(i18n.tr("Employement"));
 
-        main.setH3(1, 0, 0, i18n.tr("Addresses"));
-        main.setWidget(2, 0, address);
+        formPanel.h3(i18n.tr("Current Employement"));
+        formPanel.append(Location.Left, proto().identity().currentEmployer()).decorate();
+        formPanel.append(Location.Right, proto().identity().currentOccupation()).decorate();
 
-        main.setH3(3, 0, 0, i18n.tr("Employement"));
-        main.setWidget(4, 0, employement);
+        formPanel.h3(i18n.tr("Former Employement"));
+        formPanel.append(Location.Left, proto().identity().formerEmployer()).decorate();
+        formPanel.append(Location.Right, proto().identity().formerOccupation()).decorate();
 
-        return main;
+        return formPanel;
     }
 
     private FieldDecorator decorator(double width) {
@@ -237,26 +206,22 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int col = -1;
-                BasicFlexFormPanel table = new BasicFlexFormPanel();
-                table.setWidget(0, ++col, inject(proto().name(), decorator(20)));
-                table.setWidget(0, ++col, inject(proto().number(), decorator(15)));
-                table.setWidget(0, ++col, inject(proto().creditAmount(), decorator(10)));
-                table.setWidget(0, ++col, inject(proto().balanceAmount(), decorator(10)));
-                table.setWidget(0, ++col, inject(proto().lastPayment(), decorator(10)));
-                table.setWidget(0, ++col, inject(proto().code(), decorator(5)));
-                table.setWidget(0, ++col, inject(proto().type(), decorator(10)));
+                formPanel.append(Location.Left, proto().name()).decorate();
+                formPanel.append(Location.Left, proto().number()).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().creditAmount()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().balanceAmount()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().lastPayment()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().code()).decorate().componentWidth(90);
+                formPanel.append(Location.Right, proto().type()).decorate().componentWidth(120);
 
-                main.setWidget(0, 0, 2, table);
+                formPanel.hr();
 
-                main.setHR(1, 0, 2);
+                formPanel.append(Location.Left, proto().paymentRate()).decorate();
+                formPanel.append(Location.Right, proto().paymentType()).decorate();
 
-                main.setWidget(2, 0, inject(proto().paymentRate(), new FieldDecoratorBuilder(25).build()));
-                main.setWidget(2, 1, inject(proto().paymentType(), new FieldDecoratorBuilder(25).build()));
-
-                return main;
+                return formPanel;
             }
         }
     }

@@ -39,9 +39,8 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
         BasicFlexFormPanel main = (new TwoColumnFlexFormPanel());
         int row = -1;
         int col = (1);
-        int span = (2);
 
-        main.setWidget(++row, 0, span, inject(proto().name(), new NameEditor(i18n.tr("Person"), false)));
+        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"), false)));
         main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(7).build()));
 
         row = (row - 1);
@@ -58,7 +57,7 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
 
         row = (row + 1);
         main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, span, inject(proto().address(), new AddressSimpleEditor(false)));
+        main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
         return main;
     }

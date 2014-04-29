@@ -149,7 +149,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor(false)));
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
@@ -200,7 +200,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor(false)));
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
@@ -228,7 +228,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(25).build()));
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor(false)));
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 main.setH3(++row, 0, 2, i18n.tr("Program Info"));
                 main.setWidget(++row, 0, inject(proto().program(), new FieldDecoratorBuilder(10).build()));
@@ -267,7 +267,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor(false)));
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
@@ -303,7 +303,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor(false)));
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 

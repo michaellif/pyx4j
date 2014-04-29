@@ -20,8 +20,8 @@ import java.util.Vector;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
@@ -32,13 +32,13 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
@@ -133,8 +133,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         });
     }
 
-    protected TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    protected IsWidget createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
         String participant = null;
         if (rootClass.equals(TenantDTO.class)) {
@@ -145,52 +145,39 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             throw new IllegalArgumentException();
         }
 
-        int row = -1;
         CImage imageHolder = new CImage(GWT.<CustomerPictureCrmUploadService> create(CustomerPictureCrmUploadService.class), new VistaFileURLBuilder(
                 CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
-        ++row;
-        main.setWidget(row, 0, injectAndDecorate(proto().participantId(), 10));
-        main.setWidget(row, 1, inject(proto().customer().picture().file(), imageHolder, new FieldDecoratorBuilder().customLabel("").build()));
-        main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
+        formPanel.append(Location.Left, proto().participantId()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().yardiApplicantId()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().customer().picture().file(), imageHolder).decorate().customLabel("");
 
-        main.setWidget(++row, 0, injectAndDecorate(proto().yardiApplicantId(), 10));
-
-        main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
+        formPanel.append(Location.Full, proto().customer().person().name(), new NameEditor(participant));
         get(proto().customer().person().name()).setEditable(!VistaFeatures.instance().yardiIntegration());
 
-        ++row;
-        main.setWidget(row, 1, injectAndDecorate(proto().customer().person().birthDate(), 9));
-        main.setWidget(row, 0, injectAndDecorate(proto().customer().person().sex(), 7));
+        formPanel.append(Location.Left, proto().customer().person().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().customer().person().homePhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().customer().person().mobilePhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Right, proto().customer().person().birthDate()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().customer().person().workPhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Right, proto().customer().person().email()).decorate().componentWidth(200);
 
-        ++row;
-        main.setWidget(row, 0, injectAndDecorate(proto().customer().person().homePhone(), 15));
-        main.setWidget(row, 1, injectAndDecorate(proto().customer().person().workPhone(), 15));
+        formPanel.br(); // lease term / portal registration:
 
-        ++row;
-        main.setWidget(row, 0, injectAndDecorate(proto().customer().person().mobilePhone(), 15));
-        main.setWidget(row, 1, injectAndDecorate(proto().customer().person().email(), 15));
-
-        main.setBR(++row, 0, 2); // lease term / portal registration:
-
-        main.setWidget(++row, 0, injectAndDecorate(proto().leaseTermV(), new CLeaseTermVHyperlink(), 22));
-        main.setWidget(
-                row,
-                1,
-                injectAndDecorate(proto().screening(),
-                        new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)), 22));
+        formPanel.append(Location.Left, proto().leaseTermV(), new CLeaseTermVHyperlink()).decorate();
+        formPanel.append(Location.Left, proto().screening(),
+                new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))).decorate();
 
         if (rootClass.equals(TenantDTO.class)) {
-            ++row;
-            main.setWidget(row, 0, injectAndDecorate(((TenantDTO) proto()).role(), new CEnumLabel(), 10));
-            main.setWidget(row, 1, injectAndDecorate(((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel(), 2));
+
+            formPanel.append(Location.Left, ((TenantDTO) proto()).role(), new CEnumLabel()).decorate().componentWidth(150);
+            formPanel.append(Location.Left, ((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()).decorate().componentWidth(50);
         }
 
-        main.setHR(++row, 0, 2); // lease/application(s) info:
+        formPanel.hr(); // lease/application(s) info:
 
-        ++row;
         {
             CEntityCollectionCrudHyperlink<IList<Lease>> link = new CEntityCollectionCrudHyperlink<IList<Lease>>(new AppPlaceBuilder<IList<Lease>>() {
                 @Override
@@ -202,7 +189,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                     return place;
                 }
             });
-            main.setWidget(row, 0, injectAndDecorate(proto().leasesOfThisCustomer(), link, 5));
+            formPanel.append(Location.Right, proto().leasesOfThisCustomer(), link).decorate().componentWidth(50);
         }
         {
             CEntityCollectionCrudHyperlink<IList<Lease>> link = new CEntityCollectionCrudHyperlink<IList<Lease>>(new AppPlaceBuilder<IList<Lease>>() {
@@ -215,16 +202,16 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                     return place;
                 }
             });
-            main.setWidget(row, 1, injectAndDecorate(proto().applicationsOfThisCustomer(), link, 5));
+            formPanel.append(Location.Right, proto().applicationsOfThisCustomer(), link).decorate().componentWidth(50);
         }
 
-        return main;
+        return formPanel;
     }
 
-    protected TwoColumnFlexFormPanel createPaymentMethodsTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    protected IsWidget createPaymentMethodsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        main.setWidget(0, 0, 2, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+        formPanel.append(Location.Full, proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
@@ -295,9 +282,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 onPaymentMethodRemove(item.getValue());
                 super.removeItem(item);
             }
-        }));
+        });
 
-        return main;
+        return formPanel;
     }
 
     protected void onPaymentMethodRemove(LeasePaymentMethod lpm) {

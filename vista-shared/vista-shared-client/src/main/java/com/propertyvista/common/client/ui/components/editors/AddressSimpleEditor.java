@@ -24,7 +24,9 @@ import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
@@ -35,8 +37,6 @@ import com.propertyvista.domain.ref.Province;
 
 public class AddressSimpleEditor extends CForm<AddressSimple> {
 
-    private final boolean oneColumn;
-
     private final double maxCompWidth;
 
     private final double contentWidth;
@@ -44,50 +44,39 @@ public class AddressSimpleEditor extends CForm<AddressSimple> {
     private final double labelWidth;
 
     public AddressSimpleEditor() {
-        this(true);
+        this(FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
     }
 
-    public AddressSimpleEditor(boolean oneColumn) {
-        this(oneColumn, FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
-    }
-
-    public AddressSimpleEditor(boolean oneColumn, double labelWidth, double maxCompWidth, double contentWidth) {
+    public AddressSimpleEditor(double labelWidth, double maxCompWidth, double contentWidth) {
         super(AddressSimple.class);
 
         this.labelWidth = labelWidth;
-        this.oneColumn = oneColumn;
         this.maxCompWidth = maxCompWidth;
         this.contentWidth = contentWidth;
     }
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        int col = (oneColumn ? 0 : 1);
+        formPanel.append(Location.Left, proto().street1()).decorate();
+        formPanel.append(Location.Left, proto().street2()).decorate();
+        formPanel.append(Location.Left, proto().city()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().street1(), decorator(maxCompWidth)));
-        main.setWidget(++row, 0, inject(proto().street2(), decorator(maxCompWidth)));
-        main.setWidget(++row, 0, inject(proto().city(), decorator(maxCompWidth)));
+        formPanel.append(Location.Right, proto().province()).decorate();
+        formPanel.append(Location.Right, proto().country()).decorate();
+        formPanel.append(Location.Right, proto().postalCode()).decorate().componentWidth(120);
 
-        row = (oneColumn ? row : -1);
-
-        CField<Province, ?> province = (CField<Province, ?>) inject(proto().province(), decorator(maxCompWidth));
-        main.setWidget(++row, col, province);
-
-        final CField<Country, ?> country = (CField<Country, ?>) inject(proto().country(), decorator(maxCompWidth));
-        main.setWidget(++row, col, country);
-
-        CField<String, ?> postalCode = (CField<String, ?>) inject(proto().postalCode(), decorator(10));
+        CField<Province, ?> province = (CField<Province, ?>) get(proto().province());
+        CField<Country, ?> country = (CField<Country, ?>) get(proto().country());
+        CField<String, ?> postalCode = (CField<String, ?>) get(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormatter(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-        main.setWidget(++row, col, postalCode);
 
         attachFilters(proto(), province, country, postalCode);
 
-        return main;
+        return formPanel;
     }
 
     private void attachFilters(final AddressSimple proto, CComponent<?, Province, ?> province, CComponent<?, Country, ?> country,
@@ -109,7 +98,4 @@ public class AddressSimpleEditor extends CForm<AddressSimple> {
         });
     }
 
-    private FieldDecorator decorator(double compWidth) {
-        return new FieldDecoratorBuilder(labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth).build();
-    }
 }

@@ -100,7 +100,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         main.setH3(++row, 0, 2, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, 2, inject(proto().sameAsCurrent(), new FieldDecoratorBuilder(5, true).build()));
-        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressSimpleEditor(false)));
+        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 2);
