@@ -1,7 +1,12 @@
 /**
-***	===============================================================
-***	VIEWS TO SIMPLIFY DATABASE ADMINITRATION
-***	===============================================================
+***	    ==================================================================================================================
+***
+***	        @version $Revision$ ($Author$) $Date$ 
+***
+***         VIEWS TO SIMPLIFY DATABASE ADMINITRATION
+***
+***
+***	    ==================================================================================================================
 **/
 
 -- dba_proc view - all procedures in _dba_ schema
@@ -31,12 +36,28 @@ CREATE OR REPLACE VIEW _dba_.pmc_stats AS
                 e.row_count AS customer_users,
                 f.row_count AS tenant_sure
         FROM    _admin_.admin_pmc ap
-        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('building')) a ON (ap.namespace = a.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('building',ARRAY['NOT suspended'])) a ON (ap.namespace = a.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('apt_unit')) b ON (a.pmc = b.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('lease')) c ON (a.pmc = c.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('payment_record')) d ON (a.pmc = d.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer',ARRAY['registered_in_portal'])) e ON (a.pmc = e.pmc)
-        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('insurance_certificate',ARRAY['id_discriminator = ''InsuranceTenantSure'' '])) f ON (a.pmc = f.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('insurance_policy',ARRAY['id_discriminator = ''TenantSureInsurancePolicy'' ','status = ''Active'' '])) f 
+            ON (a.pmc = f.pmc)
         ORDER BY ap.id
 );
+
+-- Mail queue status
+
+CREATE OR REPLACE VIEW _dba_.mail_queue AS
+(
+    SELECT  status,COUNT(id) 
+    FROM    _admin_.outgoing_mail_queue 
+    GROUP BY    status 
+    ORDER BY    status
+);
+
+
+
+
+
         
