@@ -108,33 +108,34 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setForm(new LeaseApplicationForm(this));
 
         // Buttons:
-        Button applicationDocumentButton = new Button(i18n.tr("Application Document"));
-        addHeaderToolbarItem(applicationDocumentButton.asWidget());
+
+        Button applicationDocumentButton = new Button(i18n.tr("Documents"));
         ButtonMenuBar applicationDocumentMenu = new ButtonMenuBar();
         applicationDocumentButton.setMenu(applicationDocumentMenu);
+        addHeaderToolbarItem(applicationDocumentButton.asWidget());
 
-        MenuItem uploadApplicationDocumentMenuItem = new MenuItem(i18n.tr("Upload..."), new Command() {//formatter:off            
-                    @Override
-                    public void execute() {
-                        uploadApplicationDocument();
-                    }
-                });//formatter:on
-        applicationDocumentMenu.addItem(uploadApplicationDocumentMenuItem);
-        MenuItem downloadApplicationDocumentMenuItem = new MenuItem(i18n.tr("Manually Sign Application..."), new Command() {//formatter:off            
-                    @Override
-                    public void execute() {
-                        downloadApplicationDocument();
-                    }
-                });//formatter:on
-        applicationDocumentMenu.addItem(downloadApplicationDocumentMenuItem);
+        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Manually Sign Application..."), new Command() {
+            @Override
+            public void execute() {
+                downloadApplicationDocument();
+            }
+        }));
 
-        Button downloadDraftLeaseAgreement = new Button(i18n.tr("Draft Lease Agreement"), new Command() {
+        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Upload Signed Application..."), new Command() {
+            @Override
+            public void execute() {
+                uploadApplicationDocument();
+            }
+        }));
+
+        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Download Draft Lease Agreement"), new Command() {
             @Override
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).downloadDraftLeaseAgreement();
             }
-        });
-        addHeaderToolbarItem(downloadDraftLeaseAgreement);
+        }));
+
+        // ------------------------------------------------------------------------------------------------------------
 
         editButton = new Button(i18n.tr("Edit"), new Command() {
             @Override
@@ -178,18 +179,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         inviteAction = new MenuItem(INVITE, new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
-                    @Override
-                    public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                        new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
-                            @Override
-                            public boolean onClickOk() {
-                                ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
-                                return true;
-                            }
-                        }.show();
-                    }
-                });
+                inviteActionExecuter();
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
@@ -199,114 +189,146 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
-                ((LeaseApplicationViewerView.Presenter) getPresenter()).getCreditCheckServiceStatus(new DefaultAsyncCallback<PmcEquifaxStatus>() {
-                    @Override
-                    public void onSuccess(PmcEquifaxStatus result) {
-                        switch (result) {
-                        case Active:
-                            ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
-                                @Override
-                                public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                                    new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
-                                        @Override
-                                        public boolean onClickOk() {
-                                            ((LeaseApplicationViewerView.Presenter) getPresenter()).creditCheck(getSelectedItems());
-                                            return true;
-                                        }
-                                    }.show();
-                                }
-                            });
-                            break;
-                        case NotRequested:
-                            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
-                                new CreditCheckSubscribeDialog().show();
-                            } else {
-                                reportCreditCheckServiceInactive();
-                            }
-                            break;
-                        default:
-                            reportCreditCheckServiceInactive();
-                        }
-                    }
-                });
+                checkActionExecuter();
             }
         });
         if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             addAction(checkAction);
         }
 
-        // TODO Move Lease
-        {
-            approveAction = new MenuItem(APPROVE, new Command() {
+        // TODO Move Lease Action
 
-                @Override
-                public void execute() {
-                    new ActionBox(APPROVE) {
-                        @Override
-                        public boolean onClickOk() {
-                            ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
-                            return true;
-                        }
-                    }.show();
-                }
-            });
-            addAction(approveAction);
-
-            moreInfoAction = new MenuItem(MORE_INFO, new Command() {
-                @Override
-                public void execute() {
-                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
-                        @Override
-                        public void onSuccess(List<LeaseTermParticipant<?>> result) {
-                            new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
-
-                                @Override
-                                public boolean onClickOk() {
-                                    // TODO make the credit check happen
-                                    return true;
-                                }
-                            }.show();
-                        }
-                    });
-                }
-            });
-            if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
-                addAction(moreInfoAction);
+        approveAction = new MenuItem(APPROVE, new Command() {
+            @Override
+            public void execute() {
+                approveActionExecuter();
             }
+        });
+        addAction(approveAction);
 
-            declineAction = new MenuItem(DECLINE, new Command() {
-                @Override
-                public void execute() {
-                    new ActionBox(DECLINE) {
-                        @Override
-                        public boolean onClickOk() {
-                            ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Decline));
-                            return true;
-                        }
-                    }.show();
-                }
-            });
-            addAction(declineAction);
+        moreInfoAction = new MenuItem(MORE_INFO, new Command() {
+            @Override
+            public void execute() {
+                moreInfoActionExecuter();
+            }
+        });
+        if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
+            addAction(moreInfoAction);
         }
+
+        declineAction = new MenuItem(DECLINE, new Command() {
+            @Override
+            public void execute() {
+                declineActionExecuter();
+            }
+        });
+        addAction(declineAction);
 
         cancelAction = new MenuItem(CANCEL, new Command() {
             @Override
             public void execute() {
-                new ActionBox(CANCEL) {
+                cancelActionExecuter();
+            }
+        });
+        addAction(cancelAction);
+    }
+
+    private void inviteActionExecuter() {
+        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+            @Override
+            public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
                     @Override
                     public boolean onClickOk() {
-                        if (CommonsStringUtils.isEmpty(getReason())) {
-                            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
-                            return false;
-                        }
-                        ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Cancel));
+                        ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
                         return true;
                     }
                 }.show();
             }
         });
-        addAction(cancelAction);
+    }
 
+    private void checkActionExecuter() {
+        ((LeaseApplicationViewerView.Presenter) getPresenter()).getCreditCheckServiceStatus(new DefaultAsyncCallback<PmcEquifaxStatus>() {
+            @Override
+            public void onSuccess(PmcEquifaxStatus result) {
+                switch (result) {
+                case Active:
+                    ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+                        @Override
+                        public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                            new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
+                                @Override
+                                public boolean onClickOk() {
+                                    ((LeaseApplicationViewerView.Presenter) getPresenter()).creditCheck(getSelectedItems());
+                                    return true;
+                                }
+                            }.show();
+                        }
+                    });
+                    break;
+                case NotRequested:
+                    if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+                        new CreditCheckSubscribeDialog().show();
+                    } else {
+                        reportCreditCheckServiceInactive();
+                    }
+                    break;
+                default:
+                    reportCreditCheckServiceInactive();
+                }
+            }
+        });
+    }
+
+    private void approveActionExecuter() {
+        new ActionBox(APPROVE) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
+                return true;
+            }
+        }.show();
+    }
+
+    private void moreInfoActionExecuter() {
+        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+            @Override
+            public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
+
+                    @Override
+                    public boolean onClickOk() {
+                        // TODO make the credit check happen
+                        return true;
+                    }
+                }.show();
+            }
+        });
+    }
+
+    private void declineActionExecuter() {
+        new ActionBox(DECLINE) {
+            @Override
+            public boolean onClickOk() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Decline));
+                return true;
+            }
+        }.show();
+    }
+
+    private void cancelActionExecuter() {
+        new ActionBox(CANCEL) {
+            @Override
+            public boolean onClickOk() {
+                if (CommonsStringUtils.isEmpty(getReason())) {
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
+                    return false;
+                }
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Cancel));
+                return true;
+            }
+        }.show();
     }
 
     @Override
