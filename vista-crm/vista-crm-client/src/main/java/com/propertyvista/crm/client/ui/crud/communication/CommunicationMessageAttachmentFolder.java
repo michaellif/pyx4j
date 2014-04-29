@@ -19,7 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
@@ -49,19 +50,17 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
 
-            content.setWidget(
-                    ++row,
-                    0,
-                    injectAndDecorate(proto().file(),
-                            new CFile(GWT.<CommunicationMessageAttachmentUploadService> create(CommunicationMessageAttachmentUploadService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), 30));
+            formPanel.append(
+                    Location.Left,
+                    proto().file(),
+                    new CFile(GWT.<CommunicationMessageAttachmentUploadService> create(CommunicationMessageAttachmentUploadService.class),
+                            new VistaFileURLBuilder(CommunicationMessageAttachment.class))).decorate();
 
-            content.setWidget(++row, 0, injectAndDecorate(proto().description(), 20));
+            formPanel.append(Location.Left, proto().description()).decorate();
 
-            return content;
+            return formPanel;
         }
 
         @Override

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,11 +27,11 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -52,13 +52,12 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
     }
 
-    private TwoColumnFlexFormPanel createItemsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+    private IsWidget createItemsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable())));
+        formPanel.append(Location.Left, proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable()));
 
-        return panel;
+        return formPanel;
     }
 
     class ProductTaxPolicyItemFolder extends VistaBoxFolder<ProductTaxPolicyItem> {
@@ -94,16 +93,15 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                content.setWidget(++row, 0, 2, inject(proto().productCode(), new FieldDecoratorBuilder(true).build()));
+                formPanel.append(Location.Left, proto().productCode()).decorate();
                 get(proto().productCode()).setViewable(true);
 
-                content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());
-                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(ProductTaxPolicyForm.this)));
+                formPanel.h3(proto().taxes().getMeta().getCaption());
+                formPanel.append(Location.Left, proto().taxes(), new TaxFolder(ProductTaxPolicyForm.this));
 
-                return content;
+                return formPanel;
             }
         }
 

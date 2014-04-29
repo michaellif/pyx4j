@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,13 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
@@ -28,7 +26,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
@@ -52,43 +51,39 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
 
-        TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel();
-        TwoColumnFlexFormPanel companyNameAndPhonesPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        signaturePanel.setWidget(++row, 0, 2, injectAndDecorate(proto().includeSignature()));
-        signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
+        FormPanel signatureFormPanel = new FormPanel(this);
+        FormPanel companyNameAndPhonesFormPanel = new FormPanel(this);
 
-        int subRow = -1;
-        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, injectAndDecorate(proto().companyName()));
-        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, injectAndDecorate(proto().emailAddress()));
-        companyNameAndPhonesPanel.setWidget(++subRow, 0, 1, injectAndDecorate(proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)));
-        companyNameAndPhonesPanel.setWidget(subRow, 1, 1, injectAndDecorate(proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)));
+        signatureFormPanel.append(Location.Left, proto().includeSignature()).decorate();
+        signatureFormPanel.h1(i18n.tr("The following information will be used for signing N4 letters:"));
 
-        signaturePanel.setWidget(++row, 0, 1, companyNameAndPhonesPanel);
-        signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+        companyNameAndPhonesFormPanel.append(Location.Left, proto().companyName()).decorate();
+        companyNameAndPhonesFormPanel.append(Location.Right, proto().emailAddress()).decorate();
+        companyNameAndPhonesFormPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        companyNameAndPhonesFormPanel.append(Location.Right, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+
+        signatureFormPanel.append(Location.Left, companyNameAndPhonesFormPanel);
 
         AddressStructuredEditor addressEditor = new AddressStructuredEditor();
-        signaturePanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), addressEditor));
+        signatureFormPanel.append(Location.Left, proto().mailingAddress(), addressEditor);
 
-        TwoColumnFlexFormPanel arCodesPanel = new TwoColumnFlexFormPanel();
-        row = -1;
-        arCodesPanel.setH1(++row, 0, 2, i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
-        arCodesPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), arCodeFolder = new ARCodeFolder()));
+        FormPanel arCodesFormPanel = new FormPanel(this);
+        arCodesFormPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
+        arCodesFormPanel.append(Location.Left, proto().arCodes(), arCodeFolder = new ARCodeFolder());
 
-        TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel();
-        row = -1;
-        deliveryPanel.setH1(++row, 0, 2, i18n.tr("Termination date calculation:"));
-        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().terminationDateAdvanceDaysLongRentPeriod()));
-        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().terminationDateAdvanceDaysShortRentPeriod()));
+        FormPanel deliveryFormPanel = new FormPanel(this);
+        deliveryFormPanel.h1(i18n.tr("Termination date calculation:"));
+        deliveryFormPanel.append(Location.Left, proto().terminationDateAdvanceDaysLongRentPeriod()).decorate();
+        deliveryFormPanel.append(Location.Left, proto().terminationDateAdvanceDaysShortRentPeriod()).decorate();
 
-        deliveryPanel.setH1(++row, 0, 2, i18n.tr("Additional advance days based on delivery method:"));
-        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().handDeliveryAdvanceDays()));
-        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().mailDeliveryAdvanceDays()));
-        deliveryPanel.setWidget(++row, 0, 1, injectAndDecorate(proto().courierDeliveryAdvanceDays()));
+        deliveryFormPanel.h1(i18n.tr("Additional advance days based on delivery method:"));
+        deliveryFormPanel.append(Location.Left, proto().handDeliveryAdvanceDays()).decorate();
+        deliveryFormPanel.append(Location.Left, proto().mailDeliveryAdvanceDays()).decorate();
+        deliveryFormPanel.append(Location.Left, proto().courierDeliveryAdvanceDays()).decorate();
 
-        addTab(signaturePanel, i18n.tr("Signature"));
-        addTab(arCodesPanel, i18n.tr("AR Codes"));
-        addTab(deliveryPanel, i18n.tr("Delivery"));
+        addTab(signatureFormPanel, i18n.tr("Signature"));
+        addTab(arCodesFormPanel, i18n.tr("AR Codes"));
+        addTab(deliveryFormPanel, i18n.tr("Delivery"));
         addTab(createAutoCancellationPanel(), i18n.tr("Auto Cancellation"));
     }
 
@@ -96,13 +91,12 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         arCodeFolder.setARCodeOptions(arCodeOptions);
     }
 
-    private TwoColumnFlexFormPanel createAutoCancellationPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, injectAndDecorate(proto().cancellationThreshold()));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().expiryDays()));
+    private IsWidget createAutoCancellationPanel() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().cancellationThreshold()).decorate();
+        formPanel.append(Location.Left, proto().expiryDays()).decorate();
 
-        return panel;
+        return formPanel;
     }
 
     public static class ARCodeFolder extends VistaBoxFolder<N4PolicyDTOARCodeHolderDTO> {

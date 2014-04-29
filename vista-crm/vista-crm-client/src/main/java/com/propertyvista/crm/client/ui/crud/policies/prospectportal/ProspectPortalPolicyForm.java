@@ -13,15 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.prospectportal;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -38,18 +36,17 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
 
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0, 2, inject(proto().unitAvailabilitySpan(), new FieldDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxExactMatchUnits(), new FieldDecoratorBuilder(5, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxPartialMatchUnits(), new FieldDecoratorBuilder(5, true).build()));
+        formPanel.append(Location.Left, proto().unitAvailabilitySpan()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().maxExactMatchUnits()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().maxPartialMatchUnits()).decorate().componentWidth(60);
 
-        content.setBR(++row, 0, 2);
+        formPanel.br();
 
-        content.setWidget(++row, 0, 2, inject(proto().feePayment(), new FieldDecoratorBuilder(10, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().feeAmount(), new FieldDecoratorBuilder(10, true).build()));
+        formPanel.append(Location.Left, proto().feePayment()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().feeAmount()).decorate().componentWidth(100);
 
         get(proto().feePayment()).addValueChangeHandler(new ValueChangeHandler<FeePayment>() {
             @Override
@@ -58,7 +55,7 @@ public class ProspectPortalPolicyForm extends PolicyDTOTabPanelBasedForm<Prospec
             }
         });
 
-        return content;
+        return formPanel;
     }
 
     @Override

@@ -14,12 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -45,7 +47,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
 
     }
 
-    private TwoColumnFlexFormPanel createMiscPoliciesTab() {
+    private IsWidget createMiscPoliciesTab() {
         BasicFlexFormPanel accepted = new BasicFlexFormPanel();
         int col = -1;
         accepted.setH4(0, ++col, 1, i18n.tr("Accepted:"));
@@ -125,23 +127,23 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         cashEquivalent.setWidget(0, ++col, inject(proto().cashEquivalentInterac(), decorator()));
 
         // put all together:
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        main.setWidget(++row, 0, 2, accepted);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, residentPortal);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, prospectPortal);
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, cashEquivalent);
-        main.setHR(++row, 0, 2);
-        main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, 2,
-                new HTML(i18n.tr("Note: If payment marked with {0} is not selected, a Web Payment Fee will apply to the Resident.", convenienceMarker)));
-        main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.InfoMessage.name());
+        formPanel.append(Location.Left, accepted);
+        formPanel.hr();
+        formPanel.append(Location.Left, residentPortal);
+        formPanel.hr();
+        formPanel.append(Location.Left, prospectPortal);
+        formPanel.hr();
+        formPanel.append(Location.Left, cashEquivalent);
+        formPanel.hr();
+        formPanel.br();
+        HTML html;
+        formPanel.append(Location.Left,
+                html = new HTML(i18n.tr("Note: If payment marked with {0} is not selected, a Web Payment Fee will apply to the Resident.", convenienceMarker)));
+        html.setStyleName(VistaTheme.StyleName.InfoMessage.name());
 
-        return main;
+        return formPanel;
     }
 
     private FieldDecorator decorator(String customLabel) {

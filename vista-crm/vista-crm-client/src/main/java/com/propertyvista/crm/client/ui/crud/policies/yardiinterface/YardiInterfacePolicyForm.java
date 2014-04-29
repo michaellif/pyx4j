@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.yardiinterface;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -27,10 +28,9 @@ public class YardiInterfacePolicyForm extends PolicyDTOTabPanelBasedForm<YardiIn
     public YardiInterfacePolicyForm(IForm<YardiInterfacePolicyDTO> view) {
         super(YardiInterfacePolicyDTO.class, view);
 
-        TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        formPanel.setH1(++row, 0, 2, i18n.tr("Yardi charge codes to ignore during import:"));
-        formPanel.setWidget(++row, 0, 2, inject(proto().ignoreChargeCodes(), new YardiInterfacePolicyChargeCodeIgnoreFolder()));
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n.tr("Yardi charge codes to ignore during import:"));
+        formPanel.append(Location.Left, proto().ignoreChargeCodes(), new YardiInterfacePolicyChargeCodeIgnoreFolder());
         addTab(formPanel, i18n.tr("Integration"));
     }
 

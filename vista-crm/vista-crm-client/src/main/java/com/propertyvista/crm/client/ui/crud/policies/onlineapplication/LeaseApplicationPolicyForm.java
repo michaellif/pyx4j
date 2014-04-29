@@ -17,9 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -35,23 +35,21 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
     public LeaseApplicationPolicyForm(IForm<LeaseApplicationPolicyDTO> view) {
         super(LeaseApplicationPolicyDTO.class, view);
 
-        TwoColumnFlexFormPanel legalTermsPanel = new TwoColumnFlexFormPanel();
+        FormPanel legalTermsFormPanel = new FormPanel(this);
 
         {
-            int row = -1;
-            legalTermsPanel.setH1(++row, 0, 2, proto().legalTerms().getMeta().getCaption());
-            legalTermsPanel.setWidget(++row, 0, 2, inject(proto().legalTerms(), new LegalTermFolder(isEditable())));
+            legalTermsFormPanel.h1(proto().legalTerms().getMeta().getCaption());
+            legalTermsFormPanel.append(Location.Left, proto().legalTerms(), new LegalTermFolder(isEditable()));
         }
-        addTab(legalTermsPanel, i18n.tr("Legal Step"));
+        addTab(legalTermsFormPanel, i18n.tr("Legal Step"));
 
-        TwoColumnFlexFormPanel confirmationTermsPanel = new TwoColumnFlexFormPanel();
+        FormPanel confirmationTermsFormPanel = new FormPanel(this);
 
         {
-            int row = -1;
-            confirmationTermsPanel.setH1(++row, 0, 2, proto().confirmationTerms().getMeta().getCaption());
-            confirmationTermsPanel.setWidget(++row, 0, 2, inject(proto().confirmationTerms(), new ConfirmationTermFolder(isEditable())));
+            confirmationTermsFormPanel.h1(proto().confirmationTerms().getMeta().getCaption());
+            confirmationTermsFormPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermFolder(isEditable()));
         }
-        addTab(confirmationTermsPanel, i18n.tr("Confirmation Step"));
+        addTab(confirmationTermsFormPanel, i18n.tr("Confirmation Step"));
 
     }
 
@@ -74,14 +72,13 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                main.setWidget(++row, 0, inject(proto().applyToRole(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().body(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FieldDecoratorBuilder(35).build()));
-                return main;
+                formPanel.append(Location.Left, proto().applyToRole()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(250);
+                return formPanel;
             }
         }
     }
@@ -105,14 +102,13 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                main.setWidget(++row, 0, inject(proto().applyToRole(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().body(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FieldDecoratorBuilder(35).build()));
-                return main;
+                formPanel.append(Location.Left, proto().applyToRole()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(250);
+                return formPanel;
             }
         }
     }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,9 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -30,21 +32,20 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
         addTab(createMiscPoliciesTab(), i18n.tr("Restrictions"));
     }
 
-    private TwoColumnFlexFormPanel createMiscPoliciesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        String lbw = "220px";
-        content.setWidget(++row, 0, 2, inject(proto().maxParkingSpots(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxLockers(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maxPets(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().occupantsPerBedRoom(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+    private IsWidget createMiscPoliciesTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setBR(++row, 0, 1);
+        formPanel.append(Location.Left, proto().maxParkingSpots()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maxLockers()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maxPets()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().occupantsPerBedRoom()).decorate().contentWidth(40).labelWidth(220);
 
-        content.setWidget(++row, 0, 2, inject(proto().ageOfMajority(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().enforceAgeOfMajority(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
-        content.setWidget(++row, 0, 2, inject(proto().maturedOccupantsAreApplicants(), new FieldDecoratorBuilder(3, true).labelWidth(lbw).build()));
+        formPanel.br();
 
-        return content;
+        formPanel.append(Location.Left, proto().ageOfMajority()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().enforceAgeOfMajority()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maturedOccupantsAreApplicants()).decorate().contentWidth(40).labelWidth(220);
+
+        return formPanel;
     }
 }
