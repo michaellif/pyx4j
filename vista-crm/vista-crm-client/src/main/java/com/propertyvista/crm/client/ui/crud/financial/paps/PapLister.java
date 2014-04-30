@@ -37,12 +37,17 @@ public class PapLister extends AbstractLister<AutoPayDTO> {
                 new MemberColumnDescriptor.Builder(proto().payment()).searchable(false).sortable(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().build(),
+                
+                new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(),
+                
+                new MemberColumnDescriptor.Builder(proto().tenant().lease().unit().building())/*.searchable(false)*/.build(),
+                new MemberColumnDescriptor.Builder(proto().tenant().lease().unit().building().propertyCode()).searchableOnly().build(),
                 
                 new MemberColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(),
+                
                 new MemberColumnDescriptor.Builder(proto().effectiveFrom()).build(),
                 new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
                 

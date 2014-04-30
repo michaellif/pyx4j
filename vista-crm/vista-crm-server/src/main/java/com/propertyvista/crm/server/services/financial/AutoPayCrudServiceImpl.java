@@ -48,7 +48,7 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAg
     protected void enhanceListRetrieved(AutopayAgreement bo, AutoPayDTO dto) {
         super.enhanceListRetrieved(bo, dto);
 
-        Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(dto.tenant().lease().unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dto.createdBy(), AttachLevel.ToStringMembers);
 
         dto.price().setValue(BigDecimal.ZERO);
