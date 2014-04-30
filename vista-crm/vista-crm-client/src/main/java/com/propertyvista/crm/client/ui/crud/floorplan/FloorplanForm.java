@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -106,7 +106,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
             @Override
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
-                FormPanel formPanel = new FormPanel(entryForm);
+                BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
 
                 formPanel.append(Location.Full, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
                 formPanel.append(Location.Full, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
