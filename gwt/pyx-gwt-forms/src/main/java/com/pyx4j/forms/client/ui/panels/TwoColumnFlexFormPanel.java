@@ -22,6 +22,13 @@ package com.pyx4j.forms.client.ui.panels;
 
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * 
+ * 
+ * @deprecated Use {@link #TwoColumnFormPanel} instead
+ * 
+ */
+@Deprecated
 public class TwoColumnFlexFormPanel extends BasicFlexFormPanel {
 
     public TwoColumnFlexFormPanel() {
