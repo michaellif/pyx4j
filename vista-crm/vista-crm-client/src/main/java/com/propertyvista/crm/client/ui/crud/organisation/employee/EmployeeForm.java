@@ -29,13 +29,13 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -69,11 +69,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private final Tab privilegesTab, auditingTab, alertsTab;
 
-    private final TwoColumnFlexFormPanel buildingsAccessPanel = new TwoColumnFlexFormPanel();
+    private final BasicCFormPanel buildingsAccessPanel;
 
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
-
+        buildingsAccessPanel = new BasicCFormPanel(this);
         selectTab(addTab(createInfoTab(), i18n.tr("Personal Information")));
         privilegesTab = addTab(createPrivilegesTab(), i18n.tr("Privileges"));
         auditingTab = addTab(createAuditingConfigurationTab(), i18n.tr("Auditing"));
@@ -136,60 +136,53 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         alertsTab.setTabVisible(isSelfEditor || isManager);
     }
 
-    private TwoColumnFlexFormPanel createInfoTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createInfoTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().employeeId(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, inject(proto().title(), new FieldDecoratorBuilder(20).build()));
+        formPanel.append(Location.Left, proto().employeeId()).decorate().contentWidth(100);
+        formPanel.append(Location.Right, proto().title()).decorate().contentWidth(150);
 
-        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Employee"))));
-        main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(7).build()));
-        main.setWidget(++row, 0, inject(proto().birthDate(), new FieldDecoratorBuilder(9).build()));
+        formPanel.append(Location.Left, proto().name(), new NameEditor(i18n.tr("Employee")));
+        formPanel.append(Location.Left, proto().sex()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().birthDate()).decorate().contentWidth(100);
 
-        main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, inject(proto().homePhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(row, 1, inject(proto().mobilePhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++row, 0, inject(proto().workPhone(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(row, 1, inject(proto().email(), new FieldDecoratorBuilder(22).build()));
+        formPanel.br();
+        formPanel.append(Location.Left, proto().homePhone()).decorate().contentWidth(100);
+        formPanel.append(Location.Right, proto().mobilePhone()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().workPhone()).decorate().contentWidth(100);
+        formPanel.append(Location.Right, proto().email()).decorate().contentWidth(200);
         get(proto().email()).setMandatory(true);
 
-        main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
+        formPanel.br();
+        formPanel.append(Location.Left, proto().description()).decorate().contentWidth(100);
 
-        main.setBR(++row, 0, 2);
+        formPanel.br();
         CImage signature = new CImage(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class), new VistaFileURLBuilder(
                 EmployeeSignature.class));
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        main.setWidget(++row, 0, 2, inject(proto().signature().file(), signature, new FieldDecoratorBuilder(true).customLabel(i18n.tr("Signature")).build()));
-        return main;
+        formPanel.append(Location.Left, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createPrivilegesTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    private IsWidget createPrivilegesTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, inject(proto().password(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().passwordConfirm(), new FieldDecoratorBuilder(10).build()));
-        content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, inject(proto().enabled(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().requiredPasswordChangeOnNextLogIn(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().isSecurityQuestionSet(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().credentialUpdated(), new FieldDecoratorBuilder(15).build()));
+        formPanel.h1(i18n.tr("Information"));
+        formPanel.append(Location.Left, proto().password()).decorate();
+        formPanel.append(Location.Left, proto().passwordConfirm()).decorate();
+        formPanel.br();
+        formPanel.append(Location.Left, proto().enabled()).decorate().contentWidth(50);
+        formPanel.append(Location.Right, proto().requiredPasswordChangeOnNextLogIn()).decorate().contentWidth(50);
+        formPanel.append(Location.Left, proto().isSecurityQuestionSet()).decorate().contentWidth(50);
+        formPanel.append(Location.Right, proto().credentialUpdated()).decorate().contentWidth(150);
 
-        content.setH1(++row, 0, 2, i18n.tr("Roles"));
-        content.setWidget(++row, 0, 2, inject(proto().roles(), new CrmRoleFolder(this)));
+        formPanel.h1(i18n.tr("Roles"));
+        formPanel.append(Location.Left, proto().roles(), new CrmRoleFolder(this));
 
-        content.setH1(++row, 0, 2, i18n.tr("Buildings Access"));
-        content.setWidget(
-                ++row,
-                0,
-                2,
-                inject(proto().restrictAccessToSelectedBuildingsAndPortfolios(),
-                        new FieldDecoratorBuilder(30, 5, FieldDecoratorBuilder.CONTENT_WIDTH_DUAL).build()));
+        formPanel.h1(i18n.tr("Buildings Access"));
+        formPanel.append(Location.Left, proto().restrictAccessToSelectedBuildingsAndPortfolios()).decorate().contentWidth(200);
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -197,40 +190,39 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             }
         });
 
-        int baRow = -1;
-        buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Buildings"));
-        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().buildingAccess(), new BuildingFolder(this)));
+        buildingsAccessPanel.h3(i18n.tr("Buildings"));
+        buildingsAccessPanel.append(Location.Left, proto().buildingAccess(), new BuildingFolder(this));
 
-        buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Portfolios"));
-        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().portfolios(), new PortfolioFolder(getParentView(), isEditable())));
+        buildingsAccessPanel.h3(i18n.tr("Portfolios"));
+        buildingsAccessPanel.append(Location.Left, proto().portfolios(), new PortfolioFolder(getParentView(), isEditable()));
 
-        content.setWidget(++row, 0, 2, buildingsAccessPanel);
+        formPanel.append(Location.Left, buildingsAccessPanel);
 
-        content.setH1(++row, 0, 2, i18n.tr("Subordinates"));
-        content.setWidget(++row, 0, 2, inject(proto().employees(), new EmployeeFolder(this, new ParentEmployeeGetter() {
+        formPanel.h1(i18n.tr("Subordinates"));
+        formPanel.append(Location.Left, proto().employees(), new EmployeeFolder(this, new ParentEmployeeGetter() {
             @Override
             public Key getParentId() {
                 return (getValue() != null ? getValue().getPrimaryKey() : null);
             }
-        })));
+        }));
 
-        return content;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createAuditingConfigurationTab() {
-        TwoColumnFlexFormPanel tabContent = new TwoColumnFlexFormPanel();
+    private IsWidget createAuditingConfigurationTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        tabContent.setWidget(0, 0, 2, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
+        formPanel.append(Location.Left, proto().userAuditingConfiguration(), new UserAuditingConfigurationForm());
 
-        return tabContent;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createAlertsTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    private IsWidget createAlertsTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        content.setWidget(0, 0, inject(proto().notifications(), new NotificationFolder()));
+        formPanel.append(Location.Left, proto().notifications(), new NotificationFolder());
 
-        return content;
+        return formPanel;
     }
 
     private boolean isNewEmployee() {
@@ -275,19 +267,16 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().contentWidth(200);
 
-                content.setWidget(++row, 0, 2, inject(proto().type(), new CEnumLabel(), new FieldDecoratorBuilder(22, true).build()));
+                formPanel.h3(proto().buildings().getMeta().getCaption());
+                formPanel.append(Location.Left, proto().buildings(), new BuildingFolder(EmployeeForm.this));
 
-                content.setH3(++row, 0, 1, proto().buildings().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(EmployeeForm.this)));
+                formPanel.h3(proto().portfolios().getMeta().getCaption());
+                formPanel.append(Location.Left, proto().portfolios(), new PortfolioFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable()));
 
-                content.setH3(++row, 0, 1, proto().portfolios().getMeta().getCaption());
-                content.setWidget(++row, 0,
-                        inject(proto().portfolios(), new PortfolioFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable())));
-
-                return content;
+                return formPanel;
             }
         }
     }

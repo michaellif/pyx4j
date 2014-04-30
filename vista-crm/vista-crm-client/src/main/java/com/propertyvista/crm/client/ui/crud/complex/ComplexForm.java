@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Window;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;

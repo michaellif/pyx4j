@@ -13,13 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioForm extends CrmEntityForm<Portfolio> {
@@ -29,17 +28,16 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
     public PortfolioForm(IForm<Portfolio> view) {
         super(Portfolio.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(20, true).build()));
-        content.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
+        formPanel.h1(i18n.tr("Information"));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().description()).decorate();
 
-        content.setH1(++row, 0, 2, i18n.tr("Assigned Buildings"));
-        content.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(getParentView(), isEditable())));
+        formPanel.h1(i18n.tr("Assigned Buildings"));
+        formPanel.append(Location.Left, proto().buildings()).decorate();
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }

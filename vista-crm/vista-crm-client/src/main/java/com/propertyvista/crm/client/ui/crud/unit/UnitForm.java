@@ -22,6 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -30,15 +31,14 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.IShowable;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -62,15 +62,16 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private Widget unitLegalAddressLabel;
 
-    private final BasicFlexFormPanel catalogMarketPricesPanel = new BasicFlexFormPanel();
+    private final BasicCFormPanel catalogMarketPricesPanel;
 
     public UnitForm(IForm<AptUnitDTO> view) {
         super(AptUnitDTO.class, view);
 
-        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
-        selectTab(tab);
+        catalogMarketPricesPanel = new BasicCFormPanel(this);
 
-        tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+
+        Tab tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         setTabEnabled(tab, !isEditable());
 
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -79,7 +80,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         addTab(createLegalAddresslTab(), i18n.tr("Legal Address"));
-
         // TODO Hided till further investigation:
         // addTab(createMarketingTab(), i18n.tr("Marketing"));
     }
@@ -112,68 +112,58 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         buildingLegalAddressLabel.setVisible(!ownedLegalAddress);
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab() {
+    private IsWidget createGeneralTab() {
 
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int leftRow = -1;
+        formPanel
+                .append(Location.Left, proto().building(),
+                        isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)))
+                .decorate().contentWidth(250);
+        formPanel.append(Location.Right, proto().info().floor()).decorate().contentWidth(60);
 
-        flexPanel.setWidget(
-                ++leftRow,
-                0,
-                inject(proto().building(),
-                        isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)),
-                        new FieldDecoratorBuilder(20).build()));
+        formPanel.append(Location.Left, proto().floorplan(), new FloorplanSelectorHyperlink()).decorate().contentWidth(150);
+        formPanel.append(Location.Right, proto().info().number()).decorate().contentWidth(60);
 
-        flexPanel.setWidget(++leftRow, 0, inject(proto().floorplan(), new FloorplanSelectorHyperlink(), new FieldDecoratorBuilder(20).build()));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().info().economicStatus(), new FieldDecoratorBuilder(20).build()));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().info().economicStatusDescription(), new FieldDecoratorBuilder(20).build()));
+        formPanel.append(Location.Left, proto().info().economicStatus()).decorate().contentWidth(150);
+        formPanel.append(Location.Right, proto().info()._bedrooms()).decorate().contentWidth(60);
 
-        flexPanel.setBR(++leftRow, 0, 1);
-        flexPanel.setWidget(
-                ++leftRow,
-                0,
-                inject(proto().lease(),
-                        isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class)),
-                        new FieldDecoratorBuilder(20).build()));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().availability().availableForRent(), new FieldDecoratorBuilder(9).build()));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().reservedUntil(), new FieldDecoratorBuilder(9).build()));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().financial()._unitRent(), new FieldDecoratorBuilder(7).build()));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().financial()._marketRent(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().contentWidth(150);
+        formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().contentWidth(60);
 
-        int rightRow = -1;
-        flexPanel.setWidget(++rightRow, 1, inject(proto().info().floor(), new FieldDecoratorBuilder(5).build()));
-        flexPanel.setWidget(++rightRow, 1, inject(proto().info().number(), new FieldDecoratorBuilder(5).build()));
+        formPanel.br();
+        formPanel
+                .append(Location.Left, proto().lease(),
+                        isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate()
+                .contentWidth(150);
+        formPanel.append(Location.Right, proto().info().area()).decorate().contentWidth(100);
 
-        flexPanel.setWidget(++rightRow, 1, inject(proto().info()._bedrooms(), new FieldDecoratorBuilder(5).build()));
-        flexPanel.setWidget(++rightRow, 1, inject(proto().info()._bathrooms(), new FieldDecoratorBuilder(5).build()));
+        formPanel.append(Location.Left, proto().availability().availableForRent()).decorate().contentWidth(100);
+        formPanel.append(Location.Right, proto().info().areaUnits()).decorate().contentWidth(100);
 
-        flexPanel.setWidget(++rightRow, 1, inject(proto().info().area(), new FieldDecoratorBuilder(8).build()));
-        flexPanel.setWidget(++rightRow, 1, inject(proto().info().areaUnits(), new FieldDecoratorBuilder(8).build()));
+        formPanel.append(Location.Left, proto().reservedUntil()).decorate().contentWidth(100);
 
-        leftRow = Math.max(leftRow, rightRow);
+        formPanel.append(Location.Left, proto().financial()._unitRent()).decorate().contentWidth(80);
+        formPanel.append(Location.Left, proto().financial()._marketRent()).decorate().contentWidth(100);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            catalogMarketPricesPanel.setH1(0, 0, 2, proto().marketPrices().getMeta().getCaption());
-            catalogMarketPricesPanel.setWidget(1, 0, 2, inject(proto().marketPrices(), new UnitServicePriceFolder()));
-            flexPanel.setWidget(++leftRow, 0, 2, catalogMarketPricesPanel);
+            catalogMarketPricesPanel.h1(proto().marketPrices().getMeta().getCaption());
+            catalogMarketPricesPanel.append(Location.Left, proto().marketPrices(), new UnitServicePriceFolder());
+            formPanel.append(Location.Left, catalogMarketPricesPanel);
         }
 
-        return flexPanel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createLegalAddresslTab() {
-        BasicFlexFormPanel main = new BasicFlexFormPanel();
+    private IsWidget createLegalAddresslTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().info().legalAddressOverride(), new FieldDecoratorBuilder().labelWidth("360px").build()));
-        main.setH1(++row, 0, 2, proto().info().legalAddress().getMeta().getCaption());
-        unitLegalAddressLabel = main.getWidget(row, 0);
-        main.setWidget(++row, 0, inject(proto().info().legalAddress(), new AddressStructuredEditor(true)));
+        formPanel.append(Location.Left, proto().info().legalAddressOverride()).decorate().labelWidth("360px");
+        unitLegalAddressLabel = formPanel.h1(proto().info().legalAddress().getMeta().getCaption());
+        formPanel.append(Location.Left, proto().info().legalAddress(), new AddressStructuredEditor(true));
 
-        main.setH1(++row, 0, 2, proto().buildingLegalAddress().getMeta().getCaption());
-        buildingLegalAddressLabel = main.getWidget(row, 0);
-        main.setWidget(++row, 0, inject(proto().buildingLegalAddress(), new AddressStructuredEditor(true)));
+        buildingLegalAddressLabel = formPanel.h1(proto().buildingLegalAddress().getMeta().getCaption());
+        formPanel.append(Location.Left, proto().buildingLegalAddress(), new AddressStructuredEditor(true));
         get(proto().buildingLegalAddress()).setViewable(true);
 
         get(proto().info().legalAddressOverride()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -188,7 +178,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
             }
         });
 
-        return main;
+        return formPanel;
     }
 
     private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableVisorController<Floorplan> {
@@ -210,14 +200,14 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList( // @formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().marketingName(),false).build(), 
+                    new MemberColumnDescriptor.Builder(proto().marketingName(),false).build(),
                     new MemberColumnDescriptor.Builder(proto().floorCount()).build(),
                     new MemberColumnDescriptor.Builder(proto().bedrooms()).build(),
                     new MemberColumnDescriptor.Builder(proto().bathrooms()).build(),
                     new MemberColumnDescriptor.Builder(proto().halfBath()).build(),
                     new MemberColumnDescriptor.Builder(proto().dens()).build(),
                     new MemberColumnDescriptor.Builder(proto().description(),false).build()
-                );// @formatter:on        
+                );// @formatter:on
         }
 
         @Override

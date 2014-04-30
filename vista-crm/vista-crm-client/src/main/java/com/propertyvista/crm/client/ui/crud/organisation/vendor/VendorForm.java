@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
@@ -34,32 +34,30 @@ public class VendorForm extends CrmEntityForm<Vendor> {
     public VendorForm(IForm<Vendor> view) {
         super(Vendor.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-
-        int row = -1;
-        content.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(true).componentWidth("15em").build()));
-        content.setWidget(++row, 0, 2, inject(proto().type(), new FieldDecoratorBuilder(true).componentWidth("15em").build()));
-        content.setWidget(++row, 0, 2, inject(proto().website(), new FieldDecoratorBuilder(true).build()));
-        content.setH1(++row, 0, 2, i18n.tr("Phone Numbers"));
-        content.setWidget(++row, 0, 2, inject(proto().phones(), new CompanyPhoneFolder(isEditable()) {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().type()).decorate();
+        formPanel.append(Location.Left, proto().website()).decorate();
+        formPanel.h1(i18n.tr("Phone Numbers"));
+        formPanel.append(Location.Left, proto().phones(), new CompanyPhoneFolder(isEditable()) {
             @Override
             protected IFolderDecorator<CompanyPhone> createFolderDecorator() {
                 TableFolderDecorator<CompanyPhone> decor = (TableFolderDecorator<CompanyPhone>) super.createFolderDecorator();
                 decor.setShowHeader(false);
                 return decor;
             }
-        }));
-        content.setH1(++row, 0, 2, i18n.tr("Emails"));
-        content.setWidget(++row, 0, 2, inject(proto().emails(), new EmailFolder(isEditable()) {
+        });
+        formPanel.h1(i18n.tr("Emails"));
+        formPanel.append(Location.Left, proto().emails(), new EmailFolder(isEditable()) {
             @Override
             protected IFolderDecorator<CompanyEmail> createFolderDecorator() {
                 TableFolderDecorator<CompanyEmail> decor = (TableFolderDecorator<CompanyEmail>) super.createFolderDecorator();
                 decor.setShowHeader(false);
                 return decor;
             }
-        }));
+        });
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,11 +22,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
@@ -47,9 +47,9 @@ public class ScopeDialog extends OkCancelDialog {
         form = new CForm<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
-                content.setWidget(++row, 0, inject(proto().scopingResult(), new FieldDecoratorBuilder(10).build()));
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+
+                formPanel.append(Location.Left, proto().scopingResult()).decorate();
                 get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ScopingResult> event) {
@@ -71,7 +71,7 @@ public class ScopeDialog extends OkCancelDialog {
                 }
                 combo.setOptions(options);
 
-                content.setWidget(++row, 0, inject(proto().renovationEndsOn(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().renovationEndsOn()).decorate();
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
@@ -83,10 +83,10 @@ public class ScopeDialog extends OkCancelDialog {
                         }
                     }
                 });
-                content.setWidget(++row, 0, inject(proto().offMarketType(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().offMarketType()).decorate();
                 get(proto().offMarketType()).setVisible(false);
 
-                return content;
+                return formPanel;
             }
         };
         form.init();

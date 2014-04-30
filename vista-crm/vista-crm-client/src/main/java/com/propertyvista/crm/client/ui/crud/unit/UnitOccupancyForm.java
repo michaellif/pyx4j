@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -33,15 +33,14 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
     public UnitOccupancyForm(IForm<AptUnitOccupancySegment> view) {
         super(AptUnitOccupancySegment.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().dateFrom(), new FieldDecoratorBuilder(9).build()));
-        content.setWidget(++row, 0, inject(proto().dateTo(), new FieldDecoratorBuilder(9).build()));
-        content.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().offMarket(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(++row, 0, inject(proto().lease(), new FieldDecoratorBuilder(25).build()));
-        content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(50).build()));
+        formPanel.append(Location.Left, proto().dateFrom()).decorate();
+        formPanel.append(Location.Left, proto().dateTo()).decorate();
+        formPanel.append(Location.Left, proto().status()).decorate();
+        formPanel.append(Location.Left, proto().offMarket()).decorate();
+        formPanel.append(Location.Left, proto().lease()).decorate();
+        formPanel.append(Location.Left, proto().description()).decorate();
 
         get(proto().status()).addValueChangeHandler(new ValueChangeHandler<AptUnitOccupancySegment.Status>() {
             @Override
@@ -54,7 +53,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
         get(proto().offMarket()).setVisible(false);
         get(proto().lease()).setVisible(false);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
 
     }
 
