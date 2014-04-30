@@ -54,13 +54,13 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName;
 
-public class FormPanel implements IsWidget {
+public class BasicCFormPanel implements IsWidget {
 
     private final FluidPanel fluidPanel;
 
     private final CForm<?> parent;
 
-    public FormPanel(CForm<?> parent) {
+    public BasicCFormPanel(CForm<?> parent) {
 
         this.parent = parent;
 
