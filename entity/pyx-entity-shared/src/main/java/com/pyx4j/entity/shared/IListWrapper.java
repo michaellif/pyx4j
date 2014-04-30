@@ -9,6 +9,7 @@ import com.pyx4j.entity.core.IList;
  * that bind to IList and utilize inner CForm, such as CImageSlider.
  */
 @Transient
-public interface IListWrapper extends IEntity {
-    IList<?> items();
+public interface IListWrapper<E extends IEntity> extends IEntity {
+
+    IList<E> items();
 }
