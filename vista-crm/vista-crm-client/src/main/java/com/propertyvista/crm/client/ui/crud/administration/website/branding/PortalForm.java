@@ -29,7 +29,7 @@ public class PortalForm extends CrmEntityForm<SiteDescriptorDTO> {
         imageFolder.setImageSize(600, 100);
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().portalBanner(), imageFolder);
+        formPanel.append(Location.Dual, proto().portalBanner(), imageFolder);
         selectTab(addTab(formPanel, proto().portalBanner().getMeta().getCaption()));
     }
 }

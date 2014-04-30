@@ -34,7 +34,7 @@ public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
         formPanel.append(Location.Left, proto().province()).decorate();
 
         formPanel.h1(i18n.tr("Page Content"));
-        formPanel.append(Location.Full, proto().content(), new RichTextContentFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().content(), new RichTextContentFolder(isEditable()));
 
         selectTab(addTab(formPanel, i18n.tr("General")));
     }

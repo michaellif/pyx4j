@@ -175,7 +175,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Products: --------------------------------------------------------------------------------------------------------------------------------
         formPanel.h1(proto().currentTerm().version().leaseProducts().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer() {
+        formPanel.append(Location.Dual, proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer() {
             @Override
             protected EntityContainerCollapsableDecorator<BillableItem> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
@@ -183,27 +183,27 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         });
 
         formPanel.h1(proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder());
+        formPanel.append(Location.Dual, proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder());
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             formPanel.h1(proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
-            formPanel.append(Location.Full, proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder());
+            formPanel.append(Location.Dual, proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder());
         }
 
         // Utilities: -----------------------------------------------------------------------------------------------------------
         formPanel.h1(proto().currentTerm().version().utilities().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().currentTerm().version().utilities(), new BuildingUtilityFolder());
+        formPanel.append(Location.Dual, proto().currentTerm().version().utilities(), new BuildingUtilityFolder());
 
         // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         formPanel.h1(proto().currentTerm().version().tenants().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().currentTerm().version().tenants(), new TenantInLeaseFolder(this));
+        formPanel.append(Location.Dual, proto().currentTerm().version().tenants(), new TenantInLeaseFolder(this));
 
         formPanel.h1(proto().currentTerm().version().guarantors().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder(this));
+        formPanel.append(Location.Dual, proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder(this));
 
         // Insurance: --------------------------------------------------------------------------------------------------------------------------------
         formPanel.h1(i18n.tr("Tenant Insurance"));
-        formPanel.append(Location.Full, proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(new TenantOwnerClickHandler() {
+        formPanel.append(Location.Dual, proto().tenantInsuranceCertificates(), new TenantInsuranceCertificateFolder(new TenantOwnerClickHandler() {
             @Override
             public void onTenantOwnerClicked(Tenant tenantId) {
                 LeaseFormBase.this.onTenantInsuranceOwnerClicked(tenantId);
@@ -215,7 +215,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected IsWidget createChargesTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().billingPreview(), new BillForm(true));
+        formPanel.append(Location.Dual, proto().billingPreview(), new BillForm(true));
         return formPanel;
     }
 

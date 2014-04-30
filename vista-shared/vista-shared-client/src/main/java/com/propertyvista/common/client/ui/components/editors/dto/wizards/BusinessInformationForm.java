@@ -52,7 +52,7 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
         formPanel.append(Location.Right, proto().businessNumber()).decorate();
         formPanel.append(Location.Right, proto().businessEstablishedDate()).decorate();
 
-        formPanel.append(Location.Full, proto().dto_businessAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().dto_businessAddress(), new AddressSimpleEditor());
 
         Label documentsLabel = new Label();
         documentsLabel.setText(isEditable() ? i18n.tr("Attach Documentation:") : i18n.tr("Attached Documentation:"));
@@ -63,7 +63,7 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
             documentsDecorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
         }
         documentsDecorator.add(documentsLabel);
-        formPanel.append(Location.Full, documentsDecorator);
+        formPanel.append(Location.Dual, documentsDecorator);
 
         if (isEditable()) {
             Label equifaxReuirements = new Label();
@@ -71,7 +71,7 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
             formPanel.append(Location.Left, equifaxReuirements);
         }
 
-        formPanel.append(Location.Full, proto().documents(), new PmcBusinessInformationDocumentFolder());
+        formPanel.append(Location.Dual, proto().documents(), new PmcBusinessInformationDocumentFolder());
 
         return formPanel;
     }

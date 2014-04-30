@@ -61,9 +61,9 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
         yardiIntegrationPanel = new BasicCFormPanel(this);
         yardiIntegrationPanel.h1(i18n.tr("Yardi Integration"));
-        yardiIntegrationPanel.append(Location.Full, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
+        yardiIntegrationPanel.append(Location.Dual, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
 
-        formPanel.append(Location.Full, yardiIntegrationPanel);
+        formPanel.append(Location.Dual, yardiIntegrationPanel);
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("AR Code")));

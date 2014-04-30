@@ -38,10 +38,10 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         formPanel.append(Location.Left, proto().perApplicantFeee()).decorate();
 
         formPanel.h1("Business Information");
-        formPanel.append(Location.Full, proto().businessInformation(), new BusinessInformationForm());
+        formPanel.append(Location.Dual, proto().businessInformation(), new BusinessInformationForm());
 
         formPanel.h1("Personal Information");
-        formPanel.append(Location.Full, proto().personalInformation(), new PersonalInformationForm());
+        formPanel.append(Location.Dual, proto().personalInformation(), new PersonalInformationForm());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

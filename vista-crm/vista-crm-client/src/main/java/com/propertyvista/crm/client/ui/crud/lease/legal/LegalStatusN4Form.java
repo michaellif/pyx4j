@@ -47,23 +47,23 @@ public class LegalStatusN4Form extends CForm<LegalStatusN4DTO> {
     protected IsWidget createContent() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().status()).decorate();
+        formPanel.append(Location.Dual, proto().status()).decorate();
         get(proto().status()).setEditable(false);
 
-        formPanel.append(Location.Full, proto().expiryDate()).decorate();
-        formPanel.append(Location.Full, proto().expiry()).decorate();
-        formPanel.append(Location.Full, proto().cancellationThreshold()).decorate();
-        formPanel.append(Location.Full, proto().terminationDate()).decorate();
+        formPanel.append(Location.Dual, proto().expiryDate()).decorate();
+        formPanel.append(Location.Dual, proto().expiry()).decorate();
+        formPanel.append(Location.Dual, proto().cancellationThreshold()).decorate();
+        formPanel.append(Location.Dual, proto().terminationDate()).decorate();
 
-        formPanel.append(Location.Full, proto().setOn()).decorate();
-        formPanel.append(Location.Full, proto().setBy().name()).decorate().customLabel(i18n.tr("Set By"));
-        formPanel.append(Location.Full, proto().details()).decorate();
+        formPanel.append(Location.Dual, proto().setOn()).decorate();
+        formPanel.append(Location.Dual, proto().setBy().name()).decorate().customLabel(i18n.tr("Set By"));
+        formPanel.append(Location.Dual, proto().details()).decorate();
 
         formPanel.h2(i18n.tr("Attached Letters"));
         if (uploadable) {
-            formPanel.append(Location.Full, proto().letters(), new UploadableLegalLetterFolder());
+            formPanel.append(Location.Dual, proto().letters(), new UploadableLegalLetterFolder());
         } else {
-            formPanel.append(Location.Full, proto().letters(), new LegalLetterFolder());
+            formPanel.append(Location.Dual, proto().letters(), new LegalLetterFolder());
         }
         return formPanel;
     }
@@ -107,9 +107,9 @@ public class LegalStatusN4Form extends CForm<LegalStatusN4DTO> {
         @Override
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
-            formPanel.append(Location.Full, proto().file(),
+            formPanel.append(Location.Dual, proto().file(),
                     new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class), new VistaFileURLBuilder(LegalLetter.class))).decorate();
-            formPanel.append(Location.Full, proto().notes()).decorate();
+            formPanel.append(Location.Dual, proto().notes()).decorate();
             return formPanel;
         }
 

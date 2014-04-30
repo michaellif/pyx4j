@@ -43,7 +43,7 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
             if (isEditable()) {
                 formPanel.h4(i18n.tr("Click 'Add' to upload document pages"));
             }
-            formPanel.append(Location.Full, proto().documentPages(), new PmcDocumentFileFolder());
+            formPanel.append(Location.Dual, proto().documentPages(), new PmcDocumentFileFolder());
             return formPanel;
         }
 

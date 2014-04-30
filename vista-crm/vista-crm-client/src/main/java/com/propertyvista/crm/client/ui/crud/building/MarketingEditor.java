@@ -67,12 +67,12 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
         formPanel.append(Location.Right, proto().visibility()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
         // marketing address
         formPanel.h1(proto().marketingAddress().getMeta().getCaption());
-        formPanel.append(Location.Full, injectAndDecorate(proto().useCustomAddress(), true));
-        formPanel.append(Location.Full, inject(proto().marketingAddress(), addressEditor));
+        formPanel.append(Location.Dual, injectAndDecorate(proto().useCustomAddress(), true));
+        formPanel.append(Location.Dual, inject(proto().marketingAddress(), addressEditor));
         get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -82,10 +82,10 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
         // marketing contacts
         formPanel.h1(proto().marketingContacts().getMeta().getCaption());
-        formPanel.append(Location.Full, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
-        formPanel.append(Location.Full,
+        formPanel.append(Location.Dual, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
+        formPanel.append(Location.Dual,
                 inject(proto().marketingContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
-        formPanel.append(Location.Full,
+        formPanel.append(Location.Dual,
                 inject(proto().marketingContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
 
         return formPanel;

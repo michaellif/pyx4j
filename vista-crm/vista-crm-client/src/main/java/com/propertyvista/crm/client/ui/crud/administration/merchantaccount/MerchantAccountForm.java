@@ -46,7 +46,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         formPanel.append(Location.Left, proto().branchTransitNumber(), new CLabel<String>()).decorate().componentWidth(80);
         formPanel.append(Location.Left, proto().accountNumber(), new CLabel<String>()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().accountName()).decorate().componentWidth(180);
-        formPanel.append(Location.Full, proto().chargeDescription()).decorate();
+        formPanel.append(Location.Dual, proto().chargeDescription()).decorate();
 
         selectTab(addTab(formPanel, i18n.tr("General")));
 

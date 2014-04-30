@@ -39,10 +39,10 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            formPanel.append(Location.Full, proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class))).decorate();
-            formPanel.append(Location.Full, proto().generatedOn()).decorate();
-            formPanel.append(Location.Full, proto().amountOwed()).decorate();
-            formPanel.append(Location.Full, proto().terminationDate()).decorate();
+            formPanel.append(Location.Dual, proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class))).decorate();
+            formPanel.append(Location.Dual, proto().generatedOn()).decorate();
+            formPanel.append(Location.Dual, proto().amountOwed()).decorate();
+            formPanel.append(Location.Dual, proto().terminationDate()).decorate();
             return formPanel;
         }
     }
@@ -56,9 +56,9 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         @Override
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
-            formPanel.append(Location.Full, proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class))).decorate();
-            formPanel.append(Location.Full, proto().generatedOn()).decorate();
-            formPanel.append(Location.Full, proto().notes()).decorate();
+            formPanel.append(Location.Dual, proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class))).decorate();
+            formPanel.append(Location.Dual, proto().generatedOn()).decorate();
+            formPanel.append(Location.Dual, proto().notes()).decorate();
 
             return formPanel;
         }
@@ -86,7 +86,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
         @Override
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
-            formPanel.append(Location.Full, polymorphicFormContainer = new SimplePanel());
+            formPanel.append(Location.Dual, polymorphicFormContainer = new SimplePanel());
             return formPanel;
         }
 

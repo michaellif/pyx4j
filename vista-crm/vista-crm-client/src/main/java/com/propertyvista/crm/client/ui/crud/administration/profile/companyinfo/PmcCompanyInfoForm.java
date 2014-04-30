@@ -39,7 +39,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
         formPanel.append(Location.Left, proto().companyName()).decorate();
 
         formPanel.h1(proto().contacts().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().contacts(), new PmcCompanyInfoContactFolder());
+        formPanel.append(Location.Dual, proto().contacts(), new PmcCompanyInfoContactFolder());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

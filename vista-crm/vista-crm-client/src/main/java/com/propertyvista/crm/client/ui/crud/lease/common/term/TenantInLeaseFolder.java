@@ -207,7 +207,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             formPanel.append(Location.Left, proto().leaseParticipant().participantId()).decorate().componentWidth(100);
-            formPanel.append(Location.Full, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            formPanel.append(Location.Dual, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
@@ -231,9 +231,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             formPanel.append(Location.Right, proto().leaseParticipant().customer().person().workPhone()).decorate().componentWidth(180);
 
             preauthorizedPaymentsPanel.h3(proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
-            preauthorizedPaymentsPanel.append(Location.Full, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
+            preauthorizedPaymentsPanel.append(Location.Dual, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
 
-            formPanel.append(Location.Full, preauthorizedPaymentsPanel);
+            formPanel.append(Location.Dual, preauthorizedPaymentsPanel);
 
             return formPanel;
         }
@@ -377,7 +377,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
                 formPanel.append(Location.Left, proto().paymentMethod()).decorate();
 
-                formPanel.append(Location.Full, proto().coveredItems(), new PapCoveredItemFolder());
+                formPanel.append(Location.Dual, proto().coveredItems(), new PapCoveredItemFolder());
 
                 return formPanel;
             }

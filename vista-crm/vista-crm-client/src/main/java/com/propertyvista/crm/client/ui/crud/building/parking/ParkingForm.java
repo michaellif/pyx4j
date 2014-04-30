@@ -51,7 +51,7 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
         formPanel.append(Location.Right, proto().wideSpaces()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().narrowSpaces()).decorate().componentWidth(50);
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
         return formPanel;
     }

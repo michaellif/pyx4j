@@ -124,8 +124,8 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
 
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            formPanel.append(Location.Full, proto().locale(), locale).decorate();
-            formPanel.append(Location.Full, proto().image().file(), imageHolder).decorate();
+            formPanel.append(Location.Dual, proto().locale(), locale).decorate();
+            formPanel.append(Location.Dual, proto().image().file(), imageHolder).decorate();
 
             return formPanel;
         }

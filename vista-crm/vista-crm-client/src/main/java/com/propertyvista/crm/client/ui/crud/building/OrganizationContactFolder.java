@@ -64,7 +64,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             formPanel.append(Location.Right, proto().person().mobilePhone()).decorate();
             formPanel.append(Location.Right, proto().person().homePhone()).decorate();
 
-            formPanel.append(Location.Full, proto().description()).decorate();
+            formPanel.append(Location.Dual, proto().description()).decorate();
 
             // repopulate related fields from selected employee:
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {

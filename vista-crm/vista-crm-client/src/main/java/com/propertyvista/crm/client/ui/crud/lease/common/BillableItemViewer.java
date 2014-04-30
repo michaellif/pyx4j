@@ -100,19 +100,19 @@ public class BillableItemViewer extends CForm<BillableItem> {
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
-        formPanel.append(Location.Full, extraDataPanel);
+        formPanel.append(Location.Dual, extraDataPanel);
 
-        formPanel.append(Location.Full, adjustmentPanel);
+        formPanel.append(Location.Dual, adjustmentPanel);
 
-        formPanel.append(Location.Full, depositPanel);
+        formPanel.append(Location.Dual, depositPanel);
 
         adjustmentPanel.h3(proto().adjustments().getMeta().getCaption());
-        adjustmentPanel.append(Location.Full, proto().adjustments(), new AdjustmentFolder());
+        adjustmentPanel.append(Location.Dual, proto().adjustments(), new AdjustmentFolder());
 
         depositPanel.h3(proto().deposits().getMeta().getCaption());
-        depositPanel.append(Location.Full, proto().deposits(), new DepositFolder());
+        depositPanel.append(Location.Dual, proto().deposits(), new DepositFolder());
 
         get(proto().yardiChargeCode()).setVisible(false);
         get(proto().effectiveDate()).setVisible(false);

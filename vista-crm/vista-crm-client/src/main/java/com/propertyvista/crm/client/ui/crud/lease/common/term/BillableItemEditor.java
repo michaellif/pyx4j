@@ -135,18 +135,18 @@ public class BillableItemEditor extends CForm<BillableItem> {
         formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Full, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
-        formPanel.append(Location.Full, extraDataPanel);
-        formPanel.append(Location.Full, adjustmentPanel);
-        formPanel.append(Location.Full, depositPanel);
+        formPanel.append(Location.Dual, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Dual, extraDataPanel);
+        formPanel.append(Location.Dual, adjustmentPanel);
+        formPanel.append(Location.Dual, depositPanel);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             adjustmentPanel.h3(proto().adjustments().getMeta().getCaption());
-            adjustmentPanel.append(Location.Full, proto().adjustments(), new AdjustmentFolder());
+            adjustmentPanel.append(Location.Dual, proto().adjustments(), new AdjustmentFolder());
         }
 
         depositPanel.h3(proto().deposits().getMeta().getCaption());
-        depositPanel.append(Location.Full, proto().deposits(), new DepositFolder());
+        depositPanel.append(Location.Dual, proto().deposits(), new DepositFolder());
 
         itemEffectiveDateEditor = get(proto().effectiveDate());
         itemExpirationDateEditor = get(proto().expirationDate());

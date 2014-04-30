@@ -125,18 +125,18 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private IsWidget createIdentificationDocumentsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().screening().version().documents(), fileUpload);
+        formPanel.append(Location.Dual, proto().screening().version().documents(), fileUpload);
         return formPanel;
     }
 
     private IsWidget createAddressesTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.h1(proto().screening().version().currentAddress().getMeta().getCaption());
-        formPanel.append(Location.Full, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
+        formPanel.append(Location.Dual, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
 
         previousAddress.h1(proto().screening().version().previousAddress().getMeta().getCaption());
-        previousAddress.append(Location.Full, proto().screening().version().previousAddress(), new PriorAddressEditor());
-        formPanel.append(Location.Full, previousAddress);
+        previousAddress.append(Location.Dual, proto().screening().version().previousAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Dual, previousAddress);
 
         return formPanel;
     }
@@ -172,14 +172,14 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private IsWidget createIncomesTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable()));
 
         return formPanel;
     }
 
     private IsWidget createAssetsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().screening().version().assets(), new PersonalAssetFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().screening().version().assets(), new PersonalAssetFolder(isEditable()));
         return formPanel;
     }
 
@@ -190,7 +190,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
         }
 
         public void appendQuestion(IObject<?> member) {
-            append(Location.Full, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
+            append(Location.Dual, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
         }
     };
 }

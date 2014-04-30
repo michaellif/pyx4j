@@ -45,10 +45,10 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
     protected IsWidget createContent() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.h1(i18n.tr("Current Status"));
-        formPanel.append(Location.Full, proto().current(), new LegalStatusForm(false));
-        formPanel.append(Location.Full, createCommandBar());
+        formPanel.append(Location.Dual, proto().current(), new LegalStatusForm(false));
+        formPanel.append(Location.Dual, createCommandBar());
         formPanel.h1(i18n.tr("History"));
-        formPanel.append(Location.Full, proto().historical(), new LegalStatusHistoryFolder() {
+        formPanel.append(Location.Dual, proto().historical(), new LegalStatusHistoryFolder() {
             @Override
             protected void onRemoved(LegalStatus item) {
                 LeaseLegalStateForm.this.deleteStatus(item);

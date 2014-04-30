@@ -52,13 +52,13 @@ public class LeaseApplicationDocumentFolder extends VistaBoxFolder<LeaseApplicat
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
             formPanel
-                    .append(Location.Full,
+                    .append(Location.Dual,
                             proto().file(),
                             new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
                                     LeaseApplicationDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File"));
-            formPanel.append(Location.Full, proto().isSignedByInk()).decorate();
-            formPanel.append(Location.Full, proto().signedBy()).decorate();
-            formPanel.append(Location.Full, proto().uploader()).decorate();
+            formPanel.append(Location.Dual, proto().isSignedByInk()).decorate();
+            formPanel.append(Location.Dual, proto().signedBy()).decorate();
+            formPanel.append(Location.Dual, proto().uploader()).decorate();
             return formPanel;
         }
 

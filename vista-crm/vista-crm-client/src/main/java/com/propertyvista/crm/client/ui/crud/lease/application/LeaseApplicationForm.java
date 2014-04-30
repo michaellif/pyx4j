@@ -83,13 +83,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private IsWidget createInfoTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, inject(proto().tenantInfo(), createTenantView()));
+        formPanel.append(Location.Dual, inject(proto().tenantInfo(), createTenantView()));
         return formPanel;
     }
 
     private IsWidget createFinancialTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, inject(proto().tenantFinancials(), createFinancialView()));
+        formPanel.append(Location.Dual, inject(proto().tenantFinancials(), createFinancialView()));
         return formPanel;
     }
 
@@ -150,7 +150,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         formPanel.br();
 
-        formPanel.append(Location.Full, proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false,
+        formPanel.append(Location.Dual, proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false,
                 ((LeaseApplicationViewerView) getParentView())));
 
         return formPanel;
@@ -163,14 +163,14 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         formPanel.append(Location.Left, proto().masterApplicationStatus().progress()).decorate();
 
         formPanel.br();
-        formPanel.append(Location.Full, proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder());
+        formPanel.append(Location.Dual, proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder());
 
         return formPanel;
     }
 
     private IsWidget createApplicationDocumentsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().applicationDocuments(), new LeaseApplicationDocumentFolder());
+        formPanel.append(Location.Dual, proto().applicationDocuments(), new LeaseApplicationDocumentFolder());
         return formPanel;
     }
 }

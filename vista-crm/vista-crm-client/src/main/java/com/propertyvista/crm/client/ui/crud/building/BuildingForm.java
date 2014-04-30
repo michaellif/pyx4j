@@ -211,13 +211,13 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Right, proto().suspended()).decorate().componentWidth(50);
 
         formPanel.h1(proto().info().address().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().info().address(), new AddressStructuredEditor(false));
+        formPanel.append(Location.Dual, proto().info().address(), new AddressStructuredEditor(false));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
 
         formPanel.h1(proto().geoLocation().getMeta().getCaption());
-        formPanel.append(Location.Full, inject(proto().geoLocation(), new GeoLocationEditor()));
+        formPanel.append(Location.Dual, inject(proto().geoLocation(), new GeoLocationEditor()));
         return formPanel;
     }
 
@@ -242,11 +242,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         formPanel.h1(proto().amenities().getMeta().getCaption());
 
-        formPanel.append(Location.Full, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
+        formPanel.append(Location.Dual, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
 
         formPanel.h1(proto().utilities().getMeta().getCaption());
 
-        formPanel.append(Location.Full, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
+        formPanel.append(Location.Dual, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
 
         get(proto().contacts().website()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
@@ -284,11 +284,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h4(i18n.tr("Elevators"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
         formPanel.h4(i18n.tr("Boilers"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
         formPanel.h4(i18n.tr("Roofs"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
 
         return formPanel;
     }
@@ -297,9 +297,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h4(i18n.tr("Parking"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
         formPanel.h4(i18n.tr("Locker Areas"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
 
         return formPanel;
     }
@@ -333,11 +333,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Marketing Summary"));
-        formPanel.append(Location.Full, inject(proto().marketing(), new MarketingEditor(this)));
+        formPanel.append(Location.Dual, inject(proto().marketing(), new MarketingEditor(this)));
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
             formPanel.h1(proto().ilsSummary().getMeta().getCaption());
-            formPanel.append(Location.Full, inject(proto().ilsSummary(), new ILSSummaryFolder()));
+            formPanel.append(Location.Dual, inject(proto().ilsSummary(), new ILSSummaryFolder()));
         }
 
         formPanel.h1(i18n.tr("Images"));
@@ -352,22 +352,22 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
 
-                formPanel.append(Location.Full, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Full, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Full, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70).contentWidth(160);
 
                 return formPanel.asWidget();
             }
         };
         imageSlider.setImageSize(240, 160);
-        formPanel.append(Location.Full, inject(proto().media(), imageSlider));
+        formPanel.append(Location.Dual, inject(proto().media(), imageSlider));
 
         ilsEmailProfilePanel = createILSEmailProfilePanel();
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
             formPanel.h1(i18n.tr("ILS Vendor Profile"));
-            formPanel.append(Location.Full, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
+            formPanel.append(Location.Dual, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
 
-            formPanel.append(Location.Full, ilsEmailProfilePanel);
+            formPanel.append(Location.Dual, ilsEmailProfilePanel);
         }
 
         return formPanel;
@@ -377,12 +377,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h4(i18n.tr("Services"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
         formPanel.h4(i18n.tr("Features"));
-        formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
+        formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             formPanel.h4(i18n.tr("Concessions"));
-            formPanel.append(Location.Full, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+            formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         }
 
         return formPanel;
@@ -392,10 +392,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         BasicCFormPanel flexPanel = new BasicCFormPanel(this);
 
         flexPanel.h1(proto().contacts().organizationContacts().getMeta().getCaption());
-        flexPanel.append(Location.Full, proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable(), this));
+        flexPanel.append(Location.Dual, proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable(), this));
 
         flexPanel.h1(proto().contacts().propertyContacts().getMeta().getCaption());
-        flexPanel.append(Location.Full, proto().contacts().propertyContacts(), new PropertyContactFolder());
+        flexPanel.append(Location.Dual, proto().contacts().propertyContacts(), new PropertyContactFolder());
 
         return flexPanel;
     }
@@ -475,7 +475,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
                 formPanel.append(Location.Left, inject(proto().frontImage().file(), frontImage));
                 formPanel.append(Location.Right, injectAndDecorate(proto().title(), 10, 50, 55));
-                formPanel.append(Location.Full, injectAndDecorate(proto().description(), 10, 50, 55));
+                formPanel.append(Location.Dual, injectAndDecorate(proto().description(), 10, 50, 55));
 
                 return formPanel;
             }
@@ -541,16 +541,16 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-                formPanel.append(Location.Full, proto().vendor(), new CEnumLabel()).decorate();
+                formPanel.append(Location.Dual, proto().vendor(), new CEnumLabel()).decorate();
                 formPanel.append(Location.Left, proto().maxAds()).decorate().componentWidth(50);
                 formPanel.append(Location.Right, proto().disabled()).decorate();
 
                 formPanel.h1(proto().preferredContacts().getMeta().getCaption());
-                formPanel.append(Location.Full,
+                formPanel.append(Location.Dual,
                         inject(proto().preferredContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
-                formPanel.append(Location.Full,
+                formPanel.append(Location.Dual,
                         inject(proto().preferredContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
-                formPanel.append(Location.Full,
+                formPanel.append(Location.Dual,
                         inject(proto().preferredContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
 
                 return formPanel;

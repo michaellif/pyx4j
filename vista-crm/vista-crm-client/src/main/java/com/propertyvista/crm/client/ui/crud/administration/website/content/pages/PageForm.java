@@ -33,10 +33,10 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
 
         formPanel.h1(proto().content().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().content(), new PageContentFolder(this));
+        formPanel.append(Location.Dual, proto().content(), new PageContentFolder(this));
 
         formPanel.h1(proto().childPages().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().childPages(), new PageDescriptorFolder(this));
+        formPanel.append(Location.Dual, proto().childPages(), new PageDescriptorFolder(this));
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("General")));

@@ -47,10 +47,10 @@ public class ProofOfAssetUploaderFolder extends VistaBoxFolder<ProofOfAssetDocum
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            formPanel.append(Location.Full, proto().description()).decorate();
+            formPanel.append(Location.Dual, proto().description()).decorate();
 
             formPanel.h3(i18n.tr("Files"));
-            formPanel.append(Location.Full, proto().files(), new ProofOfAssetDocumentFileFolder());
+            formPanel.append(Location.Dual, proto().files(), new ProofOfAssetDocumentFileFolder());
 
             return formPanel;
         }

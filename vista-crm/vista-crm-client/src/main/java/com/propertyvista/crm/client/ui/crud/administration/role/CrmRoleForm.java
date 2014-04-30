@@ -55,7 +55,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         formPanel.append(Location.Left, proto().requireTwoStepVerificationOnLogin()).decorate().componentWidth(50);
 
         formPanel.h1(proto().permissions().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().permissions(), new CrmRolePermissionsFolder());
+        formPanel.append(Location.Dual, proto().permissions(), new CrmRolePermissionsFolder());
         get(proto().permissions()).addValueChangeHandler(new ValueChangeHandler<List<VistaCrmBehaviorDTO>>() {
             @Override
             public void onValueChange(ValueChangeEvent<List<VistaCrmBehaviorDTO>> event) {

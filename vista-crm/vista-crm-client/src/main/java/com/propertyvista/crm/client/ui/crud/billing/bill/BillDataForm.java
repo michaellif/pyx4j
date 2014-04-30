@@ -35,7 +35,7 @@ public class BillDataForm extends CrmEntityForm<BillDataDTO> {
         this.justPreviewBill = justCurrentBill;
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().bill(), new BillForm(justPreviewBill));
+        formPanel.append(Location.Dual, proto().bill(), new BillForm(justPreviewBill));
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("Bill Data")));
     }

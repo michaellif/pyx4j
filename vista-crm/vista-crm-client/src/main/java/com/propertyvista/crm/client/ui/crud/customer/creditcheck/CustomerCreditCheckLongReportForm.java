@@ -53,34 +53,34 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("QUICK SUMMARY"));
-        formPanel.append(Location.Full, createQuickSummary());
+        formPanel.append(Location.Dual, createQuickSummary());
 
         formPanel.h1(i18n.tr("IDENTITY"));
-        formPanel.append(Location.Full, createIdentity());
+        formPanel.append(Location.Dual, createIdentity());
 
         formPanel.h1(i18n.tr("ACCOUNTS"));
-        formPanel.append(Location.Full, proto().accounts(), new AccountFolder());
+        formPanel.append(Location.Dual, proto().accounts(), new AccountFolder());
 
         formPanel.h1(i18n.tr("COURT JUDGEMENTS"));
-        formPanel.append(Location.Full, proto().judgements(), new JudgementFolder());
+        formPanel.append(Location.Dual, proto().judgements(), new JudgementFolder());
 
         formPanel.h1(i18n.tr("PROPOSALS AND BANKRUPTCIES"));
-        formPanel.append(Location.Full, proto().proposals(), new ProposalFolder());
+        formPanel.append(Location.Dual, proto().proposals(), new ProposalFolder());
 
         // Not implemented in Equifax:
         if (false) {
             formPanel.h1(i18n.tr("EVICTIONS"));
-            formPanel.append(Location.Full, proto().evictions(), new EvictionFolder());
+            formPanel.append(Location.Dual, proto().evictions(), new EvictionFolder());
 
             formPanel.h1(i18n.tr("RENT HISTORY"));
-            formPanel.append(Location.Full, proto().rents(), new RentFolder());
+            formPanel.append(Location.Dual, proto().rents(), new RentFolder());
         }
 
         formPanel.h1(i18n.tr("COLLECTIONS"));
-        formPanel.append(Location.Full, proto().collections(), new CollectionFolder());
+        formPanel.append(Location.Dual, proto().collections(), new CollectionFolder());
 
         formPanel.h1(i18n.tr("INQUIRIES"));
-        formPanel.append(Location.Full, proto().inquiries(), new InquiryFolder());
+        formPanel.append(Location.Dual, proto().inquiries(), new InquiryFolder());
 
         selectTab(addTab(formPanel, i18n.tr("Customer Credit Check")));
         setTabBarVisible(false);
@@ -146,7 +146,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     private IsWidget createIdentity() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().identity().name(), new NameEditor(i18n.tr("Name")));
+        formPanel.append(Location.Dual, proto().identity().name(), new NameEditor(i18n.tr("Name")));
 
         formPanel.append(Location.Left, proto().identity().SIN()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().identity().maritalStatus()).decorate().componentWidth(120);
@@ -158,11 +158,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         formPanel.h3(i18n.tr("Current Addresses"));
 
-        formPanel.append(Location.Full, proto().identity().currentAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().identity().currentAddress(), new AddressSimpleEditor());
 
         formPanel.h3(i18n.tr("Former Addresses"));
 
-        formPanel.append(Location.Full, proto().identity().formerAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().identity().formerAddress(), new AddressSimpleEditor());
 
         formPanel.h2(i18n.tr("Employement"));
 
@@ -246,8 +246,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 formPanel.hr();
 
-                formPanel.append(Location.Full, proto().plaintiff()).decorate();
-                formPanel.append(Location.Full, proto().defendants()).decorate();
+                formPanel.append(Location.Dual, proto().plaintiff()).decorate();
+                formPanel.append(Location.Dual, proto().defendants()).decorate();
 
                 return formPanel;
             }
@@ -284,8 +284,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 formPanel.hr();
 
-                formPanel.append(Location.Full, proto().caseNumberAndTrustee()).decorate();
-                formPanel.append(Location.Full, proto().intentOrDisposition()).decorate();
+                formPanel.append(Location.Dual, proto().caseNumberAndTrustee()).decorate();
+                formPanel.append(Location.Dual, proto().intentOrDisposition()).decorate();
 
                 return formPanel;
             }
@@ -322,9 +322,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 formPanel.hr();
 
-                formPanel.append(Location.Full, proto().plaintiff()).decorate();
-                formPanel.append(Location.Full, proto().defendants()).decorate();
-                formPanel.append(Location.Full, proto().address()).decorate();
+                formPanel.append(Location.Dual, proto().plaintiff()).decorate();
+                formPanel.append(Location.Dual, proto().defendants()).decorate();
+                formPanel.append(Location.Dual, proto().address()).decorate();
 
                 return formPanel;
             }
@@ -361,10 +361,10 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 formPanel.hr();
 
-                formPanel.append(Location.Full, proto().lastUpdated()).decorate();
-                formPanel.append(Location.Full, proto().from()).decorate();
-                formPanel.append(Location.Full, proto().to()).decorate();
-                formPanel.append(Location.Full, proto().address()).decorate();
+                formPanel.append(Location.Dual, proto().lastUpdated()).decorate();
+                formPanel.append(Location.Dual, proto().from()).decorate();
+                formPanel.append(Location.Dual, proto().to()).decorate();
+                formPanel.append(Location.Dual, proto().address()).decorate();
 
                 return formPanel;
             }

@@ -37,7 +37,7 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
     protected IsWidget createContent() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().name(), new NameEditor(i18n.tr("Person")));
+        formPanel.append(Location.Dual, proto().name(), new NameEditor(i18n.tr("Person")));
         formPanel.append(Location.Left, proto().relationship()).decorate().componentWidth(180);
         formPanel.append(Location.Right, proto().sex()).decorate().componentWidth(100);
         formPanel.append(Location.Right, proto().birthDate()).decorate().componentWidth(120);
@@ -49,7 +49,7 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
         formPanel.append(Location.Right, proto().email()).decorate().componentWidth(250);
 
         formPanel.h3(i18n.tr("Address"));
-        formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
 
         return formPanel;
     }

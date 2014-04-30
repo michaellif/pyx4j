@@ -82,7 +82,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
 
         formPanel.append(Location.Left, proto().threadDTO().created()).decorate();
         formPanel.append(Location.Left, proto().subject()).decorate();
-        formPanel.append(Location.Full, proto().threadDTO().content(), messagesFolder);
+        formPanel.append(Location.Dual, proto().threadDTO().content(), messagesFolder);
         formPanel.br();
 
         return formPanel;
@@ -153,8 +153,8 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
 
             formPanel.br();
             formPanel.h1("Attachments");
-            formPanel.append(Location.Full, proto().attachments(), new CommunicationMessageAttachmentFolder());
-            formPanel.append(Location.Full, createLowerToolbar());
+            formPanel.append(Location.Dual, proto().attachments(), new CommunicationMessageAttachmentFolder());
+            formPanel.append(Location.Dual, createLowerToolbar());
             return formPanel;
         }
 

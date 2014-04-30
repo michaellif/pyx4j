@@ -99,7 +99,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
                 formPanel.h1(proto().htmlContent().getMeta().getCaption());
-                formPanel.append(Location.Full, proto().htmlContent(), new RichTextContentEditor(true));
+                formPanel.append(Location.Dual, proto().htmlContent(), new RichTextContentEditor(true));
                 return formPanel;
             }
         };
@@ -112,7 +112,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
                 formPanel.h1(proto().news().getMeta().getCaption());
-                formPanel.append(Location.Full, proto().news(), new NewsFolder(isEditable()));
+                formPanel.append(Location.Dual, proto().news(), new NewsFolder(isEditable()));
                 return formPanel;
             }
         };
@@ -125,7 +125,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
                 formPanel.h1(proto().testimonials().getMeta().getCaption());
-                formPanel.append(Location.Full, proto().testimonials(), new TestimonialFolder(isEditable()));
+                formPanel.append(Location.Dual, proto().testimonials(), new TestimonialFolder(isEditable()));
                 return formPanel;
             }
         };
@@ -138,7 +138,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
                 formPanel.h1(i18n.tr("Promotions"));
-                formPanel.append(Location.Full, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
+                formPanel.append(Location.Dual, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
                 return formPanel;
             }
         };

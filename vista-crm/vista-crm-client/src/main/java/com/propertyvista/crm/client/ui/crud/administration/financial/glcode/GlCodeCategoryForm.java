@@ -34,7 +34,7 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
         formPanel.append(Location.Left, proto().description()).decorate().componentWidth(250);
 
         formPanel.h3(proto().glCodes().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().glCodes(), new GlCodeFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().glCodes(), new GlCodeFolder(isEditable()));
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("General")));

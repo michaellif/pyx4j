@@ -40,10 +40,10 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
         formPanel.append(Location.Left, injectAndDecorate(proto().type(), 15));
         formPanel.append(Location.Left, injectAndDecorate(proto().make(), 15));
         formPanel.append(Location.Left, injectAndDecorate(proto().model(), 15));
-        formPanel.append(Location.Full, injectAndDecorate(proto().description(), true));
+        formPanel.append(Location.Dual, injectAndDecorate(proto().description(), true));
 
         formPanel.h1(proto().license().getMeta().getCaption());
-        formPanel.append(Location.Full, inject(proto().license(), new LicenseEditor()));
+        formPanel.append(Location.Dual, inject(proto().license(), new LicenseEditor()));
 
         formPanel.append(Location.Right, injectAndDecorate(proto().build(), 9));
 

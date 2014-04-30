@@ -65,14 +65,14 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         headerDeposits = formPanel.h1(i18n.tr("Deposits"));
 
         headerLMR = formPanel.h3(i18n.tr("Last Month Rent"));
-        formPanel.append(Location.Full, proto().version().depositLMR(), new ProductDepositEditor());
+        formPanel.append(Location.Dual, proto().version().depositLMR(), new ProductDepositEditor());
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             headerMoveIn = formPanel.h3(i18n.tr("Move In"));
-            formPanel.append(Location.Full, proto().version().depositMoveIn(), new ProductDepositEditor());
+            formPanel.append(Location.Dual, proto().version().depositMoveIn(), new ProductDepositEditor());
 
             headerSecurity = formPanel.h3(i18n.tr("Security"));
-            formPanel.append(Location.Full, proto().version().depositSecurity(), new ProductDepositEditor());
+            formPanel.append(Location.Dual, proto().version().depositSecurity(), new ProductDepositEditor());
         }
 
         // tweaks:
@@ -95,7 +95,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
     public BasicCFormPanel createItemsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().version().items(), new FeatureItemFolder(this));
+        formPanel.append(Location.Dual, proto().version().items(), new FeatureItemFolder(this));
 
         return formPanel;
     }

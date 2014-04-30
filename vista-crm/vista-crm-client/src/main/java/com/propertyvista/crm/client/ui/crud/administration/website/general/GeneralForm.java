@@ -72,17 +72,17 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         // =====================================================================================================================
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().locales(), new AvailableLocaleFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().locales(), new AvailableLocaleFolder(isEditable()));
         addTab(formPanel, proto().locales().getMeta().getCaption());
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().pmcInfo(), new RichTextContentFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().pmcInfo(), new RichTextContentFolder(isEditable()));
         addTab(formPanel, proto().pmcInfo().getMeta().getCaption());
 
         addTab(createCrmLogoTab(), proto().crmLogo().getMeta().getCaption());
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().socialLinks(), new SocialLinkFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().socialLinks(), new SocialLinkFolder(isEditable()));
         addTab(formPanel, proto().socialLinks().getMeta().getCaption());
     }
 

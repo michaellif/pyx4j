@@ -112,7 +112,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private IsWidget createContactsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable()));
         return formPanel;
     }
 
@@ -121,7 +121,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         formPanel.append(Location.Left, proto().nextScheduledPaymentDate(), new CDateLabel()).decorate().componentWidth(120);
         formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().preauthorizedPayments(), new PreauthorizedPaymentFolder());
+        formPanel.append(Location.Dual, proto().preauthorizedPayments(), new PreauthorizedPaymentFolder());
 
         return formPanel;
     }
@@ -139,7 +139,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         });
 
         formPanel.h1(i18n.tr("Insurance Certificates"));
-        formPanel.append(Location.Full, proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null));
+        formPanel.append(Location.Dual, proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null));
 
         return formPanel;
     }
@@ -226,7 +226,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
                 formPanel.br();
 
-                formPanel.append(Location.Full, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
+                formPanel.append(Location.Dual, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
 
                 return formPanel;
             }

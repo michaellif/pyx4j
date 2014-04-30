@@ -306,7 +306,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // Products : -----------------------------------------------------------------------------------------------------------
         formPanel.h1(proto().version().leaseProducts().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
+        formPanel.append(Location.Dual, proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
             @Override
             protected EntityContainerCollapsableDecorator<BillableItem> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
@@ -314,23 +314,23 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         });
 
         formPanel.h2(proto().version().leaseProducts().featureItems().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView));
+        formPanel.append(Location.Dual, proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             formPanel.h2(proto().version().leaseProducts().concessions().getMeta().getCaption());
-            formPanel.append(Location.Full, proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this));
+            formPanel.append(Location.Dual, proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this));
         }
 
         // Utilities: -----------------------------------------------------------------------------------------------------------
         formPanel.h1(proto().version().utilities().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().version().utilities(), new BuildingUtilityFolder());
+        formPanel.append(Location.Dual, proto().version().utilities(), new BuildingUtilityFolder());
 
         // Tenants/Guarantors: --------------------------------------------------------------------------------------------------
         formPanel.h1(proto().version().tenants().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().version().tenants(), tenantsFolder);
+        formPanel.append(Location.Dual, proto().version().tenants(), tenantsFolder);
 
         formPanel.h1(proto().version().guarantors().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().version().guarantors(), guarantorsFolder);
+        formPanel.append(Location.Dual, proto().version().guarantors(), guarantorsFolder);
 
         // tweaks:
         tenantsFolder.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {

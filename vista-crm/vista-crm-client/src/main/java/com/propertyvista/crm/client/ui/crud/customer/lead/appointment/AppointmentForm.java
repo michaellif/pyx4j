@@ -48,8 +48,8 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         formPanel.append(Location.Right, proto().phone()).decorate().componentWidth(150).customLabel(i18n.tr("Agent Phone"));
         formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200).customLabel(i18n.tr("Agent Email"));
 
-        formPanel.append(Location.Full, proto().closeReason()).decorate();
-        formPanel.append(Location.Full, proto().notes()).decorate();
+        formPanel.append(Location.Dual, proto().closeReason()).decorate();
+        formPanel.append(Location.Dual, proto().notes()).decorate();
 
         // tweak UI:
         get(proto().status()).setEditable(false);

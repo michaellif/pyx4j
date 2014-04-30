@@ -99,12 +99,12 @@ public class LeadForm extends CrmEntityForm<Lead> {
     private IsWidget createGuestsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().guests(), new GuestFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().guests(), new GuestFolder(isEditable()));
 
         formPanel.br();
 
         formPanel.append(Location.Left, proto().refSource()).decorate().componentWidth(180);
-        formPanel.append(Location.Full, proto().comments()).decorate();
+        formPanel.append(Location.Dual, proto().comments()).decorate();
 
         return formPanel;
     }
@@ -140,9 +140,9 @@ public class LeadForm extends CrmEntityForm<Lead> {
         formPanel.append(Location.Right, proto().status()).decorate().componentWidth(120);
 
         if (isEditable()) {
-            formPanel.append(Location.Full, proto().lease(), new CEntityLabel<Lease>()).decorate();
+            formPanel.append(Location.Dual, proto().lease(), new CEntityLabel<Lease>()).decorate();
         } else {
-            formPanel.append(Location.Full, proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate();
+            formPanel.append(Location.Dual, proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate();
 
         }
 

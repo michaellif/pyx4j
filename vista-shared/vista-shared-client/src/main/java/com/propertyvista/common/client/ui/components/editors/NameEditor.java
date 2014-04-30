@@ -91,7 +91,7 @@ public class NameEditor extends AccessoryEntityForm<Name> {
         } else {
             viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             viewComp.setDecorator(new FieldDecoratorBuilder(15, true).customLabel(customViewLabel).build());
-            formPanel.append(Location.Full, viewComp);
+            formPanel.append(Location.Dual, viewComp);
         }
 
         return formPanel;

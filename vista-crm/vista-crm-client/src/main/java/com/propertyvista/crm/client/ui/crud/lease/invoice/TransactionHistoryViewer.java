@@ -66,11 +66,11 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
                 TwoColumnFormPanel formPanel = new TwoColumnFormPanel();
                 if (value != null) {
                     formPanel.h1(i18n.tr("Transactions History"));
-                    formPanel.append(Location.Full, createLineItems(value.lineItems()));
+                    formPanel.append(Location.Dual, createLineItems(value.lineItems()));
 
                     formPanel.br();
                     formPanel.h1(i18n.tr("Arrears"));
-                    formPanel.append(Location.Full, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
+                    formPanel.append(Location.Dual, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
                 }
                 return formPanel;
             }

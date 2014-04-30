@@ -136,7 +136,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            formPanel.append(Location.Full, proto().content(), editor).decorate();
+            formPanel.append(Location.Dual, proto().content(), editor).decorate();
 
             // TODO
             // main.setWidget(++row, 0, inject(proto().image(), new CFileUploader(), new FormDecoratorBuilder( 60).build()));

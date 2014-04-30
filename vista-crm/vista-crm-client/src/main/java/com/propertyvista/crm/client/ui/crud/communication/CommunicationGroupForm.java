@@ -49,12 +49,12 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().isPredefined(), new CBooleanLabel()).decorate();
         formPanel.h1(i18n.tr("CRM User Roles"));
-        formPanel.append(Location.Full, proto().roles(), roleFolder);
+        formPanel.append(Location.Dual, proto().roles(), roleFolder);
         formPanel.h1(i18n.tr("Contact Associated With"));
         formPanel.h3(i18n.tr("Buildings"));
-        formPanel.append(Location.Full, proto().buildings(), new BuildingFolder(this.getParentView(), true));
+        formPanel.append(Location.Dual, proto().buildings(), new BuildingFolder(this.getParentView(), true));
         formPanel.h3(i18n.tr("Portfolios"));
-        formPanel.append(Location.Full, proto().portfolios(), new PortfolioFolder(this.getParentView(), true));
+        formPanel.append(Location.Dual, proto().portfolios(), new PortfolioFolder(this.getParentView(), true));
         return formPanel;
     }
 

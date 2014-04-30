@@ -60,9 +60,9 @@ public class RichTextContentEditor extends AccessoryEntityForm<HtmlContent> {
         if (isEditable()) {
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            formPanel.append(Location.Full, proto().html(), editor).decorate();
+            formPanel.append(Location.Dual, proto().html(), editor).decorate();
         } else {
-            formPanel.append(Location.Full, proto().html(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Dual, proto().html(), new CLabel<String>()).decorate();
         }
 
         return formPanel;

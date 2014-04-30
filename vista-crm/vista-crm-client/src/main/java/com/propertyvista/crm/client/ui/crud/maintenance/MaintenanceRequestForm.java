@@ -245,7 +245,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
                 BasicCFormPanel main = new BasicCFormPanel(entryForm);
-                main.append(Location.Full, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160).build();
+                main.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160).build();
 
                 return main.asWidget();
             }

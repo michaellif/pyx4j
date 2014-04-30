@@ -77,7 +77,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            formPanel.append(Location.Full, proto().person().name(), new NameEditor(i18n.tr("Person")));
+            formPanel.append(Location.Dual, proto().person().name(), new NameEditor(i18n.tr("Person")));
 
             formPanel.br();
 

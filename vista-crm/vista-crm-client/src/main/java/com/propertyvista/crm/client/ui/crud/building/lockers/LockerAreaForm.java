@@ -49,7 +49,7 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         formPanel.append(Location.Right, proto().largeLockers()).decorate().componentWidth(30);
         formPanel.append(Location.Right, proto().smallLockers()).decorate().componentWidth(30);
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
         return formPanel;
     }

@@ -60,27 +60,27 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
         formPanel.append(Location.Right, proto().website()).decorate();
 
         formPanel.h1(proto().address().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().address(), new AddressStructuredEditor(false));
+        formPanel.append(Location.Dual, proto().address(), new AddressStructuredEditor(false));
 
         formPanel.br();
         CImage logo = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));
         logo.setScaleMode(ScaleMode.Contain);
         logo.setImageSize(368, 60);
-        formPanel.append(Location.Full, proto().logo().file(), logo).decorate().customLabel(i18n.tr("Logo"));
+        formPanel.append(Location.Dual, proto().logo().file(), logo).decorate().customLabel(i18n.tr("Logo"));
 
         formPanel.br();
         CImage signature = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        formPanel.append(Location.Full, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
+        formPanel.append(Location.Dual, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
 
         return formPanel;
     }
 
     private IsWidget createBuildingsPanel() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().buildings(), new LandlordBuildingFolder(this));
+        formPanel.append(Location.Dual, proto().buildings(), new LandlordBuildingFolder(this));
         return formPanel;
     }
 

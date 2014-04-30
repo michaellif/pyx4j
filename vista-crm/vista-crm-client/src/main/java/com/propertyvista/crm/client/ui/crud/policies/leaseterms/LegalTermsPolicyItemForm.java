@@ -32,9 +32,9 @@ public class LegalTermsPolicyItemForm extends CForm<LegalTermsPolicyItem> {
     protected IsWidget createContent() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().enabled()).decorate();
-        formPanel.append(Location.Full, proto().caption()).decorate();
-        formPanel.append(Location.Full, proto().content()).decorate();
+        formPanel.append(Location.Dual, proto().enabled()).decorate();
+        formPanel.append(Location.Dual, proto().caption()).decorate();
+        formPanel.append(Location.Dual, proto().content()).decorate();
 
         return formPanel;
     }

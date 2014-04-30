@@ -30,7 +30,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().deposit().billableItem()).decorate();
+        formPanel.append(Location.Dual, proto().deposit().billableItem()).decorate();
 
         formPanel.append(Location.Left, proto().deposit().type()).decorate().componentWidth(150);
         formPanel.append(Location.Right, proto().status()).decorate().componentWidth(120);
@@ -41,11 +41,11 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         formPanel.append(Location.Left, proto().depositDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().refundDate()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Full, proto().deposit().description()).decorate();
+        formPanel.append(Location.Dual, proto().deposit().description()).decorate();
 
         formPanel.br();
         formPanel.h2(proto().interestAdjustments().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable()));
 
         // tweaking:
         get(proto().deposit().billableItem()).setViewable(true);

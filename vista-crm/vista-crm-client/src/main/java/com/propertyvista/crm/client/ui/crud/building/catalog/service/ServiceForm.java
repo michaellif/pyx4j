@@ -63,14 +63,14 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
         headerDeposits = formPanel.h1(i18n.tr("Deposits"));
         headerLMR = formPanel.h3(i18n.tr("Last Month Rent"));
-        formPanel.append(Location.Full, inject(proto().version().depositLMR(), new ProductDepositEditor()));
+        formPanel.append(Location.Dual, inject(proto().version().depositLMR(), new ProductDepositEditor()));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             headerMoveIn = formPanel.h3(i18n.tr("Move In"));
-            formPanel.append(Location.Full, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
+            formPanel.append(Location.Dual, inject(proto().version().depositMoveIn(), new ProductDepositEditor()));
 
             headerSecurity = formPanel.h3(i18n.tr("Security"));
-            formPanel.append(Location.Full, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
+            formPanel.append(Location.Dual, inject(proto().version().depositSecurity(), new ProductDepositEditor()));
         }
 
         // tweaks:
@@ -93,7 +93,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
     public BasicCFormPanel createItemsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().version().items(), new ServiceItemFolder(this));
+        formPanel.append(Location.Dual, proto().version().items(), new ServiceItemFolder(this));
 
         return formPanel;
     }
@@ -102,11 +102,11 @@ public class ServiceForm extends CrmEntityForm<Service> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Features"));
-        formPanel.append(Location.Full, proto().version().features(), new ServiceFeatureFolder(isEditable(), this));
+        formPanel.append(Location.Dual, proto().version().features(), new ServiceFeatureFolder(isEditable(), this));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             formPanel.h1(i18n.tr("Concessions"));
-            formPanel.append(Location.Full, proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this));
+            formPanel.append(Location.Dual, proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this));
         }
         return formPanel;
     }

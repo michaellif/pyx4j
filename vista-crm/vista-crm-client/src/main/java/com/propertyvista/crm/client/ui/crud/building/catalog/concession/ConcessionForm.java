@@ -52,7 +52,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         formPanel.append(Location.Right, proto().version().expirationDate()).decorate().componentWidth(90);
         formPanel.append(Location.Right, proto().updated(), new CDateLabel()).decorate().componentWidth(90);
 
-        formPanel.append(Location.Full, proto().version().description()).decorate();
+        formPanel.append(Location.Dual, proto().version().description()).decorate();
 
         get(proto().version().type()).addValueChangeHandler(new ValueChangeHandler<Concession.Type>() {
             @Override

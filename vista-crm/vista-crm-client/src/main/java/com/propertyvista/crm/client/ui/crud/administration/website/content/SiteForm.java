@@ -34,39 +34,39 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         BasicCFormPanel formPanel;
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().siteTitles(), new SiteTitlesFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().siteTitles(), new SiteTitlesFolder(isEditable()));
         selectTab(addTab(formPanel, proto().siteTitles().getMeta().getCaption()));
 
         formPanel = new BasicCFormPanel(this);
         formPanel.h4(i18n.tr("Recommended Logo size not to exceed: small - {0}, large - {1} pixels", "160x80", "300x90"));
-        formPanel.append(Location.Full, proto().logo(), new SiteImageResourceFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().logo(), new SiteImageResourceFolder(isEditable()));
         addTab(formPanel, i18n.tr("Site Logos"));
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().slogan(), new RichTextContentFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().slogan(), new RichTextContentFolder(isEditable()));
         addTab(formPanel, proto().slogan().getMeta().getCaption());
 
         SiteImageSetFolder imageFolder = new SiteImageSetFolder(isEditable());
         imageFolder.setImageSize(690, 300);
         imageFolder.setThumbSize(230, 100);
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().banner(), imageFolder);
+        formPanel.append(Location.Dual, proto().banner(), imageFolder);
         addTab(formPanel, proto().banner().getMeta().getCaption());
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().metaTags(), new MetaTagsFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().metaTags(), new MetaTagsFolder(isEditable()));
         addTab(formPanel, proto().metaTags().getMeta().getCaption());
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().childPages(), new PageDescriptorFolder(this));
+        formPanel.append(Location.Dual, proto().childPages(), new PageDescriptorFolder(this));
         selectTab(addTab(formPanel, proto().childPages().getMeta().getCaption()));
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, createGadgetPanel());
+        formPanel.append(Location.Dual, createGadgetPanel());
         addTab(formPanel, i18n.tr("Home Page Gadgets"));
 
         formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().cityIntroPages(), new CityIntroPageFolder(this));
+        formPanel.append(Location.Dual, proto().cityIntroPages(), new CityIntroPageFolder(this));
         addTab(formPanel, proto().cityIntroPages().getMeta().getCaption());
     }
 
@@ -74,12 +74,12 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h4(i18n.tr("Narrow Page Gadgets:"));
-        formPanel.append(Location.Full, proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable()));
 
         formPanel.br();
 
         formPanel.h4(i18n.tr("Wide Page Gadgets:"));
-        formPanel.append(Location.Full, proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable()));
 
         return formPanel;
     }

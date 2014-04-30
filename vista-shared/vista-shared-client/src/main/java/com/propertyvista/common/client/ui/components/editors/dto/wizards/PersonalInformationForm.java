@@ -33,9 +33,9 @@ public class PersonalInformationForm extends CForm<PersonalInformationDTO> {
     protected IsWidget createContent() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().name(), new NameEditor());
+        formPanel.append(Location.Dual, proto().name(), new NameEditor());
 
-        formPanel.append(Location.Full, proto().dto_personalAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().dto_personalAddress(), new AddressSimpleEditor());
 
         formPanel.append(Location.Left, proto().email()).decorate();
         formPanel.append(Location.Left, proto().dateOfBirth()).decorate();

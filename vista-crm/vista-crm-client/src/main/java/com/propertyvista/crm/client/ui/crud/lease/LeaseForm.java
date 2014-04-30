@@ -76,14 +76,14 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         CViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()
                 : new TransactionHistoryViewer();
-        formPanel.append(Location.Full, proto().transactionHistory(), transactionHistoryViewer);
+        formPanel.append(Location.Dual, proto().transactionHistory(), transactionHistoryViewer);
 
         return formPanel;
     }
 
     private IsWidget createCommunicationsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Full, proto().letters(), new LegalLetterFolder());
+        formPanel.append(Location.Dual, proto().letters(), new LegalLetterFolder());
         return formPanel;
     }
 }

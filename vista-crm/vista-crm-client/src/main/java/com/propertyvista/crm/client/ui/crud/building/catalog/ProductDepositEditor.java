@@ -54,7 +54,7 @@ public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
         formPanel.append(Location.Right, proto().valueType()).decorate().componentWidth(100);
         formPanel.append(Location.Right, valueHolder);
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweaks:
         chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));

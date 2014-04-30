@@ -75,7 +75,7 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
                 AppSite.getPlaceController().goTo(place);
             }
         });
-        formPanel.append(Location.Full, proto().coveredItems(), new PapCoveredItemFolder());
+        formPanel.append(Location.Dual, proto().coveredItems(), new PapCoveredItemFolder());
 
         selectTab(addTab(formPanel, i18n.tr("AutoPay")));
         setTabBarVisible(false);

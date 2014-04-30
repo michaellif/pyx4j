@@ -48,13 +48,13 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
     protected IsWidget createContent() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().person().name(), new NameEditor(i18n.tr("Person")));
+        formPanel.append(Location.Dual, proto().person().name(), new NameEditor(i18n.tr("Person")));
 
         formPanel.h1(proto().incomes().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().incomes(), new PersonalIncomeFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().incomes(), new PersonalIncomeFolder(isEditable()));
 
         formPanel.h1(proto().assets().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().assets(), new PersonalAssetFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().assets(), new PersonalAssetFolder(isEditable()));
 
         return formPanel;
     }

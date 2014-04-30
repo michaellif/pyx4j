@@ -117,7 +117,7 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             locale.setEditable(false);
             formPanel.append(Location.Left, proto().locale()).decorate();
             formPanel.append(Location.Left, proto().small().file(), smallLogo).decorate().customLabel(i18n.tr("Small Logo"));
-            formPanel.append(Location.Full, proto().large().file(), largeLogo).decorate().customLabel(i18n.tr("Large Logo"));
+            formPanel.append(Location.Dual, proto().large().file(), largeLogo).decorate().customLabel(i18n.tr("Large Logo"));
 
             return formPanel;
         }

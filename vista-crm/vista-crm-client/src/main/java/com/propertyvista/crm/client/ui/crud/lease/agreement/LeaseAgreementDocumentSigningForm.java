@@ -63,16 +63,16 @@ public class LeaseAgreementDocumentSigningForm extends CForm<LeaseAgreementDocum
 
         formPanel.h1(i18n.tr("Signing Progress"));
 
-        formPanel.append(Location.Full, proto().signingProgress().stackholdersProgressBreakdown(), new LeaseAgreementSigningProgressFolder());
+        formPanel.append(Location.Dual, proto().signingProgress().stackholdersProgressBreakdown(), new LeaseAgreementSigningProgressFolder());
         get(proto().signingProgress().stackholdersProgressBreakdown()).setViewable(true);
 
         formPanel.h1(i18n.tr("Digitally Signed Agreement Document"));
 
-        formPanel.append(Location.Full, proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentForm(true));
+        formPanel.append(Location.Dual, proto().digitallySignedDocument(), digitallySignedDocumentForm = new LeaseAgreementDocumentForm(true));
 
-        formPanel.append(Location.Full, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will appear here when every party signs digitally")));
+        formPanel.append(Location.Dual, notSignedDigitallyLabel = new Label(i18n.tr("A signed document will appear here when every party signs digitally")));
 
-        formPanel.append(Location.Full, signDigitallyButton = new Button(i18n.tr("Sign Digitally"), new Command() {
+        formPanel.append(Location.Dual, signDigitallyButton = new Button(i18n.tr("Sign Digitally"), new Command() {
             @Override
             public void execute() {
                 MessageDialog.confirm(i18n.tr("Sign Agreement Document"), i18n.tr("Are you sure?"), new Command() {
@@ -85,16 +85,16 @@ public class LeaseAgreementDocumentSigningForm extends CForm<LeaseAgreementDocum
         }));
         signDigitallyButton.getElement().getStyle().setMarginTop(2, Unit.EM);
 
-        formPanel.append(Location.Full,
+        formPanel.append(Location.Dual,
                 signDigitallyExplanation = new Label(i18n.tr("Once every lease participant signs, the document will be ready for signing by Landlord")));
 
         sigingProgressPanelHolder = new VerticalPanel();
         sigingProgressPanelHolder.setWidth("100%");
-        formPanel.append(Location.Full, sigingProgressPanelHolder);
+        formPanel.append(Location.Dual, sigingProgressPanelHolder);
 
         formPanel.h1(i18n.tr("Ink Signed Agreement Documents"));
 
-        formPanel.append(Location.Full, proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder() {
+        formPanel.append(Location.Dual, proto().inkSignedDocuments(), this.leaseAgreementDocumentFolder = new LeaseAgreementDocumentFolder() {
             @Override
             public void onDocumentsChanged() {
                 LeaseAgreementDocumentSigningForm.this.onDocumentsChanged();

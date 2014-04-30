@@ -90,7 +90,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         formPanel.append(Location.Left, proto().confirmationMethod()).decorate().componentWidth(120);
 
         formPanel.h3(proto().availableBillingTypes().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().availableBillingTypes(), new LeaseBillingTypeFolder());
+        formPanel.append(Location.Dual, proto().availableBillingTypes(), new LeaseBillingTypeFolder());
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().prorationMethod()).setVisible(false);

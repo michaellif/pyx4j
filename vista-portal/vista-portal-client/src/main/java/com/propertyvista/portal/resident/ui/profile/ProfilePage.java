@@ -60,11 +60,11 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
-        formPanel.append(Location.Full, proto().picture().file(), imageHolder).decorate().customLabel("");
+        formPanel.append(Location.Dual, proto().picture().file(), imageHolder).decorate().customLabel("");
 
         formPanel.h1(i18n.tr("Basic Information"));
 
-        formPanel.append(Location.Full, proto().person().name(), new CEntityLabel<Name>()).decorate().customLabel(i18n.tr("Full Name"));
+        formPanel.append(Location.Dual, proto().person().name(), new CEntityLabel<Name>()).decorate().customLabel(i18n.tr("Full Name"));
         formPanel.append(Location.Left, proto().person().sex()).decorate().componentWidth(100);
         formPanel.append(Location.Right, proto().person().birthDate()).decorate().componentWidth(150);
 
@@ -75,7 +75,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         formPanel.append(Location.Right, proto().person().email()).decorate().componentWidth(230);
 
         formPanel.h1(proto().emergencyContacts().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().emergencyContacts(), new EmergencyContactFolder());
+        formPanel.append(Location.Dual, proto().emergencyContacts(), new EmergencyContactFolder());
 
         return formPanel;
     }

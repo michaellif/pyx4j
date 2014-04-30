@@ -82,7 +82,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
     private BasicCFormPanel createBuildingsPanel() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().buildings(), new ComplexBuildingFolder(this));
+        formPanel.append(Location.Dual, proto().buildings(), new ComplexBuildingFolder(this));
 
         return formPanel;
     }

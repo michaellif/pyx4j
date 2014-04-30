@@ -156,7 +156,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         formPanel.append(Location.Left, proto().participantId()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().yardiApplicantId()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Full, proto().customer().person().name(), new NameEditor(participant));
+        formPanel.append(Location.Dual, proto().customer().person().name(), new NameEditor(participant));
         get(proto().customer().person().name()).setEditable(!VistaFeatures.instance().yardiIntegration());
 
         formPanel.append(Location.Left, proto().customer().person().sex()).decorate().componentWidth(100);
@@ -213,7 +213,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     protected IsWidget createPaymentMethodsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+        formPanel.append(Location.Dual, proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {

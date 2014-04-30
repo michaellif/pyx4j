@@ -80,7 +80,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
     protected IsWidget createContent() {
         InfoViewFormPanel formPanel = new InfoViewFormPanel(this);
 
-        formPanel.append(Location.Full, proto().person().name(), new NameEditor(i18n.tr("Person")));
+        formPanel.append(Location.Dual, proto().person().name(), new NameEditor(i18n.tr("Person")));
 
         formPanel.append(Location.Left, proto().person().sex()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().person().birthDate()).decorate().componentWidth(120);
@@ -91,14 +91,14 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         formPanel.append(Location.Right, proto().person().workPhone()).decorate().componentWidth(180);
 
         formPanel.h1(i18n.tr("Identification Documents"));
-        formPanel.append(Location.Full, proto().version().documents(), fileUpload = new IdUploaderFolder());
+        formPanel.append(Location.Dual, proto().version().documents(), fileUpload = new IdUploaderFolder());
 
         formPanel.h1(proto().version().currentAddress().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().version().currentAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Dual, proto().version().currentAddress(), new PriorAddressEditor());
 
         previousAddress.h1(proto().version().previousAddress().getMeta().getCaption());
-        previousAddress.append(Location.Full, proto().version().previousAddress(), new PriorAddressEditor());
-        formPanel.append(Location.Full, previousAddress);
+        previousAddress.append(Location.Dual, proto().version().previousAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Dual, previousAddress);
 
         formPanel.h1(proto().version().legalQuestions().getMeta().getCaption());
         formPanel.appendLegalQuestion(proto().version().legalQuestions().suedForRent());
@@ -111,7 +111,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
 
         if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             formPanel.h1(proto().emergencyContacts().getMeta().getCaption());
-            formPanel.append(Location.Full, proto().emergencyContacts(), new EmergencyContactFolder(isEditable()));
+            formPanel.append(Location.Dual, proto().emergencyContacts(), new EmergencyContactFolder(isEditable()));
         }
 
         return formPanel;
@@ -227,7 +227,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         }
 
         void appendLegalQuestion(IObject<?> member) {
-            append(Location.Full, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
+            append(Location.Dual, member).decorate().labelWidth(400).labelPosition(LabelPosition.top).useLabelSemicolon(false);
         }
     }
 }

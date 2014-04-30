@@ -41,8 +41,8 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         noPaymentMethodsMessage.setText(i18n.tr("There are no payment methods. Click 'Edit' to add a new payment method"));
         noPaymentMethodsMessage.setVisible(false);
 
-        formPanel.append(Location.Full, noPaymentMethodsMessage);
-        formPanel.append(Location.Full, proto().paymentMethods(), new PmcPaymentMethodFolder());
+        formPanel.append(Location.Dual, noPaymentMethodsMessage);
+        formPanel.append(Location.Dual, proto().paymentMethods(), new PmcPaymentMethodFolder());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

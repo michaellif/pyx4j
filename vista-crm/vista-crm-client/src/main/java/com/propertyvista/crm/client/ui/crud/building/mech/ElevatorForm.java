@@ -41,10 +41,10 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
         formPanel.append(Location.Right, proto().build()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().isForMoveInOut()).decorate().componentWidth(80);
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
         formPanel.h1(proto().license().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().license(), new LicenseEditor());
+        formPanel.append(Location.Dual, proto().license(), new LicenseEditor());
 
         return formPanel;
     }

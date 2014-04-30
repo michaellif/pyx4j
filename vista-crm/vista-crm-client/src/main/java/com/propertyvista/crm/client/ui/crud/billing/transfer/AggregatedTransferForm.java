@@ -58,12 +58,12 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         formPanel.append(Location.Right, proto().returnItemsCount()).decorate().componentWidth(60);
 
         formPanel.h3(proto().payments().getMeta().getCaption());
-        formPanel.append(Location.Full, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
+        formPanel.append(Location.Dual, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
         formPanel.h3(proto().returnedPayments().getMeta().getCaption());
-        formPanel.append(Location.Full, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
+        formPanel.append(Location.Dual, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
 
         formPanel.h3(proto().rejectedBatchPayments().getMeta().getCaption());
-        formPanel.append(Location.Full, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
+        formPanel.append(Location.Dual, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
 

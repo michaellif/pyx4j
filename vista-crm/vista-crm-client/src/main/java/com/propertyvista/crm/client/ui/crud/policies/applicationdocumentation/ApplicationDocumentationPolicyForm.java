@@ -51,7 +51,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         formPanel.append(Location.Right, proto().mandatoryProofOfIncome()).decorate().componentWidth(120);
 
         formPanel.h3(proto().allowedIDs().getMeta().getCaption());
-        formPanel.append(Location.Full, proto().allowedIDs(), new IdentificationDocumentFolder());
+        formPanel.append(Location.Dual, proto().allowedIDs(), new IdentificationDocumentFolder());
 
         return formPanel;
     }

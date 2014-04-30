@@ -108,9 +108,9 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
 
-                formPanel.append(Location.Full, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Full, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Full, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70).contentWidth(160);
 
                 return formPanel.asWidget();
             }

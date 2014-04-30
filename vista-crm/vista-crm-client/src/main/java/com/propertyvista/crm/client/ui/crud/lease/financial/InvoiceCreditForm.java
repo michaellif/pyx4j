@@ -36,7 +36,7 @@ public class InvoiceCreditForm extends CrmEntityForm<InvoiceCreditDTO> {
         formPanel.append(Location.Left, proto().outstandingCredit()).decorate();
 
         formPanel.h2(i18n.tr("Links"));
-        formPanel.append(Location.Full, proto().debitCreditLinks(), new DebitCreditLinkFolder());
+        formPanel.append(Location.Dual, proto().debitCreditLinks(), new DebitCreditLinkFolder());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

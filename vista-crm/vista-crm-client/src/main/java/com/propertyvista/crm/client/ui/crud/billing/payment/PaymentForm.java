@@ -157,15 +157,15 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, noticeViewer.getNoticePanel());
+        formPanel.append(Location.Dual, noticeViewer.getNoticePanel());
 
-        formPanel.append(Location.Full, createDetailsPanel());
+        formPanel.append(Location.Dual, createDetailsPanel());
 
         preauthorizedPaymentMethodViewerHeader = formPanel.h1(i18n.tr("Preauthorized Payment"));
-        formPanel.append(Location.Full, proto().preauthorizedPayment(), new PreauthorizedPaymentViewer());
+        formPanel.append(Location.Dual, proto().preauthorizedPayment(), new PreauthorizedPaymentViewer());
 
         paymentMethodEditorHeader = formPanel.h1(i18n.tr("Payment Method"));
-        formPanel.append(Location.Full, proto().paymentMethod(), paymentMethodEditor);
+        formPanel.append(Location.Dual, proto().paymentMethod(), paymentMethodEditor);
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -547,7 +547,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
             formPanel.br();
 
-            formPanel.append(Location.Full, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+            formPanel.append(Location.Dual, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
             return formPanel;
         }

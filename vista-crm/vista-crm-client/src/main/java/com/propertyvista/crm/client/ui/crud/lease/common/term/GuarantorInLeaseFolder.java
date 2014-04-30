@@ -141,7 +141,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             formPanel.append(Location.Left, proto().leaseParticipant().participantId()).decorate().componentWidth(100);
-            formPanel.append(Location.Full, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
+            formPanel.append(Location.Dual, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();

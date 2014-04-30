@@ -58,7 +58,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
             formPanel.append(Location.Right, proto().version().expirationDate()).decorate().componentWidth(120);
             formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
 
-            formPanel.append(Location.Full, proto().version().description()).decorate();
+            formPanel.append(Location.Dual, proto().version().description()).decorate();
 
             return formPanel;
         }

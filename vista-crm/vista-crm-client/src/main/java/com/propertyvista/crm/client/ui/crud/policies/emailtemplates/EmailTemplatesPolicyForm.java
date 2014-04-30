@@ -70,8 +70,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     private IsWidget createEmailTemplatesHeaderFooterPanel() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().header()).decorate();
-        formPanel.append(Location.Full, proto().footer()).decorate();
+        formPanel.append(Location.Dual, proto().header()).decorate();
+        formPanel.append(Location.Dual, proto().footer()).decorate();
 
         return formPanel;
     }
@@ -79,7 +79,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     private IsWidget createEmailTemplatesPanel() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Full, proto().templates(), new EmailTemplateEditorFolder());
+        formPanel.append(Location.Dual, proto().templates(), new EmailTemplateEditorFolder());
 
         return formPanel;
     }
@@ -122,13 +122,13 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                formPanel.append(Location.Full, proto().type()).decorate();
-                formPanel.append(Location.Full, proto().subject()).decorate();
-                formPanel.append(Location.Full, proto().useHeader()).decorate();
-                formPanel.append(Location.Full, proto().useFooter()).decorate();
+                formPanel.append(Location.Dual, proto().type()).decorate();
+                formPanel.append(Location.Dual, proto().subject()).decorate();
+                formPanel.append(Location.Dual, proto().useHeader()).decorate();
+                formPanel.append(Location.Dual, proto().useFooter()).decorate();
                 CRichTextArea editor = new CRichTextArea();
                 editor.setImageProvider(new SiteImageResourceProvider());
-                formPanel.append(Location.Full, proto().content(), editor).decorate();
+                formPanel.append(Location.Dual, proto().content(), editor).decorate();
                 if (isEditable()) {
                     // create variable selection button
                     final PushButton pb = editor.getNativeComponent().getEditor().getCustomButton();

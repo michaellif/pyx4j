@@ -87,7 +87,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             formPanel.append(Location.Right, proto()._total()).decorate().componentWidth(120);
         }
 
-        formPanel.append(Location.Full, proto().description()).decorate();
+        formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweak:
         get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<ExecutionType>() {

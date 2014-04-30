@@ -39,10 +39,10 @@ public class ILSConfigForm extends CrmEntityForm<ILSConfigDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(proto().vendors().getMeta().getCaption());
-        formPanel.append(Location.Full, inject(proto().vendors(), new ILSVendorConfigEditorFolder()));
+        formPanel.append(Location.Dual, inject(proto().vendors(), new ILSVendorConfigEditorFolder()));
 
         formPanel.h1(proto().emailFeeds().getMeta().getCaption());
-        formPanel.append(Location.Full, inject(proto().emailFeeds(), new ILSEmailConfigEditorFolder()));
+        formPanel.append(Location.Dual, inject(proto().emailFeeds(), new ILSEmailConfigEditorFolder()));
 
         return formPanel;
     }
