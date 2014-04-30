@@ -13,12 +13,11 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto.wizards;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -32,16 +31,16 @@ public class PersonalInformationForm extends CForm<PersonalInformationDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = 0;
-        main.setWidget(++row, 0, inject(proto().name(), new NameEditor()));
-        main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().dto_personalAddress(), new AddressSimpleEditor()));
-        main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().dateOfBirth(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().sin(), new FieldDecoratorBuilder().build()));
-        return main;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+
+        formPanel.append(Location.Full, proto().name(), new NameEditor());
+
+        formPanel.append(Location.Full, proto().dto_personalAddress(), new AddressSimpleEditor());
+
+        formPanel.append(Location.Left, proto().email()).decorate();
+        formPanel.append(Location.Left, proto().dateOfBirth()).decorate();
+        formPanel.append(Location.Left, proto().sin()).decorate();
+        return formPanel;
     }
 
 }

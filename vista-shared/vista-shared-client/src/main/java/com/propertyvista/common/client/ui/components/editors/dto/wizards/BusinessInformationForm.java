@@ -22,7 +22,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
@@ -42,27 +44,16 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
-        contentPanel.getFlexCellFormatter().setWidth(0, 0, "50%");
-        contentPanel.getFlexCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        contentPanel.getFlexCellFormatter().setWidth(0, 1, "50%");
-        contentPanel.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
-        contentPanel.getFlexCellFormatter().getElement(0, 1).getStyle().setPaddingLeft(10, Unit.PX);
+        formPanel.append(Location.Left, proto().companyName()).decorate();
+        formPanel.append(Location.Left, proto().companyType()).decorate();
 
-        TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
-        int mrow = -1;
-        mainPanel.setWidget(++mrow, 0, inject(proto().companyName(), new FieldDecoratorBuilder().build()));
-        mainPanel.setWidget(++mrow, 0, inject(proto().companyType(), new FieldDecoratorBuilder().build()));
-        mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
-        mainPanel.setWidget(++mrow, 0, inject(proto().dto_businessAddress(), new AddressSimpleEditor()));
-        mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
-        mainPanel.setWidget(++mrow, 0, inject(proto().businessNumber(), new FieldDecoratorBuilder().build()));
-        mainPanel.setWidget(++mrow, 0, inject(proto().businessEstablishedDate(), new FieldDecoratorBuilder().build()));
-        contentPanel.setWidget(0, 0, mainPanel);
+        formPanel.append(Location.Right, proto().businessNumber()).decorate();
+        formPanel.append(Location.Right, proto().businessEstablishedDate()).decorate();
 
-        TwoColumnFlexFormPanel documentsPanel = new TwoColumnFlexFormPanel();
-        int drow = -1;
+        formPanel.append(Location.Full, proto().dto_businessAddress(), new AddressSimpleEditor());
+
         Label documentsLabel = new Label();
         documentsLabel.setText(isEditable() ? i18n.tr("Attach Documentation:") : i18n.tr("Attached Documentation:"));
         documentsLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
@@ -72,17 +63,16 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
             documentsDecorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
         }
         documentsDecorator.add(documentsLabel);
-        documentsPanel.setWidget(++drow, 0, documentsDecorator);
+        formPanel.append(Location.Full, documentsDecorator);
 
         if (isEditable()) {
             Label equifaxReuirements = new Label();
             equifaxReuirements.setText(i18n.tr("Equifax requires proof of two (2) of the following documents:"));
-            documentsPanel.setWidget(++drow, 0, equifaxReuirements);
+            formPanel.append(Location.Left, equifaxReuirements);
         }
 
-        documentsPanel.setWidget(++drow, 0, inject(proto().documents(), new PmcBusinessInformationDocumentFolder()));
-        contentPanel.setWidget(0, 1, documentsPanel);
+        formPanel.append(Location.Full, proto().documents(), new PmcBusinessInformationDocumentFolder());
 
-        return contentPanel;
+        return formPanel;
     }
 }

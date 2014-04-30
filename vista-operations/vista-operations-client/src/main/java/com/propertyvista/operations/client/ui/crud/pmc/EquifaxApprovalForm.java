@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
@@ -31,20 +31,20 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         super(EquifaxSetupRequestDTO.class, view);
         this.setEditable(false);
 
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 1, "Credit Pricing Option");
-        panel.setWidget(++row, 0, inject(proto().reportType(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().setupFee(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().perApplicantFeee(), new FieldDecoratorBuilder().build()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.h1("Credit Pricing Option");
+        formPanel.append(Location.Left, proto().reportType()).decorate();
+        formPanel.append(Location.Left, proto().setupFee()).decorate();
+        formPanel.append(Location.Left, proto().perApplicantFeee()).decorate();
 
-        panel.setH1(++row, 0, 1, "Business Information");
-        panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
+        formPanel.h1("Business Information");
+        formPanel.append(Location.Full, proto().businessInformation(), new BusinessInformationForm());
 
-        panel.setH1(++row, 0, 1, "Personal Information");
-        panel.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
+        formPanel.h1("Personal Information");
+        formPanel.append(Location.Full, proto().personalInformation(), new PersonalInformationForm());
 
-        selectTab(addTab(panel, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
+        setTabBarVisible(false);
     }
 
 }
