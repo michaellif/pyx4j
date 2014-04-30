@@ -23,14 +23,18 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.EntityFactory;
@@ -45,7 +49,6 @@ import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -222,11 +225,14 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
 
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                    FlowPanel content = new FlowPanel();
 
                     thumb.setImage(getCComponent().getThumbnailPlaceholder());
-                    content.setWidget(0, 0, thumb);
-                    content.setWidget(0, 1, getCComponent().getImageEntryView(this));
+                    thumb.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                    content.add(thumb);
+                    Widget infoPanel = getCComponent().getImageEntryView(this);
+                    infoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                    content.add(infoPanel);
 
                     return content;
                 }
