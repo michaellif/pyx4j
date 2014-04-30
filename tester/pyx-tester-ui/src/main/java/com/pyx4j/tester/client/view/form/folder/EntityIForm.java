@@ -38,7 +38,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
@@ -104,18 +103,15 @@ public class EntityIForm extends CForm<EntityI> {
 
         @Override
         protected IsWidget createContent() {
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-            int row = -1;
-
-            main.setWidget(++row, 0, inject(proto().optionalTextI(), new FormDecoratorBuilder().build()));
-            main.setWidget(++row, 0, inject(proto().optionalInteger(), new FormDecoratorBuilder().build()));
-            main.setH3(++row, 0, 1, i18n.tr("Box Folder"));
-            main.setWidget(++row, 0, inject(proto().entityIIIList(), new EntityIIIFolder()));
-            main.setH3(++row, 0, 1, i18n.tr("Table Folder"));
-            main.setWidget(++row, 0, inject(proto().entityIVList(), new EntityIVFolder()));
-            return main;
+            formPanel.append(Location.Left, proto().optionalTextI()).decorate();
+            formPanel.append(Location.Left, proto().optionalInteger()).decorate();
+            formPanel.h3(i18n.tr("Box Folder"));
+            formPanel.append(Location.Left, proto().entityIIIList(), new EntityIIIFolder());
+            formPanel.h3(i18n.tr("Table Folder"));
+            formPanel.append(Location.Left, proto().entityIVList(), new EntityIVFolder());
+            return formPanel;
         }
     }
 

@@ -29,7 +29,8 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.images.Images;
@@ -48,10 +49,9 @@ public class EntityIImageForm extends CForm<EntityI> {
     @Override
     protected IsWidget createContent() {
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        main.setH2(++row, 0, 1, i18n.tr("CImage is here"));
+        formPanel.h2(i18n.tr("CImage is here"));
 
         CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class), new ImageFileURLBuilder(
                 false)) {
@@ -70,8 +70,8 @@ public class EntityIImageForm extends CForm<EntityI> {
             }
         };
 
-        main.setWidget(++row, 0, inject(proto().files(), cGallery));
+        formPanel.append(Location.Full, proto().files(), cGallery);
 
-        return main;
+        return formPanel;
     }
 }

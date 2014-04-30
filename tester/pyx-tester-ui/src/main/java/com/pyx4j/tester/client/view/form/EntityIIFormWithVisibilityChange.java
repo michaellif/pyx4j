@@ -26,10 +26,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityII;
-import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 
 public class EntityIIFormWithVisibilityChange extends CForm<EntityII> {
 
@@ -42,23 +42,22 @@ public class EntityIIFormWithVisibilityChange extends CForm<EntityII> {
     @Override
     protected IsWidget createContent() {
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Form component Visibility Test"));
-        main.setWidget(++row, 0, inject(proto().optionalEnum(), new FormDecoratorBuilder().build()));
-        main.setHR(++row, 0, 1);
+        formPanel.h1(i18n.tr("Form component Visibility Test"));
+        formPanel.append(Location.Left, proto().optionalEnum()).decorate();
+        formPanel.hr();
 
-        main.setWidget(++row, 0, inject(proto().optionalTextI(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().optionalTextII(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().mandatoryTextI(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().mandatoryTextII(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().optionalTextI()).decorate();
+        formPanel.append(Location.Left, proto().optionalTextII()).decorate();
+        formPanel.append(Location.Left, proto().mandatoryTextI()).decorate();
+        formPanel.append(Location.Left, proto().mandatoryTextII()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().checkBox(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().optionalPassword(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().mandatoryPassword(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().checkBox()).decorate();
+        formPanel.append(Location.Left, proto().optionalPassword()).decorate();
+        formPanel.append(Location.Left, proto().mandatoryPassword()).decorate();
 
-        return main;
+        return formPanel;
     }
 
     @Override

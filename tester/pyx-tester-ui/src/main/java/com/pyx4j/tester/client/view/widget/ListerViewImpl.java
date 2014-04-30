@@ -32,7 +32,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanel;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
@@ -45,19 +46,17 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
     public ListerViewImpl() {
         setSize("100%", "100%");
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        TwoColumnFormPanel formPanel = new TwoColumnFormPanel();
 
-        int row = 0;
+        formPanel.h1("Settings");
+        formPanel.append(Location.Left, new HTML("Container: width = 100px, height = 100px"));
+        formPanel.append(Location.Left, new HTML("Page Rows = 10"));
+        formPanel.append(Location.Left, new HTML("Data: cols = 5, rows = 5"));
 
-        content.setH1(row++, 0, 1, "Settings");
-        content.setWidget(row++, 0, new HTML("Container: width = 100px, height = 100px"));
-        content.setWidget(row++, 0, new HTML("Page Rows = 10"));
-        content.setWidget(row++, 0, new HTML("Data: cols = 5, rows = 5"));
+        formPanel.h1("Lister");
+        formPanel.append(Location.Full, lister);
 
-        content.setH1(row++, 0, 1, "Lister");
-        content.setWidget(row++, 0, lister);
-
-        add(content);
+        add(formPanel);
     }
 
     class TestLister extends EntityDataTablePanel<ListerDataItem> {

@@ -35,8 +35,8 @@ import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
@@ -45,7 +45,8 @@ import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -71,11 +72,9 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
     @Override
     protected IsWidget createContent() {
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Main Form"));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.h1(i18n.tr("Main Form"));
 
         // list box
         CEntityListBox<EntityIII> listBox = new CEntityListBox<EntityIII>(SelectionMode.SINGLE_PANEL);
@@ -91,20 +90,17 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         listBox.setOptions(Arrays.asList(e1, e2, e3));
         listBox.setDecorator(new FormDecoratorBuilder().build());
 
-        main.setWidget(++row, 0, inject(proto().entityIIIList(), listBox));
+        formPanel.append(Location.Left, proto().entityIIIList(), listBox);
 
         CEntityListBox<EntityIII> setBox = new CEntityListBox<EntityIII>(SelectionMode.TWO_PANEL);
         setBox.setOptions(Arrays.asList(e1, e2, e3));
         setBox.setDecorator(new FormDecoratorBuilder().build());
 
-        main.setWidget(++row, 0, inject(proto().entityIIIList2(), setBox));
+        formPanel.append(Location.Left, proto().entityIIIList2(), setBox);
 
         // Personal Identity
-        main.setWidget(
-                ++row,
-                0,
-                inject(proto().personalId(), new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class, new PersonalIdentityFormatter(
-                        "XXX-XXX-xxx;XX-XX-xxxx")), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().personalId(),
+                new CPersonalIdentityField<IPersonalIdentity>(IPersonalIdentity.class, new PersonalIdentityFormatter("XXX-XXX-xxx;XX-XX-xxxx"))).decorate();
 
         Anchor anchor = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
 
@@ -115,15 +111,15 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
             }
         });
 
-        main.setWidget(++row, 0, inject(proto().signature1(), new CSignature(anchor), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().signature1(), new CSignature(anchor)).decorate();
 
-        main.setWidget(++row, 0, inject(proto().hue(), new FormDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().color(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().hue()).decorate();
+        formPanel.append(Location.Left, proto().color()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().textBox(), new FormDecoratorBuilder().build()));
-        main.setWidget(row, 1, inject(proto().integerBox(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().textBox()).decorate();
+        formPanel.append(Location.Right, proto().integerBox()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().enumBox(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().enumBox()).decorate();
 
         Collection<String> options = new ArrayList<String>();
         for (int i = 0; i < 200; i++) {
@@ -132,32 +128,32 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
 
         CAbstractSuggestBox<String> box = new CSuggestStringBox();
         box.setOptions(options);
-        main.setWidget(row, 1, inject(proto().suggest(), box, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().suggest(), box).decorate();
 
-        main.setWidget(++row, 0, inject(proto().datePicker(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().datePicker()).decorate();
 
-        main.setWidget(row, 1, inject(proto().monthPicker(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().monthPicker()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().optionalTimePicker(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().optionalTimePicker()).decorate();
 
-        main.setWidget(row, 1, inject(proto().phone(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().phone()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().email(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().email()).decorate();
 
-        main.setWidget(row, 1, inject(proto().money(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().money()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().percent1(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().percent1()).decorate();
 
-        main.setWidget(row, 1, inject(proto().percent2(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().percent2()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().booleanRadioGroupHorizontal(), new FormDecoratorBuilder().build()));
-        main.setWidget(row, 1, inject(proto().enumRadioGroupHorizontal(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().booleanRadioGroupHorizontal()).decorate();
+        formPanel.append(Location.Right, proto().enumRadioGroupHorizontal()).decorate();
 
         CRadioGroupBoolean rgb = new CRadioGroupBoolean(Layout.VERTICAL);
-        main.setWidget(++row, 0, inject(proto().booleanRadioGroupVertical(), rgb, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().booleanRadioGroupVertical(), rgb).decorate();
 
         CRadioGroupEnum<Enum1> rge = new CRadioGroupEnum<Enum1>(Enum1.class, Layout.VERTICAL);
-        main.setWidget(row, 1, inject(proto().enumRadioGroupVertical(), rge, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().enumRadioGroupVertical(), rge).decorate();
 
         HashMap<Integer, String> rbgoptions = new HashMap<Integer, String>();
         for (int i = 0; i < 4; i++) {
@@ -165,10 +161,10 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         }
 
         CRadioGroupInteger rgi = new CRadioGroupInteger(Layout.HORISONTAL, rbgoptions);
-        main.setWidget(++row, 0, inject(proto().intRadioGroupHorizontal(), rgi, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().intRadioGroupHorizontal(), rgi).decorate();
 
         rgi = new CRadioGroupInteger(Layout.VERTICAL, rbgoptions);
-        main.setWidget(row, 1, inject(proto().intRadioGroupVertical(), rgi, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().intRadioGroupVertical(), rgi).decorate();
 
         CEntityComboBox<EntityV> cmbEntity = new CEntityComboBox<EntityV>(EntityV.class);
         Collection<EntityV> entityoptions = new ArrayList<EntityV>();
@@ -182,9 +178,9 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         }
 
         cmbEntity.setOptions(entityoptions);
-        main.setWidget(++row, 0, inject(proto().entityComboBox(), cmbEntity, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().entityComboBox(), cmbEntity).decorate();
 
-        main.setWidget(++row, 0, inject(proto().entitySelectorBox(), new CEntitySelectorHyperlink<EntityV>() {
+        formPanel.append(Location.Left, proto().entitySelectorBox(), new CEntitySelectorHyperlink<EntityV>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return null;
@@ -194,23 +190,23 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
             protected EntitySelectorTableDialog<EntityV> getSelectorDialog() {
                 return null;
             }
-        }, new FormDecoratorBuilder().build()));
+        }).decorate();
 
         CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
         cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        main.setWidget(row, 1, inject(proto().booleanComboBox(), cmbBoolean, new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().booleanComboBox(), cmbBoolean).decorate();
 
-        main.setWidget(++row, 0, inject(proto().checkBox(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().checkBox()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().enterPassword(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().enterPassword()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().confirmPassword(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().confirmPassword()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().textArea(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().textArea()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().richTextArea(), new FormDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().richTextArea()).decorate();
 
-        return main;
+        return formPanel;
     }
 
     @Override

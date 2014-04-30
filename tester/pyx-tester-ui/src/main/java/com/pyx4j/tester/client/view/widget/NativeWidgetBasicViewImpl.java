@@ -33,7 +33,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -51,10 +52,9 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
     public NativeWidgetBasicViewImpl() {
         setSize("100%", "100%");
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        TwoColumnFormPanel formPanel = new TwoColumnFormPanel();
 
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Main Form"));
+        formPanel.h1(i18n.tr("Main Form"));
 
         LogicalDate starting = new LogicalDate();
         LogicalDate minDate = new LogicalDate(110, 1, 1);
@@ -74,16 +74,16 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         });
 
         //Label lbl = new Label("CalendarUtil.getStartingDayOfWeek is: " + new Integer(CalendarUtil.getStartingDayOfWeek()).toString());
-        //main.setWidget(++row, 0, lbl);
-        main.setWidget(++row, 0, textBox);
-        main.setWidget(++row, 0, datePicker);
+        //formPanel.append(Location.Left, lbl);
+        formPanel.append(Location.Left, textBox);
+        formPanel.append(Location.Left, datePicker);
 
-        main.setHR(++row, 0, 1);
+        formPanel.hr();
 
         DatePickerComposite datePickerMulti = new DatePickerComposite(3, starting, minDate, maxDate, new ArrayList<LogicalDate>());
-        main.setWidget(++row, 0, datePickerMulti);
+        formPanel.append(Location.Left, datePickerMulti);
 
-        main.setHR(++row, 0, 1);
+        formPanel.hr();
 
         final Button dialogButton = new Button("Long message Dialog");
         dialogButton.addClickHandler(new ClickHandler() {
@@ -95,9 +95,9 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
             }
         });
 
-        main.setWidget(++row, 0, dialogButton);
+        formPanel.append(Location.Left, dialogButton);
 
-        main.setHR(++row, 0, 1);
+        formPanel.hr();
 
         {
             ListBox<String> comboBox = new ListBox<String>(false, true);
@@ -112,7 +112,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
             comboBox.getElement().getStyle().setMargin(5, Unit.PX);
 
-            main.setWidget(++row, 0, comboBox);
+            formPanel.append(Location.Left, comboBox);
         }
 
         {
@@ -141,7 +141,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
             comboBox.getElement().getStyle().setMargin(5, Unit.PX);
 
-            main.setWidget(++row, 0, comboBox);
+            formPanel.append(Location.Left, comboBox);
 
         }
 
@@ -163,7 +163,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
             comboBox.getElement().getStyle().setMargin(5, Unit.PX);
 
-            main.setWidget(++row, 0, comboBox);
+            formPanel.append(Location.Left, comboBox);
 
         }
 
@@ -185,7 +185,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
             comboBox.getElement().getStyle().setMargin(5, Unit.PX);
 
-            main.setWidget(++row, 0, comboBox);
+            formPanel.append(Location.Left, comboBox);
 
         }
 
@@ -228,16 +228,16 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
             model.addPhoto(new Photo("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG",
                     "http://lh6.ggpht.com/_FD9tLNw_5yE/SzyrboXbN3I/AAAAAAAAC_g/kcLqFd20EoM/s800/IMG_4117.JPG", "Photo7"));
 
-            main.setWidget(++row, 0, photoAlbum);
+            formPanel.append(Location.Left, photoAlbum);
 
         }
 
         {
-            main.setHR(++row, 0, 1);
+            formPanel.hr();
 
             final RadioGroup<String> rg = new RadioGroup<String>(RadioGroup.Layout.VERTICAL);
             rg.setOptions(Arrays.asList("String1", "String2", "String3"));
-            main.setWidget(++row, 0, rg);
+            formPanel.append(Location.Left, rg);
 
             final Button button1 = new Button("Set new Options");
             button1.addClickHandler(new ClickHandler() {
@@ -254,9 +254,9 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
                     rg.setOptions(opts);
                 }
             });
-            main.setWidget(++row, 0, button1);
+            formPanel.append(Location.Left, button1);
         }
 
-        add(main);
+        add(formPanel);
     }
 }
