@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui.wizard;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -96,7 +97,19 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E> {
         return btnCancel;
     }
 
+    @Override
+    public void init(CForm<E> component) {
+        super.init(component);
+        calculateButtonsState();
+    }
+
     public void calculateButtonsState() {
+
+        //Return if Wizard is not yet initiated.
+        if (getComponent() == null) {
+            return;
+        }
+
         if (getComponent().isLast()) {
             btnNext.setCaption(endButtonCaption);
         } else {
