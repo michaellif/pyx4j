@@ -37,14 +37,16 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -242,10 +244,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                main.setWidget(0, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(8, 15, 16).build()));
+                FormPanel main = new FormPanel(entryForm);
+                main.append(Location.Full, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160).build();
 
-                return main;
+                return main.asWidget();
             }
         };
         imageSlider.setImageSize(320, 240);
