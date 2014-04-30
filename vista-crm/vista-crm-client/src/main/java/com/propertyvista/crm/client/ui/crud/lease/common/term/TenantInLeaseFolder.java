@@ -37,13 +37,13 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -194,7 +194,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private class TenantInLeaseEditor extends CForm<LeaseTermTenant> {
 
-        private final TwoColumnFlexFormPanel preauthorizedPaymentsPanel = new TwoColumnFlexFormPanel();
+        private final FormPanel preauthorizedPaymentsPanel = new FormPanel(this);
 
         private final PreauthorizedPayments preauthorizedPayments = new PreauthorizedPayments();
 
@@ -204,43 +204,38 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int leftRow = -1;
-            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().participantId(), new FieldDecoratorBuilder(7).build()));
-            main.setWidget(++leftRow, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            formPanel.append(Location.Left, proto().leaseParticipant().participantId()).decorate().componentWidth(100);
+            formPanel.append(Location.Full, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                 }
-            }));
-            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().customer().person().sex(), new FieldDecoratorBuilder(7).build()));
-            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().customer().person().birthDate(), new FieldDecoratorBuilder(9).build()));
+            });
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().sex()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().birthDate()).decorate().componentWidth(120);
 
-            main.setWidget(++leftRow, 0, inject(proto().role(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++leftRow, 0, inject(proto().relationship(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(
-                    ++leftRow,
-                    0,
-                    inject(proto().effectiveScreening(),
-                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
-                            new FieldDecoratorBuilder(9).build()));
-            main.setWidget(++leftRow, 0, inject(proto().leaseParticipant().customer().person().email(), new FieldDecoratorBuilder(25).build()));
+            formPanel.append(Location.Left, proto().role()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().relationship()).decorate().componentWidth(180);
+            formPanel
+                    .append(Location.Left, proto().effectiveScreening(),
+                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)))
+                    .decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().email()).decorate();
 
-            int rightRow = -1;
-            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().yardiApplicantId(), new FieldDecoratorBuilder(10).build()));
-            main.setBR(++rightRow, 1, 1);
-            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().customer().person().homePhone(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().customer().person().mobilePhone(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++rightRow, 1, inject(proto().leaseParticipant().customer().person().workPhone(), new FieldDecoratorBuilder(15).build()));
+            formPanel.append(Location.Right, proto().leaseParticipant().yardiApplicantId()).decorate().componentWidth(120);
+            formPanel.br();
+            formPanel.append(Location.Right, proto().leaseParticipant().customer().person().homePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().leaseParticipant().customer().person().mobilePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().leaseParticipant().customer().person().workPhone()).decorate().componentWidth(180);
 
-            preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
-            preauthorizedPaymentsPanel.setWidget(1, 0, 2, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
+            preauthorizedPaymentsPanel.h3(proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
+            preauthorizedPaymentsPanel.append(Location.Full, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
 
-            leftRow = Math.max(leftRow, rightRow);
-            main.setWidget(++leftRow, 0, 2, preauthorizedPaymentsPanel);
+            formPanel.append(Location.Full, preauthorizedPaymentsPanel);
 
-            return main;
+            return formPanel;
         }
 
         @Override
@@ -373,19 +368,18 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
 
-                content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(9).build()));
-                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
+                formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate();
 
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new FieldDecoratorBuilder(35).build()));
+                formPanel.append(Location.Left, proto().paymentMethod()).decorate();
 
-                content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+                formPanel.append(Location.Full, proto().coveredItems(), new PapCoveredItemFolder());
 
-                return content;
+                return formPanel;
             }
 
             @Override

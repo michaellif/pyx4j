@@ -29,13 +29,13 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -504,9 +504,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(0, 0, 2, inject(proto().selectParticipant(), selectCombo, new FieldDecoratorBuilder().componentWidth("200px").build()));
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel.append(Location.Left, proto().selectParticipant(), selectCombo).decorate();
+            return formPanel;
         }
 
     }
@@ -553,16 +553,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         @Override
         protected IsWidget createContent() {
-            int row = -1;
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidget(
-                    ++row,
-                    0,
-                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
-                            LeaseApplicationDocument.class)),
-                            new FieldDecoratorBuilder().componentWidth("200px").customLabel(i18n.tr("Agreement Document File")).build()));
-            panel.setWidget(++row, 0, inject(proto().signedBy(), signedByCombo, new FieldDecoratorBuilder().componentWidth("200px").build()));
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel
+                    .append(Location.Left,
+                            proto().file(),
+                            new CFile(GWT.<UploadService<?, ?>> create(LeaseApplicationDocumentUploadService.class), new VistaFileURLBuilder(
+                                    LeaseApplicationDocument.class))).decorate().customLabel(i18n.tr("Agreement Document File"));
+            formPanel.append(Location.Left, proto().signedBy(), signedByCombo).decorate();
+            return formPanel;
         }
 
         @Override

@@ -17,11 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -29,8 +28,6 @@ import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
 public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
-
-    private static final I18n i18n = I18n.get(LegalLetterFolder.class);
 
     public static class N4LegalLetterForm extends CForm<N4LegalLetter> {
 
@@ -40,14 +37,13 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            int row = -1;
-            panel.setWidget(++row, 0, 2,
-                    inject(proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class)), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().generatedOn(), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().amountOwed(), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().terminationDate(), new FieldDecoratorBuilder().build()));
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+
+            formPanel.append(Location.Full, proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class))).decorate();
+            formPanel.append(Location.Full, proto().generatedOn()).decorate();
+            formPanel.append(Location.Full, proto().amountOwed()).decorate();
+            formPanel.append(Location.Full, proto().terminationDate()).decorate();
+            return formPanel;
         }
     }
 
@@ -59,15 +55,12 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            int row = -1;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel.append(Location.Full, proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class))).decorate();
+            formPanel.append(Location.Full, proto().generatedOn()).decorate();
+            formPanel.append(Location.Full, proto().notes()).decorate();
 
-            panel.setWidget(++row, 0, 2,
-                    inject(proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class)), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().generatedOn(), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().notes(), new FieldDecoratorBuilder().build()));
-
-            return panel;
+            return formPanel;
         }
     }
 
@@ -92,11 +85,9 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            panel.setWidth("100%");
-            int row = -1;
-            panel.setWidget(++row, 0, 2, polymorphicFormContainer = new SimplePanel());
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel.append(Location.Full, polymorphicFormContainer = new SimplePanel());
+            return formPanel;
         }
 
         @Override

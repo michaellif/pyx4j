@@ -19,10 +19,10 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -55,24 +55,19 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().version().type(), new FieldDecoratorBuilder(12).build()));
-            content.setWidget(++row, 0, inject(proto().version().value(), new FieldDecoratorBuilder(7).build()));
-            content.setWidget(++row, 0, inject(proto().version().term(), new FieldDecoratorBuilder(12).build()));
-            content.setWidget(++row, 0, inject(proto().version().condition(), new FieldDecoratorBuilder(10).build()));
-            content.setWidget(++row, 0, inject(proto().version().mixable(), new FieldDecoratorBuilder(5).build()));
+            formPanel.append(Location.Left, proto().version().type()).decorate().componentWidth(160);
+            formPanel.append(Location.Left, proto().version().value()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().version().term()).decorate().componentWidth(160);
+            formPanel.append(Location.Left, proto().version().condition()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().version().mixable()).decorate().componentWidth(80);
+            formPanel.append(Location.Right, proto().version().effectiveDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().version().expirationDate()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
+            formPanel.append(Location.Full, proto().version().description()).decorate();
 
-            content.setWidget(++row, 0, inject(proto().version().description(), new FieldDecoratorBuilder(60).build()));
-            content.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-            row = -1;
-            content.setWidget(++row, 1, inject(proto().version().effectiveDate(), new FieldDecoratorBuilder(9).build()));
-            content.setWidget(++row, 1, inject(proto().version().expirationDate(), new FieldDecoratorBuilder(9).build()));
-            content.setWidget(++row, 1, inject(proto().updated(), new FieldDecoratorBuilder(9).build()));
-
-            return content;
+            return formPanel;
         }
     }
 

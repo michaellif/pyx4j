@@ -24,12 +24,12 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -64,14 +64,13 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        main.setWidget(++row, 0, 2, inject(proto().incomeSource(), new CEnumLabel(), new FieldDecoratorBuilder(25, true).build()));
-        main.setWidget(++row, 0, 2, detailsHolder);
-        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload));
+        formPanel.append(Location.Full, proto().incomeSource(), new CEnumLabel());
+        formPanel.append(Location.Full, detailsHolder);
+        formPanel.append(Location.Full, proto().documents(), fileUpload);
 
-        return main;
+        return formPanel;
     }
 
     @Override
@@ -138,25 +137,23 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
-                main.setWidget(++row, 0, inject(proto().employedForYears(), new FieldDecoratorBuilder(5).build()));
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(80);
 
-                row = -1;
-                main.setWidget(++row, 1, inject(proto().supervisorName(), new FieldDecoratorBuilder(20).build()));
-                main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
-                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+                formPanel.h3(proto().address().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
 
-                row = injectIEmploymentInfo(main, row, this);
+                injectIEmploymentInfo(formPanel, this);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(row, 1, inject(proto().ends(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().starts()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().ends()).decorate().componentWidth(120);
 
-                return main;
+                return formPanel;
             }
 
             @Override
@@ -190,24 +187,22 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
 
-                row = -1;
-                main.setWidget(++row, 1, inject(proto().supervisorName(), new FieldDecoratorBuilder(20).build()));
-                main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
-                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+                formPanel.h3(proto().address().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
 
-                row = injectIEmploymentInfo(main, row, this);
+                injectIEmploymentInfo(formPanel, this);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(row, 1, inject(proto().ends(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().starts()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().ends()).decorate().componentWidth(120);
 
-                return main;
+                return formPanel;
             }
 
             @Override
@@ -222,26 +217,23 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                main.setWidget(++row, 0, 2, inject(proto().name(), new FieldDecoratorBuilder(25).build()));
+                formPanel.append(Location.Full, proto().name()).decorate().componentWidth(240);
 
-                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+                formPanel.h3(proto().address().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
 
-                main.setH3(++row, 0, 2, i18n.tr("Program Info"));
-                main.setWidget(++row, 0, inject(proto().program(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(++row, 0, inject(proto().fieldOfStudy(), new FieldDecoratorBuilder(25).build()));
-                main.setWidget(++row, 0, inject(proto().fundingChoices(), new FieldDecoratorBuilder(10).build()));
+                formPanel.h3(i18n.tr("Program Info"));
+                formPanel.append(Location.Left, proto().program()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().fieldOfStudy()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().fundingChoices()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().monthlyAmount()).decorate().componentWidth(120);
 
-                row -= 3;
-                main.setWidget(++row, 1, inject(proto().starts(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(++row, 1, inject(proto().ends(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Right, proto().starts()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().ends()).decorate().componentWidth(120);
 
-                main.setWidget(++row, 0, inject(proto().monthlyAmount(), new FieldDecoratorBuilder(10).build()));
-
-                return main;
+                return formPanel;
             }
 
             @Override
@@ -256,29 +248,27 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
-                main.setWidget(++row, 0, inject(proto().employedForYears(), new FieldDecoratorBuilder(5).build()));
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(80);
 
-                row = -1;
-                main.setWidget(++row, 1, inject(proto().supervisorName(), new FieldDecoratorBuilder(20).build()));
-                main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
-                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+                formPanel.h3(proto().address().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
 
-                row = injectIEmploymentInfo(main, row, this);
+                injectIEmploymentInfo(formPanel, this);
 
-                main.setWidget(++row, 0, inject(proto().fullyOwned(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(++row, 0, inject(proto().monthlyRevenue(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(row, 1, inject(proto().numberOfEmployees(), new FieldDecoratorBuilder(5).build()));
+                formPanel.append(Location.Left, proto().fullyOwned()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().monthlyRevenue()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().numberOfEmployees()).decorate().componentWidth(80);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(row, 1, inject(proto().ends(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().starts()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().ends()).decorate().componentWidth(120);
 
-                return main;
+                return formPanel;
             }
 
             @Override
@@ -293,24 +283,22 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                int row = -1;
-                main.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(20).build()));
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
 
-                row = -1;
-                main.setWidget(++row, 1, inject(proto().supervisorName(), new FieldDecoratorBuilder(20).build()));
-                main.setWidget(++row, 1, inject(proto().supervisorPhone(), new FieldDecoratorBuilder(15).build()));
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
-                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+                formPanel.h3(proto().address().getMeta().getCaption());
+                formPanel.append(Location.Full, proto().address(), new AddressSimpleEditor());
 
-                row = injectIEmploymentInfo(main, row, this);
+                injectIEmploymentInfo(formPanel, this);
 
-                main.setWidget(++row, 0, inject(proto().starts(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(row, 1, inject(proto().ends(), new FieldDecoratorBuilder(10).build()));
+                formPanel.append(Location.Left, proto().starts()).decorate().componentWidth(120);
+                formPanel.append(Location.Right, proto().ends()).decorate().componentWidth(120);
 
-                return main;
+                return formPanel;
             }
 
             @Override
@@ -326,14 +314,14 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(this);
 
-                CComponent<?, ?, ?> name, ends;
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
+                formPanel.append(Location.Left, proto().monthlyAmount()).decorate().componentWidth(160);
+                formPanel.append(Location.Left, proto().ends()).decorate().componentWidth(160);
 
-                int row = -1;
-                main.setWidget(++row, 0, name = inject(proto().name(), new FieldDecoratorBuilder(25).build()));
-                main.setWidget(++row, 0, inject(proto().monthlyAmount(), new FieldDecoratorBuilder(10).build()));
-                main.setWidget(++row, 0, ends = inject(proto().ends(), new FieldDecoratorBuilder(10).build()));
+                CComponent<?, ?, ?> name = get(proto().name());
+                CComponent<?, ?, ?> ends = get(proto().ends());
 
                 // some tune-up:
                 switch (incomeSource) {
@@ -354,15 +342,14 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                     name.setVisible(true);
                     ends.setVisible(true);
                 }
-                return main;
+                return formPanel;
             }
         };
     }
 
-    private static int injectIEmploymentInfo(TwoColumnFlexFormPanel main, int row, CForm<? extends IEmploymentInfo> parent) {
-        main.setH3(++row, 0, 2, i18n.tr("Employment Info"));
-        main.setWidget(++row, 0, parent.inject(parent.proto().monthlyAmount(), new FieldDecoratorBuilder(10).build()));
-        main.setWidget(row, 1, parent.inject(parent.proto().position(), new FieldDecoratorBuilder(20).build()));
-        return row;
+    private static void injectIEmploymentInfo(FormPanel formPanel, CForm<? extends IEmploymentInfo> parent) {
+        formPanel.h3(i18n.tr("Employment Info"));
+        formPanel.append(Location.Left, parent.proto().monthlyAmount()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, parent.proto().position()).decorate().componentWidth(240);
     }
 }

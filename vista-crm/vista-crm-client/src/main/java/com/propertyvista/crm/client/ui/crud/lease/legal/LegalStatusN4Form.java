@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -45,27 +45,27 @@ public class LegalStatusN4Form extends CForm<LegalStatusN4DTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().status(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.append(Location.Full, proto().status()).decorate();
         get(proto().status()).setEditable(false);
 
-        panel.setWidget(++row, 0, 2, inject(proto().expiryDate(), new FieldDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().expiry(), new FieldDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().cancellationThreshold(), new FieldDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().terminationDate(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        formPanel.append(Location.Full, proto().expiryDate()).decorate();
+        formPanel.append(Location.Full, proto().expiry()).decorate();
+        formPanel.append(Location.Full, proto().cancellationThreshold()).decorate();
+        formPanel.append(Location.Full, proto().terminationDate()).decorate();
 
-        panel.setWidget(++row, 0, 2, inject(proto().setOn(), new FieldDecoratorBuilder().componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().setBy().name(), new FieldDecoratorBuilder().customLabel(i18n.tr("Set By")).componentWidth("200px").build()));
-        panel.setWidget(++row, 0, 2, inject(proto().details(), new FieldDecoratorBuilder().componentWidth("200px").build()));
+        formPanel.append(Location.Full, proto().setOn()).decorate();
+        formPanel.append(Location.Full, proto().setBy().name()).decorate().customLabel(i18n.tr("Set By"));
+        formPanel.append(Location.Full, proto().details()).decorate();
 
-        panel.setH2(++row, 0, 2, i18n.tr("Attached Letters"));
+        formPanel.h2(i18n.tr("Attached Letters"));
         if (uploadable) {
-            panel.setWidget(++row, 0, 2, inject(proto().letters(), new UploadableLegalLetterFolder()));
+            formPanel.append(Location.Full, proto().letters(), new UploadableLegalLetterFolder());
         } else {
-            panel.setWidget(++row, 0, 2, inject(proto().letters(), new LegalLetterFolder()));
+            formPanel.append(Location.Full, proto().letters(), new LegalLetterFolder());
         }
-        return panel;
+        return formPanel;
     }
 
     @Override
@@ -106,16 +106,11 @@ public class LegalStatusN4Form extends CForm<LegalStatusN4DTO> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            int row = -1;
-            panel.setWidget(
-                    ++row,
-                    0,
-                    2,
-                    inject(proto().file(), new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class), new VistaFileURLBuilder(
-                            LegalLetter.class)), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, 2, inject(proto().notes(), new FieldDecoratorBuilder().build()));
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel.append(Location.Full, proto().file(),
+                    new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class), new VistaFileURLBuilder(LegalLetter.class))).decorate();
+            formPanel.append(Location.Full, proto().notes()).decorate();
+            return formPanel;
         }
 
         @Override

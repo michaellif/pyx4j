@@ -17,9 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ProofOfAssetDocumentFolder;
@@ -45,15 +45,14 @@ public class ProofOfAssetUploaderFolder extends VistaBoxFolder<ProofOfAssetDocum
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(50, true).build()));
+            formPanel.append(Location.Full, proto().description()).decorate();
 
-            content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().files(), new ProofOfAssetDocumentFileFolder()));
+            formPanel.h3(i18n.tr("Files"));
+            formPanel.append(Location.Full, proto().files(), new ProofOfAssetDocumentFileFolder());
 
-            return content;
+            return formPanel;
         }
     }
 }

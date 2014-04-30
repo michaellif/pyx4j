@@ -13,14 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -79,20 +81,16 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
     }
 
-    private TwoColumnFlexFormPanel createInfoTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        main.setWidget(0, 0, 2, inject(proto().tenantInfo(), createTenantView()));
-
-        return main;
+    private IsWidget createInfoTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, inject(proto().tenantInfo(), createTenantView()));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createFinancialTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        main.setWidget(0, 0, 2, inject(proto().tenantFinancials(), createFinancialView()));
-
-        return main;
+    private IsWidget createFinancialTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, inject(proto().tenantFinancials(), createFinancialView()));
+        return formPanel;
     }
 
     private CFolder<TenantInfoDTO> createTenantView() {
@@ -129,53 +127,50 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         };
     }
 
-    private TwoColumnFlexFormPanel createApprovalTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createApprovalTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().status(), new CEnumLabel(), 15, true));
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().decidedBy(), 25, true));
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().decisionDate(), 10, true));
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().decisionReason(), 50, true));
+        formPanel.append(Location.Left, proto().leaseApplication().status(), new CEnumLabel()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().leaseApplication().decidedBy()).decorate();
+        formPanel.append(Location.Left, proto().leaseApplication().decisionDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().leaseApplication().decisionReason()).decorate();
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            main.setBR(++row, 0, 2);
+            formPanel.br();
 
-            main.setH1(++row, 0, 2, i18n.tr("Credit Check"));
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().percenrtageApproved(), 5, true));
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().totalAmountApproved(), 10, true));
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().rentAmount(), 10, true));
+            formPanel.h1(i18n.tr("Credit Check"));
+            formPanel.append(Location.Left, proto().leaseApproval().percenrtageApproved()).decorate().componentWidth(80);
+            formPanel.append(Location.Left, proto().leaseApproval().totalAmountApproved()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto().leaseApproval().rentAmount()).decorate().componentWidth(120);
 
-            main.setBR(++row, 0, 2);
+            formPanel.br();
 
-            main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApproval().recomendedDecision(), 50, true));
+            formPanel.append(Location.Left, proto().leaseApproval().recomendedDecision()).decorate();
         }
 
-        main.setBR(++row, 0, 2);
+        formPanel.br();
 
-        main.setWidget(++row, 0, 2,
-                inject(proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false, ((LeaseApplicationViewerView) getParentView()))));
+        formPanel.append(Location.Full, proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false,
+                ((LeaseApplicationViewerView) getParentView())));
 
-        return main;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createOnlineStatusTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createOnlineStatusTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().leaseApplication().onlineApplication().status(), 20, 15, 20));
-        main.setWidget(++row, 0, 2, injectAndDecorate(proto().masterApplicationStatus().progress(), 20, 5, 20));
+        formPanel.append(Location.Left, proto().leaseApplication().onlineApplication().status()).decorate();
+        formPanel.append(Location.Left, proto().masterApplicationStatus().progress()).decorate();
 
-        main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
+        formPanel.br();
+        formPanel.append(Location.Full, proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder());
 
-        return main;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createApplicationDocumentsTab() {
-        int row = -1;
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, 2, inject(proto().applicationDocuments(), new LeaseApplicationDocumentFolder()));
-        return panel;
+    private IsWidget createApplicationDocumentsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Full, proto().applicationDocuments(), new LeaseApplicationDocumentFolder());
+        return formPanel;
     }
 }

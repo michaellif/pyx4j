@@ -36,7 +36,8 @@ import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -75,9 +76,9 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
-    private final TwoColumnFlexFormPanel adjustmentPanel = new TwoColumnFlexFormPanel();
+    private final FormPanel adjustmentPanel = new FormPanel(this);
 
-    private final TwoColumnFlexFormPanel depositPanel = new TwoColumnFlexFormPanel();
+    private final FormPanel depositPanel = new FormPanel(this);
 
     private final CForm<LeaseTermDTO> leaseTerm;
 
@@ -93,13 +94,11 @@ public class BillableItemEditor extends CForm<BillableItem> {
         this.leaseTermEditorView = leaseTermEditorView;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        flexPanel.setWidget(++row, 0, inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
+        formPanel.append(Location.Left, proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
             @Override
             protected AppPlace getTargetPlace() {
                 if (getValue().product().isInstanceOf(Service.ServiceV.class)) {
@@ -130,35 +129,32 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 };
 
             }
-        }, new FieldDecoratorBuilder(25).build()));
+        }).decorate();
 
-        flexPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FieldDecoratorBuilder(10).build()));
-        flexPanel.setWidget(++row, 0,
-                itemEffectiveDateEditor = (CComponent<?, LogicalDate, ?>) inject(proto().effectiveDate(), new FieldDecoratorBuilder(9).build()));
-        flexPanel.setWidget(row, 1,
-                itemExpirationDateEditor = (CComponent<?, LogicalDate, ?>) inject(proto().expirationDate(), new FieldDecoratorBuilder(9).build()));
+        formPanel.append(Location.Left, proto().agreedPrice()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
 
-        flexPanel.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
-        flexPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        flexPanel.setWidget(++row, 0, 2, extraDataPanel);
-
-        flexPanel.setWidget(++row, 0, 2, adjustmentPanel);
-
-        flexPanel.setWidget(++row, 0, 2, depositPanel);
+        formPanel.append(Location.Full, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Full, extraDataPanel);
+        formPanel.append(Location.Full, adjustmentPanel);
+        formPanel.append(Location.Full, depositPanel);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            adjustmentPanel.setH3(0, 0, 2, proto().adjustments().getMeta().getCaption());
-            adjustmentPanel.setWidget(1, 0, 2, inject(proto().adjustments(), new AdjustmentFolder()));
+            adjustmentPanel.h3(proto().adjustments().getMeta().getCaption());
+            adjustmentPanel.append(Location.Full, proto().adjustments(), new AdjustmentFolder());
         }
 
-        depositPanel.setH3(0, 0, 2, proto().deposits().getMeta().getCaption());
-        depositPanel.setWidget(1, 0, 2, inject(proto().deposits(), new DepositFolder()));
+        depositPanel.h3(proto().deposits().getMeta().getCaption());
+        depositPanel.append(Location.Full, proto().deposits(), new DepositFolder());
+
+        itemEffectiveDateEditor = get(proto().effectiveDate());
+        itemExpirationDateEditor = get(proto().expirationDate());
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
 
-        return flexPanel;
+        return formPanel;
     }
 
     @Override

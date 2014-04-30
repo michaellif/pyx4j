@@ -19,7 +19,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -78,14 +80,13 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            FormPanel formPanel = new FormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(50, true).build()));
-            content.setH3(++row, 0, 2, i18n.tr("Files"));
-            content.setWidget(++row, 0, 2, inject(proto().files(), new ProofOfIncomeDocumentFileFolder()));
+            formPanel.append(Location.Full, proto().description()).decorate();
+            formPanel.h3(i18n.tr("Files"));
+            formPanel.append(Location.Full, proto().files(), new ProofOfIncomeDocumentFileFolder());
 
-            return content;
+            return formPanel;
         }
     }
 }

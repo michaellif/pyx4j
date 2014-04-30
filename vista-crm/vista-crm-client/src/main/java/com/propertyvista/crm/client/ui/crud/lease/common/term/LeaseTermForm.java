@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.IFormatter;
@@ -44,7 +45,8 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -129,14 +131,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         return guarantorsFolder;
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab() {
-        // Lease details: -------------------------------------------------------------------------------------------------------
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+    private IsWidget createDetailsTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int leftRow = -1; // first column:
-
-        flexPanel.setH1(++leftRow, 0, 2, i18n.tr("General"));
-        flexPanel.setWidget(++leftRow, 0, inject(proto().building(), new CEntitySelectorHyperlink<Building>() {
+        formPanel.h1(i18n.tr("General"));
+        formPanel.append(Location.Left, proto().building(), new CEntitySelectorHyperlink<Building>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
@@ -193,10 +192,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 };
             }
-        }, new FieldDecoratorBuilder(25).build()));
+        }).decorate();
         get(proto().building()).setMandatory(true);
 
-        flexPanel.setWidget(++leftRow, 0, inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+        formPanel.append(Location.Left, proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
@@ -246,17 +245,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 };
             }
-        }, new FieldDecoratorBuilder(25).build()));
+        }).decorate();
 
-        flexPanel.setBR(++leftRow, 0, 1);
+        formPanel.br();
         if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
-            flexPanel.setWidget(++leftRow, 0, inject(proto().type(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
+            formPanel.append(Location.Left, proto().type()).decorate().componentWidth(180).customLabel(i18n.tr("Term Type"));
         } else {
-            flexPanel
-                    .setWidget(++leftRow, 0, inject(proto().type(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Type")).build()));
+            formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Term Type"));
         }
-        flexPanel
-                .setWidget(++leftRow, 0, inject(proto().status(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Term Status")).build()));
+        formPanel.append(Location.Left, proto().status(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Term Status"));
 
         int rightRow = 0;
 
@@ -264,7 +261,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             FlowPanel idHolder = new FlowPanel();
             idHolder.add(inject(proto().lease().leaseId(), new FieldDecoratorBuilder(15).build()));
             idHolder.add(inject(proto().lease().leaseApplication().applicationId(), new FieldDecoratorBuilder(15).build()));
-            flexPanel.setWidget(++rightRow, 1, idHolder);
+            formPanel.append(Location.Right, idHolder);
         } else {
 
             final CEntityCrudHyperlink<Lease> leaseHyperlink = new CEntityCrudHyperlink<Lease>(null);
@@ -290,61 +287,50 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 }
             });
 
-            flexPanel.setWidget(++rightRow, 1, injectAndDecorate(proto().lease(), leaseHyperlink, 15));
+            formPanel.append(Location.Right, proto().lease(), leaseHyperlink).decorate().componentWidth(180);
         }
-        flexPanel.setWidget(++rightRow, 1,
-                inject(proto().lease().type(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Lease Type")).build()));
-        flexPanel.setWidget(++rightRow, 1,
-                inject(proto().lease().status(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Lease Status")).build()));
-        flexPanel.setWidget(++rightRow, 1,
-                inject(proto().lease().completion(), new CEnumLabel(), new FieldDecoratorBuilder(15).customLabel(i18n.tr("Lease Completion")).build()));
+        formPanel.append(Location.Right, proto().lease().type(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Lease Type"));
+        formPanel.append(Location.Right, proto().lease().status(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Lease Status"));
+        formPanel.append(Location.Right, proto().lease().completion(), new CEnumLabel()).decorate().componentWidth(180)
+                .customLabel(i18n.tr("Lease Completion"));
 
         // Lease dates: ---------------------------------------------------------------------------------------------------------
-        TwoColumnFlexFormPanel datesPanel = new TwoColumnFlexFormPanel();
+        formPanel.br();
+        formPanel.append(Location.Left, proto().termFrom()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().termTo()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(120);
 
-        // first column:
-        datesPanel.setWidget(0, 0, inject(proto().termFrom(), new FieldDecoratorBuilder(9).build()));
-        datesPanel.setWidget(1, 0, inject(proto().termTo(), new FieldDecoratorBuilder(9).build()));
-
-        // second column:
-        datesPanel.setWidget(1, 1, inject(proto().creationDate(), new FieldDecoratorBuilder(9).build()));
-
-        leftRow = rightRow = Math.max(leftRow, rightRow);
-
-        flexPanel.setBR(++leftRow, 0, 2);
-        flexPanel.setWidget(++leftRow, 0, 2, datesPanel);
-        flexPanel.setWidget(++leftRow, 0, inject(proto().carryforwardBalance(), new FieldDecoratorBuilder(9).build()));
-
+        formPanel.br();
+        formPanel.append(Location.Left, inject(proto().carryforwardBalance(), new FieldDecoratorBuilder(9).build()));
         LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
 
         // Products : -----------------------------------------------------------------------------------------------------------
-        flexPanel.setH1(++leftRow, 0, 2, proto().version().leaseProducts().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
+        formPanel.h1(proto().version().leaseProducts().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseTermEditorView) {
             @Override
             protected EntityContainerCollapsableDecorator<BillableItem> createDecorator() {
                 return new EntityContainerCollapsableDecorator<BillableItem>(VistaImages.INSTANCE);
             };
-        }));
+        });
 
-        flexPanel.setH2(++leftRow, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2,
-                inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView)));
+        formPanel.h2(proto().version().leaseProducts().featureItems().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            flexPanel.setH2(++leftRow, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
-            flexPanel.setWidget(++leftRow, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+            formPanel.h2(proto().version().leaseProducts().concessions().getMeta().getCaption());
+            formPanel.append(Location.Full, proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this));
         }
 
         // Utilities: -----------------------------------------------------------------------------------------------------------
-        flexPanel.setH1(++leftRow, 0, 2, proto().version().utilities().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().utilities(), new BuildingUtilityFolder()));
+        formPanel.h1(proto().version().utilities().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().version().utilities(), new BuildingUtilityFolder());
 
         // Tenants/Guarantors: --------------------------------------------------------------------------------------------------
-        flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tenantsFolder));
+        formPanel.h1(proto().version().tenants().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().version().tenants(), tenantsFolder);
 
-        flexPanel.setH1(++leftRow, 0, 2, proto().version().guarantors().getMeta().getCaption());
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().guarantors(), guarantorsFolder));
+        formPanel.h1(proto().version().guarantors().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().version().guarantors(), guarantorsFolder);
 
         // tweaks:
         tenantsFolder.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
@@ -353,7 +339,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 guarantorsFolder.updateTenantList();
             }
         });
-        return flexPanel;
+        return formPanel;
     }
 
     @Override

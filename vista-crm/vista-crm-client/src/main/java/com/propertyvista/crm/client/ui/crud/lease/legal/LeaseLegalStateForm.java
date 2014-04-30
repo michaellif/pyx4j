@@ -20,7 +20,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
@@ -32,13 +33,7 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
 
     private static final I18n i18n = I18n.get(LeaseLegalStateForm.class);
 
-    private Button update;
-
     private final LeaseLegalStateController controller;
-
-    private Button clear;
-
-    private LegalStatusHistoryFolder historyFolder;
 
     public LeaseLegalStateForm(LeaseLegalStateController controller) {
         super(LeaseLegalStateDTO.class);
@@ -48,19 +43,18 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Current Status"));
-        panel.setWidget(++row, 0, 2, inject(proto().current(), new LegalStatusForm(false)));
-        panel.setWidget(++row, 0, 2, createCommandBar());
-        panel.setH1(++row, 0, 2, i18n.tr("History"));
-        panel.setWidget(++row, 0, 2, inject(proto().historical(), historyFolder = new LegalStatusHistoryFolder() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n.tr("Current Status"));
+        formPanel.append(Location.Full, proto().current(), new LegalStatusForm(false));
+        formPanel.append(Location.Full, createCommandBar());
+        formPanel.h1(i18n.tr("History"));
+        formPanel.append(Location.Full, proto().historical(), new LegalStatusHistoryFolder() {
             @Override
             protected void onRemoved(LegalStatus item) {
                 LeaseLegalStateForm.this.deleteStatus(item);
             }
-        }).asWidget());
-        return panel;
+        });
+        return formPanel;
     }
 
     private IsWidget createCommandBar() {
@@ -68,13 +62,13 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
         panel.setWidth("100%");
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-        panel.add(update = new Button(i18n.tr("Update..."), new Command() {
+        panel.add(new Button(i18n.tr("Update..."), new Command() {
             @Override
             public void execute() {
                 LeaseLegalStateForm.this.controller.updateStatus();
             }
         }));
-        panel.add(clear = new Button(i18n.tr("Clear"), new Command() {
+        panel.add(new Button(i18n.tr("Clear"), new Command() {
             @Override
             public void execute() {
                 LeaseLegalStateForm.this.controller.clearStatus();

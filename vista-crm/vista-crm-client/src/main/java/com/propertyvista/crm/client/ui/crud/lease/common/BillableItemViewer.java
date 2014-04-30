@@ -23,20 +23,19 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
@@ -62,9 +61,9 @@ public class BillableItemViewer extends CForm<BillableItem> {
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
-    private final TwoColumnFlexFormPanel adjustmentPanel = new TwoColumnFlexFormPanel();
+    private final FormPanel adjustmentPanel = new FormPanel(this);
 
-    private final TwoColumnFlexFormPanel depositPanel = new TwoColumnFlexFormPanel();
+    private final FormPanel depositPanel = new FormPanel(this);
 
     public BillableItemViewer() {
         super(BillableItem.class);
@@ -74,10 +73,9 @@ public class BillableItemViewer extends CForm<BillableItem> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel flowPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        flowPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FieldDecoratorBuilder(22).build()));
+        formPanel.append(Location.Left, proto().item(), new CEntityLabel<ProductItem>()).decorate();
         ((CEntityLabel<ProductItem>) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -97,30 +95,30 @@ public class BillableItemViewer extends CForm<BillableItem> {
             }
         });
 
-        flowPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FieldDecoratorBuilder(10).build()));
-        flowPanel.setWidget(++row, 0, inject(proto().effectiveDate(), new FieldDecoratorBuilder(9).build()));
-        flowPanel.setWidget(row, 1, inject(proto().expirationDate(), new FieldDecoratorBuilder(9).build()));
-        flowPanel.setWidget(++row, 0, inject(proto().yardiChargeCode(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Right, proto().agreedPrice()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().effectiveDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
 
-        flowPanel.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Full, proto().description()).decorate();
 
-        flowPanel.setWidget(++row, 0, 2, extraDataPanel);
+        formPanel.append(Location.Full, extraDataPanel);
 
-        flowPanel.setWidget(++row, 0, 2, adjustmentPanel);
+        formPanel.append(Location.Full, adjustmentPanel);
 
-        flowPanel.setWidget(++row, 0, 2, depositPanel);
+        formPanel.append(Location.Full, depositPanel);
 
-        adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
-        adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
+        adjustmentPanel.h3(proto().adjustments().getMeta().getCaption());
+        adjustmentPanel.append(Location.Full, proto().adjustments(), new AdjustmentFolder());
 
-        depositPanel.setH3(0, 0, 2, proto().deposits().getMeta().getCaption());
-        depositPanel.setWidget(1, 0, 2, inject(proto().deposits(), new DepositFolder()));
+        depositPanel.h3(proto().deposits().getMeta().getCaption());
+        depositPanel.append(Location.Full, proto().deposits(), new DepositFolder());
 
         get(proto().yardiChargeCode()).setVisible(false);
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
 
-        return flowPanel;
+        return formPanel;
     }
 
     @Override

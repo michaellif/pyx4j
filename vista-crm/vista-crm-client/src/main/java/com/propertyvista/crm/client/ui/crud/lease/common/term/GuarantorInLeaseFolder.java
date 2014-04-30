@@ -34,7 +34,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -137,44 +138,40 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-            int row = -1;
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().participantId(), new FieldDecoratorBuilder(7).build()));
-            main.setWidget(++row, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
+            FormPanel formPanel = new FormPanel(this);
+
+            formPanel.append(Location.Left, proto().leaseParticipant().participantId()).decorate().componentWidth(100);
+            formPanel.append(Location.Full, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                 }
-            }));
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().sex(), new FieldDecoratorBuilder(7).build()));
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().birthDate(), new FieldDecoratorBuilder(9).build()));
+            });
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().sex()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().birthDate()).decorate().componentWidth(120);
             if (isEditable()) {
-                main.setWidget(++row, 0, inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>(), new FieldDecoratorBuilder(25).build()));
+                formPanel.append(Location.Left, proto().tenant(), new CSimpleEntityComboBox<Tenant>()).decorate();
             } else {
-                main.setWidget(
-                        ++row,
-                        0,
+                formPanel.append(
+                        Location.Left,
                         inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)),
                                 new FieldDecoratorBuilder().build()));
             }
 
-            main.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(
-                    ++row,
-                    0,
+            formPanel.append(Location.Left, proto().relationship()).decorate().componentWidth(180);
+            formPanel.append(
+                    Location.Left,
                     inject(proto().effectiveScreening(),
                             new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
                             new FieldDecoratorBuilder(9).build()));
-            main.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().email(), new FieldDecoratorBuilder(25).build()));
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().email()).decorate();
 
-            row = -1;
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().yardiApplicantId(), new FieldDecoratorBuilder(10).build()));
-            main.setBR(++row, 1, 1);
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().homePhone(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().mobilePhone(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++row, 1, inject(proto().leaseParticipant().customer().person().workPhone(), new FieldDecoratorBuilder(15).build()));
+            formPanel.append(Location.Right, proto().leaseParticipant().yardiApplicantId()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().leaseParticipant().customer().person().homePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().leaseParticipant().customer().person().mobilePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().leaseParticipant().customer().person().workPhone()).decorate().componentWidth(180);
 
-            return main;
+            return formPanel;
         }
 
         @Override

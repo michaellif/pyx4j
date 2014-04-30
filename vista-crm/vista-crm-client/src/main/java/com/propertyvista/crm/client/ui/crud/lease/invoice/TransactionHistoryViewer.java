@@ -36,7 +36,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -62,18 +63,16 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
 
             @Override
             public IsWidget format(TransactionHistoryDTO value) {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                FormPanel formPanel = new FormPanel(null);
                 if (value != null) {
-                    content.setH1(++row, 0, 2, i18n.tr("Transactions History"));
-                    content.setWidget(++row, 0, 2, createLineItems(value.lineItems()));
+                    formPanel.h1(i18n.tr("Transactions History"));
+                    formPanel.append(Location.Full, createLineItems(value.lineItems()));
 
-                    content.setBR(++row, 0, 2);
-                    content.setH1(++row, 0, 2, i18n.tr("Arrears"));
-                    content.setWidget(++row, 0, 2, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
-
+                    formPanel.br();
+                    formPanel.h1(i18n.tr("Arrears"));
+                    formPanel.append(Location.Full, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
                 }
-                return content;
+                return formPanel;
             }
         });
     }
