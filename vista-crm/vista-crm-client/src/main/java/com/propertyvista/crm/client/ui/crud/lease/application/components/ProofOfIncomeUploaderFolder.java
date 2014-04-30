@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -80,7 +80,7 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             formPanel.append(Location.Full, proto().description()).decorate();
             formPanel.h3(i18n.tr("Files"));

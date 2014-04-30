@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -82,13 +82,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createInfoTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, inject(proto().tenantInfo(), createTenantView()));
         return formPanel;
     }
 
     private IsWidget createFinancialTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, inject(proto().tenantFinancials(), createFinancialView()));
         return formPanel;
     }
@@ -128,7 +128,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createApprovalTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().leaseApplication().status(), new CEnumLabel()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().leaseApplication().decidedBy()).decorate();
@@ -157,7 +157,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createOnlineStatusTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().leaseApplication().onlineApplication().status()).decorate();
         formPanel.append(Location.Left, proto().masterApplicationStatus().progress()).decorate();
@@ -169,7 +169,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createApplicationDocumentsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().applicationDocuments(), new LeaseApplicationDocumentFolder());
         return formPanel;
     }

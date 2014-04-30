@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -59,7 +59,7 @@ public class LeaseAgreementDocumentSigningForm extends CForm<LeaseAgreementDocum
 
     @Override
     protected IsWidget createContent() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Signing Progress"));
 

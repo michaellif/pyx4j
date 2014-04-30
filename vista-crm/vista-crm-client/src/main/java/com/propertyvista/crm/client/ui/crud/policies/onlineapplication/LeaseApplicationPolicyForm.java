@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -35,7 +35,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
     public LeaseApplicationPolicyForm(IForm<LeaseApplicationPolicyDTO> view) {
         super(LeaseApplicationPolicyDTO.class, view);
 
-        FormPanel legalTermsFormPanel = new FormPanel(this);
+        BasicCFormPanel legalTermsFormPanel = new BasicCFormPanel(this);
 
         {
             legalTermsFormPanel.h1(proto().legalTerms().getMeta().getCaption());
@@ -43,7 +43,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
         }
         addTab(legalTermsFormPanel, i18n.tr("Legal Step"));
 
-        FormPanel confirmationTermsFormPanel = new FormPanel(this);
+        BasicCFormPanel confirmationTermsFormPanel = new BasicCFormPanel(this);
 
         {
             confirmationTermsFormPanel.h1(proto().confirmationTerms().getMeta().getCaption());
@@ -72,7 +72,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
             @Override
             protected IsWidget createContent() {
-                FormPanel formPanel = new FormPanel(this);
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                 formPanel.append(Location.Left, proto().applyToRole()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
@@ -102,7 +102,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
             @Override
             protected IsWidget createContent() {
-                FormPanel formPanel = new FormPanel(this);
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                 formPanel.append(Location.Left, proto().applyToRole()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);

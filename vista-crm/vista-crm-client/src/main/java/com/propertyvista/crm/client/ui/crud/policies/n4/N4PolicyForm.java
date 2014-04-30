@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
@@ -51,8 +51,8 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
 
-        FormPanel signatureFormPanel = new FormPanel(this);
-        FormPanel companyNameAndPhonesFormPanel = new FormPanel(this);
+        BasicCFormPanel signatureFormPanel = new BasicCFormPanel(this);
+        BasicCFormPanel companyNameAndPhonesFormPanel = new BasicCFormPanel(this);
 
         signatureFormPanel.append(Location.Left, proto().includeSignature()).decorate();
         signatureFormPanel.h1(i18n.tr("The following information will be used for signing N4 letters:"));
@@ -67,11 +67,11 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         AddressStructuredEditor addressEditor = new AddressStructuredEditor();
         signatureFormPanel.append(Location.Left, proto().mailingAddress(), addressEditor);
 
-        FormPanel arCodesFormPanel = new FormPanel(this);
+        BasicCFormPanel arCodesFormPanel = new BasicCFormPanel(this);
         arCodesFormPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
         arCodesFormPanel.append(Location.Left, proto().arCodes(), arCodeFolder = new ARCodeFolder());
 
-        FormPanel deliveryFormPanel = new FormPanel(this);
+        BasicCFormPanel deliveryFormPanel = new BasicCFormPanel(this);
         deliveryFormPanel.h1(i18n.tr("Termination date calculation:"));
         deliveryFormPanel.append(Location.Left, proto().terminationDateAdvanceDaysLongRentPeriod()).decorate();
         deliveryFormPanel.append(Location.Left, proto().terminationDateAdvanceDaysShortRentPeriod()).decorate();
@@ -92,7 +92,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     }
 
     private IsWidget createAutoCancellationPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Left, proto().cancellationThreshold()).decorate();
         formPanel.append(Location.Left, proto().expiryDays()).decorate();
 

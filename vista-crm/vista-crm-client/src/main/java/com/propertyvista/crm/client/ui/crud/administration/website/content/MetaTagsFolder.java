@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
@@ -91,7 +91,7 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);

@@ -46,7 +46,7 @@ import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -132,7 +132,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     }
 
     private IsWidget createDetailsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("General"));
         formPanel.append(Location.Left, proto().building(), new CEntitySelectorHyperlink<Building>() {

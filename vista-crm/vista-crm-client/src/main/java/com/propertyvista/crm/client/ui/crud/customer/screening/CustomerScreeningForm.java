@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -48,7 +48,7 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 
     private static final I18n i18n = I18n.get(CustomerScreeningForm.class);
 
-    private final FormPanel previousAddress = new FormPanel(this) {
+    private final BasicCFormPanel previousAddress = new BasicCFormPanel(this) {
         @Override
         public void setVisible(boolean visible) {
             get(proto().screening().version().previousAddress()).setVisible(visible);
@@ -124,13 +124,13 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
     }
 
     private IsWidget createIdentificationDocumentsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().screening().version().documents(), fileUpload);
         return formPanel;
     }
 
     private IsWidget createAddressesTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.h1(proto().screening().version().currentAddress().getMeta().getCaption());
         formPanel.append(Location.Full, inject(proto().screening().version().currentAddress(), new PriorAddressEditor()));
 
@@ -171,19 +171,19 @@ public class CustomerScreeningForm extends CrmEntityForm<LeaseParticipantScreeni
 // Financial: ------------------------------------------------------------------------------------------------
 
     private IsWidget createIncomesTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().screening().version().incomes(), new PersonalIncomeFolder(isEditable()));
 
         return formPanel;
     }
 
     private IsWidget createAssetsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().screening().version().assets(), new PersonalAssetFolder(isEditable()));
         return formPanel;
     }
 
-    class QuestionsFormPanel extends FormPanel {
+    class QuestionsFormPanel extends BasicCFormPanel {
 
         public QuestionsFormPanel(CForm<?> parent) {
             super(parent);

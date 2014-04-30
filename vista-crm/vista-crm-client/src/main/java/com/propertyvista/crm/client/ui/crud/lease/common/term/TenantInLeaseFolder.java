@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -194,7 +194,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private class TenantInLeaseEditor extends CForm<LeaseTermTenant> {
 
-        private final FormPanel preauthorizedPaymentsPanel = new FormPanel(this);
+        private final BasicCFormPanel preauthorizedPaymentsPanel = new BasicCFormPanel(this);
 
         private final PreauthorizedPayments preauthorizedPayments = new PreauthorizedPayments();
 
@@ -204,7 +204,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             formPanel.append(Location.Left, proto().leaseParticipant().participantId()).decorate().componentWidth(100);
             formPanel.append(Location.Full, proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
@@ -368,7 +368,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             @Override
             protected IsWidget createContent() {
-                FormPanel formPanel = new FormPanel(this);
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
 

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -39,7 +39,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
     public MerchantAccountForm(IForm<MerchantAccount> view) {
         super(MerchantAccount.class, view);
 
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().paymentsStatus(), new CEnumLabel()).decorate();
         formPanel.append(Location.Left, proto().bankId(), new CLabel<String>()).decorate().componentWidth(80);

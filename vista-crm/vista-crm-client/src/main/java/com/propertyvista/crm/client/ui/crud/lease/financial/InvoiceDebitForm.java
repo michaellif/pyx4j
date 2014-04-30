@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.financial;
 
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -29,7 +29,7 @@ public class InvoiceDebitForm extends CrmEntityForm<InvoiceDebitDTO> {
     public InvoiceDebitForm(IForm<InvoiceDebitDTO> view) {
         super(InvoiceDebitDTO.class, view);
 
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, inject(proto().item(), new FieldDecoratorBuilder().build()));
         formPanel.append(Location.Left, inject(proto().date(), new FieldDecoratorBuilder().build()));

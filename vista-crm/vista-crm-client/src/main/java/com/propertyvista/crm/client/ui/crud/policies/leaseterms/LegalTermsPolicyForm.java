@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -34,25 +34,25 @@ public class LegalTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LegalTermsP
     }
 
     private IsWidget createResidentPortalTermsAndConditionsPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Left, proto().residentPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable()));
         return formPanel;
     }
 
     private IsWidget createResidentPortalPrivacyPolicyPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Left, proto().residentPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable()));
         return formPanel;
     }
 
     private IsWidget createProspectPortalTermsAndConditionsPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Left, proto().prospectPortalTermsAndConditions(), new LegalTermsPolicyItemForm(isEditable()));
         return formPanel;
     }
 
     private IsWidget createProspectPortalPrivacyPolicyPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Left, proto().prospectPortalPrivacyPolicy(), new LegalTermsPolicyItemForm(isEditable()));
         return formPanel;
     }

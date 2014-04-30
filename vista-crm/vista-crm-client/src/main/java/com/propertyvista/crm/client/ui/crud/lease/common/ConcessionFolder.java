@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -46,7 +46,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             formPanel.append(Location.Left, proto().version().type()).decorate().componentWidth(160);
             formPanel.append(Location.Left, proto().version().value()).decorate().componentWidth(90);

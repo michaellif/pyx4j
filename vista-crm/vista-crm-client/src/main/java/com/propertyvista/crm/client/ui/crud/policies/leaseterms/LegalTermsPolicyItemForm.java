@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsPolicyItem;
 
@@ -30,7 +30,7 @@ public class LegalTermsPolicyItemForm extends CForm<LegalTermsPolicyItem> {
 
     @Override
     protected IsWidget createContent() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Full, proto().enabled()).decorate();
         formPanel.append(Location.Full, proto().caption()).decorate();

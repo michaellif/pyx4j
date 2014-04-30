@@ -19,7 +19,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -37,7 +37,7 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
     }
 
     private IsWidget createMiscPoliciesTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().yearRangeStart()).decorate().componentWidth(60);
         formPanel.append(Location.Left, proto().yearRangeFutureSpan()).decorate().componentWidth(60);

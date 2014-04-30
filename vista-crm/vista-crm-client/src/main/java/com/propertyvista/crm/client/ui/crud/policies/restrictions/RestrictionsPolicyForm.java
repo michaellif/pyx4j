@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -33,7 +33,7 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
     }
 
     private IsWidget createMiscPoliciesTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().maxParkingSpots()).decorate().contentWidth(40).labelWidth(220);
         formPanel.append(Location.Left, proto().maxLockers()).decorate().contentWidth(40).labelWidth(220);

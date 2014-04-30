@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
@@ -62,7 +62,7 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
     @Override
     protected IsWidget createContent() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
         formPanel.append(Location.Right, proto().visibility()).decorate().componentWidth(100);
@@ -120,7 +120,7 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             formPanel.append(Location.Left, proto().value()).decorate();
             formPanel.append(Location.Right, proto().description()).decorate();
@@ -147,7 +147,7 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
             @Override
             protected IsWidget createContent() {
-                FormPanel formPanel = new FormPanel(this);
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                 formPanel.append(Location.Left, proto().eventDate()).decorate();
                 formPanel.append(Location.Left, proto().startTime()).decorate();

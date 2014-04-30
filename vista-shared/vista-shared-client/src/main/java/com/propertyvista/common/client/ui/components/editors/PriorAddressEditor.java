@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -38,7 +38,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
 
     @Override
     protected IsWidget createContent() {
-        FormPanel main = internalCreateContent();
+        BasicCFormPanel main = internalCreateContent();
 
         main.hr();
 

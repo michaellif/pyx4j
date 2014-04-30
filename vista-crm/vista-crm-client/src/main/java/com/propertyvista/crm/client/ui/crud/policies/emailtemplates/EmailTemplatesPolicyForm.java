@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -68,7 +68,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     private IsWidget createEmailTemplatesHeaderFooterPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Full, proto().header()).decorate();
         formPanel.append(Location.Full, proto().footer()).decorate();
@@ -77,7 +77,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     private IsWidget createEmailTemplatesPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Full, proto().templates(), new EmailTemplateEditorFolder());
 
@@ -120,7 +120,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
             @Override
             protected IsWidget createContent() {
-                FormPanel formPanel = new FormPanel(this);
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
                 formPanel.append(Location.Full, proto().type()).decorate();
                 formPanel.append(Location.Full, proto().subject()).decorate();

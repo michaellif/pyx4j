@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -34,7 +34,7 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
 
     @Override
     protected IsWidget createGeneralTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Information"));
         formPanel.append(Location.Left, injectAndDecorate(proto().type(), 15));

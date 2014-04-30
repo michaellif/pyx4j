@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -45,7 +45,7 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
     }
 
     private IsWidget createInfoTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().isPredefined(), new CBooleanLabel()).decorate();
         formPanel.h1(i18n.tr("CRM User Roles"));

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
@@ -42,7 +42,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
     public GeneralForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Web Skin"));
 
@@ -71,23 +71,23 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         // =====================================================================================================================
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().locales(), new AvailableLocaleFolder(isEditable()));
         addTab(formPanel, proto().locales().getMeta().getCaption());
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().pmcInfo(), new RichTextContentFolder(isEditable()));
         addTab(formPanel, proto().pmcInfo().getMeta().getCaption());
 
         addTab(createCrmLogoTab(), proto().crmLogo().getMeta().getCaption());
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().socialLinks(), new SocialLinkFolder(isEditable()));
         addTab(formPanel, proto().socialLinks().getMeta().getCaption());
     }
 
-    private FormPanel createCrmLogoTab() {
-        FormPanel formPanel = new FormPanel(this);
+    private BasicCFormPanel createCrmLogoTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         CImage file = new CImage(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new SiteImageResourceFileURLBuilder());
         file.setImageSize(150, 100);

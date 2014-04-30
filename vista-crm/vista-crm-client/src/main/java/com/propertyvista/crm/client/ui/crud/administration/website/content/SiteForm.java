@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.website.content;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -31,47 +31,47 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
     public SiteForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        FormPanel formPanel;
+        BasicCFormPanel formPanel;
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().siteTitles(), new SiteTitlesFolder(isEditable()));
         selectTab(addTab(formPanel, proto().siteTitles().getMeta().getCaption()));
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.h4(i18n.tr("Recommended Logo size not to exceed: small - {0}, large - {1} pixels", "160x80", "300x90"));
         formPanel.append(Location.Full, proto().logo(), new SiteImageResourceFolder(isEditable()));
         addTab(formPanel, i18n.tr("Site Logos"));
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().slogan(), new RichTextContentFolder(isEditable()));
         addTab(formPanel, proto().slogan().getMeta().getCaption());
 
         SiteImageSetFolder imageFolder = new SiteImageSetFolder(isEditable());
         imageFolder.setImageSize(690, 300);
         imageFolder.setThumbSize(230, 100);
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().banner(), imageFolder);
         addTab(formPanel, proto().banner().getMeta().getCaption());
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().metaTags(), new MetaTagsFolder(isEditable()));
         addTab(formPanel, proto().metaTags().getMeta().getCaption());
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().childPages(), new PageDescriptorFolder(this));
         selectTab(addTab(formPanel, proto().childPages().getMeta().getCaption()));
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, createGadgetPanel());
         addTab(formPanel, i18n.tr("Home Page Gadgets"));
 
-        formPanel = new FormPanel(this);
+        formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().cityIntroPages(), new CityIntroPageFolder(this));
         addTab(formPanel, proto().cityIntroPages().getMeta().getCaption());
     }
 
     private IsWidget createGadgetPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h4(i18n.tr("Narrow Page Gadgets:"));
         formPanel.append(Location.Full, proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable()));

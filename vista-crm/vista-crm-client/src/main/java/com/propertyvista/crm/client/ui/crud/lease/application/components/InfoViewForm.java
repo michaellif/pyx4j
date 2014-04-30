@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -51,14 +51,14 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
-    private final FormPanel previousAddress;
+    private final BasicCFormPanel previousAddress;
 
     private IdUploaderFolder fileUpload;
 
     public InfoViewForm() {
         super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
 
-        previousAddress = new FormPanel(this) {
+        previousAddress = new BasicCFormPanel(this) {
             @Override
             public void setVisible(boolean visible) {
                 get(proto().version().previousAddress()).setVisible(visible);
@@ -220,7 +220,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         });
     }
 
-    class InfoViewFormPanel extends FormPanel {
+    class InfoViewFormPanel extends BasicCFormPanel {
 
         public InfoViewFormPanel(CForm<?> parent) {
             super(parent);

@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -155,7 +155,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     public PaymentForm(IForm<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view);
 
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Full, noticeViewer.getNoticePanel());
 
@@ -182,7 +182,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     @SuppressWarnings("unchecked")
     private IsWidget createDetailsPanel() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().propertyCode()).decorate().componentWidth(120);
@@ -527,7 +527,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         @Override
         protected IsWidget createContent() {
-            FormPanel formPanel = new FormPanel(this);
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
             CNumberLabel comp;
             formPanel.append(Location.Left, proto().id(), comp = new CNumberLabel()).decorate().componentWidth(120);

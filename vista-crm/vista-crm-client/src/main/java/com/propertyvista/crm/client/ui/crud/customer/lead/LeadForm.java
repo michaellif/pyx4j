@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -97,7 +97,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     private IsWidget createGuestsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Full, proto().guests(), new GuestFolder(isEditable()));
 
@@ -110,7 +110,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     private IsWidget createDetailsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().leadId()).decorate().componentWidth(220);
         formPanel.append(Location.Left, proto().leaseType()).decorate().componentWidth(220);

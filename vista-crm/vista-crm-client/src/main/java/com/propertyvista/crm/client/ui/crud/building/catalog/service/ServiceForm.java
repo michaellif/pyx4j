@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -44,8 +44,8 @@ public class ServiceForm extends CrmEntityForm<Service> {
         addTab(createEligibilityTab(), i18n.tr("Eligibility"));
     }
 
-    public FormPanel createGeneralTab() {
-        FormPanel formPanel = new FormPanel(this);
+    public BasicCFormPanel createGeneralTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Information"));
         formPanel.append(Location.Left, proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))).decorate()
@@ -90,16 +90,16 @@ public class ServiceForm extends CrmEntityForm<Service> {
         return formPanel;
     }
 
-    public FormPanel createItemsTab() {
-        FormPanel formPanel = new FormPanel(this);
+    public BasicCFormPanel createItemsTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Full, proto().version().items(), new ServiceItemFolder(this));
 
         return formPanel;
     }
 
-    public FormPanel createEligibilityTab() {
-        FormPanel formPanel = new FormPanel(this);
+    public BasicCFormPanel createEligibilityTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Features"));
         formPanel.append(Location.Full, proto().version().features(), new ServiceFeatureFolder(isEditable(), this));

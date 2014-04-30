@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -111,13 +111,13 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     }
 
     private IsWidget createContactsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
         formPanel.append(Location.Full, proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable()));
         return formPanel;
     }
 
     protected IsWidget createPreauthorizedPaymentsTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().nextScheduledPaymentDate(), new CDateLabel()).decorate().componentWidth(120);
         formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
@@ -127,7 +127,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     }
 
     private IsWidget createTenantInsuranceTab() {
-        FormPanel formPanel = new FormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Requirements"));
         formPanel.append(Location.Left, proto().minimumRequiredLiability(), new CMoneyLabel()).decorate().componentWidth(150);
@@ -203,7 +203,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
             @Override
             protected IsWidget createContent() {
-                FormPanel formPanel = new FormPanel(this);
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
                 formPanel.append(Location.Left, proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
