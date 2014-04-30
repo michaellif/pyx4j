@@ -30,6 +30,7 @@ import com.propertyvista.biz.communication.notifications.RejectPaymentNotificati
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeImpl implements NotificationFacade {
@@ -83,6 +84,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
         aggregateOrSend(new PostToYardiFailedNotification(paymentRecord, applyNSF, yardiErrorMessage));
+    }
+
+    @Override
+    public void yardiUnableToPostPaymentBatch(Building batchBuilding, PaymentRecord firstPaymentRecord, String errorMessage) {
+        //TODO
     }
 
     @Override

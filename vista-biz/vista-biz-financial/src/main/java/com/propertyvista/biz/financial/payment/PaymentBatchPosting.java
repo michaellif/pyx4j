@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -163,6 +164,10 @@ class PaymentBatchPosting {
                             } catch (ARException e) {
                                 log.error("Unable to post batch for propertyCode {}", curentBuildingCode.get(), e);
                                 executionMonitor.addErredEvent("Batch", null, "propertyCode " + curentBuildingCode.get(), e);
+                                if (VistaFeatures.instance().yardiIntegration()) {
+                                    ServerSideFactory.create(NotificationFacade.class).yardiUnableToPostPaymentBatch(batchBuilding, firstPaymentRecord,
+                                            e.getMessage());
+                                }
                             }
                             curentBuildingCode.set(null);
                             return paymentBatchContext.getBatchNumber();

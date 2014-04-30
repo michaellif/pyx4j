@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -25,13 +26,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -57,7 +59,9 @@ import com.propertyvista.domain.company.Notification.NotificationType;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -241,7 +245,13 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         @Override
         protected void addItem() {
-            new SelectEnumDialog<NotificationType>(i18n.tr("Select Notification Type"), EnumSet.allOf(NotificationType.class)) {
+
+            Collection<NotificationType> types = EnumSet.allOf(NotificationType.class);
+            if (!VistaFeatures.instance().yardiIntegration() || !SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+                types.remove(NotificationType.YardiSynchronization);
+            }
+
+            new SelectEnumDialog<NotificationType>(i18n.tr("Select Notification Type"), types) {
                 @Override
                 public boolean onClickOk() {
                     Notification item = EntityFactory.create(Notification.class);

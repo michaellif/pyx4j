@@ -42,7 +42,10 @@ public interface Notification extends IEntity {
 
         AutoPayCanceledByResident,
 
-        MaintenanceRequest;
+        MaintenanceRequest,
+
+        /** Available only for PropertyVistaAccountOwner **/
+        YardiSynchronization;
 
         @Override
         public String toString() {
