@@ -52,9 +52,9 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
 
         formPanel.h1(i18n.tr("CComponent Properties"));
 
-        formPanel.append(Location.Full, proto().title()).decorate();
+        formPanel.append(Location.Dual, proto().title()).decorate();
 
-        formPanel.append(Location.Full, proto().componentValue()).decorate();
+        formPanel.append(Location.Dual, proto().componentValue()).decorate();
 
         FieldDecorator decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
@@ -66,7 +66,7 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Full, inject(proto().mandatory(), decorator));
+        formPanel.append(Location.Dual, inject(proto().mandatory(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
@@ -78,7 +78,7 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Full, inject(proto().enabled(), decorator));
+        formPanel.append(Location.Dual, inject(proto().enabled(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
@@ -90,7 +90,7 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Full, inject(proto().editable(), decorator));
+        formPanel.append(Location.Dual, inject(proto().editable(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
@@ -102,7 +102,7 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Full, inject(proto().visible(), decorator));
+        formPanel.append(Location.Dual, inject(proto().visible(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
@@ -114,11 +114,11 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Full, inject(proto().viewable(), decorator));
+        formPanel.append(Location.Dual, inject(proto().viewable(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
         decorator.getComponent().setViewable(true);
-        formPanel.append(Location.Full, inject(proto().valid(), decorator));
+        formPanel.append(Location.Dual, inject(proto().valid(), decorator));
 
         formPanel.append(Location.Left, proto().toolTip()).decorate();
 

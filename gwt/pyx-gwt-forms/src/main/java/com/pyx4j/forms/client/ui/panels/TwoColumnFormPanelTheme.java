@@ -28,10 +28,10 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public abstract class FormPanelTheme extends Theme {
+public abstract class TwoColumnFormPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FormPanel, FormPanelLeftColumn, FormPanelRightColumn, FormPanelLeftCell, FormPanelRightCell,
+        FormPanel, FormPanelLeftCell, FormPanelRightCell, FormPanelDualCell,
 
         FormPanelTwoRows, FormPanelCaptionLabel, FormPanelHR, FormPanelH1, FormPanelH1Image, FormPanelH1Label, FormPanelH2, FormPanelH2Label, FormPanelH3, FormPanelH3Label, FormPanelH4, FormPanelH4Label, FormPanelActionWidget
     }
@@ -40,7 +40,7 @@ public abstract class FormPanelTheme extends Theme {
 
     }
 
-    public FormPanelTheme() {
+    public TwoColumnFormPanelTheme() {
         initStyles();
     }
 
@@ -58,14 +58,6 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("padding", "6px");
         style.addProperty("text-align", "center");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FormPanelLeftColumn);
-        style.addProperty("width", "45em");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FormPanelRightColumn);
-        style.addProperty("width", "45em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelLeftCell);

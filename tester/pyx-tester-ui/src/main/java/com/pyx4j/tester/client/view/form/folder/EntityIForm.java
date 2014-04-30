@@ -64,10 +64,10 @@ public class EntityIForm extends CForm<EntityI> {
         formPanel.append(Location.Left, proto().integerBox()).decorate();
 
         formPanel.h2(i18n.tr("Box Folder"));
-        formPanel.append(Location.Full, proto().entityIIList(), new EntityIIFolder());
+        formPanel.append(Location.Dual, proto().entityIIList(), new EntityIIFolder());
 
         formPanel.h2(i18n.tr("Table Folder"));
-        formPanel.append(Location.Full, proto().entityIVList(), new EntityIVFolder());
+        formPanel.append(Location.Dual, proto().entityIVList(), new EntityIVFolder());
         return formPanel;
     }
 

@@ -42,13 +42,13 @@ public class BasicCFormPanel extends TwoColumnFormPanel {
     public CompOptions append(Location location, IObject<?> member) {
         CField<?, ?> comp = parent.inject(member);
         append(location, comp);
-        return new CompOptions(comp, location == Location.Full);
+        return new CompOptions(comp, location == Location.Dual);
     }
 
     public CompOptions append(Location location, IObject<?> member, CField<?, ?> comp) {
         comp = parent.inject(member, comp);
         append(location, comp);
-        return new CompOptions(comp, location == Location.Full);
+        return new CompOptions(comp, location == Location.Dual);
     }
 
     public void append(Location location, IObject<?> member, CComponent<?, ?, ?> comp) {

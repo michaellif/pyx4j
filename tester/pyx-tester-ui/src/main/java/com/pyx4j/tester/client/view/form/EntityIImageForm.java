@@ -70,7 +70,7 @@ public class EntityIImageForm extends CForm<EntityI> {
             }
         };
 
-        formPanel.append(Location.Full, proto().files(), cGallery);
+        formPanel.append(Location.Dual, proto().files(), cGallery);
 
         return formPanel;
     }

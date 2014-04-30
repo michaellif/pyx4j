@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TwoColumnFluidPanel implements IsWidget {
 
     public static enum Location {
-        Full, Left, Right
+        Dual, Left, Right
     }
 
     private final FlowPanel contentPanel;
@@ -46,8 +46,8 @@ public class TwoColumnFluidPanel implements IsWidget {
         int widgetCount = contentPanel.getWidgetCount();
         if (widgetCount == 0) {
             switch (location) {
-            case Full:
-                panel = new CellPanel(Location.Full);
+            case Dual:
+                panel = new CellPanel(Location.Dual);
                 contentPanel.add(panel);
                 break;
             case Left:
@@ -64,14 +64,14 @@ public class TwoColumnFluidPanel implements IsWidget {
             panel = (CellPanel) contentPanel.getWidget(widgetCount - 1);
             if (panel.location != location) {
                 switch (location) {
-                case Full:
-                    panel = new CellPanel(Location.Full);
+                case Dual:
+                    panel = new CellPanel(Location.Dual);
                     contentPanel.add(panel);
                     break;
                 case Left:
                     if (panel.location == Location.Right) {
                         panel = (CellPanel) contentPanel.getWidget(widgetCount - 2);
-                    } else if (panel.location == Location.Full) {
+                    } else if (panel.location == Location.Dual) {
                         panel = new CellPanel(Location.Left);
                         contentPanel.add(panel);
                     }
@@ -80,7 +80,7 @@ public class TwoColumnFluidPanel implements IsWidget {
                     if (panel.location == Location.Left) {
                         panel = new CellPanel(Location.Right);
                         contentPanel.add(panel);
-                    } else if (panel.location == Location.Full) {
+                    } else if (panel.location == Location.Dual) {
                         panel = new CellPanel(Location.Right);
                         contentPanel.add(new CellPanel(Location.Left));
                         contentPanel.add(panel);
@@ -136,7 +136,7 @@ public class TwoColumnFluidPanel implements IsWidget {
                     setWidth("50%");
                 }
                 break;
-            case Full:
+            case Dual:
                 setWidth("100%");
                 break;
             default:

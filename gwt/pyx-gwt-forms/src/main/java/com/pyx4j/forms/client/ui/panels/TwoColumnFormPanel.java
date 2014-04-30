@@ -20,17 +20,17 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelActionWidget;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH1;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH1Image;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH1Label;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH2;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH2Label;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH3;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH3Label;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH4;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH4Label;
-import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelHR;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelActionWidget;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Image;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Label;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH2;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH2Label;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH3;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4Label;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelHR;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -48,7 +48,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 public class TwoColumnFormPanel implements IsWidget {
@@ -75,13 +75,13 @@ public class TwoColumnFormPanel implements IsWidget {
     public Widget hr() {
         HTML space = new HTML("&nbsp;");
         space.setStyleName(FormPanelHR.name());
-        fluidPanel.append(Location.Full, space);
+        fluidPanel.append(Location.Dual, space);
         return space;
     }
 
     public Widget br() {
         HTML space = new HTML("&nbsp;");
-        fluidPanel.append(Location.Full, space);
+        fluidPanel.append(Location.Dual, space);
         return space;
     }
 
@@ -153,16 +153,17 @@ public class TwoColumnFormPanel implements IsWidget {
             actionWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             actionWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             actionWidgetHolder.setWidget(actionWidget);
-            actionWidgetHolder.setStyleName(FormFlexPanelActionWidget.name());
+            actionWidgetHolder.setStyleName(FormPanelActionWidget.name());
             header.add(actionWidgetHolder);
         }
 
-        fluidPanel.append(Location.Full, header);
+        fluidPanel.append(Location.Dual, header);
         return header;
     }
 
     public void append(Location location, IsWidget widget) {
         fluidPanel.append(location, widget);
+        widget.asWidget().addStyleName(FormPanelActionWidget.name());
     }
 
     public void setVisible(boolean visible) {

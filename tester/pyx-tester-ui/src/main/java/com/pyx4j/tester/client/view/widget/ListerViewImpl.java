@@ -54,7 +54,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
         formPanel.append(Location.Left, new HTML("Data: cols = 5, rows = 5"));
 
         formPanel.h1("Lister");
-        formPanel.append(Location.Full, lister);
+        formPanel.append(Location.Dual, lister);
 
         add(formPanel);
     }
