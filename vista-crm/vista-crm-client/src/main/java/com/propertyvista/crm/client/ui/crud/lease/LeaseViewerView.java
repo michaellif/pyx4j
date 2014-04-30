@@ -34,15 +34,12 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
     interface Presenter extends LeaseViewerViewBase.Presenter {
 
         void sendMail(List<LeaseTermParticipant<?>> users, EmailTemplateType emailType);
-
-        void newPayment();
 
         void startBilling();
 
@@ -87,14 +84,11 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void signingProgressOrUploadAgreement();
 
         void legalState();
-
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();
 
     ILister<BillDataDTO> getBillListerView();
-
-    ILister<PaymentRecordDTO> getPaymentListerView();
 
     ILister<LeaseAdjustment> getLeaseAdjustmentListerView();
 
@@ -103,5 +97,4 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
     void reportSendMailActionResult(String message);
 
     void reportCancelNoticeFailed(UserRuntimeException caught);
-
 }

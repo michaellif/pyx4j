@@ -54,13 +54,11 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -73,7 +71,6 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> implements LeaseViewerView.Presenter {
@@ -84,13 +81,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private final ILister.Presenter<BillDataDTO> billLister;
 
-    private final ILister.Presenter<PaymentRecordDTO> paymentLister;
-
     private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
 
     private final ILister.Presenter<MaintenanceRequestDTO> maintenanceLister;
-
-    private LeaseDTO currentValue;
 
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
@@ -99,14 +92,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
 
         billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
-
-        paymentLister = new ListerController<PaymentRecordDTO>(((LeaseViewerView) getView()).getPaymentListerView(),
-                GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class) {
-            @Override
-            public boolean canCreateNewItem() {
-                return (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
-            }
-        };
 
         leaseAdjustmentLister = new ListerController<LeaseAdjustment>(((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
                 GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
@@ -119,11 +104,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
 
-        currentValue = result;
-
         populateDeposits(result);
         populateBills(result);
-        populatePayments(result);
         populateLeaseAdjustments(result);
         populateMaintenance(result);
     }
@@ -142,11 +124,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         }
     }
 
-    protected void populatePayments(Lease result) {
-        paymentLister.setParent(result.billingAccount().getPrimaryKey());
-        paymentLister.populate();
-    }
-
     protected void populateLeaseAdjustments(Lease result) {
         leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
         leaseAdjustmentLister.populate();
@@ -159,11 +136,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     // Actions:
-
-    @Override
-    public void newPayment() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.Payment().formNewItemPlace(currentValue.billingAccount().getPrimaryKey()));
-    }
 
     @Override
     public void startBilling() {

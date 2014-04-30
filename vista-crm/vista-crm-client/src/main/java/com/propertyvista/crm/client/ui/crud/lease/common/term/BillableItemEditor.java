@@ -27,8 +27,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -130,7 +130,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 };
 
             }
-        }, new FieldDecoratorBuilder(20).build()));
+        }, new FieldDecoratorBuilder(25).build()));
 
         flexPanel.setWidget(row, 1, inject(proto().agreedPrice(), new FieldDecoratorBuilder(10).build()));
         flexPanel.setWidget(++row, 0,

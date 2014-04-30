@@ -25,7 +25,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
 
     public PaymentLister() {
-        super(PaymentRecordDTO.class, true);
+        super(PaymentRecordDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),

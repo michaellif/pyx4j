@@ -50,7 +50,6 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudServic
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -64,8 +63,6 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
     private BigDecimal creditCheckAmount;
-
-    private LeaseApplicationDTO currentValue;
 
     @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
@@ -85,10 +82,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     protected void populateView(LeaseApplicationDTO result) {
         super.populateView(result);
 
-        currentValue = result;
         creditCheckAmount = result.leaseApproval().rentAmount().getValue();
-
-        populatePayments(result);
     }
 
     // Views:
@@ -243,10 +237,4 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
         reportDialog.start(GWT.<BlankApplicationDocumentDownloadService> create(BlankApplicationDocumentDownloadService.class), request);
     }
-
-    protected void populatePayments(Lease result) {
-        paymentLister.setParent(result.billingAccount().getPrimaryKey());
-        paymentLister.populate();
-    }
-
 }

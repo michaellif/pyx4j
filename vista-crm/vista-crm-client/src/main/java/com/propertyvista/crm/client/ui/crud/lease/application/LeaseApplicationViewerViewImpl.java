@@ -36,8 +36,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
-import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -47,7 +45,6 @@ import com.pyx4j.widgets.client.dialog.YesNoOption;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
@@ -62,7 +59,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -70,9 +66,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private static final I18n i18n = I18n.get(LeaseApplicationViewerViewImpl.class);
 
-    private final ILister<PaymentRecordDTO> paymentLister;
-
     private final Button editButton;
+
+    private final Button documentsButton;
 
     private final MenuItem viewLease;
 
@@ -103,13 +99,11 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private static final String CANCEL = i18n.tr("Cancel");
 
     public LeaseApplicationViewerViewImpl() {
-        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
-
         setForm(new LeaseApplicationForm(this));
 
         // Buttons:
 
-        Button applicationDocumentButton = new Button(i18n.tr("Documents"));
+        documentsButton = new Button(i18n.tr("Documents"));
         ButtonMenuBar applicationDocumentMenu = new ButtonMenuBar();
 
         applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Manually Sign Application..."), new Command() {
@@ -133,8 +127,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         }));
 
-        applicationDocumentButton.setMenu(applicationDocumentMenu);
-        addHeaderToolbarItem(applicationDocumentButton.asWidget());
+        documentsButton.setMenu(applicationDocumentMenu);
+        addHeaderToolbarItem(documentsButton.asWidget());
 
         // ------------------------------------------------------------------------------------------------------------
 
@@ -345,6 +339,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(declineAction, false);
         setActionVisible(cancelAction, false);
 
+        editButton.setVisible(false);
+        documentsButton.setVisible(false);
+
         super.reset();
     }
 
@@ -366,14 +363,13 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(declineAction, status.isDraft());
         setActionVisible(cancelAction, status.isDraft());
 
+        setActionVisible(newPaymentAction, status.isDraft() && isPaymentAccepted(value));
+
         // edit/view terms enabling logic:
         editButton.setVisible(status.isDraft());
         termsButton.setVisible(!status.isDraft());
-    }
 
-    @Override
-    public ILister<PaymentRecordDTO> getPaymentListerView() {
-        return paymentLister;
+        documentsButton.setVisible(status.isDraft());
     }
 
     private abstract class ActionBox extends ReasonBox {

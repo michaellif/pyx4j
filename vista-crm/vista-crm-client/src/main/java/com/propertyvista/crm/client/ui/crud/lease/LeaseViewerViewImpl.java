@@ -60,7 +60,6 @@ import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.N4GenerationQueryDialog;
@@ -81,7 +80,6 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -93,17 +91,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final ILister<BillDataDTO> billLister;
 
-    private final ILister<PaymentRecordDTO> paymentLister;
-
     private final ILister<LeaseAdjustment> adjustmentLister;
 
     private final ILister<MaintenanceRequestDTO> maintenanceLister;
 
+    private final Button leaseAgreementButton;
+
     private final MenuItem viewApplication;
 
     private final MenuItem sendMailAction;
-
-    private final MenuItem newPaymentAction;
 
     private final MenuItem runBillAction;
 
@@ -142,7 +138,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
-        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
         maintenanceLister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
 
@@ -156,7 +151,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         // Buttons:
 
-        Button leaseAgreementDocument = new Button(i18n.tr("Lease Agreement"));
+        leaseAgreementButton = new Button(i18n.tr("Lease Agreement"));
         ButtonMenuBar leaseAgreementDocumentMenu = new ButtonMenuBar();
 
         leaseAgreementDocumentMenu.addItem(new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
@@ -175,8 +170,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }));
 
-        leaseAgreementDocument.setMenu(leaseAgreementDocumentMenu);
-        addHeaderToolbarItem(leaseAgreementDocument);
+        leaseAgreementButton.setMenu(leaseAgreementDocumentMenu);
+        addHeaderToolbarItem(leaseAgreementButton);
 
         // Views:
 
@@ -220,24 +215,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             addAction(runBillAction);
         }
 
-        newPaymentAction = new MenuItem(i18n.tr("New Payment"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).newPayment();
-            }
-        });
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            addAction(newPaymentAction);
-        }
-
         addAction(maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
         }));
-
-        addActionSeparator(); // ----------------------------------------------
 
         noticeAction = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override
@@ -531,7 +514,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(sendMailAction, false);
         setActionVisible(runBillAction, false);
 
-        setActionVisible(newPaymentAction, false);
         setActionVisible(maintenanceAction, false);
 
         setActionVisible(noticeAction, false);
@@ -544,6 +526,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(moveOutAction, false);
         setActionVisible(closeAction, false);
         setActionVisible(cancelAction, false);
+
+        leaseAgreementButton.setVisible(false);
 
         super.reset();
     }
@@ -562,7 +546,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
 
-        setActionVisible(newPaymentAction, !status.isFormer());
         setActionVisible(maintenanceAction, !status.isFormer());
 
         setActionVisible(noticeAction, status == Status.Active && completion == null);
@@ -584,12 +567,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(closeAction, status == Status.Completed);
         setActionVisible(cancelAction, status.isDraft() || status == Status.Approved);
 
+        setActionVisible(newPaymentAction, !status.isFormer() && isPaymentAccepted(value));
+
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
             setActionVisible(renewAction, status == Status.Active && completion == null);
         }
 
+        leaseAgreementButton.setVisible(status.isDraft());
     }
 
     @Override
@@ -600,11 +586,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     @Override
     public ILister<BillDataDTO> getBillListerView() {
         return billLister;
-    }
-
-    @Override
-    public ILister<PaymentRecordDTO> getPaymentListerView() {
-        return paymentLister;
     }
 
     @Override

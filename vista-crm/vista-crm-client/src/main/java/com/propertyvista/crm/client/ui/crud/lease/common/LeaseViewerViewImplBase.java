@@ -26,23 +26,30 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerViewImplBase<DTO> implements LeaseViewerViewBase<DTO> {
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
+
+    protected final ILister<PaymentRecordDTO> paymentLister;
 
     protected final Button termsButton;
 
@@ -58,8 +65,12 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private final MenuItem unreserveUnit;
 
+    protected final MenuItem newPaymentAction;
+
     public LeaseViewerViewImplBase() {
         super(true);
+
+        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
 
         // Buttons:
 
@@ -112,7 +123,13 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
             }
         }));
 
-        addActionSeparator();
+        newPaymentAction = new MenuItem(i18n.tr("Make Payment"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerViewBase.Presenter) getPresenter()).newPayment();
+            }
+        });
+        addAction(newPaymentAction);
     }
 
     private void viewHistoricTermsExecuter() {
@@ -152,6 +169,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
         setActionVisible(reserveUnit, false);
         setActionVisible(unreserveUnit, false);
+        setActionVisible(newPaymentAction, false);
 
         super.reset();
     }
@@ -171,24 +189,35 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         setupPapsMenu(value);
     }
 
+    protected boolean isPaymentAccepted(DTO value) {
+        return value.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept;
+    }
+
     private void setupPapsMenu(DTO value) {
         papsMenu.clearItems();
-        papsButton.setVisible(value.status().getValue().isCurrent() && !value.isMoveOutWithinNextBillingCycle().getValue(false));
+        if (value.status().getValue().isActive() && !value.isMoveOutWithinNextBillingCycle().getValue(false)) {
+            for (final LeaseTermTenant tenant : value.currentTerm().version().tenants()) {
+                papsMenu.addItem(new MenuItem(tenant.getStringView(), new Command() {
+                    @Override
+                    public void execute() {
+                        new PreauthorizedPaymentsVisorController(LeaseViewerViewImplBase.this, tenant.leaseParticipant().getPrimaryKey()) {
+                            @Override
+                            public boolean onClose(List<AutopayAgreement> pads) {
+                                getPresenter().populate();
+                                return true;
+                            }
+                        }.show();
+                    }
+                }));
+            }
 
-        for (final LeaseTermTenant tenant : value.currentTerm().version().tenants()) {
-            papsMenu.addItem(new MenuItem(tenant.getStringView(), new Command() {
-                @Override
-                public void execute() {
-                    new PreauthorizedPaymentsVisorController(LeaseViewerViewImplBase.this, tenant.leaseParticipant().getPrimaryKey()) {
-                        @Override
-                        public boolean onClose(List<AutopayAgreement> pads) {
-                            getPresenter().populate();
-                            return true;
-                        }
-                    }.show();
-                }
-            }));
+            papsButton.setVisible(!papsMenu.getItems().isEmpty());
         }
+    }
+
+    @Override
+    public ILister<PaymentRecordDTO> getPaymentListerView() {
+        return paymentLister;
     }
 
     private abstract class UnitReserveBox extends OkCancelDialog {
