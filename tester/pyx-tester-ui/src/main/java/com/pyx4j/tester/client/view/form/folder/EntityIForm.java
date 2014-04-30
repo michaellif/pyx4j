@@ -37,7 +37,9 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.domain.test.EntityII;
@@ -56,22 +58,18 @@ public class EntityIForm extends CForm<EntityI> {
 
     @Override
     protected IsWidget createContent() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        formPanel.h1(i18n.tr("Main Form"));
+        formPanel.append(Location.Left, proto().textBox()).decorate();
+        formPanel.append(Location.Left, proto().integerBox()).decorate();
 
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Main Form"));
+        formPanel.h2(i18n.tr("Box Folder"));
+        formPanel.append(Location.Full, proto().entityIIList(), new EntityIIFolder());
 
-        main.setWidget(++row, 0, inject(proto().textBox(), new FormDecoratorBuilder().build()));
-        //main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-        main.setWidget(++row, 0, inject(proto().integerBox(), new FormDecoratorBuilder().build()));
-
-        main.setH2(++row, 0, 1, i18n.tr("Box Folder"));
-        main.setWidget(++row, 0, inject(proto().entityIIList(), new EntityIIFolder()));
-
-        main.setH2(++row, 0, 1, i18n.tr("Table Folder"));
-        main.setWidget(++row, 0, inject(proto().entityIVList(), new EntityIVFolder()));
-        return main;
+        formPanel.h2(i18n.tr("Table Folder"));
+        formPanel.append(Location.Full, proto().entityIVList(), new EntityIVFolder());
+        return formPanel;
     }
 
     static class EntityIIFolder extends CFolder<EntityII> {
