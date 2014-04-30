@@ -23,7 +23,8 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,7 +39,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -53,34 +53,31 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this, true);
 
         CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
                 CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
-        mainPanel.setWidget(++row, 0, inject(proto().picture().file(), imageHolder, new FieldDecoratorBuilder().customLabel("").build()));
+        formPanel.append(Location.Full, proto().picture().file(), imageHolder).decorate().customLabel("");
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
+        formPanel.h1(i18n.tr("Basic Information"));
 
-        mainPanel.setWidget(++row, 0,
-                inject(proto().person().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Full Name")).build()));
+        formPanel.append(Location.Full, proto().person().name(), new CEntityLabel<Name>()).decorate().customLabel(i18n.tr("Full Name"));
+        formPanel.append(Location.Left, proto().person().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().person().birthDate()).decorate().componentWidth(150);
 
-        mainPanel.setWidget(++row, 0, inject(proto().person().sex(), new FieldDecoratorBuilder(100).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().person().birthDate(), new FieldDecoratorBuilder(150).build()));
+        formPanel.h1(i18n.tr("Contact Information"));
+        formPanel.append(Location.Left, proto().person().homePhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().person().mobilePhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().person().workPhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Right, proto().person().email()).decorate().componentWidth(230);
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
-        mainPanel.setWidget(++row, 0, inject(proto().person().homePhone(), new FieldDecoratorBuilder(200).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().person().mobilePhone(), new FieldDecoratorBuilder(200).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().person().workPhone(), new FieldDecoratorBuilder(200).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().person().email(), new FieldDecoratorBuilder(230).build()));
+        formPanel.h1(proto().emergencyContacts().getMeta().getCaption());
+        formPanel.append(Location.Full, proto().emergencyContacts(), new EmergencyContactFolder());
 
-        mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder()));
-
-        return mainPanel;
+        return formPanel;
     }
 
     @Override
