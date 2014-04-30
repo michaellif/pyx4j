@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FluidPanel implements IsWidget {
+public class TwoColumnFluidPanel implements IsWidget {
 
     public static enum Location {
         Full, Left, Right
@@ -34,7 +34,9 @@ public class FluidPanel implements IsWidget {
 
     private final FlowPanel contentPanel;
 
-    public FluidPanel() {
+    private boolean collapsed;
+
+    public TwoColumnFluidPanel() {
         contentPanel = new FlowPanel();
     }
 
@@ -103,22 +105,36 @@ public class FluidPanel implements IsWidget {
         contentPanel.setVisible(visible);
     }
 
+    public void setCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
+        for (int i = 0; i < contentPanel.getWidgetCount(); i++) {
+            Widget widget = contentPanel.getWidget(i);
+            if (widget instanceof CellPanel) {
+                ((CellPanel) widget).adjustWidth(collapsed);
+            }
+        }
+    }
+
     protected class CellPanel extends FlowPanel {
 
-        private Location location;
+        private final Location location;
 
         public CellPanel(Location location) {
+            this.location = location;
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            setLocation(location);
+            adjustWidth(collapsed);
         }
 
-        public void setLocation(Location location) {
-            this.location = location;
+        private void adjustWidth(boolean collapsed) {
             switch (location) {
             case Left:
             case Right:
-                setWidth("50%");
+                if (collapsed) {
+                    setWidth("100%");
+                } else {
+                    setWidth("50%");
+                }
                 break;
             case Full:
                 setWidth("100%");

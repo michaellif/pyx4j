@@ -29,15 +29,12 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     private IFormatter<Boolean, String> format;
 
-    private Alignment alignment;
-
     public enum Alignment {
         left, center, right
     }
 
     public CCheckBox() {
         super();
-        alignment = Alignment.left;
         populate(false);
         setFormat(new IFormatter<Boolean, String>() {
             @Override
@@ -60,15 +57,6 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     public void setFormat(IFormatter<Boolean, String> format) {
         this.format = format;
-    }
-
-    public void setAlignmet(Alignment alignment) {
-        this.alignment = alignment;
-        getNativeComponent().setAlignmet(alignment);
-    }
-
-    public Alignment getAlignmet() {
-        return alignment;
     }
 
 }

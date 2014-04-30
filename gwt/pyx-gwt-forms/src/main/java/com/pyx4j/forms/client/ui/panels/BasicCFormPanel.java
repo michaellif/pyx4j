@@ -24,14 +24,18 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 public class BasicCFormPanel extends TwoColumnFormPanel {
 
     private final CForm<?> parent;
 
     public BasicCFormPanel(CForm<?> parent) {
-        super();
+        this(parent, false);
+    }
+
+    public BasicCFormPanel(CForm<?> parent, boolean collapsed) {
+        super(collapsed);
         this.parent = parent;
     }
 

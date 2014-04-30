@@ -80,8 +80,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         super();
         setStyleName(CComponentTheme.StyleName.FieldPanel.name());
         this.cComponent = cComponent;
-        contentPanel = new SimplePanel();
-        setWidget(contentPanel);
+        setWidget(contentPanel = new SimplePanel());
     }
 
     @Override

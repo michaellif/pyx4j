@@ -48,17 +48,23 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 public class TwoColumnFormPanel implements IsWidget {
 
-    private final FluidPanel fluidPanel;
+    private final TwoColumnFluidPanel fluidPanel;
+
+    private final boolean collapsed;
 
     public TwoColumnFormPanel() {
+        this(false);
+    }
 
-        fluidPanel = new FluidPanel();
-
+    public TwoColumnFormPanel(boolean collapsed) {
+        this.collapsed = collapsed;
+        fluidPanel = new TwoColumnFluidPanel();
+        fluidPanel.setCollapsed(collapsed);
     }
 
     @Override
@@ -200,9 +206,9 @@ public class TwoColumnFormPanel implements IsWidget {
 
     public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
 
-        public static final int LABEL_WIDTH = 180;
+        public static final int LABEL_WIDTH = 220;
 
-        public static final int CONTENT_WIDTH = 300;
+        public static final int CONTENT_WIDTH = 250;
 
         public static final int CONTENT_WIDTH_DUAL = 2 * CONTENT_WIDTH + LABEL_WIDTH;
 

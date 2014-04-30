@@ -53,7 +53,6 @@ public class NCheckBox extends NFocusField<Boolean, CheckBox, CCheckBox, HTML> i
             }
         });
         setTabIndex(getCComponent().getTabIndex());
-        setAlignmet(getCComponent().getAlignmet());
     }
 
     @Override
@@ -73,10 +72,6 @@ public class NCheckBox extends NFocusField<Boolean, CheckBox, CCheckBox, HTML> i
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
         }
-    }
-
-    public void setAlignmet(Alignment alignment) {
-        getElement().getStyle().setProperty("textAlign", alignment.name());
     }
 
 }

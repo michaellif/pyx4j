@@ -80,7 +80,7 @@ public class CComponentTheme extends Theme {
     protected void initTriggerButtonStyle() {
 
         Style style = new Style(".", StyleName.FieldPanel);
-        style.addProperty("text-align", "left");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);

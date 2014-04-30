@@ -30,7 +30,6 @@ public class NHtml<E> extends NField<E, Label, CHtml<E>, Label> {
 
     public NHtml(CHtml<E> cComponent) {
         super(cComponent);
-        addStyleName("TESTTEST");
     }
 
     @Override

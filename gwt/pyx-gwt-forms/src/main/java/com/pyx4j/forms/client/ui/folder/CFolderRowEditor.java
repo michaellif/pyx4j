@@ -36,9 +36,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
@@ -72,13 +71,7 @@ public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
     }
 
     protected CField<?, ?> createCell(FolderColumnDescriptor column) {
-        CField<?, ?> comp = inject(column.getObject());
-
-        // Special TableFolder customization
-        if (comp instanceof CCheckBox) {
-            ((CCheckBox) comp).setAlignmet(CCheckBox.Alignment.center);
-        }
-        return comp;
+        return inject(column.getObject());
     }
 
     class CellDecorator extends SimplePanel implements IFieldDecorator {
