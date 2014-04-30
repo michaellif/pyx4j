@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -72,20 +72,18 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
-        TwoColumnFlexFormPanel financialTransactionHistory = new TwoColumnFlexFormPanel();
-        int row = -1;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         CViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()
                 : new TransactionHistoryViewer();
-        financialTransactionHistory.setWidget(++row, 0, 2, inject(proto().transactionHistory(), transactionHistoryViewer));
+        formPanel.append(Location.Full, proto().transactionHistory(), transactionHistoryViewer);
 
-        return financialTransactionHistory;
+        return formPanel;
     }
 
-    private Widget createCommunicationsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().letters(), new LegalLetterFolder()));
-        return panel;
+    private IsWidget createCommunicationsTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Full, proto().letters(), new LegalLetterFolder());
+        return formPanel;
     }
 }

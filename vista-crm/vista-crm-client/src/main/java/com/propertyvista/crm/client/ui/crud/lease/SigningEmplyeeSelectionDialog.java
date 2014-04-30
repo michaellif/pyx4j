@@ -21,9 +21,9 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.domain.company.Employee;
@@ -73,14 +73,9 @@ public abstract class SigningEmplyeeSelectionDialog extends OkCancelDialog {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            int row = -1;
-            panel.setWidget(
-                    ++row,
-                    0,
-                    inject(proto().employee(), createAgentComboBox(),
-                            new FieldDecoratorBuilder().componentWidth("150px").labelWidth("150px").contentWidth("150px").build()));
-            return panel;
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            formPanel.append(Location.Left, proto().employee(), createAgentComboBox()).decorate().componentWidth(160);
+            return formPanel;
         }
 
         public void setAgents(List<Employee> agents) {

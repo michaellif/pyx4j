@@ -38,7 +38,9 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.FluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -631,25 +633,22 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             content = new CForm<LeaseDTO>(LeaseDTO.class) {
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                    BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-                    main.setWidget(
-                            0,
-                            0,
-                            inject(proto().moveOutSubmissionDate(), new FieldDecoratorBuilder(9).customLabel(action.toString() + i18n.tr(" Submission Date"))
-                                    .build()));
-                    main.setWidget(1, 0, inject(proto().expectedMoveOut(), new FieldDecoratorBuilder(9).build()));
+                    formPanel.append(Location.Left, proto().moveOutSubmissionDate()).decorate().componentWidth(120)
+                            .customLabel(action.toString() + i18n.tr(" Submission Date"));
+                    formPanel.append(Location.Left, proto().expectedMoveOut()).decorate().componentWidth(120);
 
                     if (showTermination) {
-                        main.setWidget(2, 0,
-                                inject(proto().terminationLeaseTo(), new FieldDecoratorBuilder(9).customLabel(i18n.tr("Lease Termination Date")).build()));
+                        formPanel.append(Location.Left, proto().terminationLeaseTo()).decorate().componentWidth(120)
+                                .customLabel(i18n.tr("Lease Termination Date"));
                     }
 
                     // just for validation purpose:
                     inject(proto().currentTerm().termFrom());
                     inject(proto().currentTerm().termTo());
 
-                    return main;
+                    return formPanel;
                 }
 
                 @Override
