@@ -72,7 +72,7 @@ public class ChargesSummaryGadget extends FlowPanel {
 
     private void updateMonthly(OnlineApplicationDTO onlineApplication) {
         StringBuilder contentBuilder = new StringBuilder();
-        if (onlineApplication != null && !onlineApplication.unit().isNull()) {
+        if (onlineApplication != null && !onlineApplication.selectedService().isNull()) {
             contentBuilder.append(formatCharge(onlineApplication.selectedService().agreedPrice().getValue(), onlineApplication.selectedService().item().name()
                     .getValue()));
 
@@ -80,15 +80,17 @@ public class ChargesSummaryGadget extends FlowPanel {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getValue()));
             }
 
-            contentBuilder
-                    .append(formatCharge(onlineApplication.totalMonthlyCharge().getValue(), onlineApplication.totalMonthlyCharge().getMeta().getCaption()));
+            if (!onlineApplication.totalMonthlyCharge().isNull()) {
+                contentBuilder.append(formatCharge(onlineApplication.totalMonthlyCharge().getValue(), onlineApplication.totalMonthlyCharge().getMeta()
+                        .getCaption()));
+            }
         }
         monthlySection.setContentHTML(contentBuilder.length() > 0 ? contentBuilder.toString() : "&nbsp;");
     }
 
     private void updateDeposits(OnlineApplicationDTO onlineApplication) {
         StringBuilder contentBuilder = new StringBuilder();
-        if (onlineApplication != null && !onlineApplication.unit().isNull()) {
+        if (onlineApplication != null && !onlineApplication.payment().isNull()) {
             for (Deposit d : onlineApplication.payment().deposits()) {
                 contentBuilder.append(formatCharge(d.amount().getValue(), d.description().getValue()));
             }
@@ -98,7 +100,8 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     private void updateFees(OnlineApplicationDTO onlineApplication) {
-        if (onlineApplication != null && onlineApplication.payment().applicationFee().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0) {
+        if (onlineApplication != null && !onlineApplication.payment().isNull()
+                && onlineApplication.payment().applicationFee().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0) {
             feeSection.setContentHTML(formatCharge(onlineApplication.payment().applicationFee().getValue(), i18n.tr("Application Fee")));
             feeSection.setVisible(true);
         } else {

@@ -206,7 +206,10 @@ public class UnitStep extends ApplicationWizardStep {
                 @Override
                 public void onSuccess(UnitOptionsSelectionDTO result) {
                     ((OptionsStep) getWizard().getStep(OptionsStep.class)).setStepValue(result);
+
+                    // update summary gadgets:
                     getValue().unit().set(result.unit());
+                    getValue().selectedService().set(result.selectedService());
                     ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(),
                             ApplicationWizardStateChangeEvent.ChangeType.termChange));
                 }

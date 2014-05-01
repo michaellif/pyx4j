@@ -231,7 +231,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 .getPrimaryKey());
 
         to.unit().set(filterUnitData(bo.masterOnlineApplication().leaseApplication().lease().unit()));
-        to.unit().info().legalAddress().set(AddressRetriever.getUnitLegalAddress(to.unit()));
         to.utilities().setValue(retrieveUtilities(term));
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
@@ -957,10 +956,15 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     // ================================================================================================================
 
     private AptUnit filterUnitData(AptUnit unit) {
+        if (unit == null || unit.isNull()) {
+            return EntityFactory.create(AptUnit.class);
+        }
+
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.Attached);
+        unit.info().legalAddress().set(AddressRetriever.getUnitLegalAddress(unit));
 
-        AptUnit to = new EntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
+        return new EntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
             @Override
             protected void bind() {
                 bind(toProto.id(), boProto.id());
@@ -974,8 +978,6 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 bind(toProto.floorplan().marketingName(), boProto.floorplan().marketingName());
             }
         }.createTO(unit);
-
-        return to;
     }
 
     private UnitTO createUnitDTO(AptUnit unit) {

@@ -30,11 +30,11 @@ public class RentalSummaryGadget extends FlowPanel {
 
     private final HTML apartmentHTML;
 
-    private final HTML termHTML;
+    private final HTML leaseTermHTML;
 
     private final HTML utilityHTML;
 
-    private final Label utilityCaption;
+    private final Label utilityCaption, leaseTermCaption;
 
     public RentalSummaryGadget() {
         super();
@@ -56,13 +56,13 @@ public class RentalSummaryGadget extends FlowPanel {
         apartmentHTML.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryBlock.name());
         panel.add(apartmentHTML);
 
-        caption = new Label(i18n.tr("Lease Term"));
-        caption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
-        panel.add(caption);
+        leaseTermCaption = new Label(i18n.tr("Lease Term"));
+        leaseTermCaption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
+        panel.add(leaseTermCaption);
 
-        termHTML = new HTML();
-        termHTML.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryBlock.name());
-        panel.add(termHTML);
+        leaseTermHTML = new HTML();
+        leaseTermHTML.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryBlock.name());
+        panel.add(leaseTermHTML);
 
         utilityCaption = new Label(i18n.tr("Included Utilities"));
         utilityCaption.setStyleName(RentalSummaryTheme.StyleName.RentalSummaryCaption.name());
@@ -76,28 +76,30 @@ public class RentalSummaryGadget extends FlowPanel {
     }
 
     public void populate(OnlineApplicationDTO onlineApplication) {
-        if (onlineApplication != null && !onlineApplication.unit().isNull()) {
+        if (onlineApplication != null) {
             StringBuilder apartmentBuilder = new StringBuilder();
-            if (onlineApplication.unit().isNull()) {
-                apartmentBuilder.append(i18n.tr("No Unit Selected")).append("<br/>");
-            } else {
+            if (!onlineApplication.unit().isNull()) {
                 apartmentBuilder.append(i18n.tr("Unit")).append(" ").append(onlineApplication.unit().info().number().getStringView()).append("<br/>");
+                apartmentBuilder.append(" ").append(onlineApplication.unit().floorplan().marketingName().getStringView()).append("<br/>");
+                apartmentBuilder.append(onlineApplication.unit().info().legalAddress().getStringView());
+            } else {
+                apartmentBuilder.append(i18n.tr("No Unit Selected")).append("<br/>");
             }
-            apartmentBuilder.append(" ").append(onlineApplication.unit().floorplan().marketingName().getStringView()).append("<br/>");
-            apartmentBuilder.append(onlineApplication.unit().info().legalAddress().getStringView());
             apartmentHTML.setHTML(apartmentBuilder.toString());
 
-            if (onlineApplication.leaseFrom().isNull() || onlineApplication.leaseTo().isNull()) {
-                termHTML.setHTML("&nbsp;");
+            if (!onlineApplication.leaseFrom().isNull() && !onlineApplication.leaseTo().isNull()) {
+                leaseTermHTML.setHTML((onlineApplication.leaseFrom().getStringView()) + " - " + onlineApplication.leaseTo().getStringView());
+                leaseTermCaption.setVisible(true);
             } else {
-                termHTML.setHTML((onlineApplication.leaseFrom().getStringView()) + " - " + onlineApplication.leaseTo().getStringView());
+                leaseTermHTML.setHTML("&nbsp;");
+                leaseTermCaption.setVisible(false);
             }
 
             utilityHTML.setHTML(onlineApplication.utilities().getValue());
             utilityCaption.setVisible(!onlineApplication.utilities().isNull());
         } else {
             apartmentHTML.setHTML("&nbsp;");
-            termHTML.setHTML("&nbsp;");
+            leaseTermHTML.setHTML("&nbsp;");
             utilityHTML.setHTML("&nbsp;");
         }
     }
