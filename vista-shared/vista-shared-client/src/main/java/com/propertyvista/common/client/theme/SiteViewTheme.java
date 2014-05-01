@@ -28,7 +28,7 @@ public class SiteViewTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected, collapsed
+        selected
     }
 
     public SiteViewTheme() {
@@ -77,10 +77,6 @@ public class SiteViewTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.object1, 0.1);
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.6);
-        addStyle(style);
-
-        style = new Style(".", StyleName.SiteViewNavigContainer.name(), "-", StyleDependent.collapsed.name(), " .gwt-Label");
-        style.addProperty("display", "none");
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewNavigContainer.name(), " a:link, .", StyleName.SiteViewNavigContainer.name(), " a:visited, .",

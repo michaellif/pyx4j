@@ -405,13 +405,4 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
 
-    @Override
-    public void onResize() {
-        if (getOffsetWidth() == CrmRootPane.COLLAPSED_MENU_WIDTH) {
-            addStyleDependentName(SiteViewTheme.StyleDependent.collapsed.name());
-        } else {
-            removeStyleDependentName(SiteViewTheme.StyleDependent.collapsed.name());
-        }
-        super.onResize();
-    };
 }
