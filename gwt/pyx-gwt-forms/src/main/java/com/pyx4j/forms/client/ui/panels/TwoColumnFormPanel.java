@@ -137,7 +137,6 @@ public class TwoColumnFormPanel implements IsWidget {
     private Widget hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
-        header.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         if (imageResource != null) {
             Image image = new Image(imageResource);

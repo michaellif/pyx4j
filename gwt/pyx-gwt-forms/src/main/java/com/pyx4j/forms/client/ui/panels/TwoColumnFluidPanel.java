@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,56 +32,54 @@ public class TwoColumnFluidPanel implements IsWidget {
 
     private final FlowPanel contentPanel;
 
-    private boolean collapsed;
-
     public TwoColumnFluidPanel() {
         contentPanel = new FlowPanel();
         contentPanel.setStyleName(TwoColumnFormPanelTheme.StyleName.FluidPanel.name());
     }
 
-    private CellPanel ensureCellPanel(Location location) {
-        CellPanel panel = null;
+    private BlockPanel ensureCellPanel(Location location) {
+        BlockPanel panel = null;
 
         int widgetCount = contentPanel.getWidgetCount();
         if (widgetCount == 0) {
             switch (location) {
             case Dual:
-                panel = new CellPanel(Location.Dual);
+                panel = new BlockPanel(Location.Dual);
                 contentPanel.add(panel);
                 break;
             case Left:
-                panel = new CellPanel(Location.Left);
+                panel = new BlockPanel(Location.Left);
                 contentPanel.add(panel);
                 break;
             case Right:
-                panel = new CellPanel(Location.Right);
-                contentPanel.add(new CellPanel(Location.Left));
+                panel = new BlockPanel(Location.Right);
+                contentPanel.add(new BlockPanel(Location.Left));
                 contentPanel.add(panel);
                 break;
             }
         } else {
-            panel = (CellPanel) contentPanel.getWidget(widgetCount - 1);
+            panel = (BlockPanel) contentPanel.getWidget(widgetCount - 1);
             if (panel.location != location) {
                 switch (location) {
                 case Dual:
-                    panel = new CellPanel(Location.Dual);
+                    panel = new BlockPanel(Location.Dual);
                     contentPanel.add(panel);
                     break;
                 case Left:
                     if (panel.location == Location.Right) {
-                        panel = (CellPanel) contentPanel.getWidget(widgetCount - 2);
+                        panel = (BlockPanel) contentPanel.getWidget(widgetCount - 2);
                     } else if (panel.location == Location.Dual) {
-                        panel = new CellPanel(Location.Left);
+                        panel = new BlockPanel(Location.Left);
                         contentPanel.add(panel);
                     }
                     break;
                 case Right:
                     if (panel.location == Location.Left) {
-                        panel = new CellPanel(Location.Right);
+                        panel = new BlockPanel(Location.Right);
                         contentPanel.add(panel);
                     } else if (panel.location == Location.Dual) {
-                        panel = new CellPanel(Location.Right);
-                        contentPanel.add(new CellPanel(Location.Left));
+                        panel = new BlockPanel(Location.Right);
+                        contentPanel.add(new BlockPanel(Location.Left));
                         contentPanel.add(panel);
                     }
                     break;
@@ -107,13 +103,6 @@ public class TwoColumnFluidPanel implements IsWidget {
     }
 
     public void setCollapsed(boolean collapsed) {
-        this.collapsed = collapsed;
-        for (int i = 0; i < contentPanel.getWidgetCount(); i++) {
-            Widget widget = contentPanel.getWidget(i);
-            if (widget instanceof CellPanel) {
-                ((CellPanel) widget).adjustWidth(collapsed);
-            }
-        }
         if (collapsed) {
             contentPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.collapsed.name());
         } else {
@@ -121,29 +110,22 @@ public class TwoColumnFluidPanel implements IsWidget {
         }
     }
 
-    protected class CellPanel extends FlowPanel {
+    protected class BlockPanel extends FlowPanel {
 
         private final Location location;
 
-        public CellPanel(Location location) {
+        public BlockPanel(Location location) {
             this.location = location;
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            adjustWidth(collapsed);
-        }
-
-        private void adjustWidth(boolean collapsed) {
+            setStyleName(TwoColumnFormPanelTheme.StyleName.FluidPanelBlock.name());
             switch (location) {
             case Left:
+                addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.left.name());
+                break;
             case Right:
-                if (collapsed) {
-                    setWidth("100%");
-                } else {
-                    setWidth("50%");
-                }
+                addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.right.name());
                 break;
             case Dual:
-                setWidth("100%");
+                addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.dual.name());
                 break;
             default:
                 break;
