@@ -41,8 +41,8 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -352,9 +352,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
 
-                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70);
 
                 return formPanel.asWidget();
             }
@@ -474,8 +474,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 frontImage.setImageSize(240, 160);
 
                 formPanel.append(Location.Left, inject(proto().frontImage().file(), frontImage));
-                formPanel.append(Location.Right, injectAndDecorate(proto().title(), 10, 50, 55));
-                formPanel.append(Location.Dual, injectAndDecorate(proto().description(), 10, 50, 55));
+                formPanel.append(Location.Right, injectAndDecorate(proto().title(), 10, 50));
+                formPanel.append(Location.Dual, injectAndDecorate(proto().description(), 10, 50));
 
                 return formPanel;
             }

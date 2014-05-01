@@ -40,14 +40,14 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
 
     private IsWidget createInsuranceRequirementsTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Left, proto().requireMinimumLiability()).decorate().contentWidth(60);
+        formPanel.append(Location.Left, proto().requireMinimumLiability()).decorate().componentWidth(60);
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().minimumRequiredLiability()).setVisible(event.getValue());
             }
         });
-        formPanel.append(Location.Left, proto().minimumRequiredLiability()).decorate().contentWidth(200);
+        formPanel.append(Location.Left, proto().minimumRequiredLiability()).decorate().componentWidth(200);
         get(proto().minimumRequiredLiability()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public FieldValidationError isValid() {

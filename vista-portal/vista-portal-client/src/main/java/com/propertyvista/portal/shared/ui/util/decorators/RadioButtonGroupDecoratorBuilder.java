@@ -19,7 +19,6 @@ public class RadioButtonGroupDecoratorBuilder extends FieldDecorator.Builder {
 
     public RadioButtonGroupDecoratorBuilder() {
         super();
-        contentWidth("100%");
         componentWidth(70 + "px");
         labelPosition(LabelPosition.top);
         useLabelSemicolon(false);

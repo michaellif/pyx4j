@@ -35,16 +35,16 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
     private IsWidget createMiscPoliciesTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Left, proto().maxParkingSpots()).decorate().contentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().maxLockers()).decorate().contentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().maxPets()).decorate().contentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().occupantsPerBedRoom()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maxParkingSpots()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maxLockers()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maxPets()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().occupantsPerBedRoom()).decorate().componentWidth(40).labelWidth(220);
 
         formPanel.br();
 
-        formPanel.append(Location.Left, proto().ageOfMajority()).decorate().contentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().enforceAgeOfMajority()).decorate().contentWidth(40).labelWidth(220);
-        formPanel.append(Location.Left, proto().maturedOccupantsAreApplicants()).decorate().contentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().ageOfMajority()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().enforceAgeOfMajority()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().maturedOccupantsAreApplicants()).decorate().componentWidth(40).labelWidth(220);
 
         return formPanel;
     }

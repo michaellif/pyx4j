@@ -96,12 +96,12 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
             int row = -1;
-            panel.setWidget(++row, 0, inject(proto().leaseParticipant().leaseParticipant().participantId(), new FieldDecoratorBuilder(15, 15, 20).build()));
+            panel.setWidget(++row, 0, inject(proto().leaseParticipant().leaseParticipant().participantId(), new FieldDecoratorBuilder(15, 15).build()));
             panel.setWidget(
                     ++row,
                     0,
-                    inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder(15,
-                            20, 20).build()));
+                    inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(),
+                            new FieldDecoratorBuilder(15, 20).build()));
             ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
@@ -117,7 +117,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
             });
 
-            panel.setWidget(++row, 0, inject(proto().leaseParticipant().role(), new FieldDecoratorBuilder(15, 15, 20).build()));
+            panel.setWidget(++row, 0, inject(proto().leaseParticipant().role(), new FieldDecoratorBuilder(15, 15).build()));
 
             panel.setBR(++row, 0, 1);
 
@@ -126,7 +126,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     0,
                     inject(proto().screening(),
                             new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
-                            new FieldDecoratorBuilder(15, 15, 20).build()));
+                            new FieldDecoratorBuilder(15, 15).build()));
             return panel;
         }
 
@@ -134,13 +134,13 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             BasicFlexFormPanel left = new BasicFlexFormPanel();
 
             int row = -1;
-            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckResult(), new FieldDecoratorBuilder(15, 10, 10).build()));
-            left.setWidget(++row, 0, inject(proto().creditCheck().reason(), new FieldDecoratorBuilder(15, 10, 10).build()));
-            left.setWidget(++row, 0, inject(proto().creditCheck().amountApproved(), new FieldDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckResult(), new FieldDecoratorBuilder(15, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().reason(), new FieldDecoratorBuilder(15, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().amountApproved(), new FieldDecoratorBuilder(15, 10).build()));
 
             left.setHR(++row, 0, 1);
 
-            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckDate(), new FieldDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckDate(), new FieldDecoratorBuilder(15, 10).build()));
 
             CLabel<Key> creditCheckReport = new CLabel<Key>();
             creditCheckReport.setTitle(i18n.tr("View Full Report"));
@@ -170,7 +170,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                             });
                 }
             });
-            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckReport(), creditCheckReport, new FieldDecoratorBuilder(15, 10, 10).build()));
+            left.setWidget(++row, 0, inject(proto().creditCheck().creditCheckReport(), creditCheckReport, new FieldDecoratorBuilder(15, 10).build()));
 
             BasicFlexFormPanel right = new BasicFlexFormPanel();
             row = -1;
@@ -179,10 +179,10 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             right.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.NORMAL);
             right.getWidget(row, 0).getElement().getStyle().setMarginLeft(2, Unit.EM);
 
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy(), new FieldDecoratorBuilder(10, 5, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().judgment(), new FieldDecoratorBuilder(10, 5, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().collection(), new FieldDecoratorBuilder(10, 5, 5).build()));
-            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().chargeOff(), new FieldDecoratorBuilder(10, 5, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy(), new FieldDecoratorBuilder(10, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().judgment(), new FieldDecoratorBuilder(10, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().collection(), new FieldDecoratorBuilder(10, 5).build()));
+            right.setWidget(++row, 0, inject(proto().creditCheck().backgroundCheckPolicy().chargeOff(), new FieldDecoratorBuilder(10, 5).build()));
 
             // assemble main panel:
             BasicFlexFormPanel panel = new BasicFlexFormPanel();

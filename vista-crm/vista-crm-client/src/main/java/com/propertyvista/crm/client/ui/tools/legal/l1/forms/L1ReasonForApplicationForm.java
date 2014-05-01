@@ -47,8 +47,7 @@ public class L1ReasonForApplicationForm extends CForm<L1ReasonForApplication> {
                                         i18n.tr("Is the tenant still in possession of the rental unit on the date this application is filed with the Board?"))
                                 .componentWidth("100px").build()));
         panel.setWidget(++row, 0, 1, inject(proto().rentPaymentPeriod(), new FieldDecoratorBuilder().componentWidth("100px").build()));
-        panel.setWidget(row, 1, 1,
-                inject(proto().otherRentPaymentPeriodDescription(), new FieldDecoratorBuilder().componentWidth("100px").contentWidth("100px").build()));
+        panel.setWidget(row, 1, 1, inject(proto().otherRentPaymentPeriodDescription(), new FieldDecoratorBuilder().componentWidth("100px").build()));
         panel.setWidget(++row, 0, 1, new HTML("&nbsp;"));
 
         panel.setH2(++row, 0, 2, i18n.tr("Deposit"));

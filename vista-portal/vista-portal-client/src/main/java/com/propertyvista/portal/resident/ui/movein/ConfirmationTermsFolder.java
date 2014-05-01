@@ -59,11 +59,12 @@ public class ConfirmationTermsFolder extends PortalBoxFolder<SignedAgreementConf
             mainPanel.setWidget(++row, 0, inject(proto().term().title(), caption));
             mainPanel.setWidget(++row, 0, inject(proto().term().body(), new CHtml<String>()));
 
-            mainPanel.setWidget(
-                    ++row,
-                    0,
-                    inject(proto().signature(), new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px")
-                            .componentWidth("250px").build()));
+            mainPanel
+                    .setWidget(
+                            ++row,
+                            0,
+                            inject(proto().signature(), new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).componentWidth("250px")
+                                    .build()));
 
             return mainPanel;
         }

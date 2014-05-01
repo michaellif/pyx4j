@@ -113,7 +113,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
                 ++row,
                 0,
                 inject(proto().personalDisclaimerSignature(),
-                        new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).contentWidth("250px").componentWidth("250px").build()));
+                        new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).componentWidth("250px").build()));
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 

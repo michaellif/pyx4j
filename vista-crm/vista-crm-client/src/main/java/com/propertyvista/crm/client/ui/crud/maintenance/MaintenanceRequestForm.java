@@ -245,7 +245,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
                 BasicCFormPanel main = new BasicCFormPanel(entryForm);
-                main.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160).build();
+                main.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).componentWidth(160).build();
 
                 return main.asWidget();
             }
@@ -744,8 +744,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 content.setWidth("400px");
                 int row = -1;
                 content.setH2(++row, 0, 2, "Notice Of Entry");
-                content.setWidget(++row, 0, inject(proto().messageDate(), new FieldDecoratorBuilder().contentWidth("350px").labelWidth("100px").build()));
-                content.setWidget(++row, 0, inject(proto().messageId(), new FieldDecoratorBuilder().contentWidth("350px").labelWidth("100px").build()));
+                content.setWidget(++row, 0, inject(proto().messageDate(), new FieldDecoratorBuilder().componentWidth("350px").labelWidth("100px").build()));
+                content.setWidget(++row, 0, inject(proto().messageId(), new FieldDecoratorBuilder().componentWidth("350px").labelWidth("100px").build()));
                 content.setWidget(++row, 0, inject(proto().text()));
                 get(proto().text()).asWidget().setWidth("450px");
 

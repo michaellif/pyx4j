@@ -52,7 +52,6 @@ public class N4BatchRequestForm extends AccessoryEntityForm<N4BatchRequestDTO> {
         };
 
         public Builder width(String componentWidth) {
-            contentWidth(componentWidth);
             labelWidth(componentWidth);
             return super.componentWidth(componentWidth);
         }

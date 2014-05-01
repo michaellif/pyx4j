@@ -108,9 +108,9 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
 
-                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).contentWidth(160);
-                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70).contentWidth(160);
+                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70);
 
                 return formPanel.asWidget();
             }
@@ -179,8 +179,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 frontImage.setImageSize(240, 160);
 
                 content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
-                content.setWidget(0, 1, inject(proto().title(), new FieldDecoratorBuilder(10, 50, 55).build()));
-                content.setWidget(1, 0, inject(proto().description(), new FieldDecoratorBuilder(10, 50, 55).build()));
+                content.setWidget(0, 1, inject(proto().title(), new FieldDecoratorBuilder(10, 50).build()));
+                content.setWidget(1, 0, inject(proto().description(), new FieldDecoratorBuilder(10, 50).build()));
                 content.getFlexCellFormatter().setRowSpan(0, 0, 2);
 
                 return content;

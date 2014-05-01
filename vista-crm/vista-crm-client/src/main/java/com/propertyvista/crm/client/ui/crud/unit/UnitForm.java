@@ -119,32 +119,32 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         formPanel
                 .append(Location.Left, proto().building(),
                         isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)))
-                .decorate().contentWidth(250);
-        formPanel.append(Location.Right, proto().info().floor()).decorate().contentWidth(60);
+                .decorate().componentWidth(250);
+        formPanel.append(Location.Right, proto().info().floor()).decorate().componentWidth(60);
 
-        formPanel.append(Location.Left, proto().floorplan(), new FloorplanSelectorHyperlink()).decorate().contentWidth(150);
-        formPanel.append(Location.Right, proto().info().number()).decorate().contentWidth(60);
+        formPanel.append(Location.Left, proto().floorplan(), new FloorplanSelectorHyperlink()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info().number()).decorate().componentWidth(60);
 
-        formPanel.append(Location.Left, proto().info().economicStatus()).decorate().contentWidth(150);
-        formPanel.append(Location.Right, proto().info()._bedrooms()).decorate().contentWidth(60);
+        formPanel.append(Location.Left, proto().info().economicStatus()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info()._bedrooms()).decorate().componentWidth(60);
 
-        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().contentWidth(150);
-        formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().contentWidth(60);
+        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().componentWidth(60);
 
         formPanel.br();
         formPanel
                 .append(Location.Left, proto().lease(),
                         isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate()
-                .contentWidth(150);
-        formPanel.append(Location.Right, proto().info().area()).decorate().contentWidth(100);
+                .componentWidth(150);
+        formPanel.append(Location.Right, proto().info().area()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().availability().availableForRent()).decorate().contentWidth(100);
-        formPanel.append(Location.Right, proto().info().areaUnits()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().availability().availableForRent()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().info().areaUnits()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().reservedUntil()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().reservedUntil()).decorate().componentWidth(100);
 
-        formPanel.append(Location.Left, proto().financial()._unitRent()).decorate().contentWidth(80);
-        formPanel.append(Location.Left, proto().financial()._marketRent()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().financial()._unitRent()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().financial()._marketRent()).decorate().componentWidth(100);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             catalogMarketPricesPanel.h1(proto().marketPrices().getMeta().getCaption());

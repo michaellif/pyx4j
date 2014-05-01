@@ -139,22 +139,22 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     private IsWidget createInfoTab() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Left, proto().employeeId()).decorate().contentWidth(100);
-        formPanel.append(Location.Right, proto().title()).decorate().contentWidth(150);
+        formPanel.append(Location.Left, proto().employeeId()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().title()).decorate().componentWidth(150);
 
         formPanel.append(Location.Left, proto().name(), new NameEditor(i18n.tr("Employee")));
-        formPanel.append(Location.Left, proto().sex()).decorate().contentWidth(100);
-        formPanel.append(Location.Left, proto().birthDate()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(100);
 
         formPanel.br();
-        formPanel.append(Location.Left, proto().homePhone()).decorate().contentWidth(100);
-        formPanel.append(Location.Right, proto().mobilePhone()).decorate().contentWidth(100);
-        formPanel.append(Location.Left, proto().workPhone()).decorate().contentWidth(100);
-        formPanel.append(Location.Right, proto().email()).decorate().contentWidth(200);
+        formPanel.append(Location.Left, proto().homePhone()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().mobilePhone()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().workPhone()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200);
         get(proto().email()).setMandatory(true);
 
         formPanel.br();
-        formPanel.append(Location.Left, proto().description()).decorate().contentWidth(100);
+        formPanel.append(Location.Left, proto().description()).decorate().componentWidth(100);
 
         formPanel.br();
         CImage signature = new CImage(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class), new VistaFileURLBuilder(
@@ -173,16 +173,16 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         formPanel.append(Location.Left, proto().password()).decorate();
         formPanel.append(Location.Left, proto().passwordConfirm()).decorate();
         formPanel.br();
-        formPanel.append(Location.Left, proto().enabled()).decorate().contentWidth(50);
-        formPanel.append(Location.Right, proto().requiredPasswordChangeOnNextLogIn()).decorate().contentWidth(50);
-        formPanel.append(Location.Left, proto().isSecurityQuestionSet()).decorate().contentWidth(50);
-        formPanel.append(Location.Right, proto().credentialUpdated()).decorate().contentWidth(150);
+        formPanel.append(Location.Left, proto().enabled()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().requiredPasswordChangeOnNextLogIn()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().isSecurityQuestionSet()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().credentialUpdated()).decorate().componentWidth(150);
 
         formPanel.h1(i18n.tr("Roles"));
         formPanel.append(Location.Left, proto().roles(), new CrmRoleFolder(this));
 
         formPanel.h1(i18n.tr("Buildings Access"));
-        formPanel.append(Location.Left, proto().restrictAccessToSelectedBuildingsAndPortfolios()).decorate().contentWidth(200);
+        formPanel.append(Location.Left, proto().restrictAccessToSelectedBuildingsAndPortfolios()).decorate().componentWidth(200);
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -268,7 +268,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             @Override
             protected IsWidget createContent() {
                 BasicCFormPanel formPanel = new BasicCFormPanel(this);
-                formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().contentWidth(200);
+                formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().componentWidth(200);
 
                 formPanel.h3(proto().buildings().getMeta().getCaption());
                 formPanel.append(Location.Left, proto().buildings(), new BuildingFolder(EmployeeForm.this));

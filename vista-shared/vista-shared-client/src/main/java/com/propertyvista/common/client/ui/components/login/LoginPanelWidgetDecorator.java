@@ -23,8 +23,7 @@ public class LoginPanelWidgetDecorator extends FieldDecorator {
     }
 
     public LoginPanelWidgetDecorator(double componentWidth) {
-        super(new Builder().labelWidth(9 + "em").contentWidth(componentWidth + "em").componentWidth(componentWidth + "em")
-                .labelAlignment(Builder.Alignment.left));
+        super(new Builder().labelWidth(9 + "em").componentWidth(componentWidth + "em").labelAlignment(Builder.Alignment.left));
         addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.noMandatoryStar.name());
     }
 }

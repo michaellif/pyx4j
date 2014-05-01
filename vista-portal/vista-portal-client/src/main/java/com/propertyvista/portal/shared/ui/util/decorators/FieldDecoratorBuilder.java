@@ -27,7 +27,6 @@ public class FieldDecoratorBuilder extends FieldDecorator.Builder {
     public FieldDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
         super();
         labelWidth(labelWidth);
-        contentWidth(contentWidth);
         componentWidth(componentWidth);
         labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
     }

@@ -42,7 +42,6 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
         @Override
         public Builder componentWidth(String componentWidth) {
             labelWidth(componentWidth);
-            contentWidth(componentWidth);
             return super.componentWidth(componentWidth);
         }
     }
