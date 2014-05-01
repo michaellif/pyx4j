@@ -40,7 +40,6 @@ public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestB
         NSuggestBox<E> nativeTextField = new NSuggestBox<E>(this);
         setNativeComponent(nativeTextField);
         setOptions(options);
-        asWidget().setWidth("100%");
     }
 
     @Override

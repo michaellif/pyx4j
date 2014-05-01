@@ -33,7 +33,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
     public static enum StyleName implements IStyleName {
         FluidPanel, FluidPanelBlock,
 
-        FormPanelLeftCell, FormPanelRightCell, FormPanelDualCell,
+        FormPanelCell,
 
         FormPanelCaptionLabel, FormPanelHR, FormPanelH1, FormPanelH1Image, FormPanelH1Label, FormPanelH2, FormPanelH2Label, FormPanelH3, FormPanelH3Label, FormPanelH4, FormPanelH4Label, FormPanelActionWidget
     }
@@ -54,11 +54,9 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
     protected void initStyles() {
 
         Style style = new Style(".", StyleName.FluidPanel);
-        style.addProperty("border-spacing", "0");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
-        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, " td");
@@ -72,12 +70,10 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FluidPanelBlock, "-", StyleDependent.left);
         style.addProperty("width", "50%");
-        style.addProperty("text-align", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanelBlock, "-", StyleDependent.right);
         style.addProperty("width", "50%");
-        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanelBlock, "-", StyleDependent.dual);
@@ -94,32 +90,21 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.dual);
-
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanelLeftCell);
-        style.addProperty("width", "90%");
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
+        style.addProperty("width", "400px");
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right);
+        style.addProperty("width", "400px");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual);
+        style.addProperty("width", "800px");
         style.addProperty("display", "inline-block");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FormPanelRightCell);
-        style.addProperty("width", "90%");
-        style.addProperty("display", "inline-block");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FormPanelDualCell);
-        style.addProperty("width", "90%");
-        style.addProperty("display", "inline-block");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelLeftCell);
-        addStyle(style);
-
-        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelRightCell);
-        addStyle(style);
-
-        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelDualCell);
-        style.addProperty("width", "500px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCaptionLabel);
@@ -136,6 +121,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         style = new Style(".", StyleName.FormPanelH1);
         style.addProperty("background-color", getBackgroundColor(), 0.1);
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH1Image);
@@ -152,6 +138,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         style.addProperty("border-bottom", "solid 2px");
         style.addProperty("border-bottom-color", getBackgroundColor(), 1);
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH2Label);
@@ -164,6 +151,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         style.addProperty("border-bottom", "solid 1px");
         style.addProperty("border-bottom-color", getBackgroundColor(), 0.6);
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH3Label);
@@ -176,6 +164,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         style = new Style(".", StyleName.FormPanelH4);
         style.addProperty("background-color", getBackgroundColor(), 0);
         style.addProperty("margin", "6px 0 4px 0");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH4Label);

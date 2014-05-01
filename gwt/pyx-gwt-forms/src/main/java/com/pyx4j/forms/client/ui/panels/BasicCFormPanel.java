@@ -20,10 +20,15 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 public class BasicCFormPanel extends TwoColumnFormPanel {
@@ -42,17 +47,86 @@ public class BasicCFormPanel extends TwoColumnFormPanel {
     public CompOptions append(Location location, IObject<?> member) {
         CField<?, ?> comp = parent.inject(member);
         append(location, comp);
-        return new CompOptions(comp, location == Location.Dual);
+        return new CompOptions(comp, location);
     }
 
     public CompOptions append(Location location, IObject<?> member, CField<?, ?> comp) {
         comp = parent.inject(member, comp);
         append(location, comp);
-        return new CompOptions(comp, location == Location.Dual);
+        return new CompOptions(comp, location);
     }
 
     public void append(Location location, IObject<?> member, CComponent<?, ?, ?> comp) {
         comp = parent.inject(member, comp);
         append(location, comp);
+    }
+
+    public class CompOptions {
+
+        private final CField<?, ?> comp;
+
+        private final Location location;
+
+        public CompOptions(CField<?, ?> comp, Location location) {
+            this.comp = comp;
+            this.location = location;
+        }
+
+        public FieldDecoratorOptions decorate() {
+            Widget handlerPanel = comp.asWidget().getParent();
+            handlerPanel.setStyleName(TwoColumnFormPanelTheme.StyleName.FormPanelCell.name());
+            switch (location) {
+            case Left:
+                handlerPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.left.name());
+                break;
+            case Right:
+                handlerPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.right.name());
+                break;
+            case Dual:
+                handlerPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.dual.name());
+                break;
+            }
+            final FieldDecoratorOptions options = new FieldDecoratorOptions(location == Location.Dual);
+            // Untill init() called, FieldDecoratorOptions can be updated.
+            comp.setDecorator(new FieldDecorator(options) {
+                @Override
+                protected void updateViewable() {
+                    if (getLabelPosition() != LabelPosition.top) {
+                        if (getComponent().isViewable()) {
+                            options.labelAlignment(Alignment.left);
+                            options.useLabelSemicolon(false);
+                        } else {
+                            options.labelAlignment(Alignment.right);
+                            options.useLabelSemicolon(true);
+                        }
+                    }
+                    updateCaption();
+                    updateLabelAlignment();
+                    super.updateViewable();
+                }
+            });
+            return options;
+        }
+    }
+
+    public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
+
+        public static final int LABEL_WIDTH = 170;
+
+        public static final int COMPONENT_WIDTH = 250;
+
+        public FieldDecoratorOptions(boolean dual) {
+            super();
+            labelWidth(LABEL_WIDTH + "px");
+        }
+
+        public FieldDecoratorOptions componentWidth(int componentWidthPx) {
+            return componentWidth(componentWidthPx + "px");
+        }
+
+        public FieldDecoratorOptions labelWidth(int labelWidthPx) {
+            return labelWidth(labelWidthPx + "px");
+        }
+
     }
 }

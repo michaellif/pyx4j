@@ -127,8 +127,6 @@ public class TwoColumnFluidPanel implements IsWidget {
             case Dual:
                 addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.dual.name());
                 break;
-            default:
-                break;
             }
         }
 

@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui.panels;
 
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelActionWidget;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelDualCell;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Image;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Label;
@@ -32,11 +31,8 @@ import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4Label;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelHR;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelLeftCell;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelRightCell;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -47,10 +43,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName;
 
@@ -78,14 +70,12 @@ public class TwoColumnFormPanel implements IsWidget {
     public Widget hr() {
         HTML space = new HTML("&nbsp;");
         space.setStyleName(FormPanelHR.name());
-        space.addStyleName(FormPanelDualCell.name());
         fluidPanel.append(Location.Dual, space);
         return space;
     }
 
     public Widget br() {
         HTML space = new HTML("&nbsp;");
-        space.addStyleName(FormPanelDualCell.name());
         fluidPanel.append(Location.Dual, space);
         return space;
     }
@@ -162,83 +152,15 @@ public class TwoColumnFormPanel implements IsWidget {
         }
 
         fluidPanel.append(Location.Dual, header);
-        header.addStyleName(FormPanelDualCell.name());
         return header;
     }
 
     public void append(Location location, IsWidget widget) {
-        fluidPanel.append(location, widget);
-        switch (location) {
-        case Left:
-            widget.asWidget().addStyleName(FormPanelLeftCell.name());
-            break;
-        case Right:
-            widget.asWidget().addStyleName(FormPanelRightCell.name());
-            break;
-        case Dual:
-            widget.asWidget().addStyleName(FormPanelDualCell.name());
-            break;
-        }
+        fluidPanel.append(location, new SimplePanel(widget.asWidget()));
     }
 
     public void setVisible(boolean visible) {
         fluidPanel.setVisible(visible);
-    }
-
-    public class CompOptions {
-
-        private final CField<?, ?> comp;
-
-        private final boolean dual;
-
-        public CompOptions(CField<?, ?> comp, boolean dual) {
-            this.comp = comp;
-            this.dual = dual;
-        }
-
-        public FieldDecoratorOptions decorate() {
-            final FieldDecoratorOptions options = new FieldDecoratorOptions(dual);
-            // Untill init() called, FieldDecoratorOptions can be updated.
-            comp.setDecorator(new FieldDecorator(options) {
-                @Override
-                protected void updateViewable() {
-                    if (getLabelPosition() != LabelPosition.top) {
-                        if (getComponent().isViewable()) {
-                            options.labelAlignment(Alignment.left);
-                            options.useLabelSemicolon(false);
-                        } else {
-                            options.labelAlignment(Alignment.right);
-                            options.useLabelSemicolon(true);
-                        }
-                    }
-                    updateCaption();
-                    updateLabelAlignment();
-                    super.updateViewable();
-                }
-            });
-            return options;
-        }
-    }
-
-    public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
-
-        public static final int LABEL_WIDTH = 220;
-
-        public static final int COMPONENT_WIDTH = 250;
-
-        public FieldDecoratorOptions(boolean dual) {
-            super();
-            labelWidth(LABEL_WIDTH + "px");
-        }
-
-        public FieldDecoratorOptions componentWidth(int componentWidthPx) {
-            return componentWidth(componentWidthPx + "px");
-        }
-
-        public FieldDecoratorOptions labelWidth(int labelWidthPx) {
-            return labelWidth(labelWidthPx + "px");
-        }
-
     }
 
 }

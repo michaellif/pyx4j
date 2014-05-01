@@ -84,7 +84,6 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         NComboBox<E> nativeComboBox = new NComboBox<E>(this);
         nativeComboBox.refreshOptions();
         setNativeComponent(nativeComboBox);
-        asWidget().setWidth("100%");
     }
 
     @Override

@@ -80,7 +80,6 @@ public class CComponentTheme extends Theme {
     protected void initTriggerButtonStyle() {
 
         Style style = new Style(".", StyleName.FieldPanel);
-        style.addProperty("display", "inline-block");
         style.addProperty("text-align", "left");
         addStyle(style);
 

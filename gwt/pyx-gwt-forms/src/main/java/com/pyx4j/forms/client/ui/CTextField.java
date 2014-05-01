@@ -39,7 +39,6 @@ public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
         setFormatter(new StringFormat());
         setParser(new StringParser());
         setNativeComponent(new NTextBox<String>(this));
-        asWidget().setWidth("100%");
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

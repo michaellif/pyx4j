@@ -83,6 +83,7 @@ public abstract class DefaultFolderTheme extends Theme {
         style = new Style(".", StyleName.CFolderTableDecorator);
         style.addProperty("margin-top", "2px");
         style.addProperty("width", "100%");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderContent);
