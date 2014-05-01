@@ -15,6 +15,7 @@ package com.propertyvista.portal.prospect.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -36,6 +37,8 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
 
     private ApplicationWizard applicationWizard;
 
+    private HandlerRegistration handlerRegistration;
+
     public MenuActivity(Place place) {
         this.view = ProspectPortalSite.getViewFactory().getView(MenuView.class);
         view.setPresenter(this);
@@ -46,7 +49,7 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
 
-        eventBus.addHandler(ApplicationWizardStateChangeEvent.getType(), new ApplicationWizardStateChangeHandler() {
+        handlerRegistration = eventBus.addHandler(ApplicationWizardStateChangeEvent.getType(), new ApplicationWizardStateChangeHandler() {
             @Override
             public void onStateChange(ApplicationWizardStateChangeEvent event) {
                 if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.init
@@ -63,4 +66,19 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
+    protected void onDiscard() {
+        handlerRegistration.removeHandler();
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+        super.onCancel();
+    }
+
+    @Override
+    public void onStop() {
+        onDiscard();
+        super.onStop();
+    }
 }
