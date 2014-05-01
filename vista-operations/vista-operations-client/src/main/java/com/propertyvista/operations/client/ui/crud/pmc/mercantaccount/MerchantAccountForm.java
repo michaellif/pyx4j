@@ -110,6 +110,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee(), new FieldDecoratorBuilder().build()));
 
         content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedInterac(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedCreditCardVisaDebit(), new FieldDecoratorBuilder().build()));
 
         content.setH2(++row, 0, 2, i18n.tr("Assigned Buildings"));
         content.setWidget(++row, 0, 2, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));

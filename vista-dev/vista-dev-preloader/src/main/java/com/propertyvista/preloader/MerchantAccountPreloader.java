@@ -97,6 +97,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                             merchantAccount.setup().acceptedDirectBanking().setValue(true);
                             merchantAccount.setup().acceptedCreditCard().setValue(true);
                             merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                            merchantAccount.setup().acceptedCreditCardVisaDebit().setValue(true);
                             merchantAccount.setup().acceptedInterac().setValue(true);
 
                             ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
@@ -116,6 +117,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         merchantAccount.setup().acceptedDirectBanking().setValue(true);
                         merchantAccount.setup().acceptedCreditCard().setValue(true);
                         merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                        merchantAccount.setup().acceptedCreditCardVisaDebit().setValue(true);
                         merchantAccount.setup().acceptedInterac().setValue(true);
 
                         // Make one ElectronicPaymentsAllowed FALSE
@@ -146,6 +148,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         merchantAccount.setup().acceptedDirectBanking().setValue(true);
                         merchantAccount.setup().acceptedCreditCard().setValue(true);
                         merchantAccount.setup().acceptedCreditCardConvenienceFee().setValue(true);
+                        merchantAccount.setup().acceptedCreditCardVisaDebit().setValue(true);
                         merchantAccount.setup().acceptedInterac().setValue(true);
 
                         // Make one ElectronicPaymentsAllowed FALSE

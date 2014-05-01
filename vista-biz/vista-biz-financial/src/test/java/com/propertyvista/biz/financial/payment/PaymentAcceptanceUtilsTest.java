@@ -15,9 +15,9 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.Collection;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -209,6 +209,7 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
         ElectronicPaymentSetup setup = EntityFactory.create(ElectronicPaymentSetup.class);
         setup.acceptedCreditCard().setValue(true);
         setup.acceptedCreditCardConvenienceFee().setValue(true);
+        setup.acceptedCreditCardVisaDebit().setValue(true);
 
         // Nothing accepted, fee applied on all but On CashEquivalent
         {

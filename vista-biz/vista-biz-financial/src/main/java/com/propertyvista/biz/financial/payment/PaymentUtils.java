@@ -92,6 +92,7 @@ class PaymentUtils {
             if (systemState.enableCreditCardMaintenance().getValue(false)) {
                 paymentsSetup.acceptedCreditCard().setValue(false);
                 paymentsSetup.acceptedCreditCardConvenienceFee().setValue(false);
+                paymentsSetup.acceptedCreditCardVisaDebit().setValue(false);
             } else if (systemState.enableCreditCardConvenienceFeeMaintenance().getValue(false)) {
                 paymentsSetup.acceptedCreditCardConvenienceFee().setValue(false);
             }

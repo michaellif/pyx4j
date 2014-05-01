@@ -40,8 +40,9 @@ public class MerchantAccountLister extends AbstractLister<PmcMerchantAccountDTO>
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedEcheck()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedDirectBanking()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCard()).searchable(false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).searchable(false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedInterac()).searchable(false).sortable(false).build()
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).visible(false).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardVisaDebit()).visible(false).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedInterac()).visible(false).searchable(false).sortable(false).build()
             );//@formatter:on
     }
 }

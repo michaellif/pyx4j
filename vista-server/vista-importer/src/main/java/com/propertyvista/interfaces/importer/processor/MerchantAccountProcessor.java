@@ -256,6 +256,7 @@ public class MerchantAccountProcessor {
             account.setup().acceptedDirectBanking().setValue(true);
             account.setup().acceptedCreditCard().setValue(true);
             account.setup().acceptedCreditCardConvenienceFee().setValue(!account.merchantTerminalIdConvenienceFee().isNull());
+            account.setup().acceptedCreditCardVisaDebit().setValue(true);
             account.setup().acceptedInterac().setValue(true);
 
             ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);

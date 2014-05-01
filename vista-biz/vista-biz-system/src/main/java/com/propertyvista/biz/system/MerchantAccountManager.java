@@ -40,6 +40,7 @@ public class MerchantAccountManager {
         EntityGraph.setDefault(merchantAccount.setup().acceptedInterac(), true);
         EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCard(), true);
         EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCardConvenienceFee(), true);
+        EntityGraph.setDefault(merchantAccount.setup().acceptedCreditCardVisaDebit(), true);
 
         final MerchantAccount orig = EntityFactory.create(MerchantAccount.class);
         if (merchantAccount.getPrimaryKey() != null) {

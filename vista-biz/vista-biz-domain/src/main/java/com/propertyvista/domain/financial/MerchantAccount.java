@@ -56,6 +56,8 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
 
         IPrimitive<Boolean> acceptedCreditCardConvenienceFee();
 
+        IPrimitive<Boolean> acceptedCreditCardVisaDebit();
+
         IPrimitive<Boolean> acceptedInterac();
     }
 
