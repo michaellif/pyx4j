@@ -72,6 +72,7 @@ public class ChargesSummaryGadget extends FlowPanel {
 
     private void updateMonthly(OnlineApplicationDTO onlineApplication) {
         StringBuilder contentBuilder = new StringBuilder();
+
         if (onlineApplication != null && !onlineApplication.selectedService().isNull()) {
             contentBuilder.append(formatCharge(onlineApplication.selectedService().agreedPrice().getValue(), onlineApplication.selectedService().item().name()
                     .getValue()));
@@ -85,16 +86,20 @@ public class ChargesSummaryGadget extends FlowPanel {
                         .getCaption()));
             }
         }
+
         monthlySection.setContentHTML(contentBuilder.length() > 0 ? contentBuilder.toString() : "&nbsp;");
+        monthlySection.setVisible(contentBuilder.length() > 0);
     }
 
     private void updateDeposits(OnlineApplicationDTO onlineApplication) {
         StringBuilder contentBuilder = new StringBuilder();
+
         if (onlineApplication != null && !onlineApplication.payment().isNull()) {
             for (Deposit d : onlineApplication.payment().deposits()) {
                 contentBuilder.append(formatCharge(d.amount().getValue(), d.description().getValue()));
             }
         }
+
         depositSection.setContentHTML(contentBuilder.toString());
         depositSection.setVisible(contentBuilder.length() > 0);
     }

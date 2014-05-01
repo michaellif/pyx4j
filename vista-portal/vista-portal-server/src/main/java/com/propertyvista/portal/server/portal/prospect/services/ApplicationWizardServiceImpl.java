@@ -968,7 +968,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             @Override
             protected void bind() {
                 bind(toProto.id(), boProto.id());
+
                 bind(toProto.info().number(), boProto.info().number());
+                bind(toProto.info().legalAddress(), boProto.info().legalAddress());
 
                 bind(toProto.building().id(), boProto.building().id());
                 bind(toProto.building().info().address(), boProto.building().info().address());
