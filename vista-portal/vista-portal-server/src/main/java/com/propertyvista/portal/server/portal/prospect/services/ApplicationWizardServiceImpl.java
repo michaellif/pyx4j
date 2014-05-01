@@ -256,7 +256,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
-        
+
         to.leaseChargesData().set(createLeaseChargesData(term));
 
         fillTenants(bo, to);
@@ -1310,33 +1310,38 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                     switch (feature.code().type().getValue()) {
                     case AddOn:
                     case Utility:
-                        options.availableUtilities().add(item);
                         if (fillMandatory && feature.version().mandatory().getValue(false)) {
                             options.selectedUtilities().add(createBillableItem(item));
+                        } else {
+                            options.availableUtilities().add(item);
                         }
                         break;
                     case Pet:
-                        options.availablePets().add(item);
                         if (fillMandatory && feature.version().mandatory().getValue(false)) {
                             options.selectedPets().add(createBillableItem(item));
+                        } else {
+                            options.availablePets().add(item);
                         }
                         break;
                     case Parking:
-                        options.availableParking().add(item);
                         if (fillMandatory && feature.version().mandatory().getValue(false)) {
                             options.selectedParking().add(createBillableItem(item));
+                        } else {
+                            options.availableParking().add(item);
                         }
                         break;
                     case Locker:
-                        options.availableStorage().add(item);
                         if (fillMandatory && feature.version().mandatory().getValue(false)) {
                             options.selectedStorage().add(createBillableItem(item));
+                        } else {
+                            options.availableStorage().add(item);
                         }
                         break;
                     default:
-                        options.availableOther().add(item);
                         if (fillMandatory && feature.version().mandatory().getValue(false)) {
                             options.selectedOther().add(createBillableItem(item));
+                        } else {
+                            options.availableOther().add(item);
                         }
                     }
                 }
