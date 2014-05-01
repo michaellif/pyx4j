@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
 
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -62,7 +62,7 @@ public class SignatureDecorator extends FlowPanel implements IFieldDecorator {
     @Override
     public void init(CField<?, ?> component) {
         this.component = (CSignature) component;
-        component.asWidget().addStyleName(WidgetDecoratorComponent.name());
+        component.asWidget().addStyleName(WidgetDecoratorContent.name());
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

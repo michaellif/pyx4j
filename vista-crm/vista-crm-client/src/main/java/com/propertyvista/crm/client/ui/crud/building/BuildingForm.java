@@ -333,11 +333,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.h1(i18n.tr("Marketing Summary"));
-        formPanel.append(Location.Dual, inject(proto().marketing(), new MarketingEditor(this)));
+        formPanel.append(Location.Dual, proto().marketing(), new MarketingEditor(this));
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
             formPanel.h1(proto().ilsSummary().getMeta().getCaption());
-            formPanel.append(Location.Dual, inject(proto().ilsSummary(), new ILSSummaryFolder()));
+            formPanel.append(Location.Dual, proto().ilsSummary(), new ILSSummaryFolder());
         }
 
         formPanel.h1(i18n.tr("Images"));

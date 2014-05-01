@@ -84,7 +84,7 @@ public class PortalBillingTheme extends BillingTheme {
         style.addProperty("color", "#666");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent);
+        style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent);
         style.addProperty("color", "#666");
         style.addProperty("border-top", "2px solid #bbb");
         style.addProperty("padding-top", "4px");

@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
@@ -71,8 +71,8 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
 
         // marketing address
         formPanel.h1(proto().marketingAddress().getMeta().getCaption());
-        formPanel.append(Location.Dual, injectAndDecorate(proto().useCustomAddress(), true));
-        formPanel.append(Location.Dual, inject(proto().marketingAddress(), addressEditor));
+        formPanel.append(Location.Left, proto().useCustomAddress()).decorate();
+        formPanel.append(Location.Dual, proto().marketingAddress(), addressEditor);
         get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

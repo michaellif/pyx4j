@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -60,7 +60,7 @@ public class CheckBoxDecorator extends FlowPanel implements IDecorator<CField<?,
     @Override
     public void init(CField<?, ?> component) {
         this.component = (CCheckBox) component;
-        component.asWidget().addStyleName(WidgetDecoratorComponent.name());
+        component.asWidget().addStyleName(WidgetDecoratorContent.name());
         label.setText(component.getTitle());
         label.addClickHandler(new ClickHandler() {
             @Override
