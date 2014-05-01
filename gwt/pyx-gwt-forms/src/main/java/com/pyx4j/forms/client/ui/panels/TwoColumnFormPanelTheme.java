@@ -57,10 +57,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FluidPanel, " td");
-        style.addProperty("padding", "0");
+        style.addProperty("min-width", "940px");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanelBlock);
