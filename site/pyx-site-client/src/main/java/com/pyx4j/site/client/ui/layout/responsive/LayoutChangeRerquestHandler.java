@@ -24,6 +24,6 @@ import com.google.gwt.event.shared.EventHandler;
 
 public interface LayoutChangeRerquestHandler extends EventHandler {
 
-    public void onLayoutChangeRerquest(LayoutChangeRequestEvent event);
+    public void onLayoutChangeRequest(LayoutChangeRequestEvent event);
 
 }

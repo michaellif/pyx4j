@@ -52,7 +52,7 @@ public class LayoutChangeRequestEvent extends GwtEvent<LayoutChangeRerquestHandl
 
     @Override
     protected void dispatch(LayoutChangeRerquestHandler handler) {
-        handler.onLayoutChangeRerquest(this);
+        handler.onLayoutChangeRequest(this);
     }
 
     public ChangeType getChangeType() {

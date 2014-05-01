@@ -430,7 +430,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     @Override
-    public void onLayoutChangeRerquest(LayoutChangeRequestEvent event) {
+    public void onLayoutChangeRequest(LayoutChangeRequestEvent event) {
         switch (event.getChangeType()) {
         case toggleSideMenu:
             if (isSideMenuEnabled()) {
