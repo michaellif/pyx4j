@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -27,7 +25,6 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
@@ -40,8 +37,6 @@ public interface OnlineApplicationDTO extends IEntity {
 
     AptUnit unit();
 
-    Building policyNode();
-
     @Editor(type = EditorType.label)
     @Caption(name = "Included Utilities")
     IPrimitive<String> utilities();
@@ -52,14 +47,9 @@ public interface OnlineApplicationDTO extends IEntity {
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> leaseTo();
 
-    BillableItem selectedService();
-
-    IList<BillableItem> selectedFeatures();
-
-    @Editor(type = EditorType.moneylabel)
-    IPrimitive<BigDecimal> totalMonthlyCharge();
-
     IList<TenantDTO> tenants();
+
+    Building policyNode();
 
     /** Sets the age of majority for validation, null if no validation is required */
     IPrimitive<Integer> ageOfMajority();
@@ -70,6 +60,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     //--------------------------------------------
     // read and update data:
+
+    LeaseChargesDataDTO leaseChargesData();
 
     UnitSelectionDTO unitSelection();
 

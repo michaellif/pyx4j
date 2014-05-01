@@ -58,6 +58,9 @@ public abstract class ApplicationWizardStep extends WizardStep {
     public void onValueSet(boolean populate) {
     }
 
+    public void onStepLeaving() {
+    }
+
     // helpers:
 
     public ApplicationWizardView getView() {

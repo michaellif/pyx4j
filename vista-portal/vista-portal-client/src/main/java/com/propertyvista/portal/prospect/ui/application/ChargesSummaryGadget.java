@@ -73,17 +73,17 @@ public class ChargesSummaryGadget extends FlowPanel {
     private void updateMonthly(OnlineApplicationDTO onlineApplication) {
         StringBuilder contentBuilder = new StringBuilder();
 
-        if (onlineApplication != null && !onlineApplication.selectedService().isNull()) {
-            contentBuilder.append(formatCharge(onlineApplication.selectedService().agreedPrice().getValue(), onlineApplication.selectedService().item().name()
-                    .getValue()));
+        if (onlineApplication != null && !onlineApplication.leaseChargesData().selectedService().isNull()) {
+            contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().selectedService().agreedPrice().getValue(), onlineApplication
+                    .leaseChargesData().selectedService().item().name().getValue()));
 
-            for (BillableItem billableItem : onlineApplication.selectedFeatures()) {
+            for (BillableItem billableItem : onlineApplication.leaseChargesData().selectedFeatures()) {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getValue()));
             }
 
-            if (!onlineApplication.totalMonthlyCharge().isNull()) {
-                contentBuilder.append(formatCharge(onlineApplication.totalMonthlyCharge().getValue(), onlineApplication.totalMonthlyCharge().getMeta()
-                        .getCaption()));
+            if (!onlineApplication.leaseChargesData().totalMonthlyCharge().isNull()) {
+                contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
+                        .totalMonthlyCharge().getMeta().getCaption()));
             }
         }
 
@@ -115,7 +115,7 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     private String formatCharge(BigDecimal amount, String title) {
-        return title + "&nbsp;" + (amount != null ? amount : BigDecimal.ZERO) + "</br>";
+        return title + "&nbsp;-&nbsp;$" + (amount != null ? amount : BigDecimal.ZERO) + "</br>";
     }
 
     class InfoSection extends FlowPanel {

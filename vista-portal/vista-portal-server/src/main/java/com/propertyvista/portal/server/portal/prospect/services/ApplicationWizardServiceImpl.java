@@ -91,6 +91,7 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.TenantDTO;
@@ -201,6 +202,26 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     @Override
+    public void updateLeaseChargesData(AsyncCallback<LeaseChargesDataDTO> callback, UnitOptionsSelectionDTO unitOptionsSelection) {
+        LeaseChargesDataDTO result = EntityFactory.create(LeaseChargesDataDTO.class);
+
+        result.selectedService().set(unitOptionsSelection.selectedService());
+
+        result.selectedFeatures().addAll(unitOptionsSelection.selectedPets());
+        result.selectedFeatures().addAll(unitOptionsSelection.selectedParking());
+        result.selectedFeatures().addAll(unitOptionsSelection.selectedStorage());
+        result.selectedFeatures().addAll(unitOptionsSelection.selectedUtilities());
+        result.selectedFeatures().addAll(unitOptionsSelection.selectedOther());
+
+        result.totalMonthlyCharge().setValue(result.selectedService().agreedPrice().getValue());
+        for (BillableItem feature : result.selectedFeatures()) {
+            result.totalMonthlyCharge().setValue(result.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
+        }
+
+        callback.onSuccess(result);
+    }
+
+    @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
                 ProspectPortalContext.getLeaseTermTenant(), PaymentMethodUsage.OneTimePayments, VistaApplication.prospect);
@@ -235,16 +256,24 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
-
-        to.selectedService().set(term.version().leaseProducts().serviceItem());
-        to.selectedFeatures().addAll(term.version().leaseProducts().featureItems());
-
-        to.totalMonthlyCharge().setValue(to.selectedService().agreedPrice().getValue());
-        for (BillableItem feature : to.selectedFeatures()) {
-            to.totalMonthlyCharge().setValue(to.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
-        }
+        
+        to.leaseChargesData().set(createLeaseChargesData(term));
 
         fillTenants(bo, to);
+    }
+
+    public LeaseChargesDataDTO createLeaseChargesData(LeaseTerm term) {
+        LeaseChargesDataDTO result = EntityFactory.create(LeaseChargesDataDTO.class);
+
+        result.selectedService().set(term.version().leaseProducts().serviceItem());
+        result.selectedFeatures().addAll(term.version().leaseProducts().featureItems());
+
+        result.totalMonthlyCharge().setValue(result.selectedService().agreedPrice().getValue());
+        for (BillableItem feature : result.selectedFeatures()) {
+            result.totalMonthlyCharge().setValue(result.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
+        }
+
+        return result;
     }
 
     private void fillTenants(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -940,7 +969,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void saveFeaturesExtraData(OnlineApplication bo, OnlineApplicationDTO to) {
         LeaseTerm leaseTerm = bo.masterOnlineApplication().leaseApplication().lease().currentTerm();
 
-        for (BillableItem item : to.selectedFeatures()) {
+        for (BillableItem item : to.leaseChargesData().selectedFeatures()) {
             leaseTerm.version().leaseProducts().featureItems().get(item).extraData().set(item.extraData());
         }
     }

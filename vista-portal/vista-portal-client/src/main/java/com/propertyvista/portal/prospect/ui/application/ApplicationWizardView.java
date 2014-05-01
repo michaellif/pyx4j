@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -34,12 +35,13 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
 
         void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit);
 
+        void updateLeaseChargesData(AsyncCallback<LeaseChargesDataDTO> callback, UnitOptionsSelectionDTO unitOptionsSelection);
+
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
         void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData);
 
         void downloadLeaseAgreementDraft();
-
     }
 
     @Override

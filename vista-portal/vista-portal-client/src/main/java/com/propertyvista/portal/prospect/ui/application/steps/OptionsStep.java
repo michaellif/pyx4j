@@ -24,8 +24,8 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -33,6 +33,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -78,6 +79,20 @@ public class OptionsStep extends ApplicationWizardStep {
 
     public UnitOptionsSelectionDTO getStepValue() {
         return getWizard().getValue().unitOptionsSelection();
+    }
+
+    @Override
+    public void onStepLeaving() {
+        super.onStepLeaving();
+
+        getWizard().getPresenter().updateLeaseChargesData(new DefaultAsyncCallback<LeaseChargesDataDTO>() {
+            @Override
+            public void onSuccess(LeaseChargesDataDTO result) {
+                // update summary gadgets:
+                getValue().leaseChargesData().set(result);
+                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
+            }
+        }, getValue().unitOptionsSelection().<UnitOptionsSelectionDTO> duplicate());
     }
 
     private class StepDataForm extends CForm<UnitOptionsSelectionDTO> {
@@ -157,22 +172,17 @@ public class OptionsStep extends ApplicationWizardStep {
                                 newItem.item().set(item);
                                 newItem.agreedPrice().setValue(item.price().getValue());
                                 addItem(newItem);
-                                ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(),
-                                        ApplicationWizardStateChangeEvent.ChangeType.termChange));
                             }
                         }
                         return true;
                     }
                 }.show();
-            } else {
-                MessageDialog.warn(i18n.tr("Sorry"), i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
             }
         }
 
         @Override
         protected void removeItem(CFolderItem<BillableItem> item) {
             super.removeItem(item);
-            ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(), ApplicationWizardStateChangeEvent.ChangeType.termChange));
         }
     }
 

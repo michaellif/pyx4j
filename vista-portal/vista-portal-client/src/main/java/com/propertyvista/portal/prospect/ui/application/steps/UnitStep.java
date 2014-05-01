@@ -209,7 +209,8 @@ public class UnitStep extends ApplicationWizardStep {
 
                     // update summary gadgets:
                     getValue().unit().set(result.unit());
-                    getValue().selectedService().set(result.selectedService());
+                    getValue().leaseChargesData().selectedService().set(result.selectedService());
+                    getValue().payment().deposits().clear();
                     ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(getWizard(),
                             ApplicationWizardStateChangeEvent.ChangeType.termChange));
                 }

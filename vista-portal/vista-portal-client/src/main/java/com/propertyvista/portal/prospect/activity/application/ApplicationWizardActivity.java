@@ -49,6 +49,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO;
@@ -159,6 +160,11 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
     @Override
     public void getAvailableUnitOptions(AsyncCallback<UnitOptionsSelectionDTO> callback, UnitTO unit) {
         service.getAvailableUnitOptions(callback, unit/* .<AptUnit> createIdentityStub() */);
+    }
+
+    @Override
+    public void updateLeaseChargesData(AsyncCallback<LeaseChargesDataDTO> callback, UnitOptionsSelectionDTO unitOptionsSelection) {
+        service.updateLeaseChargesData(callback, unitOptionsSelection);
     }
 
     @Override

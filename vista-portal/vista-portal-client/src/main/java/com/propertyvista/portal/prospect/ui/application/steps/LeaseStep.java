@@ -59,13 +59,16 @@ public class LeaseStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, inject(proto().leaseTo(), new CDateLabel(), new FieldDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
-        panel.setWidget(++row, 0,
-                inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Unit Rent")).build()));
-        panel.setWidget(++row, 0, inject(proto().selectedService().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(
+                ++row,
+                0,
+                inject(proto().leaseChargesData().selectedService().agreedPrice(), new CMoneyLabel(),
+                        new FieldDecoratorBuilder().customLabel(i18n.tr("Unit Rent")).build()));
+        panel.setWidget(++row, 0, inject(proto().leaseChargesData().selectedService().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, depositPanel);
         depositPanel.setH4(0, 0, 1, i18n.tr("Unit Deposits"));
-        depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder() {
+        depositPanel.setWidget(1, 0, 1, inject(proto().leaseChargesData().selectedService().deposits(), new DepositFolder() {
             @Override
             public IFolderItemDecorator<Deposit> createItemDecorator() {
                 BoxFolderItemDecorator<Deposit> decor = (BoxFolderItemDecorator<Deposit>) super.createItemDecorator();
@@ -76,8 +79,8 @@ public class LeaseStep extends ApplicationWizardStep {
 
         panel.setWidget(++row, 0, featurePanel);
         featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
-        featurePanel.setWidget(++row, 0, inject(proto().selectedFeatures(), new FeatureFolder()));
-        get(proto().selectedFeatures()).setEditable(false);
+        featurePanel.setWidget(++row, 0, inject(proto().leaseChargesData().selectedFeatures(), new FeatureFolder()));
+        get(proto().leaseChargesData().selectedFeatures()).setEditable(false);
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             panel.setH3(++row, 0, 1, i18n.tr("People"));
@@ -92,10 +95,10 @@ public class LeaseStep extends ApplicationWizardStep {
         // TODO Auto-generated method stub
         super.onValueSet(populate);
 
-        depositPanel.setVisible(!getValue().selectedService().deposits().isEmpty());
-        featurePanel.setVisible(!getValue().selectedFeatures().isEmpty());
+        depositPanel.setVisible(!getValue().leaseChargesData().selectedService().deposits().isEmpty());
+        featurePanel.setVisible(!getValue().leaseChargesData().selectedFeatures().isEmpty());
 
         get(proto().utilities()).setVisible(!getValue().utilities().isNull());
-        get(proto().selectedService().description()).setVisible(!getValue().selectedService().description().isNull());
+        get(proto().leaseChargesData().selectedService().description()).setVisible(!getValue().leaseChargesData().selectedService().description().isNull());
     }
 }

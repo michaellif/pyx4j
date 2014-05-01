@@ -116,8 +116,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     public void addStep(ApplicationWizardStep step) {
         step.init(this);
-        steps.put(step.getClass(), step);
         super.addStep(step);
+        steps.put(step.getClass(), step);
     }
 
     public ApplicationWizardStep getStep(Class<? extends ApplicationWizardStep> stepClass) {
@@ -218,6 +218,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         if (currentStepIndex > -1) {
             currentStep.showErrors(true);
+            ((ApplicationWizardStep) currentStep).onStepLeaving();
         }
 
         return true;
