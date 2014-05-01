@@ -312,17 +312,33 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
             labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+
             containerPanel.getElement().getStyle().setProperty("marginLeft", "-" + builder.labelWidth);
             contentPanel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
+            validationLabel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
+            noteLabel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
+
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
             break;
         case top:
             labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
             containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+
+            containerPanel.getElement().getStyle().setProperty("marginLeft", "0");
+            contentPanel.getElement().getStyle().setProperty("paddingLeft", "0");
+            validationLabel.getElement().getStyle().setProperty("paddingLeft", "0");
+            noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
+
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
             break;
         case hidden:
             labelHolder.getElement().getStyle().setDisplay(Display.NONE);
+
+            containerPanel.getElement().getStyle().setProperty("marginLeft", "0");
+            contentPanel.getElement().getStyle().setProperty("paddingLeft", "0");
+            validationLabel.getElement().getStyle().setProperty("paddingLeft", "0");
+            noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
+
             break;
 
         }
