@@ -24,19 +24,18 @@ public class FieldDecoratorBuilder extends FieldDecorator.Builder {
 
     public static final double CONTENT_WIDTH_DUAL = 65;
 
-    public FieldDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
+    public FieldDecoratorBuilder(String labelWidth, String componentWidth) {
         super();
         labelWidth(labelWidth);
-        contentWidth(contentWidth);
         componentWidth(componentWidth);
     }
 
-    public FieldDecoratorBuilder(double labelWidth, double componentWidth, double contentWidth) {
-        this(labelWidth + "em", componentWidth + "em", contentWidth + "em");
+    public FieldDecoratorBuilder(double labelWidth, double componentWidth) {
+        this(labelWidth + "em", componentWidth + "em");
     }
 
     public FieldDecoratorBuilder(double componentWidth, boolean dual) {
-        this(LABEL_WIDTH, componentWidth, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH));
+        this(LABEL_WIDTH, componentWidth);
     }
 
     public FieldDecoratorBuilder(double componentWidth) {

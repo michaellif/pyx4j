@@ -152,12 +152,10 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         validationLabel = new HTML();
         validationLabel.setVisible(false);
-        validationLabel.setWidth(builder.contentWidth);
         validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
         noteLabel = new Label();
         noteLabel.setVisible(false);
-        noteLabel.setWidth(builder.contentWidth);
         noteLabel.setStyleName(CComponentTheme.StyleName.NoteLabel.name());
 
         assistantWidgetHolder = new SimplePanel();
@@ -169,7 +167,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
-        contentPanel.setWidth(builder.contentWidth);
         contentPanel.add(contentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
@@ -423,8 +420,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         private String componentWidth;
 
-        private String contentWidth;
-
         private String customLabel;
 
         private Widget assistantWidget;
@@ -440,9 +435,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         private LabelPosition labelPosition = LabelPosition.left;
 
         public Builder() {
-            labelWidth = "15em";
-            componentWidth = "25em";
-            contentWidth = "auto";
+            labelWidth = "170px";
+            componentWidth = "auto";
         }
 
         public FieldDecorator build() {
@@ -478,11 +472,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         public E customLabel(String customLabel) {
             this.customLabel = customLabel;
-            return (E) this;
-        }
-
-        public E contentWidth(String contentWidth) {
-            this.contentWidth = contentWidth;
             return (E) this;
         }
 

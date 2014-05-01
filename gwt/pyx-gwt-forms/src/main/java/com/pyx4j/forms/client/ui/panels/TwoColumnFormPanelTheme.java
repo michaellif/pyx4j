@@ -31,13 +31,15 @@ import com.pyx4j.commons.css.ThemeId;
 public abstract class TwoColumnFormPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FormPanel, FormPanelLeftCell, FormPanelRightCell, FormPanelDualCell,
+        FluidPanel,
 
-        FormPanelTwoRows, FormPanelCaptionLabel, FormPanelHR, FormPanelH1, FormPanelH1Image, FormPanelH1Label, FormPanelH2, FormPanelH2Label, FormPanelH3, FormPanelH3Label, FormPanelH4, FormPanelH4Label, FormPanelActionWidget
+        FormPanelLeftCell, FormPanelRightCell, FormPanelDualCell,
+
+        FormPanelCaptionLabel, FormPanelHR, FormPanelH1, FormPanelH1Image, FormPanelH1Label, FormPanelH2, FormPanelH2Label, FormPanelH3, FormPanelH3Label, FormPanelH4, FormPanelH4Label, FormPanelActionWidget
     }
 
     public static enum StyleDependent implements IStyleDependent {
-
+        collapsed;
     }
 
     public TwoColumnFormPanelTheme() {
@@ -51,33 +53,43 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
 
     protected void initStyles() {
 
-        Style style = new Style(".", StyleName.FormPanel);
+        Style style = new Style(".", StyleName.FluidPanel);
         style.addProperty("border-spacing", "0");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
-        style.addProperty("padding", "6px");
         style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, " td");
+        style.addProperty("padding", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelLeftCell);
         style.addProperty("text-align", "right");
+        style.addProperty("width", "500px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelRightCell);
         style.addProperty("text-align", "left");
+        style.addProperty("width", "500px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanelTwoRows);
+        style = new Style(".", StyleName.FormPanelDualCell);
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "1000px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelLeftCell);
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanel);
-        style.addProperty("padding", "0px");
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelRightCell);
+        style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormPanel, " td");
-        style.addProperty("padding", "0");
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelDualCell);
+        style.addProperty("width", "500px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCaptionLabel);

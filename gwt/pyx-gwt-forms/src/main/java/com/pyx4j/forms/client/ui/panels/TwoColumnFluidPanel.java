@@ -38,6 +38,7 @@ public class TwoColumnFluidPanel implements IsWidget {
 
     public TwoColumnFluidPanel() {
         contentPanel = new FlowPanel();
+        contentPanel.setStyleName(TwoColumnFormPanelTheme.StyleName.FluidPanel.name());
     }
 
     private CellPanel ensureCellPanel(Location location) {
@@ -112,6 +113,11 @@ public class TwoColumnFluidPanel implements IsWidget {
             if (widget instanceof CellPanel) {
                 ((CellPanel) widget).adjustWidth(collapsed);
             }
+        }
+        if (collapsed) {
+            contentPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.collapsed.name());
+        } else {
+            contentPanel.removeStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.collapsed.name());
         }
     }
 

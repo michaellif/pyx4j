@@ -56,9 +56,9 @@ public abstract class PrimeEntityForm<E extends IEntity> extends CTabbedEntityFo
         return comp;
     }
 
-    public final CField<?, ?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth, double contentWidth) {
+    public final CField<?, ?> injectAndDecorate(IObject<?> member, double labelWidth, double componentWidth) {
         CField<?, ?> comp = inject(member);
-        comp.setDecorator(new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
+        comp.setDecorator(new FieldDecoratorBuilder(labelWidth, componentWidth).build());
         return comp;
     }
 
@@ -86,9 +86,9 @@ public abstract class PrimeEntityForm<E extends IEntity> extends CTabbedEntityFo
         return comp;
     }
 
-    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double labelWidth, double componentWidth, double contentWidth) {
+    public final <T extends CField<?, ?>> T injectAndDecorate(IObject<?> member, T comp, double labelWidth, double componentWidth) {
         inject(member, comp);
-        comp.setDecorator(new FieldDecoratorBuilder(labelWidth, componentWidth, contentWidth).build());
+        comp.setDecorator(new FieldDecoratorBuilder(labelWidth, componentWidth).build());
         return comp;
     }
 

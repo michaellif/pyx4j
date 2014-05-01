@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.panels;
 
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelActionWidget;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelDualCell;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Image;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Label;
@@ -31,6 +32,8 @@ import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4Label;
 import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelHR;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelLeftCell;
+import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelRightCell;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -48,8 +51,8 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName;
 
 public class TwoColumnFormPanel implements IsWidget {
 
@@ -75,12 +78,14 @@ public class TwoColumnFormPanel implements IsWidget {
     public Widget hr() {
         HTML space = new HTML("&nbsp;");
         space.setStyleName(FormPanelHR.name());
+        space.addStyleName(FormPanelDualCell.name());
         fluidPanel.append(Location.Dual, space);
         return space;
     }
 
     public Widget br() {
         HTML space = new HTML("&nbsp;");
+        space.addStyleName(FormPanelDualCell.name());
         fluidPanel.append(Location.Dual, space);
         return space;
     }
@@ -158,12 +163,23 @@ public class TwoColumnFormPanel implements IsWidget {
         }
 
         fluidPanel.append(Location.Dual, header);
+        header.addStyleName(FormPanelDualCell.name());
         return header;
     }
 
     public void append(Location location, IsWidget widget) {
         fluidPanel.append(location, widget);
-        widget.asWidget().addStyleName(FormPanelActionWidget.name());
+        switch (location) {
+        case Left:
+            widget.asWidget().addStyleName(FormPanelLeftCell.name());
+            break;
+        case Right:
+            widget.asWidget().addStyleName(FormPanelRightCell.name());
+            break;
+        case Dual:
+            widget.asWidget().addStyleName(FormPanelDualCell.name());
+            break;
+        }
     }
 
     public void setVisible(boolean visible) {
@@ -209,15 +225,11 @@ public class TwoColumnFormPanel implements IsWidget {
 
         public static final int LABEL_WIDTH = 220;
 
-        public static final int CONTENT_WIDTH = 250;
-
-        public static final int CONTENT_WIDTH_DUAL = 2 * CONTENT_WIDTH + LABEL_WIDTH;
+        public static final int COMPONENT_WIDTH = 250;
 
         public FieldDecoratorOptions(boolean dual) {
             super();
             labelWidth(LABEL_WIDTH + "px");
-            contentWidth(dual ? CONTENT_WIDTH_DUAL + "px" : CONTENT_WIDTH + "px");
-            componentWidth(dual ? CONTENT_WIDTH_DUAL + "px" : CONTENT_WIDTH + "px");
         }
 
         public FieldDecoratorOptions componentWidth(int componentWidthPx) {
@@ -226,10 +238,6 @@ public class TwoColumnFormPanel implements IsWidget {
 
         public FieldDecoratorOptions labelWidth(int labelWidthPx) {
             return labelWidth(labelWidthPx + "px");
-        }
-
-        public FieldDecoratorOptions contentWidth(int contentWidthPx) {
-            return contentWidth(contentWidthPx + "px");
         }
 
     }

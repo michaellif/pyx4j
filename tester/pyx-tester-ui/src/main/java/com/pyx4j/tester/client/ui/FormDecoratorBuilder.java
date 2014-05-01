@@ -23,10 +23,9 @@ import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
 public class FormDecoratorBuilder extends FieldDecorator.Builder {
 
-    public FormDecoratorBuilder(String labelWidth, String componentWidth, String contentWidth) {
+    public FormDecoratorBuilder(String labelWidth, String componentWidth) {
         super();
         labelWidth(labelWidth);
-        contentWidth(contentWidth);
         componentWidth(componentWidth);
         labelAlignment(Alignment.left);
         useLabelSemicolon(false);
@@ -34,7 +33,7 @@ public class FormDecoratorBuilder extends FieldDecorator.Builder {
     }
 
     public FormDecoratorBuilder(String componentWidth) {
-        this("150px", componentWidth, "220px");
+        this("150px", componentWidth);
     }
 
     public FormDecoratorBuilder() {
