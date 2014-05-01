@@ -113,7 +113,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private IsWidget createGeneralTab() {
-
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel
