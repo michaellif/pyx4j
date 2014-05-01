@@ -172,6 +172,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         contentPanel.add(infoImageHolder);
 
         containerPanel = new FlowPanel();
+        containerPanel.setWidth("100%");
         containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
@@ -311,6 +312,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
             labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            containerPanel.getElement().getStyle().setProperty("marginLeft", "-" + builder.labelWidth);
+            contentPanel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
             break;
         case top:
@@ -436,7 +439,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         public Builder() {
             labelWidth = "170px";
-            componentWidth = "auto";
+            componentWidth = "100%";
         }
 
         public FieldDecorator build() {

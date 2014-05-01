@@ -93,17 +93,17 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
-        style.addProperty("width", "400px");
+        style.addProperty("width", "450px");
         style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right);
-        style.addProperty("width", "400px");
+        style.addProperty("width", "450px");
         style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual);
-        style.addProperty("width", "800px");
+        style.addProperty("width", "900px");
         style.addProperty("display", "inline-block");
         addStyle(style);
 

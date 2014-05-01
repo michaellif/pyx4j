@@ -46,19 +46,24 @@ public class BasicCFormPanel extends TwoColumnFormPanel {
 
     public CompOptions append(Location location, IObject<?> member) {
         CField<?, ?> comp = parent.inject(member);
-        append(location, comp);
+        super.append(location, comp);
         return new CompOptions(comp, location);
     }
 
     public CompOptions append(Location location, IObject<?> member, CField<?, ?> comp) {
         comp = parent.inject(member, comp);
-        append(location, comp);
+        super.append(location, comp);
         return new CompOptions(comp, location);
     }
 
     public void append(Location location, IObject<?> member, CComponent<?, ?, ?> comp) {
         comp = parent.inject(member, comp);
-        append(location, comp);
+        super.append(location, comp);
+    }
+
+    public CompOptions append(Location location, CField<?, ?> comp) {
+        super.append(location, comp);
+        return new CompOptions(comp, location);
     }
 
     public class CompOptions {

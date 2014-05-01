@@ -58,6 +58,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("border-spacing", "0");
         style.addProperty("padding", "5px 0");
         style.addProperty("white-space", "nowrap");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable);
