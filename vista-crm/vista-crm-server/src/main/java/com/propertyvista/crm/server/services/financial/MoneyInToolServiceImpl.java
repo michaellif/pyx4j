@@ -142,15 +142,14 @@ public class MoneyInToolServiceImpl implements MoneyInToolService {
     }
 
     private Collection<? extends MoneyInLeaseParticipantDTO> fetchPayerCandidates(Lease lease) {
-        EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
-        criteria.eq(criteria.proto().leaseParticipant().lease(), lease);
-        criteria.in(criteria.proto().role(), LeaseTermParticipant.Role.Applicant, LeaseTermParticipant.Role.CoApplicant);
-
-        List<LeaseTermParticipant> leaseTermParticipants = Persistence.service().query(criteria);
-
-        List<MoneyInLeaseParticipantDTO> moneyInLeaseParticipants = new ArrayList<MoneyInLeaseParticipantDTO>(leaseTermParticipants.size());
-        for (LeaseTermParticipant leaseTermParticipant : leaseTermParticipants) {
-            moneyInLeaseParticipants.add(toMoneyInLeaseParticipant(leaseTermParticipant));
+        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.IdOnly);
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        List<MoneyInLeaseParticipantDTO> moneyInLeaseParticipants = new ArrayList<MoneyInLeaseParticipantDTO>(lease.currentTerm().version().tenants().size());
+        for (LeaseTermParticipant leaseTermParticipant : lease.currentTerm().version().tenants()) {
+            if (leaseTermParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant
+                    || leaseTermParticipant.role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
+                moneyInLeaseParticipants.add(toMoneyInLeaseParticipant(leaseTermParticipant));
+            }
         }
 
         return moneyInLeaseParticipants;
