@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -34,6 +34,7 @@ import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -142,9 +143,11 @@ public class UnitStep extends ApplicationWizardStep {
 
         availableUnitsHeader.setVisible(editable);
         availableUnitsFolder.setVisible(editable);
+        availableUnitsFolder.setNoDataNotificationWidget(null);
 
         potentialUnitsHeader.setVisible(editable);
         potentialUnitsFolder.setVisible(editable);
+        potentialUnitsFolder.setNoDataNotificationWidget(null);
 
         updateButton.setVisible(!editable);
     }
@@ -215,10 +218,12 @@ public class UnitStep extends ApplicationWizardStep {
         getValue().unitSelection().availableUnits().clear();
         getValue().unitSelection().availableUnits().addAll(result.availableUnits());
         availableUnitsFolder.populate(getValue().unitSelection().availableUnits());
+        availableUnitsFolder.setNoDataNotificationWidget(new Label(i18n.tr("Please refine your search. No matches have been found")));
 
         getValue().unitSelection().potentialUnits().clear();
         getValue().unitSelection().potentialUnits().addAll(result.potentialUnits());
         potentialUnitsFolder.populate(getValue().unitSelection().potentialUnits());
+        potentialUnitsFolder.setNoDataNotificationWidget(new Label(i18n.tr("Please refine your search. No matches have been found")));
     }
 
     private class AvailableUnitsFolder extends PortalBoxFolder<UnitTO> {

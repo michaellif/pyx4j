@@ -78,15 +78,21 @@ public class RentalSummaryGadget extends FlowPanel {
     public void populate(OnlineApplicationDTO onlineApplication) {
         if (onlineApplication != null && !onlineApplication.unit().isNull()) {
             StringBuilder apartmentBuilder = new StringBuilder();
-            apartmentBuilder.append(i18n.tr("Unit")).append(" ").append(onlineApplication.unit().info().number().getStringView()).append("<br/>");
+            if (onlineApplication.unit().isNull()) {
+                apartmentBuilder.append(i18n.tr("No Unit Selected")).append("<br/>");
+            } else {
+                apartmentBuilder.append(i18n.tr("Unit")).append(" ").append(onlineApplication.unit().info().number().getStringView()).append("<br/>");
+            }
             apartmentBuilder.append(" ").append(onlineApplication.unit().floorplan().marketingName().getStringView()).append("<br/>");
             apartmentBuilder.append(onlineApplication.unit().info().legalAddress().getStringView());
             apartmentHTML.setHTML(apartmentBuilder.toString());
+
             if (onlineApplication.leaseFrom().isNull() || onlineApplication.leaseTo().isNull()) {
                 termHTML.setHTML("&nbsp;");
             } else {
                 termHTML.setHTML((onlineApplication.leaseFrom().getStringView()) + " - " + onlineApplication.leaseTo().getStringView());
             }
+
             utilityHTML.setHTML(onlineApplication.utilities().getValue());
             utilityCaption.setVisible(!onlineApplication.utilities().isNull());
         } else {

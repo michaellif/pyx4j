@@ -107,7 +107,7 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     private String formatCharge(BigDecimal amount, String title) {
-        return title + "&nbsp;" + amount + "</br>";
+        return title + "&nbsp;" + (amount != null ? amount : BigDecimal.ZERO) + "</br>";
     }
 
     class InfoSection extends FlowPanel {
