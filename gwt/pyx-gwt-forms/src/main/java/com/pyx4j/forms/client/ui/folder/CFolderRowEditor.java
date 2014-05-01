@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui.folder;
 
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
 
 import java.util.List;
 
@@ -98,7 +98,7 @@ public class CFolderRowEditor<E extends IEntity> extends CForm<E> {
         public void init(final CField<?, ?> component) {
             this.component = component;
             final Widget nativeComponent = component.asWidget();
-            nativeComponent.addStyleName(WidgetDecoratorComponent.name());
+            nativeComponent.addStyleName(WidgetDecoratorContent.name());
 
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
                 @Override

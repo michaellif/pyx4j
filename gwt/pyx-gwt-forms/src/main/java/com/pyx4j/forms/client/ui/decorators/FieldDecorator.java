@@ -21,8 +21,8 @@
 package com.pyx4j.forms.client.ui.decorators;
 
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponentHolder;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentHolder;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorInfoImage;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
@@ -146,7 +146,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         contentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        contentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
+        contentHolder.setStyleName(WidgetDecoratorContentHolder.name());
         contentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         contentHolder.setWidth(builder.componentWidth);
 
@@ -192,7 +192,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
 
         Widget content = nativeComponent.getContent().asWidget();
 
-        content.addStyleName(WidgetDecoratorComponent.name());
+        content.addStyleName(WidgetDecoratorContent.name());
         content.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         content.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 

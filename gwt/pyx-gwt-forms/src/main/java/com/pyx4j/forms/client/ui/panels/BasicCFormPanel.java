@@ -111,13 +111,8 @@ public class BasicCFormPanel extends TwoColumnFormPanel {
 
     public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
 
-        public static final int LABEL_WIDTH = 170;
-
-        public static final int COMPONENT_WIDTH = 250;
-
         public FieldDecoratorOptions(boolean dual) {
             super();
-            labelWidth(LABEL_WIDTH + "px");
         }
 
         public FieldDecoratorOptions componentWidth(int componentWidthPx) {

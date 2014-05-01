@@ -35,7 +35,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
     public static enum StyleName implements IStyleName {
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
-        WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder,
+        WidgetDecoratorContentPanel, WidgetDecoratorContent, WidgetDecoratorContentHolder,
 
         EntityContainerDecorator, EntityContainerDecoratorToolbar, EntityContainerDecoratorCollapsedCaption
     }
@@ -69,7 +69,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponent);
+        style = new Style(".", StyleName.WidgetDecoratorContent);
         style.addProperty("white-space", "normal");
         addStyle(style);
 
@@ -98,7 +98,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("line-height", "2em");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponent, " .", CComponentTheme.StyleName.FieldEditorPanel);
+        style = new Style(".", StyleName.WidgetDecoratorContent, " .", CComponentTheme.StyleName.FieldEditorPanel);
         style.addProperty("line-height", "2em");
         addStyle(style);
 
@@ -108,7 +108,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponent, " .", CComponentTheme.StyleName.FieldViewerPanel);
+        style = new Style(".", StyleName.WidgetDecoratorContent, " .", CComponentTheme.StyleName.FieldViewerPanel);
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 
@@ -131,21 +131,21 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponentHolder);
+        style = new Style(".", StyleName.WidgetDecoratorContentHolder);
         style.addProperty("word-wrap", "break-word");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponent);
+        style = new Style(".", StyleName.WidgetDecoratorContent);
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.TextBox);
+        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.TextBox);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorComponent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.ListBox);
+        style = new Style(".", StyleName.WidgetDecoratorContent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.ListBox);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "#f79494");

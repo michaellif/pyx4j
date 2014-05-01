@@ -50,6 +50,7 @@ public class TwoColumnFluidPanel implements IsWidget {
             case Left:
                 panel = new BlockPanel(Location.Left);
                 contentPanel.add(panel);
+                contentPanel.add(new BlockPanel(Location.Right));
                 break;
             case Right:
                 panel = new BlockPanel(Location.Right);
@@ -71,6 +72,7 @@ public class TwoColumnFluidPanel implements IsWidget {
                     } else if (panel.location == Location.Dual) {
                         panel = new BlockPanel(Location.Left);
                         contentPanel.add(panel);
+                        contentPanel.add(new BlockPanel(Location.Right));
                     }
                     break;
                 case Right:
