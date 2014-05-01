@@ -316,7 +316,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Right, proto().financial().currency().name()).decorate().componentWidth(100).customLabel(i18n.tr("Currency Name"));
 
         formPanel.br();
-        formPanel.append(Location.Left, injectAndDecorate(proto().merchantAccount(), 15));
+        formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(180);
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
