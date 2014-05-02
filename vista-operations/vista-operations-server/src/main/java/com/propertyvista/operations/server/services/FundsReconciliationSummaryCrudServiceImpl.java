@@ -16,9 +16,9 @@ package com.propertyvista.operations.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
@@ -27,7 +27,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSum
 import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudService;
 
-public class FundsReconciliationSummaryCrudServiceImpl extends AbstractListServiceDtoImpl<FundsReconciliationSummary, FundsReconciliationSummaryDTO> implements
+public class FundsReconciliationSummaryCrudServiceImpl extends AbstractCrudServiceDtoImpl<FundsReconciliationSummary, FundsReconciliationSummaryDTO> implements
         FundsReconciliationSummaryCrudService {
 
     public FundsReconciliationSummaryCrudServiceImpl() {
@@ -40,23 +40,24 @@ public class FundsReconciliationSummaryCrudServiceImpl extends AbstractListServi
     }
 
     @Override
-    public void init(AsyncCallback<FundsReconciliationSummaryDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+    protected FundsReconciliationSummaryDTO init(InitializationData initializationData) {
         throw new RuntimeException("Operation not Supported");
     }
 
     @Override
-    public void retrieve(AsyncCallback<FundsReconciliationSummaryDTO> callback, Key entityId,
-            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    protected void retrievedForList(FundsReconciliationSummary bo) {
+        Persistence.ensureRetrieve(bo.merchantAccount().pmc(), AttachLevel.Attached);
+    }
 
-        FundsReconciliationSummary summary = Persistence.secureRetrieve(FundsReconciliationSummary.class, entityId);
-        FundsReconciliationSummaryDTO summaryDto = EntityFactory.create(FundsReconciliationSummaryDTO.class);
-        copyBOtoTO(summary, summaryDto);
+    @Override
+    protected void enhanceRetrieved(FundsReconciliationSummary bo, FundsReconciliationSummaryDTO to, RetrieveTarget retrieveTarget) {
+        Persistence.ensureRetrieve(to.merchantAccount().pmc(), AttachLevel.Attached);
 
-        EntityQueryCriteria<FundsReconciliationRecordRecord> recordsCountCriteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
-        recordsCountCriteria.eq(recordsCountCriteria.proto().reconciliationSummary(), entityId);
-        summaryDto.recordsCount().setValue(Persistence.service().count(recordsCountCriteria));
-
-        callback.onSuccess(summaryDto);
+        {
+            EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
+            criteria.eq(criteria.proto().reconciliationSummary(), bo);
+            to.recordsCount().setValue(Persistence.service().count(criteria));
+        }
     }
 
     @Override

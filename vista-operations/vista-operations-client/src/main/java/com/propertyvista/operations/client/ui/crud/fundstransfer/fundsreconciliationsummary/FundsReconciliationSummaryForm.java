@@ -35,6 +35,11 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
         super(FundsReconciliationSummaryDTO.class, view);
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int i = 0;
+
+        panel.setWidget(++i, 0, 1, inject(proto().merchantAccount().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
+        panel.setWidget(+i, 0, 1, inject(proto().reconciliationFile(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(+i, 0, 1, inject(proto().reconciliationFile().fundsTransferType(), new FieldDecoratorBuilder().build()));
+
         panel.setWidget(++i, 0, 2, inject(proto().paymentDate(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++i, 0, 2, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++i, 0, 2, inject(proto().reconciliationStatus(), new FieldDecoratorBuilder().build()));

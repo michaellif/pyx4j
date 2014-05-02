@@ -30,7 +30,7 @@ public class FundsReconciliationDebitRecordLister extends AbstractLister<FundsRe
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().fileName()).build(),
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().merchantAccount().pmc()).build(),
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().merchantAccount().pmc().namespace()).visible(false).build(),
-         
+                    new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().fundsTransferType()).build(), //
                     new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),   
                     new MemberColumnDescriptor.Builder(proto().paymentDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().clientId()).build(),
