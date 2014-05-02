@@ -15,11 +15,15 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferb
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 
 public class FundsTransferBatchForm extends OperationsEntityForm<FundsTransferBatchDTO> {
 
@@ -35,6 +39,13 @@ public class FundsTransferBatchForm extends OperationsEntityForm<FundsTransferBa
 
         panel.setWidget(++row, 0, 1, inject(proto().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
         panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+
+        panel.setWidget(
+                ++row,
+                0,
+                1,
+                inject(proto().padFile(), new CEntityCrudHyperlink<FundsTransferFile>(AppPlaceEntityMapper.resolvePlace(FundsTransferFileDTO.class)),
+                        new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, 1, inject(proto().bankId(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder().build()));

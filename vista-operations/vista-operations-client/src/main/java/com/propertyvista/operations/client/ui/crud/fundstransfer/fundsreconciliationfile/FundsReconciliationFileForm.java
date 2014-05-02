@@ -20,6 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -56,8 +57,9 @@ public class FundsReconciliationFileForm extends OperationsEntityForm<FundsRecon
                 return place;
             }
         };
-
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecordsCount(), new FieldDecoratorBuilder().build()));
+        CEntityCollectionCrudHyperlink<IList<FundsReconciliationRecordRecord>> link = new CEntityCollectionCrudHyperlink<IList<FundsReconciliationRecordRecord>>(
+                appPlaceBuilder);
+        panel.setWidget(++row, 0, 1, inject(proto().reconciliationRecords(), link, new FieldDecoratorBuilder().build()));
 
         panel.setBR(++row, 0, 1);
 

@@ -15,10 +15,16 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferr
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
+import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
+import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
 
 public class FundsTransferDebitRecordForm extends OperationsEntityForm<FundsTransferRecordDTO> {
@@ -34,9 +40,23 @@ public class FundsTransferDebitRecordForm extends OperationsEntityForm<FundsTran
         panel.setWidget(++row, 0, 1, inject(proto().padBatch().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
         panel.setWidget(++row, 0, 1, inject(proto().padBatch().merchantTerminalId(), new FieldDecoratorBuilder().build()));
 
-        panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(
+                ++row,
+                0,
+                1,
+                inject(proto().padBatch().padFile(),
+                        new CEntityCrudHyperlink<FundsTransferFile>(AppPlaceEntityMapper.resolvePlace(FundsTransferFileDTO.class)),
+                        new FieldDecoratorBuilder().build()));
+
         panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile().fundsTransferType(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().padBatch().padFile().sent(), new FieldDecoratorBuilder().build()));
+
+        panel.setWidget(
+                ++row,
+                0,
+                1,
+                inject(proto().padBatch(), new CEntityCrudHyperlink<FundsTransferBatch>(AppPlaceEntityMapper.resolvePlace(FundsTransferBatchDTO.class)),
+                        new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, 1, inject(proto().clientId(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().amount(), new FieldDecoratorBuilder().build()));

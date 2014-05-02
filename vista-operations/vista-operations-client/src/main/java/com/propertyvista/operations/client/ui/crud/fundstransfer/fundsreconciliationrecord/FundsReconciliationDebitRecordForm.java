@@ -15,11 +15,17 @@ package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconcili
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsReconciliationRecordRecordDTO;
+import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 
 public class FundsReconciliationDebitRecordForm extends OperationsEntityForm<FundsReconciliationRecordRecordDTO> {
 
@@ -33,10 +39,26 @@ public class FundsReconciliationDebitRecordForm extends OperationsEntityForm<Fun
 
         panel.setWidget(++row, 0, 1,
                 inject(proto().reconciliationSummary().merchantAccount().pmc().name(), new FieldDecoratorBuilder().customLabel("PMC:").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().reconciliationSummary().reconciliationFile(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(
+                ++row,
+                0,
+                1,
+                inject(proto().reconciliationSummary().reconciliationFile(),
+                        new CEntityCrudHyperlink<FundsReconciliationFile>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationFileDTO.class)),
+                        new FieldDecoratorBuilder().build()));
+
         panel.setWidget(++row, 0, 1, inject(proto().reconciliationSummary().reconciliationFile().fundsTransferType(), new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, 1, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+
+        panel.setWidget(
+                ++row,
+                0,
+                1,
+                inject(proto().reconciliationSummary(),
+                        new CEntityCrudHyperlink<FundsReconciliationSummary>(AppPlaceEntityMapper.resolvePlace(FundsReconciliationSummaryDTO.class)),
+                        new FieldDecoratorBuilder().build()));
+
         panel.setWidget(++row, 0, 1, inject(proto().paymentDate(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().clientId(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 1, inject(proto().transactionId(), new FieldDecoratorBuilder().build()));

@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
@@ -47,16 +48,20 @@ public interface FundsReconciliationSummary extends IEntity {
     @Indexed
     FundsReconciliationFile reconciliationFile();
 
+    @ToString
     IPrimitive<LogicalDate> paymentDate();
 
+    @ToString
     IPrimitive<String> merchantTerminalId();
 
     // found based on merchantTerminalId
     @Indexed
     PmcMerchantAccountIndex merchantAccount();
 
+    @ToString
     IPrimitive<MerchantReconciliationStatus> reconciliationStatus();
 
+    @ToString
     @NotNull
     @Format("#0.00")
     @Editor(type = EditorType.moneylabel)

@@ -39,7 +39,8 @@ public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDto
         {
             EntityQueryCriteria<FundsReconciliationRecordRecord> criteria = EntityQueryCriteria.create(FundsReconciliationRecordRecord.class);
             criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile(), bo);
-            to.reconciliationRecordsCount().setValue(Persistence.service().count(criteria));
+
+            to.reconciliationRecords().setCollectionSizeOnly(Persistence.service().count(criteria));
         }
     }
 }

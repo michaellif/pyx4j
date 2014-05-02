@@ -96,6 +96,7 @@ public interface FundsTransferBatch extends IEntity {
     // Updated when batch is sent to Caledon
     @Format("#0.00")
     @Editor(type = EditorType.moneylabel)
+    @ToString
     IPrimitive<BigDecimal> batchAmount();
 
     @Caption(name = "Ack. Code")

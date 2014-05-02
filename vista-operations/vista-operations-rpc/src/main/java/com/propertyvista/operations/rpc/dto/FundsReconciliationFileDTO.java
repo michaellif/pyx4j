@@ -13,13 +13,17 @@
  */
 package com.propertyvista.operations.rpc.dto;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
+import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 
 @Transient
 public interface FundsReconciliationFileDTO extends FundsReconciliationFile {
 
-    IPrimitive<Integer> reconciliationRecordsCount();
+    @Detached(level = AttachLevel.CollectionSizeOnly)
+    IList<FundsReconciliationRecordRecord> reconciliationRecords();
 }
