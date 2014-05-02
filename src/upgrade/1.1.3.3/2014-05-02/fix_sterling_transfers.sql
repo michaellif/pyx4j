@@ -14,7 +14,7 @@
 SELECT  id,previous_balance,merchant_balance,funds_released,status,
         pad_reconciliation_summary_key
 FROM    sterling.aggregated_transfer
-WHERE   id IN (2760,2761,2763,2764);
+WHERE   id = 2810;
 
 \o
 
