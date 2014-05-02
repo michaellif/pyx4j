@@ -23,6 +23,7 @@ package com.pyx4j.tester.client.domain.test;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -189,5 +190,38 @@ public class DomainFactory {
             listerData.add(item);
         }
         return listerData;
+    }
+
+    public static List<TestCountry> getCountries() {
+        List<TestCountry> countries = new ArrayList<>();
+        TestCountry us = EntityFactory.create(TestCountry.class);
+        us.name().setValue("United States");
+        for (String prov : Arrays.asList("Arizona", "California", "Delaware", "Georgia", "New York")) {
+            us.provinces().add(getProvince(prov));
+        }
+        countries.add(us);
+
+        TestCountry ca = EntityFactory.create(TestCountry.class);
+        ca.name().setValue("Canada");
+        for (String prov : Arrays.asList("Ontario", "Quebec", "Manitoba", "British Columbia")) {
+            ca.provinces().add(getProvince(prov));
+        }
+        countries.add(ca);
+
+        TestCountry uk = EntityFactory.create(TestCountry.class);
+        uk.name().setValue("United Kingdom");
+        countries.add(uk);
+
+        TestCountry ot = EntityFactory.create(TestCountry.class);
+        ot.name().setValue("Other");
+        countries.add(ot);
+
+        return countries;
+    }
+
+    private static TestProvince getProvince(String name) {
+        TestProvince prov = EntityFactory.create(TestProvince.class);
+        prov.name().setValue(name);
+        return prov;
     }
 }

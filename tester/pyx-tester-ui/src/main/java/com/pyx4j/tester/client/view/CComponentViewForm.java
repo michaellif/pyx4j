@@ -57,7 +57,8 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
         formPanel.append(Location.Dual, proto().componentValue()).decorate();
 
         FieldDecorator decorator = new FieldDecorator.Builder().labelWidth("10em").build();
-        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
+        formPanel.append(Location.Dual, inject(proto().mandatory(), decorator));
+        get(proto().mandatory()).addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -66,10 +67,10 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Dual, inject(proto().mandatory(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
-        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
+        formPanel.append(Location.Dual, inject(proto().enabled(), decorator));
+        get(proto().enabled()).addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -78,10 +79,10 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Dual, inject(proto().enabled(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
-        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
+        formPanel.append(Location.Dual, inject(proto().editable(), decorator));
+        get(proto().editable()).addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -90,10 +91,10 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Dual, inject(proto().editable(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
-        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
+        formPanel.append(Location.Dual, inject(proto().visible(), decorator));
+        get(proto().visible()).addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -102,10 +103,10 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Dual, inject(proto().visible(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
-        decorator.getComponent().addValueChangeHandler(new ValueChangeHandler() {
+        formPanel.append(Location.Dual, inject(proto().viewable(), decorator));
+        get(proto().viewable()).addValueChangeHandler(new ValueChangeHandler() {
             @Override
             public void onValueChange(ValueChangeEvent event) {
 
@@ -114,11 +115,10 @@ public class CComponentViewForm extends CForm<CComponentProperties> {
             }
 
         });
-        formPanel.append(Location.Dual, inject(proto().viewable(), decorator));
 
         decorator = new FieldDecorator.Builder().labelWidth("10em").build();
-        decorator.getComponent().setViewable(true);
         formPanel.append(Location.Dual, inject(proto().valid(), decorator));
+        get(proto().valid()).setViewable(true);
 
         formPanel.append(Location.Left, proto().toolTip()).decorate();
 

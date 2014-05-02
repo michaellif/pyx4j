@@ -50,6 +50,9 @@ public class TesterSiteMap implements SiteMap {
         public static class RichTextEditor extends AppPlace {
         }
 
+        public static class AddressEditor extends AppPlace {
+        }
+
         public static class Lister extends AppPlace {
         }
 

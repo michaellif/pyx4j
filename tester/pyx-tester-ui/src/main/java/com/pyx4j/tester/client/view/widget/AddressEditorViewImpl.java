@@ -1,0 +1,125 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on May 2, 2014
+ * @author stanp
+ * @version $Id$
+ */
+package com.pyx4j.tester.client.view.widget;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
+
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.EntityDataSource;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.tester.client.domain.test.DomainFactory;
+import com.pyx4j.tester.client.domain.test.TestAddress;
+import com.pyx4j.tester.client.domain.test.TestCountry;
+
+public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorView {
+
+    public AddressEditorViewImpl() {
+        setSize("100%", "100%");
+
+        AddressEditorForm form = new AddressEditorForm();
+        form.init();
+        form.asWidget().setWidth("700px");
+        form.asWidget().getElement().getStyle().setProperty("marginTop", "20px");
+        add(form);
+    }
+
+    static class AddressEditorForm extends CForm<TestAddress> {
+
+        public AddressEditorForm() {
+            super(TestAddress.class);
+        }
+
+        @Override
+        protected IsWidget createContent() {
+            BasicCFormPanel content = new BasicCFormPanel(this);
+
+            content.append(Location.Left, proto().country(), new CountrySelector()).decorate().labelWidth(200).componentWidth(150);
+            content.append(Location.Left, proto().addressLine1()).decorate().labelWidth(200).componentWidth(150);
+            content.append(Location.Left, proto().addressLine2()).decorate().labelWidth(200).componentWidth(150);
+
+            content.append(Location.Right, proto().city()).decorate().componentWidth(150);
+            content.append(Location.Right, proto().region()).decorate().componentWidth(150);
+            content.append(Location.Right, proto().postalCode()).decorate().componentWidth(100);
+
+            // tweaks:
+            get(proto().country()).addValueChangeHandler(new ValueChangeHandler<TestCountry>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<TestCountry> event) {
+                    checkCountry();
+                }
+            });
+
+            return content;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            checkCountry();
+        }
+
+        private void checkCountry() {
+            if (getValue() != null) {
+                if (getValue().country().name().getStringView().compareTo("Canada") == 0) {
+                    get(proto().region()).setVisible(true);
+                    get(proto().region()).setTitle("Province");
+                    get(proto().postalCode()).setTitle("Postal Code");
+                } else if (getValue().country().name().getStringView().compareTo("United States") == 0) {
+                    get(proto().region()).setVisible(true);
+                    get(proto().region()).setTitle("State");
+                    get(proto().postalCode()).setTitle("Zip Code");
+                } else if (getValue().country().name().getStringView().compareTo("United Kingdom") == 0) {
+                    get(proto().region()).setVisible(false);
+                    get(proto().postalCode()).setTitle("Postal Code");
+                } else {
+                    //TODO generic case for other countries
+                }
+            }
+        }
+
+        static class CountrySelector extends CEntityComboBox<TestCountry> {
+
+            public CountrySelector() {
+                super(TestCountry.class, (NotInOptionsPolicy) null, new EntityDataSource<TestCountry>() {
+
+                    @Override
+                    public void obtain(EntityQueryCriteria<TestCountry> criteria, AsyncCallback<EntitySearchResult<TestCountry>> handlingCallback) {
+                        EntitySearchResult<TestCountry> result = new EntitySearchResult<>();
+                        for (TestCountry c : DomainFactory.getCountries()) {
+                            result.add(c);
+                        }
+                        handlingCallback.onSuccess(result);
+                    }
+
+                });
+            }
+
+        }
+    }
+}

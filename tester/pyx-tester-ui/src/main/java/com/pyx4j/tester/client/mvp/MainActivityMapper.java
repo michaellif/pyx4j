@@ -28,6 +28,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.tester.client.TesterSiteMap;
+import com.pyx4j.tester.client.activity.AddressEditorActivity;
 import com.pyx4j.tester.client.activity.FolderLayoutActivity;
 import com.pyx4j.tester.client.activity.FolderValidationActivity;
 import com.pyx4j.tester.client.activity.FormTesterActivity;
@@ -55,6 +56,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new NativeWidgetBasicActivity(place);
                 } else if (place instanceof TesterSiteMap.NativeWidget.RichTextEditor) {
                     activity = new RichTextEditorActivity(place);
+                } else if (place instanceof TesterSiteMap.NativeWidget.AddressEditor) {
+                    activity = new AddressEditorActivity(place);
                 } else if (place instanceof TesterSiteMap.NativeWidget.Lister) {
                     activity = new ListerActivity(place);
                 } else if (place instanceof TesterSiteMap.FormTester) {
