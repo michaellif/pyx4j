@@ -9,7 +9,7 @@
 **/
 
 
-\o dms_aggregated_tarnsfer_may1.txt
+\o dms_aggregated_tarnsfer_may2.txt
 
 SELECT  id,previous_balance,merchant_balance,funds_released,status,
         pad_reconciliation_summary_key
