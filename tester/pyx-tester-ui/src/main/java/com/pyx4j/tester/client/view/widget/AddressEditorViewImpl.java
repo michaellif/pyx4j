@@ -44,7 +44,7 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
 
         AddressEditorForm form = new AddressEditorForm();
         form.init();
-        form.asWidget().setWidth("700px");
+        form.asWidget().setWidth("920px");
         form.asWidget().getElement().getStyle().setProperty("marginTop", "20px");
         add(form);
     }
@@ -59,9 +59,9 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
         protected IsWidget createContent() {
             BasicCFormPanel content = new BasicCFormPanel(this);
 
-            content.append(Location.Left, proto().country(), new CountrySelector()).decorate().labelWidth(200).componentWidth(150);
-            content.append(Location.Left, proto().addressLine1()).decorate().labelWidth(200).componentWidth(150);
-            content.append(Location.Left, proto().addressLine2()).decorate().labelWidth(200).componentWidth(150);
+            content.append(Location.Left, proto().country(), new CountrySelector()).decorate().componentWidth(150);
+            content.append(Location.Left, proto().addressLine1()).decorate().componentWidth(150);
+            content.append(Location.Left, proto().addressLine2()).decorate().componentWidth(150);
 
             content.append(Location.Right, proto().city()).decorate().componentWidth(150);
             content.append(Location.Right, proto().region()).decorate().componentWidth(150);
@@ -71,7 +71,7 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
             get(proto().country()).addValueChangeHandler(new ValueChangeHandler<TestCountry>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<TestCountry> event) {
-                    checkCountry();
+                    onCountrySelected(event.getValue());
                 }
             });
 
@@ -81,24 +81,28 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            checkCountry();
+            onCountrySelected(getValue().country());
         }
 
-        private void checkCountry() {
-            if (getValue() != null) {
-                if (getValue().country().name().getStringView().compareTo("Canada") == 0) {
+        private void onCountrySelected(TestCountry country) {
+            if (!country.isEmpty()) {
+                if (country.name().getStringView().compareTo("Canada") == 0) {
                     get(proto().region()).setVisible(true);
                     get(proto().region()).setTitle("Province");
                     get(proto().postalCode()).setTitle("Postal Code");
-                } else if (getValue().country().name().getStringView().compareTo("United States") == 0) {
+                } else if (country.name().getStringView().compareTo("United States") == 0) {
                     get(proto().region()).setVisible(true);
                     get(proto().region()).setTitle("State");
                     get(proto().postalCode()).setTitle("Zip Code");
-                } else if (getValue().country().name().getStringView().compareTo("United Kingdom") == 0) {
+                } else if (country.name().getStringView().compareTo("United Kingdom") == 0) {
                     get(proto().region()).setVisible(false);
                     get(proto().postalCode()).setTitle("Postal Code");
                 } else {
-                    //TODO generic case for other countries
+                    // International
+                    get(proto().region()).setVisible(true);
+                    get(proto().region()).setTitle(proto().region().getMeta().getCaption());
+                    get(proto().postalCode()).setVisible(true);
+                    get(proto().postalCode()).setTitle(proto().postalCode().getMeta().getCaption());
                 }
             }
         }
