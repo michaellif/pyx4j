@@ -122,6 +122,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
         criteria.eq(criteria.proto().customer().user(), customerUser);
         criteria.ne(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.Cancelled);
+        criteria.eq(criteria.proto().masterOnlineApplication().building().suspended(), false);
         return Persistence.service().query(criteria);
     }
 

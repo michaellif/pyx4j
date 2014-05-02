@@ -27,17 +27,21 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
@@ -138,13 +142,21 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
 
     @Override
     protected void sendPasswordRetrievalToken(CustomerUser user) {
-        // See if active Application exists
-        List<OnlineApplication> applications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user);
-        if (applications.size() == 0) {
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+        Customer customer = Persistence.service().retrieve(criteria);
+        if (customer == null) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
-
-        ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(applications.get(0).customer());
+        // See if Application exists
+        if (ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user).size() > 0) {
+            ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
+        } else if (ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user).size() > 0) {
+            ServerSideFactory.create(CommunicationFacade.class).sendTenantPasswordRetrievalToken(customer);
+        } else {
+            throw new UserRuntimeException(
+                    i18n.tr("This account has been deactivated or moved to a new web address. Please contact your landlord for more information."));
+        }
         Persistence.service().commit();
     }
 

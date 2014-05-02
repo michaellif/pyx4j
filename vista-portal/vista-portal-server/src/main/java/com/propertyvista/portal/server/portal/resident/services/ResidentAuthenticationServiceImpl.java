@@ -36,6 +36,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.PortalResidentBehavior;
@@ -175,11 +176,13 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
         // See if active Lease exists
-        List<Lease> leases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user);
-        if (leases.size() > 0) {
+        if (ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user).size() > 0) {
             ServerSideFactory.create(CommunicationFacade.class).sendTenantPasswordRetrievalToken(customer);
-        } else {
+        } else if (ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user).size() > 0) {
             ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
+        } else {
+            throw new UserRuntimeException(
+                    i18n.tr("This account has been deactivated or moved to a new web address. Please contact your landlord for more information."));
         }
         Persistence.service().commit();
     }
