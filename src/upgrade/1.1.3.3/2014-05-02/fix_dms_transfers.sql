@@ -27,7 +27,7 @@ BEGIN TRANSACTION;
             merchant_balance = s.merchant_balance,
             funds_released = s.funds_released
     FROM    _admin_.funds_reconciliation_summary s
-    WHERE   s.id = 2765
+    WHERE   s.id = 2769
     AND     a.id = 2764;
     
     UPDATE  dms.aggregated_transfer AS a
@@ -37,7 +37,7 @@ BEGIN TRANSACTION;
             merchant_balance = s.merchant_balance,
             funds_released = s.funds_released
     FROM    _admin_.funds_reconciliation_summary s
-    WHERE   s.id = 2764
+    WHERE   s.id = 2768
     AND     a.id = 2760;
     
     UPDATE  dms.aggregated_transfer AS a
@@ -47,7 +47,7 @@ BEGIN TRANSACTION;
             merchant_balance = s.merchant_balance,
             funds_released = s.funds_released
     FROM    _admin_.funds_reconciliation_summary s
-    WHERE   s.id = 2763
+    WHERE   s.id = 2767
     AND     a.id = 2763;
     
     UPDATE  dms.aggregated_transfer AS a
@@ -57,7 +57,7 @@ BEGIN TRANSACTION;
             merchant_balance = s.merchant_balance,
             funds_released = s.funds_released
     FROM    _admin_.funds_reconciliation_summary s
-    WHERE   s.id = 2762
+    WHERE   s.id = 2766
     AND     a.id = 2761;
     
     UPDATE  _admin_.funds_reconciliation_summary
