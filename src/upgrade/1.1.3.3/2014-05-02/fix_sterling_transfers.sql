@@ -20,7 +20,7 @@ WHERE   id IN (2760,2761,2763,2764);
 
 BEGIN TRANSACTION;
 
-    UPDATE  dms.aggregated_transfer AS a
+    UPDATE  sterling.aggregated_transfer AS a
     SET     status = 'Paid',
             pad_reconciliation_summary_key = s.id,
             previous_balance = s.previous_balance ,
