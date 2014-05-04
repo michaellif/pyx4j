@@ -17,11 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -108,13 +106,12 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                int row = -1;
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-                main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().body(), new FieldDecoratorBuilder(35).build()));
-                main.setWidget(++row, 0, inject(proto().signatureFormat(), new FieldDecoratorBuilder(35).build()));
-                return main;
+                formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(250);
+                return formPanel;
             }
         }
     }
