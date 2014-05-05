@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme;
+import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -62,7 +62,7 @@ public class OnboardingTheme extends Theme {
                 return ThemeColor.background;
             }
         });
-        addTheme(new TwoColumnFormPanelTheme() {
+        addTheme(new DualColumnFormPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.background;
