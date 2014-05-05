@@ -78,24 +78,15 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.left);
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.right);
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.dual);
-        addStyle(style);
-
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
         style.addProperty("width", "450px");
+        style.addProperty("display", "inline-block");
         style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right);
         style.addProperty("width", "450px");
+        style.addProperty("display", "inline-block");
         style.addProperty("float", "left");
         addStyle(style);
 
@@ -174,6 +165,33 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         style = new Style(".", StyleName.FormPanelActionWidget);
         style.addProperty("float", "right");
         style.addProperty("margin-right", "20px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed);
+        style.addProperty("min-width", "470px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.left);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.right);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.dual);
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.left);
+        style.addProperty("float", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.right);
+        style.addProperty("float", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual);
+        style.addProperty("width", "450px");
         addStyle(style);
     }
 

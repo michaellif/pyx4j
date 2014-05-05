@@ -18,11 +18,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout;
+package com.pyx4j.gwt.commons.layout;
 
 import com.google.gwt.event.shared.GwtEvent;
-
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 
 public class LayoutChangeEvent extends GwtEvent<LayoutChangeHandler> {
 

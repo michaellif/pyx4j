@@ -27,10 +27,10 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.RiaDevConsole;
-import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 
 public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {

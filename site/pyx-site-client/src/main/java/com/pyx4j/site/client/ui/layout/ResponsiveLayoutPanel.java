@@ -27,9 +27,16 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.layout.client.Layout;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.layout.ILayoutable;
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRerquestHandler;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 
@@ -45,29 +52,6 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
 
     public enum DisplayType {
         header, toolbar, menu, content, footer, communication, extra, notification
-    }
-
-    public enum LayoutType {
-
-        phonePortrait(0, 320), phoneLandscape(321, 480), tabletPortrait(481, 768), tabletLandscape(769, 1024), monitor(1025, 1200), huge(1201,
-                Integer.MAX_VALUE);
-
-        private final int minWidth;
-
-        private final int maxWidth;
-
-        LayoutType(int minWidth, int maxWidth) {
-            this.minWidth = minWidth;
-            this.maxWidth = maxWidth;
-        }
-
-        public static LayoutType getLayoutType(int width) {
-            for (LayoutType segment : LayoutType.values()) {
-                if (width >= segment.minWidth && width <= segment.maxWidth)
-                    return segment;
-            }
-            throw new Error("No ResponseSegment found for width " + width);
-        }
     }
 
     public ResponsiveLayoutPanel() {
@@ -112,9 +96,9 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
 
     public final void forceLayout(int animationTime) {
         doLayout();
+        doLayout(getDisplay(DisplayType.content), getLayoutType());
         layout.layout(animationTime);
         AppSite.getEventBus().fireEvent(new LayoutChangeEvent(getLayoutType()));
-        resizeComponents();
     }
 
     public DisplayPanel getDisplay(DisplayType displayType) {
@@ -124,4 +108,17 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
     protected abstract void resizeComponents();
 
     protected abstract void doLayout();
+
+    private void doLayout(IsWidget widget, LayoutType layoutType) {
+        if (widget instanceof ILayoutable) {
+            ILayoutable component = (ILayoutable) widget;
+            component.doLayout(layoutType);
+        }
+        if (widget instanceof HasWidgets) {
+            for (Widget childWidget : (HasWidgets) widget) {
+                doLayout(childWidget, layoutType);
+            }
+        }
+    }
+
 }

@@ -24,16 +24,19 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.layout.ILayoutable;
+import com.pyx4j.gwt.commons.layout.LayoutType;
+
 public class TwoColumnFluidPanel implements IsWidget {
 
     public static enum Location {
         Dual, Left, Right
     }
 
-    private final FlowPanel contentPanel;
+    private final ContentPanel contentPanel;
 
     public TwoColumnFluidPanel() {
-        contentPanel = new FlowPanel();
+        contentPanel = new ContentPanel();
         contentPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanel.name());
     }
 
@@ -109,6 +112,14 @@ public class TwoColumnFluidPanel implements IsWidget {
             contentPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
         } else {
             contentPanel.removeStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
+        }
+    }
+
+    protected class ContentPanel extends FlowPanel implements ILayoutable {
+
+        @Override
+        public void doLayout(LayoutType type) {
+            TwoColumnFluidPanel.this.setCollapsed(LayoutType.tabletLandscape.compareTo(type) > 0);
         }
     }
 

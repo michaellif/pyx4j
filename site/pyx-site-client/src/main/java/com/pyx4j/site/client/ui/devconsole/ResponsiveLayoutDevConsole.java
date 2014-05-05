@@ -25,11 +25,11 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.layout.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
 import com.pyx4j.widgets.client.Toolbar;
 
