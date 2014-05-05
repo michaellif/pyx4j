@@ -25,7 +25,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class StickyToolbarHolder extends SimplePanel implements RequiresResize {
 

@@ -50,15 +50,16 @@ public class TwoColumnFormPanel implements IsWidget {
 
     private final TwoColumnFluidPanel fluidPanel;
 
-    private final boolean collapsed;
-
     public TwoColumnFormPanel() {
         this(false);
     }
 
     public TwoColumnFormPanel(boolean collapsed) {
-        this.collapsed = collapsed;
         fluidPanel = new TwoColumnFluidPanel();
+        setCollapsed(collapsed);
+    }
+
+    public void setCollapsed(boolean collapsed) {
         fluidPanel.setCollapsed(collapsed);
     }
 

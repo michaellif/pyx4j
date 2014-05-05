@@ -35,19 +35,6 @@ import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 
 public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
-    private final DisplayPanel headerDisplay;
-
-    private final DisplayPanel notificationsDisplay;
-
-    //TODO leave navigDisplay and move shortcuts and footer under it
-    private final DisplayPanel navigDisplay;
-
-    private final DisplayPanel shortcutsDisplay;
-
-    private final DisplayPanel footerDisplay;
-
-    private final DisplayPanel contentDisplay;
-
     private final DockLayoutPanel menuPanel;
 
     private DevConsoleTab devConsoleTab;
@@ -64,7 +51,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         // ============ Header ============
         {
-            headerDisplay = new DisplayPanel();
+            DisplayPanel headerDisplay = getDisplay(DisplayType.header);
 
             Layer layer = getLayout().attachChild(headerDisplay.asWidget().getElement(), headerDisplay);
             headerDisplay.setLayoutData(layer);
@@ -75,7 +62,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         // ============ Notifications ============
         {
-            notificationsDisplay = new DisplayPanel();
+            DisplayPanel notificationsDisplay = getDisplay(DisplayType.notification);
             Layer layer = getLayout().attachChild(notificationsDisplay.asWidget().getElement(), notificationsDisplay);
             notificationsDisplay.setLayoutData(layer);
 
@@ -93,20 +80,17 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
             getChildren().add(menuPanel);
             adopt(menuPanel);
 
-            footerDisplay = new DisplayPanel();
-            menuPanel.addSouth(footerDisplay, 40);
+            menuPanel.addSouth(getDisplay(DisplayType.footer), 40);
 
-            shortcutsDisplay = new DisplayPanel();
-            menuPanel.addSouth(shortcutsDisplay, 200);
+            menuPanel.addSouth(getDisplay(DisplayType.extra), 200);
 
-            navigDisplay = new DisplayPanel();
-            menuPanel.add(navigDisplay);
+            menuPanel.add(getDisplay(DisplayType.menu));
 
         }
 
         // ============ Content ============
         {
-            contentDisplay = new DisplayPanel();
+            DisplayPanel contentDisplay = getDisplay(DisplayType.content);
 
             Layer layer = getLayout().attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
             contentDisplay.setLayoutData(layer);
@@ -115,6 +99,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
             adopt(contentDisplay);
         }
 
+        // ============ Dev Console ============
         if (ApplicationMode.isDevelopment()) {
             devConsoleTab = new DevConsoleTab(new RiaDevConsole(this));
             add(devConsoleTab.asWidget(), getElement());
@@ -124,34 +109,6 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     }
 
-    public DisplayPanel getHeaderDisplay() {
-        return headerDisplay;
-    }
-
-    public DisplayPanel getNavigDisplay() {
-        return navigDisplay;
-    }
-
-    @Deprecated
-    //TODO combine with NavigDisplay
-    public DisplayPanel getShortcutsDisplay() {
-        return shortcutsDisplay;
-    }
-
-    @Deprecated
-    //TODO combine with NavigDisplay
-    public DisplayPanel getFooterDisplay() {
-        return footerDisplay;
-    }
-
-    public DisplayPanel getContentDisplay() {
-        return contentDisplay;
-    }
-
-    public DisplayPanel getNotificationsDisplay() {
-        return notificationsDisplay;
-    }
-
     @Override
     protected void doLayout() {
 
@@ -159,7 +116,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         int height = headerHeight;
 
         {
-            Layer layer = (Layer) headerDisplay.getLayoutData();
+            Layer layer = (Layer) getDisplay(DisplayType.header).getLayoutData();
             layer.setTopHeight(top, Unit.PX, height, Unit.PX);
             layer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
         }
@@ -168,7 +125,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         height = notificationsHeight;
 
         {
-            Layer layer = (Layer) notificationsDisplay.getLayoutData();
+            Layer layer = (Layer) getDisplay(DisplayType.notification).getLayoutData();
             layer.setTopHeight(top, Unit.PX, height, Unit.PX);
             layer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
         }
@@ -185,7 +142,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
 
         {
-            Layer layer = (Layer) contentDisplay.getLayoutData();
+            Layer layer = (Layer) getDisplay(DisplayType.content).getLayoutData();
             layer.setTopBottom(top, Unit.PX, 0, Unit.PX);
             layer.setLeftRight(menuVisible ? menuWidth : 0, Unit.PX, 0, Unit.PX);
         }

@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.client.ui.layout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.layout.client.Layout;
 import com.google.gwt.user.client.Window;
@@ -28,6 +31,7 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.DisplayPanel;
 
 public abstract class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
 
@@ -36,6 +40,12 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
     private LayoutType layoutType;
 
     private final Layout layout;
+
+    private final Map<DisplayType, DisplayPanel> displays;
+
+    public enum DisplayType {
+        header, toolbar, menu, content, footer, communication, extra, notification
+    }
 
     public enum LayoutType {
 
@@ -63,6 +73,11 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
     public ResponsiveLayoutPanel() {
         setElement(Document.get().createDivElement());
         layout = new Layout(getElement());
+
+        displays = new HashMap<>();
+        for (DisplayType display : DisplayType.values()) {
+            displays.put(display, new DisplayPanel());
+        }
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
     }
@@ -100,6 +115,10 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
         layout.layout(animationTime);
         AppSite.getEventBus().fireEvent(new LayoutChangeEvent(getLayoutType()));
         resizeComponents();
+    }
+
+    public DisplayPanel getDisplay(DisplayType displayType) {
+        return displays.get(displayType);
     }
 
     protected abstract void resizeComponents();

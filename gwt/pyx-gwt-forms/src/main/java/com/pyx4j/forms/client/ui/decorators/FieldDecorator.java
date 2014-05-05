@@ -462,58 +462,69 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
             return new FieldDecorator(this);
         }
 
+        @SuppressWarnings("unchecked")
         @Deprecated
         public E labelWidth(double labelWidth) {
             this.labelWidth = labelWidth + "em";
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         @Deprecated
         public E componentWidth(double componentWidth) {
             this.componentWidth = componentWidth + "em";
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E labelWidth(String labelWidth) {
             this.labelWidth = labelWidth;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E labelAlignment(Alignment labelAlignment) {
             this.labelAlignment = labelAlignment;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E labelPosition(LabelPosition position) {
             this.labelPosition = position;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E customLabel(String customLabel) {
             this.customLabel = customLabel;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E componentWidth(String componentWidth) {
             this.componentWidth = componentWidth;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E componentAlignment(Alignment componentAlignment) {
             this.componentAlignment = componentAlignment;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E mandatoryMarker(boolean visible) {
             this.mandatoryMarker = visible;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E useLabelSemicolon(boolean useLabelSemicolon) {
             this.useLabelSemicolon = useLabelSemicolon;
             return (E) this;
         }
 
+        @SuppressWarnings("unchecked")
         public E assistantWidget(Widget assistantWidget) {
             this.assistantWidget = assistantWidget;
             return (E) this;

@@ -20,9 +20,6 @@
  */
 package com.pyx4j.site.client.ui.layout.frontoffice;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -49,12 +46,6 @@ import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     public static final int MAX_WIDTH = 1200;
-
-    public enum DisplayType {
-        header, toolbar, menu, content, footer, communication, extra, notification
-    }
-
-    private final Map<DisplayType, DisplayPanel> displays;
 
     private final InlineToolbarHolder inlineToolbarHolder;
 
@@ -90,11 +81,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     @SuppressWarnings("deprecation")
     public FrontOfficeLayoutPanel() {
-
-        displays = new HashMap<>();
-        for (DisplayType display : DisplayType.values()) {
-            displays.put(display, new DisplayPanel());
-        }
 
         pageHolder = new FlowPanel();
 
@@ -211,10 +197,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         return footerHolder;
     }
 
-    public DisplayPanel getDisplay(DisplayType displayType) {
-        return displays.get(displayType);
-    }
-
     @Override
     protected void doLayout() {
 
@@ -295,8 +277,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");
         }
 
-        for (DisplayPanel displayPanel : displays.values()) {
-            displayPanel.onResize();
+        for (DisplayType displayType : DisplayType.values()) {
+            getDisplay(displayType).onResize();
         }
 
         stickyToolbarHolder.onResize();

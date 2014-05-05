@@ -26,7 +26,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.DisplayPanel;
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class InlineMenuHolder extends SimplePanel {
 

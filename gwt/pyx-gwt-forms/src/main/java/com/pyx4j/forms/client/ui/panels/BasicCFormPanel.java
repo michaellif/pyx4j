@@ -92,7 +92,7 @@ public class BasicCFormPanel extends TwoColumnFormPanel {
                 break;
             }
             final FieldDecoratorOptions options = new FieldDecoratorOptions(location == Location.Dual);
-            // Untill init() called, FieldDecoratorOptions can be updated.
+            // Until init() method called, FieldDecoratorOptions can be updated.
             comp.setDecorator(new FieldDecorator(options) {
                 @Override
                 protected void updateViewable() {

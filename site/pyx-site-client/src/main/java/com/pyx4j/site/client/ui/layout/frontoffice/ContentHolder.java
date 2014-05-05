@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.layout.frontoffice;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class ContentHolder extends FlowPanel {
 
