@@ -42,8 +42,8 @@ import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;

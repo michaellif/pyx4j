@@ -27,10 +27,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
+import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
-import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
 

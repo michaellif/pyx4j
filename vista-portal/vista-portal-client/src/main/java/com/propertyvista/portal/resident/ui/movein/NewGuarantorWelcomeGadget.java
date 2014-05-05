@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;

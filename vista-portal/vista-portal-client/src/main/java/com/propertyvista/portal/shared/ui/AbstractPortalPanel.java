@@ -19,10 +19,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 

@@ -16,11 +16,11 @@ package com.propertyvista.portal.resident.ui.offers.dashboard;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
