@@ -18,17 +18,18 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+
 public class ContentHolder extends FlowPanel {
 
-    public ContentHolder(ResponsiveLayoutPanel parent) {
+    public ContentHolder(FrontOfficeLayoutPanel parent) {
         getElement().getStyle().setProperty("verticalAlign", "top");
-        add(parent.getNotificationDisplay());
-        add(parent.getBreadcrumbsDisplay());
-        add(parent.getContentDisplay());
+        add(parent.getDisplay(DisplayType.notification));
+        add(parent.getDisplay(DisplayType.content));
     }
 
 }

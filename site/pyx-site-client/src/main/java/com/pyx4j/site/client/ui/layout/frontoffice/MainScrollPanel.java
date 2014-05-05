@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
 import com.google.gwt.user.client.ui.AbstractNativeScrollbar;
 import com.google.gwt.user.client.ui.CustomScrollPanel;

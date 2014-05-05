@@ -18,26 +18,21 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
-import com.google.gwt.layout.client.Layout;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,44 +42,19 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.ResponsiveLayoutDevConsole;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
-public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
+public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     public static final int MAX_WIDTH = 1200;
 
-    public enum LayoutType {
-
-        phonePortrait(0, 320), phoneLandscape(321, 480), tabletPortrait(481, 768), tabletLandscape(769, 1024), monitor(1025, 1200), huge(1201,
-                Integer.MAX_VALUE);
-
-        private int minWidth;
-
-        private int maxWidth;
-
-        LayoutType(int minWidth, int maxWidth) {
-            this.minWidth = minWidth;
-            this.maxWidth = maxWidth;
-        }
-
-        public static LayoutType getLayoutType(int width) {
-            for (LayoutType segment : LayoutType.values()) {
-                if (width >= segment.minWidth && width <= segment.maxWidth)
-                    return segment;
-            }
-            throw new Error("No ResponseSegment found for width " + width);
-        }
+    public enum DisplayType {
+        header, toolbar, menu, content, footer, communication, extra, notification
     }
 
-    public enum Display {
-        header, toolbar, menu, content, footer, communication, extra, notification, breadcrumbs
-    }
-
-    private static final int ANIMATION_TIME = 500;
-
-    private final Map<Display, DisplayPanel> displays;
-
-    private final Layout pageLayout;
+    private final Map<DisplayType, DisplayPanel> displays;
 
     private final InlineToolbarHolder inlineToolbarHolder;
 
@@ -116,37 +86,31 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private boolean sideCommVisible = false;
 
-    private LayoutType layoutType;
-
     private DevConsoleTab devConsoleTab;
 
     @SuppressWarnings("deprecation")
-    public ResponsiveLayoutPanel() {
-
-        setElement(Document.get().createDivElement());
+    public FrontOfficeLayoutPanel() {
 
         displays = new HashMap<>();
-        for (Display display : Display.values()) {
+        for (DisplayType display : DisplayType.values()) {
             displays.put(display, new DisplayPanel());
         }
-
-        pageLayout = new Layout(getElement());
 
         pageHolder = new FlowPanel();
 
         pagePanel = new FlowPanel();
-        pagePanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
+        pagePanel.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
         pageScroll.addScrollHandler(new ScrollHandler() {
 
             @Override
             public void onScroll(ScrollEvent event) {
-                if (pageScroll.getVerticalScrollPosition() <= getHeaderDisplay().getOffsetHeight()) {
-                    getHeaderDisplay().getElement().getStyle()
-                            .setOpacity(1 - (double) pageScroll.getVerticalScrollPosition() / getHeaderDisplay().getOffsetHeight());
+                DisplayPanel headerDisplay = getDisplay(DisplayType.header);
+                if (pageScroll.getVerticalScrollPosition() <= headerDisplay.getOffsetHeight()) {
+                    headerDisplay.getElement().getStyle().setOpacity(1 - (double) pageScroll.getVerticalScrollPosition() / headerDisplay.getOffsetHeight());
                 } else {
-                    getHeaderDisplay().getElement().getStyle().setOpacity(1);
+                    headerDisplay.getElement().getStyle().setOpacity(1);
                 }
             }
         });
@@ -161,11 +125,11 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         extraHolder = new ExtraHolder(this);
 
-        getNotificationDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        getContentDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        getDisplay(DisplayType.notification).getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        getDisplay(DisplayType.content).getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        getToolbarDisplay().getElement().getStyle().setProperty("maxWidth", ResponsiveLayoutPanel.MAX_WIDTH + "px");
-        getToolbarDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        getDisplay(DisplayType.toolbar).getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
+        getDisplay(DisplayType.toolbar).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         contentHolder = new ContentHolder(this);
         contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
@@ -183,25 +147,25 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         pageScroll.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                ResponsiveLayoutPanel.this.onScroll();
+                FrontOfficeLayoutPanel.this.onScroll();
             }
         });
 
         popupCommHolder = new PopupCommHolder();
 
-        footerHolder = new SimplePanel(getFooterDisplay());
-        footerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
-        getFooterDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
-        getFooterDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        footerHolder = new SimplePanel(getDisplay(DisplayType.footer));
+        footerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
+        getDisplay(DisplayType.footer).getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        getDisplay(DisplayType.footer).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
-        pagePanel.add(getHeaderDisplay());
+        pagePanel.add(getDisplay(DisplayType.header));
         pagePanel.add(inlineToolbarHolder);
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
         // ============ Content Layer ============
         {
-            Layer layer = pageLayout.attachChild(pageHolder.asWidget().getElement(), pageHolder);
+            Layer layer = getLayout().attachChild(pageHolder.asWidget().getElement(), pageHolder);
             pageHolder.setLayoutData(layer);
 
             layer.setTopBottom(0, Unit.PX, 0, Unit.PX);
@@ -215,7 +179,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
             sideMenuHolder = new SidePanelHolder();
 
-            Layer layer = pageLayout.attachChild(sideMenuHolder.asWidget().getElement(), sideMenuHolder);
+            Layer layer = getLayout().attachChild(sideMenuHolder.asWidget().getElement(), sideMenuHolder);
             sideMenuHolder.setLayoutData(layer);
 
             getChildren().add(sideMenuHolder);
@@ -227,7 +191,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
             sideCommHolder = new SidePanelHolder();
 
-            Layer layer = pageLayout.attachChild(sideCommHolder.asWidget().getElement(), sideCommHolder);
+            Layer layer = getLayout().attachChild(sideCommHolder.asWidget().getElement(), sideCommHolder);
             sideCommHolder.setLayoutData(layer);
 
             getChildren().add(sideCommHolder);
@@ -235,8 +199,6 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
 
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
-
-        layoutType = LayoutType.getLayoutType(Window.getClientWidth());
 
         if (ApplicationMode.isDevelopment()) {
             devConsoleTab = new DevConsoleTab(new ResponsiveLayoutDevConsole(this));
@@ -249,73 +211,35 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return footerHolder;
     }
 
-    public DisplayPanel getHeaderDisplay() {
-        return displays.get(Display.header);
+    public DisplayPanel getDisplay(DisplayType displayType) {
+        return displays.get(displayType);
     }
 
-    public DisplayPanel getToolbarDisplay() {
-        return displays.get(Display.toolbar);
-    }
+    @Override
+    protected void doLayout() {
 
-    public DisplayPanel getContentDisplay() {
-        return displays.get(Display.content);
-    }
-
-    public DisplayPanel getMenuDisplay() {
-        return displays.get(Display.menu);
-    }
-
-    public DisplayPanel getCommDisplay() {
-        return displays.get(Display.communication);
-    }
-
-    public DisplayPanel getFooterDisplay() {
-        return displays.get(Display.footer);
-    }
-
-    public DisplayPanel getExtraDisplay() {
-        return displays.get(Display.extra);
-    }
-
-    public DisplayPanel getNotificationDisplay() {
-        return displays.get(Display.notification);
-    }
-
-    public DisplayPanel getBreadcrumbsDisplay() {
-        return displays.get(Display.breadcrumbs);
-    }
-
-    public void forceLayout(int animationTime) {
-        doLayout();
-        pageLayout.layout(animationTime);
-        AppSite.getEventBus().fireEvent(new LayoutChangeEvent(layoutType));
-        resizeComponents();
-    }
-
-    private void doLayout() {
-
-        switch (layoutType) {
+        switch (getLayoutType()) {
         case phonePortrait:
         case phoneLandscape:
-            sideMenuHolder.setDisplay(getMenuDisplay());
-            sideCommHolder.setDisplay(getCommDisplay());
-            getHeaderDisplay().setVisible(false);
+            sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
+            sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
+            getDisplay(DisplayType.header).setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
             setSideCommVisible(false);
-            inlineMenuHolder.setMenuDisplay(getMenuDisplay());
-            popupCommHolder.setWidget(getCommDisplay());
-            getHeaderDisplay().setVisible(true);
+            inlineMenuHolder.setMenuDisplay(getDisplay(DisplayType.menu));
+            popupCommHolder.setWidget(getDisplay(DisplayType.communication));
+            getDisplay(DisplayType.header).setVisible(true);
             break;
         }
 
-        switch (layoutType) {
+        switch (getLayoutType()) {
         case huge:
-            getExtraDisplay().setVisible(true);
+            getDisplay(DisplayType.extra).setVisible(true);
             break;
         default:
-            getExtraDisplay().setVisible(false);
+            getDisplay(DisplayType.extra).setVisible(false);
             break;
         }
 
@@ -341,16 +265,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     @Override
     public void onResize() {
-
-        LayoutType previousLayoutType = layoutType;
-        layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-
-        if (previousLayoutType != layoutType) {
-            forceLayout(0);
-        } else {
-            resizeComponents();
-        }
-
+        super.onResize();
         pageScroll.onResize();
     }
 
@@ -368,12 +283,13 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     }
 
-    private void resizeComponents() {
+    @Override
+    protected void resizeComponents() {
         onScroll();
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
 
-        if (getExtraDisplay().isVisible()) {
+        if (getDisplay(DisplayType.extra).isVisible()) {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - extraHolder.getOffsetWidth()) + "px");
         } else {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");
@@ -384,12 +300,6 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
 
         stickyToolbarHolder.onResize();
-    }
-
-    @Override
-    protected void onLoad() {
-        super.onLoad();
-        forceLayout(0);
     }
 
     private boolean isSideMenuEnabled() {
@@ -410,14 +320,14 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     private void setSideMenuVisible(boolean visible) {
         if (this.sideMenuVisible != visible) {
             this.sideMenuVisible = visible;
-            forceLayout(ANIMATION_TIME);
+            forceLayout(ResponsiveLayoutPanel.ANIMATION_TIME);
         }
     }
 
     private void setSideCommVisible(boolean visible) {
         if (this.sideCommVisible != visible) {
             this.sideCommVisible = visible;
-            forceLayout(ANIMATION_TIME);
+            forceLayout(ResponsiveLayoutPanel.ANIMATION_TIME);
         }
     }
 
@@ -460,8 +370,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public void scrollToTop() {
-        if (pageScroll.getVerticalScrollPosition() > getHeaderDisplay().getOffsetHeight()) {
-            pageScroll.setVerticalScrollPosition(getHeaderDisplay().getOffsetHeight());
+        if (pageScroll.getVerticalScrollPosition() > getDisplay(DisplayType.header).getOffsetHeight()) {
+            pageScroll.setVerticalScrollPosition(getDisplay(DisplayType.header).getOffsetHeight());
         }
     }
 

@@ -18,37 +18,27 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class StickyToolbarHolder extends SimplePanel implements RequiresResize {
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
 
-    private final ResponsiveLayoutPanel parent;
+public class InlineToolbarHolder extends SimplePanel {
 
-    public StickyToolbarHolder(ResponsiveLayoutPanel parent) {
+    private final FrontOfficeLayoutPanel parent;
+
+    public InlineToolbarHolder(FrontOfficeLayoutPanel parent) {
         this.parent = parent;
 
-        getElement().getStyle().setZIndex(10);
-
-        setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyToolbarHolder.name());
-
-        getElement().getStyle().setTop(0, Unit.PX);
-        getElement().getStyle().setLeft(0, Unit.PX);
-        getElement().getStyle().setPosition(Position.ABSOLUTE);
+        setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutInlineToolbarHolder.name());
 
     }
 
     public void setDisplay() {
-        setWidget(parent.getToolbarDisplay());
-    }
-
-    @Override
-    public void onResize() {
-        setWidth(parent.getPageWidth() + "px");
+        setWidget(parent.getDisplay(DisplayType.toolbar));
+        getElement().getStyle().setHeight(parent.getDisplay(DisplayType.toolbar).getOffsetHeight(), Unit.PX);
     }
 
 }

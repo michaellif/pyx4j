@@ -27,19 +27,19 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.client.ui.layout.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
 import com.pyx4j.widgets.client.Toolbar;
 
 public class ResponsiveLayoutDevConsole extends AbstractDevConsole {
 
     private final Image deviceImage;
 
-    private final ResponsiveLayoutPanel responsiveLayoutPanel;
+    private final FrontOfficeLayoutPanel responsiveLayoutPanel;
 
-    public ResponsiveLayoutDevConsole(final ResponsiveLayoutPanel responsiveLayoutPanel) {
+    public ResponsiveLayoutDevConsole(final FrontOfficeLayoutPanel responsiveLayoutPanel) {
         this.responsiveLayoutPanel = responsiveLayoutPanel;
 
         getElement().getStyle().setPadding(20, Unit.PX);

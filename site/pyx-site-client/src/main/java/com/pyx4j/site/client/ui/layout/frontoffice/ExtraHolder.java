@@ -18,41 +18,41 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
 
-public class InlineMenuHolder extends SimplePanel {
+public class ExtraHolder extends SimplePanel {
 
-    private final ResponsiveLayoutPanel parent;
+    private final FrontOfficeLayoutPanel parent;
 
-    public InlineMenuHolder(ResponsiveLayoutPanel parent) {
+    public ExtraHolder(FrontOfficeLayoutPanel parent) {
         this.parent = parent;
-    }
-
-    public void setMenuDisplay(DisplayPanel display) {
-        super.setWidget(display);
-        onPositionChange();
-        getElement().getStyle().setTop(0, Unit.PX);
-        getElement().getStyle().setProperty("width", "auto");
-        getElement().getStyle().setPosition(Position.ABSOLUTE);
+        setWidget(parent.getDisplay(DisplayType.extra));
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
     }
 
     public void onPositionChange() {
         if (getWidget() != null && isAttached()) {
-            int offsetTop = parent.getToolbarDisplay().getOffsetHeight();
-            int offsetBottom = parent.getFooterHolder().getAbsoluteTop();
+            int offsetTop = parent.getDisplay(DisplayType.toolbar).getOffsetHeight();
+            int offsetBottom = parent.getDisplay(DisplayType.footer).getAbsoluteTop();
             getWidget().setHeight("auto");
 
-            if (getAbsoluteTop() >= offsetTop) {
+            //TODO investigate why container's getAbsoluteTop() changes when child's position changes from STATIC to FIXED
+            //Workaround - use 10px threshold 
+            if (getAbsoluteTop() > offsetTop + 10) {
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
-            } else {
+                getElement().getStyle().setProperty("width", "auto");
+            } else if (getAbsoluteTop() < offsetTop - 10) {
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
+                getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);
                 if ((offsetTop + getWidget().getOffsetHeight()) <= offsetBottom) {
                     getWidget().getElement().getStyle().setProperty("top", offsetTop + "px");
                     getWidget().getElement().getStyle().setProperty("bottom", "auto");
@@ -65,19 +65,12 @@ public class InlineMenuHolder extends SimplePanel {
         } else {
             getElement().getStyle().setWidth(0, Unit.PX);
         }
+
     }
 
     @Override
     protected void onLoad() {
         super.onLoad();
         onPositionChange();
-    }
-
-    public int getMenuWidth() {
-        if (getWidget() == null) {
-            return 0;
-        } else {
-            return getWidget().getElement().getOffsetWidth();
-        }
     }
 }

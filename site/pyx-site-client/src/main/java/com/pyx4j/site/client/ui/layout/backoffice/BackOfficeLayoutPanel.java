@@ -18,17 +18,11 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout;
+package com.pyx4j.site.client.ui.layout.backoffice;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.layout.client.Layout;
-import com.google.gwt.layout.client.Layout.AnimationCallback;
 import com.google.gwt.layout.client.Layout.Layer;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.LayoutCommand;
-import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,12 +30,10 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.RiaDevConsole;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 
-public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
-
-    private final Layout layout;
-
-    private final LayoutCommand layoutCmd;
+public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final DisplayPanel headerDisplay;
 
@@ -68,17 +60,13 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private int notificationsHeight = 0;
 
-    public RiaLayoutPanel() {
-        setElement(Document.get().createDivElement());
-
-        layout = new Layout(getElement());
-        layoutCmd = new DisplaysLayoutCommand();
+    public BackOfficeLayoutPanel() {
 
         // ============ Header ============
         {
             headerDisplay = new DisplayPanel();
 
-            Layer layer = layout.attachChild(headerDisplay.asWidget().getElement(), headerDisplay);
+            Layer layer = getLayout().attachChild(headerDisplay.asWidget().getElement(), headerDisplay);
             headerDisplay.setLayoutData(layer);
 
             getChildren().add(headerDisplay);
@@ -88,7 +76,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         // ============ Notifications ============
         {
             notificationsDisplay = new DisplayPanel();
-            Layer layer = layout.attachChild(notificationsDisplay.asWidget().getElement(), notificationsDisplay);
+            Layer layer = getLayout().attachChild(notificationsDisplay.asWidget().getElement(), notificationsDisplay);
             notificationsDisplay.setLayoutData(layer);
 
             getChildren().add(notificationsDisplay);
@@ -99,7 +87,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         {
             menuPanel = new DockLayoutPanel(Unit.PX);
 
-            Layer layer = layout.attachChild(menuPanel.asWidget().getElement(), menuPanel);
+            Layer layer = getLayout().attachChild(menuPanel.asWidget().getElement(), menuPanel);
             menuPanel.setLayoutData(layer);
 
             getChildren().add(menuPanel);
@@ -120,7 +108,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         {
             contentDisplay = new DisplayPanel();
 
-            Layer layer = layout.attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
+            Layer layer = getLayout().attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
             contentDisplay.setLayoutData(layer);
 
             getChildren().add(contentDisplay);
@@ -132,7 +120,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
             add(devConsoleTab.asWidget(), getElement());
         }
 
-        forceLayout();
+        forceLayout(0);
 
     }
 
@@ -164,14 +152,8 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         return notificationsDisplay;
     }
 
-    public void forceLayout() {
-        layoutCmd.cancel();
-        doLayout();
-        layout.layout();
-        onResize();
-    }
-
-    private void doLayout() {
+    @Override
+    protected void doLayout() {
 
         int top = 0;
         int height = headerHeight;
@@ -225,29 +207,18 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         this.notificationsHeight = height;
     }
 
-    private class DisplaysLayoutCommand extends LayoutCommand {
-        public DisplaysLayoutCommand() {
-            super(layout);
-        }
-
-        @Override
-        public void schedule(int duration, final AnimationCallback callback) {
-        }
-
-        @Override
-        protected void doBeforeLayout() {
-            doLayout();
-        }
-    }
-
     @Override
-    public void onResize() {
+    public void resizeComponents() {
 
         for (Widget child : getChildren()) {
             if (child instanceof RequiresResize) {
                 ((RequiresResize) child).onResize();
             }
         }
+    }
+
+    @Override
+    public void onLayoutChangeRequest(LayoutChangeRequestEvent event) {
     }
 
 }

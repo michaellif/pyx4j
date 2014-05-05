@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -30,8 +30,8 @@ public class CenterPanel extends FlowPanel {
 
     public CenterPanel(FlowPanel contentPanel, InlineMenuHolder inlineMenuHolder) {
 
-        setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
-        getElement().getStyle().setProperty("maxWidth", ResponsiveLayoutPanel.MAX_WIDTH + "px");
+        setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
+        getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
         addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
         getElement().getStyle().setPosition(Position.RELATIVE);
 
@@ -41,7 +41,7 @@ public class CenterPanel extends FlowPanel {
         backgroundPanel.getElement().getStyle().setProperty("bottom", "0");
         backgroundPanel.getElement().getStyle().setProperty("left", "0");
         backgroundPanel.getElement().getStyle().setProperty("right", "0");
-        backgroundPanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
+        backgroundPanel.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
         add(backgroundPanel);
 
         FlowPanel containerPanel = new FlowPanel();

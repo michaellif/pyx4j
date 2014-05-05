@@ -14,29 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 19, 2013
+ * Created on Jun 23, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.widgets.client.DropDownPanel;
 
-public class InlineToolbarHolder extends SimplePanel {
-
-    private final ResponsiveLayoutPanel parent;
-
-    public InlineToolbarHolder(ResponsiveLayoutPanel parent) {
-        this.parent = parent;
-
-        setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutInlineToolbarHolder.name());
-
-    }
-
-    public void setDisplay() {
-        setWidget(parent.getToolbarDisplay());
-        getElement().getStyle().setHeight(parent.getToolbarDisplay().getOffsetHeight(), Unit.PX);
-    }
+public class PopupCommHolder extends DropDownPanel {
 
 }

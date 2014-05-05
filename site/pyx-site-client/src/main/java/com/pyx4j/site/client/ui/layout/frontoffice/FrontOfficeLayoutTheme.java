@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.responsive;
+package com.pyx4j.site.client.ui.layout.frontoffice;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
@@ -27,7 +27,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class ResponsiveLayoutTheme extends Theme {
+public class FrontOfficeLayoutTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         ResponsiveLayoutMainHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
@@ -35,7 +35,7 @@ public class ResponsiveLayoutTheme extends Theme {
         ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder, ResponsiveLayoutContentBackground;
     }
 
-    public ResponsiveLayoutTheme() {
+    public FrontOfficeLayoutTheme() {
         initStyles();
         initScrollStyles();
     }

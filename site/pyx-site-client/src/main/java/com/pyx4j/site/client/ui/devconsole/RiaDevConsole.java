@@ -22,13 +22,13 @@ package com.pyx4j.site.client.ui.devconsole;
 
 import com.google.gwt.dom.client.Style.Unit;
 
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
+import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
 
 public class RiaDevConsole extends AbstractDevConsole {
 
-    private final RiaLayoutPanel riaLayoutPanel;
+    private final BackOfficeLayoutPanel riaLayoutPanel;
 
-    public RiaDevConsole(final RiaLayoutPanel riaLayoutPanel) {
+    public RiaDevConsole(final BackOfficeLayoutPanel riaLayoutPanel) {
         this.riaLayoutPanel = riaLayoutPanel;
         getElement().getStyle().setPadding(20, Unit.PX);
         add(new SetMocksButton());
