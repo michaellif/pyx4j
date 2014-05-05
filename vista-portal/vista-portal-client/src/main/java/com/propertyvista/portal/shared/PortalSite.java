@@ -32,7 +32,7 @@ import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
@@ -52,7 +52,7 @@ public abstract class PortalSite extends VistaSite {
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
-    private final RootPane<ResponsiveLayoutPanel> rootPane;
+    private final RootPane<FrontOfficeLayoutPanel> rootPane;
 
     private final PortalTheme portalTheme;
 
@@ -60,7 +60,7 @@ public abstract class PortalSite extends VistaSite {
 
     private boolean canHideAddrBar = false;
 
-    public PortalSite(String appId, Class<? extends PortalSiteMap> siteMapClass, RootPane<ResponsiveLayoutPanel> rootPane, AppPlaceDispatcher placeDispatcher,
+    public PortalSite(String appId, Class<? extends PortalSiteMap> siteMapClass, RootPane<FrontOfficeLayoutPanel> rootPane, AppPlaceDispatcher placeDispatcher,
             PortalTheme portalTheme) {
         super(appId, siteMapClass, new SingletonViewFactory(), placeDispatcher);
         this.rootPane = rootPane;

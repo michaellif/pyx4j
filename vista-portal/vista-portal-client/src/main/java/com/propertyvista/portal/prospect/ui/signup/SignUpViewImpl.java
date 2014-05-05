@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.client.ui.layout.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.shared.EntityValidationException;

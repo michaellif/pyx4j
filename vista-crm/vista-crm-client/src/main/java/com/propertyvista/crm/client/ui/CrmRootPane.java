@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.RootPane;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
+import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
@@ -28,7 +28,7 @@ import com.propertyvista.crm.client.mvp.NotificationsActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class CrmRootPane extends RootPane<RiaLayoutPanel> {
+public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
 
     public static final int MENU_WIDTH = 200;
 
@@ -37,7 +37,7 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> {
     public static final int NOTIFICATION_HEIGHT = 30;
 
     public CrmRootPane() {
-        super(new RiaLayoutPanel());
+        super(new BackOfficeLayoutPanel());
 
         asWidget().setMenuWidth(MENU_WIDTH);
         asWidget().setHeaderHeight(HEADER_HEIGHT);
@@ -54,7 +54,7 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> {
 
     public void allocateNotificationsSpace(int number) {
         asWidget().setNotificationsHeight(number * NOTIFICATION_HEIGHT);
-        asWidget().forceLayout();
+        asWidget().forceLayout(0);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> {
             asWidget().setMenuVisible(true);
         }
 
-        asWidget().forceLayout();
+        asWidget().forceLayout(0);
     }
 
 }

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui;
 
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+
 import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
 import com.propertyvista.portal.resident.mvp.ExtraActivityMapper;
@@ -28,14 +30,14 @@ public class ResidentPortalRootPane extends PortalRootPane {
     public ResidentPortalRootPane() {
         super();
 
-        bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
-        bind(new ToolbarActivityMapper(), asWidget().getToolbarDisplay());
-        bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
-        bind(new CommunicationActivityMapper(), asWidget().getCommDisplay());
-        bind(new ContentActivityMapper(), asWidget().getContentDisplay());
-        bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
-        bind(new ExtraActivityMapper(), asWidget().getExtraDisplay());
-        bind(new NotificationActivityMapper(), asWidget().getNotificationDisplay());
+        bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
+        bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));
+        bind(new MenuActivityMapper(), asWidget().getDisplay(DisplayType.menu));
+        bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
+        bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
+        bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
+        bind(new ExtraActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
 
     }
 

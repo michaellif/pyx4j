@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.extra.ExtraView;

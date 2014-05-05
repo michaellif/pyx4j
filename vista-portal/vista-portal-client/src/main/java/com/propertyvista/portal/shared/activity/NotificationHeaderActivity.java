@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 

@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.client.ui.layout.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;

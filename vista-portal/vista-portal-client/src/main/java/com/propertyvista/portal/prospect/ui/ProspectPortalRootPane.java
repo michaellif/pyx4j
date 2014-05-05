@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui;
 
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
 import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentalSummaryActivityMapper;
@@ -27,13 +29,13 @@ public class ProspectPortalRootPane extends PortalRootPane {
     public ProspectPortalRootPane() {
         super();
 
-        bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
-        bind(new ToolbarActivityMapper(), asWidget().getToolbarDisplay());
-        bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
-        bind(new ContentActivityMapper(), asWidget().getContentDisplay());
-        bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
-        bind(new RentalSummaryActivityMapper(), asWidget().getExtraDisplay());
-        bind(new NotificationActivityMapper(), asWidget().getNotificationDisplay());
+        bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
+        bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));
+        bind(new MenuActivityMapper(), asWidget().getDisplay(DisplayType.menu));
+        bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
+        bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
+        bind(new RentalSummaryActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
     }
 
 }

@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -50,7 +50,7 @@ public class PortalTheme extends Theme {
         initMessageStyles();
         initCellListStyle();
 
-        addTheme(new ResponsiveLayoutTheme());
+        addTheme(new FrontOfficeLayoutTheme());
 
         addTheme(new HorizontalAlignCenterMixin());
 
@@ -353,16 +353,16 @@ public class PortalTheme extends Theme {
 
     private void initBackground() {
 
-        Style style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
+        Style style = new Style(".", FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
         style.addProperty("background-image", "url('" + PortalImages.INSTANCE.background().getSafeUri().asString() + "')");
         addStyle(style);
 
-        style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
+        style = new Style(".", FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("opacity", "0");
         addStyle(style);
 
-        style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
+        style = new Style(".", FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("opacity", "0.9");
         addStyle(style);

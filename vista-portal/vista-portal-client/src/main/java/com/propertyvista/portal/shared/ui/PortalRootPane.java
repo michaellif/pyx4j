@@ -16,12 +16,12 @@ package com.propertyvista.portal.shared.ui;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.RootPane;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
 
-public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
+public class PortalRootPane extends RootPane<FrontOfficeLayoutPanel> {
 
     public PortalRootPane() {
-        super(new ResponsiveLayoutPanel());
+        super(new FrontOfficeLayoutPanel());
 
     }
 

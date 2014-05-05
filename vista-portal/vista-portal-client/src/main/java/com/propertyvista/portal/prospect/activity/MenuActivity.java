@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;

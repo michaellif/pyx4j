@@ -32,8 +32,8 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
@@ -179,7 +179,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
             flexPanel.setH4(row, 1, 1, i18n.tr("Which building do you live in?"));
 
-            buildingSelector = (BuildingSuggestBox) inject(proto().building(), new BuildingSuggestBox(), new LoginWidgetDecoratorBuilder().build());
+            buildingSelector = inject(proto().building(), new BuildingSuggestBox(), new LoginWidgetDecoratorBuilder().build());
             buildingSelector.setWatermark(i18n.tr("Your building's address"));
             buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
             flexPanel.setWidget(++row, 0, buildingSelector);
