@@ -95,7 +95,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     }
 
     @Override
-    protected String getAddItemDialogBody() {
+    protected String getAddItemDialogSelectionText() {
         return i18n.tr("Do you want to select existing Prospect/Tenant?");
     }
 

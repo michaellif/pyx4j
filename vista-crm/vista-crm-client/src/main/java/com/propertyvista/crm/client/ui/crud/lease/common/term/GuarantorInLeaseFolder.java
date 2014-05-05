@@ -82,7 +82,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    protected String getAddItemDialogBody() {
+    protected String getAddItemDialogSelectionText() {
         return i18n.tr("Do you want to select existing Guarantor?");
     }
 

@@ -17,12 +17,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.RadioGroup;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
@@ -76,29 +82,33 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     @Override
     protected void addItem() {
-        MessageDialog.confirm(getAddItemDialogCaption(), getAddItemDialogBody(), new Command() {
+
+        new AddParticipantBox() {
             @Override
-            public void execute() {
-                new CustomerSelectorDialog(parentForm.getParentView(), retrieveExistingCustomers()) {
-                    @Override
-                    public void onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            addParticipants(getSelectedItems());
+            public boolean onClickOk() {
+                switch (getSelection()) {
+                case Existing:
+                    new CustomerSelectorDialog(parentForm.getParentView(), retrieveExistingCustomers()) {
+                        @Override
+                        public void onClickOk() {
+                            if (!getSelectedItems().isEmpty()) {
+                                addParticipants(getSelectedItems());
+                            }
                         }
-                    }
-                }.show();
-            }
-        }, new Command() {
-            @Override
-            public void execute() {
-                addParticipant();
-            }
-        }, null);
+                    }.show();
+
+                case New:
+                    addParticipant();
+                }
+
+                return true;
+            };
+        }.show();
     }
 
     protected abstract String getAddItemDialogCaption();
 
-    protected abstract String getAddItemDialogBody();
+    protected abstract String getAddItemDialogSelectionText();
 
     protected abstract void addParticipants(List<Customer> customers);
 
@@ -121,5 +131,38 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     protected List<Customer> retrieveConcurrentCustomers() {
         return Collections.emptyList();
+    }
+
+    protected enum AddParticipantSelection {
+        New, Existing
+    }
+
+    private abstract class AddParticipantBox extends OkCancelDialog {
+
+        CRadioGroupEnum<AddParticipantSelection> selection = new CRadioGroupEnum<>(AddParticipantSelection.class, RadioGroup.Layout.HORISONTAL);
+
+        public AddParticipantBox() {
+            super(getAddItemDialogCaption());
+            setBody(createBody());
+            selection.setValue(AddParticipantSelection.New);
+            setDialogPixelWidth(300);
+        }
+
+        protected Widget createBody() {
+            VerticalPanel content = new VerticalPanel();
+            content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            content.setSpacing(5);
+
+            content.add(new Label(getAddItemDialogSelectionText()));
+            content.add(selection.asWidget());
+            selection.asWidget().getElement().getStyle().setMarginLeft(75, Unit.PX);
+
+            content.setWidth("100%");
+            return content.asWidget();
+        }
+
+        public AddParticipantSelection getSelection() {
+            return selection.getValue();
+        }
     }
 }
