@@ -34,7 +34,7 @@ public class TwoColumnFluidPanel implements IsWidget {
 
     public TwoColumnFluidPanel() {
         contentPanel = new FlowPanel();
-        contentPanel.setStyleName(TwoColumnFormPanelTheme.StyleName.FluidPanel.name());
+        contentPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanel.name());
     }
 
     private BlockPanel ensureCellPanel(Location location) {
@@ -106,9 +106,9 @@ public class TwoColumnFluidPanel implements IsWidget {
 
     public void setCollapsed(boolean collapsed) {
         if (collapsed) {
-            contentPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.collapsed.name());
+            contentPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
         } else {
-            contentPanel.removeStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.collapsed.name());
+            contentPanel.removeStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
         }
     }
 
@@ -118,16 +118,16 @@ public class TwoColumnFluidPanel implements IsWidget {
 
         public BlockPanel(Location location) {
             this.location = location;
-            setStyleName(TwoColumnFormPanelTheme.StyleName.FluidPanelBlock.name());
+            setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanelBlock.name());
             switch (location) {
             case Left:
-                addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.left.name());
+                addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.left.name());
                 break;
             case Right:
-                addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.right.name());
+                addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.right.name());
                 break;
             case Dual:
-                addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.dual.name());
+                addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
                 break;
             }
         }

@@ -20,17 +20,17 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelActionWidget;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Image;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH1Label;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH2;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH2Label;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH3;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH3Label;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelH4Label;
-import static com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName.FormPanelHR;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelActionWidget;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH1;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH1Image;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH1Label;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH2;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH2Label;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH3;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH4;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH4Label;
+import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelHR;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -44,17 +44,17 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanelTheme.StyleName;
+import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName;
 
-public class TwoColumnFormPanel implements IsWidget {
+public class DualColumnFormPanel implements IsWidget {
 
     private final TwoColumnFluidPanel fluidPanel;
 
-    public TwoColumnFormPanel() {
+    public DualColumnFormPanel() {
         this(false);
     }
 
-    public TwoColumnFormPanel(boolean collapsed) {
+    public DualColumnFormPanel(boolean collapsed) {
         fluidPanel = new TwoColumnFluidPanel();
         setCollapsed(collapsed);
     }

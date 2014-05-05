@@ -33,7 +33,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFormPanel;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
@@ -46,7 +46,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
     public ListerViewImpl() {
         setSize("100%", "100%");
 
-        TwoColumnFormPanel formPanel = new TwoColumnFormPanel();
+        DualColumnFormPanel formPanel = new DualColumnFormPanel();
 
         formPanel.h1("Settings");
         formPanel.append(Location.Left, new HTML("Container: width = 100px, height = 100px"));

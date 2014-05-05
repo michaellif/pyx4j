@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
-public class BasicCFormPanel extends TwoColumnFormPanel {
+public class BasicCFormPanel extends DualColumnFormPanel {
 
     private final CForm<?> parent;
 
@@ -79,16 +79,16 @@ public class BasicCFormPanel extends TwoColumnFormPanel {
 
         public FieldDecoratorOptions decorate() {
             Widget handlerPanel = comp.asWidget().getParent();
-            handlerPanel.setStyleName(TwoColumnFormPanelTheme.StyleName.FormPanelCell.name());
+            handlerPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FormPanelCell.name());
             switch (location) {
             case Left:
-                handlerPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.left.name());
+                handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.left.name());
                 break;
             case Right:
-                handlerPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.right.name());
+                handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.right.name());
                 break;
             case Dual:
-                handlerPanel.addStyleDependentName(TwoColumnFormPanelTheme.StyleDependent.dual.name());
+                handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
                 break;
             }
             final FieldDecoratorOptions options = new FieldDecoratorOptions(location == Location.Dual);

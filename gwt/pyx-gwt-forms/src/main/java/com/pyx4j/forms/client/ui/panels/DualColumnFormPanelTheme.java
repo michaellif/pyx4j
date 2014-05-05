@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public abstract class TwoColumnFormPanelTheme extends Theme {
+public abstract class DualColumnFormPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         FluidPanel, FluidPanelBlock,
@@ -42,7 +42,7 @@ public abstract class TwoColumnFormPanelTheme extends Theme {
         collapsed, left, right, dual;
     }
 
-    public TwoColumnFormPanelTheme() {
+    public DualColumnFormPanelTheme() {
         initStyles();
     }
 
