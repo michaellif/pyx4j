@@ -16,7 +16,8 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -29,18 +30,17 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
     public CardServiceSimulatorConfigForm(IForm<CardServiceSimulatorConfigDTO> view) {
         super(CardServiceSimulatorConfigDTO.class, view);
 
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().responseDelay(), 5, true));
+        formPanel.append(Location.Left, proto().responseDelay()).decorate().componentWidth(80);
 
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().responseType(), 15, true));
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().responseCode(), 15, true));
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().responseHttpCode(), 15, true));
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().responseText(), 15, true));
+        formPanel.append(Location.Left, proto().responseType()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().responseCode()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().responseHttpCode()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().responseText()).decorate().componentWidth(180);
 
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().acceptCardExpiryFrom(), 15, true));
-        panel.setWidget(++row, 0, 2, injectAndDecorate(proto().acceptCardExpiryTo(), 15, true));
+        formPanel.append(Location.Left, proto().acceptCardExpiryFrom()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().acceptCardExpiryTo()).decorate().componentWidth(180);
 
         get(proto().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
 
@@ -51,7 +51,7 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
 
         });
 
-        selectTab(addTab(panel, "Card Service Simulator"));
+        selectTab(addTab(formPanel, "Card Service Simulator"));
     }
 
     @Override

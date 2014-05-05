@@ -21,15 +21,15 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
-public class AccountRecoveryOptionsForm extends AccessoryEntityForm<AccountRecoveryOptionsDTO> {
+public class AccountRecoveryOptionsForm extends CForm<AccountRecoveryOptionsDTO> {
 
     public AccountRecoveryOptionsForm(boolean isEditable) {
         super(AccountRecoveryOptionsDTO.class);

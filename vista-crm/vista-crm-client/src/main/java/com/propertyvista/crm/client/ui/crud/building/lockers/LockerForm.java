@@ -30,8 +30,8 @@ public class LockerForm extends CrmEntityForm<Locker> {
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        formPanel.append(Location.Left, injectAndDecorate(proto().name(), 10));
-        formPanel.append(Location.Left, injectAndDecorate(proto().type(), 10));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(120);
 
         selectTab(addTab(formPanel, i18n.tr("General")));
         setTabBarVisible(false);

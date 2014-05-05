@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -94,7 +95,8 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         unbind(proto().version().value());
 
         if (comp != null) {
-            valueHolder.setWidget(injectAndDecorate(proto().version().value(), comp, 6));
+            comp.setDecorator(new FieldDecorator.Builder<>().componentWidth("100px").build());
+            valueHolder.setWidget(inject(proto().version().value(), comp));
 
             if (repopulatevalue && valueType != Concession.Type.free) {
                 get(proto().version().value()).populate(getValue().version().value().getValue(BigDecimal.ZERO));

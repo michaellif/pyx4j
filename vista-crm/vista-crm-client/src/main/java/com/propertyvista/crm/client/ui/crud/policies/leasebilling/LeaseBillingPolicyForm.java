@@ -37,6 +37,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
@@ -159,7 +160,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         unbind(proto().lateFee().baseFee());
 
         if (comp != null) {
-            baseFeeHolder.setWidget(injectAndDecorate(proto().lateFee().baseFee(), comp, 6));
+            comp.setDecorator(new FieldDecorator.Builder<>().componentWidth("100px").build());
+            baseFeeHolder.setWidget(inject(proto().lateFee().baseFee(), comp));
 
             if (repopulatevalue) {
                 get(proto().lateFee().baseFee()).populate(getValue().lateFee().baseFee().getValue(BigDecimal.ZERO));

@@ -15,7 +15,8 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -36,22 +37,22 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
 
         setTabBarVisible(false);
 
-        TwoColumnFlexFormPanel detailsTab = new TwoColumnFlexFormPanel();
-        int row = -1;
-        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().userName()));
-        detailsTab.setWidget(row, 1, injectAndDecorate(proto().remoteAddr()));
-        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().userKey(), new CLabel<Key>()));
-        detailsTab.setWidget(row, 1, injectAndDecorate(proto().sessionId()));
-        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().event()));
-        detailsTab.setWidget(row, 1, injectAndDecorate(proto().when()));
-        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().namespace()));
-        detailsTab.setWidget(row, 1, injectAndDecorate(proto().worldTime()));
-        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), 10));
-        detailsTab.setWidget(++row, 0, injectAndDecorate(proto().application()));
-        detailsTab.setWidget(row, 1, injectAndDecorate(proto().targetEntity()));
-        detailsTab.setWidget(++row, 0, 2, injectAndDecorate(proto().details(), true));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        selectTab(addTab(detailsTab, i18n.tr("Audit Record")));
+        formPanel.append(Location.Left, proto().userName()).decorate();
+        formPanel.append(Location.Right, proto().remoteAddr()).decorate();
+        formPanel.append(Location.Left, proto().userKey(), new CLabel<Key>()).decorate();
+        formPanel.append(Location.Right, proto().sessionId()).decorate();
+        formPanel.append(Location.Left, proto().event()).decorate();
+        formPanel.append(Location.Right, proto().when()).decorate();
+        formPanel.append(Location.Left, proto().namespace()).decorate();
+        formPanel.append(Location.Right, proto().worldTime()).decorate();
+        formPanel.append(Location.Left, proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))).decorate();
+        formPanel.append(Location.Left, proto().application()).decorate();
+        formPanel.append(Location.Right, proto().targetEntity()).decorate();
+        formPanel.append(Location.Dual, proto().details()).decorate();
+
+        selectTab(addTab(formPanel, i18n.tr("Audit Record")));
 
         get(proto().details()).asWidget().setStyleName(OperationsTheme.OperationsStyles.TextFieldPreformatted.name(), true);
 

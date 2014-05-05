@@ -51,7 +51,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -461,7 +460,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             return new ILSSummaryEditor();
         }
 
-        private class ILSSummaryEditor extends AccessoryEntityForm<ILSSummaryBuilding> {
+        private class ILSSummaryEditor extends CForm<ILSSummaryBuilding> {
             public ILSSummaryEditor() {
                 super(ILSSummaryBuilding.class);
             }
@@ -473,9 +472,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 160);
 
-                formPanel.append(Location.Left, inject(proto().frontImage().file(), frontImage));
-                formPanel.append(Location.Right, injectAndDecorate(proto().title(), 10, 50));
-                formPanel.append(Location.Dual, injectAndDecorate(proto().description(), 10, 50));
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
+                formPanel.append(Location.Right, proto().title());
+                formPanel.append(Location.Dual, proto().description());
 
                 return formPanel;
             }
@@ -532,7 +531,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             });
         }
 
-        private class ILSProfileBuildingEditor extends AccessoryEntityForm<ILSProfileBuilding> {
+        private class ILSProfileBuildingEditor extends CForm<ILSProfileBuilding> {
             public ILSProfileBuildingEditor() {
                 super(ILSProfileBuilding.class);
             }

@@ -53,7 +53,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         formPanel.append(Location.Left, proto().version().name()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().version().description()).decorate().componentWidth(200);
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            formPanel.append(Location.Left, injectAndDecorate(proto().defaultCatalogItem(), new CBooleanLabel(), 40));
+            formPanel.append(Location.Left, proto().defaultCatalogItem(), new CBooleanLabel()).decorate();
         }
 
         formPanel.append(Location.Right, proto().expiredFrom()).decorate().componentWidth(100);

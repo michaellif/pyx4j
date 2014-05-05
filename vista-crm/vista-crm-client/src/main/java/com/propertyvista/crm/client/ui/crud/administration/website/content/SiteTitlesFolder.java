@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -82,7 +81,7 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
         return new SiteTitlesEditor();
     }
 
-    class SiteTitlesEditor extends AccessoryEntityForm<SiteTitles> {
+    class SiteTitlesEditor extends CForm<SiteTitles> {
 
         public SiteTitlesEditor() {
             super(SiteTitles.class);

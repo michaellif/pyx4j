@@ -33,7 +33,6 @@ import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -105,7 +104,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
         return editor;
     }
 
-    class PortalBannerImageEditor extends AccessoryEntityForm<PortalBannerImage> {
+    class PortalBannerImageEditor extends CForm<PortalBannerImage> {
         private final CImage imageHolder;
 
         public PortalBannerImageEditor() {

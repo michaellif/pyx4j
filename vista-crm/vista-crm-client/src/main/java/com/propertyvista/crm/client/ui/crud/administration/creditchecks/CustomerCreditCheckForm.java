@@ -37,19 +37,19 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         formPanel.append(Location.Left, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 
         formPanel.h1(i18n.tr("Details"));
-        formPanel.append(Location.Left, injectAndDecorate(proto().creditCheckDate()));
-        formPanel.append(Location.Left, injectAndDecorate(proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())));
-        formPanel.append(Location.Left, injectAndDecorate(proto().amountChecked()));
+        formPanel.append(Location.Left, proto().creditCheckDate()).decorate();
+        formPanel.append(Location.Left, proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())).decorate();
+        formPanel.append(Location.Left, proto().amountChecked()).decorate();
 
         formPanel.h1(i18n.tr("Results From Equifax"));
-        formPanel.append(Location.Left, injectAndDecorate(proto().riskCode()));
-        formPanel.append(Location.Left, injectAndDecorate(proto().creditCheckResult()));
-        formPanel.append(Location.Left, injectAndDecorate(proto().amountApproved()));
-        formPanel.append(Location.Left, injectAndDecorate(proto().reason()));
+        formPanel.append(Location.Left, proto().riskCode()).decorate();
+        formPanel.append(Location.Left, proto().creditCheckResult()).decorate();
+        formPanel.append(Location.Left, proto().amountApproved()).decorate();
+        formPanel.append(Location.Left, proto().reason()).decorate();
 
         formPanel.h1(i18n.tr("Fees"));
-        formPanel.append(Location.Left, injectAndDecorate(proto().transaction().amount()));
-        formPanel.append(Location.Left, injectAndDecorate(proto().transactionRef()));
+        formPanel.append(Location.Left, proto().transaction().amount()).decorate();
+        formPanel.append(Location.Left, proto().transactionRef()).decorate();
 
         selectTab(addTab(formPanel, i18n.tr("General")));
     }

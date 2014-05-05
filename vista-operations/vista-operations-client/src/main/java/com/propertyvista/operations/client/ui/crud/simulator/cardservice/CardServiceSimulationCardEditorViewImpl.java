@@ -30,8 +30,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
@@ -93,27 +93,25 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
             transactionLister = new CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister();
 
-            TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            int row = 0;
-            contentPanel.setWidget(row++, 1, injectAndDecorate(proto().created()));
-            contentPanel.setWidget(row++, 1, injectAndDecorate(proto().updated()));
+            formPanel.append(Location.Left, proto().cardType()).decorate();
+            formPanel.append(Location.Left, proto().number()).decorate();
+            formPanel.append(Location.Left, proto().expiryDate()).decorate();
+            formPanel.append(Location.Left, proto().creditLimit()).decorate();
+            formPanel.append(Location.Left, proto().balance()).decorate();
+            formPanel.append(Location.Left, proto().reserved()).decorate();
+            formPanel.append(Location.Left, proto().responseCode()).decorate();
 
-            row = 0;
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().cardType()));
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().number()));
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().expiryDate()));
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().creditLimit()));
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().balance()));
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().reserved()));
-            contentPanel.setWidget(row++, 0, injectAndDecorate(proto().responseCode()));
+            formPanel.append(Location.Right, proto().created()).decorate();
+            formPanel.append(Location.Right, proto().updated()).decorate();
 
-            contentPanel.setH2(row++, 0, 2, "Tokens");
-            contentPanel.setWidget(row++, 0, 2, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));
+            formPanel.h2("Tokens");
+            formPanel.append(Location.Dual, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));
 
-            contentPanel.setH2(row++, 0, 2, "Transactions");
+            formPanel.h2("Transactions");
 
-            contentPanel.setWidget(row++, 0, 2, new Button("Add New Transaction...", new Command() {
+            formPanel.append(Location.Dual, new Button("Add New Transaction...", new Command() {
                 @Override
                 public void execute() {
                     if (getValue().getPrimaryKey() == null) {
@@ -123,12 +121,12 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
                     ((CardServiceSimulationCardEditorView.Presenter) CardServiceSimulationCardEditorViewImpl.this.getPresenter()).addTransaction();
                 }
             }));
-            contentPanel.setWidget(row++, 0, 2, transactionLister);
+            formPanel.append(Location.Dual, transactionLister);
             transactionLister.setDataSource(new ListerDataSource<CardServiceSimulationTransaction>(CardServiceSimulationTransaction.class, GWT
                     .<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class)));
 
             setTabBarVisible(false);
-            selectTab(addTab(contentPanel, "Card Service Simulation"));
+            selectTab(addTab(formPanel, "Card Service Simulation"));
 
         }
 

@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -118,11 +119,11 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         if (!isEditable()) {
             formPanel.hr();
 
-            formPanel.append(Location.Left, injectAndDecorate(proto().created(), 10));
-            formPanel.append(Location.Right, injectAndDecorate(proto().updated(), 10));
+            formPanel.append(Location.Left, proto().created()).decorate().componentWidth(120);
+            formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
 
-            formPanel.append(Location.Left, injectAndDecorate(proto().createdBy(), 25));
-            formPanel.append(Location.Right, injectAndDecorate(proto().status(), 10));
+            formPanel.append(Location.Left, proto().createdBy()).decorate();
+            formPanel.append(Location.Right, proto().status()).decorate().componentWidth(120);
         }
 
         selectTab(addTab(formPanel, i18n.tr("General")));
@@ -160,7 +161,8 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         unbind(proto().tax());
 
         if (comp != null) {
-            taxHolder.setWidget(injectAndDecorate(proto().tax(), comp, 10));
+            comp.setDecorator(new FieldDecorator.Builder<>().componentWidth("100px").build());
+            taxHolder.setWidget(inject(proto().tax(), comp));
 
             if (repopulate) {
                 get(proto().tax()).populate(getValue().tax().getValue(BigDecimal.ZERO));

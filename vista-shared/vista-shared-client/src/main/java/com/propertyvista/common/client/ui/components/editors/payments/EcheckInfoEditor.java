@@ -14,14 +14,14 @@
 package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
@@ -31,7 +31,7 @@ import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.shared.util.EcheckFormatter;
 
-public class EcheckInfoEditor extends AccessoryEntityForm<EcheckInfo> {
+public class EcheckInfoEditor extends CForm<EcheckInfo> {
 
     protected final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(
             AccountNumberIdentity.class, new EcheckFormatter());
@@ -42,23 +42,21 @@ public class EcheckInfoEditor extends AccessoryEntityForm<EcheckInfo> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        panel.setWidget(++row, 0, injectAndDecorate(proto().nameOn(), 20));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().accountNo(), accountEditor, 20));
+        formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().accountNo()).decorate().componentWidth(250);
 
-        panel.setWidget(++row, 0, injectAndDecorate(proto().branchTransitNumber(), 5));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().bankId(), 3));
+        formPanel.append(Location.Left, proto().branchTransitNumber()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().bankId()).decorate().componentWidth(50);
 
         if (!isViewable() && isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
             image.getElement().getStyle().setMarginTop(1, Unit.EM);
-            panel.setWidget(++row, 0, image);
-            panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+            formPanel.append(Location.Dual, image);
         }
 
-        return panel;
+        return formPanel;
     }
 
     @Override

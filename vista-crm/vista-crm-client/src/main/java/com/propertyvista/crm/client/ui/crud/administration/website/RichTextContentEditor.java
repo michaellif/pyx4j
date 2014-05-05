@@ -17,18 +17,18 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 
-public class RichTextContentEditor extends AccessoryEntityForm<HtmlContent> {
+public class RichTextContentEditor extends CForm<HtmlContent> {
 
     private boolean selectableLocale;
 

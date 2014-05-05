@@ -13,8 +13,11 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulation;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -45,66 +48,61 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         get(proto().systems().useDirectBankingSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createGeneralTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        content.setH2(++row, 0, 2, i18n.tr("Cache"));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().generalCacheEnabled(), 5, true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().entityCacheServiceEnabled(), 5, true));
+        formPanel.h2(i18n.tr("Cache"));
+        formPanel.append(Location.Left, proto().generalCacheEnabled()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().entityCacheServiceEnabled()).decorate().componentWidth(80);
 
-        content.setH2(++row, 0, 2, i18n.tr("Network Simulation"));
+        formPanel.h2(i18n.tr("Network Simulation"));
 
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().networkSimulation().enabled(), 5, true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().networkSimulation().delay(), 10, true));
+        formPanel.append(Location.Left, proto().networkSimulation().enabled()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().networkSimulation().delay()).decorate().componentWidth(120);
 
-        content.setH2(++row, 0, 2, i18n.tr("New Session duration"));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().devSessionDuration(), 10, true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().applicationSessionDuration(), 10, true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().containerSessionTimeout(), new CLabel<String>(), 10, true));
+        formPanel.h2(i18n.tr("New Session duration"));
+        formPanel.append(Location.Left, proto().devSessionDuration()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().applicationSessionDuration()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().containerSessionTimeout(), new CLabel<String>()).decorate().componentWidth(120);
 
-        return content;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createCaledonTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createCaledonTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        content.setH2(++row, 0, 2, i18n.tr("Funds Transfer"));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useFundsTransferSimulator(), 5, true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useDirectBankingSimulator(), 5, true));
+        formPanel.h2(i18n.tr("Funds Transfer"));
+        formPanel.append(Location.Left, proto().systems().useFundsTransferSimulator()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().systems().useDirectBankingSimulator()).decorate().componentWidth(80);
 
-        content.setH2(++row, 0, 2, i18n.tr("Credit Cards"));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useCardServiceSimulator(), 5, true));
+        formPanel.h2(i18n.tr("Credit Cards"));
+        formPanel.append(Location.Left, proto().systems().useCardServiceSimulator()).decorate().componentWidth(80);
 
-        return content;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createYardiTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createYardiTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiAllTenantsToHaveEmails(), 5, true));
+        formPanel.append(Location.Left, proto().systems().yardiAllTenantsToHaveEmails()).decorate().componentWidth(80);
 
-        content.setH2(++row, 0, 2, i18n.tr("Yardi Network Simulation"));
+        formPanel.h2(i18n.tr("Yardi Network Simulation"));
 
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiInterfaceNetworkSimulation().enabled(), 5, true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().yardiInterfaceNetworkSimulation().delay(), 10, true));
+        formPanel.append(Location.Left, proto().systems().yardiInterfaceNetworkSimulation().enabled()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().systems().yardiInterfaceNetworkSimulation().delay()).decorate().componentWidth(120);
 
-        return content;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createEquifaxTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private IsWidget createEquifaxTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().systems().useEquifaxSimulator(), 5, true));
+        formPanel.append(Location.Left, proto().systems().useEquifaxSimulator()).decorate().componentWidth(80);
 
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().equifax().approve().xml(), true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().equifax().decline().xml(), true));
-        content.setWidget(++row, 0, 2, injectAndDecorate(proto().equifax().moreInfo().xml(), true));
+        formPanel.append(Location.Dual, proto().equifax().approve().xml()).decorate();
+        formPanel.append(Location.Dual, proto().equifax().decline().xml()).decorate();
+        formPanel.append(Location.Dual, proto().equifax().moreInfo().xml()).decorate();
 
-        return content;
+        return formPanel;
     }
-
 }

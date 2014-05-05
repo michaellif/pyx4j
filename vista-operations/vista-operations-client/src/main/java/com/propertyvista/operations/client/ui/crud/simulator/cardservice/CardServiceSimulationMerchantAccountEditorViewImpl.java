@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
@@ -29,20 +29,19 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
         public CardServiceSimulationMerchantAccountForm(IForm<CardServiceSimulationMerchantAccount> view) {
             super(CardServiceSimulationMerchantAccount.class, view);
 
-            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
-            int row = -1;
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().terminalID()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().balance()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().responseCode()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().created()));
+            formPanel.append(Location.Left, proto().terminalID()).decorate();
+            formPanel.append(Location.Left, proto().balance()).decorate();
+            formPanel.append(Location.Left, proto().responseCode()).decorate();
+            formPanel.append(Location.Left, proto().created()).decorate();
 
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().visaCreditConvenienceFee()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().masterCardConvenienceFee()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().visaDebitConvenienceFee()));
+            formPanel.append(Location.Left, proto().visaCreditConvenienceFee()).decorate();
+            formPanel.append(Location.Left, proto().masterCardConvenienceFee()).decorate();
+            formPanel.append(Location.Left, proto().visaDebitConvenienceFee()).decorate();
 
             setTabBarVisible(false);
-            selectTab(addTab(tabPanel, "Card Service Simulation"));
+            selectTab(addTab(formPanel, "Card Service Simulation"));
         }
     }
 

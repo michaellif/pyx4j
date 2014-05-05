@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -67,7 +66,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         return new GuestEditor();
     }
 
-    class GuestEditor extends AccessoryEntityForm<Guest> {
+    class GuestEditor extends CForm<Guest> {
 
         public GuestEditor() {
             super(Guest.class);
@@ -81,10 +80,10 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
             formPanel.br();
 
-            formPanel.append(Location.Left, injectAndDecorate(proto().person().homePhone(), 15));
-            formPanel.append(Location.Left, injectAndDecorate(proto().person().mobilePhone(), 15));
-            formPanel.append(Location.Left, injectAndDecorate(proto().person().workPhone(), 15));
-            formPanel.append(Location.Right, injectAndDecorate(proto().person().email(), 22));
+            formPanel.append(Location.Left, proto().person().homePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().person().mobilePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().person().workPhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Right, proto().person().email()).decorate().componentWidth(250);
 
             return formPanel;
         }

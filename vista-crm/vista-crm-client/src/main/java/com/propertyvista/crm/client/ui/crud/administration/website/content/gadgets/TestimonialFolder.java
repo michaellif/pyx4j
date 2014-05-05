@@ -19,7 +19,6 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.Testimonial;
@@ -35,7 +34,7 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
         return new TestimonialEditor();
     }
 
-    class TestimonialEditor extends AccessoryEntityForm<Testimonial> {
+    class TestimonialEditor extends CForm<Testimonial> {
 
         public TestimonialEditor() {
             super(Testimonial.class);

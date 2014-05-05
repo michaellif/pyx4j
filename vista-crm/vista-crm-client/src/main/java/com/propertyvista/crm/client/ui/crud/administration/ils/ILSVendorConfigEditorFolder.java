@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
@@ -67,7 +66,7 @@ public class ILSVendorConfigEditorFolder extends VistaBoxFolder<ILSVendorConfig>
         return new ILSVendorConfigEditor();
     }
 
-    class ILSVendorConfigEditor extends AccessoryEntityForm<ILSVendorConfig> {
+    class ILSVendorConfigEditor extends CForm<ILSVendorConfig> {
 
         public ILSVendorConfigEditor() {
             super(ILSVendorConfig.class);

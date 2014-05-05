@@ -21,16 +21,16 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.person.Name;
 
-public class NameEditor extends AccessoryEntityForm<Name> {
+public class NameEditor extends CForm<Name> {
 
     private final CField<Name, ?> viewComp;
 

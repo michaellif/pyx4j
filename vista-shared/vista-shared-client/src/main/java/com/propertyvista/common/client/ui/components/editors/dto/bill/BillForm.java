@@ -20,13 +20,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
@@ -35,7 +35,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class BillForm extends AccessoryEntityForm<BillDTO> {
+public class BillForm extends CForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 

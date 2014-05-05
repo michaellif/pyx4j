@@ -23,17 +23,18 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 
-public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
+public class ProductDepositEditor extends CForm<ProductDeposit> {
 
     private final SimplePanel valueHolder = new SimplePanel();
 
@@ -105,11 +106,11 @@ public class ProductDepositEditor extends AccessoryEntityForm<ProductDeposit> {
             comp = new CPercentageField();
             break;
         }
-
         unbind(proto().value());
 
         if (comp != null) {
-            valueHolder.setWidget(injectAndDecorate(proto().value(), comp, 6));
+            comp.setDecorator(new FieldDecorator.Builder().componentWidth("80px").build());
+            valueHolder.setWidget(inject(proto().value(), comp));
             if (repopulatevalue) {
                 get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
             }

@@ -13,7 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -32,26 +33,28 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
         public CardServiceSimulationTransactionForm(IForm<CardServiceSimulationTransaction> view) {
             super(CardServiceSimulationTransaction.class, view);
 
-            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
-            int row = -1;
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-            tabPanel.setWidget(++row, 0, inject(proto().card(), // 
+            formPanel.append(Location.Left, inject(proto().card(), // 
                     OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class), new FieldDecoratorBuilder(18).build()));
 
-            tabPanel.setWidget(++row, 0, inject(proto().merchant(), //
-                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class), new FieldDecoratorBuilder(18).build()));
+            formPanel
+                    .append(Location.Left,
+                            inject(proto().merchant(), //
+                                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class),
+                                    new FieldDecoratorBuilder(18).build()));
 
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().transactionType()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().scheduledSimulatedResponce()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().amount()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().convenienceFee()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().reference()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().responseCode()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().authorizationNumber()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().voided()));
-            tabPanel.setWidget(++row, 0, injectAndDecorate(proto().transactionDate()));
+            formPanel.append(Location.Left, proto().transactionType()).decorate();
+            formPanel.append(Location.Left, proto().scheduledSimulatedResponce()).decorate();
+            formPanel.append(Location.Left, proto().amount()).decorate();
+            formPanel.append(Location.Left, proto().convenienceFee()).decorate();
+            formPanel.append(Location.Left, proto().reference()).decorate();
+            formPanel.append(Location.Left, proto().responseCode()).decorate();
+            formPanel.append(Location.Left, proto().authorizationNumber()).decorate();
+            formPanel.append(Location.Left, proto().voided()).decorate();
+            formPanel.append(Location.Left, proto().transactionDate()).decorate();
 
-            selectTab(addTab(tabPanel, "Card Service Simulation"));
+            selectTab(addTab(formPanel, "Card Service Simulation"));
         }
     }
 

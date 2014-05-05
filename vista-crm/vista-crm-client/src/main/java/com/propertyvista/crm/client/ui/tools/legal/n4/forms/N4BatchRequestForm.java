@@ -17,24 +17,24 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.company.Employee;
 
-public class N4BatchRequestForm extends AccessoryEntityForm<N4BatchRequestDTO> {
+public class N4BatchRequestForm extends CForm<N4BatchRequestDTO> {
 
     private static final I18n i18n = I18n.get(N4BatchRequestForm.class);
 
@@ -65,25 +65,22 @@ public class N4BatchRequestForm extends AccessoryEntityForm<N4BatchRequestDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         FlowPanel n4FillingSettingsPanel = new FlowPanel();
         n4FillingSettingsPanel.add(inject(proto().noticeDate(), new MyDecoratorBuilder().width("150px").build()));
         n4FillingSettingsPanel.add(inject(proto().deliveryMethod(), new MyDecoratorBuilder().width("150px").build()));
         n4FillingSettingsPanel.add(inject(proto().agent(), createAgentComboBox(), new MyDecoratorBuilder().width("150px").build()));
-        panel.setWidget(++row, 0, 2, n4FillingSettingsPanel);
+        formPanel.append(Location.Dual, n4FillingSettingsPanel);
+        formPanel.br();
+        formPanel.h1(i18n.tr("Agent/Company Contact Information:"));
+        formPanel.append(Location.Left, proto().companyName()).decorate();
+        formPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        formPanel.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
+        formPanel.append(Location.Left, proto().emailAddress()).decorate();
+        formPanel.append(Location.Dual, proto().mailingAddress(), new AddressStructuredEditor(true));
 
-        panel.setWidget(++row, 0, 2, new HTML("&nbsp;"));
-
-        panel.setH1(++row, 0, 2, i18n.tr("Agent/Company Contact Information:"));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().companyName()));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().emailAddress()));
-        panel.setWidget(++row, 0, inject(proto().mailingAddress(), new AddressStructuredEditor(true)));
-
-        return panel;
+        return formPanel;
     }
 
     public void setAgents(List<Employee> agents) {

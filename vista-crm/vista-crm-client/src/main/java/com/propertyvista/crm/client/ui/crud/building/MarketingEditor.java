@@ -22,7 +22,6 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -35,7 +34,7 @@ import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSOpenHouse;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class MarketingEditor extends AccessoryEntityForm<Marketing> {
+public class MarketingEditor extends CForm<Marketing> {
 
     private final CForm<? extends Building> parentForm;
 
@@ -113,7 +112,7 @@ public class MarketingEditor extends AccessoryEntityForm<Marketing> {
         super.setEditorValue(value);
     }
 
-    public static class MarketingContactEditor<T extends MarketingContact> extends AccessoryEntityForm<T> {
+    public static class MarketingContactEditor<T extends MarketingContact> extends CForm<T> {
         public MarketingContactEditor(Class<T> valueClass) {
             super(valueClass);
         }

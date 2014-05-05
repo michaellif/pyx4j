@@ -37,9 +37,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,7 +49,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -518,7 +517,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private class PreauthorizedPaymentViewer extends AccessoryEntityForm<AutopayAgreement> {
+    private class PreauthorizedPaymentViewer extends CForm<AutopayAgreement> {
 
         public PreauthorizedPaymentViewer() {
             super(AutopayAgreement.class);

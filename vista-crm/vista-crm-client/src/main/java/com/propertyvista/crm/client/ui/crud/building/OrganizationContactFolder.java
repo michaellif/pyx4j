@@ -19,10 +19,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView.Presenter;
@@ -47,7 +46,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         return (Presenter) parent.getParentView().getPresenter();
     }
 
-    private class OrganizationContactEditor extends AccessoryEntityForm<OrganizationContact> {
+    private class OrganizationContactEditor extends CForm<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);

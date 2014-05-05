@@ -15,14 +15,16 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.domain.company.Company;
 
-public class CompanyEditor extends AccessoryEntityForm<Company> {
+public class CompanyEditor extends CForm<Company> {
 
     public CompanyEditor() {
         super(Company.class);
@@ -30,23 +32,21 @@ public class CompanyEditor extends AccessoryEntityForm<Company> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        int row = -1;
-        main.setWidget(++row, 0, injectAndDecorate(proto().name(), 15));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
 
 // TODO : design representation for:
 //      main.add(parent.inject(proto.addresses()), 15);
 
-        main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        main.setWidget(++row, 0, injectAndDecorate(proto().website(), 22));
+        formPanel.append(Location.Dual, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
+        formPanel.append(Location.Left, proto().website()).decorate().componentWidth(250);
 
-        main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
+        formPanel.append(Location.Dual, inject(proto().emails(), new EmailFolder(isEditable())));
 
 //TODO : design representation for:
 //      main.add(parent.inject(proto.contacts()), 15);
 //      main.add(parent.inject(proto.logo()), 15);
 
-        return main;
+        return formPanel;
     }
 }

@@ -15,13 +15,14 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.AccessoryEntityForm;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 
 import com.propertyvista.domain.payment.AccountType;
 import com.propertyvista.domain.payment.CheckInfo;
 
-public class CheckInfoEditor extends AccessoryEntityForm<CheckInfo> {
+public class CheckInfoEditor extends CForm<CheckInfo> {
 
     public CheckInfoEditor() {
         super(CheckInfo.class);
@@ -29,20 +30,18 @@ public class CheckInfoEditor extends AccessoryEntityForm<CheckInfo> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        panel.setWidget(++row, 0, injectAndDecorate(proto().nameOn(), 20));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().bankName(), 20));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().accountType(), 10));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().checkNo(), 5));
+        formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().bankName()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().accountType()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().checkNo()).decorate().componentWidth(100);
 
-        row = 0;
-        panel.setWidget(++row, 1, injectAndDecorate(proto().transitNo(), 10));
-        panel.setWidget(++row, 1, injectAndDecorate(proto().institutionNo(), 5));
-        panel.setWidget(++row, 1, injectAndDecorate(proto().accountNo(), 15));
+        formPanel.append(Location.Right, proto().transitNo()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().institutionNo()).decorate().componentWidth(100);
+        formPanel.append(Location.Right, proto().accountNo()).decorate().componentWidth(200);
 
-        return panel;
+        return formPanel;
     }
 
     @Override
