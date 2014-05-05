@@ -15,9 +15,9 @@ package com.propertyvista.portal.shared.ui.security;
 
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public class PasswordResetWizardViewImpl extends AbstractWizardFormView<PasswordChangeRequest> implements PasswordResetWizardView {
+public class PasswordResetWizardViewImpl extends AbstractWizardView<PasswordChangeRequest> implements PasswordResetWizardView {
 
     public PasswordResetWizardViewImpl() {
         setWizard(new PasswordResetWizard(this));

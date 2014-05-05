@@ -14,9 +14,9 @@
 package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public class AutoPayWizardViewImpl extends AbstractWizardFormView<AutoPayDTO> implements AutoPayWizardView {
+public class AutoPayWizardViewImpl extends AbstractWizardView<AutoPayDTO> implements AutoPayWizardView {
 
     public AutoPayWizardViewImpl() {
         super();

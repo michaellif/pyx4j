@@ -14,9 +14,9 @@
 package com.propertyvista.portal.resident.ui.movein;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
-import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public class LeaseSigningWizardViewImpl extends AbstractWizardFormView<LeaseAgreementDTO> implements LeaseSigningWizardView {
+public class LeaseSigningWizardViewImpl extends AbstractWizardView<LeaseAgreementDTO> implements LeaseSigningWizardView {
 
     public LeaseSigningWizardViewImpl() {
         setWizard(new LeaseSigningWizard(this));

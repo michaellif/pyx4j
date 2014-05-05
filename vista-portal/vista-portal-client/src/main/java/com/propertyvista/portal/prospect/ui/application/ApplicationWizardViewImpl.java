@@ -14,9 +14,9 @@
 package com.propertyvista.portal.prospect.ui.application;
 
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
-import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineApplicationDTO> implements ApplicationWizardView {
+public class ApplicationWizardViewImpl extends AbstractWizardView<OnlineApplicationDTO> implements ApplicationWizardView {
 
     public ApplicationWizardViewImpl() {
         super();

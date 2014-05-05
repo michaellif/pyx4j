@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui;
 
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
 import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;

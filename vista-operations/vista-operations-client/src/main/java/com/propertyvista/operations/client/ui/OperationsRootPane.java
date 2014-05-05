@@ -17,6 +17,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.RootPane;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
@@ -39,11 +40,11 @@ public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> implemen
         asWidget().setHeaderHeight(50);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
 
-        bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
-        bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
-        bind(new NavigActivityMapper(), asWidget().getNavigDisplay());
-        bind(new ShortCutsActivityMapper(), asWidget().getShortcutsDisplay());
-        bind(new ContentActivityMapper(), asWidget().getContentDisplay());
+        bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
+        bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
+        bind(new NavigActivityMapper(), asWidget().getDisplay(DisplayType.menu));
+        bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
 
     }
 

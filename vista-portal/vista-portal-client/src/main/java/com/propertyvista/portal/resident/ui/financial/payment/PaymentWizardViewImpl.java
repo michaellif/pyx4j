@@ -14,9 +14,9 @@
 package com.propertyvista.portal.resident.ui.financial.payment;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
-import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public class PaymentWizardViewImpl extends AbstractWizardFormView<PaymentDTO> implements PaymentWizardView {
+public class PaymentWizardViewImpl extends AbstractWizardView<PaymentDTO> implements PaymentWizardView {
 
     public PaymentWizardViewImpl() {
         super();

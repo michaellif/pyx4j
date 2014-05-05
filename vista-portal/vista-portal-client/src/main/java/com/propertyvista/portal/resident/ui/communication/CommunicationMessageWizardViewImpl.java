@@ -14,9 +14,9 @@
 package com.propertyvista.portal.resident.ui.communication;
 
 import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
-import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
-public class CommunicationMessageWizardViewImpl extends AbstractWizardFormView<CommunicationMessageDTO> implements CommunicationMessageWizardView {
+public class CommunicationMessageWizardViewImpl extends AbstractWizardView<CommunicationMessageDTO> implements CommunicationMessageWizardView {
 
     public CommunicationMessageWizardViewImpl() {
         setWizard(new CommunicationMessageWizard(this));

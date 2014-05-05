@@ -28,7 +28,7 @@ import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecorator;
 
 public abstract class AbstractPortalPanel extends SimplePanel {
 
-    private LabelPosition widgetLayout = null;
+    private LabelPosition labelPosition = null;
 
     public AbstractPortalPanel() {
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
@@ -42,10 +42,10 @@ public abstract class AbstractPortalPanel extends SimplePanel {
     }
 
     public void doLayout() {
-        LabelPosition newWdgetLayout = getWidgetLabelPosition();
-        if (widgetLayout != newWdgetLayout) {
-            updateDecoratorsLayout(AbstractPortalPanel.this, newWdgetLayout);
-            widgetLayout = newWdgetLayout;
+        LabelPosition newLabelPosition = getWidgetLabelPosition();
+        if (labelPosition != newLabelPosition) {
+            updateDecoratorsLabelPosition(this, newLabelPosition);
+            labelPosition = newLabelPosition;
         }
     }
 
@@ -69,7 +69,7 @@ public abstract class AbstractPortalPanel extends SimplePanel {
         return layout;
     }
 
-    private void updateDecoratorsLayout(Widget widget, LabelPosition layout) {
+    private void updateDecoratorsLabelPosition(Widget widget, LabelPosition layout) {
         if (widget instanceof FormWidgetDecorator) {
             FormWidgetDecorator decorator = (FormWidgetDecorator) widget;
             if (decorator.getLabelPosition() != LabelPosition.hidden) {
@@ -78,7 +78,7 @@ public abstract class AbstractPortalPanel extends SimplePanel {
         }
         if (widget instanceof HasWidgets) {
             for (Widget childWidget : (HasWidgets) widget) {
-                updateDecoratorsLayout(childWidget, layout);
+                updateDecoratorsLabelPosition(childWidget, layout);
             }
         }
     }

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui;
 
-import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel.DisplayType;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
