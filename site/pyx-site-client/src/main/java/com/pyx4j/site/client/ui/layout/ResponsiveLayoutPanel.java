@@ -99,6 +99,7 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
         doLayout(getDisplay(DisplayType.content), getLayoutType());
         layout.layout(animationTime);
         AppSite.getEventBus().fireEvent(new LayoutChangeEvent(getLayoutType()));
+        resizeComponents();
     }
 
     public DisplayPanel getDisplay(DisplayType displayType) {

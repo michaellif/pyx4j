@@ -107,19 +107,19 @@ public class TwoColumnFluidPanel implements IsWidget {
         contentPanel.setVisible(visible);
     }
 
-    public void setCollapsed(boolean collapsed) {
-        if (collapsed) {
-            contentPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
-        } else {
-            contentPanel.removeStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
-        }
-    }
-
     protected class ContentPanel extends FlowPanel implements ILayoutable {
 
         @Override
         public void doLayout(LayoutType type) {
-            TwoColumnFluidPanel.this.setCollapsed(LayoutType.tabletLandscape.compareTo(type) > 0);
+            setCollapsed(LayoutType.tabletLandscape.compareTo(type) > 0);
+        }
+
+        public void setCollapsed(boolean collapsed) {
+            if (collapsed) {
+                contentPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
+            } else {
+                contentPanel.removeStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
+            }
         }
     }
 

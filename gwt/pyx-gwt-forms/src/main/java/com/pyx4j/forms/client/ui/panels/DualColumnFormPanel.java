@@ -51,16 +51,7 @@ public class DualColumnFormPanel implements IsWidget {
     private final TwoColumnFluidPanel fluidPanel;
 
     public DualColumnFormPanel() {
-        this(false);
-    }
-
-    public DualColumnFormPanel(boolean collapsed) {
         fluidPanel = new TwoColumnFluidPanel();
-        setCollapsed(collapsed);
-    }
-
-    public void setCollapsed(boolean collapsed) {
-        fluidPanel.setCollapsed(collapsed);
     }
 
     @Override

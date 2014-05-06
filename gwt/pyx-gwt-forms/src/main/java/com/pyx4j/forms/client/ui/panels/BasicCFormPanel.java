@@ -36,11 +36,7 @@ public class BasicCFormPanel extends DualColumnFormPanel {
     private final CForm<?> parent;
 
     public BasicCFormPanel(CForm<?> parent) {
-        this(parent, false);
-    }
-
-    public BasicCFormPanel(CForm<?> parent, boolean collapsed) {
-        super(collapsed);
+        super();
         this.parent = parent;
     }
 

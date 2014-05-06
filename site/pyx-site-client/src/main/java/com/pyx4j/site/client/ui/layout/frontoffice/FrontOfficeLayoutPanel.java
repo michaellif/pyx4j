@@ -268,6 +268,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     @Override
     protected void resizeComponents() {
+
         onScroll();
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
