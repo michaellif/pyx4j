@@ -63,7 +63,7 @@ public interface LeaseApprovalDTO extends IEntity {
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percenrtageApproved();
 
-    IPrimitive<SuggestedDecision> recomendedDecision();
+    IPrimitive<SuggestedDecision> recommendedDecision();
 
     IPrimitive<String> reason();
 

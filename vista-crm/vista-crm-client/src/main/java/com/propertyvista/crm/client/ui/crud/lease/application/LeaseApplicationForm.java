@@ -21,10 +21,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.ApplicationStatusFolder;
@@ -41,7 +40,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
-    private Tab onlineStatusTab;
+    private BasicCFormPanel onlineStatusPanel;
 
     public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
@@ -56,10 +55,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         addTab(createFinancialTab(), i18n.tr("Financial"));
         addTab(createApprovalTab(), i18n.tr("Approval"));
         addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"));
-
-        if (VistaFeatures.instance().onlineApplication()) {
-            onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
-        }
     }
 
     @Override
@@ -69,8 +64,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().applicationId()).setVisible(true);
         get(proto().leaseApplication().yardiApplicationId()).setVisible(VistaFeatures.instance().yardiIntegration());
 
-        if (onlineStatusTab != null) {
-            setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());
+        if (onlineStatusPanel != null) {
+            onlineStatusPanel.setVisible(!getValue().leaseApplication().onlineApplication().isNull());
         }
 
         // show processing result:
@@ -135,6 +130,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         formPanel.append(Location.Left, proto().leaseApplication().decisionDate()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().leaseApplication().decisionReason()).decorate();
 
+        if (VistaFeatures.instance().onlineApplication()) {
+            formPanel.append(Location.Dual, onlineStatusPanel = createOnlineStatusPanel());
+        }
+
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             formPanel.br();
 
@@ -145,7 +144,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
             formPanel.br();
 
-            formPanel.append(Location.Left, proto().leaseApproval().recomendedDecision()).decorate();
+            formPanel.append(Location.Left, proto().leaseApproval().recommendedDecision()).decorate();
         }
 
         formPanel.br();
@@ -156,9 +155,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         return formPanel;
     }
 
-    private IsWidget createOnlineStatusTab() {
+    private BasicCFormPanel createOnlineStatusPanel() {
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
+        formPanel.h2(i18n.tr("Online Status Details"));
         formPanel.append(Location.Left, proto().leaseApplication().onlineApplication().status()).decorate();
         formPanel.append(Location.Left, proto().masterApplicationStatus().progress()).decorate();
 
