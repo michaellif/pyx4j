@@ -53,7 +53,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this, true);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
                 CustomerPicture.class));
