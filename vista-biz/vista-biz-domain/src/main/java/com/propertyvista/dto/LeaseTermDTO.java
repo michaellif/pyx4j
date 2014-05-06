@@ -62,4 +62,6 @@ public interface LeaseTermDTO extends LeaseTerm {
     IPrimitive<Boolean> enforceAgeOfMajority();
 
     IPrimitive<Boolean> maturedOccupantsAreApplicants();
+
+    IPrimitive<Boolean> noNeedGuarantors();
 }

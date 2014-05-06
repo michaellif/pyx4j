@@ -404,6 +404,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
             dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
             dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
+            dto.noNeedGuarantors().setValue(restrictionsPolicy.noNeedGuarantors().getValue());
         }
     }
 

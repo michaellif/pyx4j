@@ -24,6 +24,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 import com.pyx4j.commons.IFormatter;
@@ -45,8 +46,8 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -103,6 +104,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             return guarantorsFolder.retrieveCurrentCustomers();
         }
     };
+
+    private Widget guarantorsHeader;
 
     private final GuarantorInLeaseFolder guarantorsFolder = new GuarantorInLeaseFolder(this) {
         @Override
@@ -329,7 +332,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         formPanel.h1(proto().version().tenants().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().version().tenants(), tenantsFolder);
 
-        formPanel.h1(proto().version().guarantors().getMeta().getCaption());
+        guarantorsHeader = formPanel.h1(proto().version().guarantors().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().version().guarantors(), guarantorsFolder);
 
         // tweaks:
@@ -375,7 +378,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
-        setAgeRestrictions(getValue(), true);
+        setRestrictions(getValue(), true);
     }
 
     @Override
@@ -452,7 +455,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     }
 
     @SuppressWarnings("rawtypes")
-    void setAgeRestrictions(LeaseTermDTO value, boolean revalidate) {
+    void setRestrictions(LeaseTermDTO value, boolean revalidate) {
         TenantInLeaseFolder tenantInLeaseFolder = ((TenantInLeaseFolder) ((LeaseTermParticipantFolder) get(proto().version().tenants())));
         tenantInLeaseFolder.setAgeOfMajority(value.ageOfMajority().getValue());
         tenantInLeaseFolder.setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
@@ -465,6 +468,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();
             ((LeaseTermParticipantFolder) get(proto().version().guarantors())).revalidate();
         }
+
+        // set Guarantors folder visibility:
+        get(proto().version().guarantors()).setVisible(!value.noNeedGuarantors().getValue(false));
+        guarantorsHeader.setVisible(!value.noNeedGuarantors().getValue(false));
     }
 
     private class BuildingUtilityFolder extends VistaTableFolder<BuildingUtility> {

@@ -15,6 +15,8 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -36,6 +38,8 @@ public class FinancialStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(FinancialStep.class);
 
+    private Widget guarantorsHeader;
+
     public FinancialStep() {
         super(OnlineApplicationWizardStepMeta.Financial);
     }
@@ -53,6 +57,7 @@ public class FinancialStep extends ApplicationWizardStep {
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             panel.setH3(++row, 0, 1, i18n.tr("Guarantors"));
+            guarantorsHeader = panel.getWidget(row, 0);
             panel.setWidget(++row, 0, inject(proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView())));
         }
 
@@ -62,6 +67,11 @@ public class FinancialStep extends ApplicationWizardStep {
     @Override
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+            guarantorsHeader.setVisible(!getValue().noNeedGuarantors().getValue(false));
+            get(proto().guarantors()).setVisible(!getValue().noNeedGuarantors().getValue(false));
+        }
 
         if (getWizard().isEditable()) {
             ((PersonalIncomeFolder) (CComponent<?, ?, ?>) get(proto().applicant().incomes())).setDocumentsPolicy(getValue().applicant().documentsPolicy());

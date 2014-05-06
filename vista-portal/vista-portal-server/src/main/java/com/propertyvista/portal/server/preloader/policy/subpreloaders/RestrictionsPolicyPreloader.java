@@ -34,6 +34,8 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
 
     private static final boolean OCCUPANTS_OVER_18_ARE_APPLICANTS = true;
 
+    private static final boolean NO_NEED_GUARANTORS = false;
+
     private Integer ageOfMajority;
 
     private String provinceCode;
@@ -72,6 +74,7 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
     protected RestrictionsPolicy createPolicy(StringBuilder log) {
         RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
+        policy.noNeedGuarantors().setValue(NO_NEED_GUARANTORS);
         policy.maturedOccupantsAreApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
         policy.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);
         policy.maxParkingSpots().setValue(MAX_PARKING_SPOTS);

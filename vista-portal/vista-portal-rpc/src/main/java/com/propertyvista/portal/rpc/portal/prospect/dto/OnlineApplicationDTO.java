@@ -58,6 +58,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<Boolean> maturedOccupantsAreApplicants();
 
+    IPrimitive<Boolean> noNeedGuarantors();
+
     //--------------------------------------------
     // read and update data:
 

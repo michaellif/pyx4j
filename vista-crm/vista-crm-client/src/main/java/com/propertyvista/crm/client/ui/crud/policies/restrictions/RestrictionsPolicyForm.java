@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -45,6 +45,7 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
         formPanel.append(Location.Left, proto().ageOfMajority()).decorate().componentWidth(40).labelWidth(220);
         formPanel.append(Location.Left, proto().enforceAgeOfMajority()).decorate().componentWidth(40).labelWidth(220);
         formPanel.append(Location.Left, proto().maturedOccupantsAreApplicants()).decorate().componentWidth(40).labelWidth(220);
+        formPanel.append(Location.Left, proto().noNeedGuarantors()).decorate().componentWidth(40).labelWidth(220);
 
         return formPanel;
     }
