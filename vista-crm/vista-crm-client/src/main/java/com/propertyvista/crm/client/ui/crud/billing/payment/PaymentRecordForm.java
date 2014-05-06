@@ -80,9 +80,9 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
+public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentForm.class);
+    private static final I18n i18n = I18n.get(PaymentRecordForm.class);
 
     private final Widget preauthorizedPaymentMethodViewerHeader, paymentMethodEditorHeader;
 
@@ -93,24 +93,24 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> getPaymentTypes() {
-            return PaymentForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes().getValue();
+            return PaymentRecordForm.this.getValue().allowedPaymentsSetup().allowedPaymentTypes().getValue();
         }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentForm.this.getValue().allowedPaymentsSetup().allowedCardTypes().getValue();
+            return PaymentRecordForm.this.getValue().allowedPaymentsSetup().allowedCardTypes().getValue();
         };
 
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
             if (set) {
-                ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
+                ((PaymentRecordEditorView.Presenter) ((PaymentRecordEditorView) getParentView()).getPresenter()).getCurrentAddress(
                         new DefaultAsyncCallback<AddressSimple>() {
                             @Override
                             public void onSuccess(AddressSimple result) {
                                 comp.setValue(result, false);
                             }
-                        }, PaymentForm.this.getValue().leaseTermParticipant());
+                        }, PaymentRecordForm.this.getValue().leaseTermParticipant());
             } else {
                 comp.setValue(EntityFactory.create(AddressSimple.class), false);
             }
@@ -118,7 +118,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         @Override
         protected String getNameOn() {
-            return PaymentForm.this.getValue().leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
+            return PaymentRecordForm.this.getValue().leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
         }
 
         @Override
@@ -151,7 +151,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentForm(IForm<PaymentRecordDTO> view) {
+    public PaymentRecordForm(IForm<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view);
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
@@ -205,10 +205,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             protected IShowable getSelectorDialog() {
                 return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"), false,
-                        PaymentForm.this.getValue().participants()) {
+                        PaymentRecordForm.this.getValue().participants()) {
                     @Override
                     public boolean onClickOk() {
-                        CComponent<?, ?, ?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
+                        CComponent<?, ?, ?> comp = get(PaymentRecordForm.this.proto().leaseTermParticipant());
                         ((CComponent<?, LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
                         return true;
                     }
@@ -451,7 +451,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
-        ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
+        ((PaymentRecordEditorView.Presenter) ((PaymentRecordEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
                 new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
                     @Override
                     public void onSuccess(List<LeasePaymentMethod> result) {

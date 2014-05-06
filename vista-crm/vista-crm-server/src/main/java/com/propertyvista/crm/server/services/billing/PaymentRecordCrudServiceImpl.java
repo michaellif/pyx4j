@@ -38,7 +38,7 @@ import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -53,11 +53,11 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
+public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentRecordCrudService {
 
-    private static final I18n i18n = I18n.get(PaymentCrudServiceImpl.class);
+    private static final I18n i18n = I18n.get(PaymentRecordCrudServiceImpl.class);
 
-    public PaymentCrudServiceImpl() {
+    public PaymentRecordCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
 
@@ -82,45 +82,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             boCriteria.eq(boCriteria.proto().invoicePaymentBackOut().applyNSF(), nsfCriteria.getValue());
         }
         super.enhanceListCriteria(boCriteria, toCriteria);
-    }
-
-    @Override
-    protected PaymentRecordDTO init(InitializationData initializationData) {
-        PaymentInitializationData initData = (PaymentInitializationData) initializationData;
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, initData.parent().getPrimaryKey());
-        if ((billingAccount == null) || (billingAccount.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + initData.parent().getPrimaryKey()
-                    + " NotFound");
-        }
-
-        if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
-            throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
-        }
-
-        Persistence.ensureRetrieve(billingAccount.lease().unit().building(), AttachLevel.Attached);
-
-        PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
-
-        dto.billingAccount().set(billingAccount);
-        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), VistaApplication.crm));
-
-        dto.leaseId().set(billingAccount.lease().leaseId());
-        dto.leaseStatus().set(billingAccount.lease().status());
-        dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
-        dto.unitNumber().set(billingAccount.lease().unit().info().number());
-
-        dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
-
-        // some default values:
-        dto.createdDate().setValue(SystemDateManager.getDate());
-
-        // calculate current balance:
-        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
-        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
-            dto.amount().setValue(new BigDecimal("0.00"));
-        }
-
-        return dto;
     }
 
     @Override
@@ -156,6 +117,45 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         if (!bo.invoicePaymentBackOut().isNull()) {
             to.rejectedWithNSF().setValue(bo.invoicePaymentBackOut().applyNSF().getValue());
         }
+    }
+
+    @Override
+    protected PaymentRecordDTO init(InitializationData initializationData) {
+        PaymentInitializationData initData = (PaymentInitializationData) initializationData;
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, initData.parent().getPrimaryKey());
+        if ((billingAccount == null) || (billingAccount.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + initData.parent().getPrimaryKey()
+                    + " NotFound");
+        }
+    
+        if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
+            throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
+        }
+    
+        Persistence.ensureRetrieve(billingAccount.lease().unit().building(), AttachLevel.Attached);
+    
+        PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
+    
+        dto.billingAccount().set(billingAccount);
+        dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(dto.billingAccount(), VistaApplication.crm));
+    
+        dto.leaseId().set(billingAccount.lease().leaseId());
+        dto.leaseStatus().set(billingAccount.lease().status());
+        dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
+        dto.unitNumber().set(billingAccount.lease().unit().info().number());
+    
+        dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
+    
+        // some default values:
+        dto.createdDate().setValue(SystemDateManager.getDate());
+    
+        // calculate current balance:
+        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
+        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
+            dto.amount().setValue(new BigDecimal("0.00"));
+        }
+    
+        return dto;
     }
 
     @Override

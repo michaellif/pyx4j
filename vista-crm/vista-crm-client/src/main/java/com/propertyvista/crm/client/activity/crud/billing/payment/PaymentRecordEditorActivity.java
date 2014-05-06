@@ -27,8 +27,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordEditorView;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -36,16 +36,16 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> implements PaymentEditorView.Presenter {
+public class PaymentRecordEditorActivity extends CrmEditorActivity<PaymentRecordDTO> implements PaymentRecordEditorView.Presenter {
 
-    public PaymentEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PaymentEditorView.class), GWT
-                .<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class), PaymentRecordDTO.class);
+    public PaymentRecordEditorActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().getView(PaymentRecordEditorView.class), GWT
+                .<AbstractCrudService<PaymentRecordDTO>> create(PaymentRecordCrudService.class), PaymentRecordDTO.class);
     }
 
     @Override
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
-        PaymentCrudService.PaymentInitializationData id = EntityFactory.create(PaymentCrudService.PaymentInitializationData.class);
+        PaymentRecordCrudService.PaymentInitializationData id = EntityFactory.create(PaymentRecordCrudService.PaymentInitializationData.class);
         id.parent().set(EntityFactory.createIdentityStub(BillingAccount.class, getParentId()));
         callback.onSuccess(id);
     }
@@ -53,7 +53,7 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
     @SuppressWarnings("unchecked")
     @Override
     public void getCurrentAddress(final AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
-        ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+        ((PaymentRecordCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
@@ -64,7 +64,7 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
     @SuppressWarnings("unchecked")
     @Override
     public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
-        ((PaymentCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
+        ((PaymentRecordCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(Vector<LeasePaymentMethod> result) {
                 callback.onSuccess(result);

@@ -32,8 +32,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -44,23 +42,18 @@ import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationVi
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownloadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<LeaseApplicationDTO> implements LeaseApplicationViewerView.Presenter {
 
     private static final I18n i18n = I18n.get(LeaseApplicationViewerActivity.class);
-
-    private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
     private BigDecimal creditCheckAmount;
 
@@ -68,14 +61,6 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationViewerCrudService.class));
-
-        paymentLister = new ListerController<PaymentRecordDTO>(((LeaseApplicationViewerView) getView()).getPaymentListerView(),
-                GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class) {
-            @Override
-            public boolean canCreateNewItem() {
-                return (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
-            }
-        };
     }
 
     @Override

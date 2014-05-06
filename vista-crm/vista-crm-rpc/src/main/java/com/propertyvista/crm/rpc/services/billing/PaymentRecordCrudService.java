@@ -28,7 +28,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO> {
+public interface PaymentRecordCrudService extends AbstractCrudService<PaymentRecordDTO> {
 
     @Transient
     public interface PaymentInitializationData extends InitializationData {

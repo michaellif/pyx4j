@@ -57,7 +57,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
@@ -468,7 +468,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseAdjustmentCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DepositLifecycleCrudService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationMessageCrudService.class));

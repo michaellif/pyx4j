@@ -33,7 +33,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity.ReturnBehaviour;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
@@ -58,7 +58,7 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
         super(place, view, service);
 
         paymentLister = new ListerController<PaymentRecordDTO>(((LeaseViewerViewBase) getView()).getPaymentListerView(),
-                GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class) {
+                GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class), PaymentRecordDTO.class) {
             @Override
             public boolean canCreateNewItem() {
                 return (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
@@ -121,8 +121,8 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     }
 
     @Override
-    public void unreserveUnit() {
-        ((LeaseViewerCrudServiceBase<DTO>) getService()).unreserveUnit(new DefaultAsyncCallback<VoidSerializable>() {
+    public void releaseUnit() {
+        ((LeaseViewerCrudServiceBase<DTO>) getService()).releaseUnit(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();

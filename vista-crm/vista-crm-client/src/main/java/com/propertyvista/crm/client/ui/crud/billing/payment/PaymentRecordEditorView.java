@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentEditorView extends IEditor<PaymentRecordDTO> {
+public interface PaymentRecordEditorView extends IEditor<PaymentRecordDTO> {
 
     interface Presenter extends IEditor.Presenter {
 

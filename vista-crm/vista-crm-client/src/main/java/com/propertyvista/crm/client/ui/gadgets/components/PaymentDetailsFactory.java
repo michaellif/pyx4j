@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetF
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
 import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -56,7 +56,7 @@ public class PaymentDetailsFactory extends AbstractListerDetailsFactory<PaymentR
         super(//@formatter:off
                 PaymentRecordDTO.class,
                 DEFAULT_COLUMN_DESCRIPTORS,
-                GWT.<PaymentCrudService>create(PaymentCrudService.class),
+                GWT.<PaymentRecordCrudService>create(PaymentRecordCrudService.class),
                 filterDataProvider,
                 criteriaProvider,
                 listerSettingsProxy

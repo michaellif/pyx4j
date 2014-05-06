@@ -34,7 +34,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -116,10 +115,10 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
             }
         }));
 
-        addAction(unreserveUnit = new MenuItem(i18n.tr("Unreserve Unit"), new Command() {
+        addAction(unreserveUnit = new MenuItem(i18n.tr("Release Unit"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerViewBase.Presenter) getPresenter()).unreserveUnit();
+                ((LeaseViewerViewBase.Presenter) getPresenter()).releaseUnit();
             }
         }));
 

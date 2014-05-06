@@ -21,19 +21,19 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordViewerView;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> implements PaymentViewerView.Presenter {
+public class PaymentRecordViewerActivity extends CrmViewerActivity<PaymentRecordDTO> implements PaymentRecordViewerView.Presenter {
 
-    public PaymentViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PaymentViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class));
+    public PaymentRecordViewerActivity(CrudAppPlace place) {
+        super(place,  CrmSite.getViewFactory().getView(PaymentRecordViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentRecordCrudService.class));
     }
 
     @Override
     public void schedulePayment() {
-        ((PaymentCrudService) getService()).schedulePayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentRecordCrudService) getService()).schedulePayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -43,7 +43,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void processPayment() {
-        ((PaymentCrudService) getService()).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentRecordCrudService) getService()).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -53,7 +53,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void clearPayment() {
-        ((PaymentCrudService) getService()).clearPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentRecordCrudService) getService()).clearPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -63,7 +63,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void rejectPayment(boolean applyNSF) {
-        ((PaymentCrudService) getService()).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentRecordCrudService) getService()).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -73,7 +73,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void cancelPayment() {
-        ((PaymentCrudService) getService()).cancelPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentRecordCrudService) getService()).cancelPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);

@@ -30,6 +30,6 @@ public interface LeaseViewerCrudServiceBase<DTO extends LeaseDTO> extends Abstra
 
     void reserveUnit(AsyncCallback<VoidSerializable> callback, Key entityId, int durationHours);
 
-    void unreserveUnit(AsyncCallback<VoidSerializable> callback, Key entityId);
+    void releaseUnit(AsyncCallback<VoidSerializable> callback, Key entityId);
 
 }

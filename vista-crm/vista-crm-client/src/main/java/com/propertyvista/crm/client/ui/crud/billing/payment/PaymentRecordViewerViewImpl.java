@@ -26,9 +26,9 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDTO> implements PaymentViewerView {
+public class PaymentRecordViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDTO> implements PaymentRecordViewerView {
 
-    private static final I18n i18n = I18n.get(PaymentViewerViewImpl.class);
+    private static final I18n i18n = I18n.get(PaymentRecordViewerViewImpl.class);
 
     private final MenuItem scheduleAction;
 
@@ -42,13 +42,13 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
     private final MenuItem cancelAction;
 
-    public PaymentViewerViewImpl() {
-        setForm(new PaymentForm(this));
+    public PaymentRecordViewerViewImpl() {
+        setForm(new PaymentRecordForm(this));
 
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).cancelPayment();
+                ((PaymentRecordViewerView.Presenter) getPresenter()).cancelPayment();
             }
         });
         addAction(cancelAction);
@@ -56,7 +56,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         rejectNSFAction = new MenuItem(i18n.tr("Reject with NSF"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).rejectPayment(true);
+                ((PaymentRecordViewerView.Presenter) getPresenter()).rejectPayment(true);
             }
         });
         addAction(rejectNSFAction);
@@ -64,7 +64,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         rejectAction = new MenuItem(i18n.tr("Reject Other"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).rejectPayment(false);
+                ((PaymentRecordViewerView.Presenter) getPresenter()).rejectPayment(false);
             }
         });
         addAction(rejectAction);
@@ -72,7 +72,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         clearAction = new MenuItem(i18n.tr("Clear"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).clearPayment();
+                ((PaymentRecordViewerView.Presenter) getPresenter()).clearPayment();
             }
         });
         addAction(clearAction);
@@ -80,7 +80,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         processAction = new MenuItem(i18n.tr("Process"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).processPayment();
+                ((PaymentRecordViewerView.Presenter) getPresenter()).processPayment();
             }
         });
         addAction(processAction);
@@ -88,7 +88,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         scheduleAction = new MenuItem(i18n.tr("Schedule"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).schedulePayment();
+                ((PaymentRecordViewerView.Presenter) getPresenter()).schedulePayment();
             }
         });
         addAction(scheduleAction);

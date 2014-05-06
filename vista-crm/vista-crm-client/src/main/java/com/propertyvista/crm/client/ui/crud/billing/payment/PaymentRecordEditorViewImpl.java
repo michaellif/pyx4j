@@ -7,29 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
-
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentViewerView extends IViewer<PaymentRecordDTO> {
-
-    interface Presenter extends IViewer.Presenter {
-
-        void schedulePayment();
-
-        void processPayment();
-
-        void clearPayment();
-
-        void rejectPayment(boolean applyNSF);
-
-        void cancelPayment();
+public class PaymentRecordEditorViewImpl extends CrmEditorViewImplBase<PaymentRecordDTO> implements PaymentRecordEditorView {
+    public PaymentRecordEditorViewImpl() {
+        setForm(new PaymentRecordForm(this));
     }
-
 }

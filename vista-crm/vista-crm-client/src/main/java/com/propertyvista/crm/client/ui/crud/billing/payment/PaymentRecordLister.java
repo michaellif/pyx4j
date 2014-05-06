@@ -18,22 +18,28 @@ import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
+public class PaymentRecordLister extends AbstractLister<PaymentRecordDTO> {
 
-    public PaymentLister() {
+    private static final I18n i18n = I18n.get(PaymentRecordLister.class);
+
+    public PaymentRecordLister() {
         super(PaymentRecordDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().firstName()).searchableOnly().build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name().lastName()).searchableOnly().build(),
-            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build(),
+            new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().building().propertyCode()).columnTitle(i18n.tr("Property Code")).visible(true).build(),
+            new MemberColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).columnTitle(i18n.tr("Pre-Authorized Payment Cycle")).build(),
+            new MemberColumnDescriptor.Builder(proto().padBillingCycle().id(), false).columnTitle(i18n.tr("Pre-Authorized Payment Cycle Id")).build(),
+            new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().info().number()).columnTitle(i18n.tr("Unit")).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().billingAccount().lease().leaseId()).columnTitle(i18n.tr("Lease")).visible(true).build(),
+            new MemberColumnDescriptor.Builder(proto().billingAccount().accountNumber()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().paymentMethod().customer()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).columnTitle(i18n.tr("Lease role")).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
             new MemberColumnDescriptor.Builder(proto().createdDate()).build(),
@@ -42,7 +48,9 @@ public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
             new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
             new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build(),
-            new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build()
+            new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().notice()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().createdBy()).visible(false).searchable(false).build()
         );//@formatter:on
     }
 

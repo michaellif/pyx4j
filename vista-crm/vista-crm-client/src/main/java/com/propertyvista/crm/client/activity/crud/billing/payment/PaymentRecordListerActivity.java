@@ -21,15 +21,15 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.billing.transfer.PaymentRecordListerView;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordListerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
+import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentListerActivity extends AbstractListerActivity<PaymentRecordDTO> {
+public class PaymentRecordListerActivity extends AbstractListerActivity<PaymentRecordDTO> {
 
-    public PaymentListerActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
+    public PaymentRecordListerActivity(AppPlace place) {
+        super(place, CrmSite.getViewFactory().getView(PaymentRecordListerView.class), GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class),
                 PaymentRecordDTO.class);
 
     }
@@ -43,5 +43,4 @@ public class PaymentListerActivity extends AbstractListerActivity<PaymentRecordD
             filters.eq(filters.proto().padBillingCycle().id(), new Key(val));
         }
     }
-
 }

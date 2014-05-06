@@ -80,9 +80,9 @@ import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleBill
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentEditorActivity;
-import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentListerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentRecordEditorActivity;
+import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentRecordListerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentRecordViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.transfer.AggregatedTransferListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.transfer.AggregatedTransferViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
@@ -753,13 +753,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof Finance.Payment) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new PaymentEditorActivity(crudPlace);
+                            activity = new PaymentRecordEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new PaymentViewerActivity(crudPlace);
+                            activity = new PaymentRecordViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new PaymentListerActivity(crudPlace);
+                            activity = new PaymentRecordListerActivity(crudPlace);
                         default:
                             break;
                         }

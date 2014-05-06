@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.billing.transfer;
+package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.dto.PaymentRecordDTO;

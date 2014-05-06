@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.billing.transfer;
+package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 

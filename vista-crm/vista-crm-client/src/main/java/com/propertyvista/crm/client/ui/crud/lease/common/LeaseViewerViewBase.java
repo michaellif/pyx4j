@@ -37,7 +37,7 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewer<DTO> 
 
         void reserveUnit(int durationHours);
 
-        void unreserveUnit();
+        void releaseUnit();
 
         void newPayment();
     }
