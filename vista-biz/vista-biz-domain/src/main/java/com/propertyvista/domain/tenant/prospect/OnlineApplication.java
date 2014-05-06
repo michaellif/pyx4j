@@ -15,12 +15,15 @@ package com.propertyvista.domain.tenant.prospect;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -82,4 +85,6 @@ public interface OnlineApplication extends IEntity {
     @Owned
     ISet<OnlineApplicationWizardStepStatus> stepsStatuses();
 
+    @Timestamp(Update.Created)
+    IPrimitive<LogicalDate> createDate();
 }

@@ -37,6 +37,7 @@ public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationS
         columns.add(new FolderColumnDescriptor(proto().customer(), "20em"));
         columns.add(new FolderColumnDescriptor(proto().role(), "10em"));
         columns.add(new FolderColumnDescriptor(proto().status(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().daysOpen(), "7em"));
         columns.add(new FolderColumnDescriptor(proto().progress(), "7em"));
         return columns;
     }

@@ -45,4 +45,5 @@ public interface OnlineApplicationStatus extends IEntity {
     @Editor(type = EditorType.percentagelabel)
     IPrimitive<BigDecimal> progress();
 
+    IPrimitive<Long> daysOpen();
 }

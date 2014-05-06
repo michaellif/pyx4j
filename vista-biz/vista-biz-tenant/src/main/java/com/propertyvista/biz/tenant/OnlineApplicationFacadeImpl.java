@@ -22,6 +22,7 @@ import java.util.List;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -257,13 +258,14 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             }
 
             OnlineApplicationStatus status = EntityFactory.create(OnlineApplicationStatus.class);
-            status.status().setValue(app.status().getValue());
 
+            status.status().setValue(app.status().getValue());
             status.customer().set(app.customer());
-            status.role().set(app.role());
+            status.role().setValue(app.role().getValue());
 
             // calculate progress:
             status.progress().setValue(calculateProgress(app));
+            status.daysOpen().setValue((SystemDateManager.getLogicalDate().getTime() - app.createDate().getValue().getTime()) / (1000 * 60 * 60 * 24));
 
             moaStatus.individualApplications().add(status);
 
@@ -303,7 +305,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         default:
             return BigDecimal.ZERO;
         }
-
     }
 
     private void inviteCoApplicants(Lease lease) {
