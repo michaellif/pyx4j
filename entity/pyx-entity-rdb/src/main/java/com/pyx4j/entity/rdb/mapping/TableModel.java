@@ -1081,6 +1081,9 @@ public class TableModel {
                     break;
                 }
                 stmt.setInt(parameterIndex, offset);
+                if (PersistenceTrace.traceSql) {
+                    log.debug("{}{} limit: {}, offset: {}", persistenceContext.txId(), Trace.id(), limit, offset);
+                }
             }
 
             rs = stmt.executeQuery();
