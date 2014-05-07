@@ -125,12 +125,12 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         criteria.eq(criteria.proto().customer().user(), customerUser);
         criteria.ne(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.Cancelled);
         List<OnlineApplication> applications = Persistence.service().query(criteria);
-        // Check for suspended building. Note that building can still be null at this point, so criteria won't work for
-        // this check since the join will have no records to return.
+        // Check for suspended building.
         for (Iterator<OnlineApplication> it = applications.iterator(); it.hasNext();) {
             OnlineApplication app = it.next();
-            Persistence.ensureRetrieve(app.masterOnlineApplication().building(), AttachLevel.Attached);
-            if (app.masterOnlineApplication().building().suspended().isBooleanTrue()) {
+            Building building = getOnlineApplicationPolicyNode(app);
+            Persistence.ensureRetrieve(building, AttachLevel.Attached);
+            if (building.suspended().isBooleanTrue()) {
                 it.remove();
             }
         }
