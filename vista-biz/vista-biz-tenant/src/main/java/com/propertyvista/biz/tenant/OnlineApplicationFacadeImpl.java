@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -123,8 +124,17 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
         criteria.eq(criteria.proto().customer().user(), customerUser);
         criteria.ne(criteria.proto().masterOnlineApplication().status(), MasterOnlineApplication.Status.Cancelled);
-        criteria.eq(criteria.proto().masterOnlineApplication().building().suspended(), false);
-        return Persistence.service().query(criteria);
+        List<OnlineApplication> applications = Persistence.service().query(criteria);
+        // Check for suspended building. Note that building can still be null at this point, so criteria won't work for
+        // this check since the join will have no records to return.
+        for (Iterator<OnlineApplication> it = applications.iterator(); it.hasNext();) {
+            OnlineApplication app = it.next();
+            Persistence.ensureRetrieve(app.masterOnlineApplication().building(), AttachLevel.Attached);
+            if (app.masterOnlineApplication().building().suspended().isBooleanTrue()) {
+                it.remove();
+            }
+        }
+        return applications;
     }
 
     @Override
