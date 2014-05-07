@@ -14,7 +14,6 @@
 package com.propertyvista.interfaces.importer;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
 
@@ -31,7 +30,7 @@ public class ExportBuildingDataRetriever {
         BuildingIO buildingIO = new BuildingConverter().createTO(building);
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+            criteria.eq(criteria.proto().building(), building);
             progress.progressMaximum.addAndGet(Persistence.service().count(criteria));
 
             criteria.asc(criteria.proto().info().number());

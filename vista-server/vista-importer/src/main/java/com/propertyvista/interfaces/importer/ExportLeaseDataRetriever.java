@@ -13,6 +13,9 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.apache.commons.lang.time.DateUtils;
+
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
@@ -21,6 +24,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.converter.LeaseConverter;
 import com.propertyvista.interfaces.importer.model.LeaseIO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ExportLeaseDataRetriever {
 
@@ -30,7 +34,17 @@ public class ExportLeaseDataRetriever {
         criteria.in(criteria.proto().status(), Lease.Status.present());
         // set sorting by 'from date' to get last active lease first:
         criteria.desc(criteria.proto().leaseFrom());
-        return Persistence.service().retrieve(criteria);
+        Lease lease = Persistence.service().retrieve(criteria);
+
+        if ((lease != null) && (lease.status().getValue() == Lease.Status.Completed) && (!lease.leaseTo().isNull())
+                && VistaFeatures.instance().yardiIntegration()) {
+            // filter out leases that are not coming in yardi interface
+            if (lease.leaseTo().getValue().before(DateUtils.addMonths(SystemDateManager.getDate(), -2))) {
+                return null;
+            }
+        }
+
+        return lease;
     }
 
     public LeaseIO getModel(AptUnit unit) {
