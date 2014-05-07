@@ -17,6 +17,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
 
@@ -64,6 +65,16 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
     @Override
     public long stopYardiTimer() {
         return YardiExecutionTimer.stop();
+    }
+
+    @Override
+    public long stopYardiTimer(AtomicReference<Long> maxTimeResult) {
+        return YardiExecutionTimer.stop(maxTimeResult);
+    }
+
+    @Override
+    public void yardiRequestCompleted(long interval) {
+        YardiExecutionTimer.requestCompleted(interval);
     }
 
     @Override

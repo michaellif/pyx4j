@@ -14,12 +14,16 @@
 package com.propertyvista.biz.system.yardi;
 
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class YardiExecutionTimer {
     private static final ThreadLocal<AtomicLong> timerHolder = new ThreadLocal<>();
 
+    private static final ThreadLocal<AtomicLong> maxRequestTime = new ThreadLocal<>();
+
     public static void start() {
         timerHolder.set(new AtomicLong());
+        maxRequestTime.set(new AtomicLong());
     }
 
     public static void add(long interval) {
@@ -28,9 +32,24 @@ public class YardiExecutionTimer {
         }
     }
 
+    public static void requestCompleted(long interval) {
+        AtomicLong maxTime = maxRequestTime.get();
+        if (maxTime != null) {
+            maxTime.set(Math.max(maxTime.get(), interval));
+        }
+    }
+
     public static long stop() {
+        return stop(null);
+    }
+
+    public static long stop(AtomicReference<Long> maxTimeResult) {
         long time = timerHolder.get() == null ? 0 : timerHolder.get().get();
+        if (maxTimeResult != null) {
+            maxTimeResult.set(maxRequestTime.get().get());
+        }
         timerHolder.remove();
+        maxRequestTime.remove();
         return time;
     }
 }

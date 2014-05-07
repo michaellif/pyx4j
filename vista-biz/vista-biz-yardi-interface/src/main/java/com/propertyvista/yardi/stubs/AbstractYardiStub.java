@@ -159,7 +159,9 @@ public abstract class AbstractYardiStub implements YardiInterface, ExternalInter
                     }
                 }
 
-                ServerSideFactory.create(YardiConfigurationFacade.class).incrementYardiTimer(TimeUtils.since(requestStartTime));
+                long requestTime = TimeUtils.since(requestStartTime);
+                ServerSideFactory.create(YardiConfigurationFacade.class).yardiRequestCompleted(requestTime);
+                ServerSideFactory.create(YardiConfigurationFacade.class).incrementYardiTimer(requestTime);
             }
 
         });

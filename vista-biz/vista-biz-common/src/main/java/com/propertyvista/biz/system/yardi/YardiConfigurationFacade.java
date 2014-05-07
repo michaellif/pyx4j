@@ -14,6 +14,7 @@
 package com.propertyvista.biz.system.yardi;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -46,6 +47,10 @@ public interface YardiConfigurationFacade {
 
     /** read Yardi execution time and remove the timer */
     long stopYardiTimer();
+
+    void yardiRequestCompleted(long interval);
+
+    long stopYardiTimer(AtomicReference<Long> maxTimeResult);
 
     List<String> retrievePropertyCodes(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException;
 

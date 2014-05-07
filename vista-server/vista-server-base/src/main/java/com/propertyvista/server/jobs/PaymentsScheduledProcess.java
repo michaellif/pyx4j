@@ -14,6 +14,7 @@
 package com.propertyvista.server.jobs;
 
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
@@ -59,8 +60,11 @@ public class PaymentsScheduledProcess implements PmcProcess {
         } finally {
             if (yardiIntegration) {
                 ServerSideFactory.create(YardiConfigurationFacade.class).clearYardiCredentialCache();
-                long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
+                AtomicReference<Long> maxRequestTime = new AtomicReference<>();
+                long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
                 context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
+                context.getExecutionMonitor().addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()),
+                        new BigDecimal(maxRequestTime.get()));
                 yardiRequestsTimeTotal += yardiTime;
             }
         }

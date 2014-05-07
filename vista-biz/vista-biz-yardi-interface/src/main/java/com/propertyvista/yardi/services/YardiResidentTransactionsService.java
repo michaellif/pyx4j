@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.axis2.AxisFault;
 import org.apache.commons.lang.StringUtils;
@@ -235,8 +236,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
         } finally {
-            long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer();
+            AtomicReference<Long> maxRequestTime = new AtomicReference<>();
+            long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
             executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
+            executionMonitor.addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()), new BigDecimal(maxRequestTime.get()));
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 
