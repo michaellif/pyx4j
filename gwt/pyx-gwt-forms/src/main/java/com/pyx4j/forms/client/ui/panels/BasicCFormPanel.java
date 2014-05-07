@@ -87,7 +87,7 @@ public class BasicCFormPanel extends DualColumnFormPanel {
                 handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
                 break;
             }
-            final FieldDecoratorOptions options = new FieldDecoratorOptions(location == Location.Dual);
+            final FieldDecoratorOptions options = new FieldDecoratorOptions();
             // Until init() method called, FieldDecoratorOptions can be updated.
             comp.setDecorator(new FieldDecorator(options) {
                 @Override
@@ -112,7 +112,7 @@ public class BasicCFormPanel extends DualColumnFormPanel {
 
     public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
 
-        public FieldDecoratorOptions(boolean dual) {
+        public FieldDecoratorOptions() {
             super();
         }
 
