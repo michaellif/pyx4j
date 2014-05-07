@@ -98,6 +98,8 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(new IServiceExecutePermission(OperationsAuthenticationService.class));
         grant(VistaBasicBehavior.OperationsPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
+        grant(VistaBasicBehavior.Operations, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
+
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Pmc.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DeferredProcessService.class));
 
@@ -205,7 +207,6 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         // let Onboarding change their own user info and own password
         grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(AdminUserService.class));
         grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
-        grant(VistaOperationsBehavior.Onboarding, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
         grant(VistaOperationsBehavior.Onboarding, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(PmcCrudService.class));
@@ -216,7 +217,6 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, VistaOperationsBehavior.Caledon);
         grant(VistaOperationsBehavior.SystemAdmin, VistaOperationsBehavior.ProcessAdmin);
 
-        grant(VistaOperationsBehavior.Caledon, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
 
     }

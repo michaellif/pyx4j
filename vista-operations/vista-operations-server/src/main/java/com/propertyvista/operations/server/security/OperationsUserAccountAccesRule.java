@@ -14,17 +14,22 @@
 package com.propertyvista.operations.server.security;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.system.VistaContext;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 
 public class OperationsUserAccountAccesRule implements DatasetAccessRule<OperationsUserCredential> {
 
+    private static final long serialVersionUID = -8708570145392919006L;
+
     @Override
     public void applyRule(EntityQueryCriteria<OperationsUserCredential> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUserPrimaryKey()));
+        if (!SecurityController.checkBehavior(VistaOperationsBehavior.SystemAdmin)) {
+            criteria.eq(criteria.proto().user(), VistaContext.getCurrentUserPrimaryKey());
+        }
     }
 
 }
