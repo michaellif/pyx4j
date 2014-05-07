@@ -254,6 +254,10 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.unit().set(filterUnitData(bo.masterOnlineApplication().leaseApplication().lease().unit()));
         to.utilities().setValue(retrieveUtilities(term));
 
+        Persistence.ensureRetrieve(to.unit().building().landlord(), AttachLevel.Attached);
+        to.landlordInfo().name().setValue(to.unit().building().landlord().name().getValue());
+        to.landlordInfo().address().setValue(to.unit().building().landlord().address().getStringView());
+
         to.leaseFrom().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseFrom().getValue());
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
 

@@ -54,6 +54,10 @@ public class LeaseStep extends ApplicationWizardStep {
         panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
+        panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
         panel.setWidget(++row, 0, inject(proto().leaseFrom(), new CDateLabel(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().leaseTo(), new CDateLabel(), new FieldDecoratorBuilder().build()));

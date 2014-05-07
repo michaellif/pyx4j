@@ -35,6 +35,8 @@ public interface OnlineApplicationDTO extends IEntity {
     //--------------------------------------------
     // read-only data:
 
+    LandlordInfo landlordInfo();
+
     AptUnit unit();
 
     @Editor(type = EditorType.label)

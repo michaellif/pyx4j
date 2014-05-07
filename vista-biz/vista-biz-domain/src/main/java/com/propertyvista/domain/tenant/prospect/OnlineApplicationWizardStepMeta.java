@@ -14,12 +14,18 @@
 package com.propertyvista.domain.tenant.prospect;
 
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n
 public enum OnlineApplicationWizardStepMeta {
 
-    Unit, Options, Lease, People, AboutYou, AdditionalInfo, Financial, EmergencyContacts, Legal, Summary, Payment, Confirmation;
+    Unit, Options,
+
+    @Translate("Lease Application")
+    Lease,
+
+    People, AboutYou, AdditionalInfo, Financial, EmergencyContacts, Legal, Summary, Payment, Confirmation;
 
     @Override
     public String toString() {

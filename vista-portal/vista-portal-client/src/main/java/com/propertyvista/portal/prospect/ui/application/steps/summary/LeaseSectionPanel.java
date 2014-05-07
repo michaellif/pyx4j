@@ -34,6 +34,10 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         addField(proto().unit().info().legalAddress());
         addField(proto().utilities());
 
+        addCaption(i18n.tr("Landlord Info"));
+        addField(proto().landlordInfo().name());
+        addField(proto().landlordInfo().address());
+
         addCaption(i18n.tr("Lease Term"));
         addField(proto().leaseFrom());
         addField(proto().leaseTo());
