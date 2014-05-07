@@ -63,11 +63,12 @@ public interface MasterOnlineApplication extends IEntity {
     // -----------------------------------------------
     // Selected on Vista Site:
 
+    /** Reflects customer selection during online sign up. Only valid until Lease.unit() is set. */
     @Detached
-    Building building();
+    Building ilsBuilding();
 
     @Detached
-    Floorplan floorplan();
+    Floorplan ilsFloorplan();
 
     // -----------------------------------------------
 

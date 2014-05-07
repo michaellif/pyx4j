@@ -1302,7 +1302,7 @@ public abstract class LeaseAbstractManager {
                 criteria.eq(criteria.proto().leaseApplication().lease(), leaseId);
                 MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(criteria);
                 if (masterOnlineApplication != null) {
-                    building = masterOnlineApplication.building();
+                    building = masterOnlineApplication.ilsBuilding();
                 }
             }
             if (building != null) {

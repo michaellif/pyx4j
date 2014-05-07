@@ -644,7 +644,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     private void fillUnitSelectionData(OnlineApplication bo, OnlineApplicationDTO to) {
         MasterOnlineApplication moa = ProspectPortalContext.getMasterOnlineApplication();
-        if (!moa.building().isNull() || !moa.floorplan().isNull()) {
+        if (!moa.ilsBuilding().isNull() || !moa.ilsFloorplan().isNull()) {
             UnitSelectionDTO unitSelection = EntityFactory.create(UnitSelectionDTO.class);
 
             Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
@@ -658,11 +658,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
                 unitSelection.floorplan().set(lease.unit().floorplan());
                 unitSelection.moveIn().setValue(lease.leaseFrom().getValue());
             } else {
-                Persistence.ensureRetrieve(moa.floorplan(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(moa.building(), AttachLevel.ToStringMembers);
+                Persistence.ensureRetrieve(moa.ilsFloorplan(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(moa.ilsBuilding(), AttachLevel.ToStringMembers);
 
-                unitSelection.building().set(moa.building());
-                unitSelection.floorplan().set(moa.floorplan());
+                unitSelection.building().set(moa.ilsBuilding());
+                unitSelection.floorplan().set(moa.ilsFloorplan());
                 unitSelection.moveIn().setValue(SystemDateManager.getLogicalDate());
             }
 

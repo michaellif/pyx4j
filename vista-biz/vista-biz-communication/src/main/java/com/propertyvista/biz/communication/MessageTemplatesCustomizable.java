@@ -114,11 +114,11 @@ class MessageTemplatesCustomizable {
 
         EmailTemplate emailTemplate;
 
-        if (tenantInLease.application().masterOnlineApplication().building().isNull()) {
+        if (tenantInLease.application().masterOnlineApplication().ilsBuilding().isNull()) {
             emailTemplate = getEmailTemplate(EmailTemplateType.ProspectWelcome,
                     Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)));
         } else {
-            emailTemplate = getEmailTemplate(EmailTemplateType.ProspectWelcome, tenantInLease.application().masterOnlineApplication().building());
+            emailTemplate = getEmailTemplate(EmailTemplateType.ProspectWelcome, tenantInLease.application().masterOnlineApplication().ilsBuilding());
         }
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);

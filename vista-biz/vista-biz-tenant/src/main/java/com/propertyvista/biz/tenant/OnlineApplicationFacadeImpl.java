@@ -70,8 +70,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
 
         masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Incomplete);
-        masterOnlineApplication.building().set(building);
-        masterOnlineApplication.floorplan().set(floorplan);
+        masterOnlineApplication.ilsBuilding().set(building);
+        masterOnlineApplication.ilsFloorplan().set(floorplan);
         Persistence.service().persist(masterOnlineApplication);
 
         for (LeaseTermTenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
@@ -167,7 +167,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
             criteria.eq(criteria.proto().applications(), application);
             MasterOnlineApplication moa = Persistence.service().retrieve(criteria);
-            if (moa != null && (!moa.building().isNull() || !moa.floorplan().isNull())) {
+            if (moa != null && (!moa.ilsBuilding().isNull() || !moa.ilsFloorplan().isNull())) {
                 retVal.add(PortalProspectBehavior.CanEditLeaseTerms);
             }
         }
@@ -442,7 +442,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         } else {
             // Case of ILS link
             Persistence.ensureRetrieve(app.masterOnlineApplication(), AttachLevel.Attached);
-            return app.masterOnlineApplication().building();
+            return app.masterOnlineApplication().ilsBuilding();
         }
     }
 
