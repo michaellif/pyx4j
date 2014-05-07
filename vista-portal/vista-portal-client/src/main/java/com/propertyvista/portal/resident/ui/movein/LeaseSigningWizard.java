@@ -13,13 +13,12 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -33,6 +32,8 @@ import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     private final static I18n i18n = I18n.get(LeaseSigningWizard.class);
+
+    private final BasicFlexFormPanel featurePanel = new BasicFlexFormPanel();
 
     public LeaseSigningWizard(LeaseSigningWizardView view) {
         super(LeaseAgreementDTO.class, view, i18n.tr("Move-In Wizard"), i18n.tr("Submit"), ThemeColor.contrast2);
@@ -59,8 +60,8 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         });
 
         panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CDateLabel(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Info"));
         panel.setWidget(++row, 0, inject(proto().unit().building(), buildingLabel, new FieldDecoratorBuilder().build()));
@@ -76,9 +77,12 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>(), new FieldDecoratorBuilder()
-                        .customLabel(i18n.tr("Base Rent")).build()));
-        panel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));
+                inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CMoneyLabel(),
+                        new FieldDecoratorBuilder().customLabel(i18n.tr("Base Rent")).build()));
+
+        panel.setWidget(++row, 0, featurePanel);
+        featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
+        featurePanel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Tenants"));
         panel.setWidget(++row, 0, inject(proto().leaseTerm().version().tenants(), new TenantsFolder()));
@@ -104,5 +108,12 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         panel.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder()));
 
         return panel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        featurePanel.setVisible(!getValue().leaseTerm().version().leaseProducts().featureItems().isEmpty());
     }
 }

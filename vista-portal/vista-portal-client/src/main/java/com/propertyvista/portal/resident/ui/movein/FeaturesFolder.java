@@ -13,14 +13,13 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -51,7 +50,7 @@ public class FeaturesFolder extends PortalBoxFolder<BillableItem> {
 
             int row = -1;
             mainPanel.setWidget(++row, 0, inject(proto().item(), new CEntityLabel<ProductItem>(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().agreedPrice(), new CLabel<BigDecimal>(), new FieldDecoratorBuilder().build()));
+            mainPanel.setWidget(++row, 0, inject(proto().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().build()));
             mainPanel.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
             return mainPanel;
