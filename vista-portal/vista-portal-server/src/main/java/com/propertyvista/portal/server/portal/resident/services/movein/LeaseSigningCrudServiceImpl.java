@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.portal.resident.services.movein;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -26,8 +27,10 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementConfirmationTerm;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.SignedAgreementConfirmationTerm;
 import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
@@ -48,6 +51,11 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
 
         to.unit().set(lease.unit());
         to.leaseTerm().set(lease.currentTerm());
+        to.utilities().setValue(retrieveUtilities(lease.currentTerm()));
+
+        Persistence.ensureRetrieve(lease.unit().building().landlord(), AttachLevel.Attached);
+        to.landlordInfo().name().setValue(lease.unit().building().landlord().name().getValue());
+        to.landlordInfo().address().setValue(lease.unit().building().landlord().address().getStringView());
 
         for (LeaseAgreementLegalTerm term : lease.currentTerm().agreementLegalTerms()) {
             SignedAgreementLegalTerm signedTerm = EntityFactory.create(SignedAgreementLegalTerm.class);
@@ -100,4 +108,19 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         throw new UnsupportedOperationException();
     }
 
+    private String retrieveUtilities(LeaseTerm term) {
+        assert (!term.isValueDetached());
+
+        Persistence.ensureRetrieve(term.version().utilities(), AttachLevel.Attached);
+
+        StringBuffer res = new StringBuffer();
+        for (BuildingUtility utility : term.version().utilities()) {
+            if (res.length() > 0) {
+                res.append(", ");
+            }
+            res.append(utility.name().getStringView());
+        }
+
+        return res.toString();
+    }
 }

@@ -13,15 +13,20 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.dto.movein;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
+import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.SignedAgreementConfirmationTerm;
 import com.propertyvista.domain.tenant.lease.SignedAgreementLegalTerm;
+import com.propertyvista.portal.rpc.portal.shared.dto.LandlordInfo;
 
 @Transient
 public interface LeaseAgreementDTO extends IEntity {
@@ -32,8 +37,13 @@ public interface LeaseAgreementDTO extends IEntity {
     @Owned
     IList<SignedAgreementConfirmationTerm> confirmationTerms();
 
+    LandlordInfo landlordInfo();
+
     AptUnit unit();
 
-    LeaseTerm leaseTerm();
+    @Editor(type = EditorType.label)
+    @Caption(name = "Included Utilities")
+    IPrimitive<String> utilities();
 
+    LeaseTerm leaseTerm();
 }

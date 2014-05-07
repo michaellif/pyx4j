@@ -48,15 +48,15 @@ public class LeaseStep extends ApplicationWizardStep {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
+        panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
         panel.setWidget(++row, 0, inject(proto().unit().info().number(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-
-        panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CDateLabel(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CDateLabel(), new FieldDecoratorBuilder().build()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
         panel.setWidget(++row, 0, inject(proto().leaseFrom(), new CDateLabel(), new FieldDecoratorBuilder().build()));

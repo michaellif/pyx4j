@@ -28,6 +28,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepStatus;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationConfirmationTerm;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
+import com.propertyvista.portal.rpc.portal.shared.dto.LandlordInfo;
 
 @Transient
 public interface OnlineApplicationDTO extends IEntity {

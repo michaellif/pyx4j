@@ -49,7 +49,6 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
         CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
         buildingLabel.setFormatter(new IFormatter<Building, String>() {
-
             @Override
             public String format(Building value) {
                 StringBuilder builder = new StringBuilder();
@@ -59,21 +58,26 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
             }
         });
 
+        panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Lease Info"));
         panel.setWidget(++row, 0, inject(proto().unit().building(), buildingLabel, new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().unit(), new CEntityLabel<AptUnit>(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
+        panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0,
                 inject(proto().leaseTerm().termFrom(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease From")).build()));
         panel.setWidget(++row, 0, inject(proto().leaseTerm().termTo(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
 
+        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
         panel.setWidget(
                 ++row,
                 0,
                 inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CLabel<BigDecimal>(), new FieldDecoratorBuilder()
                         .customLabel(i18n.tr("Base Rent")).build()));
-
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
         panel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Tenants"));

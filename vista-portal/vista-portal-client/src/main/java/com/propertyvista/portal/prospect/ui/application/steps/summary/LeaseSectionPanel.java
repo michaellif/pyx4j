@@ -29,14 +29,14 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
     public LeaseSectionPanel(int index, SummaryForm form, LeaseStep step) {
         super(index, OnlineApplicationWizardStepMeta.Lease.toString(), form, step);
 
+        addCaption(i18n.tr("Landlord Info"));
+        addField(proto().landlordInfo().name());
+        addField(proto().landlordInfo().address());
+
         addCaption(i18n.tr("Unit"));
         addField(proto().unit().info().number());
         addField(proto().unit().info().legalAddress());
         addField(proto().utilities());
-
-        addCaption(i18n.tr("Landlord Info"));
-        addField(proto().landlordInfo().name());
-        addField(proto().landlordInfo().address());
 
         addCaption(i18n.tr("Lease Term"));
         addField(proto().leaseFrom());
