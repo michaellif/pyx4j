@@ -123,7 +123,7 @@ public class DerbyDialect extends Dialect {
 
     @Override
     public String applyLimitCriteria(String sql) {
-        return sql + "OFFSET ? ROWS";
+        return sql + " OFFSET ? ROWS";
     }
 
     @Override

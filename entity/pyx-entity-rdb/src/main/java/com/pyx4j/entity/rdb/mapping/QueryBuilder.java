@@ -45,6 +45,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.adapters.IndexAdapter;
 import com.pyx4j.entity.core.criterion.AndCriterion;
 import com.pyx4j.entity.core.criterion.Criterion;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
@@ -134,11 +135,14 @@ public class QueryBuilder<T extends IEntity> {
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
             appendFilters(sql, queryJoin, criteria.getFilters(), firstCriteria, true);
         }
-        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
-            log.trace("sort by {}", criteria.getSorts());
+
+        boolean requireOrder = (criteria instanceof EntityListCriteria) || ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty()));
+        if (requireOrder) {
             sortsSql.append(" ORDER BY ");
+            List<Sort> sorts = appenPrimaryKeySort(criteria, expandToStringMembers(criteria.getSorts()));
+            log.trace("sort by {}", sorts);
             boolean firstOrderBy = true;
-            for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {
+            for (EntityQueryCriteria.Sort sort : sorts) {
                 if (firstOrderBy) {
                     firstOrderBy = false;
                 } else {
@@ -442,34 +446,51 @@ public class QueryBuilder<T extends IEntity> {
         sql.append(subQuerySql);
     }
 
+    private List<Sort> appenPrimaryKeySort(EntityQueryCriteria<T> criteria, List<Sort> sorts) {
+        String idPath = criteria.proto().id().getPath().toString();
+        boolean pkSortFound = false;
+        for (Sort sort : sorts) {
+            if (idPath.equals(sort.getPropertyPath())) {
+                pkSortFound = true;
+                break;
+            }
+        }
+        if (!pkSortFound) {
+            sorts.add(new Sort(criteria.proto().id(), false));
+        }
+        return sorts;
+    }
+
     private List<Sort> expandToStringMembers(List<Sort> sorts) {
         List<Sort> result = new ArrayList<Sort>();
-        for (Sort sort : sorts) {
-            Path path = new Path(sort.getPropertyPath());
+        if (sorts != null) {
+            for (Sort sort : sorts) {
+                Path path = new Path(sort.getPropertyPath());
 
-            // Sort by collections is unsupported on postgresql
-            if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
-                throw new Error("Sort by collections is unsupported");
-            }
+                // Sort by collections is unsupported on postgresql
+                if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
+                    throw new Error("Sort by collections is unsupported");
+                }
 
-            MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(path);
-            ObjectClassType type = memberMeta.getObjectClassType();
+                MemberMeta memberMeta = queryJoin.operationsMeta.entityMeta().getMemberMeta(path);
+                ObjectClassType type = memberMeta.getObjectClassType();
 
-            if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
-                throw new Error("Sort by collections is unsupported");
-            }
+                if ((type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
+                    throw new Error("Sort by collections is unsupported");
+                }
 
-            if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
-                @SuppressWarnings("unchecked")
-                Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
-                List<Sort> expanded = expandEntityToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending());
-                if (expanded.size() > 0) {
-                    result.addAll(expanded);
+                if ((type == ObjectClassType.Entity) || (type == ObjectClassType.EntityList) || (type == ObjectClassType.EntitySet)) {
+                    @SuppressWarnings("unchecked")
+                    Class<? extends IEntity> targetEntityClass = (Class<? extends IEntity>) memberMeta.getValueClass();
+                    List<Sort> expanded = expandEntityToStringMembers(sort.getPropertyPath(), targetEntityClass, sort.isDescending());
+                    if (expanded.size() > 0) {
+                        result.addAll(expanded);
+                    } else {
+                        result.add(sort);
+                    }
                 } else {
                     result.add(sort);
                 }
-            } else {
-                result.add(sort);
             }
         }
         return result;
