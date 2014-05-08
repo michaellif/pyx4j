@@ -117,6 +117,7 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
+        style.addProperty("font-family", "inherit");
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.disabled);
@@ -165,6 +166,7 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
+        style.addProperty("font-family", "inherit");
         addStyle(style);
 
         style = new Style(".", StyleName.ListBox, "-", StyleDependent.readonly);

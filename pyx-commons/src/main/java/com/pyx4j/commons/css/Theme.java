@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.user.client.ui.RootPanel;
+
 public abstract class Theme {
 
     private final ThemeDescriminator discriminator;
@@ -87,10 +89,6 @@ public abstract class Theme {
 
     public ThemeDescriminator getDiscriminator() {
         return discriminator;
-    }
-
-    public double getTabHeight() {
-        return 2.6;
     }
 
 }

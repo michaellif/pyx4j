@@ -52,6 +52,7 @@ import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
+//TODO responsive tabs http://css-tricks.com/
 public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>,
         HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab>, HasWidgets.ForIsWidget {
 
@@ -234,7 +235,7 @@ public class TabPanel extends LayoutPanel implements IndexedPanel.ForIsWidget, H
 
     public void setTabBarVisible(boolean visible) {
 
-        double barHeight = StyleManager.getTheme().getTabHeight();
+        double barHeight = 2.6;
         tabBar.setVisible(visible);
         if (visible) {
             setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
