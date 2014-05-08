@@ -330,7 +330,6 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         @SuppressWarnings({ "unchecked", "rawtypes" })
         public void setContent(IsWidget content) {
             this.content = content;
-            content.asWidget().setStyleName(CComponentTheme.StyleName.CEntityContainerContentHolder.name());
             if (getWidget() instanceof IDecorator) {
                 ((IDecorator) getWidget()).setContent(content);
                 ((IDecorator) getWidget()).init(CContainer.this);

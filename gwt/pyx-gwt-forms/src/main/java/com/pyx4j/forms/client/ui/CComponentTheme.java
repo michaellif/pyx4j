@@ -36,9 +36,7 @@ public class CComponentTheme extends Theme {
 
         TabbedFormTab,
 
-        ImageHolder, ImageEditorMenu,
-
-        CEntityContainerContentHolder
+        ImageHolder, ImageEditorMenu
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -61,13 +59,6 @@ public class CComponentTheme extends Theme {
         initTabbedFormStyle();
         initImageHolderStyle();
         initCheckBoxStyle();
-        initContainerStyles();
-    }
-
-    private void initContainerStyles() {
-        Style style = new Style(".", StyleName.CEntityContainerContentHolder);
-        style.addProperty("width", "100%");
-        addStyle(style);
     }
 
     private void initCheckBoxStyle() {

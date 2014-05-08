@@ -20,14 +20,18 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.ILayoutable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 
 public class TwoColumnFluidPanel implements IsWidget {
+
+    public static final String CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE = "FormCollapsingLayoutType";
 
     public static enum Location {
         Dual, Left, Right
@@ -109,9 +113,16 @@ public class TwoColumnFluidPanel implements IsWidget {
 
     protected class ContentPanel extends FlowPanel implements ILayoutable {
 
+        public ContentPanel() {
+
+        }
+
         @Override
         public void doLayout(LayoutType type) {
-            setCollapsed(LayoutType.tabletLandscape.compareTo(type) > 0);
+            LayoutType collapseType = LayoutType.valueOf(CssVariable.getVariable(getElement(), CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE));
+            if (collapseType != null) {
+                setCollapsed(collapseType.compareTo(type) > 0);
+            }
         }
 
         public void setCollapsed(boolean collapsed) {
@@ -120,6 +131,12 @@ public class TwoColumnFluidPanel implements IsWidget {
             } else {
                 contentPanel.removeStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
             }
+        }
+
+        @Override
+        protected void onLoad() {
+            super.onLoad();
+            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
         }
     }
 

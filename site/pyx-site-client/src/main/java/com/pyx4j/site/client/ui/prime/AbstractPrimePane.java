@@ -22,6 +22,9 @@ package com.pyx4j.site.client.ui.prime;
 
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel;
+import com.pyx4j.gwt.commons.css.CssVariable;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
@@ -31,6 +34,7 @@ public class AbstractPrimePane extends AbstractPane implements IPrimePane {
     private final IMemento memento = new MementoImpl();
 
     public AbstractPrimePane() {
+        CssVariable.setVariable(getElement(), TwoColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
     }
 
     @Override

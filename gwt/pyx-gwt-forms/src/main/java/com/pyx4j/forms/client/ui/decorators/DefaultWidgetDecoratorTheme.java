@@ -104,8 +104,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable, " .", StyleName.WidgetDecoratorLabel);
-        style.addProperty("color", ThemeColor.foreground, 0.5);
-        style.addProperty("font-size", "0.9em");
+        style.addProperty("color", ThemeColor.foreground, 0.7);
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 
