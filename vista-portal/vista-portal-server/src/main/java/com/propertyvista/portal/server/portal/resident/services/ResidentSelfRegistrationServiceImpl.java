@@ -78,6 +78,7 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
     private SelfRegistrationBuildingDTO toDto(Building dbo) {
 
         SelfRegistrationBuildingDTO dto = EntityFactory.create(SelfRegistrationBuildingDTO.class);
+        dto.supportPhone().setValue(dbo.contacts().supportPhone().getValue());
         dto.address().setValue(dbo.info().address().getStringView());
         dto.buildingKey().set(dbo.createIdentityStub());
 

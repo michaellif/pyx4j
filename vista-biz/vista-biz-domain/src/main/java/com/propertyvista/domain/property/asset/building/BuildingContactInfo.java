@@ -13,7 +13,10 @@
  */
 package com.propertyvista.domain.property.asset.building;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -37,4 +40,8 @@ public interface BuildingContactInfo extends IEntity {
     @Owned
     @Detached
     IList<OrganizationContact> organizationContacts();
+
+    @Caption(description = "Resident Portal registration support")
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> supportPhone();
 }

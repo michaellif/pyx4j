@@ -155,6 +155,8 @@ public class BuildingsGenerator {
 
         building.contacts().website().setValue(website);
 
+        building.contacts().supportPhone().setValue(DataGenerator.randomPhone(RandomUtil.randomBoolean() ? "416" : "647"));
+
         return building;
     }
 

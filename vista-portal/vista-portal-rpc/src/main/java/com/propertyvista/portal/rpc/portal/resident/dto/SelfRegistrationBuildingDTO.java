@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.dto;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
@@ -29,4 +31,6 @@ public interface SelfRegistrationBuildingDTO extends IEntity {
     // Building Address String
     IPrimitive<String> address();
 
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> supportPhone();
 }

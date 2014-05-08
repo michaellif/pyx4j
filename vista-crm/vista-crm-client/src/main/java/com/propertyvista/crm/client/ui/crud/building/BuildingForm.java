@@ -390,6 +390,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     private BasicCFormPanel createContactTab() {
         BasicCFormPanel flexPanel = new BasicCFormPanel(this);
 
+        flexPanel.append(Location.Left, proto().contacts().supportPhone()).decorate().componentWidth(200);
+
         flexPanel.h1(proto().contacts().organizationContacts().getMeta().getCaption());
         flexPanel.append(Location.Dual, proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable(), this));
 

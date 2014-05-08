@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -158,6 +159,8 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         private final List<CComponent<?, ?, ?>> validationList;
 
+        private final CPhoneField supportField = new CPhoneField();
+
         public SignUpForm() {
             super(ResidentSelfRegistrationDTO.class);
             this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
@@ -263,11 +266,32 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
             flexPanel.setBR(++row, 0, 2);
 
+            supportField.setVisible(false);
+            supportField.setViewable(true);
+            supportField.setDecorator(new LoginWidgetDecoratorBuilder().build());
+            supportField.setNote(i18n.tr("In case you have issues with the registration please call this phone"), NoteStyle.Warn);
+
+            flexPanel.setWidget(++row, 1, supportField);
+            flexPanel.getFlexCellFormatter().getElement(row, 1).getStyle().setTextAlign(TextAlign.LEFT);
+
+            flexPanel.setBR(++row, 0, 2);
+
             return flexPanel;
         }
 
         public void init(List<SelfRegistrationBuildingDTO> buildings) {
             buildingSelector.setOptions(buildings);
+            buildingSelector.addValueChangeHandler(new ValueChangeHandler<SelfRegistrationBuildingDTO>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<SelfRegistrationBuildingDTO> event) {
+                    supportField.setVisible(false);
+                    if (event.getValue() != null) {
+                        supportField.setValue(event.getValue().supportPhone().getValue());
+                        supportField.setVisible(!event.getValue().supportPhone().isNull());
+                    }
+                }
+            });
+
             populateNew();
         }
 
