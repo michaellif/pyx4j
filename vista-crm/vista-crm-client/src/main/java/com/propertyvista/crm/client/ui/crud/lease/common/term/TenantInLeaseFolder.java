@@ -29,13 +29,11 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
@@ -78,15 +76,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     public void setPadEditable(boolean isPadEditable) {
         this.isPadEditable = isPadEditable;
-    }
-
-    @Override
-    public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
-        super.setEnforceAgeOfMajority(enforceAgeOfMajority);
-
-        for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((TenantInLeaseEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
-        }
     }
 
     @Override
@@ -256,7 +245,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                             .getPrimaryKey());
                 }
 
-                get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(getEnforceAgeOfMajority());
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 
                 if (get(proto().role()) instanceof CComboBox) {
@@ -327,10 +315,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     }
                 });
             }
-        }
-
-        void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
-            get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(enforceAgeOfMajority);
         }
 
         private void devGenerateTenant() {

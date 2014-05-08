@@ -34,8 +34,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -65,15 +65,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
 
     public GuarantorInLeaseFolder(CrmEntityForm<?> parentForm) {
         super(LeaseTermGuarantor.class, parentForm);
-    }
-
-    @Override
-    public void setEnforceAgeOfMajority(boolean enforceAgeOfMajority) {
-        super.setEnforceAgeOfMajority(enforceAgeOfMajority);
-
-        for (CComponent<?, ?, ?> comp : getComponents()) {
-            ((GuarantorInLeaseEditor) ((CFolderItem<?>) comp).getComponents().iterator().next()).setEnforceAgeOfMajority(enforceAgeOfMajority);
-        }
     }
 
     @Override
@@ -191,7 +182,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                             .getPrimaryKey());
                 }
 
-                get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(getEnforceAgeOfMajority());
                 get(proto().leaseParticipant().customer().person().email()).setMandatory(!getValue().leaseParticipant().customer().user().isNull());
 
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -234,10 +224,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                     }
                 });
             }
-        }
-
-        void setEnforceAgeOfMajority(Boolean enforceAgeOfMajority) {
-            get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(enforceAgeOfMajority);
         }
 
         @SuppressWarnings("unchecked")

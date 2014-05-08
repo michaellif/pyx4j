@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -102,12 +102,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 throw new IllegalArgumentException();
             }
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
-
-            if (VistaFeatures.instance().yardiIntegration()) {
-                get(proto().customer().person().birthDate()).setMandatory(false);
-            } else {
-                get(proto().customer().person().birthDate()).setMandatory(!getValue().ageOfMajority().isNull());
-            }
         }
 
         if (rootClass.equals(TenantDTO.class)) {

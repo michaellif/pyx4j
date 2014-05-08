@@ -456,10 +456,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     @SuppressWarnings("rawtypes")
     void setRestrictions(LeaseTermDTO value, boolean revalidate) {
-        TenantInLeaseFolder tenantInLeaseFolder = ((TenantInLeaseFolder) ((LeaseTermParticipantFolder) get(proto().version().tenants())));
-        tenantInLeaseFolder.setAgeOfMajority(value.ageOfMajority().getValue());
-        tenantInLeaseFolder.setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
-        tenantInLeaseFolder.setMaturedOccupantsAreApplicants(value.maturedOccupantsAreApplicants().getValue());
+        ((TenantInLeaseFolder) (LeaseTermParticipantFolder) get(proto().version().tenants())).setMaturedOccupantsAreApplicants(value
+                .maturedOccupantsAreApplicants().getValue());
+        ((LeaseTermParticipantFolder) get(proto().version().tenants())).setAgeOfMajority(value.ageOfMajority().getValue());
+        ((LeaseTermParticipantFolder) get(proto().version().tenants())).setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
 
         ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setAgeOfMajority(value.ageOfMajority().getValue());
         ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setEnforceAgeOfMajority(value.enforceAgeOfMajority().getValue());
