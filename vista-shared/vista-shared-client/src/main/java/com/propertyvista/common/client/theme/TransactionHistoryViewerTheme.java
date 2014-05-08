@@ -63,7 +63,6 @@ public class TransactionHistoryViewerTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FinancialTransactionMoneyCell.name());
-        style.addProperty("font-family", "monospace");
         addStyle(style);
 
         style = new Style(".", StyleName.FinancialTransactionTotalRow.name());

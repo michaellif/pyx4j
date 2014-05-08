@@ -45,7 +45,6 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("input, select, textarea");
-        style.addProperty("font-family", "inherit");
         style.addProperty("font-size", "100%");
         addStyle(style);
 

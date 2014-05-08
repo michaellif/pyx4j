@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceDispatcher;

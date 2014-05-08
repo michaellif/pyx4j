@@ -120,7 +120,6 @@ public class OnboardingTheme extends Theme {
         style = new Style("." + OnboardingStyles.OnboardingCaption.name());
         style.addProperty("text-align", "center");
         style.addProperty("margin-bottom", "40px");
-        style.addProperty("font-family", "Tahoma");
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "2.5em");
         style.addProperty("color", COLOR_SPECIAL_FOREGROUND);
@@ -207,7 +206,6 @@ public class OnboardingTheme extends Theme {
         style.addProperty("margin-bottom", "30px");
         style.addProperty("font-style", "italic");
         style.addProperty("font-weight", "bold");
-        style.addProperty("font-family", "Tahoma");
         style.addProperty("color", COLOR_SPECIAL_FOREGROUND);
         style.addProperty("text-align", "center");
         addStyle(style);
@@ -239,7 +237,6 @@ public class OnboardingTheme extends Theme {
         Style style = new Style(".", PmcAccountCreationCompleteViewImpl.Styles.PmcAccountCreationCompleteLabel.name());
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
-        style.addProperty("font-family", "Tahoma");
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.2em");
         style.addProperty("text-align", "center");

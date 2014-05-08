@@ -491,7 +491,6 @@ public class CrmTheme extends VistaTheme {
         {
             Style style = new Style("." + ArrearsStyleName.ArrearsMoneyCell.name());
             style.addProperty("text-align", "right");
-            style.addProperty("font-family", "monospace");
             addStyle(style);
         }
         {
