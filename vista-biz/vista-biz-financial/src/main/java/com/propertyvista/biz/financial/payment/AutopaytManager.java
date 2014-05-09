@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
@@ -220,15 +221,13 @@ class AutopaytManager {
      * Calculate total amounts.
      */
     List<PreauthorizedAmount> calulatePapAmounts(BillingCycle billingCycle, BillingAccount billingAccount) {
-        List<PreauthorizedAmount> records = new ArrayList<PreauthorizedAmount>();
-
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(),
                 AutoPayPolicy.class);
-        if ((billingAccount.lease().status().getValue() == Lease.Status.Active)
+        if ((billingAccount.lease().status().getValue() != Lease.Status.Active)
                 || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy))) {
             // Do not create payments
-            return records;
+            return Collections.emptyList();
         }
 
         List<LeaseTermTenant> leaseParticipants;
@@ -253,6 +252,7 @@ class AutopaytManager {
             }
         }
 
+        List<PreauthorizedAmount> records = new ArrayList<PreauthorizedAmount>();
         for (LeaseTermTenant leaseParticipant : leaseParticipants) {
             List<AutopayAgreement> preauthorizedPayments;
             {

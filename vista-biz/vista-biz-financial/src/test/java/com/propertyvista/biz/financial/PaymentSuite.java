@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.propertyvista.biz.financial.payment.AutoPayLeaseActivationInternalTest;
 import com.propertyvista.biz.financial.payment.CreditCardPaymentTest;
 import com.propertyvista.biz.financial.payment.FundsTransferProcessErrorRecoveryTest;
 import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
@@ -38,6 +39,7 @@ import com.propertyvista.biz.financial.payment.PreauthorizedPaymentCyclesTest;
         PaymentAcceptanceUtilsTest.class, //
         PadPaymentChargeBaseSunnyDayScenarioTest.class, //
         PadPaymentMethodCancellationTest.class, //
+        AutoPayLeaseActivationInternalTest.class, //
         PadPaymentPercentAmountValidationTest.class, //
         PadPaymentFixedAmountValidationTest.class, //
         PadProcessingTest.class, //
