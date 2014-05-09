@@ -33,7 +33,11 @@ public class ImportUnitDataProcessor {
     public void importModel(Building building, AptUnitIO aptUnitIO, ExecutionMonitor monitor) {
         AptUnit unit = retrive(building, aptUnitIO);
         if (unit == null) {
-            monitor.addErredEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
+            if (!aptUnitIO.lease().isNull()) {
+                monitor.addErredEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
+            } else {
+                monitor.addFailedEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
+            }
             return;
         }
 

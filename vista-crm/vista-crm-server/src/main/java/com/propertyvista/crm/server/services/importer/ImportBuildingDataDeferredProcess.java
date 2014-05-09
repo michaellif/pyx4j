@@ -87,7 +87,7 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
                         if (status().isCanceled()) {
                             break;
                         }
-                        if ((monitor.getFailed() != 0) || (monitor.getErred() != 0)) {
+                        if (monitor.getErred() != 0) {
                             throw new FlowTerminationRollbackRuntimeException();
                         }
                     }
