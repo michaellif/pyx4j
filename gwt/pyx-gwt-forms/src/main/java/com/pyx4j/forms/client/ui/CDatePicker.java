@@ -52,7 +52,6 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
         setParser(new DateParser(defaultDateFormat));
         addComponentValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeComponent(new NDatePicker(this));
-        asWidget().setWidth("100%");
     }
 
     public void setDateFormat(String pattern) {

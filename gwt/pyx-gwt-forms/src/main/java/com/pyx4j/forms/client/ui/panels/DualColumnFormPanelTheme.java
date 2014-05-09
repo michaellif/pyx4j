@@ -83,7 +83,6 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell);
-        style.addProperty("display", "inline-block");
         style.addProperty("margin", "0 auto");
         addStyle(style);
 

@@ -47,7 +47,6 @@ public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
         addComponentValidator(new TextBoxParserValidator<String>());
         setNativeComponent(new NTextBox<String>(this));
         setWatermark(phoneType);
-        asWidget().setWidth("100%");
     }
 
     private void setWatermark(PhoneType phoneType) {

@@ -47,7 +47,6 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
         setParser(new EmailParser());
         addComponentValidator(new TextBoxParserValidator<String>());
         setNativeComponent(new NTextBox<String>(this));
-        asWidget().setWidth("100%");
     }
 
     public static class EmailParser implements IParser<String> {

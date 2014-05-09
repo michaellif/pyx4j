@@ -45,7 +45,6 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         setParser(new MoneyParser());
         addComponentValidator(new TextBoxParserValidator<BigDecimal>());
         setNativeComponent(new NTextBox<BigDecimal>(this));
-        asWidget().setWidth("100%");
     }
 
     public static class MoneyFormat implements IFormatter<BigDecimal, String> {

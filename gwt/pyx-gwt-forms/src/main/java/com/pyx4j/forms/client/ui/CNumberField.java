@@ -40,7 +40,6 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         validator = new TextBoxParserValidator<E>();
         addComponentValidator(validator);
         setNativeComponent(new NTextBox<E>(this));
-        asWidget().setWidth("100%");
     }
 
     public void setRange(E from, E to) {
