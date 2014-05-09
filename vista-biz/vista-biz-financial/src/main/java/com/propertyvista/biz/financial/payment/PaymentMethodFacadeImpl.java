@@ -46,6 +46,7 @@ import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -194,10 +195,19 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public BillingCycle getNextAutopayBillingCycle(Lease lease) {
         LogicalDate when = SystemDateManager.getLogicalDate();
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        if (lease.status().getValue() == Status.Approved && when.before(lease.leaseFrom().getValue())) {
+            when = lease.leaseFrom().getValue();
+        }
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         while (!billingCycle.targetAutopayExecutionDate().getValue().after(when)) {
             billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
         }
+        // Check that autopay was not executed for this date:
+        while (!billingCycle.actualAutopayExecutionDate().isNull()) {
+            billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+        }
+
         return billingCycle;
     }
 
