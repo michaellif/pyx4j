@@ -25,8 +25,8 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -52,6 +52,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Left, proto().description()).decorate();
+        formPanel.append(Location.Left, proto().requireSecurityQuestionForPasswordReset()).decorate().componentWidth(50);
         formPanel.append(Location.Left, proto().requireTwoStepVerificationOnLogin()).decorate().componentWidth(50);
 
         formPanel.h1(proto().permissions().getMeta().getCaption());
