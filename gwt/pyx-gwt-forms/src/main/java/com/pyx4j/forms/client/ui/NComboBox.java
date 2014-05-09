@@ -63,6 +63,7 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
 
     @Override
     protected void onEditorCreate() {
+        getEditor().setWidth("100%");
         super.onEditorCreate();
         refreshOptions();
         getEditor().addChangeHandler(new ChangeHandler() {

@@ -71,6 +71,12 @@ public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBo
     }
 
     @Override
+    protected void onEditorCreate() {
+        getEditor().setWidth("100%");
+        super.onEditorCreate();
+    }
+
+    @Override
     public void setVisibleItemCount(int count) {
         visibleItemCount = count;
         getEditor().setVisibleItemCount(count);
