@@ -119,9 +119,14 @@ public class TwoColumnFluidPanel implements IsWidget {
 
         @Override
         public void doLayout(LayoutType type) {
-            LayoutType collapseType = LayoutType.valueOf(CssVariable.getVariable(getElement(), CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE));
-            if (collapseType != null) {
-                setCollapsed(collapseType.compareTo(type) > 0);
+            String var = CssVariable.getVariable(getElement(), CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE);
+            if (var == null) {
+                setCollapsed(true);
+            } else {
+                LayoutType collapseType = LayoutType.valueOf(var);
+                if (collapseType != null) {
+                    setCollapsed(collapseType.compareTo(type) > 0);
+                }
             }
         }
 
