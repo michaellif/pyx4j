@@ -226,7 +226,7 @@ class AutopaytManager {
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(),
                 AutoPayPolicy.class);
         if ((billingAccount.lease().status().getValue() == Lease.Status.Active)
-                && (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy))) {
+                || (!AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy))) {
             // Do not create payments
             return records;
         }
