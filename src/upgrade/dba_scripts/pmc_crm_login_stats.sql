@@ -26,3 +26,69 @@ JOIN    (SELECT namespace,MIN(created) AS first_crm_login,
 WHERE NOT f.yardi_integration;
 
 
+
+SELECT DATE_PART('hour', created) hourOfDay, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE event = 'Login'  
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+ GROUP BY DATE_PART('hour', created)
+ ORDER BY DATE_PART('hour', created);
+
+SELECT DATE_PART('day', created) dayOfMonth, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE event = 'Login'  
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+ GROUP BY DATE_PART('day', created)
+ ORDER BY DATE_PART('day', created);
+
+-- Mid Month
+
+SELECT DATE_PART('hour', created) hourOfDay, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE event = 'Login'  
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+   AND DATE_PART('day', created) BETWEEN 10 and 18
+ GROUP BY DATE_PART('hour', created)
+ ORDER BY DATE_PART('hour', created);
+ 
+------ Setup Payments
+
+SELECT DATE_PART('hour', created) hourOfDay, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE entity_class IN ('AutopayAgreement', 'LeasePaymentMethod')
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+ GROUP BY DATE_PART('hour', created)
+ ORDER BY DATE_PART('hour', created);
+ 
+SELECT DATE_PART('day', created) dayOfMonth, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE entity_class IN ('AutopayAgreement', 'LeasePaymentMethod')
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+ GROUP BY DATE_PART('day', created)
+ ORDER BY DATE_PART('day', created);
+  
+ 
+--  Setup Payments Mid Month
+SELECT DATE_PART('hour', created) hourOfDay, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE entity_class IN ('AutopayAgreement', 'LeasePaymentMethod')
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+   AND DATE_PART('day', created) BETWEEN 10 and 18
+ GROUP BY DATE_PART('hour', created)
+ ORDER BY DATE_PART('hour', created); 
+ 
+--  Setup Payments Hot Days
+SELECT DATE_PART('hour', created) hourOfDay, COUNT(created) AS total_logins
+	FROM _admin_.audit_record 
+ WHERE entity_class IN ('AutopayAgreement', 'LeasePaymentMethod')
+   AND namespace != '_admin_'
+   AND user_type = 'customer'
+   AND (DATE_PART('day', created) BETWEEN 1 and 9) or  (DATE_PART('day', created) BETWEEN 25 and 31)
+ GROUP BY DATE_PART('hour', created)
+ ORDER BY DATE_PART('hour', created);  
