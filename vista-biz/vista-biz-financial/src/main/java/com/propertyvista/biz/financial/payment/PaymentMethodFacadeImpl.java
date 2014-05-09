@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.AuditFacade;
@@ -197,7 +198,8 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         LogicalDate when = SystemDateManager.getLogicalDate();
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         if (lease.status().getValue() == Status.Approved && when.before(lease.leaseFrom().getValue())) {
-            when = lease.leaseFrom().getValue();
+            when = DateUtils.daysAdd(lease.leaseFrom().getValue(), -1);
+            // offset one day back to avoid miscalculation when leaseFrom equals to targetAutopayExecutionDate!..
         }
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         while (!billingCycle.targetAutopayExecutionDate().getValue().after(when)) {

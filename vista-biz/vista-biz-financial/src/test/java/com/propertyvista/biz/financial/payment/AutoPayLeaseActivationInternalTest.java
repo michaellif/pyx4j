@@ -64,7 +64,7 @@ public class AutoPayLeaseActivationInternalTest extends LeaseFinancialTestBase {
         // Need to investigate the diff with lease agreed price of 1000.00
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
 
-        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(getLease()));
+        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(retrieveLease()));
 
         // Add 100% PAP
         final AutopayAgreement preauthorizedPayment1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
@@ -90,5 +90,24 @@ public class AutoPayLeaseActivationInternalTest extends LeaseFinancialTestBase {
                 .lastRecordStatus(PaymentStatus.Queued)//
                 .lastRecordAmount("1120.00"); //;
 
+    }
+
+    public void testNextAutopayDate() throws Exception {
+        setSysDate("2011-01-01");
+        createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
+        approveApplication(true);
+        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(retrieveLease()));
+
+        setSysDate("2011-01-01");
+        createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
+        advanceSysDate("2011-03-31");
+        approveApplication(true);
+        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(retrieveLease()));
+
+        setSysDate("2011-01-01");
+        createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
+        advanceSysDate("2011-04-01");
+        approveApplication(true);
+        assertEquals("Next PAP", "2011-05-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(retrieveLease()));
     }
 }
