@@ -43,15 +43,15 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName;
 
 public class DualColumnFormPanel implements IsWidget {
 
-    private final TwoColumnFluidPanel fluidPanel;
+    private final DualColumnFluidPanel fluidPanel;
 
     public DualColumnFormPanel() {
-        fluidPanel = new TwoColumnFluidPanel();
+        fluidPanel = new DualColumnFluidPanel();
     }
 
     @Override
@@ -148,7 +148,20 @@ public class DualColumnFormPanel implements IsWidget {
     }
 
     public void append(Location location, IsWidget widget) {
-        fluidPanel.append(location, new SimplePanel(widget.asWidget()));
+        Widget handlerPanel = new SimplePanel(widget.asWidget());
+        handlerPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FormPanelCell.name());
+        switch (location) {
+        case Left:
+            handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.left.name());
+            break;
+        case Right:
+            handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.right.name());
+            break;
+        case Dual:
+            handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
+            break;
+        }
+        fluidPanel.append(location, handlerPanel);
     }
 
     public void setVisible(boolean visible) {

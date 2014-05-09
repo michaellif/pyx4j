@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
@@ -59,8 +60,13 @@ import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
+import com.pyx4j.gwt.commons.css.CssVariable;
+import com.pyx4j.gwt.commons.layout.ILayoutable;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 
-public class FieldDecorator extends FlowPanel implements IFieldDecorator {
+public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayoutable {
+
+    public static final String CSS_VAR_FIELD_DECORATOR_LABEL_POSITION_LAYOUT_TYPE = "FieldDecoratorLabelPositionLayoutType";
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
@@ -96,6 +102,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
     private final SimplePanel contentHolder;
 
     private final Builder<?> builder;
+
+    private boolean narrowLayout;
 
     public FieldDecorator() {
         this(new Builder<>());
@@ -246,6 +254,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
         updateTooltip();
         updateVisibility();
 
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
     }
 
     @Override
@@ -306,8 +316,15 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
     }
 
     protected void updateLabelPosition() {
-        switch (builder.labelPosition) {
-        case left:
+        if (builder.labelPosition == LabelPosition.hidden) {
+            labelHolder.getElement().getStyle().setDisplay(Display.NONE);
+
+            containerPanel.getElement().getStyle().setProperty("marginLeft", "0");
+            contentPanel.getElement().getStyle().setProperty("paddingLeft", "0");
+            validationLabel.getElement().getStyle().setProperty("paddingLeft", "0");
+            noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
+
+        } else if (builder.labelPosition == LabelPosition.left && !narrowLayout) {
             labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -319,8 +336,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
             noteLabel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
 
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
-            break;
-        case top:
+        } else {
             labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
             containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
 
@@ -330,18 +346,8 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
             noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
 
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
-            break;
-        case hidden:
-            labelHolder.getElement().getStyle().setDisplay(Display.NONE);
-
-            containerPanel.getElement().getStyle().setProperty("marginLeft", "0");
-            contentPanel.getElement().getStyle().setProperty("paddingLeft", "0");
-            validationLabel.getElement().getStyle().setProperty("paddingLeft", "0");
-            noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
-
-            break;
-
         }
+
     }
 
     protected void updateLabelAlignment() {
@@ -418,7 +424,24 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator {
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
+    }
 
+    @Override
+    public void doLayout(LayoutType type) {
+        String var = CssVariable.getVariable(getElement(), CSS_VAR_FIELD_DECORATOR_LABEL_POSITION_LAYOUT_TYPE);
+        if (var == null) {
+            setNarrowLayout(false);
+        } else {
+            LayoutType collapseType = LayoutType.valueOf(var);
+            if (collapseType != null) {
+                setNarrowLayout(collapseType.compareTo(type) > 0);
+            }
+        }
+    }
+
+    public void setNarrowLayout(boolean narrowLayout) {
+        this.narrowLayout = narrowLayout;
+        updateLabelPosition();
     }
 
     protected Builder<?> getBuilder() {

@@ -49,9 +49,11 @@ public class CssVariable {
         String input = ComputedStyle.getStyleProperty(el, "fontFamily");
         HashMap<String, String> vars = new HashMap<>();
 
-        MatchResult result = RegExp.compile("\'var\\.(.*)=(.*)\'").exec(input);
-        for (int i = 1; i < result.getGroupCount(); i = i + 2) {
-            vars.put(result.getGroup(i), result.getGroup(i + 1));
+        RegExp regExp = RegExp.compile("'var\\.(.+?)=(.*?)'", "g");
+
+        MatchResult result = null;
+        while ((result = regExp.exec(input)) != null) {
+            vars.put(result.getGroup(1), result.getGroup(2));
         }
         return vars;
     }

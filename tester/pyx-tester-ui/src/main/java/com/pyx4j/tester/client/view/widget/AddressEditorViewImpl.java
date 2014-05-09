@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.EntityDataSource;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.TestAddress;
 import com.pyx4j.tester.client.domain.test.TestCountry;

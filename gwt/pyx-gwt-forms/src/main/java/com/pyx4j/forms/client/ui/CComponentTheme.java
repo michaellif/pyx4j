@@ -72,6 +72,7 @@ public class CComponentTheme extends Theme {
 
         Style style = new Style(".", StyleName.FieldPanel);
         style.addProperty("text-align", "left");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);

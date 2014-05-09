@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
@@ -29,7 +27,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 public class BasicCFormPanel extends DualColumnFormPanel {
 
@@ -43,13 +41,13 @@ public class BasicCFormPanel extends DualColumnFormPanel {
     public CompOptions append(Location location, IObject<?> member) {
         CField<?, ?> comp = parent.inject(member);
         super.append(location, comp);
-        return new CompOptions(comp, location);
+        return new CompOptions(comp);
     }
 
     public CompOptions append(Location location, IObject<?> member, CField<?, ?> comp) {
         comp = parent.inject(member, comp);
         super.append(location, comp);
-        return new CompOptions(comp, location);
+        return new CompOptions(comp);
     }
 
     public void append(Location location, IObject<?> member, CComponent<?, ?, ?> comp) {
@@ -59,34 +57,18 @@ public class BasicCFormPanel extends DualColumnFormPanel {
 
     public CompOptions append(Location location, CField<?, ?> comp) {
         super.append(location, comp);
-        return new CompOptions(comp, location);
+        return new CompOptions(comp);
     }
 
     public class CompOptions {
 
         private final CField<?, ?> comp;
 
-        private final Location location;
-
-        public CompOptions(CField<?, ?> comp, Location location) {
+        public CompOptions(CField<?, ?> comp) {
             this.comp = comp;
-            this.location = location;
         }
 
         public FieldDecoratorOptions decorate() {
-            Widget handlerPanel = comp.asWidget().getParent();
-            handlerPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FormPanelCell.name());
-            switch (location) {
-            case Left:
-                handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.left.name());
-                break;
-            case Right:
-                handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.right.name());
-                break;
-            case Dual:
-                handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
-                break;
-            }
             final FieldDecoratorOptions options = new FieldDecoratorOptions();
             // Until init() method called, FieldDecoratorOptions can be updated.
             comp.setDecorator(new FieldDecorator(options) {

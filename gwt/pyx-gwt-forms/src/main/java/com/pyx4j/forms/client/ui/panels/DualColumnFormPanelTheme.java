@@ -27,6 +27,8 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.forms.client.ui.CComponentTheme;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 
 public abstract class DualColumnFormPanelTheme extends Theme {
 
@@ -39,7 +41,9 @@ public abstract class DualColumnFormPanelTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        collapsed, left, right, dual;
+        collapsed,
+
+        left, right, dual;
     }
 
     public DualColumnFormPanelTheme() {
@@ -57,7 +61,6 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
-        style.addProperty("min-width", "940px");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanelBlock);
@@ -81,24 +84,33 @@ public abstract class DualColumnFormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormPanelCell);
         style.addProperty("display", "inline-block");
+        style.addProperty("margin", "0 auto");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
-        style.addProperty("width", "450px");
         style.addProperty("float", "right");
-        style.addProperty("margin", "0 auto");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right);
-        style.addProperty("width", "450px");
         style.addProperty("float", "left");
-        style.addProperty("margin", "0 auto");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual);
-        style.addProperty("width", "900px");
-        style.addProperty("display", "block");
-        style.addProperty("margin", "0 auto");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.FieldPanel, " .",
+                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
+        style.addProperty("width", "250px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.FieldPanel, " .",
+                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
+        style.addProperty("width", "250px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.FieldPanel, " .",
+                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
+        style.addProperty("width", "670px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCaptionLabel);
@@ -174,7 +186,6 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed);
-        style.addProperty("min-width", "470px");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FluidPanelBlock, "-", StyleDependent.left);
@@ -191,9 +202,12 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell);
         style.addProperty("display", "block");
         style.addProperty("float", "none");
-        style.addProperty("width", "450px");
         addStyle(style);
 
+        style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
+                CComponentTheme.StyleName.FieldPanel, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
+        style.addProperty("width", "250px");
+        addStyle(style);
     }
 
     protected abstract ThemeColor getBackgroundColor();

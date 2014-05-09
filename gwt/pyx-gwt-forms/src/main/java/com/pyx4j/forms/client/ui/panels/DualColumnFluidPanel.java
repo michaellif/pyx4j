@@ -29,7 +29,7 @@ import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.ILayoutable;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 
-public class TwoColumnFluidPanel implements IsWidget {
+public class DualColumnFluidPanel implements IsWidget {
 
     public static final String CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE = "FormCollapsingLayoutType";
 
@@ -39,9 +39,8 @@ public class TwoColumnFluidPanel implements IsWidget {
 
     private final ContentPanel contentPanel;
 
-    public TwoColumnFluidPanel() {
+    public DualColumnFluidPanel() {
         contentPanel = new ContentPanel();
-        contentPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanel.name());
     }
 
     private BlockPanel ensureCellPanel(Location location) {
@@ -114,7 +113,7 @@ public class TwoColumnFluidPanel implements IsWidget {
     protected class ContentPanel extends FlowPanel implements ILayoutable {
 
         public ContentPanel() {
-
+            setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanel.name());
         }
 
         @Override
