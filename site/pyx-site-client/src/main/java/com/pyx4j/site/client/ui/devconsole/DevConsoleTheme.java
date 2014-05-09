@@ -78,6 +78,7 @@ public class DevConsoleTheme extends Theme {
         style.addProperty("border-color", ThemeColor.foreground, 1.0);
         style.addProperty("background-color", ThemeColor.background, 1.0);
         style.addProperty("opacity", "0.9");
+        style.addProperty("height", "50px");
         addStyle(style);
 
     }

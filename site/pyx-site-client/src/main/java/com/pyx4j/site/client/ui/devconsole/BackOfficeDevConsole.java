@@ -20,8 +20,6 @@
  */
 package com.pyx4j.site.client.ui.devconsole;
 
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
 
 public class BackOfficeDevConsole extends AbstractDevConsole {
@@ -30,7 +28,6 @@ public class BackOfficeDevConsole extends AbstractDevConsole {
 
     public BackOfficeDevConsole(final BackOfficeLayoutPanel layoutPanel) {
         this.layoutPanel = layoutPanel;
-        getElement().getStyle().setPadding(20, Unit.PX);
         add(new SetMocksButton());
     }
 

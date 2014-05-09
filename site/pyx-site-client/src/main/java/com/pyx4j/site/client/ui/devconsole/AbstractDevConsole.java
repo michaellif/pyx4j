@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui.devconsole;
 
 import java.util.Iterator;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
@@ -54,10 +55,12 @@ public abstract class AbstractDevConsole extends FlowPanel {
     public AbstractDevConsole() {
         deviceImage = new Image();
         SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
+        deviceImageHolder.getElement().getStyle().setFloat(Float.RIGHT);
         deviceImageHolder.getElement().getStyle().setProperty("padding", "5px");
         deviceImageHolder.getElement().getStyle().setProperty("marginRight", "15px");
         deviceImageHolder.getElement().getStyle().setProperty("borderRadius", "5px");
         deviceImageHolder.getElement().getStyle().setProperty("background", "white");
+
         add(deviceImageHolder);
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
