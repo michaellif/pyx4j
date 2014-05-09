@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;

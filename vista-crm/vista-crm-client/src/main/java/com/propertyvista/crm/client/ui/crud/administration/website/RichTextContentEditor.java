@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.site.AvailableLocale;

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFluidPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.gwt.commons.css.CssVariable;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
@@ -33,7 +33,7 @@ public abstract class AbstractPortalPanel extends SimplePanel {
     private LabelPosition labelPosition = null;
 
     public AbstractPortalPanel() {
-        CssVariable.setVariable(getElement(), TwoColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.huge.name());
+        CssVariable.setVariable(getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.huge.name());
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 
