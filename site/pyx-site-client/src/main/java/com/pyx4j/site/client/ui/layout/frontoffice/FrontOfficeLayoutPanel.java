@@ -43,7 +43,7 @@ import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
-import com.pyx4j.site.client.ui.devconsole.ResponsiveLayoutDevConsole;
+import com.pyx4j.site.client.ui.devconsole.FrontOfficeDevConsole;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
@@ -193,7 +193,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
         if (ApplicationMode.isDevelopment()) {
-            devConsoleTab = new DevConsoleTab(new ResponsiveLayoutDevConsole(this));
+            devConsoleTab = new DevConsoleTab(new FrontOfficeDevConsole(this));
             add(devConsoleTab.asWidget(), getElement());
         }
 

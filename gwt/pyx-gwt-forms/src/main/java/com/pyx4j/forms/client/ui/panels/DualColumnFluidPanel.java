@@ -124,7 +124,7 @@ public class DualColumnFluidPanel implements IsWidget {
             } else {
                 LayoutType collapseType = LayoutType.valueOf(var);
                 if (collapseType != null) {
-                    setCollapsed(collapseType.compareTo(type) > 0);
+                    setCollapsed(collapseType.compareTo(type) >= 0);
                 }
             }
         }

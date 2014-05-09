@@ -180,7 +180,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         contentPanel.add(infoImageHolder);
 
         containerPanel = new FlowPanel();
-        containerPanel.setWidth("100%");
         containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
@@ -318,33 +317,15 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     protected void updateLabelPosition() {
         if (builder.labelPosition == LabelPosition.hidden) {
             labelHolder.getElement().getStyle().setDisplay(Display.NONE);
-
-            containerPanel.getElement().getStyle().setProperty("marginLeft", "0");
-            contentPanel.getElement().getStyle().setProperty("paddingLeft", "0");
-            validationLabel.getElement().getStyle().setProperty("paddingLeft", "0");
-            noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
-
         } else if (builder.labelPosition == LabelPosition.left && !narrowLayout) {
             labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-
-            containerPanel.getElement().getStyle().setProperty("marginLeft", "-" + builder.labelWidth);
-            contentPanel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
-            validationLabel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
-            noteLabel.getElement().getStyle().setProperty("paddingLeft", builder.labelWidth);
-
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
         } else {
             labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
             containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-
-            containerPanel.getElement().getStyle().setProperty("marginLeft", "0");
-            contentPanel.getElement().getStyle().setProperty("paddingLeft", "0");
-            validationLabel.getElement().getStyle().setProperty("paddingLeft", "0");
-            noteLabel.getElement().getStyle().setProperty("paddingLeft", "0");
-
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
         }
 

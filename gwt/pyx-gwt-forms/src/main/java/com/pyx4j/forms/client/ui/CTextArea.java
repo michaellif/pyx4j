@@ -30,7 +30,6 @@ public class CTextArea extends CTextComponent<String, NTextArea> {
         super();
         NTextArea nativeTextArea = new NTextArea(this);
         nativeTextArea.setVisibleLines(getRows());
-        nativeTextArea.setWidth("100%");
         setNativeComponent(nativeTextArea);
     }
 

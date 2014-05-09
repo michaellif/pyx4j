@@ -22,21 +22,26 @@ package com.pyx4j.site.client.ui.devconsole;
 
 import com.google.gwt.dom.client.Style.Unit;
 
-import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
+import com.pyx4j.widgets.client.Toolbar;
 
-public class RiaDevConsole extends AbstractDevConsole {
+public class FrontOfficeDevConsole extends AbstractDevConsole {
 
-    private final BackOfficeLayoutPanel riaLayoutPanel;
+    private final FrontOfficeLayoutPanel layoutPanel;
 
-    public RiaDevConsole(final BackOfficeLayoutPanel riaLayoutPanel) {
-        this.riaLayoutPanel = riaLayoutPanel;
+    public FrontOfficeDevConsole(final FrontOfficeLayoutPanel layoutPanel) {
+        this.layoutPanel = layoutPanel;
+
         getElement().getStyle().setPadding(20, Unit.PX);
-        add(new SetMocksButton());
+
+        Toolbar toolbar = new Toolbar();
+        add(toolbar);
+        toolbar.addItem(new SetMocksButton());
     }
 
     @Override
     void setMockValues() {
-        setMockValues(riaLayoutPanel);
+        setMockValues(layoutPanel);
     }
 
 }
