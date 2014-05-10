@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.ui.components.editors.CountryContextCComponentProvider;
 import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class AddressSimpleEditor extends CForm<AddressSimple> {
 
@@ -40,18 +40,16 @@ public class AddressSimpleEditor extends CForm<AddressSimple> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel main = new BasicFlexFormPanel();
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        int row = -1;
+        formPanel.append(Location.Left, proto().street1()).decorate();
+        formPanel.append(Location.Left, proto().street2()).decorate();
+        formPanel.append(Location.Left, proto().city()).decorate();
+        formPanel.append(Location.Left, proto().province()).decorate();
+        formPanel.append(Location.Left, proto().country()).decorate();
+        formPanel.append(Location.Left, proto().postalCode()).decorate();
 
-        main.setWidget(++row, 0, inject(proto().street1(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().street2(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().city(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().province(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().country(), new FieldDecoratorBuilder().build()));
-        main.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
-
-        return main;
+        return formPanel;
     }
 
     @Override

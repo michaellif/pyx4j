@@ -22,10 +22,11 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class NameEditor extends AccessoryEntityForm<Name> {
@@ -55,15 +56,14 @@ public class NameEditor extends AccessoryEntityForm<Name> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel main = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        main.setWidget(++row, 0, nameComp);
-        main.setWidget(++row, 0, injectAndDecorate(proto().firstName(), 200));
-        main.setWidget(++row, 0, injectAndDecorate(proto().lastName(), 200));
-        main.setWidget(++row, 0, injectAndDecorate(proto().middleName(), 60));
-        main.setWidget(++row, 0, injectAndDecorate(proto().namePrefix(), 80));
-        main.setWidget(++row, 0, injectAndDecorate(proto().nameSuffix(), 60));
+        formPanel.append(Location.Left, nameComp);
+        formPanel.append(Location.Left, proto().firstName()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().lastName()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().middleName()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().namePrefix()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().nameSuffix()).decorate().componentWidth(60);
 
         calculateFieldsStatus();
 
@@ -76,7 +76,7 @@ public class NameEditor extends AccessoryEntityForm<Name> {
             }
         });
 
-        return main;
+        return formPanel;
     }
 
     @Override

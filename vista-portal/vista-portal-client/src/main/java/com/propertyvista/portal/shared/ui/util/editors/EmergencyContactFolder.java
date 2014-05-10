@@ -20,15 +20,15 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
@@ -74,24 +74,23 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            main.setWidget(++row, 0, 1, inject(proto().name(), new NameEditor(i18n.tr("Full Name"))));
-            main.setWidget(++row, 0, inject(proto().sex(), new FieldDecoratorBuilder(85).build()));
-            main.setWidget(++row, 0, inject(proto().birthDate(), new FieldDecoratorBuilder(120).build()));
+            formPanel.append(Location.Left, proto().name(), new NameEditor(i18n.tr("Full Name")));
+            formPanel.append(Location.Left, proto().sex()).decorate().componentWidth(85);
+            formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(120);
 
-            main.setH3(++row, 0, 1, i18n.tr("Contact Info"));
-            main.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
-            main.setWidget(++row, 0, inject(proto().homePhone(), new FieldDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().mobilePhone(), new FieldDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().workPhone(), new FieldDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder(250).build()));
+            formPanel.h3(i18n.tr("Contact Info"));
+            formPanel.append(Location.Left, proto().relationship()).decorate();
+            formPanel.append(Location.Left, proto().homePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().mobilePhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().workPhone()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().email()).decorate().componentWidth(250);
 
-            main.setH3(++row, 0, 1, i18n.tr("Address"));
-            main.setWidget(++row, 0, 1, inject(proto().address(), new AddressSimpleEditor()));
+            formPanel.h3(i18n.tr("Address"));
+            formPanel.append(Location.Left, inject(proto().address(), new AddressSimpleEditor()));
 
-            return main;
+            return formPanel;
         }
 
         @Override
