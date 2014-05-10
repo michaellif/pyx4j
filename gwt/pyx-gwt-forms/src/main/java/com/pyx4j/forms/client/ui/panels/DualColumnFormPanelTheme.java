@@ -98,18 +98,18 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
-        style.addProperty("width", "250px");
+                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style.addProperty("width", getSingleColumnWidth());
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
-        style.addProperty("width", "250px");
+                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style.addProperty("width", getSingleColumnWidth());
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.FieldPanel, " .",
-                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
-        style.addProperty("width", "670px");
+                DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style.addProperty("width", getDualColumnWidth());
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCaptionLabel);
@@ -204,10 +204,15 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
-                CComponentTheme.StyleName.FieldPanel, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel);
-        style.addProperty("width", "250px");
+                CComponentTheme.StyleName.FieldPanel, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
+        style.addProperty("width", getSingleColumnWidth());
         addStyle(style);
     }
 
     protected abstract ThemeColor getBackgroundColor();
+
+    protected abstract String getSingleColumnWidth();
+
+    protected abstract String getDualColumnWidth();
+
 }

@@ -78,4 +78,13 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
             ((WatermarkComponent) getEditor()).setWatermark(watermark);
         }
     }
+
+    @Override
+    public String getWatermark() {
+        if (getEditor() instanceof WatermarkComponent) {
+            return ((WatermarkComponent) getEditor()).getWatermark();
+        } else {
+            return null;
+        }
+    }
 }

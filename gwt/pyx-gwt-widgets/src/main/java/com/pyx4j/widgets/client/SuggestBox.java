@@ -68,6 +68,11 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
     }
 
     @Override
+    public String getWatermark() {
+        return watermark.getWatermark();
+    }
+
+    @Override
     public void setText(String text) {
         super.setText(text);
         if (watermark != null) {

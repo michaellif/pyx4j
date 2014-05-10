@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,30 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 28, 2010
+ * Created on May 10, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.forms.client.ui.panels;
 
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-public interface WatermarkComponent {
+public class FormFieldDecoratorOptions extends FieldDecorator.Builder<FormFieldDecoratorOptions> {
 
-    HandlerRegistration addFocusHandler(FocusHandler focusHandler);
+    public FormFieldDecoratorOptions() {
+        super();
+    }
 
-    HandlerRegistration addBlurHandler(BlurHandler blurHandler);
+    public FormFieldDecoratorOptions componentWidth(int componentWidthPx) {
+        return componentWidth(componentWidthPx + "px");
+    }
 
-    boolean isEnabled();
-
-    void addStyleDependentName(String string);
-
-    void removeStyleDependentName(String string);
-
-    void setWatermark(String watermark);
-
-    String getWatermark();
+    public FormFieldDecoratorOptions labelWidth(int labelWidthPx) {
+        return labelWidth(labelWidthPx + "px");
+    }
 
 }

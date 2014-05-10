@@ -60,6 +60,11 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
     }
 
     @Override
+    public String getWatermark() {
+        return watermark.getWatermark();
+    }
+
+    @Override
     public void setText(String text) {
         super.setText(text);
         if (watermark != null) {

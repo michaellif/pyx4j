@@ -25,8 +25,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 public class BasicCFormPanel extends DualColumnFormPanel {
@@ -68,43 +66,20 @@ public class BasicCFormPanel extends DualColumnFormPanel {
             this.comp = comp;
         }
 
-        public FieldDecoratorOptions decorate() {
-            final FieldDecoratorOptions options = new FieldDecoratorOptions();
+        public FormFieldDecoratorOptions decorate() {
+            final FormFieldDecoratorOptions options = createFieldDecoratorOptions();
             // Until init() method called, FieldDecoratorOptions can be updated.
-            comp.setDecorator(new FieldDecorator(options) {
-                @Override
-                protected void updateViewable() {
-                    if (getLabelPosition() != LabelPosition.top) {
-                        if (getComponent().isViewable()) {
-                            options.labelAlignment(Alignment.left);
-                            options.useLabelSemicolon(false);
-                        } else {
-                            options.labelAlignment(Alignment.right);
-                            options.useLabelSemicolon(true);
-                        }
-                    }
-                    updateCaption();
-                    updateLabelAlignment();
-                    super.updateViewable();
-                }
-            });
+            comp.setDecorator(createFieldDecorator(options));
             return options;
         }
     }
 
-    public class FieldDecoratorOptions extends FieldDecorator.Builder<FieldDecoratorOptions> {
-
-        public FieldDecoratorOptions() {
-            super();
-        }
-
-        public FieldDecoratorOptions componentWidth(int componentWidthPx) {
-            return componentWidth(componentWidthPx + "px");
-        }
-
-        public FieldDecoratorOptions labelWidth(int labelWidthPx) {
-            return labelWidth(labelWidthPx + "px");
-        }
-
+    protected FormFieldDecoratorOptions createFieldDecoratorOptions() {
+        return new FormFieldDecoratorOptions();
     }
+
+    protected FieldDecorator createFieldDecorator(final FormFieldDecoratorOptions options) {
+        return new FormFieldDecorator(options);
+    }
+
 }

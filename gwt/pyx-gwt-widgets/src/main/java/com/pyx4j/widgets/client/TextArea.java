@@ -49,6 +49,11 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
     }
 
     @Override
+    public String getWatermark() {
+        return watermark.getWatermark();
+    }
+
+    @Override
     public void setText(String text) {
         super.setText(text);
         if (watermark != null) {

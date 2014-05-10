@@ -344,6 +344,10 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
         response.setWatermark(text);
     };
 
+    public String getWatermark() {
+        return response.getWatermark();
+    };
+
     @Override
     public void setEnabled(boolean enabled) {
     }

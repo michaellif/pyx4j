@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> {
+public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements IAcceptsWatermark {
 
     private TextComponentLengthValidator validator;
 
@@ -40,6 +40,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
         addComponentValidator(validator);
     }
 
+    @Override
     public void setWatermark(String watermark) {
         this.watermark = watermark;
         if (asWidget() instanceof WatermarkComponent) {
@@ -47,6 +48,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
         }
     }
 
+    @Override
     public String getWatermark() {
         return watermark;
     }

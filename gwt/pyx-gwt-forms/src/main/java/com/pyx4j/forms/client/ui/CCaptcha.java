@@ -24,7 +24,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
+public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> implements IAcceptsWatermark {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
 
@@ -46,8 +46,14 @@ public class CCaptcha extends CFocusComponent<Pair<String, String>, NCaptcha> {
         getNativeComponent().createNewChallenge();
     }
 
+    @Override
     public void setWatermark(String watermark) {
         getNativeComponent().setWatermark(watermark);
+    }
+
+    @Override
+    public String getWatermark() {
+        return getNativeComponent().getWatermark();
     }
 
 }

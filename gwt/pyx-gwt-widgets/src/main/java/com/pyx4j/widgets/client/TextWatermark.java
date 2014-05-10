@@ -74,6 +74,10 @@ public abstract class TextWatermark {
         }
     }
 
+    public String getWatermark() {
+        return watermark;
+    }
+
     public void show() {
         if (insideShowWatermark) {
             return;

@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.decorators;
 
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContent;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentHolder;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContentPanel;
@@ -180,6 +181,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         contentPanel.add(infoImageHolder);
 
         containerPanel = new FlowPanel();
+        containerPanel.setStyleName(WidgetDecoratorContainerPanel.name());
         containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
@@ -458,7 +460,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         private LabelPosition labelPosition = LabelPosition.left;
 
         public Builder() {
-            labelWidth = "170px";
+            labelWidth = "150px";
             componentWidth = "100%";
         }
 

@@ -34,7 +34,6 @@ public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox>
         setFormatter(new StringFormat());
         setParser(new StringParser());
         setNativeComponent(new NPasswordTextBox(this));
-        asWidget().setWidth("100%");
     }
 
     public CPasswordTextField(boolean mandatory) {

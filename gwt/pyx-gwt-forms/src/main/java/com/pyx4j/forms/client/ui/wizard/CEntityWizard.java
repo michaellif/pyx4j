@@ -106,7 +106,7 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
 
     }
 
-    public WizardStep addStep(Widget content, String tabTitle) {
+    public WizardStep addStep(IsWidget content, String tabTitle) {
         WizardStep step = new WizardStep(content, tabTitle);
         addStep(step);
         return step;

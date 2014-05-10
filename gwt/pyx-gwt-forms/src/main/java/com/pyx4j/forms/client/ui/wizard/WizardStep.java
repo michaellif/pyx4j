@@ -20,8 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.wizard;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -30,7 +30,7 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     private WizardPanel parent;
 
-    private Widget content;
+    private IsWidget content;
 
     private String title;
 
@@ -44,7 +44,7 @@ public class WizardStep extends SimplePanel implements IValidatable {
         this(null, null);
     }
 
-    public WizardStep(Widget content, String title) {
+    public WizardStep(IsWidget content, String title) {
         setStepTitle(title);
         setStepContent(content);
         addStyleName(WizardDecoratorTheme.StyleName.WizardStep.name());
@@ -54,7 +54,7 @@ public class WizardStep extends SimplePanel implements IValidatable {
         this.parent = parent;
     }
 
-    protected void setStepContent(Widget content) {
+    protected void setStepContent(IsWidget content) {
         setWidget(this.content = content);
     }
 

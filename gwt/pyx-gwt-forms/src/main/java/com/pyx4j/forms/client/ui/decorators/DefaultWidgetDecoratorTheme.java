@@ -35,7 +35,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
     public static enum StyleName implements IStyleName {
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
-        WidgetDecoratorContentPanel, WidgetDecoratorContent, WidgetDecoratorContentHolder,
+        WidgetDecoratorContainerPanel, WidgetDecoratorContentPanel, WidgetDecoratorContent, WidgetDecoratorContentHolder,
 
         EntityContainerDecorator, EntityContainerDecoratorToolbar, EntityContainerDecoratorCollapsedCaption
     }

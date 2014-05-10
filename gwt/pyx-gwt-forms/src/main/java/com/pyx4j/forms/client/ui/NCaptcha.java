@@ -57,6 +57,11 @@ public class NCaptcha extends NFocusField<Pair<String, String>, CaptchaComposite
     }
 
     @Override
+    public String getWatermark() {
+        return captchaComposite.getWatermark();
+    }
+
+    @Override
     public void setNativeValue(Pair<String, String> value) {
         if (value == null) {
             captchaComposite.createNewChallenge();

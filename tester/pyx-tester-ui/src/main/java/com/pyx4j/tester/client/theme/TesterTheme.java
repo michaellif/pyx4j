@@ -82,6 +82,16 @@ public class TesterTheme extends Theme {
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.object1;
             }
+
+            @Override
+            protected String getSingleColumnWidth() {
+                return "250px";
+            }
+
+            @Override
+            protected String getDualColumnWidth() {
+                return "650px";
+            }
         });
 
         addTheme(new DefaultPaneTheme());
