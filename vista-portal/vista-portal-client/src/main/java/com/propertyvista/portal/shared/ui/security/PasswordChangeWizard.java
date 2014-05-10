@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.shared.ui.security;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.HasDescription;
@@ -31,7 +33,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.LoginFormPanel;
 
 public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 
@@ -51,22 +53,22 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
 
     }
 
-    public BasicFlexFormPanel createStep() {
+    public IsWidget createStep() {
 
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+        LoginFormPanel formPanel = new LoginFormPanel(this);
 
-        int row = -1;
+        formPanel.append(Location.Left, proto().currentPassword()).decorate();
 
-        mainPanel.setWidget(++row, 0, inject(proto().currentPassword(), new LoginWidgetDecoratorBuilder().build()));
-        captchaField = (CCaptcha) inject(proto().captcha(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Enter both security words above")).build());
-        mainPanel.setWidget(++row, 0, captchaField);
+        formPanel.append(Location.Left, proto().captcha());
+        captchaField = (CCaptcha) get(proto().captcha());
+        captchaField.setWatermark(i18n.tr("Enter both security words above"));
         setCaptchaEnabled(false);
 
-        mainPanel.setBR(++row, 0, 1);
+        formPanel.br();
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, inject(proto().newPassword(), new LoginWidgetDecoratorBuilder().assistantWidget(passwordStrengthWidget).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().newPasswordConfirm(), new LoginWidgetDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
+        formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
 
         if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
             get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
@@ -74,7 +76,7 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
             get(proto().newPassword()).setTooltip(get(proto().newPassword()).getTooltip());
         }
 
-        return mainPanel;
+        return formPanel;
     }
 
     public final void setCaptchaEnabled(boolean isEnabled) {

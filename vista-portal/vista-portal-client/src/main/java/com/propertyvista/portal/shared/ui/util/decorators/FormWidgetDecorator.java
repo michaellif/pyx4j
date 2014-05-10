@@ -13,12 +13,9 @@
  */
 package com.propertyvista.portal.shared.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-
-import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
 public class FormWidgetDecorator extends FieldDecorator {
 
@@ -27,15 +24,6 @@ public class FormWidgetDecorator extends FieldDecorator {
     protected FormWidgetDecorator(FieldDecoratorBuilder builder) {
         super(builder);
         this.builder = builder;
-    }
-
-    @Override
-    public void init(CField<?, ?> component) {
-        super.init(component);
-        if (getLabelPosition() != LabelPosition.hidden) {
-            builder.labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
-            updateLabelPosition();
-        }
     }
 
     @Override
@@ -52,11 +40,6 @@ public class FormWidgetDecorator extends FieldDecorator {
         updateCaption();
         updateLabelAlignment();
         super.updateViewable();
-    }
-
-    public void setLabelPosition(LabelPosition layout) {
-        getBuilder().labelPosition(layout);
-        updateLabelPosition();
     }
 
 }

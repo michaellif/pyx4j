@@ -17,26 +17,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CEmailField;
-import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -46,11 +35,11 @@ import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.landing.ILoginGadget;
+import com.propertyvista.portal.shared.ui.landing.LoginForm;
 import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
-import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
-import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
-public class LoginGadget extends AbstractGadget<LandingViewImpl> {
+public class LoginGadget extends AbstractGadget<LandingViewImpl> implements ILoginGadget {
 
     static final I18n i18n = I18n.get(LandingViewImpl.class);
 
@@ -86,7 +75,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     }
 
     public void enableHumanVerification() {
-        loginForm.setEnableCaptcha(true);
+        loginForm.setCaptchaEnabled(true);
     }
 
     public void reset(String userId, boolean rememberUserId) {
@@ -96,87 +85,24 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             loginForm.get(loginForm.proto().email()).setValue(userId);
         }
         loginForm.get(loginForm.proto().rememberID()).setValue(rememberUserId);
-        loginForm.setEnableCaptcha(false);
+        loginForm.setCaptchaEnabled(false);
     }
 
-    private void onLogin() {
+    @Override
+    public void onLogin() {
         loginForm.setVisitedRecursive();
         if (loginForm.isValid()) {
             presenter.login(loginForm.getValue());
         }
     }
 
-    void onResetPassword() {
+    @Override
+    public void onResetPassword() {
         presenter.gotoResetPassword();
     }
 
     public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
         loginToolbar.setDevLogin(devCredientials, appModeName);
-    }
-
-    class LoginForm extends CForm<AuthenticationRequest> {
-
-        private CCaptcha captchaField;
-
-        private final LoginGadget loginGadget;
-
-        public LoginForm(LoginGadget loginGadget) {
-            super(AuthenticationRequest.class);
-            this.loginGadget = loginGadget;
-        }
-
-        @Override
-        protected IsWidget createContent() {
-            BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
-
-            int row = -1;
-
-            contentPanel.setBR(++row, 0, 2);
-
-            CEmailField emailField = (CEmailField) inject(proto().email(), new CEmailField(),
-                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Email Address")).build());
-            emailField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, emailField);
-            emailField.setMandatoryValidationMessage(i18n.tr("Enter your email address"));
-
-            CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField(), new LoginWidgetDecoratorBuilder()
-                    .watermark(LandingViewImpl.i18n.tr("Password")).build());
-            passwordField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, passwordField);
-            passwordField.setMandatoryValidationMessage(i18n.tr("Enter your password"));
-
-            CCheckBox rememberID = (CCheckBox) inject(proto().rememberID(), new CCheckBox());
-            rememberID.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, new CheckBoxDecorator(rememberID));
-
-            Anchor resetPassword = new Anchor(i18n.tr("Forgot your password?"));
-            resetPassword.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    loginGadget.onResetPassword();
-                }
-            });
-            contentPanel.setWidget(++row, 0, resetPassword);
-
-            captchaField = (CCaptcha) inject(proto().captcha(),
-                    new LoginWidgetDecoratorBuilder().watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
-            captchaField.getNativeComponent().addKeyUpHandler(new EnterKeyHandler());
-            contentPanel.setWidget(++row, 0, captchaField);
-            setEnableCaptcha(false);
-
-            contentPanel.setBR(++row, 0, 2);
-
-            return contentPanel;
-        }
-
-        public final void setEnableCaptcha(boolean isEnabled) {
-            captchaField.setVisible(isEnabled);
-            if (isEnabled) {
-                captchaField.createNewChallenge();
-            }
-
-        }
-
     }
 
     class LoginToolbar extends GadgetToolbar {

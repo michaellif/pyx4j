@@ -28,10 +28,10 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.widgets.client.Label;
 
-public class CheckBoxDecorator extends FlowPanel implements IDecorator<CField<?, ?>> {
+public class CheckBoxDecorator extends FlowPanel implements IFieldDecorator {
 
     private final SimplePanel componentHolder;
 
@@ -39,7 +39,7 @@ public class CheckBoxDecorator extends FlowPanel implements IDecorator<CField<?,
 
     private final Label label;
 
-    public CheckBoxDecorator(CCheckBox component) {
+    public CheckBoxDecorator() {
 
         componentHolder = new SimplePanel();
         componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -54,7 +54,6 @@ public class CheckBoxDecorator extends FlowPanel implements IDecorator<CField<?,
         label.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
         add(label);
 
-        init(component);
     }
 
     @Override

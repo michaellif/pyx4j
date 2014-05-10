@@ -14,16 +14,19 @@
 package com.propertyvista.portal.shared.ui.landing;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.CEmailField;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.LoginFormPanel;
 
 public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetrievalRequest> {
 
@@ -34,24 +37,26 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
         addStep(createStep(), i18n.tr("General"));
     }
 
-    public BasicFlexFormPanel createStep() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-
-        int row = -1;
+    public IsWidget createStep() {
+        LoginFormPanel formPanel = new LoginFormPanel(this);
 
         HTML message = new HTML(
                 i18n.tr("If you've forgotten the password to your account, please enter the email address that you registered with and your password will be emailed to you shortly."));
-        message.getElement().getStyle().setProperty("maxWidth", "600px");
+        message.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        message.getElement().getStyle().setProperty("maxWidth", "500px");
         message.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        mainPanel.setWidget(++row, 0, message);
-        mainPanel.setBR(++row, 0, 1);
-        mainPanel.setWidget(++row, 0, inject(proto().email(), new LoginWidgetDecoratorBuilder().build()));
-        mainPanel.setWidget(++row, 0,
-                inject(proto().captcha(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Enter both security words above")).build()));
-        mainPanel.setBR(++row, 0, 1);
+        formPanel.append(Location.Left, message);
+        formPanel.br();
+        formPanel.append(Location.Left, proto().email()).decorate();
+        formPanel.append(Location.Left, proto().captcha()).decorate();
 
-        return mainPanel;
+        ((CEmailField) get(proto().email())).setWatermark(get(proto().email()).getTitle());
+        ((CCaptcha) get(proto().captcha())).setWatermark(i18n.tr("Enter both security words above"));
+
+        formPanel.br();
+
+        return formPanel;
     }
 
     public void createNewCaptchaChallenge() {

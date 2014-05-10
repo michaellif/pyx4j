@@ -16,9 +16,11 @@ package com.propertyvista.portal.prospect.ui.signup;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -32,9 +34,10 @@ import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -53,8 +56,8 @@ import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValid
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.LoginFormPanel;
 import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
-import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
@@ -150,56 +153,49 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
-            flexPanel.getColumnFormatter().setWidth(0, "50px");
-            flexPanel.getColumnFormatter().setWidth(1, "300px");
-            int row = -1;
+
+            FlexTable mainPanel = new FlexTable();
+            mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            mainPanel.getElement().getStyle().setProperty("maxWidth", "500px");
 
             signUpTimeImage = new Image(PortalImages.INSTANCE.signUpTime());
-            flexPanel.setWidget(++row, 0, signUpTimeImage);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 2);
-            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+            mainPanel.setWidget(0, 0, signUpTimeImage);
+            mainPanel.getFlexCellFormatter().setRowSpan(0, 0, 2);
+            mainPanel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
 
-            flexPanel.setWidget(row, 1, new HTML(i18n.tr("<b>Time to Complete</b><div>The online rental application will guide you through several steps."
+            mainPanel.setWidget(0, 1, new HTML(i18n.tr("<b>Time to Complete</b><div>The online rental application will guide you through several steps."
                     + " The process takes approximately 20 minutes to complete. Required fields are indicated with an (*).</div><br/>")));
-            flexPanel.getFlexCellFormatter().getElement(row, 1).getStyle().setTextAlign(TextAlign.LEFT);
+            mainPanel.getFlexCellFormatter().getElement(0, 1).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new HTML(i18n
+            mainPanel.setWidget(1, 0, new HTML(i18n
                     .tr("<b> Don't Worry!</b><div>If you need to step away from your computer to gather information, feel free to log out."
                             + " Upon returning, log in and you will find all your information in the same place you left it.</div><br/>")));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            mainPanel.getFlexCellFormatter().getElement(1, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             signUpPersonalImage = new Image(PortalImages.INSTANCE.signUpPersonal());
-            flexPanel.setWidget(++row, 0, signUpPersonalImage);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 7);
-            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+            mainPanel.setWidget(2, 0, signUpPersonalImage);
+            mainPanel.getFlexCellFormatter().setRowSpan(2, 0, 7);
+            mainPanel.getFlexCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_TOP);
 
-            flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
+            LoginFormPanel formPanel = new LoginFormPanel(this);
+            mainPanel.setWidget(2, 1, formPanel);
 
-            flexPanel.setWidget(++row, 0, inject(proto().firstName(), new LoginWidgetDecoratorBuilder().build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            formPanel.h4(i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
+            formPanel.append(Location.Left, proto().firstName()).decorate();
+            formPanel.append(Location.Left, proto().middleName()).decorate();
+            formPanel.append(Location.Left, proto().lastName()).decorate();
+            formPanel.append(Location.Left, proto().email()).decorate();
+            formPanel.append(Location.Left, proto().password()).decorate().componentWidth(180)
+                    .assistantWidget(passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
+            formPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(180);
+            formPanel.br();
 
-            flexPanel.setWidget(++row, 0, inject(proto().middleName(), new LoginWidgetDecoratorBuilder().build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            flexPanel.setWidget(++row, 0, inject(proto().lastName(), new LoginWidgetDecoratorBuilder().build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email(), new LoginWidgetDecoratorBuilder().build());
+            CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) get(proto().email());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
-            flexPanel.setWidget(++row, 0, emailField);
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-            flexPanel.setWidget(
-                    ++row,
-                    0,
-                    inject(proto().password(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Create a Password")).componentWidth("180px")
-                            .assistantWidget(passwordStrengthWidget).build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Create a Password"));
 
-            flexPanel.setWidget(++row, 0, inject(proto().passwordConfirm(), new LoginWidgetDecoratorBuilder().componentWidth("180px").build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            ((CPasswordTextField) get(proto().passwordConfirm())).setWatermark(i18n.tr("Confirm Password"));
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
@@ -214,9 +210,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             });
             get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
-            flexPanel.setBR(++row, 0, 2);
-
-            return flexPanel;
+            return mainPanel;
         }
 
         @Override

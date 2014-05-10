@@ -7,24 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 6, 2013
+ * Created on May 10, 2014
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui;
+package com.propertyvista.portal.shared.ui.landing;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+public interface ILoginGadget {
 
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.gwt.commons.css.CssVariable;
-import com.pyx4j.gwt.commons.layout.LayoutType;
+    void onResetPassword();
 
-public abstract class AbstractPortalPanel extends SimplePanel {
-
-    public AbstractPortalPanel() {
-
-        CssVariable.setVariable(getElement(), FieldDecorator.CSS_VAR_FIELD_DECORATOR_LABEL_POSITION_LAYOUT_TYPE, LayoutType.tabletLandscape.name());
-
-    }
+    void onLogin();
 
 }

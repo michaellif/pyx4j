@@ -191,6 +191,16 @@ public class PortalTheme extends Theme {
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
             }
+
+            @Override
+            protected String getSingleColumnWidth() {
+                return "300px";
+            }
+
+            @Override
+            protected String getDualColumnWidth() {
+                return "650px";
+            }
         });
 
         //.vista-pmsite-residentPage .content

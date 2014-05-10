@@ -16,12 +16,15 @@ package com.propertyvista.portal.resident.ui.signup;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -34,10 +37,10 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -58,8 +61,8 @@ import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValid
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.LoginFormPanel;
 import com.propertyvista.portal.shared.ui.landing.TermsLinkPanel;
-import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class SignUpGadget extends AbstractGadget<SignUpView> {
 
@@ -109,12 +112,14 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             signupForm.signUpBuildingImage.setVisible(false);
             signupForm.signUpPersonalImage.setVisible(false);
             signupForm.signUpSecurity.setVisible(false);
+            signupForm.mainPanel.getColumnFormatter().setWidth(0, "0px");
             break;
 
         default:
             signupForm.signUpBuildingImage.setVisible(true);
             signupForm.signUpPersonalImage.setVisible(true);
             signupForm.signUpSecurity.setVisible(true);
+            signupForm.mainPanel.getColumnFormatter().setWidth(0, "150px");
             break;
         }
     }
@@ -143,6 +148,8 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
     class SignUpForm extends CForm<ResidentSelfRegistrationDTO> {
 
+        private FlexTable mainPanel;
+
         private BuildingSuggestBox buildingSelector;
 
         private EntityValidationException entityValidationException;
@@ -159,7 +166,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
         private final List<CComponent<?, ?, ?>> validationList;
 
-        private final CPhoneField supportField = new CPhoneField();
+        private HTML supportField;
 
         public SignUpForm() {
             super(ResidentSelfRegistrationDTO.class);
@@ -170,64 +177,59 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
         @SuppressWarnings("unchecked")
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
-            flexPanel.getColumnFormatter().setWidth(0, "50px");
-            flexPanel.getColumnFormatter().setWidth(1, "300px");
-            int row = -1;
+            mainPanel = new FlexTable();
+            mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            mainPanel.getElement().getStyle().setProperty("maxWidth", "500px");
 
             signUpBuildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
-            flexPanel.setWidget(++row, 0, signUpBuildingImage);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 2);
-            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+            mainPanel.setWidget(0, 0, signUpBuildingImage);
+            mainPanel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
 
-            flexPanel.setH4(row, 1, 1, i18n.tr("Which building do you live in?"));
+            LoginFormPanel buildingSelectionPanel = new LoginFormPanel(this);
+            mainPanel.setWidget(0, 1, buildingSelectionPanel);
 
-            buildingSelector = inject(proto().building(), new BuildingSuggestBox(), new LoginWidgetDecoratorBuilder().build());
+            buildingSelectionPanel.h4(i18n.tr("Which building do you live in?"));
+
+            buildingSelectionPanel.append(Location.Left, proto().building(), new BuildingSuggestBox()).decorate();
+
+            buildingSelector = (BuildingSuggestBox) get(proto().building());
             buildingSelector.setWatermark(i18n.tr("Your building's address"));
             buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
-            flexPanel.setWidget(++row, 0, buildingSelector);
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setBR(++row, 0, 2);
+            buildingSelectionPanel.br();
 
             signUpPersonalImage = new Image(PortalImages.INSTANCE.signUpPersonal());
-            flexPanel.setWidget(++row, 0, signUpPersonalImage);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 5);
-            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+            mainPanel.setWidget(1, 0, signUpPersonalImage);
+            mainPanel.getFlexCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
 
-            flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
+            LoginFormPanel userInfoPanel = new LoginFormPanel(this);
+            mainPanel.setWidget(1, 1, userInfoPanel);
 
-            flexPanel.setWidget(++row, 0, inject(proto().firstName(), new LoginWidgetDecoratorBuilder().build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            userInfoPanel.h4(i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
+            userInfoPanel.append(Location.Left, proto().firstName()).decorate();
+            userInfoPanel.append(Location.Left, proto().middleName()).decorate();
+            userInfoPanel.append(Location.Left, proto().lastName()).decorate();
+            userInfoPanel.append(Location.Left, proto().email()).decorate();
 
-            flexPanel.setWidget(++row, 0, inject(proto().middleName(), new LoginWidgetDecoratorBuilder().build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            flexPanel.setWidget(++row, 0, inject(proto().lastName(), new LoginWidgetDecoratorBuilder().build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            CField<String, ?> emailField = (CField<String, ?>) inject(proto().email(), new LoginWidgetDecoratorBuilder().build());
+            CField<String, ?> emailField = (CField<String, ?>) get(proto().email());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
-            flexPanel.setWidget(++row, 0, emailField);
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setBR(++row, 0, 2);
+            userInfoPanel.br();
 
             signUpSecurity = new Image(PortalImages.INSTANCE.signUpSecurity());
-            flexPanel.setWidget(++row, 0, signUpSecurity);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 4);
-            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+            mainPanel.setWidget(2, 0, signUpSecurity);
+            mainPanel.getFlexCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_TOP);
 
-            flexPanel.setH4(row, 1, 1, i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
+            LoginFormPanel securityPanel = new LoginFormPanel(this);
+            mainPanel.setWidget(2, 1, securityPanel);
 
-            final CTextFieldBase<String, ?> securityCodeField;
-            flexPanel.setWidget(
-                    ++row,
-                    0,
-                    securityCodeField = (CTextFieldBase<String, ?>) inject(proto().securityCode(), new LoginWidgetDecoratorBuilder().componentWidth("180px")
-                            .build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            securityPanel.h4(i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
+            securityPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(180);
+            securityPanel.append(Location.Left, proto().password()).decorate().componentWidth(180)
+                    .assistantWidget(passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
+            securityPanel.append(Location.Left, proto().passwordConfirm()).decorate().componentWidth(180);
 
+            final CTextFieldBase<String, ?> securityCodeField = (CTextFieldBase<String, ?>) get(proto().securityCode());
             securityCodeField
                     .setTooltip(i18n
                             .tr("You should have received Security Code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly."));
@@ -241,16 +243,8 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 }
             });
 
-            passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-            flexPanel.setWidget(
-                    ++row,
-                    0,
-                    inject(proto().password(), new LoginWidgetDecoratorBuilder().watermark(i18n.tr("Create a Password")).componentWidth("180px")
-                            .assistantWidget(passwordStrengthWidget).build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            flexPanel.setWidget(++row, 0, inject(proto().passwordConfirm(), new LoginWidgetDecoratorBuilder().componentWidth("180px").build()));
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+            ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Create a Password"));
+            get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
@@ -262,21 +256,17 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                     return null;
                 }
             });
-            get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
+            ((CPasswordTextField) get(proto().passwordConfirm())).setWatermark(i18n.tr("Confirm Password"));
 
-            flexPanel.setBR(++row, 0, 2);
+            securityPanel.br();
 
-            supportField.setVisible(false);
-            supportField.setViewable(true);
-            supportField.setDecorator(new LoginWidgetDecoratorBuilder().build());
-            supportField.setNote(i18n.tr("In case you have issues with the registration please call this phone"), NoteStyle.Warn);
+            supportField = new HTML();
+            supportField.getElement().getStyle().setPaddingBottom(20, Unit.PX);
+            mainPanel.setWidget(4, 0, supportField);
+            mainPanel.getFlexCellFormatter().setColSpan(4, 0, 2);
+            mainPanel.getFlexCellFormatter().getElement(4, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 1, supportField);
-            flexPanel.getFlexCellFormatter().getElement(row, 1).getStyle().setTextAlign(TextAlign.LEFT);
-
-            flexPanel.setBR(++row, 0, 2);
-
-            return flexPanel;
+            return mainPanel;
         }
 
         public void init(List<SelfRegistrationBuildingDTO> buildings) {
@@ -286,7 +276,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
                 public void onValueChange(ValueChangeEvent<SelfRegistrationBuildingDTO> event) {
                     supportField.setVisible(false);
                     if (event.getValue() != null) {
-                        supportField.setValue(event.getValue().supportPhone().getValue());
+                        supportField.setText(i18n.tr("In case you have issues with the registration please call ") + event.getValue().supportPhone().getValue());
                         supportField.setVisible(!event.getValue().supportPhone().isNull());
                     }
                 }

@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,6 +39,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
@@ -94,15 +96,14 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().name().firstName()).decorate();
+                formPanel.append(Location.Left, proto().name().lastName()).decorate();
+                formPanel.append(Location.Left, proto().relationship()).decorate();
+                formPanel.append(Location.Left, proto().email()).decorate();
 
-                return mainPanel;
+                return formPanel;
             }
 
             @Override
@@ -172,15 +173,14 @@ public class PeopleStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().birthDate(), new FieldDecoratorBuilder(150).build()));
+                formPanel.append(Location.Left, proto().name().firstName()).decorate();
+                formPanel.append(Location.Left, proto().name().lastName()).decorate();
+                formPanel.append(Location.Left, proto().relationship()).decorate();
+                formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(150);
 
-                return mainPanel;
+                return formPanel;
             }
 
             @Override

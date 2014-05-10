@@ -109,6 +109,16 @@ public class CrmTheme extends VistaTheme {
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
             }
+
+            @Override
+            protected String getSingleColumnWidth() {
+                return "250px";
+            }
+
+            @Override
+            protected String getDualColumnWidth() {
+                return "650px";
+            }
         });
         addTheme(new DefaultFolderTheme() {
             @Override
