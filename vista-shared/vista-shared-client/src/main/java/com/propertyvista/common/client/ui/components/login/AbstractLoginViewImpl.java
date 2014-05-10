@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.components.login;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -24,7 +25,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.DemoData;
 
-public abstract class AbstractLoginViewImpl extends TwoColumnFlexFormPanel implements LoginView {
+public abstract class AbstractLoginViewImpl extends SimplePanel implements LoginView {
 
     private static final I18n i18n = I18n.get(AbstractLoginViewImpl.class);
 
