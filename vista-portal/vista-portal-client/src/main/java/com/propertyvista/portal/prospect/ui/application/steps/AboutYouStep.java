@@ -15,11 +15,12 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,7 +33,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.IdUploaderFolder;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 
 public class AboutYouStep extends ApplicationWizardStep {
@@ -46,31 +47,30 @@ public class AboutYouStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
         CImage imageHolder = new CImage(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class), new VistaFileURLBuilder(
                 CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
-        panel.setWidget(++row, 0, inject(proto().applicant().picture().file(), imageHolder, new FieldDecoratorBuilder().customLabel("").build()));
+        formPanel.append(Location.Left, proto().applicant().picture().file(), imageHolder).decorate().customLabel("");
 
-        panel.setH3(++row, 0, 1, i18n.tr("Personal Information"));
-        panel.setWidget(++row, 0, inject(proto().applicant().person().name(), new NameEditor(i18n.tr("Full Name"))));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().applicant().person().sex(), 100));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().applicant().person().birthDate(), 150));
+        formPanel.h3(i18n.tr("Personal Information"));
+        formPanel.append(Location.Left, proto().applicant().person().name(), new NameEditor(i18n.tr("Full Name")));
+        formPanel.append(Location.Left, proto().applicant().person().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().applicant().person().birthDate()).decorate().componentWidth(150);
 
-        panel.setH3(++row, 0, 1, i18n.tr("Contact Information"));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().applicant().person().homePhone(), 180));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().applicant().person().mobilePhone(), 180));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().applicant().person().workPhone(), 180));
-        panel.setWidget(++row, 0, injectAndDecorate(proto().applicant().person().email(), 230));
+        formPanel.h3(i18n.tr("Contact Information"));
+        formPanel.append(Location.Left, proto().applicant().person().homePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().applicant().person().mobilePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().applicant().person().workPhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().applicant().person().email()).decorate().componentWidth(230);
 
-        panel.setH3(++row, 0, 1, i18n.tr("Identification Documents"));
-        panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload));
+        formPanel.h3(i18n.tr("Identification Documents"));
+        formPanel.append(Location.Left, proto().applicant().documents(), fileUpload);
 
-        return panel;
+        return formPanel;
     }
 
     @Override

@@ -22,11 +22,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,6 +40,7 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFolder> {
@@ -162,12 +163,11 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0, injectAndDecorate(proto().idType(), new CEntityLabel<IdentificationDocumentType>()));
-            content.setWidget(++row, 0, injectAndDecorate(proto().idNumber()));
-            content.setWidget(++row, 0, injectAndDecorate(proto().notes()));
+            formPanel.append(Location.Left, proto().idType(), new CEntityLabel<IdentificationDocumentType>()).decorate();
+            formPanel.append(Location.Left, proto().idNumber()).decorate();
+            formPanel.append(Location.Left, proto().notes()).decorate();
 
             IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
             docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
@@ -181,9 +181,9 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
                 }
             });
 
-            content.setH3(++row, 0, 1, i18n.tr("Files"));
-            content.setWidget(++row, 0, 1, inject(proto().files(), docPagesFolder));
-            return content;
+            formPanel.h3(i18n.tr("Files"));
+            formPanel.append(Location.Left, proto().files(), docPagesFolder);
+            return formPanel;
         }
 
         @Override

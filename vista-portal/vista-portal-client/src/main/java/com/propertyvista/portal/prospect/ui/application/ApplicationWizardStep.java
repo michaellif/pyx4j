@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.application;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -41,7 +41,7 @@ public abstract class ApplicationWizardStep extends WizardStep {
 
     public void init(ApplicationWizard wizard) {
         this.wizard = wizard;
-        Widget content = createStepContent();
+        IsWidget content = createStepContent();
         setStepContent(content);
         setStepTitle(meta.toString());
     }
@@ -50,7 +50,7 @@ public abstract class ApplicationWizardStep extends WizardStep {
         return wizard;
     }
 
-    abstract public Widget createStepContent();
+    abstract public IsWidget createStepContent();
 
     public void addValidations() {
     }
