@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -36,6 +36,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.PriorAddressEditor;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.RadioButtonGroupDecoratorBuilder;
 
@@ -43,53 +44,52 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(AdditionalInfoStep.class);
 
-    private final BasicFlexFormPanel previousAddress = new BasicFlexFormPanel() {
-        @Override
-        public void setVisible(boolean visible) {
-            get(proto().applicant().previousAddress()).setVisible(visible);
-            super.setVisible(visible);
-        }
-    };
+    private PortalFormPanel previousAddress;
 
     public AdditionalInfoStep() {
         super(OnlineApplicationWizardStepMeta.AdditionalInfo);
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Current Address"));
-        panel.setWidget(++row, 0, inject(proto().applicant().currentAddress(), new PriorAddressEditor()));
+        formPanel.h3(i18n.tr("Current Address"));
+        formPanel.append(Location.Left, proto().applicant().currentAddress(), new PriorAddressEditor());
 
-        previousAddress.setH3(0, 0, 1, i18n.tr("Previous Address"));
-        previousAddress.setWidget(1, 0, inject(proto().applicant().previousAddress(), new PriorAddressEditor()));
-        panel.setWidget(++row, 0, previousAddress);
+        previousAddress = new PortalFormPanel(getWizard()) {
+            @Override
+            public void setVisible(boolean visible) {
+                get(proto().applicant().previousAddress()).setVisible(visible);
+                super.setVisible(visible);
+            }
+        };
+        previousAddress.h3(i18n.tr("Previous Address"));
+        previousAddress.append(Location.Left, proto().applicant().previousAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Left, previousAddress);
 
-        panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-        panel.setWidget(++row, 0, inject(proto().applicant().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
-        panel.getCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+        formPanel.h3(i18n.tr("General Questions"));
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
+
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
+
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
+
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
+
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
+
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
+
+        formPanel.append(Location.Left, inject(proto().applicant().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         // TODO currently removed, then rethink: 
         if (false && !SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
-            panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
-            panel.setWidget(++row, 0, inject(proto().applicant().refSource(), new FieldDecoratorBuilder(180).build()));
+            formPanel.h3(i18n.tr("How Did You Hear About Us?"));
+            formPanel.append(Location.Left, inject(proto().applicant().refSource(), new FieldDecoratorBuilder(180).build()));
         }
 
-        return panel;
+        return formPanel;
     }
 
     @Override
