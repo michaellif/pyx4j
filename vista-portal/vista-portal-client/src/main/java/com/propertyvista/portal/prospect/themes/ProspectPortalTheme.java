@@ -27,6 +27,7 @@ public class ProspectPortalTheme extends PortalTheme {
     @Override
     protected void initStyles() {
         addTheme(new RentalSummaryTheme());
+        addTheme(new AdditionalInfoStepTheme());
         addTheme(new SummaryStepTheme());
         addTheme(new ApplicationWizardTheme());
 

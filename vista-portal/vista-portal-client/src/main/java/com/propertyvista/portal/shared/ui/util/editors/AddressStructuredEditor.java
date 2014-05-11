@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.ui.components.editors.CountryContextCComponentProvider;
 import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public abstract class AddressStructuredEditor<A extends AddressStructured> extends CForm<A> {
 
@@ -48,36 +48,34 @@ public abstract class AddressStructuredEditor<A extends AddressStructured> exten
         this.showUnit = showUnit;
     }
 
-    protected BasicFlexFormPanel internalCreateContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
+    protected PortalFormPanel internalCreateContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+
+        if (showUnit) {
+            formPanel.append(Location.Left, proto().suiteNumber()).decorate().componentWidth(120);
+        }
+        formPanel.append(Location.Left, proto().streetNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().streetNumberSuffix()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().streetName()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().streetType()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().streetDirection()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().city()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().county()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().province()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().country()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().postalCode()).decorate().componentWidth(120);
 
         @SuppressWarnings("unchecked")
-        final CComponent<?, Country, ?> country = (CComponent<?, Country, ?>) inject(proto().country(), new FieldDecoratorBuilder(200).build());
+        final CComponent<?, Country, ?> country = get(proto().country());
         @SuppressWarnings("unchecked")
-        final CComponent<?, Province, ?> province = (CComponent<?, Province, ?>) inject(proto().province(), new FieldDecoratorBuilder(200).build());
+        final CComponent<?, Province, ?> province = get(proto().province());
         @SuppressWarnings("unchecked")
-        final CComponent<?, String, ?> postalCode = (CComponent<?, String, ?>) inject(proto().postalCode(), new FieldDecoratorBuilder(120).build());
+        final CComponent<?, String, ?> postalCode = get(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             @SuppressWarnings("unchecked")
             CTextFieldBase<String, ?> comp = ((CTextFieldBase<String, ?>) postalCode);
             comp.setFormatter(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-
-        int row = -1;
-
-        if (showUnit) {
-            content.setWidget(++row, 0, inject(proto().suiteNumber(), new FieldDecoratorBuilder(120).build()));
-        }
-        content.setWidget(++row, 0, inject(proto().streetNumber(), new FieldDecoratorBuilder(120).build()));
-        content.setWidget(++row, 0, inject(proto().streetNumberSuffix(), new FieldDecoratorBuilder(120).build()));
-        content.setWidget(++row, 0, inject(proto().streetName(), new FieldDecoratorBuilder(200).build()));
-        content.setWidget(++row, 0, inject(proto().streetType(), new FieldDecoratorBuilder(120).build()));
-        content.setWidget(++row, 0, inject(proto().streetDirection(), new FieldDecoratorBuilder(120).build()));
-        content.setWidget(++row, 0, inject(proto().city(), new FieldDecoratorBuilder(200).build()));
-        content.setWidget(++row, 0, inject(proto().county(), new FieldDecoratorBuilder(200).build()));
-        content.setWidget(++row, 0, province);
-        content.setWidget(++row, 0, country);
-        content.setWidget(++row, 0, postalCode);
 
         // tweaks:
         attachFilters(proto(), province, country, postalCode);
@@ -88,7 +86,7 @@ public abstract class AddressStructuredEditor<A extends AddressStructured> exten
             }
         });
 
-        return content;
+        return formPanel;
     }
 
     private void attachFilters(final AddressStructured proto, CComponent<?, Province, ?> province, CComponent<?, Country, ?> country,

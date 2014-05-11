@@ -19,11 +19,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.AddressStructuredEditor;
 
 public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
@@ -34,16 +34,21 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel main = internalCreateContent();
+        PortalFormPanel formPanel = internalCreateContent();
 
-        int row = main.getRowCount();
+        formPanel.br();
 
-        main.setBR(++row, 0, 1);
+        formPanel.append(Location.Left, proto().moveInDate()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().moveOutDate()).decorate().componentWidth(150);
 
-        main.setWidget(++row, 0, inject(proto().moveInDate(), new FieldDecoratorBuilder(120).build()));
-        main.setWidget(++row, 0, inject(proto().moveOutDate(), new FieldDecoratorBuilder(120).build()));
+        formPanel.append(Location.Left, proto().rented()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().payment()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().propertyCompany()).decorate().componentWidth(230);
+        formPanel.append(Location.Left, proto().managerName()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().managerPhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().managerEmail()).decorate().componentWidth(230);
 
-        CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) inject(proto().rented(), new FieldDecoratorBuilder(150).build());
+        CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) get(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {
@@ -51,14 +56,7 @@ public class PriorAddressEditor extends AddressStructuredEditor<PriorAddress> {
             }
         });
 
-        main.setWidget(++row, 0, rentedComponent);
-        main.setWidget(++row, 0, inject(proto().payment(), new FieldDecoratorBuilder(100).build()));
-        main.setWidget(++row, 0, inject(proto().propertyCompany(), new FieldDecoratorBuilder(230).build()));
-        main.setWidget(++row, 0, inject(proto().managerName(), new FieldDecoratorBuilder(180).build()));
-        main.setWidget(++row, 0, inject(proto().managerPhone(), new FieldDecoratorBuilder(180).build()));
-        main.setWidget(++row, 0, inject(proto().managerEmail(), new FieldDecoratorBuilder(230).build()));
-
-        return main;
+        return formPanel;
     }
 
     @Override
