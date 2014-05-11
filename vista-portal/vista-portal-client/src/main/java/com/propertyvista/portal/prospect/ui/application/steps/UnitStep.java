@@ -18,7 +18,6 @@ import java.util.EnumSet;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -29,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -48,8 +47,8 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.Bathroo
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.BedroomNumber;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitSelectionDTO.UnitTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class UnitStep extends ApplicationWizardStep {
 
@@ -87,28 +86,25 @@ public class UnitStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        panel.setWidget(++row, 0, inject(proto().unitSelection().building(), new CEntityLabel<Building>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().moveIn(), new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().bedrooms(), bedroomSelector, new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().bathrooms(), bathroomSelector, new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().unitSelection().selectedUnit(), selectedUnit, new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().unitSelection().building(), new CEntityLabel<Building>()).decorate();
+        formPanel.append(Location.Left, proto().unitSelection().moveIn()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().unitSelection().bedrooms(), bedroomSelector).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().unitSelection().bathrooms(), bathroomSelector).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().unitSelection().selectedUnit(), selectedUnit).decorate();
 
-        panel.setH3(++row, 0, 1, i18n.tr("Exact match:"));
-        availableUnitsHeader = panel.getWidget(row, 0);
-        panel.setWidget(++row, 0, inject(proto().unitSelection().availableUnits(), availableUnitsFolder));
+        availableUnitsHeader = formPanel.h3(i18n.tr("Exact match:"));
 
-        panel.setH3(++row, 0, 1, i18n.tr("Partial match:"));
-        potentialUnitsHeader = panel.getWidget(row, 0);
-        panel.setWidget(++row, 0, inject(proto().unitSelection().potentialUnits(), potentialUnitsFolder));
+        formPanel.append(Location.Left, proto().unitSelection().availableUnits(), availableUnitsFolder);
 
-        panel.setWidget(++row, 0, updateButton);
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
+        potentialUnitsHeader = formPanel.h3(i18n.tr("Partial match:"));
+        formPanel.append(Location.Left, proto().unitSelection().potentialUnits(), potentialUnitsFolder);
 
-        return panel;
+        formPanel.append(Location.Left, updateButton);
+
+        return formPanel;
     }
 
     @Override
@@ -264,18 +260,17 @@ public class UnitStep extends ApplicationWizardStep {
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                int row = -1;
-                mainPanel.setWidget(++row, 0, inject(proto().number(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().floor(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().bedrooms(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().dens(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().bathrooms(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().available(), new FieldDecoratorBuilder().build()));
-                mainPanel.setWidget(++row, 0, inject(proto().price(), new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().number()).decorate();
+                formPanel.append(Location.Left, proto().floor()).decorate();
+                formPanel.append(Location.Left, proto().bedrooms()).decorate();
+                formPanel.append(Location.Left, proto().dens()).decorate();
+                formPanel.append(Location.Left, proto().bathrooms()).decorate();
+                formPanel.append(Location.Left, proto().available()).decorate();
+                formPanel.append(Location.Left, proto().price()).decorate();
 
-                return mainPanel;
+                return formPanel;
             }
 
             @Override
