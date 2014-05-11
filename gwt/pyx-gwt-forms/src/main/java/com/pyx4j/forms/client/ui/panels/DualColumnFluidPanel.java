@@ -110,6 +110,10 @@ public class DualColumnFluidPanel implements IsWidget {
         contentPanel.setVisible(visible);
     }
 
+    public void addStyleName(String style) {
+        contentPanel.addStyleName(style);
+    }
+
     protected class ContentPanel extends FlowPanel implements ILayoutable {
 
         public ContentPanel() {

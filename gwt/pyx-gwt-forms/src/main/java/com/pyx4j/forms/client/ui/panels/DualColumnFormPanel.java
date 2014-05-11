@@ -168,4 +168,8 @@ public class DualColumnFormPanel implements IsWidget {
         fluidPanel.setVisible(visible);
     }
 
+    public void addStyleName(String style) {
+        fluidPanel.addStyleName(style);
+    }
+
 }
