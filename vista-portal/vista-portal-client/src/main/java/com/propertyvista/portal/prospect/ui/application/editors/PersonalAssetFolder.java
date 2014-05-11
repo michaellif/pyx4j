@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -73,15 +74,14 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            main.setWidget(++row, 0, inject(proto().assetType(), new FieldDecoratorBuilder(180).build()));
-            main.setWidget(++row, 0, inject(proto().percent(), new FieldDecoratorBuilder(60).build()));
-            main.setWidget(++row, 0, inject(proto().assetValue(), new FieldDecoratorBuilder(100).build()));
-            main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
+            formPanel.append(Location.Left, proto().assetType()).decorate().componentWidth(180);
+            formPanel.append(Location.Left, proto().percent()).decorate().componentWidth(60);
+            formPanel.append(Location.Left, proto().assetValue()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().documents(), new ProofOfAssetUploaderFolder());
 
-            return main;
+            return formPanel;
         }
 
         @Override

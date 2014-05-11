@@ -19,11 +19,11 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
 
@@ -45,14 +45,12 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate();
+            formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().item().name(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-
-            return content;
+            return formPanel;
         }
 
         @Override

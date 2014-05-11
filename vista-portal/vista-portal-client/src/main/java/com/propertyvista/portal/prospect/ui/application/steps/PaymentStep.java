@@ -19,6 +19,7 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,7 +27,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -43,7 +44,7 @@ import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentStep extends ApplicationWizardStep {
@@ -78,7 +79,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
     private Widget depositHeader, feesHeader;
 
-    private BasicFlexFormPanel paymentMethodPanel;
+    private PortalFormPanel paymentMethodPanel;
 
     private final SimplePanel paymentMethodHolder = new SimplePanel();
 
@@ -93,40 +94,33 @@ public class PaymentStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
-            panel.setH3(++row, 0, 1, i18n.tr("Deposits"));
-            depositHeader = panel.getWidget(row, 0);
-            panel.setWidget(++row, 0, inject(proto().payment().deposits(), new DepositFolder()));
+            depositHeader = formPanel.h3(i18n.tr("Deposits"));
+            formPanel.append(Location.Left, proto().payment().deposits(), new DepositFolder());
         }
 
-        panel.setH3(++row, 0, 1, i18n.tr("Fees"));
-        feesHeader = panel.getWidget(row, 0);
-        panel.setWidget(++row, 0, inject(proto().payment().applicationFee(), new CMoneyLabel(), new FieldDecoratorBuilder().build()));
+        feesHeader = formPanel.h3(i18n.tr("Fees"));
+        formPanel.append(Location.Left, proto().payment().applicationFee(), new CMoneyLabel()).decorate();
 
-        panel.setWidget(++row, 0, paymentMethodHolder);
+        formPanel.append(Location.Left, paymentMethodHolder);
         paymentMethodPanel = createPaymentMethodPanel();
 
-        return panel;
+        return formPanel;
     }
 
-    public BasicFlexFormPanel createPaymentMethodPanel() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public PortalFormPanel createPaymentMethodPanel() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Payment Method"));
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().payment().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL),
-                        new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().payment().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().payment().paymentMethod(), paymentMethodEditor));
-        panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, inject(proto().payment().storeInProfile(), new FieldDecoratorBuilder().build()));
+        formPanel.h3(i18n.tr("Payment Method"));
+        formPanel.append(Location.Left, proto().payment().selectPaymentMethod(),
+                new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)).decorate();
+        formPanel.append(Location.Left, proto().payment().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();
+        formPanel.append(Location.Left, proto().payment().paymentMethod(), paymentMethodEditor);
+        formPanel.hr();
+        formPanel.append(Location.Left, proto().payment().storeInProfile()).decorate();
 
         // tweaks:
 
@@ -191,7 +185,7 @@ public class PaymentStep extends ApplicationWizardStep {
             }
         });
 
-        return panel;
+        return formPanel;
     }
 
     @Override

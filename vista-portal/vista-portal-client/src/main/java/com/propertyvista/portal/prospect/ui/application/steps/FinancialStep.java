@@ -15,11 +15,12 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,6 +34,7 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class FinancialStep extends ApplicationWizardStep {
 
@@ -45,23 +47,21 @@ public class FinancialStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Income"));
-        panel.setWidget(++row, 0, inject(proto().applicant().incomes(), new PersonalIncomeFolder()));
+        formPanel.h3(i18n.tr("Income"));
+        formPanel.append(Location.Left, proto().applicant().incomes(), new PersonalIncomeFolder());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Assets"));
-        panel.setWidget(++row, 0, inject(proto().applicant().assets(), new PersonalAssetFolder()));
+        formPanel.h3(i18n.tr("Assets"));
+        formPanel.append(Location.Left, proto().applicant().assets(), new PersonalAssetFolder());
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
-            panel.setH3(++row, 0, 1, i18n.tr("Guarantors"));
-            guarantorsHeader = panel.getWidget(row, 0);
-            panel.setWidget(++row, 0, inject(proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView())));
+            guarantorsHeader = formPanel.h3(i18n.tr("Guarantors"));
+            formPanel.append(Location.Left, proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView()));
         }
 
-        return panel;
+        return formPanel;
     }
 
     @Override

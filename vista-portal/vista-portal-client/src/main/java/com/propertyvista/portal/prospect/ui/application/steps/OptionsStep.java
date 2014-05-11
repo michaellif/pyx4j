@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -35,23 +35,23 @@ import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEven
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.LeaseChargesDataDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.UnitOptionsSelectionDTO;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class OptionsStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(OptionsStep.class);
 
-    private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
+    private PortalFormPanel depositPanel;
 
-    private final BasicFlexFormPanel chargedPanel = new BasicFlexFormPanel();
+    private PortalFormPanel chargedPanel;
 
-    private final BasicFlexFormPanel petsPanel = new BasicFlexFormPanel();
+    private PortalFormPanel petsPanel;
 
-    private final BasicFlexFormPanel parkingPanel = new BasicFlexFormPanel();
+    private PortalFormPanel parkingPanel;
 
-    private final BasicFlexFormPanel storagePanel = new BasicFlexFormPanel();
+    private PortalFormPanel storagePanel;
 
-    private final BasicFlexFormPanel otherPanel = new BasicFlexFormPanel();
+    private PortalFormPanel otherPanel;
 
     private FeatureFolder2 lockerFolder;
 
@@ -64,13 +64,10 @@ public class OptionsStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-
-        panel.setWidget(++row, 0, inject(proto().unitOptionsSelection(), new StepDataForm()));
-
-        return panel;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        formPanel.append(Location.Left, proto().unitOptionsSelection(), new StepDataForm());
+        return formPanel;
     }
 
     public void setStepValue(UnitOptionsSelectionDTO value) {
@@ -103,36 +100,41 @@ public class OptionsStep extends ApplicationWizardStep {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            int row = -1;
-            content.setWidget(++row, 0,
-                    inject(proto().selectedService().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Unit Price")).build()));
-            depositPanel.setH3(0, 0, 1, i18n.tr("Unit Deposits"));
-            depositPanel.setWidget(1, 0, 1, inject(proto().selectedService().deposits(), new DepositFolder()));
-            content.setWidget(++row, 0, depositPanel);
+            formPanel.append(Location.Left, proto().selectedService().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Unit Price"));
 
-            petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
-            petsPanel.setWidget(1, 0, inject(proto().selectedPets(), petFolder = new FeatureFolder2(ARCode.Type.Pet)));
-            content.setWidget(++row, 0, petsPanel);
+            depositPanel = new PortalFormPanel(this);
+            depositPanel.h3(i18n.tr("Unit Deposits"));
+            depositPanel.append(Location.Left, proto().selectedService().deposits(), new DepositFolder());
+            formPanel.append(Location.Left, depositPanel);
 
-            parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
-            parkingPanel.setWidget(1, 0, inject(proto().selectedParking(), parkingFolder = new FeatureFolder2(ARCode.Type.Parking)));
-            content.setWidget(++row, 0, parkingPanel);
+            petsPanel = new PortalFormPanel(this);
+            petsPanel.h2(i18n.tr("Pets"));
+            petsPanel.append(Location.Left, proto().selectedPets(), petFolder = new FeatureFolder2(ARCode.Type.Pet));
+            formPanel.append(Location.Left, petsPanel);
 
-            storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
-            storagePanel.setWidget(1, 0, inject(proto().selectedStorage(), lockerFolder = new FeatureFolder2(ARCode.Type.Locker)));
-            content.setWidget(++row, 0, storagePanel);
+            parkingPanel = new PortalFormPanel(this);
+            parkingPanel.h2(i18n.tr("Parking"));
+            parkingPanel.append(Location.Left, proto().selectedParking(), parkingFolder = new FeatureFolder2(ARCode.Type.Parking));
+            formPanel.append(Location.Left, parkingPanel);
 
-            chargedPanel.setH2(0, 0, 1, i18n.tr("Utilities"));
-            chargedPanel.setWidget(1, 0, inject(proto().selectedUtilities(), new FeatureFolder2(ARCode.Type.Utility)));
-            content.setWidget(++row, 0, chargedPanel);
+            storagePanel = new PortalFormPanel(this);
+            storagePanel.h2(i18n.tr("Storage"));
+            storagePanel.append(Location.Left, proto().selectedStorage(), lockerFolder = new FeatureFolder2(ARCode.Type.Locker));
+            formPanel.append(Location.Left, storagePanel);
 
-            otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
-            otherPanel.setWidget(1, 0, inject(proto().selectedOther(), new FeatureFolder2(ARCode.Type.OneTime)));
-            content.setWidget(++row, 0, otherPanel);
+            chargedPanel = new PortalFormPanel(this);
+            chargedPanel.h2(i18n.tr("Utilities"));
+            chargedPanel.append(Location.Left, proto().selectedUtilities(), new FeatureFolder2(ARCode.Type.Utility));
+            formPanel.append(Location.Left, chargedPanel);
 
-            return content;
+            otherPanel = new PortalFormPanel(this);
+            otherPanel.h2(i18n.tr("Other"));
+            otherPanel.append(Location.Left, proto().selectedOther(), new FeatureFolder2(ARCode.Type.OneTime));
+            formPanel.append(Location.Left, otherPanel);
+
+            return formPanel;
         }
 
         @Override

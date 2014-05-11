@@ -19,15 +19,15 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
 
 public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
@@ -53,15 +53,13 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().name().firstName()).decorate();
+            formPanel.append(Location.Left, proto().name().lastName()).decorate();
+            formPanel.append(Location.Left, proto().relationship()).decorate();
+            formPanel.append(Location.Left, proto().email()).decorate();
 
-            int row = -1;
-            mainPanel.setWidget(++row, 0, inject(proto().name().firstName(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().name().lastName(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().relationship(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().email(), new FieldDecoratorBuilder().build()));
-
-            return mainPanel;
+            return formPanel;
         }
 
         @Override

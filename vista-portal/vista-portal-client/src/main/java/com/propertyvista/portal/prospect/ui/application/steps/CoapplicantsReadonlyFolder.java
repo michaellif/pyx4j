@@ -16,16 +16,16 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> {
 
@@ -46,14 +46,12 @@ public class CoapplicantsReadonlyFolder extends PortalBoxFolder<CoapplicantDTO> 
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().name(), new CEntityLabel<Name>()).decorate();
+            formPanel.append(Location.Left, proto().relationship(), new CEnumLabel()).decorate();
+            formPanel.append(Location.Left, proto().email(), new CLabel<String>()).decorate();
 
-            int row = -1;
-            mainPanel.setWidget(++row, 0, inject(proto().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().relationship(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().email(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-
-            return mainPanel;
+            return formPanel;
         }
 
     }

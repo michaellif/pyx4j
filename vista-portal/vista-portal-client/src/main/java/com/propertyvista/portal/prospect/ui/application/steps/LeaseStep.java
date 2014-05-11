@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -29,69 +31,67 @@ import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class LeaseStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(LeaseStep.class);
 
-    private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
+    private PortalFormPanel depositPanel;
 
-    private final BasicFlexFormPanel featurePanel = new BasicFlexFormPanel();
+    private PortalFormPanel featurePanel;
 
     public LeaseStep() {
         super(OnlineApplicationWizardStepMeta.Lease);
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        formPanel.h3(i18n.tr("Landlord Info"));
+        formPanel.append(Location.Left, proto().landlordInfo().name(), new CLabel<String>()).decorate();
+        formPanel.append(Location.Left, proto().landlordInfo().address(), new CLabel<String>()).decorate();
 
-        panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        formPanel.h3(i18n.tr("Unit"));
+        formPanel.append(Location.Left, proto().unit().info().number(), new CLabel<String>()).decorate();
+        formPanel.append(Location.Left, proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>()).decorate();
+        formPanel.append(Location.Left, proto().unit().floorplan(), new CEntityLabel<Floorplan>()).decorate();
+        formPanel.append(Location.Left, proto().utilities(), new CLabel<String>()).decorate();
 
-        panel.setH3(++row, 0, 1, i18n.tr("Unit"));
-        panel.setWidget(++row, 0, inject(proto().unit().info().number(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        formPanel.h3(i18n.tr("Lease Term"));
+        formPanel.append(Location.Left, proto().leaseFrom(), new CDateLabel()).decorate();
+        formPanel.append(Location.Left, proto().leaseTo(), new CDateLabel()).decorate();
 
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
-        panel.setWidget(++row, 0, inject(proto().leaseFrom(), new CDateLabel(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().leaseTo(), new CDateLabel(), new FieldDecoratorBuilder().build()));
+        formPanel.h3(i18n.tr("Lease Options"));
+        formPanel.append(Location.Left, proto().leaseChargesData().selectedService().agreedPrice(), new CMoneyLabel()).decorate()
+                .customLabel(i18n.tr("Unit Rent"));
+        formPanel.append(Location.Left, proto().leaseChargesData().selectedService().description(), new CLabel<String>()).decorate();
 
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().leaseChargesData().selectedService().agreedPrice(), new CMoneyLabel(),
-                        new FieldDecoratorBuilder().customLabel(i18n.tr("Unit Rent")).build()));
-        panel.setWidget(++row, 0, inject(proto().leaseChargesData().selectedService().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        depositPanel = new PortalFormPanel(getWizard());
+        formPanel.append(Location.Left, depositPanel);
 
-        panel.setWidget(++row, 0, depositPanel);
-        depositPanel.setH4(0, 0, 1, i18n.tr("Unit Deposits"));
-        depositPanel.setWidget(1, 0, 1, inject(proto().leaseChargesData().selectedService().deposits(), new DepositFolder() {
+        depositPanel.h4(i18n.tr("Unit Deposits"));
+        depositPanel.append(Location.Left, proto().leaseChargesData().selectedService().deposits(), new DepositFolder() {
             @Override
             public IFolderItemDecorator<Deposit> createItemDecorator() {
                 BoxFolderItemDecorator<Deposit> decor = (BoxFolderItemDecorator<Deposit>) super.createItemDecorator();
                 decor.setExpended(false);
                 return decor;
             }
-        }));
+        });
 
-        panel.setWidget(++row, 0, featurePanel);
-        featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
-        featurePanel.setWidget(++row, 0, inject(proto().leaseChargesData().selectedFeatures(), new FeatureFolder()));
+        featurePanel = new PortalFormPanel(getWizard());
+        formPanel.append(Location.Left, featurePanel);
+        featurePanel.h3(i18n.tr("Features"));
+        featurePanel.append(Location.Left, proto().leaseChargesData().selectedFeatures(), new FeatureFolder());
         get(proto().leaseChargesData().selectedFeatures()).setEditable(false);
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
-            panel.setH3(++row, 0, 1, i18n.tr("People"));
-            panel.setWidget(++row, 0, inject(proto().tenants(), new TenantsReadonlyFolder()));
+            formPanel.h3(i18n.tr("People"));
+            formPanel.append(Location.Left, proto().tenants(), new TenantsReadonlyFolder());
         }
 
-        return panel;
+        return formPanel;
     }
 
     @Override

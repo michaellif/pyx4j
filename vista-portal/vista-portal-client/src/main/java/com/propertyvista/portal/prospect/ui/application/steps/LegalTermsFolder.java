@@ -20,14 +20,14 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CHtml;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
 import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLegalTerm> {
 
@@ -56,22 +56,15 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
             CLabel<String> caption = new CLabel<String>();
             caption.asWidget().addStyleName(FlexFormPanelTheme.StyleName.FormFlexPanelH1Label.name());
-            mainPanel.setWidget(++row, 0, inject(proto().term().title(), caption));
-            mainPanel.setWidget(++row, 0, inject(proto().term().body(), new CHtml<String>()));
+            formPanel.append(Location.Left, proto().term().title(), caption);
+            formPanel.append(Location.Left, proto().term().body(), new CHtml<String>());
 
-            mainPanel
-                    .setWidget(
-                            ++row,
-                            0,
-                            inject(proto().signature(), new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).componentWidth("250px")
-                                    .build()));
+            formPanel.append(Location.Left, proto().signature()).decorate().customLabel("").labelPosition(LabelPosition.hidden).componentWidth(250);
 
-            return mainPanel;
+            return formPanel;
         }
 
         @Override

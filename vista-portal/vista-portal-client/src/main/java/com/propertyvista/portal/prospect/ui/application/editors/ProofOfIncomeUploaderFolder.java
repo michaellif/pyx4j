@@ -20,12 +20,14 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.media.ProofOfIncomeDocumentFolder;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -78,15 +80,13 @@ public class ProofOfIncomeUploaderFolder extends PortalBoxFolder<ProofOfIncomeDo
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().description()).decorate().componentWidth(250);
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(250).build()));
+            formPanel.h3(i18n.tr("Files"));
+            formPanel.append(Location.Left, proto().files(), new ProofOfIncomeDocumentFileFolder());
 
-            content.setH3(++row, 0, 1, i18n.tr("Files"));
-            content.setWidget(++row, 0, inject(proto().files(), new ProofOfIncomeDocumentFileFolder()));
-
-            return content;
+            return formPanel;
         }
     }
 }

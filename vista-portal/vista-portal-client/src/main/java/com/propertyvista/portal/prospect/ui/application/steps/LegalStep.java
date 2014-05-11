@@ -14,13 +14,15 @@
 package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public abstract class LegalStep extends ApplicationWizardStep {
 
@@ -31,18 +33,16 @@ public abstract class LegalStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-
-        panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder()));
-        panel.setWidget(++row, 0, new Button(i18n.tr("Download Lease Agreement Draft"), new Command() {
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        formPanel.append(Location.Left, proto().legalTerms(), new LegalTermsFolder());
+        formPanel.append(Location.Left, new Button(i18n.tr("Download Lease Agreement Draft"), new Command() {
             @Override
             public void execute() {
                 onDownloadLeaseAgreementDraft();
             }
         }));
-        return panel;
+        return formPanel;
     }
 
     public abstract void onDownloadLeaseAgreementDraft();

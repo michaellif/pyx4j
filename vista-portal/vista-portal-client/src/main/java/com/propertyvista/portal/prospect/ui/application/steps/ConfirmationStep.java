@@ -20,6 +20,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,7 +30,7 @@ import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CSignature;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,6 +45,7 @@ import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 
@@ -60,14 +62,12 @@ public class ConfirmationStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        content.setH3(++row, 0, 1, i18n.tr("Payment Details"));
-        paymentDetailsHeader = content.getWidget(row, 0);
-        content.setWidget(++row, 0, paymentDetailsHolder);
-        content.setWidget(++row, 0, inject(proto().payment().amount(), new CMoneyLabel()));
+        paymentDetailsHeader = formPanel.h3(i18n.tr("Payment Details"));
+        formPanel.append(Location.Left, paymentDetailsHolder);
+        formPanel.append(Location.Left, inject(proto().payment().amount(), new CMoneyLabel()));
         get(proto().payment().amount()).setVisible(false);
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
@@ -89,15 +89,16 @@ public class ConfirmationStep extends ApplicationWizardStep {
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
+        cSignature.setDecorator(new SignatureDecorator());
 
-        content.setWidget(++row, 0, inject(proto().payment().convenienceFeeSignature(), cSignature, new SignatureDecorator()));
+        formPanel.append(Location.Left, proto().payment().convenienceFeeSignature(), cSignature);
 
-        content.setBR(++row, 0, 1);
+        formPanel.br();
 
-        content.setH3(++row, 0, 1, i18n.tr("Terms and Conditions"));
-        content.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder(getView())));
+        formPanel.h3(i18n.tr("Terms and Conditions"));
+        formPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermsFolder(getView()));
 
-        return content;
+        return formPanel;
     }
 
     @Override

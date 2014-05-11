@@ -23,7 +23,6 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -52,20 +51,20 @@ public class PeopleStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        panel.setWidget(++row, 0, new HTML(i18n.tr("Everyone living in the residence must be listed below.")));
-        panel.getWidget(row, 0).setStyleName(StyleName.WarningMessage.name());
+        HTML message = new HTML(i18n.tr("Everyone living in the residence must be listed below."));
+        message.setStyleName(StyleName.WarningMessage.name());
+        formPanel.append(Location.Left, message);
 
-        panel.setH3(++row, 0, 1, i18n.tr("Co-Applicants"));
-        panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder(getWizard())));
+        formPanel.h3(i18n.tr("Co-Applicants"));
+        formPanel.append(Location.Left, proto().coapplicants(), new CoapplicantsFolder(getWizard()));
 
-        panel.setH3(++row, 0, 1, i18n.tr("Dependents"));
-        panel.setWidget(++row, 0, inject(proto().dependents(), new DependentsFolder(getWizard())));
+        formPanel.h3(i18n.tr("Dependents"));
+        formPanel.append(Location.Left, proto().dependents(), new DependentsFolder(getWizard()));
 
-        return panel;
+        return formPanel;
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {

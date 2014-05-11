@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
 
 public class EmergencyContactsStep extends ApplicationWizardStep {
@@ -26,12 +29,9 @@ public class EmergencyContactsStep extends ApplicationWizardStep {
     }
 
     @Override
-    public BasicFlexFormPanel createStepContent() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-
-        panel.setWidget(++row, 0, inject(proto().applicant().emergencyContacts(), new EmergencyContactFolder()));
-
-        return panel;
+    public IsWidget createStepContent() {
+        PortalFormPanel formPanel = new PortalFormPanel(getWizard());
+        formPanel.append(Location.Left, proto().applicant().emergencyContacts(), new EmergencyContactFolder());
+        return formPanel;
     }
 }

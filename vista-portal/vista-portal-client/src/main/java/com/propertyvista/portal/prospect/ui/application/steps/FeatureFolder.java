@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,8 +41,8 @@ import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.prospect.ui.application.editors.PetDataEditor;
 import com.propertyvista.portal.prospect.ui.application.editors.VehicleDataEditor;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
@@ -81,7 +81,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
     class FeatureItemForm extends CForm<BillableItem> {
 
-        private final BasicFlexFormPanel depositPanel = new BasicFlexFormPanel();
+        private PortalFormPanel depositPanel;
 
         private final SimplePanel extraDataPanel = new SimplePanel();
 
@@ -92,19 +92,19 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().item().name(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Left, proto().agreedPrice(), new CMoneyLabel()).decorate();
+            formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate();
+            formPanel.append(Location.Left, extraDataPanel);
 
-            int row = -1;
-            content.setWidget(++row, 0, inject(proto().item().name(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-            content.setWidget(++row, 0, extraDataPanel);
-            content.setWidget(++row, 0, depositPanel);
+            depositPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, depositPanel);
 
-            depositPanel.setH4(0, 0, 1, proto().deposits().getMeta().getCaption());
-            depositPanel.setWidget(1, 0, 1, inject(proto().deposits(), new DepositFolder()));
+            depositPanel.h4(proto().deposits().getMeta().getCaption());
+            depositPanel.append(Location.Left, proto().deposits(), new DepositFolder());
 
-            return content;
+            return formPanel;
         }
 
         @Override

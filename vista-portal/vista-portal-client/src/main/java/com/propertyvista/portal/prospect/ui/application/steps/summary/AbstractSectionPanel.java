@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.CollapsablePanel;
@@ -35,7 +35,7 @@ import com.propertyvista.portal.prospect.themes.SummaryStepTheme;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public abstract class AbstractSectionPanel extends CollapsablePanel {
 
@@ -43,9 +43,7 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     private final SectionCaptionBar captionBar;
 
-    private final BasicFlexFormPanel contentPanel;
-
-    private final SummaryForm form;
+    private final PortalFormPanel contentPanel;
 
     private final ApplicationWizardStep step;
 
@@ -53,14 +51,11 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
 
     private final HTML errorMessageBar;
 
-    private int row = -1;
-
     public AbstractSectionPanel(int index, String caption, SummaryForm form, ApplicationWizardStep step) {
         super(VistaImages.INSTANCE);
-        this.form = form;
         this.step = step;
         this.captionBar = new SectionCaptionBar(index, caption);
-        this.contentPanel = new BasicFlexFormPanel();
+        this.contentPanel = new PortalFormPanel(form);
         this.entityPrototype = EntityFactory.getEntityPrototype(OnlineApplicationDTO.class);
 
         setStyleName(SummaryStepTheme.StyleName.SummaryStepSection.name());
@@ -93,23 +88,23 @@ public abstract class AbstractSectionPanel extends CollapsablePanel {
     }
 
     protected void addComponent(IObject<?> member, CComponent<?, ?, ?> component) {
-        contentPanel.setWidget(++row, 0, form.inject(member, component));
+        contentPanel.append(Location.Left, member, component);
     }
 
     protected void addField(IObject<?> member) {
-        contentPanel.setWidget(++row, 0, form.inject(member, new FieldDecoratorBuilder().build()));
+        contentPanel.append(Location.Left, member).decorate();
     }
 
     protected void addField(IObject<?> member, String customLabel) {
-        contentPanel.setWidget(++row, 0, form.inject(member, new FieldDecoratorBuilder().customLabel(customLabel).build()));
+        contentPanel.append(Location.Left, member).decorate().customLabel(customLabel);
     }
 
     protected void addField(IObject<?> member, CField<?, ?> field) {
-        contentPanel.setWidget(++row, 0, form.injectAndDecorate(member, field));
+        contentPanel.append(Location.Left, member, field).decorate();
     }
 
     protected void addCaption(String caption) {
-        contentPanel.setH4(++row, 0, 1, caption);
+        contentPanel.h4(caption);
     }
 
     public OnlineApplicationDTO proto() {
