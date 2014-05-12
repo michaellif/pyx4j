@@ -141,7 +141,7 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.watermark);
-        style.addProperty("color", ThemeColor.foreground, 0.3);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
     }
