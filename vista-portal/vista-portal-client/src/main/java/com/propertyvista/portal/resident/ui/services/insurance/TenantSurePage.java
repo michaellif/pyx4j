@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -42,6 +43,7 @@ import com.propertyvista.portal.resident.themes.TenantSureTheme;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
+import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
@@ -89,10 +91,11 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
 
         formPanel.append(Location.Left, proto().messages(), new TenantSureMessagesViewer());
 
-        TenantSure2HighCourtReferenceLinks highCourtLinks = new TenantSure2HighCourtReferenceLinks();
-        highCourtLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
-        highCourtLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
-        formPanel.append(Location.Left, highCourtLinks);
+        formPanel.br();
+        formPanel.append(Location.Left, createTermLink(i18n.tr("Privacy Policy"), TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF));
+        formPanel.append(Location.Left,
+                createTermLink(i18n.tr("Compensation Disclosure Statement"), TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF));
+
         return formPanel;
     }
 
@@ -246,4 +249,11 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
 
     }
 
+    private Anchor createTermLink(String text, String href) {
+        Anchor anchor = new Anchor(text);
+        anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
+        anchor.setTarget("_blank");
+        anchor.setHref(href);
+        return anchor;
+    }
 }

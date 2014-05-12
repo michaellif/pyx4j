@@ -23,34 +23,20 @@ import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResource
 
 public class TenantSureTheme extends Theme {
 
-    public enum StyleName implements IStyleName {//@formatter:off
-        
-        TenantSureLogo,
-        TenantSureLogoPhone,
-        TenantSureManagementGreetingPanel,
-        TenantSureManagementGreeting,
-                                
-        TenantSure2HighCourtLinks,
-        TenantSureTermsLink,
-        TenantSurePrivacyPolicyLink,
-        TenantSureBillingAndCancellationsPolicyLink,
-        
-        TenantSurePurchaseViewSection,
-        TenantSurePucrhaseViewMessageText,
-        TenantSureUnavailableMessage,
-        TenantSureSendDocs, 
-        TenantSurePaymentAmount,
-        
+    public enum StyleName implements IStyleName {
+
+        TenantSureLogo, TenantSureLogoPhone, TenantSureManagementGreetingPanel, TenantSureManagementGreeting,
+
+        TenantSurePurchaseViewSection, TenantSurePucrhaseViewMessageText, TenantSureUnavailableMessage, TenantSureSendDocs, TenantSurePaymentAmount,
+
         TenantSureAboutContactInfo,
-        
-        TenantSureMessages,
-        TenantSureMessage
-        
-    }//@formatter:on
+
+        TenantSureMessages, TenantSureMessage
+
+    }
 
     public TenantSureTheme() {
         initTenantSureCommonStyles();
-        initTenantSureDecoratorStyles();
         initTenantSurePurchaseViewStyles();
         initTenantSureManagementViewStyles();
         initTenantSureAboutViewStyles();
@@ -61,24 +47,6 @@ public class TenantSureTheme extends Theme {
     @Override
     public final ThemeId getId() {
         return new ClassBasedThemeId(getClass());
-    }
-
-    private void initTenantSureDecoratorStyles() {
-        Style style = null;
-
-        style = new Style(".", StyleName.TenantSurePrivacyPolicyLink.name());
-        style.addProperty("text-align", "right");
-        addStyle(style);
-
-        style = new Style(".", StyleName.TenantSureBillingAndCancellationsPolicyLink.name());
-        style.addProperty("text-align", "left");
-        addStyle(style);
-
-        style = new Style(".", StyleName.TenantSure2HighCourtLinks.name());
-        style.addProperty("margin-top", "20px");
-        style.addProperty("padding-top", "20px");
-        style.addProperty("text-align", "center");
-        addStyle(style);
     }
 
     public void initTenantSurePurchaseViewStyles() {

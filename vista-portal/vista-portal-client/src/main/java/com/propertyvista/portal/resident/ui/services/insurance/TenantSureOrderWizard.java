@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -40,14 +41,13 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCove
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureOrderWizard.class);
-
-    private TenantSure2HighCourtReferenceLinks personalInforReferenceLinks;
 
     private Button quoteSendButton;
 
@@ -101,20 +101,23 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         formPanel.h1(PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal Disclaimer Terms"));
 
         HTMLPanel personalDisclaimer = new HTMLPanel(TenantSureResources.INSTANCE.personalDisclaimer().getText());
+        personalDisclaimer.getElement().getStyle().setTextAlign(TextAlign.LEFT);
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         privacyPolicyAnchor.setTarget("_blank");
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);
 
         formPanel.append(Location.Left, personalDisclaimer);
+        formPanel.br();
         formPanel.append(Location.Left, proto().personalDisclaimerSignature()).decorate().customLabel("").labelPosition(LabelPosition.hidden);
         formPanel.h1(PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
         formPanel.append(Location.Left, proto().tenantSureCoverageRequest().tenantName()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().tenantSureCoverageRequest().tenantPhone()).decorate().componentWidth(200);
-        formPanel.append(Location.Left, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
 
-        personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
-        personalInforReferenceLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
+        formPanel.br();
+        formPanel.append(Location.Left, createTermLink(i18n.tr("Privacy Policy"), TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF));
+        formPanel.append(Location.Left,
+                createTermLink(i18n.tr("Compensation Disclosure Statement"), TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF));
 
         return formPanel;
     }
@@ -213,4 +216,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         wizardDecorator = super.createDecorator();
         return wizardDecorator;
     }
+
+    private Anchor createTermLink(String text, String href) {
+        Anchor anchor = new Anchor(text);
+        anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
+        anchor.setTarget("_blank");
+        anchor.setHref(href);
+        return anchor;
+    }
+
 }
