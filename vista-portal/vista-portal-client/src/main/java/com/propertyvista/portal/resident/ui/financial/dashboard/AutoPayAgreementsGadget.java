@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -118,8 +119,8 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
 
         @Override
-        public IFolderItemDecorator<AutoPayInfoDTO> createItemDecorator() {
-            BoxFolderItemDecorator<AutoPayInfoDTO> decor = (BoxFolderItemDecorator<AutoPayInfoDTO>) super.createItemDecorator();
+        public BoxFolderItemDecorator<AutoPayInfoDTO> createItemDecorator() {
+            BoxFolderItemDecorator<AutoPayInfoDTO> decor = super.createItemDecorator();
             decor.setExpended(false);
             return decor;
         }

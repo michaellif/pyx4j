@@ -20,7 +20,6 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -73,8 +72,8 @@ public class LeaseStep extends ApplicationWizardStep {
         depositPanel.h4(i18n.tr("Unit Deposits"));
         depositPanel.append(Location.Left, proto().leaseChargesData().selectedService().deposits(), new DepositFolder() {
             @Override
-            public IFolderItemDecorator<Deposit> createItemDecorator() {
-                BoxFolderItemDecorator<Deposit> decor = (BoxFolderItemDecorator<Deposit>) super.createItemDecorator();
+            public BoxFolderItemDecorator<Deposit> createItemDecorator() {
+                BoxFolderItemDecorator<Deposit> decor = super.createItemDecorator();
                 decor.setExpended(false);
                 return decor;
             }

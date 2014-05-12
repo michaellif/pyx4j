@@ -20,10 +20,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CPercentageLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -42,6 +44,19 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
     }
 
     public void onAmontValueChange() {
+    }
+
+    @Override
+    public BoxFolderItemDecorator<PreauthorizedPaymentCoveredItemDTO> createItemDecorator() {
+        BoxFolderItemDecorator<PreauthorizedPaymentCoveredItemDTO> decorator = super.createItemDecorator();
+        decorator.setCaptionFormatter(new IFormatter<PreauthorizedPaymentCoveredItemDTO, String>() {
+            @Override
+            public String format(PreauthorizedPaymentCoveredItemDTO value) {
+                //TODO implement nice view
+                return value.getStringView();
+            }
+        });
+        return decorator;
     }
 
     @Override

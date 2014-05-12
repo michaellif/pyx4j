@@ -56,7 +56,7 @@ public abstract class PortalBoxFolder<E extends IEntity> extends CFolder<E> {
     }
 
     @Override
-    public IFolderItemDecorator<E> createItemDecorator() {
+    public BoxFolderItemDecorator<E> createItemDecorator() {
         BoxFolderItemDecorator<E> decor = new BoxFolderItemDecorator<E>(VistaImages.INSTANCE);
         decor.setExpended(expended);
         return decor;
