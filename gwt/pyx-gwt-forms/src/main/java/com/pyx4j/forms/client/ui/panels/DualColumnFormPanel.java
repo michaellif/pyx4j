@@ -119,24 +119,26 @@ public class DualColumnFormPanel implements IsWidget {
     private Widget hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
+        header.getElement().getStyle().setProperty("display", "table");
+        header.getElement().getStyle().setProperty("width", "100%");
 
         if (imageResource != null) {
             Image image = new Image(imageResource);
             image.setStyleName(imageStyle.name());
-            image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            image.getElement().getStyle().setProperty("display", "table-cell");
             image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             header.add(image);
         }
 
         Label label = new Label(caption);
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getElement().getStyle().setProperty("display", "table-cell");
         label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         label.setStyleName(labelStyle.name());
         header.add(label);
 
         if (actionWidget != null) {
             SimplePanel actionWidgetHolder = new SimplePanel();
-            actionWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionWidgetHolder.getElement().getStyle().setProperty("display", "table-cell");
             actionWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             actionWidgetHolder.setWidget(actionWidget);
             actionWidgetHolder.setStyleName(FormPanelActionWidget.name());

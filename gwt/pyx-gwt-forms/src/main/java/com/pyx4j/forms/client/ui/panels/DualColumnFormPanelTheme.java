@@ -180,8 +180,8 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelActionWidget);
-        style.addProperty("float", "right");
-        style.addProperty("margin-right", "20px");
+        style.addProperty("text-align", "right");
+        style.addProperty("padding-right", "20px");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed);
