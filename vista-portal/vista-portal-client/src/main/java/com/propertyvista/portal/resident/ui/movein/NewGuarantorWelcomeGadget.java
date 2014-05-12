@@ -13,9 +13,10 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
@@ -41,20 +42,23 @@ public class NewGuarantorWelcomeGadget extends AbstractGadget<NewGuarantorWelcom
         super(view, null, i18n.tr("Lease Agreement Signing Wizard for Guarantor"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-        FlowPanel welcomePanel = new FlowPanel();
-        contentPanel.add(welcomePanel);
+        FlexTable welcomePanel = new FlexTable();
+        welcomePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        welcomePanel.getElement().getStyle().setProperty("maxWidth", "500px");
+        welcomePanel.getElement().getStyle().setProperty("textAlign", "left");
 
         buildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
-        welcomePanel.add(buildingImage);
+        buildingImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
+        welcomePanel.setWidget(0, 0, buildingImage);
 
         welcomePanel
-                .add(new HTML(
-                        i18n.tr("<b>Congratulations. The application you are the Guarantor for has been Approved!</b><p/><div style=text-align:left>To finalize the Lease you have guaranteed, you will need to sign the Lease by following a few short steps.</div>")));
+                .setWidget(
+                        0,
+                        1,
+                        new HTML(
+                                i18n.tr("<b>Congratulations. The application you are the Guarantor for has been Approved!</b><p/><div style=text-align:left>To finalize the Lease you have guaranteed, you will need to sign the Lease by following a few short steps.</div>")));
 
-        setContent(contentPanel);
+        setContent(welcomePanel);
     }
 
     class NewResidentWelcomeToolbar extends GadgetToolbar {

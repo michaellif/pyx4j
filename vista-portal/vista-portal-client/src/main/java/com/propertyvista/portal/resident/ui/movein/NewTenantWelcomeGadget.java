@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
-import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -44,26 +44,33 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
         super(view, null, i18n.tr("Move-In Wizard"), ThemeColor.contrast2, 1);
         setActionsToolbar(new NewResidentWelcomeToolbar());
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-        FlowPanel welcomePanel = new FlowPanel();
-        contentPanel.add(welcomePanel);
+        FlexTable welcomePanel = new FlexTable();
+        welcomePanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        welcomePanel.getElement().getStyle().setProperty("maxWidth", "500px");
+        welcomePanel.getElement().getStyle().setProperty("textAlign", "left");
 
         buildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
-        welcomePanel.add(buildingImage);
+        buildingImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
+        welcomePanel.setWidget(0, 0, buildingImage);
 
         welcomePanel
-                .add(new HTML(
-                        i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
+                .setWidget(
+                        0,
+                        1,
+                        new HTML(
+                                i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
 
         helpImage = new Image(PortalImages.INSTANCE.signUpPersonal());
-        welcomePanel.add(helpImage);
+        helpImage.getElement().getStyle().setPaddingRight(20, Unit.PX);
+        welcomePanel.setWidget(1, 0, helpImage);
         welcomePanel
-                .add(new HTML(
-                        i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Setup pre-authorised payments</li><li>Sign up for exclusive offers</li></ul>")));
+                .setWidget(
+                        1,
+                        1,
+                        new HTML(
+                                i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Setup pre-authorised payments</li><li>Sign up for exclusive offers</li></ul>")));
 
-        setContent(contentPanel);
+        setContent(welcomePanel);
     }
 
     class NewResidentWelcomeToolbar extends GadgetToolbar {
