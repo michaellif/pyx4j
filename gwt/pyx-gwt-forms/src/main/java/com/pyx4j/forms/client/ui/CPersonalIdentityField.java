@@ -62,7 +62,6 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         setMandatory(mandatory);
         setPersonalIdentityFormatter(formatter);
         setNativeComponent(new NPersonalIdentityField<T>(this));
-        asWidget().setWidth("100%");
     }
 
     public void setPersonalIdentityFormatter(PersonalIdentityFormatter formatter) {
