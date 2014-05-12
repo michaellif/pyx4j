@@ -1,7 +1,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -86,5 +86,5 @@ public abstract class CImageSlider<E extends IHasFile<?>> extends CField<IList<E
         return service;
     }
 
-    public abstract Widget getImageEntryView(CForm<E> entryForm);
+    public abstract IsWidget getImageEntryView(CForm<E> entryForm);
 }

@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.core.EntityFactory;
@@ -230,8 +229,8 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
                     thumb.setImage(getCComponent().getThumbnailPlaceholder());
                     thumb.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
                     content.add(thumb);
-                    Widget infoPanel = getCComponent().getImageEntryView(this);
-                    infoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                    IsWidget infoPanel = getCComponent().getImageEntryView(this);
+                    infoPanel.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                     content.add(infoPanel);
 
                     return content;
