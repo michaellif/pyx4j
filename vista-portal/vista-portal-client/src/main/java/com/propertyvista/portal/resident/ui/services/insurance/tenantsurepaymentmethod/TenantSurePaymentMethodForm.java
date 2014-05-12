@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSignature;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Anchor;
@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
@@ -55,9 +56,8 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = (BasicFlexFormPanel) super.createContent();
-        int row = content.getRowCount() + 1;
-        content.setBR(row, 0, 2);
+        PortalFormPanel content = (PortalFormPanel) super.createContent();
+        content.br();
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
         String anchorId = HTMLPanel.createUniqueId();
@@ -66,8 +66,10 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
         HTMLPanel signatureDescriptionPanel = new HTMLPanel(signatureDescriptionBuilder.toSafeHtml());
         Anchor termsAnchor = new TermsAnchor(i18n.tr("TenantSure Pre-Authorized Payment Terms"), ResidentPortalTerms.TenantSurePreAuthorizedPaymentTerms.class);
         signatureDescriptionPanel.addAndReplaceElement(termsAnchor, anchorId);
+        CSignature signature = new CSignature(signatureDescriptionPanel);
+        signature.setDecorator(new SignatureDecorator());
 
-        content.setWidget(++row, 0, 2, inject(proto().preAuthorizedAgreementSignature(), new CSignature(signatureDescriptionPanel), new SignatureDecorator()));
+        content.append(Location.Left, proto().preAuthorizedAgreementSignature());
         return content;
     }
 
