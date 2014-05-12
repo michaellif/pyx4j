@@ -19,6 +19,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -58,6 +59,7 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
         LoginFormPanel formPanel = new LoginFormPanel(this);
 
         formPanel.append(Location.Left, proto().currentPassword()).decorate();
+        ((CPasswordTextField) get(proto().currentPassword())).setWatermark(get(proto().currentPassword()).getTitle());
 
         formPanel.append(Location.Left, proto().captcha());
         captchaField = (CCaptcha) get(proto().captcha());
@@ -69,6 +71,9 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         formPanel.append(Location.Left, proto().newPassword()).decorate().assistantWidget(passwordStrengthWidget);
         formPanel.append(Location.Left, proto().newPasswordConfirm()).decorate();
+
+        ((CPasswordTextField) get(proto().newPassword())).setWatermark(get(proto().newPassword()).getTitle());
+        ((CPasswordTextField) get(proto().newPasswordConfirm())).setWatermark(get(proto().newPasswordConfirm()).getTitle());
 
         if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
             get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
