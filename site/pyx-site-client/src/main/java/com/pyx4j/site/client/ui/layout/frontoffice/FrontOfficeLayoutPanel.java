@@ -364,6 +364,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
     }
 
+    public void scrollToBottom() {
+        pageScroll.setVerticalScrollPosition(pagePanel.getOffsetHeight());
+    }
+
     public void setDevConsole(IsWidget widget) {
         if (devConsoleTab != null) {
             devConsoleTab.setDevConsole(widget);
