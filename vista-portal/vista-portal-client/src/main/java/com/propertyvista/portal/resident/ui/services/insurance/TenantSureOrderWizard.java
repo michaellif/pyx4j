@@ -20,7 +20,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
@@ -134,7 +133,15 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
             }
         });
 
-        formPanel.h1(i18n.tr("Quote"));
+        quoteSendButton = new Button(i18n.tr("Email Quote Details"), new Command() {
+            @Override
+            public void execute() {
+                presenter.sendQuoteDetailsEmail();
+            }
+        });
+        quoteSendButton.setVisible(false);
+
+        formPanel.h1(i18n.tr("Quote"), quoteSendButton);
 
         FlowPanel quoteSection = new FlowPanel();
         quoteSection.addStyleName(TenantSureTheme.StyleName.TenantSurePurchaseViewSection.name());
@@ -144,23 +151,11 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote from Highcourt Partners Limited"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
-        quoteSendButton = new Button(i18n.tr("Email Quote Details"), new Command() {
-            @Override
-            public void execute() {
-                presenter.sendQuoteDetailsEmail();
-            }
-        });
-        quoteSendButton.setVisible(false);
-
         retrievingQuoteMessage = new Label();
         retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TenantSurePucrhaseViewMessageText.name());
         retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
         retrievingQuoteMessage.setVisible(false);
         quoteSection.add(retrievingQuoteMessage);
-
-        SimplePanel quoteSendHolder = new SimplePanel(quoteSendButton);
-        quoteSendHolder.setStyleName(TenantSureTheme.StyleName.TenantSureSendDocs.name());
-        quoteSection.add(quoteSendHolder);
 
         quoteSection.add(inject(proto().quote(), quoteViewer));
 

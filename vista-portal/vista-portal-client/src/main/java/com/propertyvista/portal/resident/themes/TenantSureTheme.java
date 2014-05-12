@@ -27,7 +27,7 @@ public class TenantSureTheme extends Theme {
 
         TenantSureLogo, TenantSureLogoPhone, TenantSureManagementGreetingPanel, TenantSureManagementGreeting,
 
-        TenantSurePurchaseViewSection, TenantSurePucrhaseViewMessageText, TenantSureUnavailableMessage, TenantSureSendDocs, TenantSurePaymentAmount,
+        TenantSurePurchaseViewSection, TenantSurePucrhaseViewMessageText, TenantSureUnavailableMessage, TenantSurePaymentAmount,
 
         TenantSureAboutContactInfo,
 
@@ -73,20 +73,6 @@ public class TenantSureTheme extends Theme {
             Style style = new Style("." + TenantSureTheme.StyleName.TenantSurePurchaseViewSection.name());
             style.addProperty("margin-right", "20px");
             style.addProperty("margin-left", "20px");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style(".", TenantSureTheme.StyleName.TenantSureSendDocs.name());
-            style.addProperty("text-align", "center");
-            style.addProperty("padding-top", "20px");
-            style.addProperty("padding-bottom", "20px");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style(".", TenantSureTheme.StyleName.TenantSureSendDocs.name(), " .Button");
-            style.addProperty("float", "none");
             addStyle(style);
         }
 

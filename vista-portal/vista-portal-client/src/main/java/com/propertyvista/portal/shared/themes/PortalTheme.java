@@ -201,6 +201,19 @@ public class PortalTheme extends Theme {
             protected String getDualColumnWidth() {
                 return "710px";
             }
+
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+                Style style = new Style(".", StyleName.FormPanelActionWidget, " .", DefaultWidgetsTheme.StyleName.Button);
+                style.addProperty("height", "auto");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormPanelActionWidget, " .", DefaultWidgetsTheme.StyleName.Button, " .",
+                        DefaultWidgetsTheme.StyleName.ButtonText);
+                style.addProperty("line-height", "normal");
+                addStyle(style);
+            }
         });
 
         //.vista-pmsite-residentPage .content
