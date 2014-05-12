@@ -60,7 +60,7 @@ public class DevConsoleTab implements IsWidget {
         devConsoleContent.setStylePrimaryName(DevConsoleTheme.StyleName.DevConsoleContent.name());
         devConsole.add(devConsoleContent);
 
-        devConsoleContent.setWidget(consolePanel);
+        setDevConsole(consolePanel);
 
         devConsoleHandler.addHandler(new ClickHandler() {
 
@@ -83,6 +83,7 @@ public class DevConsoleTab implements IsWidget {
     }
 
     public void setDevConsole(IsWidget widget) {
+        devConsole.setVisible(widget != null);
         devConsoleContent.setWidget(widget);
     }
 }
