@@ -30,12 +30,11 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
@@ -51,6 +50,7 @@ import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationM
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMessageDTO> {
 
@@ -91,14 +91,13 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
-        mainPanel.setWidget(++row, 0, inject(proto().thread().created(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().thread().content(), messagesFolder));
-        mainPanel.setBR(++row, 0, 1);
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().thread().created(), new CLabel<String>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().thread().content(), messagesFolder);
+        formPanel.br();
 
-        return mainPanel;
+        return formPanel;
     }
 
     private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessage> {
@@ -156,8 +155,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
 
         @Override
         public IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
             inject(proto().star());
             starImage = new Image(PortalImages.INSTANCE.noStar());
             starImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
@@ -179,20 +177,20 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                             }, m);
                 }
             });
-            content.setWidget(++row, 0, 1, starImage);
-            content.setH1(++row, 0, 1, "Details");
-            content.setWidget(++row, 0, 1, inject(proto().data().date(), new CLabel<String>(), new FieldDecoratorBuilder(20).build()));
+            formPanel.append(Location.Left, starImage);
+            formPanel.h1("Details");
+            formPanel.append(Location.Left, proto().data().date(), new CLabel<String>()).decorate().componentWidth(200);
             CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
             cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
 
-            content.setWidget(++row, 0, 1, inject(proto().data().isHighImportance(), cmbBoolean, new FieldDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, 1, inject(proto().data().sender(), new SenderLabel(), new FieldDecoratorBuilder(20).build()));
-            content.setWidget(++row, 0, 1, inject(proto().data().text(), new FieldDecoratorBuilder(20).build()));
-            content.setBR(++row, 0, 1);
-            content.setH1(++row, 0, 1, "Attachments");
-            content.setWidget(++row, 0, 1, inject(proto().data().attachments(), new CommunicationMessageAttachmentFolder()));
-            content.setWidget(++row, 0, 2, createLowerToolbar());
-            return content;
+            formPanel.append(Location.Left, proto().data().isHighImportance(), cmbBoolean).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().data().sender(), new SenderLabel()).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().data().text()).decorate().componentWidth(200);
+            formPanel.br();
+            formPanel.h1("Attachments");
+            formPanel.append(Location.Left, proto().data().attachments(), new CommunicationMessageAttachmentFolder());
+            formPanel.append(Location.Left, createLowerToolbar());
+            return formPanel;
         }
 
         protected Toolbar createLowerToolbar() {

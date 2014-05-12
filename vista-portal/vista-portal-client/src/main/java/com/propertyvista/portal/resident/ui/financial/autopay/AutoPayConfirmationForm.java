@@ -19,13 +19,13 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
@@ -37,21 +37,17 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        mainPanel.setWidget(
-                ++row,
-                0,
-                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(200).labelAlignment(Alignment.left)
-                        .build()));
-        mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        mainPanel.setWidget(++row, 0, inject(proto().total(), new FieldDecoratorBuilder(100).build()));
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(200)
+                .labelAlignment(Alignment.left);
+        formPanel.append(Location.Left, proto().coveredItems(), new PapCoveredItemFolder());
+        formPanel.append(Location.Left, proto().total()).decorate().componentWidth(100);
 
-        mainPanel.setBR(++row, 0, 1);
+        formPanel.br();
 
-        mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+        formPanel.append(Location.Left, proto().nextPaymentDate(), new CDateLabel()).decorate().componentWidth(100);
 
-        return mainPanel;
+        return formPanel;
     }
 }

@@ -18,12 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillViewDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
 
@@ -35,12 +36,9 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
-
-        content.setWidget(++row, 0, inject(proto().billData(), new BillForm(/* true */)));
-
-        return content;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().billData(), new BillForm());
+        return formPanel;
     }
 
     @Override

@@ -16,9 +16,11 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -27,7 +29,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsurancePolicyDTO> {
 
@@ -54,21 +56,20 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         addStep(createDetailsStep(), i18n.tr("General"));
     }
 
-    public BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
-        int row = -1;
+    public IsWidget createDetailsStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().insuranceProvider(), new FieldDecoratorBuilder(150).build()));
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().insuranceCertificateNumber(), new FieldDecoratorBuilder(150).build()));
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().liabilityCoverage(), new FieldDecoratorBuilder(150).build()));
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().inceptionDate(), new FieldDecoratorBuilder(150).build()));
+        formPanel.append(Location.Left, proto().certificate().insuranceProvider()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().insuranceCertificateNumber()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().liabilityCoverage()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().inceptionDate()).decorate().componentWidth(150);
 
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().expiryDate(), new FieldDecoratorBuilder(150).build()));
+        formPanel.append(Location.Left, proto().certificate().expiryDate()).decorate().componentWidth(150);
 
-        contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate Documents");
-        contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
+        formPanel.h1("Attach Scanned Insurance Certificate Documents");
+        formPanel.append(Location.Left, proto().certificate().certificateDocs(), new CertificateScanFolder());
 
-        return contentPanel;
+        return formPanel;
     }
 
     @Override

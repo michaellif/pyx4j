@@ -25,9 +25,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -50,6 +49,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
@@ -118,28 +118,24 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         }
     }
 
-    private BasicFlexFormPanel createPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+    private IsWidget createPaymentMethodStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        formPanel.append(Location.Left, proto().paymentMethod(), paymentMethodEditor);
 
-        return panel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createConfirmationStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, confirmationDetailsHolder);
 
-        panel.setWidget(++row, 0, confirmationDetailsHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.br();
+        formPanel.hr();
 
-        panel.setBR(++row, 0, 1);
-        panel.setHR(++row, 0, 1);
+        formPanel.append(Location.Left, createLegalTermsPanel());
 
-        panel.setWidget(++row, 0, createLegalTermsPanel());
-        panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        return panel;
+        return formPanel;
     }
 
     @Override

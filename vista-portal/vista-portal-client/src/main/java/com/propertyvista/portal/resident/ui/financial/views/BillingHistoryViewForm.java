@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -31,8 +31,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO> {
 
@@ -44,12 +44,9 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
-
-        content.setWidget(++row, 0, inject(proto().bills(), new BillDataFolder()));
-
-        return content;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().bills(), new BillDataFolder());
+        return formPanel;
     }
 
     class BillDataFolder extends PortalBoxFolder<BillDataDTO> {
@@ -74,15 +71,14 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().referenceNo(), new CNumberLabel(), new FieldDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().fromDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().dueDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+                formPanel.append(Location.Left, proto().referenceNo(), new CNumberLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().fromDate(), new CDateLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().dueDate(), new CDateLabel()).decorate().componentWidth(100);
 
-                content.setWidget(++row, 0, new Anchor("View Details", new Command() {
+                formPanel.append(Location.Left, new Anchor("View Details", new Command() {
                     @Override
                     public void execute() {
                         ((BillingHistoryView.Presenter) getView().getPresenter()).viewBill(EntityFactory.createIdentityStub(Bill.class, getValue()
@@ -90,7 +86,7 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
                     }
                 }));
 
-                return content;
+                return formPanel;
             }
         }
     }

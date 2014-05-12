@@ -16,17 +16,17 @@ package com.propertyvista.portal.resident.ui.movein;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
 
@@ -49,16 +49,12 @@ public class TenantsFolder extends PortalBoxFolder<LeaseTermTenant> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()).decorate();
+            formPanel.append(Location.Left, proto().role(), new CEnumLabel()).decorate();
+            formPanel.append(Location.Left, proto().leaseParticipant().customer().person().email(), new CLabel<String>()).decorate();
 
-            int row = -1;
-            mainPanel.setWidget(++row, 0,
-                    inject(proto().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0, inject(proto().role(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
-            mainPanel.setWidget(++row, 0,
-                    inject(proto().leaseParticipant().customer().person().email(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-
-            return mainPanel;
+            return formPanel;
         }
     }
 }

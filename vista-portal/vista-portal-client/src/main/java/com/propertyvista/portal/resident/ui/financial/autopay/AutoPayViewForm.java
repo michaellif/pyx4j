@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -35,7 +35,7 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
@@ -57,14 +57,12 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(200)
+                .labelAlignment(Alignment.left);
 
-        mainPanel.setWidget(++row, 0,
-                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(200).labelAlignment(Alignment.left).build()));
-
-        mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        mainPanel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
+        formPanel.append(Location.Left, proto().coveredItems(), new PapCoveredItemFolder());
+        formPanel.append(Location.Left, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
                 BigDecimal total = BigDecimal.ZERO;
@@ -75,17 +73,17 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
                 }
                 AutoPayViewForm.this.get(AutoPayViewForm.this.proto().total()).setValue(total);
             }
-        }));
+        });
 
-        mainPanel.setHR(++row, 0, 1);
+        formPanel.hr();
 
-        mainPanel.setWidget(++row, 0, inject(proto().total(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
+        formPanel.append(Location.Left, proto().total(), new CMoneyLabel()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().nextPaymentDate(), new CDateLabel()).decorate().componentWidth(100);
 
         get(proto().coveredItems()).setVisible(isViewable());
         get(proto().coveredItemsDTO()).setVisible(!isViewable());
 
-        return mainPanel;
+        return formPanel;
     }
 
     @Override

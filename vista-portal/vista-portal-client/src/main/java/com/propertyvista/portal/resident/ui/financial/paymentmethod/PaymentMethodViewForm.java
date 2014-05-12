@@ -18,7 +18,7 @@ import java.util.Set;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
@@ -26,6 +26,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
 public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO> {
@@ -38,10 +39,9 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+        formPanel.append(Location.Left, proto().paymentMethod(), new PortalPaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
             @Override
             public Set<PaymentType> getPaymentTypes() {
@@ -57,8 +57,8 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
             protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
                 return PaymentMethodViewForm.this.getValue().allowedPaymentsSetup().convenienceFeeApplicableCardTypes();
             }
-        }));
+        });
 
-        return content;
+        return formPanel;
     }
 }

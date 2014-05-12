@@ -25,7 +25,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -36,7 +36,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView.PaymentConfirmationPresenter;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
@@ -56,26 +56,25 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Reference Number")).build()));
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().transactionAuthorizationNumber(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().convenienceFee(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().convenienceFeeTransactionAuthorizationNumber(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().customLabel(i18n.tr("Reference Number"));
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate();
+        formPanel.append(Location.Left, proto().amount()).decorate();
+        formPanel.append(Location.Left, proto().transactionAuthorizationNumber()).decorate();
+        formPanel.append(Location.Left, proto().convenienceFee()).decorate();
+        formPanel.append(Location.Left, proto().convenienceFeeTransactionAuthorizationNumber()).decorate();
 
-        content.setHR(++row, 0, 1);
+        formPanel.hr();
 
-        content.setWidget(++row, 0, inject(proto().transactionErrorMessage(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().transactionErrorMessage()).decorate();
 
-        content.setWidget(++row, 0, autoPaySignupPanel = createAutoPaySignupPanel());
+        formPanel.append(Location.Left, autoPaySignupPanel = createAutoPaySignupPanel());
 
         // tweak:
         get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.ErrorMessage.name());
 
-        return content;
+        return formPanel;
     }
 
     private Widget createAutoPaySignupPanel() {

@@ -26,7 +26,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPercentageField.PercentageFormat;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
@@ -40,7 +40,7 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class ApplicationStatusPageViewImpl extends FlowPanel implements ApplicationStatusPageView {
 
@@ -242,14 +242,12 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel main = new BasicFlexFormPanel();
+                PortalFormPanel formPanel = new PortalFormPanel(this);
+                formPanel.append(Location.Left, proto().progress()).decorate();
+                formPanel.br();
+                formPanel.append(Location.Left, proto().individualApplications(), new ApplicationStatusFolder());
 
-                int row = -1;
-                main.setWidget(++row, 0, inject(proto().progress(), new FieldDecoratorBuilder().build()));
-                main.setBR(++row, 0, 1);
-                main.setWidget(++row, 0, inject(proto().individualApplications(), new ApplicationStatusFolder()));
-
-                return main;
+                return formPanel;
             }
 
             class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationStatus> {

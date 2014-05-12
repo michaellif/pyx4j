@@ -24,13 +24,13 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CPercentageLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymentCoveredItemDTO> {
 
@@ -57,16 +57,15 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            content.setWidget(++row, 0,
-                    inject(proto().billableItem(), new PapBillableItemLabel(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Lease Charge")).build()));
-            content.setWidget(++row, 0,
-                    inject(proto().billableItem().agreedPrice(), new CMoneyLabel(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Price")).build()));
-            content.setWidget(++row, 0, inject(proto().covered(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
-            content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(100).customLabel(i18n.tr("Payment")).build()));
-            content.setWidget(++row, 0, inject(proto().percent(), new CPercentageLabel(), new FieldDecoratorBuilder(100).build()));
+            formPanel.append(Location.Left, proto().billableItem(), new PapBillableItemLabel()).decorate().componentWidth(200)
+                    .customLabel(i18n.tr("Lease Charge"));
+            formPanel.append(Location.Left, proto().billableItem().agreedPrice(), new CMoneyLabel()).decorate().componentWidth(100)
+                    .customLabel(i18n.tr("Price"));
+            formPanel.append(Location.Left, proto().covered(), new CMoneyLabel()).decorate().componentWidth(100);
+            formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(100).customLabel(i18n.tr("Payment"));
+            formPanel.append(Location.Left, proto().percent(), new CPercentageLabel()).decorate().componentWidth(100);
 
             // tweaks:
             get(proto().amount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
@@ -84,7 +83,7 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
                 }
             });
 
-            return content;
+            return formPanel;
         }
     }
 }

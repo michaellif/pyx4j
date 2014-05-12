@@ -14,11 +14,9 @@
 package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
@@ -34,11 +32,7 @@ public class TenantSurePaymentMethodUpdateConfirmationForm extends CPortalEntity
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        mainPanel.setWidget(0, 0, new HTML(i18n.tr("Thank You!")));
-        mainPanel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        return mainPanel;
-
+        return new HTML(i18n.tr("Thank You!"));
     }
 
 }

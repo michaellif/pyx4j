@@ -20,10 +20,12 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -49,14 +51,10 @@ public class ApplicationOptionsFolder extends PortalBoxFolder<OptionDTO> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-
-            int row = -1;
-            mainPanel.setWidget(++row, 0,
-                    inject(proto().item(), new CEntityLabel<ProductItem>(), new FieldDecoratorBuilder(200).customLabel(i18n.tr("Item Name")).build()));
-
-            mainPanel.setWidget(++row, 0, inject(proto().price(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
-            return mainPanel;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().item(), new CEntityLabel<ProductItem>()).decorate().componentWidth(200).customLabel(i18n.tr("Item Name"));
+            formPanel.append(Location.Left, proto().price(), new CMoneyLabel()).decorate();
+            return formPanel;
         }
     }
 }

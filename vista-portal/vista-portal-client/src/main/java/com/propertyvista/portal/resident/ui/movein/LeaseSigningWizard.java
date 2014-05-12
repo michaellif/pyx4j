@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.resident.ui.movein;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -27,13 +29,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     private final static I18n i18n = I18n.get(LeaseSigningWizard.class);
 
-    private final BasicFlexFormPanel featurePanel = new BasicFlexFormPanel();
+    private PortalFormPanel featurePanel;
 
     public LeaseSigningWizard(LeaseSigningWizardView view) {
         super(LeaseAgreementDTO.class, view, i18n.tr("Move-In Wizard"), i18n.tr("Submit"), ThemeColor.contrast2);
@@ -43,10 +45,9 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
         addStep(createConfirmationStep(), i18n.tr("Confirmation"));
     }
 
-    public BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
+    public IsWidget createDetailsStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.h1(i18n.tr("Lease Details"));
 
         CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
         buildingLabel.setFormatter(new IFormatter<Building, String>() {
@@ -59,55 +60,46 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
             }
         });
 
-        panel.setH3(++row, 0, 1, i18n.tr("Landlord Info"));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().name(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().landlordInfo().address(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        formPanel.h3(i18n.tr("Landlord Info"));
+        formPanel.append(Location.Left, proto().landlordInfo().name(), new CLabel<String>()).decorate();
+        formPanel.append(Location.Left, proto().landlordInfo().address(), new CLabel<String>()).decorate();
 
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Info"));
-        panel.setWidget(++row, 0, inject(proto().unit().building(), buildingLabel, new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit(), new CEntityLabel<AptUnit>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().utilities(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        formPanel.h3(i18n.tr("Lease Info"));
+        formPanel.append(Location.Left, proto().unit().building(), buildingLabel).decorate();
+        formPanel.append(Location.Left, proto().unit(), new CEntityLabel<AptUnit>()).decorate();
+        formPanel.append(Location.Left, proto().unit().floorplan(), new CEntityLabel<Floorplan>()).decorate();
+        formPanel.append(Location.Left, proto().utilities(), new CLabel<String>()).decorate();
 
-        panel.setWidget(++row, 0,
-                inject(proto().leaseTerm().termFrom(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease From")).build()));
-        panel.setWidget(++row, 0, inject(proto().leaseTerm().termTo(), new CDateLabel(), new FieldDecoratorBuilder().customLabel(i18n.tr("Lease To")).build()));
+        formPanel.append(Location.Left, proto().leaseTerm().termFrom(), new CDateLabel()).decorate().customLabel(i18n.tr("Lease From"));
+        formPanel.append(Location.Left, proto().leaseTerm().termTo(), new CDateLabel()).decorate().customLabel(i18n.tr("Lease To"));
 
-        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CMoneyLabel(),
-                        new FieldDecoratorBuilder().customLabel(i18n.tr("Base Rent")).build()));
+        formPanel.h3(i18n.tr("Lease Options"));
+        formPanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CMoneyLabel()).decorate()
+                .customLabel(i18n.tr("Base Rent"));
 
-        panel.setWidget(++row, 0, featurePanel);
-        featurePanel.setH3(0, 0, 1, i18n.tr("Features"));
-        featurePanel.setWidget(++row, 0, inject(proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder()));
+        featurePanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, featurePanel);
+        featurePanel.h3(i18n.tr("Features"));
+        featurePanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Tenants"));
-        panel.setWidget(++row, 0, inject(proto().leaseTerm().version().tenants(), new TenantsFolder()));
+        formPanel.h3(i18n.tr("Tenants"));
+        formPanel.append(Location.Left, proto().leaseTerm().version().tenants(), new TenantsFolder());
 
-        return panel;
+        return formPanel;
     }
 
-    public BasicFlexFormPanel createAgreementStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        panel.setWidget(++row, 0, inject(proto().legalTerms(), new LegalTermsFolder()));
-
-        return panel;
+    public IsWidget createAgreementStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.h1(i18n.tr("Lease Agreement"));
+        formPanel.append(Location.Left, proto().legalTerms(), new LegalTermsFolder());
+        return formPanel;
     }
 
-    public BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-
-        panel.setWidget(++row, 0, inject(proto().confirmationTerms(), new ConfirmationTermsFolder()));
-
-        return panel;
+    public IsWidget createConfirmationStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.h1(i18n.tr("Confirmation"));
+        formPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermsFolder());
+        return formPanel;
     }
 
     @Override

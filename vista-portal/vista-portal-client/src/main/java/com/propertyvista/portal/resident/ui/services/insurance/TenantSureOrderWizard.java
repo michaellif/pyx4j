@@ -13,18 +13,17 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -42,7 +41,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsu
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
 
@@ -96,43 +95,34 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         wizardDecorator.getBtnNext().setEnabled(true);
     }
 
-    private BasicFlexFormPanel createPersonalInfoStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createPersonalInfoStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal Disclaimer Terms"));
+        formPanel.h1(PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal Disclaimer Terms"));
+
         HTMLPanel personalDisclaimer = new HTMLPanel(TenantSureResources.INSTANCE.personalDisclaimer().getText());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         privacyPolicyAnchor.setTarget("_blank");
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);
 
-        panel.setWidget(++row, 0, personalDisclaimer);
-
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().personalDisclaimerSignature(),
-                        new FieldDecoratorBuilder().customLabel("").labelPosition(LabelPosition.hidden).componentWidth("250px").build()));
-
-        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
-
-        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantName(), new FieldDecoratorBuilder(200).build()));
-        panel.setWidget(++row, 0, inject(proto().tenantSureCoverageRequest().tenantPhone(), new FieldDecoratorBuilder(200).build()));
-        panel.setWidget(++row, 0, 1, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
+        formPanel.append(Location.Left, personalDisclaimer);
+        formPanel.append(Location.Left, proto().personalDisclaimerSignature()).decorate().customLabel("").labelPosition(LabelPosition.hidden);
+        formPanel.h1(PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
+        formPanel.append(Location.Left, proto().tenantSureCoverageRequest().tenantName()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().tenantSureCoverageRequest().tenantPhone()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
 
         personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
         personalInforReferenceLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
 
-        return panel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createInsuranceCoverageStep() {
-        BasicFlexFormPanel quotationRequestStepPanel = new BasicFlexFormPanel();
-        quotationRequestStepPanel.getElement().getStyle().setMarginBottom(2, Unit.EM);
-        int row = -1;
-        quotationRequestStepPanel
-                .setWidget(++row, 0, 1, inject(proto().tenantSureCoverageRequest(), coverageRequestForm = new TenantSureCoverageRequestForm()));
+    private IsWidget createInsuranceCoverageStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+
+        formPanel.append(Location.Left, proto().tenantSureCoverageRequest(), coverageRequestForm = new TenantSureCoverageRequestForm());
         get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
             @Override
             public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
@@ -141,7 +131,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
             }
         });
 
-        quotationRequestStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
+        formPanel.h1(i18n.tr("Quote"));
 
         FlowPanel quoteSection = new FlowPanel();
         quoteSection.addStyleName(TenantSureTheme.StyleName.TenantSurePurchaseViewSection.name());
@@ -171,25 +161,22 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
         quoteSection.add(inject(proto().quote(), quoteViewer));
 
-        quotationRequestStepPanel.setWidget(++row, 0, 1, quoteSection);
-        quotationRequestStepPanel.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-        quotationRequestStepPanel.getCellFormatter().getElement(row, 0).getStyle().setProperty("height", "10em");
+        formPanel.append(Location.Left, quoteSection);
 
-        return quotationRequestStepPanel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createPaymentMethodStep() {
-        BasicFlexFormPanel paymentStepPanel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createPaymentMethodStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Summary"));
-        paymentStepPanel.setWidget(++row, 0, 1, inject(proto().tenantSureCoverageRequestConfirmation(), new TenantSureCoverageRequestForm(true)));
-        paymentStepPanel.setWidget(++row, 0, 1, inject(proto().quoteConfirmation(), new TenantSureQuoteViewer(true)));
+        formPanel.h1(i18n.tr("Summary"));
+        formPanel.append(Location.Left, proto().tenantSureCoverageRequestConfirmation(), new TenantSureCoverageRequestForm(true));
+        formPanel.append(Location.Left, proto().quoteConfirmation(), new TenantSureQuoteViewer(true));
 
-        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
-        paymentStepPanel.setWidget(++row, 0, 1, inject(proto().paymentMethod(), paymentMethodForm));
+        formPanel.h1(i18n.tr("Payment"));
+        formPanel.append(Location.Left, proto().paymentMethod(), paymentMethodForm);
 
-        return paymentStepPanel;
+        return formPanel;
     }
 
     public void waitForQuote() {

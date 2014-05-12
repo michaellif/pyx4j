@@ -27,6 +27,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -37,6 +38,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodD
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
@@ -49,26 +51,12 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
-        mainPanel.setWidget(
-                ++row,
-                0,
-                inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>(), new FieldDecoratorBuilder(250).labelAlignment(Alignment.left)
-                        .build()));
-
-        mainPanel.setHR(++row, 0, 1);
-
-        mainPanel.setWidget(++row, 0, createAutoPaySignupPanel());
-
-        SimplePanel contentPanel = new SimplePanel(mainPanel);
-        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
-        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
-        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-
-        return mainPanel;
-
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(250)
+                .labelAlignment(Alignment.left);
+        formPanel.hr();
+        formPanel.append(Location.Left, createAutoPaySignupPanel());
+        return formPanel;
     }
 
     private Widget createAutoPaySignupPanel() {

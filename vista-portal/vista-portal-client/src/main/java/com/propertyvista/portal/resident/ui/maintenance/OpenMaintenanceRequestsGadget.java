@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -26,6 +26,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceR
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
 public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
@@ -72,16 +73,10 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-
-            int row = -1;
-
-            main.setWidget(++row, 0, inject(proto().openMaintenanceRequests(), new OpenMaintenanceRequestsFolder()));
-
-            main.setWidget(++row, 0, message);
-
-            return main;
-
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().openMaintenanceRequests(), new OpenMaintenanceRequestsFolder());
+            formPanel.append(Location.Left, message);
+            return formPanel;
         }
 
         @Override

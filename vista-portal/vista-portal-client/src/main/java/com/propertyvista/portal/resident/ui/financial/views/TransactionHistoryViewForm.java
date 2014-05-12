@@ -21,14 +21,14 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHistoryDTO> {
 
@@ -40,15 +40,11 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
-
-        content.setWidget(++row, 0, inject(proto().issueDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-        content.setWidget(++row, 0, inject(proto().currentBalanceAmount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
-
-        content.setWidget(++row, 0, inject(proto().lineItems(), new InvoiceLineItemFolder()));
-
-        return content;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().issueDate(), new CDateLabel()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().currentBalanceAmount(), new CMoneyLabel()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().lineItems(), new InvoiceLineItemFolder());
+        return formPanel;
     }
 
     class InvoiceLineItemFolder extends PortalBoxFolder<InvoiceLineItem> {
@@ -70,14 +66,11 @@ public class TransactionHistoryViewForm extends CPortalEntityForm<TransactionHis
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
-
-                content.setWidget(++row, 0, inject(proto().amount(), new CMoneyLabel(), new FieldDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().postDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
-
-                return content;
+                PortalFormPanel formPanel = new PortalFormPanel(this);
+                formPanel.append(Location.Left, proto().amount(), new CMoneyLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().postDate(), new CDateLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate().componentWidth(250);
+                return formPanel;
             }
         }
     }

@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -30,6 +30,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.ResidentAccountDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
 
@@ -42,10 +43,8 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
-
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Security"));
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.h1(i18n.tr("Security"));
 
         Anchor anchor = new Anchor("Change my Password", new Command() {
 
@@ -57,25 +56,25 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
         anchor.setWidth("200px");
         anchor.getElement().getStyle().setTextAlign(TextAlign.LEFT);
         anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
-        mainPanel.setWidget(++row, 0, anchor);
+        formPanel.append(Location.Left, anchor);
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Mail Preferences"));
+        formPanel.h1(i18n.tr("Mail Preferences"));
 
         HTML label = new HTML("Coming soon.");
         label.setWidth("200px");
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        mainPanel.setWidget(++row, 0, 1, label);
+        formPanel.append(Location.Left, label);
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Notification Preferences"));
+        formPanel.h1(i18n.tr("Notification Preferences"));
 
         label = new HTML("Coming soon.");
         label.setWidth("200px");
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        mainPanel.setWidget(++row, 0, 1, label);
+        formPanel.append(Location.Left, label);
 
-        return mainPanel;
+        return formPanel;
     }
 
 }

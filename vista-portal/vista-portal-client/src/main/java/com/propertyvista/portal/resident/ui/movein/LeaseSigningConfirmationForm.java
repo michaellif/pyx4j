@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Button;
@@ -28,6 +28,7 @@ import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.movein.LeaseAgreementConfirmationDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreementConfirmationDTO> {
 
@@ -39,38 +40,34 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        contentPanel
-                .setH4(++row,
-                        0,
-                        1,
-                        i18n.tr("Thank you. We have received your signed Lease Agreement. You can obtain a draft copy of the agreement by clicking 'Download Agreement' button here."));
+        formPanel
+                .h4(i18n.tr("Thank you. We have received your signed Lease Agreement. You can obtain a draft copy of the agreement by clicking 'Download Agreement' button here."));
 
-        contentPanel.setWidget(++row, 0, new Button(i18n.tr("Download Agreement"), new Command() {
+        formPanel.append(Location.Left, new Button(i18n.tr("Download Agreement"), new Command() {
             @Override
             public void execute() {
                 onDownloadAgreement();
             }
         }));
 
-        contentPanel.setBR(++row, 0, 1);
+        formPanel.br();
 
         if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
             HTML helpText = new HTML(
                     i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, submit maintenance requests, view special offers and more."));
             //" Please use the links below to continue with the setup of your tenant services, then continue on to the mycommunity dashboard."
             helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            contentPanel.setWidget(++row, 0, helpText);
+            formPanel.append(Location.Left, helpText);
         } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             HTML helpText = new HTML(
                     i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, view special offers and more."));
             helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-            contentPanel.setWidget(++row, 0, helpText);
+            formPanel.append(Location.Left, helpText);
         }
 
-        return contentPanel;
+        return formPanel;
     }
 
     public void onDownloadAgreement() {

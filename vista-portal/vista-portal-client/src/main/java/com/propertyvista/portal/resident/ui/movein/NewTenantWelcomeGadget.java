@@ -47,31 +47,21 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        BasicFlexFormPanel welcomePanel = new BasicFlexFormPanel();
+        FlowPanel welcomePanel = new FlowPanel();
         contentPanel.add(welcomePanel);
 
-        welcomePanel.getColumnFormatter().setWidth(0, "50px");
-        welcomePanel.getColumnFormatter().setWidth(1, "300px");
-        int row = -1;
-
         buildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
-        welcomePanel.setWidget(++row, 0, buildingImage);
+        welcomePanel.add(buildingImage);
 
         welcomePanel
-                .setWidget(
-                        row,
-                        1,
-                        new HTML(
-                                i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
+                .add(new HTML(
+                        i18n.tr("<b>Congratulations You’ve been Approved!</b><p/><div style=text-align:left>Use this Move-In Wizard to ease your move-in experience . After a few simple steps you’ll be ready for your new home.</div>")));
 
         helpImage = new Image(PortalImages.INSTANCE.signUpPersonal());
-        welcomePanel.setWidget(++row, 0, helpImage);
+        welcomePanel.add(helpImage);
         welcomePanel
-                .setWidget(
-                        row,
-                        1,
-                        new HTML(
-                                i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Setup pre-authorised payments</li><li>Sign up for exclusive offers</li></ul>")));
+                .add(new HTML(
+                        i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Setup pre-authorised payments</li><li>Sign up for exclusive offers</li></ul>")));
 
         setContent(contentPanel);
     }

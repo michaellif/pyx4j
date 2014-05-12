@@ -20,12 +20,12 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
@@ -40,8 +40,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -91,14 +91,13 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            mainPanel.setWidget(++row, 0, inject(proto().nextAutoPayDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-            mainPanel.setBR(++row, 0, 1);
-            mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder(this)));
+            formPanel.append(Location.Left, proto().nextAutoPayDate(), new CDateLabel()).decorate().componentWidth(100);
+            formPanel.br();
+            formPanel.append(Location.Left, proto().currentAutoPayments(), new AutoPayFolder(this));
 
-            return mainPanel;
+            return formPanel;
         }
     }
 
@@ -158,16 +157,15 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Tenant>(), new FieldDecoratorBuilder(250).build()));
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>(), new FieldDecoratorBuilder(250).build()));
-                content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(100).build()));
+                formPanel.append(Location.Left, proto().payer(), new CEntityLabel<Tenant>()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<PaymentMethod>()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(100);
 
-                content.setWidget(++row, 0, detailsViewAnchor);
+                formPanel.append(Location.Left, detailsViewAnchor);
 
-                return content;
+                return formPanel;
             }
 
             @SuppressWarnings("unchecked")

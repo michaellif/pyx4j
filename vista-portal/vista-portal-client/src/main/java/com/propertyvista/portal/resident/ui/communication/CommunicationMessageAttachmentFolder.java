@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<CommunicationMessageAttachment> {
     private final static I18n i18n = I18n.get(CommunicationMessageAttachmentFolder.class);
@@ -49,19 +49,14 @@ public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<Commun
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
-
-            content.setWidget(
-                    ++row,
-                    0,
-                    inject(proto().file(),
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel
+                    .append(Location.Left,
+                            proto().file(),
                             new CFile(GWT.<CommunicationMessageAttachmentUploadPortalService> create(CommunicationMessageAttachmentUploadPortalService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class)), new FieldDecoratorBuilder(250).build()));
-
-            content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(200).build()));
-
-            return content;
+                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class))).decorate().componentWidth(250);
+            formPanel.append(Location.Left, proto().description()).decorate().componentWidth(200);
+            return formPanel;
         }
 
         @Override

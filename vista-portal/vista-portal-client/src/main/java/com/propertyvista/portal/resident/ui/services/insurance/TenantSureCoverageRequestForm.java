@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboB
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureAgreementParamsDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> {
 
@@ -51,25 +51,24 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        contentPanel.setWidget(++row, 0, 1, inject(proto().inceptionDate(), new FieldDecoratorBuilder().build()));
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage"));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().personalLiabilityCoverage(), new MoneyComboBox(), new FieldDecoratorBuilder().build()));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().contentsCoverage(), new MoneyComboBox(), new FieldDecoratorBuilder().build()));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().deductible(), new MoneyComboBox(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().inceptionDate()).decorate();
+        formPanel.h1(i18n.tr("Coverage"));
+        formPanel.append(Location.Left, proto().personalLiabilityCoverage(), new MoneyComboBox()).decorate();
+        formPanel.append(Location.Left, proto().contentsCoverage(), new MoneyComboBox()).decorate();
+        formPanel.append(Location.Left, proto().deductible(), new MoneyComboBox()).decorate();
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().smoker(), new YesNoComboBox(), new FieldDecoratorBuilder().build()));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().numberOfPreviousClaims(), new FieldDecoratorBuilder().build()));
+        formPanel.h1(i18n.tr("Coverage Qualification Questions"));
+        formPanel.append(Location.Left, proto().smoker(), new YesNoComboBox()).decorate();
+        formPanel.append(Location.Left, proto().numberOfPreviousClaims()).decorate();
 
         if (VistaTODO.VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED) {
-            contentPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
-            contentPanel.setWidget(++row, 0, 1, inject(proto().paymentSchedule(), new FieldDecoratorBuilder().build()));
+            formPanel.h1(i18n.tr("Payment"));
+            formPanel.append(Location.Left, proto().paymentSchedule()).decorate();
         }
 
-        return contentPanel;
+        return formPanel;
     }
 
     /** resets the form and sets pre-defined options for filling the from */

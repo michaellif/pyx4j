@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -33,7 +33,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> {
@@ -113,13 +113,13 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
         @Override
         protected IsWidget createContent() {
 
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-            mainPanel.setWidget(0, 0, inject(proto().currentBalance(), new FieldDecoratorBuilder("140px", "100px", "120px").build()));
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().currentBalance()).decorate().labelWidth(140).componentWidth(100);
             if (!VistaFeatures.instance().yardiIntegration()) {
-                mainPanel.setWidget(1, 0, inject(proto().dueDate(), new FieldDecoratorBuilder("140px", "100px", "120px").build()));
+                formPanel.append(Location.Left, proto().dueDate()).decorate().labelWidth(140).componentWidth(100);
             }
 
-            return mainPanel;
+            return formPanel;
         }
     }
 

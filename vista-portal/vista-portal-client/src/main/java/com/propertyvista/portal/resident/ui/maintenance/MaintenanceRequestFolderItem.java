@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -34,7 +34,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestStatusDTO;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatusDTO> {
 
@@ -54,16 +54,15 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().subject(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
-        content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
-        content.setWidget(++row, 0, inject(proto().status().phase(), new CLabel<StatusPhase>(), new FieldDecoratorBuilder(180).build()));
-        content.setWidget(++row, 0, inject(proto().priority().level(), new CLabel<PriorityLevel>(), new FieldDecoratorBuilder(180).build()));
-        content.setWidget(++row, 0, inject(proto().lastUpdated(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
+        formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().description(), new CLabel<String>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().status().phase(), new CLabel<StatusPhase>()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().priority().level(), new CLabel<PriorityLevel>()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().lastUpdated(), new CLabel<String>()).decorate().componentWidth(180);
 
-        content.setBR(++row, 0, 1);
+        formPanel.br();
 
         rateIt = new RateIt(5);
         rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
@@ -77,7 +76,7 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
 
         SimplePanel rateItHolder = new SimplePanel(rateIt);
         rateItHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        content.setWidget(++row, 0, rateItHolder);
+        formPanel.append(Location.Left, rateItHolder);
 
         detailsLink = new Anchor(i18n.tr("View Details"), new Command() {
 
@@ -88,9 +87,9 @@ public class MaintenanceRequestFolderItem extends CForm<MaintenanceRequestStatus
         });
         detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);
 
-        content.setWidget(++row, 0, detailsLink);
+        formPanel.append(Location.Left, detailsLink);
 
-        return content;
+        return formPanel;
     }
 
     @Override

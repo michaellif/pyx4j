@@ -19,7 +19,6 @@ import java.util.Set;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,7 +27,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -39,7 +38,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod> extends PaymentMethodEditor<E> {
 
@@ -59,16 +58,14 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().type(), new CComboBox<PaymentType>(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, paymentDetailsHolder);
+        formPanel.append(Location.Left, proto().type(), new CComboBox<PaymentType>()).decorate();
+        formPanel.append(Location.Left, paymentDetailsHolder);
 
-        content.setH4(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
-        billingAddressHeader = content.getWidget(row, 0);
-        content.setWidget(++row, 0, inject(proto().sameAsCurrent(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
+        billingAddressHeader = formPanel.h4(proto().billingAddress().getMeta().getCaption());
+        formPanel.append(Location.Left, proto().sameAsCurrent()).decorate();
+        formPanel.append(Location.Left, proto().billingAddress(), new AddressSimpleEditor());
 
         // tweaks:
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -86,7 +83,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
             }
         });
 
-        return content;
+        return formPanel;
     }
 
     @Override
@@ -94,23 +91,20 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
         return new EcheckInfoEditor() {
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel panel = new BasicFlexFormPanel();
+                PortalFormPanel formPanel = new PortalFormPanel(this);
+                formPanel.append(Location.Left, proto().nameOn()).decorate();
+                formPanel.append(Location.Left, proto().accountNo(), accountEditor).decorate();
 
-                int row = -1;
-                panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder().build()));
-                panel.setWidget(++row, 0, inject(proto().accountNo(), accountEditor, new FieldDecoratorBuilder().build()));
-
-                panel.setWidget(++row, 0, inject(proto().branchTransitNumber(), new FieldDecoratorBuilder(150).build()));
-                panel.setWidget(++row, 0, inject(proto().bankId(), new FieldDecoratorBuilder(50).build()));
+                formPanel.append(Location.Left, proto().branchTransitNumber()).decorate().componentWidth(150);
+                formPanel.append(Location.Left, proto().bankId()).decorate().componentWidth(50);
 
                 if (!isViewable() && isEditable()) {
                     Image image = new Image(VistaImages.INSTANCE.eChequeGuideNarrow().getSafeUri());
                     image.getElement().getStyle().setMarginTop(1, Unit.EM);
-                    panel.setWidget(++row, 0, image);
-                    panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+                    formPanel.append(Location.Left, image);
                 }
 
-                return panel;
+                return formPanel;
             }
         };
     }
@@ -120,16 +114,14 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
         return new CreditCardInfoEditor() {
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel panel = new BasicFlexFormPanel();
-
-                int row = -1;
+                PortalFormPanel formPanel = new PortalFormPanel(this);
                 CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-                panel.setWidget(++row, 0, inject(proto().nameOn(), new FieldDecoratorBuilder().build()));
-                panel.setWidget(++row, 0, inject(proto().cardType(), typeSelector, new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().nameOn()).decorate();
+                formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate();
 
-                panel.setWidget(++row, 0, inject(proto().card(), cardEditor, new FieldDecoratorBuilder().build()));
-                panel.setWidget(++row, 0, inject(proto().expiryDate(), monthYearPicker, new FieldDecoratorBuilder(125).build()));
-                panel.setWidget(++row, 0, inject(proto().securityCode(), new FieldDecoratorBuilder(50).build()));
+                formPanel.append(Location.Left, proto().card(), cardEditor).decorate();
+                formPanel.append(Location.Left, proto().expiryDate(), monthYearPicker).decorate().componentWidth(125);
+                formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(50);
 
                 // tweak:
                 monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
@@ -142,7 +134,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
                     }
                 });
 
-                return panel;
+                return formPanel;
             }
 
             @Override

@@ -28,9 +28,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,7 +42,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
@@ -68,6 +67,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.ResidentPortalTerms;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
@@ -137,13 +137,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         totalWidget = inject(proto().total(), new FieldDecoratorBuilder(100).build());
     }
 
-    private BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
-
-        panel.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>(), new FieldDecoratorBuilder(200).build()));
-        panel.setWidget(++row, 0, inject(proto().address(), new CEntityLabel<AddressSimple>(), new FieldDecoratorBuilder(200).build()));
-        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
+    private IsWidget createDetailsStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().tenant(), new CEntityLabel<Tenant>()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().address(), new CEntityLabel<AddressSimple>()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
                 BigDecimal total = BigDecimal.ZERO;
@@ -154,25 +152,20 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                 }
                 AutoPayWizard.this.get(AutoPayWizard.this.proto().total()).setValue(total);
             }
-        }));
-        panel.setWidget(++row, 0, detailsTotalHolder);
+        });
+        formPanel.append(Location.Left, detailsTotalHolder);
 
-        return panel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createSelectPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createSelectPaymentMethodStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))
+                .decorate().componentWidth(200);
 
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL),
-                        new FieldDecoratorBuilder(200).build()));
+        formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate().componentWidth(200);
 
-        panel.setWidget(++row, 0, inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FieldDecoratorBuilder(200).build()));
-
-        panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        formPanel.append(Location.Left, proto().paymentMethod(), paymentMethodEditor);
 
         // tweaks:
 
@@ -229,34 +222,25 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             }
         });
 
-        return panel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createConfirmationStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        panel.setWidget(++row, 0, confirmationDetailsHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.append(Location.Left, confirmationDetailsHolder);
+        formPanel.br();
+        formPanel.append(Location.Left, proto().coveredItems(), new PapCoveredItemFolder());
+        formPanel.append(Location.Left, confirmationTotalHolder);
+        formPanel.br();
+        formPanel.append(Location.Left, proto().nextPaymentDate(), new CDateLabel()).decorate().componentWidth(100).labelWidth(250);
+        formPanel.hr();
+        formPanel.append(Location.Left, createLegalTermsPanel());
 
-        panel.setBR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         get(proto().coveredItems()).setViewable(true);
         get(proto().coveredItems()).inheritViewable(false);
 
-        panel.setWidget(++row, 0, confirmationTotalHolder);
-
-        panel.setBR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, inject(proto().nextPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder(100).labelWidth("250px").build()));
-
-        panel.setHR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, createLegalTermsPanel());
-        panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        return panel;
+        return formPanel;
     }
 
     @Override

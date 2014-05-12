@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummary
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -107,24 +107,20 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     class BillingView extends CForm<BillingSummaryDTO> {
 
-        private final BasicFlexFormPanel mainPanel;
-
         public BillingView() {
             super(BillingSummaryDTO.class);
-
-            mainPanel = new BasicFlexFormPanel();
-
         }
 
         @Override
         protected IsWidget createContent() {
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            mainPanel.setWidget(0, 0, inject(proto().currentBalance(), new FieldDecoratorBuilder(140).build()));
+            formPanel.append(Location.Left, proto().currentBalance()).decorate().componentWidth(140);
             if (!VistaFeatures.instance().yardiIntegration()) {
-                mainPanel.setWidget(1, 0, inject(proto().dueDate(), new FieldDecoratorBuilder(140).build()));
+                formPanel.append(Location.Left, proto().dueDate()).decorate().componentWidth(140);
             }
 
-            return mainPanel;
+            return formPanel;
         }
     }
 }

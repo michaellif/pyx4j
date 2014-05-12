@@ -20,11 +20,11 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
@@ -39,8 +39,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodS
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -89,12 +89,9 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
-
-            content.setWidget(++row, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(this)));
-
-            return content;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.append(Location.Left, proto().paymentMethods(), new PaymentMethodFolder(this));
+            return formPanel;
         }
     }
 
@@ -147,23 +144,20 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().paymentMethod().creationDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-                content.setWidget(++row, 0, inject(proto().paymentMethod().type(), new CEnumLabel(), new FieldDecoratorBuilder(150).build()));
-                content.setWidget(++row, 0, inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0,
-                        inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>(), new FieldDecoratorBuilder().build()));
-
-                content.setWidget(++row, 0, new Anchor(i18n.tr("View Details"), new Command() {
+                formPanel.append(Location.Left, proto().paymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
+                formPanel.append(Location.Left, proto().paymentMethod().type(), new CEnumLabel()).decorate().componentWidth(150);
+                formPanel.append(Location.Left, proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>()).decorate();
+                formPanel.append(Location.Left, proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>()).decorate();
+                formPanel.append(Location.Left, new Anchor(i18n.tr("View Details"), new Command() {
                     @Override
                     public void execute() {
                         getGadgetView().getPresenter().viewPaymentMethod(getValue());
                     }
                 }));
 
-                return content;
+                return formPanel;
             }
 
             @Override

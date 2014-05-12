@@ -18,13 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyDTO> {
 
@@ -36,19 +36,18 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceProvider(), new FieldDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().insuranceCertificateNumber(), new FieldDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().liabilityCoverage(), new FieldDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().inceptionDate(), new FieldDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().expiryDate(), new FieldDecoratorBuilder(150).build()));
+        formPanel.append(Location.Left, proto().certificate().insuranceProvider()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().insuranceCertificateNumber()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().liabilityCoverage()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().inceptionDate()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().expiryDate()).decorate().componentWidth(150);
 
-        mainPanel.setH1(++row, 0, 1, "Scanned Insurance Certificate Documents");
-        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
+        formPanel.h1("Scanned Insurance Certificate Documents");
+        formPanel.append(Location.Left, proto().certificate().certificateDocs(), new CertificateScanFolder());
 
-        return mainPanel;
+        return formPanel;
 
     }
 

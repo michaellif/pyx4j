@@ -17,10 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
@@ -28,8 +28,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActiviti
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -60,12 +60,11 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
+            PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            content.setWidget(++row, 0, inject(proto().payments(), new InvoiceLineItemFolder()));
+            formPanel.append(Location.Left, proto().payments(), new InvoiceLineItemFolder());
 
-            return content;
+            return formPanel;
         }
     }
 
@@ -91,17 +90,16 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
+                PortalFormPanel formPanel = new PortalFormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().convenienceFee(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Name>(), new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate();
+                formPanel.append(Location.Left, proto().amount()).decorate();
+                formPanel.append(Location.Left, proto().convenienceFee()).decorate();
+                formPanel.append(Location.Left, proto().date()).decorate();
+                formPanel.append(Location.Left, proto().status()).decorate();
+                formPanel.append(Location.Left, proto().payer(), new CEntityLabel<Name>()).decorate();
 
-                return content;
+                return formPanel;
             }
 
             @Override

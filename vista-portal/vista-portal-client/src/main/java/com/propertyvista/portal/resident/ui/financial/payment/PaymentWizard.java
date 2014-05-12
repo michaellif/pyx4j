@@ -30,10 +30,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -48,7 +47,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -76,8 +75,8 @@ import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.TermsAnchor;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.SignatureDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PortalPaymentMethodEditor;
 
@@ -138,41 +137,33 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         confirmationStep = addStep(createConfirmationStep(), i18n.tr("Confirmation"));
     }
 
-    private BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createDetailsStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
+        formPanel.h1(PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
 
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>(), new FieldDecoratorBuilder(200)
-                        .customLabel(i18n.tr("Tenant")).build()));
+        formPanel.append(Location.Left, proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>()).decorate()
+                .componentWidth(200).customLabel(i18n.tr("Tenant"));
 
-        panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, inject(proto().amount(), new FieldDecoratorBuilder(100).build()));
+        formPanel.br();
+        formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(100);
 
-        return panel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createSelectPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createSelectPaymentMethodStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL),
-                        new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))
+                .decorate();
 
-        panel.setWidget(++row, 0, inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo, new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().profiledPaymentMethod(), profiledPaymentMethodsCombo).decorate();
 
-        panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        formPanel.append(Location.Left, proto().paymentMethod(), paymentMethodEditor);
 
-        panel.setHR(++row, 0, 1);
+        formPanel.hr();
 
-        panel.setWidget(++row, 0, inject(proto().storeInProfile(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().storeInProfile()).decorate();
 
         // tweaks:
 
@@ -236,17 +227,15 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             }
         });
 
-        return panel;
+        return formPanel;
     }
 
-    private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    private IsWidget createConfirmationStep() {
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        panel.setWidget(++row, 0, confirmationDetailsHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.append(Location.Left, confirmationDetailsHolder);
 
-        panel.setBR(++row, 0, 1);
+        formPanel.br();
 
         SafeHtmlBuilder signatureDescriptionBuilder = new SafeHtmlBuilder();
         String anchorId = HTMLPanel.createUniqueId();
@@ -269,14 +258,13 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
         cSignature.setDecorator(new SignatureDecorator());
 
-        panel.setWidget(++row, 0, inject(proto().convenienceFeeSignature(), cSignature));
+        formPanel.append(Location.Left, proto().convenienceFeeSignature(), cSignature);
 
-        panel.setHR(++row, 0, 1);
+        formPanel.hr();
 
-        panel.setWidget(++row, 0, createLegalTermsPanel());
-        panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        formPanel.append(Location.Left, createLegalTermsPanel());
 
-        return panel;
+        return formPanel;
     }
 
     @Override

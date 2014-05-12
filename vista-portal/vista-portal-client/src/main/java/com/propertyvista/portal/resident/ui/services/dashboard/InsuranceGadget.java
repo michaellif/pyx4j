@@ -23,7 +23,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -35,8 +35,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.Insuran
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
@@ -86,16 +86,10 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-
-            int row = -1;
-
-            main.setH4(++row, 0, 1, i18n.tr("Certificates"));
-
-            main.setWidget(++row, 0, inject(proto().certificates(), folder = new InsuranceCertificatesFolder()));
-
-            return main;
-
+            PortalFormPanel formPanel = new PortalFormPanel(this);
+            formPanel.h4(i18n.tr("Certificates"));
+            formPanel.append(Location.Left, proto().certificates(), folder = new InsuranceCertificatesFolder());
+            return formPanel;
         }
 
         @Override
@@ -141,14 +135,12 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             @Override
             protected IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
-
-                content.setWidget(++row, 0, inject(proto().insuranceProvider(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().insuranceCertificateNumber(), new CLabel<String>(), new FieldDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().liabilityCoverage(), new FieldDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().inceptionDate(), new FieldDecoratorBuilder(180).build()));
-                content.setWidget(++row, 0, inject(proto().expiryDate(), new FieldDecoratorBuilder(180).build()));
+                PortalFormPanel formPanel = new PortalFormPanel(this);
+                formPanel.append(Location.Left, proto().insuranceProvider(), new CLabel<String>()).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().insuranceCertificateNumber(), new CLabel<String>()).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().liabilityCoverage()).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().inceptionDate()).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().expiryDate()).decorate().componentWidth(180);
 
                 detailsAnchor = new Anchor(i18n.tr("View Details"), new Command() {
 
@@ -168,9 +160,9 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                 });
                 detailsAnchor.getElement().getStyle().setMarginTop(30, Unit.PX);
 
-                content.setWidget(++row, 0, detailsAnchor);
+                formPanel.append(Location.Left, detailsAnchor);
 
-                return content;
+                return formPanel;
             }
         }
 

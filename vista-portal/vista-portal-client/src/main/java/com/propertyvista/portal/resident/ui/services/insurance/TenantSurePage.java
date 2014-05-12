@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -43,7 +43,7 @@ import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageVie
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {
 
@@ -65,36 +65,35 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
 
     @Override
     protected IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-        int row = -1;
-        mainPanel.setWidget(++row, 0, 2, new TenantSureLogo());
-        mainPanel.setWidget(++row, 0, 2, makeGreetingPanel());
+        PortalFormPanel formPanel = new PortalFormPanel(this);
+        formPanel.append(Location.Left, new TenantSureLogo());
+        formPanel.append(Location.Left, makeGreetingPanel());
 
-        mainPanel.setH3(++row, 0, 1, i18n.tr("Coverage"));
-        mainPanel.setWidget(++row, 0, inject(proto().certificate().insuranceCertificateNumber(), new FieldDecoratorBuilder(300).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().certificate().inceptionDate(), new FieldDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().certificate().expiryDate(), new FieldDecoratorBuilder(150).build()));
+        formPanel.h3(i18n.tr("Coverage"));
+        formPanel.append(Location.Left, proto().certificate().insuranceCertificateNumber()).decorate();
+        formPanel.append(Location.Left, proto().certificate().inceptionDate()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().certificate().expiryDate()).decorate().componentWidth(150);
 
-        mainPanel.setWidget(++row, 0, inject(proto().certificate().liabilityCoverage(), new FieldDecoratorBuilder(150).build()));
-        mainPanel.setWidget(++row, 0, inject(proto().contentsCoverage(), new FieldDecoratorBuilder(150).build()));
+        formPanel.append(Location.Left, proto().certificate().liabilityCoverage()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().contentsCoverage()).decorate().componentWidth(150);
 
         IFormatter<BigDecimal, String> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
         ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormatter(currencyFormat);
         ((CTextFieldBase<BigDecimal, ?>) get(proto().contentsCoverage())).setFormatter(currencyFormat);
 
-        mainPanel.setH3(++row, 0, 1, i18n.tr("Annual Payment"));
-        mainPanel.setWidget(++row, 0, inject(proto().annualPaymentDetails(), new TenantSurePaymentViewer()));
+        formPanel.h3(i18n.tr("Annual Payment"));
+        formPanel.append(Location.Left, proto().annualPaymentDetails(), new TenantSurePaymentViewer());
 
-        mainPanel.setH3(++row, 0, 1, i18n.tr("Next Monthly Payment"));
-        mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDetails(), new TenantSurePaymentViewer()));
+        formPanel.h3(i18n.tr("Next Monthly Payment"));
+        formPanel.append(Location.Left, proto().nextPaymentDetails(), new TenantSurePaymentViewer());
 
-        mainPanel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));
+        formPanel.append(Location.Left, proto().messages(), new TenantSureMessagesViewer());
 
         TenantSure2HighCourtReferenceLinks highCourtLinks = new TenantSure2HighCourtReferenceLinks();
         highCourtLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
         highCourtLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
-        mainPanel.setWidget(++row, 0, highCourtLinks);
-        return mainPanel;
+        formPanel.append(Location.Left, highCourtLinks);
+        return formPanel;
     }
 
     public void setPresenter(TenantSurePageView.TenantSurePagePresenter presenter) {

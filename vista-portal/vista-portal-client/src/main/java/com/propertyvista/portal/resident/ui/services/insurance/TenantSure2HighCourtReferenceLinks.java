@@ -15,10 +15,9 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
@@ -33,8 +32,7 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
     private final Anchor privacyPolicyAnchor;
 
     public TenantSure2HighCourtReferenceLinks() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        panel.setWidth("100%");
+        FlowPanel panel = new FlowPanel();
         panel.setStyleName(TenantSureTheme.StyleName.TenantSure2HighCourtLinks.name());
 
         SimplePanel privacyPolicyAnchorHolder = new SimplePanel();
@@ -45,9 +43,7 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
         privacyPolicyAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         privacyPolicyAnchor.setTarget("_blank");
         privacyPolicyAnchorHolder.setWidget(privacyPolicyAnchor);
-        panel.setWidget(0, 0, privacyPolicyAnchorHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-        panel.getFlexCellFormatter().setWidth(0, 0, "50%");
+        panel.add(privacyPolicyAnchorHolder);
 
         SimplePanel compensationDisclosureStatementAnchorHolder = new SimplePanel();
         compensationDisclosureStatementAnchorHolder.setStyleName(TenantSureTheme.StyleName.TenantSureTermsLink.name());
@@ -57,12 +53,8 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
         compensationDisclosureStatementAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         compensationDisclosureStatementAnchor.setTarget("_blank");
         compensationDisclosureStatementAnchorHolder.setWidget(compensationDisclosureStatementAnchor);
-        panel.setWidget(0, 1, compensationDisclosureStatementAnchorHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
-        panel.getFlexCellFormatter().setWidth(0, 1, "50%");
-
+        panel.add(compensationDisclosureStatementAnchorHolder);
         initWidget(panel);
-
     }
 
     public final void setPrivacyPolcyHref(String href) {
