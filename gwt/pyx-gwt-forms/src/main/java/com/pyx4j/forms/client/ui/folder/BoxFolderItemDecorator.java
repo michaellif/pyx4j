@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -63,7 +64,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     private CollapsablePanel collapsablePanel;
 
-    private EntityContainerDecoratorToolbar toolbar;
+    private EntityContainerDecoratorToolbar<E> toolbar;
 
     private SimplePanel contentHolder;
 
@@ -97,7 +98,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
         ensureDebugId(new CompositeDebugId(DecoratorDebugIds.BoxFolderItemToolbar, EntityContainerDecoratorToolbar.DebugIds.Decorator).debugId());
 
-        toolbar = new EntityContainerDecoratorToolbar(this.getImages());
+        toolbar = new EntityContainerDecoratorToolbar<>(this.getImages());
         toolbar.addCaptionHolderClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -125,7 +126,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     public void init(final CFolderItem<E> folderItem) {
         super.init(folderItem);
 
-        toolbar.setEntityContainer(folderItem);
+        toolbar.setEntityForm(folderItem.getEntityForm());
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -203,4 +204,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         toolbar.setActionsBar(actionsBar);
     }
 
+    public void setCaptionFormatter(IFormatter<E, String> formatter) {
+        toolbar.setCaptionFormatter(formatter);
+    }
 }

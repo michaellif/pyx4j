@@ -32,10 +32,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class EntityContainerDecoratorToolbar extends HorizontalPanel {
+public class EntityContainerDecoratorToolbar<E extends IEntity> extends HorizontalPanel {
 
     public static enum DebugIds implements IDebugId {
         Caption, Decorator, ImageWarn, TitleIcon;
@@ -46,7 +48,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         }
     }
 
-    private CContainer<?, ?, ?> entityContainer;
+    private CForm<E> entityForm;
 
     private final SimplePanel actionsPanelHolder;
 
@@ -58,10 +60,19 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
 
     private final HorizontalPanel captionHolder;
 
+    private IFormatter<E, String> captionFormatter;
+
     public EntityContainerDecoratorToolbar(WidgetsImages images) {
 
         setWidth("100%");
         setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorToolbar.name());
+
+        captionFormatter = new IFormatter<E, String>() {
+            @Override
+            public String format(E value) {
+                return value.getStringView();
+            }
+        };
 
         captionHolder = new HorizontalPanel();
         captionHolder.getElement().getStyle().setMarginLeft(50, Unit.PX);
@@ -104,15 +115,15 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
     }
 
     public void update(boolean expanded) {
-        if (entityContainer != null && entityContainer.getValue() != null) {
-            setCaption(entityContainer.getValue().getStringView());
+        if (entityForm != null && entityForm.getValue() != null) {
+            setCaption(captionFormatter.format(entityForm.getValue()));
         }
         caption.setVisible(!expanded);
     }
 
-    public void setEntityContainer(CContainer<?, ?, ?> entityContainer) {
-        this.entityContainer = entityContainer;
-        ImageResource icon = entityContainer.getIcon();
+    public void setEntityForm(CForm<E> entityForm) {
+        this.entityForm = entityForm;
+        ImageResource icon = entityForm.getIcon();
         if (icon != null) {
             titleIcon.setResource(icon);
             titleIcon.setVisible(true);
@@ -139,4 +150,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         }
     }
 
+    public void setCaptionFormatter(IFormatter<E, String> formatter) {
+        this.captionFormatter = formatter;
+    }
 }

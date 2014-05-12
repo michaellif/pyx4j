@@ -121,6 +121,10 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
         return entityForm;
     }
 
+    public CForm<E> getEntityForm() {
+        return entityForm;
+    }
+
     protected abstract CForm<? extends E> createItemForm(IObject<?> member);
 
     public void addAction(ActionType action, String title, ButtonImages images, Command command) {

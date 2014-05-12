@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.IFormatter;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -43,7 +44,7 @@ import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public class EntityContainerCollapsableDecorator<E extends IEntity> extends CollapsablePanel implements IFormDecorator<E> {
 
-    private final EntityContainerDecoratorToolbar toolbar;
+    private final EntityContainerDecoratorToolbar<E> toolbar;
 
     private final SimplePanel contentHolder;
 
@@ -65,7 +66,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
         mainPanel.setWidth("100%");
         setWidget(mainPanel);
 
-        toolbar = new EntityContainerDecoratorToolbar(images);
+        toolbar = new EntityContainerDecoratorToolbar<>(images);
         toolbar.addCaptionHolderClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -85,7 +86,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
 
     @Override
     public void init(final CForm<E> entityContainer) {
-        toolbar.setEntityContainer(entityContainer);
+        toolbar.setEntityForm(entityContainer);
 
         entityContainer.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -118,4 +119,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
         contentHolder.setWidget(content);
     }
 
+    public void setCaptionFormatter(IFormatter<E, String> formatter) {
+        toolbar.setCaptionFormatter(formatter);
+    }
 }
