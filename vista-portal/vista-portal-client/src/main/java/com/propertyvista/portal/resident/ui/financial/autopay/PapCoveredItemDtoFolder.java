@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
@@ -52,8 +53,9 @@ public class PapCoveredItemDtoFolder extends PortalBoxFolder<PreauthorizedPaymen
         decorator.setCaptionFormatter(new IFormatter<PreauthorizedPaymentCoveredItemDTO, String>() {
             @Override
             public String format(PreauthorizedPaymentCoveredItemDTO value) {
-                //TODO implement nice view
-                return value.getStringView();
+                String itemDescription = value.billableItem().description().isNull() ? value.billableItem().item().name().getValue() : value.billableItem()
+                        .description().getValue();
+                return SimpleMessageFormat.format("{0} ({1}/{2})", itemDescription, value.amount(), value.billableItem().agreedPrice());
             }
         });
         return decorator;
