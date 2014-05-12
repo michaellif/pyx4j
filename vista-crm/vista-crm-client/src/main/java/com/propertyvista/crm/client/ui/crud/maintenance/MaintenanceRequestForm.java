@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,13 +22,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,13 +44,10 @@ import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -91,19 +87,19 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private BasicFlexFormPanel categoryPanel;
+    private BasicCFormPanel categoryPanel;
 
-    private TwoColumnFlexFormPanel accessPanel;
+    private BasicCFormPanel accessPanel;
 
-    private TwoColumnFlexFormPanel unitAccessPanel;
+    private BasicCFormPanel unitAccessPanel;
 
-    private TwoColumnFlexFormPanel statusPanel;
+    private BasicCFormPanel statusPanel;
 
-    private TwoColumnFlexFormPanel scheduledPanel;
+    private BasicCFormPanel scheduledPanel;
 
-    private TwoColumnFlexFormPanel resolvedPanel;
+    private BasicCFormPanel resolvedPanel;
 
-    private TwoColumnFlexFormPanel surveyPanel;
+    private BasicCFormPanel surveyPanel;
 
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
@@ -171,28 +167,21 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private BasicCFormPanel createGeneralTab() {
+        BasicCFormPanel panel = new BasicCFormPanel(this);
 
-        panel.setWidget(++row, 0, inject(proto().reportedDate(), new FieldDecoratorBuilder(10).build()));
-        panel.setWidget(row, 1, inject(proto().requestId(), new FieldDecoratorBuilder(20).build()));
+        panel.append(Location.Left, inject(proto().reportedDate())).decorate().componentWidth(100);
+        panel.append(Location.Right, inject(proto().requestId())).decorate().componentWidth(200);
 
-        panel.setH1(++row, 0, 2, i18n.tr("Issue Location"));
+        panel.h1(i18n.tr("Issue Location"));
 
-        int rowAnchor = row;
-        panel.setWidget(++row, 0, inject(proto().reportedForOwnUnit(), new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().reporter(), reporterSelector, new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().reporterPhone(), new FieldDecoratorBuilder(20).build()));
-        panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
-        panel.setWidget(++row, 0, inject(proto().phoneType(), new FieldDecoratorBuilder(20).build()));
-        panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
-        panel.getFlexCellFormatter().setRowSpan(row, 0, 2);
-        panel.getCellFormatter().setHeight(row, 0, "100%");
+        panel.append(Location.Left, inject(proto().reportedForOwnUnit())).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().reporter(), reporterSelector)).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().reporterPhone())).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().phoneType())).decorate().componentWidth(100);
 
-        row = rowAnchor;
-        panel.setWidget(++row, 1, inject(proto().unit(), unitSelector, new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 1, inject(proto().building(), buildingSelector, new FieldDecoratorBuilder(20).build()));
+        panel.append(Location.Right, inject(proto().unit(), unitSelector)).decorate().componentWidth(200);
+        panel.append(Location.Right, inject(proto().building(), buildingSelector)).decorate().componentWidth(200);
         get(proto().reporter()).addValueChangeHandler(new ValueChangeHandler<Tenant>() {
             @Override
             public void onValueChange(ValueChangeEvent<Tenant> event) {
@@ -217,23 +206,17 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         });
 
         // category panel
-        mrCategory = new MaintenanceRequestCategoryChoice();
-        bind(mrCategory, proto().category());
-        categoryPanel = new BasicFlexFormPanel();
-        panel.setWidget(++row, 1, categoryPanel);
-        panel.getFlexCellFormatter().setRowSpan(row, 1, 3);
-        row += 2;
+        panel.h1(i18n.tr("Issue Classification"));
+        panel.append(Location.Dual, categoryPanel = new BasicCFormPanel(this));
+        // bind root category component
+        bind(mrCategory = new MaintenanceRequestCategoryChoice(), proto().category());
 
-        panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
-        rowAnchor = row;
-        panel.setWidget(++row, 0, inject(proto().priority(), prioritySelector, new FieldDecoratorBuilder(20).build()));
-        panel.setWidget(++row, 0, inject(proto().summary(), new FieldDecoratorBuilder(30).build()));
-        panel.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(30).build()));
-        panel.getRowFormatter().setVerticalAlign(row, HasVerticalAlignment.ALIGN_TOP);
-        panel.getFlexCellFormatter().setRowSpan(row, 0, 2);
+        panel.h1(i18n.tr("Issue Details"));
+        panel.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().summary())).decorate().componentWidth(300);
+        panel.append(Location.Left, inject(proto().description())).decorate().componentWidth(300);
 
         // --------------------------------------------------------------------------------------------------------------------
-        row = rowAnchor;
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadService> create(MaintenanceRequestPictureUploadService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -251,16 +234,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         };
         imageSlider.setImageSize(320, 240);
-        panel.setWidget(++row, 1, inject(proto().pictures(), imageSlider, new FieldDecoratorBuilder(32).build()));
-        panel.getFlexCellFormatter().setRowSpan(row, 1, 4);
-        row += 3;
+        panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(320);
 
         // --------------------------------------------------------------------------------------------------------------------
-        unitAccessPanel = new TwoColumnFlexFormPanel();
-        int innerRow = -1;
-        unitAccessPanel.setH1(++innerRow, 0, 2, i18n.tr("Unit Access"));
-        unitAccessPanel.setWidget(++innerRow, 0, 2, inject(proto().permissionToEnter(), new FieldDecoratorBuilder(20, true).build()));
-        unitAccessPanel.setWidget(++innerRow, 0, 2, accessPanel = new TwoColumnFlexFormPanel());
+        unitAccessPanel = new BasicCFormPanel(this);
+
+        unitAccessPanel.h1(i18n.tr("Unit Access"));
+
+        unitAccessPanel.append(Location.Dual, inject(proto().permissionToEnter())).decorate().componentWidth(200);
+        unitAccessPanel.append(Location.Dual, accessPanel = new BasicCFormPanel(this));
 
         get(proto().permissionToEnter()).setNote(i18n.tr("Indicate whether Permission to Enter has been granted by Tenant."));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -271,60 +253,58 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         });
 
         // --------------------------------------------------------------------------------------------------------------------
-        innerRow = -1;
-        accessPanel.setWidget(++innerRow, 0, inject(proto().preferredDate1(), new FieldDecoratorBuilder(10).build()));
-        accessPanel.setWidget(innerRow, 1, inject(proto().preferredDate2(), new FieldDecoratorBuilder(10).build()));
-        accessPanel.setWidget(++innerRow, 0, inject(proto().preferredTime1(), new FieldDecoratorBuilder(10).build()));
-        accessPanel.setWidget(innerRow, 1, inject(proto().preferredTime2(), new FieldDecoratorBuilder(10).build()));
+        accessPanel.append(Location.Dual, inject(proto().petInstructions())).decorate().componentWidth(500).customLabel(i18n.tr("Entry Instructions"));
+        get(proto().petInstructions()).setNote(i18n.tr("Entry instructions, including Pet Warnings, etc"));
+
+        accessPanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(100);
+        accessPanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(100);
+        accessPanel.append(Location.Right, inject(proto().preferredTime1())).decorate().componentWidth(100);
+        accessPanel.append(Location.Right, inject(proto().preferredTime2())).decorate().componentWidth(100);
         get(proto().preferredDate1()).addComponentValidator(new FutureDateValidator());
         get(proto().preferredDate2()).addComponentValidator(new FutureDateValidator());
 
-        accessPanel.setWidget(++innerRow, 0, 2,
-                inject(proto().petInstructions(), new FieldDecoratorBuilder(50, true).customLabel(i18n.tr("Entry Instructions")).build()));
-        get(proto().petInstructions()).setNote(i18n.tr("Entry instructions, including Pet Warnings, etc"));
-
-        panel.setWidget(++row, 0, 2, unitAccessPanel);
+        panel.append(Location.Dual, unitAccessPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
-        statusPanel = new TwoColumnFlexFormPanel();
-        innerRow = -1;
-        statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-        rowAnchor = innerRow;
-        statusPanel.setWidget(++innerRow, 0, inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>(), new FieldDecoratorBuilder(10).build()));
-        statusPanel.setWidget(++innerRow, 0, inject(proto().updated(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
-        statusPanel.setWidget(++innerRow, 0, inject(proto().submitted(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
+        statusPanel = new BasicCFormPanel(this);
+
+        statusPanel.h1(i18n.tr("Status"));
+
+        statusPanel.append(Location.Left, inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().updated(), new CDateLabel())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().submitted(), new CDateLabel())).decorate().componentWidth(100);
 
         FlowPanel detailHolder = new FlowPanel();
-        statusPanel.setWidget(++rowAnchor, 1, detailHolder);
-        statusPanel.getFlexCellFormatter().setRowSpan(rowAnchor, 1, innerRow - rowAnchor + 1);
-        statusPanel.getFlexCellFormatter().getElement(rowAnchor, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
+        statusPanel.append(Location.Right, detailHolder);
+        //       statusPanel.getFlexCellFormatter().getElement(rowAnchor, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
 
         // --------------------------------------------------------------------------------------------------------------------
-        scheduledPanel = new TwoColumnFlexFormPanel();
-        innerRow = -1;
-        scheduledPanel.setWidget(++innerRow, 0, inject(proto().scheduledDate(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
-        scheduledPanel.setWidget(++innerRow, 0, inject(proto().scheduledTimeFrom(), new CTimeLabel(), new FieldDecoratorBuilder(10).build()));
-        scheduledPanel.setWidget(++innerRow, 0, inject(proto().scheduledTimeTo(), new CTimeLabel(), new FieldDecoratorBuilder(10).build()));
+        scheduledPanel = new BasicCFormPanel(this);
+
+        scheduledPanel.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
+        scheduledPanel.append(Location.Left, inject(proto().scheduledTimeFrom(), new CTimeLabel())).decorate().componentWidth(100);
+        scheduledPanel.append(Location.Left, inject(proto().scheduledTimeTo(), new CTimeLabel())).decorate().componentWidth(100);
 
         // --------------------------------------------------------------------------------------------------------------------
-        resolvedPanel = new TwoColumnFlexFormPanel();
-        innerRow = -1;
-        resolvedPanel.setWidget(++innerRow, 0, inject(proto().resolvedDate(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
-        resolvedPanel.setWidget(++innerRow, 0, inject(proto().resolution(), new CLabel<String>(), new FieldDecoratorBuilder(40).build()));
+        resolvedPanel = new BasicCFormPanel(this);
+
+        resolvedPanel.append(Location.Left, inject(proto().resolvedDate(), new CDateLabel())).decorate().componentWidth(100);
+        resolvedPanel.append(Location.Left, inject(proto().resolution(), new CLabel<String>())).decorate().componentWidth(400);
 
         detailHolder.add(scheduledPanel);
         detailHolder.add(resolvedPanel);
 
-        panel.setWidget(++row, 0, 2, statusPanel);
+        panel.append(Location.Dual, statusPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
-        surveyPanel = new TwoColumnFlexFormPanel();
-        innerRow = -1;
-        surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
-        surveyPanel.setWidget(++innerRow, 0, inject(proto().surveyResponse().rating(), new CLabel<Integer>(), new FieldDecoratorBuilder(10).build()));
-        surveyPanel.setWidget(innerRow, 1, inject(proto().surveyResponse().description(), new CLabel<String>(), new FieldDecoratorBuilder(10).build()));
+        surveyPanel = new BasicCFormPanel(this);
 
-        panel.setWidget(++row, 0, 2, surveyPanel);
+        surveyPanel.h1(proto().surveyResponse().getMeta().getCaption());
+
+        surveyPanel.append(Location.Left, inject(proto().surveyResponse().rating(), new CLabel<Integer>())).decorate().componentWidth(100);
+        surveyPanel.append(Location.Right, inject(proto().surveyResponse().description(), new CLabel<String>())).decorate().componentWidth(100);
+
+        panel.append(Location.Dual, surveyPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
         unitSelector.addValueChangeHandler(new ValueChangeHandler<AptUnit>() {
@@ -405,15 +385,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         return value;
     }
 
-    private TwoColumnFlexFormPanel createWorkHistoryTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(0, 0, 2, inject(proto().workHistory(), new MaintenanceRequestScheduleFolder()));
+    private BasicCFormPanel createWorkHistoryTab() {
+        BasicCFormPanel panel = new BasicCFormPanel(this);
+        panel.append(Location.Dual, inject(proto().workHistory(), new MaintenanceRequestScheduleFolder()));
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createStatusHistoryTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(0, 0, 2, inject(proto().statusHistory(), new StatusHistoryFolder()));
+    private BasicCFormPanel createStatusHistoryTab() {
+        BasicCFormPanel panel = new BasicCFormPanel(this);
+        panel.append(Location.Dual, inject(proto().statusHistory(), new StatusHistoryFolder()));
         return panel;
     }
 
@@ -449,10 +429,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         // attach selectors to the panel - bottom up
         categoryPanel.clear();
-        int row = levels;
+        List<MaintenanceRequestCategoryChoice> list = new ArrayList<>();
         for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
-            choice.setDecorator(new FieldDecoratorBuilder(20).build());
-            categoryPanel.setWidget(--row, 0, choice);
+            list.add(choice);
+        }
+        Collections.reverse(list);
+        for (MaintenanceRequestCategoryChoice c : list) {
+            categoryPanel.append(Location.Left, c).decorate().componentWidth(200);
         }
     }
 
@@ -655,12 +638,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                                     @Override
                                     protected IsWidget createContent() {
-                                        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                                        BasicCFormPanel main = new BasicCFormPanel(this);
 
-                                        int row = -1;
-                                        main.setWidget(++row, 0, inject(proto().workDescription(), new CLabel<String>(), new FieldDecoratorBuilder(40).build()));
-                                        main.setWidget(++row, 0, inject(proto().scheduledDate(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
-                                        main.setWidget(++row, 0, inject(proto().progressNote(), new FieldDecoratorBuilder(25).build()));
+                                        main.append(Location.Left, inject(proto().workDescription(), new CLabel<String>())).decorate().componentWidth(400);
+                                        main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
+                                        main.append(Location.Left, inject(proto().progressNote())).decorate().componentWidth(250);
 
                                         return main;
                                     }
@@ -701,22 +683,15 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
-                // left side
-                content.setH2(++row, 0, 1, "Work Order");
-                content.setWidget(++row, 0, inject(proto().scheduledDate(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().scheduledTimeFrom(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().scheduledTimeTo(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().workDescription(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().progressNote(), new FieldDecoratorBuilder().build()));
-                // add spacer
-                content.setWidget(++row, 0, new HTML());
-                content.getCellFormatter().setHeight(row, 0, "120px");
-                // right side
-                content.setWidget(0, 1, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
-                content.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
-                content.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+                BasicCFormPanel content = new BasicCFormPanel(this);
+                content.h1(i18n.tr("Work Order"));
+                content.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
+                content.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
+                content.append(Location.Dual, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
+                content.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(100);
+                content.append(Location.Dual, inject(proto().progressNote())).decorate().componentWidth(250);
+
+                content.append(Location.Dual, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
 
                 return content;
             }
@@ -740,14 +715,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                content.setWidth("400px");
-                int row = -1;
-                content.setH2(++row, 0, 2, "Notice Of Entry");
-                content.setWidget(++row, 0, inject(proto().messageDate(), new FieldDecoratorBuilder().componentWidth("350px").labelWidth("100px").build()));
-                content.setWidget(++row, 0, inject(proto().messageId(), new FieldDecoratorBuilder().componentWidth("350px").labelWidth("100px").build()));
-                content.setWidget(++row, 0, inject(proto().text()));
-                get(proto().text()).asWidget().setWidth("450px");
+                BasicCFormPanel content = new BasicCFormPanel(this);
+                content.h1(i18n.tr("Notice Of Entry"));
+                content.append(Location.Dual, inject(proto().messageDate())).decorate().componentWidth(350).labelWidth(100);
+                content.append(Location.Dual, inject(proto().messageId())).decorate().componentWidth(350).labelWidth(100);
+                content.append(Location.Dual, inject(proto().text()));
+//                get(proto().text()).asWidget().setWidth("250px");
 
                 return content;
             }
@@ -774,15 +747,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                BasicCFormPanel content = new BasicCFormPanel(this);
                 // left side
-                content.setWidget(++row, 0, inject(proto().created(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 0, inject(proto().updatedBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder().build()));
+                content.append(Location.Left, inject(proto().created())).decorate();
+                content.append(Location.Left, inject(proto().updatedBy(), new CEntityLabel<AbstractPmcUser>())).decorate();
                 // right side
-                row = -1;
-                content.setWidget(++row, 1, inject(proto().oldStatus(), new CEntityLabel<MaintenanceRequestStatus>(), new FieldDecoratorBuilder().build()));
-                content.setWidget(++row, 1, inject(proto().newStatus(), new CEntityLabel<MaintenanceRequestStatus>(), new FieldDecoratorBuilder().build()));
+                content.append(Location.Right, inject(proto().oldStatus(), new CEntityLabel<MaintenanceRequestStatus>())).decorate();
+                content.append(Location.Right, inject(proto().newStatus(), new CEntityLabel<MaintenanceRequestStatus>())).decorate();
 
                 return content;
             }

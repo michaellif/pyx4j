@@ -26,11 +26,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -163,13 +163,12 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                    BasicCFormPanel main = new BasicCFormPanel(this);
 
-                    int row = -1;
-                    main.setWidget(++row, 0, inject(proto().scheduledDate(), new FieldDecoratorBuilder(10).build()));
-                    main.setWidget(++row, 0, inject(proto().scheduledTimeFrom(), new FieldDecoratorBuilder(10).build()));
-                    main.setWidget(++row, 0, inject(proto().scheduledTimeTo(), new FieldDecoratorBuilder(10).build()));
-                    main.setWidget(++row, 0, inject(proto().workDescription(), new FieldDecoratorBuilder(25).build()));
+                    main.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
+                    main.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
+                    main.append(Location.Dual, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
+                    main.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(250);
 
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
 
@@ -218,10 +217,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CForm<MaintenanceRequestDTO>(MaintenanceRequestDTO.class) {
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                    BasicCFormPanel main = new BasicCFormPanel(this);
 
-                    main.setWidget(0, 0, inject(proto().resolvedDate(), new FieldDecoratorBuilder(10).build()));
-                    main.setWidget(1, 0, inject(proto().resolution(), new FieldDecoratorBuilder(25).build()));
+                    main.append(Location.Dual, inject(proto().resolvedDate())).decorate().componentWidth(100);
+                    main.append(Location.Dual, inject(proto().resolution())).decorate().componentWidth(250);
 
                     CComponent<?, LogicalDate, ?> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);
@@ -276,10 +275,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                    BasicCFormPanel main = new BasicCFormPanel(this);
 
-                    main.setWidget(0, 0, inject(proto().rating(), new FieldDecoratorBuilder(3).build()));
-                    main.setWidget(1, 0, inject(proto().description(), new FieldDecoratorBuilder(20).build()));
+                    main.append(Location.Dual, inject(proto().rating())).decorate().componentWidth(30);
+                    main.append(Location.Dual, inject(proto().description())).decorate().componentWidth(200);
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));
