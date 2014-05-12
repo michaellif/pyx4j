@@ -196,10 +196,6 @@ public class LeaseMerger {
     }
 
     public Lease updateUnit(AptUnit unit, Lease lease) {
-        LeaseTerm newTerm = ServerSideFactory.create(LeaseFacade.class).createOffer(lease, unit, LeaseTerm.Type.FixedEx);
-        newTerm.termFrom().setValue(lease.currentTerm().termFrom().getValue());
-        newTerm.termTo().setValue(lease.currentTerm().termTo().getValue());
-
         // process old term:
         if (lease.currentTerm().unit().isNull()) {
             lease.currentTerm().unit().set(lease.unit());
@@ -209,10 +205,14 @@ public class LeaseMerger {
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
 
         // set new term:
-        lease.unit().set(unit);
-        lease.currentTerm().set(newTerm);
+        lease.currentTerm().set(ServerSideFactory.create(LeaseFacade.class).createOffer(lease, unit, LeaseTerm.Type.FixedEx));
+        lease.currentTerm().termFrom().setValue(lease.currentTerm().termFrom().getValue());
+        lease.currentTerm().termTo().setValue(lease.currentTerm().termTo().getValue());
         lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
 
+        // update lease unit:
+        ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
         return ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 

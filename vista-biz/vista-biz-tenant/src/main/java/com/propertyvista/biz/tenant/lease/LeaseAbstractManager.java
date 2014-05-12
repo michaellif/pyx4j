@@ -748,7 +748,7 @@ public abstract class LeaseAbstractManager {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
 
-        if (!lease.status().getValue().isDraft()) {
+        if (!VistaFeatures.instance().yardiIntegration() && !lease.status().getValue().isDraft()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
