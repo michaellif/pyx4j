@@ -199,7 +199,7 @@ public class PortalTheme extends Theme {
 
             @Override
             protected String getDualColumnWidth() {
-                return "610px";
+                return "710px";
             }
         });
 
