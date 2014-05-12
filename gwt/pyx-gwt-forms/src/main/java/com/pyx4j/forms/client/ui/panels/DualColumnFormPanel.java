@@ -116,6 +116,10 @@ public class DualColumnFormPanel implements IsWidget {
         return hx(null, caption, actionWidget, imageStyle, labelStyle, headerStyle);
     }
 
+    public void clear() {
+        fluidPanel.clear();
+    }
+
     private Widget hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());

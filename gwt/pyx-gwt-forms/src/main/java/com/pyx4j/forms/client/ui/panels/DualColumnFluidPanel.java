@@ -114,6 +114,10 @@ public class DualColumnFluidPanel implements IsWidget {
         contentPanel.addStyleName(style);
     }
 
+    public void clear() {
+        contentPanel.clear();
+    }
+
     protected class ContentPanel extends FlowPanel implements ILayoutable {
 
         public ContentPanel() {
