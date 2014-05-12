@@ -27,16 +27,16 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
-@ToStringFormat("{10}, {11,number,percent}")
+@ToStringFormat("{0}, {1,number,percent}")
 public interface PreauthorizedPaymentCoveredItemDTO extends AutopayAgreement.AutopayAgreementCoveredItem {
 
     @ReadOnly
-    @ToString(index = 10)
+    @ToString(index = 0)
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> covered();
 
-    @ToString(index = 11)
+    @ToString(index = 1)
     @Format("#,##00")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percent();
