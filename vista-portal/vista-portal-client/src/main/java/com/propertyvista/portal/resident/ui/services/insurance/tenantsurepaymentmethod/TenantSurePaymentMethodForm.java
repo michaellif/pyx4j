@@ -69,7 +69,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
         CSignature signature = new CSignature(signatureDescriptionPanel);
         signature.setDecorator(new SignatureDecorator());
 
-        content.append(Location.Left, proto().preAuthorizedAgreementSignature());
+        content.append(Location.Left, proto().preAuthorizedAgreementSignature(), signature);
         return content;
     }
 
