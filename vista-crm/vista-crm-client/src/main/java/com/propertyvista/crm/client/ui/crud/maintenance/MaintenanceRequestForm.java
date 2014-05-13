@@ -176,12 +176,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.h1(i18n.tr("Issue Location"));
 
         panel.append(Location.Left, inject(proto().reportedForOwnUnit())).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().reporter(), reporterSelector)).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().reporterPhone())).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().phoneType())).decorate().componentWidth(100);
+        panel.append(Location.Left, inject(proto().unit(), unitSelector)).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().building(), buildingSelector)).decorate().componentWidth(200);
 
-        panel.append(Location.Right, inject(proto().unit(), unitSelector)).decorate().componentWidth(200);
-        panel.append(Location.Right, inject(proto().building(), buildingSelector)).decorate().componentWidth(200);
+        panel.append(Location.Right, inject(proto().reporter(), reporterSelector)).decorate().componentWidth(200);
+        panel.append(Location.Right, inject(proto().reporterPhone())).decorate().componentWidth(200);
+        panel.append(Location.Right, inject(proto().phoneType())).decorate().componentWidth(100);
         get(proto().reporter()).addValueChangeHandler(new ValueChangeHandler<Tenant>() {
             @Override
             public void onValueChange(ValueChangeEvent<Tenant> event) {
