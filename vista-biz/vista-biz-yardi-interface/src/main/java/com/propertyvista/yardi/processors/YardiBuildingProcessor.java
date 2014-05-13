@@ -13,17 +13,12 @@
  */
 package com.propertyvista.yardi.processors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
-import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -55,7 +50,7 @@ public class YardiBuildingProcessor {
     }
 
     public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
-        Building building = getBuildingFromProperty(propertyId);
+        Building building = getBuilding(propertyId);
 
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
@@ -86,7 +81,7 @@ public class YardiBuildingProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public Building getBuildingFromProperty(PropertyIDType propertyId) {
+    public Building getBuilding(PropertyIDType propertyId) {
         Building building = new BuildingsMapper().map(propertyId);
 
         Address address = propertyId.getAddress().get(0);
@@ -128,13 +123,5 @@ public class YardiBuildingProcessor {
         }
 
         return building;
-    }
-
-    static public List<Property> getProperties(ResidentTransactions transaction) {
-        List<Property> properties = new ArrayList<Property>();
-        for (Property property : transaction.getProperty()) {
-            properties.add(property);
-        }
-        return properties;
     }
 }

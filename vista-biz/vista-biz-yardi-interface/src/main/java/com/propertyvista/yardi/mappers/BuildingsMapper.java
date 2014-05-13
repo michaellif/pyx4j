@@ -37,19 +37,19 @@ public class BuildingsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingsMapper.class);
 
-    static public String getPropertyCode(PropertyIDType propertyID) {
-        return propertyID.getIdentification().getPrimaryID().toLowerCase();
-    }
-
     static public String getPropertyCode(String propertyCode) {
         return propertyCode.toLowerCase();
+    }
+
+    static public String getPropertyCode(PropertyIDType propertyID) {
+        return getPropertyCode(propertyID.getIdentification().getPrimaryID());
     }
 
     static public void normalizePropertyCodes(List<String> codes) {
         CollectionUtils.transform(codes, new Transformer<String, String>() {
             @Override
             public String transform(String input) {
-                return input.toLowerCase();
+                return getPropertyCode(input);
             }
         });
     }

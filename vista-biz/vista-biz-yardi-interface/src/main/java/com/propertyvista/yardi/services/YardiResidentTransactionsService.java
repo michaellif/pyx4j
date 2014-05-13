@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.axis2.AxisFault;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,8 +149,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      *             if operation fails
      */
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        List<String> propertyCodes = ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor);
-        updateProperties(yc, propertyCodes, executionMonitor);
+        updateProperties(yc, ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor), executionMonitor);
     }
 
     public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
@@ -163,7 +164,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
             final Key yardiInterfaceId = yc.getPrimaryKey();
-            BuildingsMapper.normalizePropertyCodes(propertyCodes);
 
             // Find buildings that are no longer in list and suspend them
             {
@@ -173,8 +173,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 ICursorIterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.Attached);
                 try {
                     while (buildings.hasNext()) {
-                        Building building = buildings.next();
-                        if (!propertyCodes.contains(building.propertyCode().getValue())) {
+                        final Building building = buildings.next();
+                        if (!CollectionUtils.exists(propertyCodes, new Predicate<String>() {
+                            @Override
+                            public boolean evaluate(String object) {
+                                return BuildingsMapper.getPropertyCode(object).equals(building.propertyCode().getValue());
+                            }
+                        })) {
                             if (suspendBuilding(yardiInterfaceId, building.propertyCode().getValue())) {
                                 executionMonitor.addFailedEvent("BuildingSuspended", building.propertyCode().getValue());
                             }
@@ -321,9 +326,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         stub.importResidentTransactions(yc, reversalTransactions);
     }
 
+    static public List<Property> getProperties(ResidentTransactions transaction) {
+        List<Property> properties = new ArrayList<Property>();
+        for (Property property : transaction.getProperty()) {
+            properties.add(property);
+        }
+        return properties;
+    }
+
     public List<YardiPropertyConfiguration> getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        return getPropertyConfigurations(stub, yc);
+        return getPropertyConfigurations(ServerSideFactory.create(YardiResidentTransactionsStub.class), yc);
     }
 
     public List<YardiPropertyConfiguration> getPropertyConfigurations(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException,
@@ -361,7 +373,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("ResidentTransactions: Import started...");
         List<Building> importedBuildings = new ArrayList<Building>();
-        List<Property> properties = YardiBuildingProcessor.getProperties(transaction);
+        List<Property> properties = getProperties(transaction);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
             if (executionMonitor != null) {
@@ -666,7 +678,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("LeaseCharges: import started...");
 
         // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
-        List<Property> properties = YardiBuildingProcessor.getProperties(leaseCharges);
+        List<Property> properties = getProperties(leaseCharges);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
             if (executionMonitor != null) {

@@ -51,6 +51,7 @@ import com.propertyvista.server.TaskRunner;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.UnitsMapper;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
+import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class XmlBeanTest {
 
@@ -123,9 +124,9 @@ public class XmlBeanTest {
         log.info("Loaded transactions:\n{}", transactions);
 
         YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor();
-        List<Property> properties = buildingProcessor.getProperties(transactions);
+        List<Property> properties = YardiResidentTransactionsService.getProperties(transactions);
         for (Property property : properties) {
-            Building building = buildingProcessor.getBuildingFromProperty(property.getPropertyID().get(0));
+            Building building = buildingProcessor.getBuilding(property.getPropertyID().get(0));
             Assert.assertNotNull("Has buildings", building);
 
             Assert.assertFalse(building.propertyCode().isNull());
