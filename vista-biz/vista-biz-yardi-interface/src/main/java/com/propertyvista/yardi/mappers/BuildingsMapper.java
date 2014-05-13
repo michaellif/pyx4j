@@ -13,6 +13,10 @@
  */
 package com.propertyvista.yardi.mappers;
 
+import java.util.List;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +37,21 @@ public class BuildingsMapper {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingsMapper.class);
 
-    static public String getPropertyID(PropertyIDType propertyID) {
+    static public String getPropertyCode(PropertyIDType propertyID) {
         return propertyID.getIdentification().getPrimaryID().toLowerCase();
+    }
+
+    static public String getPropertyCode(String propertyCode) {
+        return propertyCode.toLowerCase();
+    }
+
+    static public void normalizePropertyCodes(List<String> codes) {
+        CollectionUtils.transform(codes, new Transformer<String, String>() {
+            @Override
+            public String transform(String input) {
+                return input.toLowerCase();
+            }
+        });
     }
 
     /**
@@ -48,7 +65,7 @@ public class BuildingsMapper {
         Building building = EntityFactory.create(Building.class);
 
         Identification identification = propertyID.getIdentification();
-        building.propertyCode().setValue(getPropertyID(propertyID));
+        building.propertyCode().setValue(getPropertyCode(propertyID));
         building.info().name().setValue(identification.getLegalName());
         building.marketing().name().setValue(identification.getMarketingName());
         building.defaultProductCatalog().setValue(false);

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -158,11 +159,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             RemoteException {
         try {
             ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
-
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
 
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
             final Key yardiInterfaceId = yc.getPrimaryKey();
+            BuildingsMapper.normalizePropertyCodes(propertyCodes);
 
             // Find buildings that are no longer in list and suspend them
             {
@@ -184,11 +185,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            List<Building> importedBuildings = new ArrayList<Building>();
+            List<Building> importedBuildings = new ArrayList<>();
+
             // resident transactions
             if (!executionMonitor.isTerminationRequested()) {
-                List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyCodes);
-                for (ResidentTransactions transaction : allTransactions) {
+                List<ResidentTransactions> transactions = getResidentTransactions(stub, yc, executionMonitor, propertyCodes);
+                for (ResidentTransactions transaction : transactions) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
@@ -196,7 +198,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            // lease charges
+            // lease charges:
             if (!executionMonitor.isTerminationRequested()) {
                 List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, importedBuildings);
                 for (ResidentTransactions leaseCharges : allLeaseCharges) {
@@ -208,8 +210,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            // availability
-            List<PhysicalProperty> properties = null;
+            // availability:
+            List<PhysicalProperty> properties = Collections.emptyList();
             if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
                 properties = getILSPropertyMarketing(yc, executionMonitor, propertyCodes);
                 for (PhysicalProperty property : properties) {
@@ -332,7 +334,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private Map<String, BigDecimal> getBuildingDepositInfo(Building building, List<PhysicalProperty> marketingInfo) {
         for (PhysicalProperty propertyInfo : marketingInfo) {
             for (com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
-                String propertyCode = BuildingsMapper.getPropertyID(property.getPropertyID());
+                String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID());
                 if (propertyCode != null && propertyCode.equals(building.propertyCode().getValue())) {
                     return new YardiILSMarketingProcessor().getDepositInfo(property);
                 }
@@ -359,7 +361,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("ResidentTransactions: Import started...");
         List<Building> importedBuildings = new ArrayList<Building>();
-        List<Property> properties = getProperties(transaction);
+        List<Property> properties = YardiBuildingProcessor.getProperties(transaction);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
             if (executionMonitor != null) {
@@ -373,7 +375,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             String propertyId = null;
             if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
-                propertyId = BuildingsMapper.getPropertyID(property.getPropertyID().get(0));
+                propertyId = BuildingsMapper.getPropertyCode(property.getPropertyID().get(0));
             }
 
             try {
@@ -623,9 +625,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
-    private List<ResidentTransactions> getAllResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
+    private List<ResidentTransactions> getResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
             List<String> propertyCodes) throws YardiServiceException, RemoteException {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
+
         final Key yardiInterfaceId = yc.getPrimaryKey();
         for (String propertyCode : propertyCodes) {
             if (executionMonitor.isTerminationRequested()) {
@@ -654,6 +657,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
         }
+
         return transactions;
     }
 
@@ -662,7 +666,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("LeaseCharges: import started...");
 
         // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
-        List<Property> properties = getProperties(leaseCharges);
+        List<Property> properties = YardiBuildingProcessor.getProperties(leaseCharges);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
             if (executionMonitor != null) {
@@ -848,6 +852,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private List<PhysicalProperty> getILSPropertyMarketing(PmcYardiCredential yc, ExecutionMonitor executionMonitor, List<String> propertyCodes) {
         YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
         List<PhysicalProperty> marketingInfo = new ArrayList<PhysicalProperty>();
+
         for (String propertyCode : propertyCodes) {
             if (executionMonitor.isTerminationRequested()) {
                 break;
@@ -883,7 +888,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            String propertyCode = BuildingsMapper.getPropertyID(property.getPropertyID());
+            String propertyCode = BuildingsMapper.getPropertyCode(property.getPropertyID());
 
             try {
                 log.info("  Processing building: {}", propertyCode);
@@ -998,14 +1003,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return status;
     }
 
-    public List<Property> getProperties(ResidentTransactions transaction) {
-        List<Property> properties = new ArrayList<Property>();
-        for (Property property : transaction.getProperty()) {
-            properties.add(property);
-        }
-        return properties;
-    }
-
     private class LeaseFinancialStats {
 
         private BigDecimal chargesAmount = BigDecimal.ZERO;
@@ -1031,7 +1028,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private List<Lease> getActiveLeases(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().unit().building().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
         criteria.in(criteria.proto().status(), Lease.Status.active());
         return Persistence.service().query(criteria);
@@ -1059,7 +1056,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private Building findBuilding(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
         return Persistence.service().retrieve(criteria);
     }

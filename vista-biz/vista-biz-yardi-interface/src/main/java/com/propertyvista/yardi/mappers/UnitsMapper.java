@@ -40,6 +40,7 @@ public class UnitsMapper {
     private final static Logger log = LoggerFactory.getLogger(UnitsMapper.class);
 
     static public String getUnitID(Unit unit) {
+        assert (!unit.getInformation().isEmpty());
         return getUnitID(unit.getInformation().get(0));
     }
 

@@ -124,5 +124,4 @@ public class YardiConfigurationFacadeImpl implements YardiConfigurationFacade {
 
         return propertyCodes;
     }
-
 }

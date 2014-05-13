@@ -60,7 +60,7 @@ public class YardiBuildingProcessor {
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
 
-        return merge(building, MappingUtils.getBuilding(yardiInterfaceId, building.propertyCode().getValue()));
+        return new BuildingsMerger().merge(building, MappingUtils.getBuilding(yardiInterfaceId, building.propertyCode().getValue()));
     }
 
     public AptUnit updateUnit(Building building, Unit unit) throws YardiServiceException {
@@ -72,30 +72,18 @@ public class YardiBuildingProcessor {
 
     }
 
-    private Building merge(Building imported, Building existing) {
-        return new BuildingsMerger().merge(imported, existing);
-    }
-
     private AptUnit updateUnitForBuilding(AptUnit importedUnit, Building building) throws YardiServiceException {
         if (building == null) {
             throw new YardiServiceException("Unable to update units for building: null");
         }
-        return mergeUnit(building, importedUnit, getUnit(building, importedUnit.info().number().getValue()));
-    }
-
-    private AptUnit mergeUnit(Building building, AptUnit importedUnit, AptUnit existingUnit) {
-        return new UnitsMerger().merge(building, importedUnit, existingUnit);
+        return new UnitsMerger().merge(building, importedUnit, getUnit(building, importedUnit.info().number().getValue()));
     }
 
     private AptUnit getUnit(Building building, String unitNumber) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.eq(criteria.proto().building(), building);
         criteria.eq(criteria.proto().info().number(), unitNumber);
-        List<AptUnit> units = Persistence.service().query(criteria);
-        if (units.size() == 0) {
-            return null;
-        }
-        return units.get(0);
+        return Persistence.service().retrieve(criteria);
     }
 
     public Building getBuildingFromProperty(PropertyIDType propertyId) {
@@ -142,12 +130,11 @@ public class YardiBuildingProcessor {
         return building;
     }
 
-    public List<Property> getProperties(ResidentTransactions transaction) {
+    static public List<Property> getProperties(ResidentTransactions transaction) {
         List<Property> properties = new ArrayList<Property>();
         for (Property property : transaction.getProperty()) {
             properties.add(property);
         }
         return properties;
     }
-
 }
