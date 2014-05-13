@@ -180,9 +180,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                                 return BuildingsMapper.getPropertyCode(object).equals(building.propertyCode().getValue());
                             }
                         })) {
-                            if (suspendBuilding(yardiInterfaceId, building.propertyCode().getValue())) {
-                                executionMonitor.addFailedEvent("BuildingSuspended", building.propertyCode().getValue());
-                            }
+                            suspendBuilding(building);
+                            executionMonitor.addInfoEvent("BuildingSuspended", building.propertyCode().getValue());
                         }
                     }
                 } finally {
@@ -1040,9 +1039,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private List<Lease> getActiveLeases(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+
         criteria.eq(criteria.proto().unit().building().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
         criteria.in(criteria.proto().status(), Lease.Status.active());
+
         return Persistence.service().query(criteria);
     }
 
@@ -1068,18 +1069,22 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private Building findBuilding(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+
         criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
+
         return Persistence.service().retrieve(criteria);
     }
 
     private boolean suspendBuilding(Key yardiInterfaceId, String propertyCode) {
-        Building building = findBuilding(yardiInterfaceId, propertyCode);
-        if ((building != null) && (!building.suspended().getValue())) {
+        return suspendBuilding(findBuilding(yardiInterfaceId, propertyCode));
+    }
+
+    private boolean suspendBuilding(Building building) {
+        if (building != null && !building.suspended().getValue()) {
             ServerSideFactory.create(BuildingFacade.class).suspend(building);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }
