@@ -359,9 +359,17 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     }
 
     public void scrollToTop() {
-        if (pageScroll.getVerticalScrollPosition() > getDisplay(DisplayType.header).getOffsetHeight()) {
+        scrollToTop(pageScroll.getVerticalScrollPosition());
+    }
+
+    public void scrollToTop(int originalSchrollPosition) {
+        if (originalSchrollPosition > getDisplay(DisplayType.header).getOffsetHeight()) {
             pageScroll.setVerticalScrollPosition(getDisplay(DisplayType.header).getOffsetHeight());
         }
+    }
+
+    public int getScrollPosition() {
+        return pageScroll.getVerticalScrollPosition();
     }
 
     public void scrollToBottom() {
@@ -373,4 +381,5 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             devConsoleTab.setDevConsole(widget);
         }
     }
+
 }
