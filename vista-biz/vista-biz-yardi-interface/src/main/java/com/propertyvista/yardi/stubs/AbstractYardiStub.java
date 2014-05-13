@@ -101,7 +101,7 @@ public abstract class AbstractYardiStub implements YardiInterface, ExternalInter
             }
         }
         if (!allow) {
-            throw new AssertionError("Write access to " + url + " from test system if forbidden");
+            throw new AssertionError("Write access to " + url + " from test system is forbidden");
         }
     }
 
