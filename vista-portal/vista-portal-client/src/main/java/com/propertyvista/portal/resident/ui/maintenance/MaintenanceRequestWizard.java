@@ -13,13 +13,16 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -29,13 +32,12 @@ import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -54,7 +56,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceRequestDTO> {
 
@@ -64,17 +66,17 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
     private MaintenanceRequestCategoryChoice mrCategory;
 
-    private final BasicFlexFormPanel categoryPanel = new BasicFlexFormPanel();
+    private PortalFormPanel categoryPanel;
 
-    private final BasicFlexFormPanel permissionPanel = new BasicFlexFormPanel();
+    private PortalFormPanel permissionPanel;
 
-    private final BasicFlexFormPanel accessPanel = new BasicFlexFormPanel();
+    private PortalFormPanel accessPanel;
 
-    private final BasicFlexFormPanel statusPanel = new BasicFlexFormPanel();
+    private PortalFormPanel statusPanel;
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
 
-    private BasicFlexFormPanel imagePanel;
+    private PortalFormPanel imagePanel;
 
     public MaintenanceRequestWizard(MaintenanceRequestWizardView view) {
         super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
@@ -115,34 +117,30 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         initSelectors();
     }
 
-    public TwoColumnFlexFormPanel createDetailsStep() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+    public IsWidget createDetailsStep() {
+        PortalFormPanel content = new PortalFormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().requestId(), new CLabel<String>(), new FieldDecoratorBuilder(250).build()));
-        content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, inject(proto().reportedForOwnUnit(), new FieldDecoratorBuilder(250).build()));
-        content.setBR(++row, 0, 1);
+        content.append(Location.Left, inject(proto().requestId(), new CLabel<String>())).decorate().componentWidth(250);
+        content.br();
+        content.append(Location.Left, inject(proto().reportedForOwnUnit())).decorate().componentWidth(250);
 
         // category panel
-        mrCategory = new MaintenanceRequestCategoryChoice();
-        bind(mrCategory, proto().category());
-        content.setWidget(++row, 0, categoryPanel);
-        content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+        bind(mrCategory = new MaintenanceRequestCategoryChoice(), proto().category());
+        content.append(Location.Dual, categoryPanel = new PortalFormPanel(this));
 
         // Description
-        content.setWidget(++row, 0, inject(proto().summary(), new FieldDecoratorBuilder(250).build()));
-        content.setWidget(++row, 0, inject(proto().description(), new FieldDecoratorBuilder(250).build()));
-        content.setWidget(++row, 0, inject(proto().priority(), prioritySelector, new FieldDecoratorBuilder(250).build()));
+        content.append(Location.Left, inject(proto().summary())).decorate().componentWidth(250);
+        content.append(Location.Left, inject(proto().description())).decorate().componentWidth(250);
+        content.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate().componentWidth(250);
 
         // phone is mandatory
-        content.setWidget(++row, 0, inject(proto().reporterPhone(), new FieldDecoratorBuilder(250).customLabel(i18n.tr("Contact Phone")).build()));
-        content.setWidget(++row, 0, inject(proto().phoneType(), new FieldDecoratorBuilder(250).build()));
+        content.append(Location.Left, inject(proto().reporterPhone())).decorate().componentWidth(250).customLabel(i18n.tr("Contact Phone"));
+        content.append(Location.Left, inject(proto().phoneType())).decorate().componentWidth(250);
         get(proto().phoneType()).setMandatory(true);
         get(proto().reporterPhone()).setMandatory(true);
-        content.setBR(++row, 0, 1);
+        content.br();
 
-        imagePanel = new TwoColumnFlexFormPanel();
+        imagePanel = new PortalFormPanel(this);
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
                 GWT.<MaintenanceRequestPictureUploadPortalService> create(MaintenanceRequestPictureUploadPortalService.class), new VistaFileURLBuilder(
                         MaintenanceRequestPicture.class)) {
@@ -153,45 +151,47 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
-                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-                main.setWidget(0, 0, 2, entryForm.inject(entryForm.proto().description(), new FieldDecoratorBuilder(80, 150, 160).build()));
-                return main;
+                PortalFormPanel main = new PortalFormPanel(entryForm);
+                main.append(Location.Left, entryForm.inject(entryForm.proto().description())).decorate().componentWidth(250);
+                return main.asWidget();
             }
         };
         imageSlider.setImageSize(250, 240);
         imageSlider.setOrganizerWidth(600);
-        imagePanel.setWidget(0, 0, 1, inject(proto().pictures(), imageSlider, new FieldDecoratorBuilder(100).build()));
-        content.setWidget(++row, 0, imagePanel);
+        imagePanel.append(Location.Left, inject(proto().pictures(), imageSlider)).decorate().componentWidth(100);
+        content.append(Location.Dual, imagePanel);
 
-        accessPanel.setWidget(0, 0, inject(proto().petInstructions(), new FieldDecoratorBuilder(250).build()));
+        accessPanel = new PortalFormPanel(this);
+        accessPanel.append(Location.Left, inject(proto().petInstructions())).decorate().componentWidth(250);
         // schedule panel
-        TwoColumnFlexFormPanel schedulePanel = new TwoColumnFlexFormPanel();
-        schedulePanel.setWidget(0, 0, inject(proto().preferredDate1(), new FieldDecoratorBuilder(120).build()));
-        schedulePanel.setWidget(1, 0, inject(proto().preferredTime1(), new FieldDecoratorBuilder(120).build()));
-        schedulePanel.setWidget(2, 0, inject(proto().preferredDate2(), new FieldDecoratorBuilder(120).build()));
-        schedulePanel.setWidget(3, 0, inject(proto().preferredTime2(), new FieldDecoratorBuilder(120).build()));
+        PortalFormPanel schedulePanel = new PortalFormPanel(this);
+        schedulePanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(120);
+        schedulePanel.append(Location.Left, inject(proto().preferredTime1())).decorate().componentWidth(120);
+        schedulePanel.append(Location.Left, inject(proto().preferredDate2())).decorate().componentWidth(120);
+        schedulePanel.append(Location.Left, inject(proto().preferredTime2())).decorate().componentWidth(120);
         // past dates not allowed
         ((CDatePicker) get(proto().preferredDate1())).setPastDateSelectionAllowed(false);
         ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
-        accessPanel.setWidget(1, 0, schedulePanel);
+        accessPanel.append(Location.Dual, schedulePanel);
 
-        permissionPanel.setWidget(2, 0, inject(proto().permissionToEnter(), new FieldDecoratorBuilder(250).build()));
-        permissionPanel.setWidget(3, 0, accessPanel);
-        content.setWidget(++row, 0, permissionPanel);
-        content.setBR(++row, 0, 1);
+        permissionPanel = new PortalFormPanel(this);
+        permissionPanel.append(Location.Left, inject(proto().permissionToEnter())).decorate().componentWidth(250);
+        permissionPanel.append(Location.Dual, accessPanel);
+        content.append(Location.Dual, permissionPanel);
+        content.br();
 
-        int panelRow = -1;
-        statusPanel.setH1(++panelRow, 0, 1, i18n.tr("Status"));
-        statusPanel.setWidget(++panelRow, 0, inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>(), new FieldDecoratorBuilder(100).build()));
-        statusPanel.setWidget(++panelRow, 0, inject(proto().updated(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-        statusPanel.setWidget(++panelRow, 0, inject(proto().submitted(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-        statusPanel.setBR(++panelRow, 0, 1);
-        statusPanel.setWidget(++panelRow, 0, inject(proto().scheduledDate(), new CDateLabel(), new FieldDecoratorBuilder(100).build()));
-        statusPanel.setWidget(++panelRow, 0, inject(proto().scheduledTimeFrom(), new CTimeLabel(), new FieldDecoratorBuilder(100).build()));
-        statusPanel.setWidget(++panelRow, 0, inject(proto().scheduledTimeTo(), new CTimeLabel(), new FieldDecoratorBuilder(100).build()));
-        content.setWidget(++row, 0, statusPanel);
+        statusPanel = new PortalFormPanel(this);
+        statusPanel.h1(i18n.tr("Status"));
+        statusPanel.append(Location.Left, inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().updated(), new CDateLabel())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().submitted(), new CDateLabel())).decorate().componentWidth(100);
+        statusPanel.br();
+        statusPanel.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().scheduledTimeFrom(), new CTimeLabel())).decorate().componentWidth(100);
+        statusPanel.append(Location.Left, inject(proto().scheduledTimeTo(), new CTimeLabel())).decorate().componentWidth(100);
+        content.append(Location.Dual, statusPanel);
 
-        content.setBR(++row, 0, 1);
+        content.br();
 
         // tweaks:
         get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -322,10 +322,13 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         // attach selectors to the panel - bottom up
         categoryPanel.clear();
-        int row = levels;
+        List<MaintenanceRequestCategoryChoice> list = new ArrayList<>();
         for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
-            choice.setDecorator(new FieldDecoratorBuilder(250).build());
-            categoryPanel.setWidget(--row, 0, choice);
+            list.add(choice);
+        }
+        Collections.reverse(list);
+        for (MaintenanceRequestCategoryChoice c : list) {
+            categoryPanel.append(Location.Left, c).decorate().componentWidth(250);
         }
     }
 
