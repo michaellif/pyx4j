@@ -1050,16 +1050,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return Persistence.service().query(criteria);
     }
 
-    private boolean removeLease(List<Lease> leases, String leaseId) {
-        if (leaseId == null) {
-            return false;
-        }
-        Iterator<Lease> it = leases.iterator();
-        while (it.hasNext()) {
-            if (leaseId.equals(it.next().leaseId().getValue())) {
-                it.remove();
-                return true;
-            }
+    private boolean removeLease(List<Lease> leases, final String leaseId) {
+        if (leaseId != null) {
+            Iterator<Lease> it = leases.iterator();
+            while (it.hasNext()) {
+                if (leaseId.equals(it.next().leaseId().getValue())) {
+                    it.remove();
+                    return true;
+                }
+            }            
         }
         return false;
     }
