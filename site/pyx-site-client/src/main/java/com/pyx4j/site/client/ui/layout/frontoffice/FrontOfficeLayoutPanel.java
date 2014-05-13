@@ -363,7 +363,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     }
 
     public void scrollToTop(int originalSchrollPosition) {
+        //TODO remove debug!
+        log.debug("header getOffsetHeight {} ", getDisplay(DisplayType.header).getOffsetHeight());
         if (originalSchrollPosition > getDisplay(DisplayType.header).getOffsetHeight()) {
+            log.debug("pageScroll");
             pageScroll.setVerticalScrollPosition(getDisplay(DisplayType.header).getOffsetHeight());
         }
     }
