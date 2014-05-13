@@ -47,15 +47,18 @@ public class MappingUtils {
 
     public static Building getBuilding(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().propertyCode(), propertyCode);
+
+        criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
-        List<Building> buildings = Persistence.service().query(criteria);
-        return !buildings.isEmpty() ? buildings.get(0) : null;
+
+        return Persistence.service().retrieve(criteria);
     }
 
     public static List<Province> getProvinces() {
         EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
+
         criteria.asc(criteria.proto().name());
+
         return Persistence.service().query(criteria);
     }
 

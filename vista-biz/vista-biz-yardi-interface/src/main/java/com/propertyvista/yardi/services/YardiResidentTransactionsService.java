@@ -48,6 +48,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -209,7 +210,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
-
                     importLeaseCharges(yardiInterfaceId, leaseCharges, executionMonitor, stub);
                 }
             }
@@ -222,12 +222,20 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
+
                     // process each property info - import new buildings only
-                    List<String> newBuildings = importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
+                    List<Building> newBuildings = importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
+                    importedBuildings.addAll(newBuildings);
+
                     executionMonitor.addInfoEvent(
                             "ILSPropertyMarketing",
                             SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0<# [{1}]}", newBuildings.size(),
-                                    ConverterUtils.convertStringCollection(newBuildings)));
+                                    ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
+                                        @Override
+                                        public String toString(Building value) {
+                                            return value.propertyCode().getStringView();
+                                        }
+                                    })));
                 }
             }
 
@@ -351,7 +359,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
         }
-        return java.util.Collections.emptyMap();
+        return Collections.emptyMap();
     }
 
     private List<YardiPropertyConfiguration> getPropertyConfigurations(Properties properties) {
@@ -371,9 +379,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             final ExternalInterfaceLoggingStub interfaceLog) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("ResidentTransactions: Import started...");
+
         List<Building> importedBuildings = new ArrayList<Building>();
-        List<Property> properties = getProperties(transaction);
         Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
+
+        List<Property> properties = getProperties(transaction);
         for (final Property property : properties) {
             if (executionMonitor != null) {
                 IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Unit");
@@ -382,11 +392,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 } else {
                     expectedTotal.onIterationCompleted(property.getRTCustomer().size());
                 }
-            }
-
-            String propertyId = null;
-            if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
-                propertyId = BuildingsMapper.getPropertyCode(property.getPropertyID().get(0));
             }
 
             try {
@@ -450,10 +455,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
 
             } catch (YardiServiceException e) {
-                executionMonitor.addFailedEvent("Building", propertyId, e);
+                executionMonitor.addFailedEvent("Building", BuildingsMapper.getPropertyCode(property.getPropertyID().get(0)), e);
                 interfaceLog.logRecordedTracastions();
             } catch (Throwable t) {
-                executionMonitor.addErredEvent("Building", propertyId, t);
+                executionMonitor.addErredEvent("Building", BuildingsMapper.getPropertyCode(property.getPropertyID().get(0)), t);
                 interfaceLog.logRecordedTracastions();
             }
 
@@ -480,7 +485,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             throws YardiServiceException {
         log.info("Updating building {}", propertyId.getIdentification().getPrimaryID());
 
-        Building building = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
             @Override
             public Building execute() throws YardiServiceException {
                 Building building = new YardiBuildingProcessor(executionMonitor).updateBuilding(yardiInterfaceId, propertyId);
@@ -488,14 +493,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 return building;
             }
         });
-
-        return building;
     }
 
     private AptUnit importUnit(final Building building, final Unit unit, ExecutionMonitor executionMonitor) throws YardiServiceException {
         log.info("    Updating unit #" + unit.getInformation().get(0).getUnitID());
 
-        AptUnit aptUnit = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
             @Override
             public AptUnit execute() throws YardiServiceException {
                 AptUnit aptUnit = new YardiBuildingProcessor().updateUnit(building, unit);
@@ -503,8 +506,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 return aptUnit;
             }
         });
-
-        return aptUnit;
     }
 
     private void assignLegalAddress(final AptUnit unit, final Address address, final ExecutionMonitor executionMonitor) throws YardiServiceException {
@@ -645,7 +646,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            Building building = findBuilding(yardiInterfaceId, propertyCode);
+            Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
             if (building != null) {
                 if (building.suspended().getValue()) {
                     executionMonitor.addInfoEvent("skip suspended property code for transaction import", CompletionType.failed, propertyCode, null);
@@ -883,11 +884,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return marketingInfo;
     }
 
-    private List<String> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
+    private List<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
             final ExecutionMonitor executionMonitor) {
         log.info("PropertyMarketing: import started...");
 
-        List<String> newProperties = new ArrayList<String>();
+        List<Building> newBuildings = new ArrayList<>();
+
         for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
             if (executionMonitor != null) {
                 IterationProgressCounter expectedTotal = executionMonitor.getIterationProgressCounter("Availability");
@@ -904,11 +906,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             try {
                 log.info("  Processing building: {}", propertyCode);
 
-                // only update new buildings
+                // import new buildings
                 Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
                 if (building == null || !importedBuildings.contains(building)) {
                     building = importProperty(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
-                    newProperties.add(propertyCode);
+                    newBuildings.add(building);
                 }
                 executionMonitor.addProcessedEvent("Building");
 
@@ -940,7 +942,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 break;
             }
         }
-        return newProperties;
+
+        return newBuildings;
     }
 
     private void clearUnitAvailability(final Set<AptUnit> units, ExecutionMonitor executionMonitor) throws YardiServiceException {
@@ -1067,17 +1070,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    private Building findBuilding(Key yardiInterfaceId, String propertyCode) {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-
-        criteria.eq(criteria.proto().propertyCode(), BuildingsMapper.getPropertyCode(propertyCode));
-        criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
-
-        return Persistence.service().retrieve(criteria);
-    }
-
     private boolean suspendBuilding(Key yardiInterfaceId, String propertyCode) {
-        return suspendBuilding(findBuilding(yardiInterfaceId, propertyCode));
+        return suspendBuilding(MappingUtils.getBuilding(yardiInterfaceId, propertyCode));
     }
 
     private boolean suspendBuilding(Building building) {
