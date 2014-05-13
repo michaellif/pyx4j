@@ -23,6 +23,10 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- foreign keys
+        
+        ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_building_fk;
+        ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_floorplan_fk;
         
         
         /**
@@ -65,7 +69,39 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- building 
         
+        ALTER TABLE building ADD COLUMN contacts_support_phone VARCHAR(500);
+        
+        -- legal_status
+        
+        ALTER TABLE legal_status    ADD COLUMN cancellation_threshold NUMERIC(18,2),
+                                    ADD COLUMN expiry TIMESTAMP,
+                                    ADD COLUMN termination_date DATE;
+        
+        -- master_online_application
+        
+        ALTER TABLE master_online_application RENAME COLUMN building TO ils_building;
+        ALTER TABLE master_online_application RENAME COLUMN floorplan TO ils_floorplan;
+        
+        
+        -- n4_policy
+        
+        ALTER TABLE n4_policy   ADD COLUMN cancellation_threshold NUMERIC(18,2),
+                                ADD COLUMN expiry_days INT;
+        
+        
+        -- online_application
+        
+        ALTER TABLE online_application ADD COLUMN create_date DATE;
+        
+        -- restrictions_policy
+        
+        ALTER TABLE restrictions_policy ADD COLUMN no_need_guarantors BOOLEAN;
+        
+        -- site_titles
+        
+        ALTER TABLE site_titles RENAME COLUMN resident_portal_promotions TO site_promo_title;
         
         /**
         ***     =====================================================================================================
@@ -75,6 +111,23 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- Phone numbers update
+        
+        PERFORM * FROM _dba_.update_phone_numbers(v_schema_name);
+       
+        
+        
+        -- online_application
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.online_application AS a '
+                ||'SET  create_date = m.create_date '
+                ||'FROM '||v_schema_name||'.master_online_application AS m '
+                ||'WHERE    m.id = a.master_online_application ';
+                
+        -- restrictions_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
+                ||'SET  no_need_guarantors = FALSE ';
        
         /**
         ***     ==========================================================================================================
@@ -93,6 +146,12 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- foreign keys
+        
+        ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_building_fk FOREIGN KEY(ils_building) 
+            REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_floorplan_fk FOREIGN KEY(ils_floorplan) 
+            REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
         
         /**
         ***     ====================================================================================================

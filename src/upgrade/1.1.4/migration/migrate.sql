@@ -18,6 +18,8 @@
 -- _expiring_ schema migration 
 --\i migrate_expiring_schema.sql;
 
+-- Phone/fax numbers update
+\i update_phone_numbers.sql
 
 -- create migration function
 \i create_migrate_functions.sql;
