@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.shared.ui;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.RootPane;
@@ -27,6 +29,13 @@ public class PortalRootPane extends RootPane<FrontOfficeLayoutPanel> {
 
     @Override
     protected void onPlaceChange(Place place) {
-        asWidget().scrollToTop();
+        final int originalSchrollPosition = asWidget().getScrollPosition();
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                asWidget().scrollToTop(originalSchrollPosition);
+            }
+        });
+
     }
 }
