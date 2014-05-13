@@ -716,11 +716,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             @Override
             protected IsWidget createContent() {
                 BasicCFormPanel content = new BasicCFormPanel(this);
+
                 content.h1(i18n.tr("Notice Of Entry"));
-                content.append(Location.Dual, inject(proto().messageDate())).decorate().componentWidth(350).labelWidth(100);
-                content.append(Location.Dual, inject(proto().messageId())).decorate().componentWidth(350).labelWidth(100);
+                content.append(Location.Dual, inject(proto().messageDate())).decorate().componentWidth(350);
+                content.append(Location.Dual, inject(proto().messageId())).decorate().componentWidth(350);
                 content.append(Location.Dual, inject(proto().text()));
-//                get(proto().text()).asWidget().setWidth("250px");
 
                 return content;
             }
