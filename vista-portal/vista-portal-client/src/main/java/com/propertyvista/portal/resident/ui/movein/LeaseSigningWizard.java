@@ -47,7 +47,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     public IsWidget createDetailsStep() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
-        formPanel.h1(i18n.tr("Details"));
+//        formPanel.h1(i18n.tr("Details"));
 
         CEntityLabel<Building> buildingLabel = new CEntityLabel<Building>();
         buildingLabel.setFormatter(new IFormatter<Building, String>() {
@@ -87,14 +87,14 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
     public IsWidget createAgreementStep() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
-        formPanel.h1(i18n.tr("Agreement"));
+//        formPanel.h1(i18n.tr("Agreement"));
         formPanel.append(Location.Left, proto().legalTerms(), new LegalTermsFolder());
         return formPanel;
     }
 
     public IsWidget createConfirmationStep() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
-        formPanel.h1(i18n.tr("Confirmation"));
+//        formPanel.h1(i18n.tr("Confirmation"));
         formPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermsFolder());
         return formPanel;
     }
