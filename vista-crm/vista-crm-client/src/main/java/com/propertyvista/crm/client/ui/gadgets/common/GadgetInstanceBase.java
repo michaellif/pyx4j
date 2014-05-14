@@ -20,12 +20,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -51,7 +50,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private final RefreshTimer refreshTimer;
 
-    private VerticalPanel gadgetPanel;
+    private FlowPanel gadgetPanel;
 
     private Panel errorPanel;
 
@@ -99,28 +98,6 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         return null;
     }
 
-    protected Panel initLoadingPanel() {
-        VerticalPanel loadingPanel = createPanel();
-        Label label = new Label(i18n.tr("Loading") + "...");
-        loadingPanel.add(label);
-        return loadingPanel;
-    }
-
-    protected Panel initErrorPanel() {
-        VerticalPanel errorPanel = createPanel();
-        Label label = new Label(i18n.tr("Error") + ":(");
-        errorPanel.add(label);
-        return errorPanel;
-    }
-
-    private VerticalPanel createPanel() {
-        VerticalPanel panel = new VerticalPanel();
-        panel.setSize("100%", defineHeight());
-        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        return panel;
-    }
-
     @Override
     public void setContainerBoard(IBuildingFilterContainer board) {
         this.containerBoard = board;
@@ -158,24 +135,30 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     protected final Widget initView() {
         if (errorPanel == null) {
-            errorPanel = initErrorPanel();
+            errorPanel = new SimplePanel();
+            errorPanel.setSize("100%", defineHeight());
+            errorPanel.add(new Label(i18n.tr("Error") + ":("));
         }
         errorPanel.setVisible(false);
         if (loadingPanel == null) {
-            loadingPanel = initLoadingPanel();
+            loadingPanel = new SimplePanel();
+            loadingPanel.setSize("100%", defineHeight());
+            loadingPanel.add(new Label(i18n.tr("Loading") + "..."));
         }
         loadingPanel.setVisible(false);
         contentPanel = initContentPanel();
         contentPanel.setVisible(false);
 
         if (gadgetPanel == null) {
-            gadgetPanel = createPanel();
+            gadgetPanel = new FlowPanel();
+            gadgetPanel.setSize("100%", defineHeight());
         } else {
             gadgetPanel.clear();
         }
         gadgetPanel.add(contentPanel);
         gadgetPanel.add(loadingPanel);
         gadgetPanel.add(errorPanel);
+
         return gadgetPanel;
     }
 

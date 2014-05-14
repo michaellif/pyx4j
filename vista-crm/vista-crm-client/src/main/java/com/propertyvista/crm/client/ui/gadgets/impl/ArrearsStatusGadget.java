@@ -20,8 +20,10 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -32,7 +34,6 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -89,7 +90,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
 
     private final ArrearsReportService service;
 
-    private TwoColumnFlexFormPanel contentPanel;
+    private FlowPanel contentPanel;
 
     private HTML titleBannerLabel;
 
@@ -123,10 +124,10 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
 
     @Override
     protected Widget initContentPanel() {
-        contentPanel = new TwoColumnFlexFormPanel();
-        contentPanel.setWidget(1, 0, initTitleBannerPanel());
-        contentPanel.setWidget(2, 0, initDataTablePanel());
-        return contentPanel;
+        contentPanel = new FlowPanel();
+        contentPanel.add(initTitleBannerPanel());
+        contentPanel.add(initDataTablePanel());
+        return new ScrollPanel(contentPanel);
     }
 
     private Widget initDataTablePanel() {

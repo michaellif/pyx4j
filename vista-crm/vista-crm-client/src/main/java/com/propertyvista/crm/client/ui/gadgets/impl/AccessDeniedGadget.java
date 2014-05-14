@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.impl;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -47,7 +48,7 @@ public class AccessDeniedGadget extends GadgetInstanceBase<AccessDeniedGagetMeta
         label.getElement().getStyle().setProperty("marginLeft", "auto");
         label.getElement().getStyle().setProperty("marginRight", "auto");
         contentPanel.add(label);
-        return contentPanel;
+        return new ScrollPanel(contentPanel);
     }
 
     @Override

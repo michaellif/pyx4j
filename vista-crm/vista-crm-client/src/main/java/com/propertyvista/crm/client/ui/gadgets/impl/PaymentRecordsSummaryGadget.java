@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 
+import java.awt.Scrollbar;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -147,19 +149,15 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
     @Override
     protected Widget initContentPanel() {
 
-        VerticalPanel contentPanel = new VerticalPanel();
-        contentPanel.setWidth("100%");
-
+        FlowPanel contentPanel = new FlowPanel();
         contentPanel.add(initSummaryPanel());
         contentPanel.add(initFeesPanel());
 
-        return contentPanel;
+        return new ScrollPanel(contentPanel);
     }
 
     private Widget initSummaryPanel() {
-        VerticalPanel summaryPanel = new VerticalPanel();
-        summaryPanel.setWidth("100%");
-
+        FlowPanel summaryPanel = new FlowPanel();
         summaryTitlePanel = new HTML();
         summaryTitlePanel.setWidth("100%");
         summaryTitlePanel.getElement().getStyle().setProperty("textAlign", "center");

@@ -22,6 +22,7 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -83,7 +84,7 @@ public class ArrearsYOYAnalysisChartGadget extends GadgetInstanceBase<ArrearsYOY
             }
         };
 
-        graphPanel.setSize("100%", defineHeight());
+        graphPanel.setSize("100%", "100%");
         graphPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
         return graphPanel;
