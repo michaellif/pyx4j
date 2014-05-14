@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
@@ -119,9 +120,15 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         getDisplay(DisplayType.toolbar).addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         contentHolder = new ContentHolder(this);
-        contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
+        contentHolder.ensureDebugId(getClass().getSimpleName() + ".contentHolder");
+
+        // Fix for MCO footer position in IE8
+        if (!BrowserType.isIE8()) {
+            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
+        }
 
         FlowPanel contentPanel = new FlowPanel();
+        contentPanel.ensureDebugId(getClass().getSimpleName() + ".contentPanel");
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 
         contentPanel.add(contentHolder);
