@@ -30,6 +30,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -105,6 +106,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         if (SecurityController.checkAnyBehavior(VistaCrmBehavior.OrganizationFinancial, VistaCrmBehavior.PropertyVistaAccountOwner)) {
             folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
         }
+        folder.addNavigItem(new Financial.CustomerCreditCheck());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Content Management"));

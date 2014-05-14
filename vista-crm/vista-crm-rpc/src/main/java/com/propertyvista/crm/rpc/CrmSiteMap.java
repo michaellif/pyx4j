@@ -336,21 +336,6 @@ public class CrmSiteMap implements SiteMap {
         }
     }
 
-    @Deprecated
-    public static class Report extends AppPlace {
-
-        @PlaceProperties(navigLabel = "Manage Reports", caption = "Reports")
-        public static class Management extends CrmCrudAppPlace {
-        }
-
-        public static class Edit extends CrmCrudAppPlace {
-        }
-
-        public static class CustomerCreditCheck extends CrmCrudAppPlace {
-        }
-
-    }
-
     public static class Reports extends AppPlace {
 
         // please try to maintain lexicographic order
@@ -498,6 +483,10 @@ public class CrmSiteMap implements SiteMap {
 
             @PlaceProperties(navigLabel = "Taxes")
             public static class Tax extends CrmCrudAppPlace {
+            }
+
+            @PlaceProperties(navigLabel = "Credit Checks")
+            public static class CustomerCreditCheck extends CrmCrudAppPlace {
             }
         }
 

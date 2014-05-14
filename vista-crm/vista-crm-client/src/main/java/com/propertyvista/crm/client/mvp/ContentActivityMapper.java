@@ -274,6 +274,7 @@ import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentW
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Account;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
 import com.propertyvista.crm.rpc.CrmSiteMap.Finance;
@@ -287,7 +288,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap.PasswordChange;
 import com.propertyvista.crm.rpc.CrmSiteMap.PasswordReset;
 import com.propertyvista.crm.rpc.CrmSiteMap.PasswordResetRequest;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties;
-import com.propertyvista.crm.rpc.CrmSiteMap.Report;
 import com.propertyvista.crm.rpc.CrmSiteMap.Reports;
 import com.propertyvista.crm.rpc.CrmSiteMap.RuntimeError;
 import com.propertyvista.crm.rpc.CrmSiteMap.Tenants;
@@ -901,7 +901,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Report.CustomerCreditCheck) {
+                    } else if (crudPlace instanceof Financial.CustomerCreditCheck) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new CustomerCreditCheckListerActivity(crudPlace);

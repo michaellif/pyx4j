@@ -20,13 +20,13 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
 import com.propertyvista.crm.rpc.CrmSiteMap.Finance;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.CrmSiteMap.Organization;
 import com.propertyvista.crm.rpc.CrmSiteMap.Properties;
-import com.propertyvista.crm.rpc.CrmSiteMap.Report;
 import com.propertyvista.crm.rpc.CrmSiteMap.Tenants;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
@@ -204,7 +204,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseDTO.class, Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, Tenants.LeaseApplication.class, defaultImage);
 
-        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, Report.CustomerCreditCheck.class, defaultImage);
+        AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, Financial.CustomerCreditCheck.class, defaultImage);
         AppPlaceEntityMapper.register(CustomerCreditCheckLongReportDTO.class, Tenants.CustomerCreditCheckLongReport.class, defaultImage);
 
         AppPlaceEntityMapper.register(MoneyInBatchDTO.class, Finance.MoneyIn.Batch.class, defaultImage);

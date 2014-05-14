@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.creditchecks;
 
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -40,6 +40,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         formPanel.append(Location.Left, proto().creditCheckDate()).decorate();
         formPanel.append(Location.Left, proto().createdBy(), new CEntityCrudHyperlink<Employee>(new CrmSiteMap.Organization.Employee())).decorate();
         formPanel.append(Location.Left, proto().amountChecked()).decorate();
+        formPanel.append(Location.Left, proto().transaction().status()).decorate();
 
         formPanel.h1(i18n.tr("Results From Equifax"));
         formPanel.append(Location.Left, proto().riskCode()).decorate();
@@ -51,6 +52,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         formPanel.append(Location.Left, proto().transaction().amount()).decorate();
         formPanel.append(Location.Left, proto().transactionRef()).decorate();
 
+        setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("General")));
     }
 
