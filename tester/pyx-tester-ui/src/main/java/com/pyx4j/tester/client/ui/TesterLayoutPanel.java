@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class TesterLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
@@ -55,7 +56,7 @@ public class TesterLayoutPanel extends ComplexPanel implements RequiresResize, P
 
         // ============ navigDisplay ============
         {
-            navigDisplay = new DisplayPanel();
+            navigDisplay = new DisplayPanel(DisplayType.header);
             Layer layer = layout.attachChild(navigDisplay.asWidget().getElement(), navigDisplay);
             navigDisplay.setLayoutData(layer);
 
@@ -65,7 +66,7 @@ public class TesterLayoutPanel extends ComplexPanel implements RequiresResize, P
 
         // ============ Content ============
         {
-            contentDisplay = new DisplayPanel();
+            contentDisplay = new DisplayPanel(DisplayType.content);
             Layer layer = layout.attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
             contentDisplay.setLayoutData(layer);
 
@@ -75,7 +76,7 @@ public class TesterLayoutPanel extends ComplexPanel implements RequiresResize, P
 
         // ============ consoleDisplay ============
         {
-            consoleDisplay = new DisplayPanel();
+            consoleDisplay = new DisplayPanel(DisplayType.footer);
             Layer layer = layout.attachChild(consoleDisplay.asWidget().getElement(), consoleDisplay);
             consoleDisplay.setLayoutData(layer);
 

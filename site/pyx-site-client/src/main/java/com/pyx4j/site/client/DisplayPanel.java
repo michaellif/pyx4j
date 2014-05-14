@@ -25,9 +25,12 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
+
 public class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
 
-    public DisplayPanel() {
+    public DisplayPanel(DisplayType display) {
+        ensureDebugId(getClass().getSimpleName() + "." + display.name());
     }
 
     @Override

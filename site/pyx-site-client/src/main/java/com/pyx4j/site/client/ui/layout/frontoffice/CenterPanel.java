@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 public class CenterPanel extends FlowPanel {
 
     public CenterPanel(FlowPanel contentPanel, InlineMenuHolder inlineMenuHolder) {
-
+        ensureDebugId(getClass().getSimpleName());
         setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
         getElement().getStyle().setProperty("maxWidth", FrontOfficeLayoutPanel.MAX_WIDTH + "px");
         addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
@@ -45,6 +45,7 @@ public class CenterPanel extends FlowPanel {
         add(backgroundPanel);
 
         FlowPanel containerPanel = new FlowPanel();
+        containerPanel.ensureDebugId(getClass().getSimpleName() + ".containerPanel");
         add(containerPanel);
 
         containerPanel.add(contentPanel);

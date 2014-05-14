@@ -60,7 +60,7 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
 
         displays = new HashMap<>();
         for (DisplayType display : DisplayType.values()) {
-            displays.put(display, new DisplayPanel());
+            displays.put(display, new DisplayPanel(display));
         }
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
