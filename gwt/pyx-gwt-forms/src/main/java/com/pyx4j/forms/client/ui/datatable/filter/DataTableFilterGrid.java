@@ -37,7 +37,6 @@ public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
 
     public DataTableFilterGrid(DataTablePanel<E> dataTablePanel) {
         this.dataTablePanel = dataTablePanel;
-        setWidth("800px");
     }
 
     public void addFilter(DataTableFilterItem<E> filter) {

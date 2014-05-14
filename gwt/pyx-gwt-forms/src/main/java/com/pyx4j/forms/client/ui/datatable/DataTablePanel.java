@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -41,7 +41,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class DataTablePanel<E extends IEntity> extends VerticalPanel {
+public class DataTablePanel<E extends IEntity> extends FlowPanel {
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
@@ -96,7 +96,6 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         add(bottomActionsBar);
 
         dataTable.setWidth("100%");
-        setCellWidth(dataTable, "100%");
 
         filterButton = new Button(i18n.tr("Filter"), new Command() {
 
@@ -135,8 +134,8 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void setDelActionCommand(Command delActionCommand) {
-        topActionsBar.getToolbar().insertItem(
-                delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
+        topActionsBar.getToolbar()
+                .insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);
