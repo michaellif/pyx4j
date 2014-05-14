@@ -72,14 +72,11 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
 
         formPanel.append(Location.Left, proto().leaseTerm().termFrom(), new CDateLabel()).decorate().customLabel(i18n.tr("Lease From"));
         formPanel.append(Location.Left, proto().leaseTerm().termTo(), new CDateLabel()).decorate().customLabel(i18n.tr("Lease To"));
-
-        formPanel.h3(i18n.tr("Lease Options"));
         formPanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().serviceItem().agreedPrice(), new CMoneyLabel()).decorate()
                 .customLabel(i18n.tr("Base Rent"));
 
-        featurePanel = new PortalFormPanel(this);
-        formPanel.append(Location.Left, featurePanel);
-        featurePanel.h3(i18n.tr("Features"));
+        formPanel.append(Location.Left, featurePanel = new PortalFormPanel(this));
+        featurePanel.h3(i18n.tr("Lease Options"));
         featurePanel.append(Location.Left, proto().leaseTerm().version().leaseProducts().featureItems(), new FeaturesFolder());
 
         formPanel.h3(i18n.tr("Tenants"));
