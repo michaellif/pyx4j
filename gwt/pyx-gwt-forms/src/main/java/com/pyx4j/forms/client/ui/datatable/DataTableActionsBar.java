@@ -34,18 +34,18 @@ public class DataTableActionsBar extends SimplePanel implements DataTableModelLi
     private final PageNavigBar pageNavigBar;
 
     public DataTableActionsBar() {
-        setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBar.name());
+        setStyleName(DataTableTheme.StyleName.DataTableActionsBar.name());
 
         FlowPanel content = new FlowPanel();
         setWidget(content);
-        content.setStyleName(DefaultDataTableTheme.StyleName.DataTableActionsBarContent.name());
+        content.setStyleName(DataTableTheme.StyleName.DataTableActionsBarContent.name());
 
         toolbar = new Toolbar();
-        toolbar.addStyleName(DefaultDataTableTheme.StyleName.DataTableToolBar.name());
+        toolbar.addStyleName(DataTableTheme.StyleName.DataTableToolBar.name());
         content.add(toolbar);
 
         pageNavigBar = new PageNavigBar(this);
-        pageNavigBar.addStyleName(DefaultDataTableTheme.StyleName.DataTablePageNavigBar.name());
+        pageNavigBar.addStyleName(DataTableTheme.StyleName.DataTablePageNavigBar.name());
         content.add(pageNavigBar);
 
     }

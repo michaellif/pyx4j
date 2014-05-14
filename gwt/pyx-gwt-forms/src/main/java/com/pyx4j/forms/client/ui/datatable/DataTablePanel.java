@@ -25,6 +25,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -75,7 +77,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel {
 
     public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, WidgetsImages images) {
         this.images = images;
-        setWidth("100%");
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
         if (criteriaForm != null) {
@@ -90,12 +91,12 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel {
         add(filterPanel);
 
         dataTable = new DataTable<E>();
-        add(dataTable);
+        ScrollPanel dataTableScroll = new ScrollPanel(dataTable);
+        dataTableScroll.setStyleName(DataTableTheme.StyleName.DataTableHolder.name());
+        add(dataTableScroll);
 
         bottomActionsBar = new DataTableActionsBar();
         add(bottomActionsBar);
-
-        dataTable.setWidth("100%");
 
         filterButton = new Button(i18n.tr("Filter"), new Command() {
 

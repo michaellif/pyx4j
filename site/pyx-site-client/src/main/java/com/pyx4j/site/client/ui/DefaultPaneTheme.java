@@ -26,7 +26,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
+import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultPaneTheme extends Theme {
@@ -223,7 +223,6 @@ public class DefaultPaneTheme extends Theme {
 
         Style style = new Style(".", StyleName.Lister);
         style.addProperty("width", "100%");
-        style.addProperty("padding", "6px");
         addStyle(style);
 
         style = new Style(".", StyleName.ListerFiltersPanel);
@@ -232,13 +231,7 @@ public class DefaultPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ListerListPanel);
-        addStyle(style);
-
-        style = new Style(".", StyleName.ListerListPanel, " .", DefaultDataTableTheme.StyleName.DataTable);
-        style.addProperty("border-left", "1px solid");
-        style.addProperty("border-right", "1px solid");
-        style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
-        style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
+        style.addProperty("padding", "6px");
         addStyle(style);
 
     }

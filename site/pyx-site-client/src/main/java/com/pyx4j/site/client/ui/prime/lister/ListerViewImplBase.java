@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -46,7 +47,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
      */
     protected void setLister(AbstractLister<E> lister) {
         if (getContentPane() == null) { // finalise UI here:
-            setContentPane(new ScrollPanel());
+            setContentPane(new SimplePanel());
             setSize("100%", "100%");
         }
 
@@ -54,7 +55,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
             return; // already!?.
         }
 
-        ((ScrollPanel) getContentPane()).setWidget(this.lister = lister);
+        ((SimplePanel) getContentPane()).setWidget(this.lister = lister);
     }
 
     @Override

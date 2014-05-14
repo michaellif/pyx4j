@@ -43,7 +43,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
+import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.gwt.commons.FocusUtil;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -66,7 +66,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
         this.dataTablePanel = dataTablePanel;
 
-        setStyleName(DefaultDataTableTheme.StyleName.DataTableFilter.name());
+        setStyleName(DataTableTheme.StyleName.DataTableFilter.name());
 
         final Widget addButtonWidget = createAddButton();
 
@@ -83,15 +83,15 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
                 setExpanded(visible);
             }
         };
-        header.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterHeader.name());
+        header.setStyleName(DataTableTheme.StyleName.DataTableFilterHeader.name());
 
         add(header, DockPanel.NORTH);
         grid = new DataTableFilterGrid<E>(dataTablePanel);
-        grid.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterMain.name());
+        grid.setStyleName(DataTableTheme.StyleName.DataTableFilterMain.name());
 
         add(grid, DockPanel.CENTER);
 
-        footer.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterFooter.name());
+        footer.setStyleName(DataTableTheme.StyleName.DataTableFilterFooter.name());
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         footer.setWidget(buttonsPanel);

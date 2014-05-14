@@ -49,7 +49,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
+import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.IconButton;
@@ -159,7 +159,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
     public DataTableFilterItem(final DataTableFilterGrid<E> parent) {
         this.parent = parent;
 
-        setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterItem.name());
+        setStyleName(DataTableTheme.StyleName.DataTableFilterItem.name());
 
         Image btnDel = new IconButton(i18n.tr("Remove Filter"), FolderImages.INSTANCE.delButton(), new Command() {
 

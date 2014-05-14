@@ -29,10 +29,10 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class DefaultDataTableTheme extends Theme {
+public class DataTableTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
+        DataTable, DataTableHolder, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
 
         DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem,
 
@@ -43,7 +43,7 @@ public class DefaultDataTableTheme extends Theme {
         disabled, selected, hover, even, odd, nodetails
     }
 
-    public DefaultDataTableTheme() {
+    public DataTableTheme() {
         initStyles();
     }
 
@@ -56,6 +56,15 @@ public class DefaultDataTableTheme extends Theme {
 
         Style style = new Style(".", StyleName.DataTable);
         style.addProperty("border-collapse", "separate");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableHolder);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
+        style.addProperty("max-height", "300px");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableHeader);

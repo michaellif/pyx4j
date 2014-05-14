@@ -94,7 +94,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private List<ColumnSelectionHandler> columnSelectionHandlers;
 
     public DataTable() {
-        setStyleName(DefaultDataTableTheme.StyleName.DataTable.name());
+        setStyleName(DataTableTheme.StyleName.DataTable.name());
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
 
         this.addClickHandler(new ClickHandler() {
@@ -416,7 +416,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", COLUMNS_SELECTOR_COLUMN_SIZE);
             }
 
-            getCellFormatter().setStyleName(0, colIndex, DefaultDataTableTheme.StyleName.DataTableColumnSelector.name());
+            getCellFormatter().setStyleName(0, colIndex, DataTableTheme.StyleName.DataTableColumnSelector.name());
             getCellFormatter().setVerticalAlignment(0, colIndex, HasVerticalAlignment.ALIGN_MIDDLE);
             getCellFormatter().setHorizontalAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -424,7 +424,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         if (getRowCount() > 0) {
             Element rowElement = getRowFormatter().getElement(0);
-            UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableHeader.name());
+            UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableHeader.name());
         }
     }
 
@@ -492,17 +492,17 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
                 if (rowIndex < getRowCount()) {
                     Element rowElement = getRowFormatter().getElement(rowIndex);
-                    UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name());
+                    UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name());
                     if (rowIndex % 2 == 0) {
                         UIObject.setStyleName(rowElement,
-                                DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
+                                DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.even.name(), true);
                     } else {
                         UIObject.setStyleName(rowElement,
-                                DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
+                                DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.odd.name(), true);
                     }
                     if (!hasDetailsNavigation()) {
-                        UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-"
-                                + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
+                        UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-"
+                                + DataTableTheme.StyleDependent.nodetails.name(), true);
                     }
 
                     ++rowIndex;
@@ -543,7 +543,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     protected void markRow(int row, boolean selected) {
         if (isMarkSelectedRow() && row >= 0) {
             Element previous = getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(previous, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.selected.name(),
+            UIObject.setStyleName(previous, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.selected.name(),
                     selected);
         }
     }
@@ -606,7 +606,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
             ScrollPanel scroll = new ScrollPanel(panel);
             scroll.setHeight("200px");
-            scroll.setStyleName(DefaultDataTableTheme.StyleName.DataTableColumnMenu.name());
+            scroll.setStyleName(DataTableTheme.StyleName.DataTableColumnMenu.name());
 
             setBody(scroll.asWidget());
         }

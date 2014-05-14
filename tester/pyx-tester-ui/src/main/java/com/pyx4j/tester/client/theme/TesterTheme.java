@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
+import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
@@ -95,7 +95,7 @@ public class TesterTheme extends Theme {
         });
 
         addTheme(new DefaultPaneTheme());
-        addTheme(new DefaultDataTableTheme());
+        addTheme(new DataTableTheme());
 
         addTheme(new DefaultDatePickerTheme());
         addTheme(new CComponentTheme());

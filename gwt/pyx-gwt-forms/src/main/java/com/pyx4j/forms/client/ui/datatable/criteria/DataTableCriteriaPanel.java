@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
-import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
+import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.gwt.commons.FocusUtil;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -60,7 +60,7 @@ public class DataTableCriteriaPanel<E extends IEntity> extends DockPanel {
         this.dataTablePanel = dataTablePanel;
         this.form = form;
 
-        setStyleName(DefaultDataTableTheme.StyleName.DataTableFilter.name());
+        setStyleName(DataTableTheme.StyleName.DataTableFilter.name());
 
         final SimplePanel formHolder = new SimplePanel();
 
@@ -77,14 +77,14 @@ public class DataTableCriteriaPanel<E extends IEntity> extends DockPanel {
             }
         };
 
-        header.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterHeader.name());
+        header.setStyleName(DataTableTheme.StyleName.DataTableFilterHeader.name());
         add(header, DockPanel.NORTH);
 
-        formHolder.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterMain.name());
+        formHolder.setStyleName(DataTableTheme.StyleName.DataTableFilterMain.name());
         formHolder.setWidget(form);
         add(formHolder, DockPanel.CENTER);
 
-        footer.setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterFooter.name());
+        footer.setStyleName(DataTableTheme.StyleName.DataTableFilterFooter.name());
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         footer.setWidget(buttonsPanel);
