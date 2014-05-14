@@ -45,7 +45,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -73,7 +72,7 @@ final class GadgetHolder extends SimplePanel {
 
     private final HorizontalPanel caption = new HorizontalPanel();
 
-    private final ScrollPanel scroll = new ScrollPanel();
+    private final SimplePanel holder = new SimplePanel();
 
     private final Label title = new Label();
 
@@ -136,8 +135,8 @@ final class GadgetHolder extends SimplePanel {
         // put it together:
         content.add(caption);
 
-        scroll.setWidget(holdedGadget.asWidget());
-        content.add(scroll);
+        holder.setWidget(holdedGadget.asWidget());
+        content.add(holder);
 
         this.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         this.getElement().getStyle().setProperty("MozBoxSizing", "border-box");
@@ -235,16 +234,16 @@ final class GadgetHolder extends SimplePanel {
 
     private void minimize() {
         if (isMinimized()) {
-            scroll.setVisible(true);
+            holder.setVisible(true);
             holdedGadget.onMinimize(false);
         } else { // minimize:
-            scroll.setVisible(false);
+            holder.setVisible(false);
             holdedGadget.onMinimize(true);
         }
     }
 
     private boolean isMinimized() {
-        return !scroll.isVisible();
+        return !holder.isVisible();
     }
 
     private void expand() {
@@ -331,7 +330,7 @@ final class GadgetHolder extends SimplePanel {
     }
 
     private void switchViewTo(Widget view) {
-        scroll.setWidget(view);
+        holder.setWidget(view);
     }
 
     private void switchViewToNormal() {
