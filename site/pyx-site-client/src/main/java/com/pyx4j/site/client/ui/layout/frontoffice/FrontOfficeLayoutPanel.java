@@ -20,9 +20,6 @@
  */
 package com.pyx4j.site.client.ui.layout.frontoffice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -48,8 +45,6 @@ import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
-
-    private static final Logger log = LoggerFactory.getLogger(FrontOfficeLayoutPanel.class);
 
     public static final int MAX_WIDTH = 1200;
 
@@ -363,10 +358,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     }
 
     public void scrollToTop(int originalSchrollPosition) {
-        //TODO remove debug!
-        log.debug("header getOffsetHeight {} ", getDisplay(DisplayType.header).getOffsetHeight());
         if (originalSchrollPosition > getDisplay(DisplayType.header).getOffsetHeight()) {
-            log.debug("pageScroll");
             pageScroll.setVerticalScrollPosition(getDisplay(DisplayType.header).getOffsetHeight());
         }
     }
