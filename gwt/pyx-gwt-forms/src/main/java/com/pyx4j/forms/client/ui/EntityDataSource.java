@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.core.IEntity;
@@ -28,6 +30,10 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 
 public interface EntityDataSource<E extends IEntity> {
 
-    public void obtain(EntityQueryCriteria<E> criteria, AsyncCallback<EntitySearchResult<E>> handlingCallback);
+    /** asynchronously load options from the server; returned OptionLoadingHandler allows to check status and cancel request */
+    public AsyncLoadingHandler obtain(EntityQueryCriteria<E> criteria, AsyncCallback<EntitySearchResult<E>> handlingCallback);
+
+    /** client event handler to handle options change on the server */
+    public HandlerRegistration addDataChangeHandler(ValueChangeHandler<Class<E>> handler);
 
 }

@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -92,7 +93,8 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
         }
 
         @Override
-        public void obtain(EntityQueryCriteria<ListerDataItem> criteria, final AsyncCallback<EntitySearchResult<ListerDataItem>> handlingCallback) {
+        public AsyncLoadingHandler obtain(EntityQueryCriteria<ListerDataItem> criteria,
+                final AsyncCallback<EntitySearchResult<ListerDataItem>> handlingCallback) {
             EntitySearchResult<ListerDataItem> result = new EntitySearchResult<ListerDataItem>();
             // use data to populate result
             int dataSize = data.size();
@@ -103,6 +105,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
             result.setTotalRows(dataSize);
             result.hasMoreData(idxFrom + result.getTotalRows() < dataSize);
             handlingCallback.onSuccess(result);
+            return null;
         }
     }
 }

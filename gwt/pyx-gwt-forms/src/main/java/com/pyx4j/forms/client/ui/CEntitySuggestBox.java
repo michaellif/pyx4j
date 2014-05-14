@@ -29,13 +29,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.entity.core.EntityFactory;
@@ -47,18 +44,22 @@ import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
+import com.pyx4j.forms.client.ui.AsyncLoadingHandler.Status;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.ComponentValidator;
+import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.i18n.shared.I18n;
 
-public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
+public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText,
+        AsyncOptionsReadyCallback<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntitySuggestBox.class);
 
-    private final Class<E> entityClass;
+    private static final I18n i18n = I18n.get(CEntitySuggestBox.class);
 
-    private final EntityQueryCriteria<E> criteria;
+    private final Class<E> entityClass;
 
     private OptionsFilter<E> optionsFilter;
 
@@ -66,32 +67,36 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
 
     private String stringViewMemberName;
 
-    private boolean optionsLoaded;
-
-    private boolean isLoading = false;
-
-    private boolean isUnavailable = false;
-
     private boolean hasAsyncValue = false;
+
+    private final AsyncOptionLoadingDelegate<E> asyncOptionDelegate;
+
+    private ComponentValidator<E> unavailableValidator;
 
     public CEntitySuggestBox(Class<E> entityClass) {
         super();
         this.entityClass = entityClass;
-        this.criteria = new EntityQueryCriteria<E>(entityClass);
+        this.asyncOptionDelegate = new AsyncOptionLoadingDelegate<E>(entityClass, this, null);
+        this.unavailableValidator = new AbstractComponentValidator<E>() {
+            @Override
+            public FieldValidationError isValid() {
+                return new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+            }
+        };
         setFormatter(new EntitySuggestFormatter());
         setParser(new EntitySuggestParser());
-        retriveOptions(null);
+        retrieveOptions(null);
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
-        if (optionsLoaded) {
+        if (isOptionsLoaded()) {
             throw new RuntimeException();
         }
-        return this.criteria.add(criterion);
+        return asyncOptionDelegate.addCriterion(criterion);
     }
 
     public E proto() {
-        return this.criteria.proto();
+        return asyncOptionDelegate.proto();
     }
 
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
@@ -105,7 +110,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
     }
 
     public boolean isOptionsLoaded() {
-        return this.optionsLoaded;
+        return asyncOptionDelegate.isOptionsLoaded();
     }
 
     @Override
@@ -133,83 +138,21 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
     }
 
     public void resetOptions() {
-        if ((optionsLoaded) || (criteria != null)) {
-            optionsLoaded = false;
-        }
+        asyncOptionDelegate.resetOptions();
     }
 
-    private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {
-
-        final HandlerRegistration handlerRegistration;
-
-        final AsyncOptionsReadyCallback<E> callback;
-
-        OptionsReadyPropertyChangeHandler(final AsyncOptionsReadyCallback<E> callback) {
-            this.callback = callback;
-            this.handlerRegistration = CEntitySuggestBox.this.addOptionsChangeHandler(this);
-        }
-
-        @Override
-        public void onOptionsChange(OptionsChangeEvent<List<E>> event) {
-            handlerRegistration.removeHandler();
-            callback.onOptionsReady(event.getOptions());
-        }
-    }
-
-    public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
-        if ((optionsLoaded) || (criteria == null)) {
-            // super.retriveOptions(callback);
-        } else {
-            if (isLoading) {
-                // Second or any other sequential call.
-                if (callback != null) {
-                    new OptionsReadyPropertyChangeHandler(callback);
-                }
-                return;
-            }
-
-            final AsyncCallback<List<E>> handlingCallback = new AsyncCallback<List<E>>() {
-
-                @Override
-                public void onSuccess(List<E> result) {
-                    log.debug("loaded {} {}", result.size(), CEntitySuggestBox.this);
-                    isLoading = false;
-                    isUnavailable = false;
-                    setOptions(result);
-                    optionsLoaded = true;
-                    if (callback != null) {
-                        callback.onOptionsReady(ConverterUtils.collectionAsList(getOptions()));
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    isLoading = false;
-                    isUnavailable = true;
-                    log.error("can't load {} {}", getTitle(), caught);
-                    setOptions(null);
-                }
-            };
-            isLoading = true;
-            if (ReferenceDataManager.isCached(criteria)) {
-                ReferenceDataManager.obtain(criteria, handlingCallback, true);
-            } else {
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        ReferenceDataManager.obtain(criteria, handlingCallback, true);
-                    }
-                });
-            }
+    public void retrieveOptions(final AsyncOptionsReadyCallback<E> optionsReadyCallback) {
+        if (!asyncOptionDelegate.isOptionsLoaded()) {
+            asyncOptionDelegate.retrieveOptions(optionsReadyCallback);
         }
     }
 
     @Override
     public String getOptionName(E o) {
         if (o == null || o.isNull()) {
-            if (isLoading) {
+            if (asyncOptionDelegate != null && asyncOptionDelegate.isOptStatus(Status.Loading)) {
                 return "loading...";
-            } else if (isUnavailable) {
+            } else if (asyncOptionDelegate != null && asyncOptionDelegate.isOptStatus(Status.Failed)) {
                 return "Error: Data unavailable";
             } else {
                 // Get super's NULL presentation
@@ -239,7 +182,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
             }
         } else {
             hasAsyncValue = true;
-            retriveOptions(new AsyncOptionsReadyCallback<E>() {
+            retrieveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
                     for (E o : opt) {
@@ -318,6 +261,16 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
             return true;
         }
         return CommonsStringUtils.isEmpty(getFormatter().format(getValue()));
+    }
+
+    @Override
+    public void onOptionsReady(List<E> opt) {
+        if (isOptionsLoaded()) {
+            removeComponentValidator(unavailableValidator);
+        } else {
+            addComponentValidator(unavailableValidator);
+        }
+        setOptions(opt);
     }
 
 }

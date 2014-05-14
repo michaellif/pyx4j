@@ -60,7 +60,7 @@ public class ReferenceDataManager {
 
     private static final Map<EntityQueryCriteria<?>, List<? extends IEntity>> cache = new HashMap<EntityQueryCriteria<?>, List<? extends IEntity>>();
 
-    private static final Map<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>>();
+    private static final Map<EntityQueryCriteria<?>, List<AsyncLoadingHandler>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncLoadingHandler>>();
 
     private static EventBus eventBus;
 
@@ -74,41 +74,41 @@ public class ReferenceDataManager {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static <T extends IEntity> void obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
-        obtainImpl((EntityQueryCriteria<?>) criteria, (AsyncCallback) handlingCallback, background);
+    public static <T extends IEntity> AsyncLoadingHandler obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
+        return obtainImpl(criteria, new AsyncLoadingHandler((AsyncCallback) handlingCallback), background);
     }
 
     /**
      * The second function to avoid Generics problem
      */
-    private static void obtainImpl(EntityQueryCriteria<?> criteria, AsyncCallback<List<?>> handlingCallback, boolean background) {
+    private static AsyncLoadingHandler obtainImpl(EntityQueryCriteria<?> criteria, AsyncLoadingHandler handler, boolean background) {
         final boolean inCache = cache.containsKey(criteria);
         if (!inCache) {
             final EntityQueryCriteria<?> originalCriteria = criteria.iclone();
             // Handle concurrent load
-            List<AsyncCallback<List<?>>> loading = concurrentLoad.get(originalCriteria);
+            List<AsyncLoadingHandler> loading = concurrentLoad.get(originalCriteria);
             if (loading == null) {
-                loading = new Vector<AsyncCallback<List<?>>>();
-                loading.add(handlingCallback);
+                loading = new Vector<AsyncLoadingHandler>();
                 concurrentLoad.put(originalCriteria, loading);
-            } else {
-                loading.add(handlingCallback);
-                return;
             }
+            loading.add(handler);
 
             AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
 
                 @Override
-                public void onSuccess(final EntitySearchResult<? extends IEntity> result) {
+                public void onSuccess(final EntitySearchResult<?> result) {
                     try {
                         cache.put(originalCriteria, result.getData());
                         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
                             @Override
                             public void execute() {
-                                List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(originalCriteria);
-                                for (AsyncCallback<List<?>> cb : callbacks) {
+                                List<AsyncLoadingHandler> handlers = concurrentLoad.remove(originalCriteria);
+                                if (handlers == null) {
+                                    return;
+                                }
+                                for (AsyncLoadingHandler handler : handlers) {
                                     try {
-                                        cb.onSuccess(result.getData());
+                                        handler.onSuccess(result.getData());
                                     } catch (Throwable e) {
                                         log.error("Internal error [UIR]", e);
                                         UncaughtHandler.onUnrecoverableError(e, "UIRonS");
@@ -123,10 +123,9 @@ public class ReferenceDataManager {
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(originalCriteria);
-                    for (AsyncCallback<List<?>> cb : callbacks) {
+                    for (AsyncLoadingHandler handler : concurrentLoad.remove(originalCriteria)) {
                         try {
-                            cb.onFailure(caught);
+                            handler.onFailure(caught);
                         } catch (Throwable e) {
                             log.error("Internal error [UIRF]", e);
                             UncaughtHandler.onUnrecoverableError(e, "UIRonF");
@@ -142,8 +141,9 @@ public class ReferenceDataManager {
                 service.query(callback, criteria);
             }
         } else {
-            handlingCallback.onSuccess(cache.get(criteria));
+            handler.onSuccess(cache.get(criteria));
         }
+        return handler;
     }
 
     public static boolean isCached(EntityQueryCriteria<?> criteria) {
@@ -245,5 +245,34 @@ public class ReferenceDataManager {
         }
         return eventBus.addHandler(ValueChangeEvent.getType(), handler);
 
+    }
+
+    public static <E extends IEntity> EntityDataSource<E> getDataSource(final boolean async) {
+        return new EntityDataSource<E>() {
+
+            @Override
+            public AsyncLoadingHandler obtain(EntityQueryCriteria<E> criteria, final AsyncCallback<EntitySearchResult<E>> handlingCallback) {
+                return ReferenceDataManager.obtain(criteria, new AsyncCallback<List<E>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        handlingCallback.onFailure(caught);
+                    }
+
+                    @Override
+                    public void onSuccess(List<E> data) {
+                        EntitySearchResult<E> result = new EntitySearchResult<E>();
+                        result.setData(new Vector<E>(data));
+                        handlingCallback.onSuccess(result);
+                    }
+                }, async);
+            }
+
+            @Override
+            public HandlerRegistration addDataChangeHandler(ValueChangeHandler<Class<E>> handler) {
+                return ReferenceDataManager.addValueChangeHandler(handler);
+            }
+
+        };
     }
 }

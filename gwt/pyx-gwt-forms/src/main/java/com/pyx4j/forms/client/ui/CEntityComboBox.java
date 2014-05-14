@@ -26,13 +26,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -41,23 +34,22 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
+import com.pyx4j.forms.client.ui.AsyncLoadingHandler.Status;
+import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.ComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
+public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText,
+        AsyncOptionsReadyCallback<E> {
 
     private static final I18n i18n = I18n.get(CEntityComboBox.class);
-
-    private static final Logger log = LoggerFactory.getLogger(CEntityComboBox.class);
-
-    private EntityQueryCriteria<E> criteria;
 
     private OptionsFilter<E> optionsFilter;
 
@@ -65,23 +57,13 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     private String stringViewMemberName;
 
-    private boolean optionsLoaded;
-
-    private boolean isLoading = false;
-
-    private boolean isUnavailable = false;
-
     private boolean useNamesComparison = false;
-
-    private AbstractComponentValidator<E> unavailableValidator;
 
     private boolean hasAsyncValue = false;
 
-    private EntityDataSource<E> optionsDataSource;
+    private final AsyncOptionLoadingDelegate<E> asyncOptionDelegate;
 
-    private HandlerRegistration referenceDataManagerHandlerRegistration;
-
-    private TerminableHandlingCallback optionHandlingCallback = null;
+    private ComponentValidator<E> unavailableValidator;
 
     public CEntityComboBox(Class<E> entityClass) {
         this(entityClass, (NotInOptionsPolicy) null, null);
@@ -89,21 +71,26 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     public CEntityComboBox(Class<E> entityClass, NotInOptionsPolicy policy, EntityDataSource<E> optionsDataSource) {
         super(policy);
-        this.criteria = new EntityQueryCriteria<E>(entityClass);
-        this.optionsDataSource = optionsDataSource;
+        this.asyncOptionDelegate = new AsyncOptionLoadingDelegate<E>(entityClass, this, optionsDataSource);
+        this.unavailableValidator = new AbstractComponentValidator<E>() {
+            @Override
+            public FieldValidationError isValid() {
+                return new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+            }
+        };
         retriveOptions(null);
     }
 
     public E proto() {
-        return this.criteria.proto();
+        return asyncOptionDelegate.proto();
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
-        return this.criteria.add(criterion);
+        return asyncOptionDelegate.addCriterion(criterion);
     }
 
     public void resetCriteria() {
-        this.criteria.resetCriteria();
+        asyncOptionDelegate.resetCriteria();
     }
 
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
@@ -117,12 +104,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     public boolean isOptionsLoaded() {
-        return this.optionsLoaded;
+        return asyncOptionDelegate.isOptionsLoaded();
     }
 
     @Override
     public void setOptions(Collection<E> opt) {
-        optionsLoaded = true;
         if (((optionsFilter == null) && (comparator == null)) || (opt == null) || (opt.size() == 0)) {
             super.setOptions(opt);
         } else {
@@ -141,6 +127,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
             }
             super.setOptions(optFiltered);
         }
+        // in case the options were set synchronously
+        asyncOptionDelegate.setOptionsLoaded(true);
     }
 
     @Override
@@ -149,9 +137,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     public void resetOptions() {
-        if (optionsLoaded) {
-            optionsLoaded = false;
-        }
+        asyncOptionDelegate.resetOptions();
     }
 
     public void refreshOptions() {
@@ -160,116 +146,15 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         getNativeComponent().refreshOptions();
     }
 
-    private class TerminableHandlingCallback implements AsyncCallback<List<E>> {
-        private final AsyncOptionsReadyCallback<E> callback;
-
-        private boolean cancelled = false;
-
-        public TerminableHandlingCallback(AsyncOptionsReadyCallback<E> callback) {
-            this.callback = callback;
-        }
-
-        public void cancel() {
-            cancelled = true;
-        }
-
-        @Override
-        public void onSuccess(List<E> result) {
-            if (cancelled) {
-                return;
-            }
-            isLoading = false;
-            isUnavailable = false;
-            if (unavailableValidator != null) {
-                removeComponentValidator(unavailableValidator);
-            }
-            setOptions(result);
-            optionsLoaded = true;
-            if (callback != null) {
-                callback.onOptionsReady(getOptions());
-            }
-        }
-
-        @Override
-        public void onFailure(Throwable caught) {
-            if (cancelled) {
-                return;
-            }
-            isLoading = false;
-            isUnavailable = true;
-            log.error("can't load {} {}", getTitle(), caught);
-            if (unavailableValidator == null) {
-                unavailableValidator = new AbstractComponentValidator<E>() {
-
-                    @Override
-                    public FieldValidationError isValid() {
-                        return !isUnavailable ? null : new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
-                    }
-                };
-            }
-            addComponentValidator(unavailableValidator);
-            setOptions(null);
-        }
-    }
-
     @Override
-    public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
+    public void retriveOptions(final AsyncOptionsReadyCallback<E> optionsReadyCallback) {
         if (isViewable()) {
             return;
         }
-        if (optionsLoaded) {
-            super.retriveOptions(callback);
+        if (asyncOptionDelegate.isOptionsLoaded()) {
+            super.retriveOptions(optionsReadyCallback);
         } else {
-            if (isLoading && (optionHandlingCallback != null)) {
-                // Second or any other sequential call cancels previous callback
-                optionHandlingCallback.cancel();
-            }
-            isLoading = true;
-            optionHandlingCallback = new TerminableHandlingCallback(callback);
-            if (optionsDataSource != null) {
-                optionsDataSource.obtain(criteria, new AsyncCallback<EntitySearchResult<E>>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        optionHandlingCallback.onFailure(caught);
-                    }
-
-                    @Override
-                    public void onSuccess(EntitySearchResult<E> result) {
-                        optionHandlingCallback.onSuccess(result.getData());
-                    }
-                });
-            } else {
-                if (ReferenceDataManager.isCached(criteria)) {
-                    ReferenceDataManager.obtain(criteria, optionHandlingCallback, true);
-                } else {
-                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                        // keep current criteria and callback reference as they can change by the time the command executes
-                        final TerminableHandlingCallback handlingCallback = optionHandlingCallback;
-
-                        final EntityQueryCriteria<E> crit = criteria.iclone();
-
-                        @Override
-                        public void execute() {
-                            ReferenceDataManager.obtain(crit, handlingCallback, true);
-                        }
-                    });
-                }
-                registerDataChangeHandler();
-            }
-
-        }
-    }
-
-    private void registerDataChangeHandler() {
-        if (referenceDataManagerHandlerRegistration == null) {
-            referenceDataManagerHandlerRegistration = ReferenceDataManager.addValueChangeHandler(new ValueChangeHandler<Class<E>>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Class<E>> event) {
-                    if ((criteria.getEntityClass() == event.getValue()) || (IEntity.class == event.getValue())) {
-                        resetOptions();
-                    }
-                }
-            });
+            asyncOptionDelegate.retrieveOptions(optionsReadyCallback);
         }
     }
 
@@ -336,7 +221,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     @Override
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
         super.onValuePropagation(value, fireEvent, populate);
-        if (populate && optionsFilter != null || (criteria != null && criteria.getFilters() != null && !criteria.getFilters().isEmpty())) {
+        if (populate && (optionsFilter != null || asyncOptionDelegate.hasCriteria())) {
             // Fire options reload since optionsFilter may depend on other values in the model.
             refreshOptions();
         }
@@ -381,9 +266,9 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     @Override
     public String getItemName(E o) {
         if ((o == null) || (o.isNull())) {
-            if (isLoading) {
+            if (asyncOptionDelegate != null && asyncOptionDelegate.isOptStatus(Status.Loading)) {
                 return "loading...";
-            } else if (isUnavailable) {
+            } else if (asyncOptionDelegate != null && asyncOptionDelegate.isOptStatus(Status.Failed)) {
                 return "Error: Data unavailable";
             } else {
                 // Get super's NULL presentation
@@ -400,13 +285,24 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append(super.toString());
-        b.append("\noptionsLoaded " + optionsLoaded + "; ");
+        b.append("\noptionsLoaded " + asyncOptionDelegate.isOptionsLoaded() + "; ");
         b.append("filtered=" + (optionsFilter != null) + "; ");
         b.append("sorted=" + (comparator != null) + "; ");
         if (getOptions() != null) {
             b.append("options=" + getOptions().size() + "; ");
         }
         return b.toString();
+    }
+
+    /** To be used by AsyncOptionLoadingDelegate */
+    @Override
+    public void onOptionsReady(List<E> opt) {
+        if (isOptionsLoaded()) {
+            removeComponentValidator(unavailableValidator);
+        } else {
+            addComponentValidator(unavailableValidator);
+        }
+        setOptions(opt);
     }
 
 }

@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -31,6 +33,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.EntityDataSource;
+import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> {
@@ -49,7 +52,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     }
 
     @Override
-    public void obtain(EntityQueryCriteria<E> criteria, final AsyncCallback<EntitySearchResult<E>> handlingCallback) {
+    public AsyncLoadingHandler obtain(EntityQueryCriteria<E> criteria, final AsyncCallback<EntitySearchResult<E>> handlingCallback) {
         service.list(new DefaultAsyncCallback<EntitySearchResult<E>>() {
 
             @Override
@@ -58,6 +61,7 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
             }
 
         }, updateCriteria((EntityListCriteria<E>) criteria));
+        return null;
     }
 
     // filtering mechanics:
@@ -124,5 +128,11 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
         }
 
         return criteria;
+    }
+
+    @Override
+    public HandlerRegistration addDataChangeHandler(ValueChangeHandler<Class<E>> handler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -22,20 +22,24 @@ package com.pyx4j.tester.client.view.widget;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.EntityDataSource;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.TestAddress;
 import com.pyx4j.tester.client.domain.test.TestCountry;
+import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
 public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorView {
 
@@ -51,8 +55,17 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
 
     static class AddressEditorForm extends CForm<TestAddress> {
 
+        private final ProvinceSelector provinceSelector;
+
         public AddressEditorForm() {
             super(TestAddress.class);
+            provinceSelector = new ProvinceSelector();
+            provinceSelector.addValueChangeHandler(new ValueChangeHandler<String>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<String> event) {
+                    TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(provinceSelector));
+                }
+            });
         }
 
         @Override
@@ -64,7 +77,7 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
             content.append(Location.Left, proto().addressLine2()).decorate().componentWidth(150);
 
             content.append(Location.Right, proto().city()).decorate().componentWidth(150);
-            content.append(Location.Right, proto().region()).decorate().componentWidth(150);
+            content.append(Location.Right, proto().region(), provinceSelector).decorate().componentWidth(150);
             content.append(Location.Right, proto().postalCode()).decorate().componentWidth(100);
 
             // tweaks:
@@ -87,20 +100,23 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
         private void onCountrySelected(TestCountry country) {
             if (!country.isEmpty()) {
                 if (country.name().getStringView().compareTo("Canada") == 0) {
-                    get(proto().region()).setVisible(true);
-                    get(proto().region()).setTitle("Province");
+                    provinceSelector.setCountry(country);
+                    provinceSelector.setVisible(true);
+                    provinceSelector.setTitle("Province");
                     get(proto().postalCode()).setTitle("Postal Code");
                 } else if (country.name().getStringView().compareTo("United States") == 0) {
-                    get(proto().region()).setVisible(true);
-                    get(proto().region()).setTitle("State");
+                    provinceSelector.setCountry(country);
+                    provinceSelector.setVisible(true);
+                    provinceSelector.setTitle("State");
                     get(proto().postalCode()).setTitle("Zip Code");
                 } else if (country.name().getStringView().compareTo("United Kingdom") == 0) {
-                    get(proto().region()).setVisible(false);
+                    provinceSelector.setVisible(false);
                     get(proto().postalCode()).setTitle("Postal Code");
                 } else {
                     // International
-                    get(proto().region()).setVisible(true);
-                    get(proto().region()).setTitle(proto().region().getMeta().getCaption());
+                    provinceSelector.setTextMode(true);
+                    provinceSelector.setVisible(true);
+                    provinceSelector.setTitle(proto().region().getMeta().getCaption());
                     get(proto().postalCode()).setVisible(true);
                     get(proto().postalCode()).setTitle(proto().postalCode().getMeta().getCaption());
                 }
@@ -113,12 +129,18 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
                 super(TestCountry.class, (NotInOptionsPolicy) null, new EntityDataSource<TestCountry>() {
 
                     @Override
-                    public void obtain(EntityQueryCriteria<TestCountry> criteria, AsyncCallback<EntitySearchResult<TestCountry>> handlingCallback) {
+                    public AsyncLoadingHandler obtain(EntityQueryCriteria<TestCountry> criteria, AsyncCallback<EntitySearchResult<TestCountry>> handlingCallback) {
                         EntitySearchResult<TestCountry> result = new EntitySearchResult<>();
                         for (TestCountry c : DomainFactory.getCountries()) {
                             result.add(c);
                         }
                         handlingCallback.onSuccess(result);
+                        return null;
+                    }
+
+                    @Override
+                    public HandlerRegistration addDataChangeHandler(ValueChangeHandler<Class<TestCountry>> handler) {
+                        return null;
                     }
 
                 });
