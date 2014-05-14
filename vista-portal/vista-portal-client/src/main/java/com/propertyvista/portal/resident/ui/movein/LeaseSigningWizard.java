@@ -38,7 +38,7 @@ public class LeaseSigningWizard extends CPortalEntityWizard<LeaseAgreementDTO> {
     private PortalFormPanel featurePanel;
 
     public LeaseSigningWizard(LeaseSigningWizardView view) {
-        super(LeaseAgreementDTO.class, view, i18n.tr("Move-In Wizard"), i18n.tr("Submit"), ThemeColor.contrast2);
+        super(LeaseAgreementDTO.class, view, i18n.tr("Lease Agreement"), i18n.tr("Submit"), ThemeColor.contrast2);
 
         addStep(createDetailsStep(), i18n.tr("Lease Details"));
         addStep(createAgreementStep(), i18n.tr("Lease Agreement"));
