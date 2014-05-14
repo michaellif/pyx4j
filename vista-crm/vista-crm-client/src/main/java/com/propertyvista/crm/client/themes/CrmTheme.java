@@ -18,7 +18,7 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
+import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
@@ -129,7 +129,7 @@ public class CrmTheme extends VistaTheme {
         addTheme(new DefaultRichTextEditorTheme());
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultPaneTheme());
-        addTheme(new DefaultDataTableTheme());
+        addTheme(new DataTableTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new CComponentTheme());
 
