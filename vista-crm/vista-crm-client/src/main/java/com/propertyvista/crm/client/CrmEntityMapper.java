@@ -92,7 +92,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -137,10 +136,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(ProductItem.class, Properties.Service.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequest.class, Tenants.MaintenanceRequest.class, defaultImage);
 
-        AppPlaceEntityMapper.register(Customer.class, Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(Tenant.class, Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(Guarantor.class, Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
-        AppPlaceEntityMapper.register(LeaseParticipantScreeningTO.class, Tenants.Screening.class, defaultImage);
 
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, defaultImage);
         AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, defaultImage);
@@ -203,6 +200,8 @@ public class CrmEntityMapper {
         // DTO mappings:
         AppPlaceEntityMapper.register(LeaseDTO.class, Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, Tenants.LeaseApplication.class, defaultImage);
+
+        AppPlaceEntityMapper.register(LeaseParticipantScreeningTO.class, Tenants.Screening.class, defaultImage);
 
         AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, Financial.CustomerCreditCheck.class, defaultImage);
         AppPlaceEntityMapper.register(CustomerCreditCheckLongReportDTO.class, Tenants.CustomerCreditCheckLongReport.class, defaultImage);
