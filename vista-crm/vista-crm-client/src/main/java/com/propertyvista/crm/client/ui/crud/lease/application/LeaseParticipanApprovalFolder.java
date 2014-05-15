@@ -96,12 +96,12 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
             int row = -1;
-            panel.setWidget(++row, 0, inject(proto().leaseParticipant().leaseParticipant().participantId(), new FieldDecoratorBuilder(15, 15).build()));
+            panel.setWidget(++row, 0, inject(proto().leaseParticipant().leaseParticipant().participantId(), new FieldDecoratorBuilder(10, 15).build()));
             panel.setWidget(
                     ++row,
                     0,
                     inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>(),
-                            new FieldDecoratorBuilder(15, 20).build()));
+                            new FieldDecoratorBuilder(10, 15).build()));
             ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
@@ -117,7 +117,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
             });
 
-            panel.setWidget(++row, 0, inject(proto().leaseParticipant().role(), new FieldDecoratorBuilder(15, 15).build()));
+            panel.setWidget(++row, 0, inject(proto().leaseParticipant().role(), new FieldDecoratorBuilder(10, 15).build()));
 
             panel.setBR(++row, 0, 1);
 
@@ -126,7 +126,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     0,
                     inject(proto().screening(),
                             new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
-                            new FieldDecoratorBuilder(15, 15).build()));
+                            new FieldDecoratorBuilder(10, 15).build()));
             return panel;
         }
 

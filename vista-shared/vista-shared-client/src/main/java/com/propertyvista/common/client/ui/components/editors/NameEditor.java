@@ -89,7 +89,7 @@ public class NameEditor extends CForm<Name> {
             formPanel.append(Location.Right, proto().maidenName()).decorate().componentWidth(180);
         } else {
             viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            formPanel.append(Location.Dual, viewComp).decorate().customLabel(customViewLabel);
+            formPanel.append(Location.Left, viewComp).decorate().customLabel(customViewLabel);
         }
 
         return formPanel;
