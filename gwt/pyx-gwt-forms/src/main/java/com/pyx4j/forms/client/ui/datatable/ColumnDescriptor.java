@@ -187,7 +187,7 @@ public class ColumnDescriptor {
 
         private boolean searchableOnly = false;
 
-        private String width;
+        private String width = DEFAULT_WIDTH;
 
         private boolean wordWrap = true;
 

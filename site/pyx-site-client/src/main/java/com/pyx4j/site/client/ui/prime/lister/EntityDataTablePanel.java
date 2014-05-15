@@ -285,24 +285,8 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
         dataTablePanel.getDataTable().setMarkSelectedRow(isSelectable);
     }
 
-    public boolean isMultiSelect() {
-        return dataTablePanel.getDataTable().isMultiSelect();
-    }
-
-    public void setMultiSelect(boolean isMultiSelect) {
-        dataTablePanel.getDataTable().setMultiSelect(isMultiSelect);
-    }
-
-    public void releaseSelection() {
-        dataTablePanel.getDataTable().releaseSelection();
-    }
-
     public E getSelectedItem() {
         return dataTablePanel.getDataTable().getSelectedItem();
-    }
-
-    public List<E> getSelectedItems() {
-        return dataTablePanel.getDataTable().getSelectedItems();
     }
 
     public void addItemSelectionHandler(ItemSelectionHandler<E> handler) {

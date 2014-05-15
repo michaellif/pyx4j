@@ -67,8 +67,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private int selectedRow = -1;
 
-    private List<Integer> selectedRows;
-
     private boolean hasDetailsNavigation = false;
 
     private boolean hasColumnClickSorting = false;
@@ -81,6 +79,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private final List<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
+    private ItemZoomInCommand<E> itemZoomInCommand;
+
     private SelectionCheckBox selectionCheckBoxAll;
 
     private List<ItemSelectionHandler> itemSelectionHandlers;
@@ -90,6 +90,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private List<SortChangeHandler<E>> sortChangeHandlers;
 
     private List<ColumnSelectionHandler> columnSelectionHandlers;
+
+    public static interface ItemZoomInCommand<E extends IEntity> {
+        void execute(E item);
+    }
 
     public DataTable() {
         setStyleName(DataTableTheme.StyleName.DataTable.name());
@@ -107,6 +111,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     }
                 } else if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0)) {
                     setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
+                    if (itemZoomInCommand != null) {
+                        itemZoomInCommand.execute(getSelectedItem());
+                    }
                 }
             }
         });
@@ -138,28 +145,12 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         return selectedRow;
     }
 
-    public List<Integer> getSelectedRows() {
-        return selectedRows;
-    }
-
     public E getSelectedItem() {
         int selectedRow = getSelectedRow();
         if (selectedRow >= 0 && selectedRow < model.getData().size()) {
             return model.getData().get(selectedRow).getEntity();
         }
         return null;
-    }
-
-    public List<E> getSelectedItems() {
-        List<E> selected = new ArrayList<E>();
-
-        for (int selectedRow : selectedRows) {
-            if (selectedRow >= 0 && selectedRow < model.getData().size()) {
-                selected.add(model.getData().get(selectedRow).getEntity());
-            }
-        }
-
-        return selected;
     }
 
     public List<E> getCheckedItems() {
@@ -245,35 +236,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.markSelectedRow = markSelectedRow;
     }
 
-    public boolean isMultiSelect() {
-        return (selectedRows != null);
-    }
-
-    public void setMultiSelect(boolean isMultiSelect) {
-        if (isMultiSelect) {
-            if (!isMultiSelect()) {
-                selectedRows = new ArrayList<Integer>(model.getPageSize());
-            }
-        } else {
-            for (int i : selectedRows) {
-                markRow(i, false);
-            }
-            selectedRows = null;
-        }
-    }
-
-    public void releaseSelection() {
-        if (isMultiSelect()) {
-            for (int i : selectedRows) {
-                markRow(i, false);
-            }
-            selectedRows.clear();
-        } else {
-            markRow(getSelectedRow(), false);
-        }
-        selectedRow = -1;
-    }
-
     public boolean hasColumnClickSorting() {
         return hasColumnClickSorting;
     }
@@ -332,9 +294,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public void clearTable() {
         selectedRow = -1;
-        if (selectedRows != null) {
-            selectedRows.clear();
-        }
         selectionCheckBoxes.clear();
         for (int row = getRowCount() - 1; row > 0; row--) {
             removeRow(row);
@@ -502,19 +461,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     protected void setSelectedRow(int selectedRow) {
 
-        if (isMultiSelect()) {
-            if (selectedRows.contains(new Integer(selectedRow))) {
-                selectedRows.remove(new Integer(selectedRow));
-                markRow(selectedRow, false);
-            } else {
-                selectedRows.add(selectedRow);
-                markRow(selectedRow, true);
-            }
-        } else {
-            markRow(getSelectedRow(), false);
-            this.selectedRow = selectedRow;
-            markRow(getSelectedRow(), true);
-        }
+        markRow(getSelectedRow(), false);
+        this.selectedRow = selectedRow;
+        markRow(getSelectedRow(), true);
 
         // notify listeners:
         if (itemSelectionHandlers != null) {
