@@ -31,7 +31,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
@@ -148,7 +148,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
+    public void getCurrentAddress(AsyncCallback<InternationalAddress> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 

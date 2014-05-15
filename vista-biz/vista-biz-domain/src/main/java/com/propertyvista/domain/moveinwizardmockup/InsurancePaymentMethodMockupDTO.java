@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo;
 
 @Transient
@@ -50,10 +50,10 @@ public interface InsurancePaymentMethodMockupDTO extends IEntity {
     IPrimitive<Boolean> sameAsCurrent();
 
     @EmbeddedEntity
-    AddressSimple billingAddress();
+    InternationalAddress billingAddress();
 
     @EmbeddedEntity
-    AddressSimple currentAddress();
+    InternationalAddress currentAddress();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();

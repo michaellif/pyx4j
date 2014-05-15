@@ -30,7 +30,7 @@ import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.PmcBusinessInformationDocumentFolder;
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
 // TODO add document requirements label and validator
@@ -52,7 +52,7 @@ public class BusinessInformationForm extends CForm<BusinessInformationDTO> {
         formPanel.append(Location.Right, proto().businessNumber()).decorate();
         formPanel.append(Location.Right, proto().businessEstablishedDate()).decorate();
 
-        formPanel.append(Location.Dual, proto().dto_businessAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().dto_businessAddress(), new InternationalAddressEditor());
 
         Label documentsLabel = new Label();
         documentsLabel.setText(isEditable() ? i18n.tr("Attach Documentation:") : i18n.tr("Attached Documentation:"));

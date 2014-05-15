@@ -45,7 +45,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person;
@@ -145,7 +145,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     }
 
     @Override
-    public void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback) {
+    public void getCurrentTenantAddress(AsyncCallback<InternationalAddress> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 

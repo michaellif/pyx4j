@@ -25,7 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayWizardView;
@@ -41,10 +41,10 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
-        ((AutoPayWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+    public void getCurrentAddress(final AsyncCallback<InternationalAddress> callback) {
+        ((AutoPayWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
             @Override
-            public void onSuccess(AddressSimple result) {
+            public void onSuccess(InternationalAddress result) {
                 callback.onSuccess(result);
             }
         });

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
@@ -28,7 +28,7 @@ public interface TenantSureInsurancePolicyCrudService extends AbstractCrudServic
 
     void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
 
-    void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback);
+    void getCurrentTenantAddress(AsyncCallback<InternationalAddress> callback);
 
     void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId);
 

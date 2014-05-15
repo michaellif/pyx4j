@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
@@ -198,7 +198,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         wizardDecorator.getBtnNext().setEnabled(quote != null && !quote.quoteId().isNull());
     }
 
-    public void setBillingAddress(AddressSimple billingAddress) {
+    public void setBillingAddress(InternationalAddress billingAddress) {
         paymentMethodForm.setBillingAddress(billingAddress);
     }
 

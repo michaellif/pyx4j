@@ -25,7 +25,7 @@ import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodWizardView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -41,10 +41,10 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
-        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+    public void getCurrentAddress(final AsyncCallback<InternationalAddress> callback) {
+        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
             @Override
-            public void onSuccess(AddressSimple result) {
+            public void onSuccess(InternationalAddress result) {
                 callback.onSuccess(result);
             }
         });

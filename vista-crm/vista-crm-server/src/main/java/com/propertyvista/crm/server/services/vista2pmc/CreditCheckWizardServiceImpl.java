@@ -34,7 +34,7 @@ import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
-import com.propertyvista.domain.pmc.info.PmcAddressSimple;
+import com.propertyvista.domain.pmc.info.PmcAddress;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcPersonalInformationDocument;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
@@ -71,8 +71,8 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
                 }
 
                 // solution to CRM country namespace editing in CRM and saving in admin
-                businessInformation.businessAddress().set(dto.businessInformation().dto_businessAddress().duplicate(PmcAddressSimple.class));
-                personalInformation.personalAddress().set(dto.personalInformation().dto_personalAddress().duplicate(PmcAddressSimple.class));
+                businessInformation.businessAddress().set(dto.businessInformation().dto_businessAddress().duplicate(PmcAddress.class));
+                personalInformation.personalAddress().set(dto.personalInformation().dto_personalAddress().duplicate(PmcAddress.class));
 
                 Persistence.service().persist(businessInformation);
                 Persistence.service().persist(personalInformation);

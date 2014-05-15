@@ -17,10 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 
 public interface PaymentMethodWizardService extends AbstractCrudService<PaymentMethodDTO> {
 
-    void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+    void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
 }

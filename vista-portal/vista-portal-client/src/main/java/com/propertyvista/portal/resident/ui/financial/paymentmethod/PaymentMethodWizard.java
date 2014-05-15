@@ -42,7 +42,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -81,17 +81,17 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentMethodWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((PaymentMethodWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
                     @Override
-                    public void onSuccess(AddressSimple result) {
+                    public void onSuccess(InternationalAddress result) {
                         comp.setValue(result, false);
                     }
                 });
             } else {
-                comp.setValue(EntityFactory.create(AddressSimple.class), false);
+                comp.setValue(EntityFactory.create(InternationalAddress.class), false);
             }
         }
 

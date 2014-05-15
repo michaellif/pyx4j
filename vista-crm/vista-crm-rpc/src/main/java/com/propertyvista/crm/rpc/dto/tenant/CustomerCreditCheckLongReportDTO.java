@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
 
 @Transient
@@ -169,9 +169,9 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> maritalStatus();
 
-        AddressSimple currentAddress();
+        InternationalAddress currentAddress();
 
-        AddressSimple formerAddress();
+        InternationalAddress formerAddress();
 
         @Caption(name = "Employer")
         IPrimitive<String> currentEmployer();
@@ -297,7 +297,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> defendants();
 
-        AddressSimple address();
+        InternationalAddress address();
     }
 
     IList<EvictionDTO> evictions();
@@ -332,7 +332,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<LogicalDate> duration();
 
-        AddressSimple address();
+        InternationalAddress address();
 
         IPrimitive<String> historyTable();
     }

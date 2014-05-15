@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -158,11 +158,11 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         formPanel.h3(i18n.tr("Current Addresses"));
 
-        formPanel.append(Location.Dual, proto().identity().currentAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().identity().currentAddress(), new InternationalAddressEditor());
 
         formPanel.h3(i18n.tr("Former Addresses"));
 
-        formPanel.append(Location.Dual, proto().identity().formerAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().identity().formerAddress(), new InternationalAddressEditor());
 
         formPanel.h2(i18n.tr("Employement"));
 

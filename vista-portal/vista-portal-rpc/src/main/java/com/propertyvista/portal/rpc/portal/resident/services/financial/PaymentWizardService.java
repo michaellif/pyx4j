@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
@@ -27,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 
 public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
 
-    void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+    void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 

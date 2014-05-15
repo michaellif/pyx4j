@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -49,7 +49,7 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
         formPanel.append(Location.Right, proto().email()).decorate().componentWidth(250);
 
         formPanel.h3(i18n.tr("Address"));
-        formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
         return formPanel;
     }

@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -44,7 +44,7 @@ public interface PaymentDataDTO extends IEntity {
     }
 
     @Transient
-    AddressSimple address();
+    InternationalAddress address();
 
     @Editor(type = EditorType.label)
     IPrimitive<String> propertyCode();

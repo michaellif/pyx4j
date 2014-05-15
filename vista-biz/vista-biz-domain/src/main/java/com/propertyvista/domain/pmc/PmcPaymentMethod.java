@@ -25,7 +25,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 
 @Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
@@ -46,7 +46,7 @@ public interface PmcPaymentMethod extends AbstractPaymentMethod {
 
     @Override
     @Transient
-    AddressSimple billingAddress();
+    InternationalAddress billingAddress();
 
     @Transient
     @Caption(description = "Use this payment method for Equifax payments")

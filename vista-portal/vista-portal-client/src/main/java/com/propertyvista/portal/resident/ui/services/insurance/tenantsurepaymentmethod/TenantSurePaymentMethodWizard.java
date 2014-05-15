@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView.Persenter;
@@ -55,7 +55,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
         this.presenter = presenter;
     }
 
-    public void setBillingAddress(AddressSimple address) {
+    public void setBillingAddress(InternationalAddress address) {
         InsurancePaymentMethod paymentMethod = paymentMethodForm.getValue();
         paymentMethod.billingAddress().set(address);
         paymentMethodForm.setValue(paymentMethod);
@@ -65,7 +65,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
         PortalFormPanel formPanel = new PortalFormPanel(this);
         formPanel.append(Location.Left, proto().currentPaymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().currentPaymentMethod().details(), new CEntityLabel<PaymentDetails>()).decorate();
-        formPanel.append(Location.Left, proto().currentPaymentMethod().billingAddress(), new CEntityLabel<AddressSimple>()).decorate();
+        formPanel.append(Location.Left, proto().currentPaymentMethod().billingAddress(), new CEntityLabel<InternationalAddress>()).decorate();
         return formPanel;
     }
 

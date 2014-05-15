@@ -62,7 +62,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.resources.VistaResources;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -109,17 +109,17 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((PaymentWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
                     @Override
-                    public void onSuccess(AddressSimple result) {
+                    public void onSuccess(InternationalAddress result) {
                         comp.setValue(result, false);
                     }
                 });
             } else {
-                comp.setValue(EntityFactory.create(AddressSimple.class), false);
+                comp.setValue(EntityFactory.create(InternationalAddress.class), false);
             }
         }
 

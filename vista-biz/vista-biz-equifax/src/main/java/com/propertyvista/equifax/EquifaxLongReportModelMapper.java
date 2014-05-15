@@ -44,7 +44,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RatingLevel;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RiskLevel;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -365,9 +365,9 @@ public class EquifaxLongReportModelMapper {
         return null;
     }
 
-    private static AddressSimple createAddress(CNAddressType cnAddress) {
+    private static InternationalAddress createAddress(CNAddressType cnAddress) {
         if (cnAddress != null) {
-            AddressSimple address = EntityFactory.create(AddressSimple.class);
+            InternationalAddress address = EntityFactory.create(InternationalAddress.class);
             address.city().setValue(cnAddress.getCity() != null ? cnAddress.getCity().getValue() : null);
             address.postalCode().setValue(cnAddress.getPostalCode());
             String streetName = "";
@@ -377,12 +377,11 @@ public class EquifaxLongReportModelMapper {
             if (cnAddress.getStreetName() != null) {
                 streetName = streetName + " " + cnAddress.getStreetName();
             }
-            address.street1().setValue(streetName);
+            address.addressLine1().setValue(streetName);
             if (cnAddress.getProvince() != null) {
-                address.province().code().setValue(cnAddress.getProvince().getCode());
                 List<Province> provinces = getProvinces();
                 address.country().name().setValue(getCountry(provinces, cnAddress.getProvince().getCode()));
-                address.province().name().setValue(getProvince(provinces, cnAddress.getProvince().getCode()));
+                address.province().setValue(getProvince(provinces, cnAddress.getProvince().getCode()));
             }
             return address;
         }

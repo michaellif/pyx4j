@@ -54,7 +54,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -105,17 +105,17 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((AutoPayWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((AutoPayWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
                     @Override
-                    public void onSuccess(AddressSimple result) {
+                    public void onSuccess(InternationalAddress result) {
                         comp.setValue(result, false);
                     }
                 });
             } else {
-                comp.setValue(EntityFactory.create(AddressSimple.class), false);
+                comp.setValue(EntityFactory.create(InternationalAddress.class), false);
             }
         }
 
@@ -140,7 +140,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     private IsWidget createDetailsStep() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
         formPanel.append(Location.Left, proto().tenant(), new CEntityLabel<Tenant>()).decorate().componentWidth(200);
-        formPanel.append(Location.Left, proto().address(), new CEntityLabel<AddressSimple>()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().address(), new CEntityLabel<InternationalAddress>()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {

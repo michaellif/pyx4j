@@ -16,32 +16,31 @@ package com.propertyvista.interfaces.importer.converter;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.interfaces.importer.model.AddressSimpleIO;
 
-public class AddressSimpleConverter extends EntityBinder<AddressSimple, AddressSimpleIO> {
+public class AddressSimpleConverter extends EntityBinder<InternationalAddress, AddressSimpleIO> {
 
     public AddressSimpleConverter() {
-        super(AddressSimple.class, AddressSimpleIO.class, false);
+        super(InternationalAddress.class, AddressSimpleIO.class, false);
     }
 
     @Override
     protected void bind() {
-        bind(toProto.street1(), boProto.street1());
-        bind(toProto.street2(), boProto.street2());
+        bind(toProto.street1(), boProto.addressLine1());
+        bind(toProto.street2(), boProto.addressLine2());
         bind(toProto.city(), boProto.city());
-        bind(toProto.provinceCode(), boProto.province().code());
+        bind(toProto.provinceName(), boProto.province());
         bind(toProto.country(), boProto.country().name());
         bind(toProto.postalCode(), boProto.postalCode());
     }
 
     @Override
-    protected void onUpdateBOmember(AddressSimpleIO dto, AddressSimple dbo, IObject<?> dboM) {
+    protected void onUpdateBOmember(AddressSimpleIO dto, InternationalAddress dbo, IObject<?> dboM) {
         if (dboM == dbo.country().name()) {
             dbo.country().setPrimaryKey(null);
-        } else if (dboM == dbo.province().code()) {
-            dbo.province().setPrimaryKey(null);
-            dbo.province().name().setValue(null);
+        } else if (dboM == dbo.province()) {
+            dbo.province().setValue(null);
         }
     }
 }

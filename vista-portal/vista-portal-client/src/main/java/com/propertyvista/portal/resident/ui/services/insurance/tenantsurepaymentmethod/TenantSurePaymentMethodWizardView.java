@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
@@ -24,6 +24,6 @@ public interface TenantSurePaymentMethodWizardView extends IWizardView<Insurance
         void getCurrentAddress();
     }
 
-    public void setBillingAddress(AddressSimple callback);
+    public void setBillingAddress(InternationalAddress callback);
 
 }

@@ -20,7 +20,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderWizardView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
@@ -71,9 +71,9 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
 
     @Override
     public void populateCurrentAddressAsBillingAddress() {
-        ((TenantSureInsurancePolicyCrudService) getService()).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
+        ((TenantSureInsurancePolicyCrudService) getService()).getCurrentTenantAddress(new DefaultAsyncCallback<InternationalAddress>() {
             @Override
-            public void onSuccess(AddressSimple billingAddress) {
+            public void onSuccess(InternationalAddress billingAddress) {
                 getView().setBillingAddress(billingAddress);
             }
         });

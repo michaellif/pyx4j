@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
@@ -24,7 +24,7 @@ public interface PaymentMethodWizardView extends IWizardView<PaymentMethodDTO> {
 
     interface Presenter extends IWizardFormPresenter<PaymentMethodDTO> {
 
-        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+        void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
 
         void showTermsOfUse();
 

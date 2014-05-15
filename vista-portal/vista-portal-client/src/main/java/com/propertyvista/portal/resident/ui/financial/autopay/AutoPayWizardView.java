@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
@@ -27,7 +27,7 @@ public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
 
     interface Presenter extends IWizardFormPresenter<AutoPayDTO> {
 
-        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+        void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 

@@ -37,7 +37,7 @@ public interface PersonalInformation extends IEntity {
 
     @EmbeddedEntity
     @NotNull
-    PmcAddressSimple personalAddress();
+    PmcAddress personalAddress();
 
     @NotNull
     @Editor(type = EditorType.email)

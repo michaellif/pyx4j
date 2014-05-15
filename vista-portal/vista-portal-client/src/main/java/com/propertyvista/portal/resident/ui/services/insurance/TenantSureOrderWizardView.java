@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
@@ -34,7 +34,7 @@ public interface TenantSureOrderWizardView extends IWizardView<TenantSureInsuran
 
     void setQuote(TenantSureQuoteDTO quote);
 
-    void setBillingAddress(AddressSimple billingAddress);
+    void setBillingAddress(InternationalAddress billingAddress);
 
     void acknowledgeSendQuoteDetailsSucess(String email);
 

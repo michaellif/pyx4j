@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodView;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentMethodWizardService;
@@ -32,10 +32,10 @@ public class PaymentMethodViewActivity extends AbstractEditorActivity<PaymentMet
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
-        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+    public void getCurrentAddress(final AsyncCallback<InternationalAddress> callback) {
+        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
             @Override
-            public void onSuccess(AddressSimple result) {
+            public void onSuccess(InternationalAddress result) {
                 callback.onSuccess(result);
             }
         });

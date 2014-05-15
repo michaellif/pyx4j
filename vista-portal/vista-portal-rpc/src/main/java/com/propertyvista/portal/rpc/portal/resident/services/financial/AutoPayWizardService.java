@@ -19,14 +19,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 
 public interface AutoPayWizardService extends AbstractCrudService<AutoPayDTO> {
 
-    void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+    void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 

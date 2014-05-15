@@ -28,7 +28,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 
 @AbstractEntity
 @Inheritance
@@ -44,7 +44,7 @@ public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
 
     @EmbeddedEntity
     @Caption(name = "Employer Address")
-    AddressSimple address();
+    InternationalAddress address();
 
     //TODO: either one of starts/ends,  may be optional/hidden ?
     @Caption(name = "Employed for (years)")

@@ -19,24 +19,24 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.IList;
 
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.site.rpc.dto.AmenityDTO;
 
 class Formatter {
 
     public final static String POSTFIX = " \u2022 ";
 
-    public static String formatAddress(AddressSimple address) {
+    public static String formatAddress(InternationalAddress address) {
 
         if (address.isNull())
             return "";
 
         StringBuffer addrString = new StringBuffer();
 
-        addrString.append(address.street1().getStringView());
-        if (!address.street2().isNull()) {
+        addrString.append(address.addressLine1().getStringView());
+        if (!address.addressLine2().isNull()) {
             addrString.append(" ");
-            addrString.append(address.street2().getStringView());
+            addrString.append(address.addressLine2().getStringView());
         }
 
         if (!address.city().isNull()) {

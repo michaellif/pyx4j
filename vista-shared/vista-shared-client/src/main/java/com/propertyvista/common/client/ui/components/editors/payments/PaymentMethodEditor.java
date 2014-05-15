@@ -37,8 +37,8 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
@@ -97,7 +97,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         billingAddressHeader = formPanel.h3(proto().billingAddress().getMeta().getCaption());
 
         formPanel.append(Location.Dual, proto().sameAsCurrent()).decorate().componentWidth(80);
-        formPanel.append(Location.Dual, proto().billingAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().billingAddress(), new InternationalAddressEditor());
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             formPanel.br();
@@ -390,11 +390,11 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         return EnumSet.allOf(CreditCardType.class);
     }
 
-    public void setBillingAddress(AddressSimple address) {
+    public void setBillingAddress(InternationalAddress address) {
         get(proto().billingAddress()).setValue(address);
     }
 
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, AddressSimple, ?> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, InternationalAddress, ?> comp) {
         // Implements meaningful in derived classes...
     }
 

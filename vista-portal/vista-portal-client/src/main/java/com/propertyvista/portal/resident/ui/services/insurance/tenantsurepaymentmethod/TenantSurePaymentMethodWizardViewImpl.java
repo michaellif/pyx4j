@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
@@ -25,7 +25,7 @@ public class TenantSurePaymentMethodWizardViewImpl extends AbstractWizardView<In
     }
 
     @Override
-    public void setBillingAddress(AddressSimple address) {
+    public void setBillingAddress(InternationalAddress address) {
         ((TenantSurePaymentMethodWizard) getWizard()).setBillingAddress(address);
     }
 

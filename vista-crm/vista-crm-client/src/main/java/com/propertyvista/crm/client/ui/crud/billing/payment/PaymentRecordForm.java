@@ -63,7 +63,7 @@ import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValid
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -102,17 +102,17 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         };
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
             if (set) {
                 ((PaymentRecordEditorView.Presenter) ((PaymentRecordEditorView) getParentView()).getPresenter()).getCurrentAddress(
-                        new DefaultAsyncCallback<AddressSimple>() {
+                        new DefaultAsyncCallback<InternationalAddress>() {
                             @Override
-                            public void onSuccess(AddressSimple result) {
+                            public void onSuccess(InternationalAddress result) {
                                 comp.setValue(result, false);
                             }
                         }, PaymentRecordForm.this.getValue().leaseTermParticipant());
             } else {
-                comp.setValue(EntityFactory.create(AddressSimple.class), false);
+                comp.setValue(EntityFactory.create(InternationalAddress.class), false);
             }
         }
 

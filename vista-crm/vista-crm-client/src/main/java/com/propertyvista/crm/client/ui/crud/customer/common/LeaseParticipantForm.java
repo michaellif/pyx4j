@@ -56,7 +56,7 @@ import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -210,17 +210,17 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         formPanel.append(Location.Dual, proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
-            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, AddressSimple, ?> comp) {
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<?, InternationalAddress, ?> comp) {
                 if (set) {
                     ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
-                            .getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                            .getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
                                 @Override
-                                public void onSuccess(AddressSimple result) {
+                                public void onSuccess(InternationalAddress result) {
                                     comp.setValue(result, false);
                                 }
                             });
                 } else {
-                    comp.setValue(EntityFactory.create(AddressSimple.class), false);
+                    comp.setValue(EntityFactory.create(InternationalAddress.class), false);
                 }
             }
 

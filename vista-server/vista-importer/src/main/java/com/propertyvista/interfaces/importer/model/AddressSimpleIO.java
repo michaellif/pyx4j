@@ -28,7 +28,7 @@ public interface AddressSimpleIO extends IEntity {
 
     IPrimitive<String> city();
 
-    IPrimitive<String> provinceCode();
+    IPrimitive<String> provinceName();
 
     IPrimitive<String> country();
 

@@ -26,7 +26,7 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -62,7 +62,7 @@ public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePayment
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
+    public void getCurrentAddress(AsyncCallback<InternationalAddress> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 

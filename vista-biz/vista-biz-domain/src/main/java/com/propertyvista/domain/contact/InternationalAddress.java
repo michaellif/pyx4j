@@ -26,21 +26,17 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
-import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AddressSimple extends IEntity {
+public interface InternationalAddress extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    @Caption(name = "Address 1")
-    IPrimitive<String> street1();
+    IPrimitive<String> addressLine1();
 
     @ToString(index = 1)
-    @Caption(name = "Address 2")
-    IPrimitive<String> street2();
+    IPrimitive<String> addressLine2();
 
     @NotNull
     @ToString(index = 2)
@@ -48,10 +44,8 @@ public interface AddressSimple extends IEntity {
 
     @NotNull
     @ToString(index = 3)
-    @Caption(name = "Province/State")
-    @Editor(type = EditorType.combo)
-    @Reference(adapter = ProvinceReferenceAdapter.class)
-    Province province();
+    @Caption(name = "Province/State/Region")
+    IPrimitive<String> province();
 
     @NotNull
     @ToString(index = 4)

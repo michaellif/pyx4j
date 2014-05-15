@@ -31,7 +31,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodInfoDTO;
@@ -149,7 +149,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 formPanel.append(Location.Left, proto().paymentMethod().creationDate(), new CDateLabel()).decorate().componentWidth(100);
                 formPanel.append(Location.Left, proto().paymentMethod().type(), new CEnumLabel()).decorate().componentWidth(150);
                 formPanel.append(Location.Left, proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>()).decorate();
-                formPanel.append(Location.Left, proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>()).decorate();
+                formPanel.append(Location.Left, proto().paymentMethod().billingAddress(), new CEntityLabel<InternationalAddress>()).decorate();
                 formPanel.append(Location.Left, new Anchor(i18n.tr("View Details"), new Command() {
                     @Override
                     public void execute() {

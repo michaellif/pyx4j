@@ -17,7 +17,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardView;
@@ -51,7 +51,7 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
     }
 
     @Override
-    public void setBillingAddress(AddressSimple billingAddress) {
+    public void setBillingAddress(InternationalAddress billingAddress) {
         wizard.setBillingAddress(billingAddress);
     }
 

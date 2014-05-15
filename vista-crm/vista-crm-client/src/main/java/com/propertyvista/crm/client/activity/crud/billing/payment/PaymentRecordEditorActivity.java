@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordEditorView;
 import com.propertyvista.crm.rpc.services.billing.PaymentRecordCrudService;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -52,10 +52,10 @@ public class PaymentRecordEditorActivity extends CrmEditorActivity<PaymentRecord
 
     @SuppressWarnings("unchecked")
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
-        ((PaymentRecordCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+    public void getCurrentAddress(final AsyncCallback<InternationalAddress> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
+        ((PaymentRecordCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<InternationalAddress>() {
             @Override
-            public void onSuccess(AddressSimple result) {
+            public void onSuccess(InternationalAddress result) {
                 callback.onSuccess(result);
             }
         }, (LeaseTermParticipant<? extends LeaseParticipant<?>>) payer.createIdentityStub());

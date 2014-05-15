@@ -33,7 +33,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -140,7 +140,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressSimple> callback, TO participantId) {
+    public void getCurrentAddress(AsyncCallback<InternationalAddress> callback, TO participantId) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(EntityFactory.createIdentityStub(boClass, participantId.getPrimaryKey())));
     }
 

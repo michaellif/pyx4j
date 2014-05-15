@@ -29,7 +29,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 
 @AbstractEntity
 @ToStringFormat("{0}{1,choice,null#|!null# - {1}}")
@@ -51,7 +51,7 @@ public interface AbstractPaymentMethod extends IEntity {
     IPrimitive<Boolean> sameAsCurrent();
 
     @EmbeddedEntity
-    AddressSimple billingAddress();
+    InternationalAddress billingAddress();
 
     /**
      * Indicates if this method is deleted (still persists in DB but not used anymore!).

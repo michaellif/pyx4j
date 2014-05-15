@@ -15,14 +15,13 @@ package com.propertyvista.domain.pmc.info;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 
 @EmbeddedEntity
-public interface PmcAddressSimple extends AddressSimple {
+public interface PmcAddress extends InternationalAddress {
 
-    @Override
     @EmbeddedEntity
-    PmcAddressProvince province();
+    PmcAddressProvince provinceInfo();
 
     @Override
     @EmbeddedEntity

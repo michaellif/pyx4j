@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
@@ -146,7 +146,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
+                formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
                 injectIEmploymentInfo(formPanel, this);
 
@@ -195,7 +195,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
+                formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
                 injectIEmploymentInfo(formPanel, this);
 
@@ -222,7 +222,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 formPanel.append(Location.Dual, proto().name()).decorate().componentWidth(240);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
+                formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
                 formPanel.h3(i18n.tr("Program Info"));
                 formPanel.append(Location.Left, proto().program()).decorate().componentWidth(120);
@@ -257,7 +257,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
+                formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
                 injectIEmploymentInfo(formPanel, this);
 
@@ -291,7 +291,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
-                formPanel.append(Location.Dual, proto().address(), new AddressSimpleEditor());
+                formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
                 injectIEmploymentInfo(formPanel, this);
 

@@ -17,7 +17,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 
@@ -25,28 +25,28 @@ public class AddressConverter {
 
     private static final I18n i18n = I18n.get(AddressConverter.class);
 
-    public static class StructuredToSimpleAddressConverter extends EntityBinder<AddressStructured, AddressSimple> {
+    public static class StructuredToSimpleAddressConverter extends EntityBinder<AddressStructured, InternationalAddress> {
 
         public StructuredToSimpleAddressConverter() {
-            super(AddressStructured.class, AddressSimple.class);
+            super(AddressStructured.class, InternationalAddress.class);
         }
 
         @Override
         protected void bind() {
             bind(toProto.city(), boProto.city());
             bind(toProto.country(), boProto.country());
-            bind(toProto.province(), boProto.province());
+            bind(toProto.province(), boProto.province().name());
             bind(toProto.postalCode(), boProto.postalCode());
         }
 
         @Override
-        public void copyBOtoTO(AddressStructured dbo, AddressSimple dto) {
+        public void copyBOtoTO(AddressStructured dbo, InternationalAddress dto) {
             super.copyBOtoTO(dbo, dto);
 
             //@formatter:off
             StringBuilder address = new StringBuilder(getStreetAddress(dbo));
             address.append(", ").append(i18n.tr("Suite")).append(' ').append(val(dbo.suiteNumber()));
-            dto.street1().setValue(address.toString());
+            dto.addressLine1().setValue(address.toString());
             //@formatter:on
         }
 

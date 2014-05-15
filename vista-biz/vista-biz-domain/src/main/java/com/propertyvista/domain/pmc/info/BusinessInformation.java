@@ -55,7 +55,7 @@ public interface BusinessInformation extends IEntity {
 
     @NotNull
     @EmbeddedEntity
-    PmcAddressSimple businessAddress();
+    PmcAddress businessAddress();
 
     @Caption(name = "Business Number / Employer Identification")
     IPrimitive<String> businessNumber();

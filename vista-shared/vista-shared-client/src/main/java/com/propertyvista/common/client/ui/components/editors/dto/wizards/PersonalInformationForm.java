@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.dto.vista2pmc.PersonalInformationDTO;
 
@@ -35,7 +35,7 @@ public class PersonalInformationForm extends CForm<PersonalInformationDTO> {
 
         formPanel.append(Location.Dual, proto().name(), new NameEditor());
 
-        formPanel.append(Location.Dual, proto().dto_personalAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Dual, proto().dto_personalAddress(), new InternationalAddressEditor());
 
         formPanel.append(Location.Left, proto().email()).decorate();
         formPanel.append(Location.Left, proto().dateOfBirth()).decorate();

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -21,34 +21,38 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
-import com.propertyvista.common.client.ui.components.editors.CountryContextCComponentProvider;
-import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.Country;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
-public class AddressSimpleEditor extends CForm<InternationalAddress> {
+public class InternationalAddressEditor extends CForm<InternationalAddress> {
 
     private final CProvinceComboBox province = new CProvinceComboBox();
 
-    public AddressSimpleEditor() {
+    public InternationalAddressEditor() {
+        this(FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
+    }
+
+    public InternationalAddressEditor(double labelWidth, double maxCompWidth, double contentWidth) {
         super(InternationalAddress.class);
     }
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         formPanel.append(Location.Left, proto().addressLine1()).decorate();
         formPanel.append(Location.Left, proto().addressLine2()).decorate();
         formPanel.append(Location.Left, proto().city()).decorate();
-        formPanel.append(Location.Left, proto().province(), province).decorate();
-        formPanel.append(Location.Left, proto().country()).decorate();
-        formPanel.append(Location.Left, proto().postalCode()).decorate();
+
+        formPanel.append(Location.Right, proto().province(), province).decorate();
+        formPanel.append(Location.Right, proto().country()).decorate();
+        formPanel.append(Location.Right, proto().postalCode()).decorate().componentWidth(120);
 
         return formPanel;
     }
@@ -102,13 +106,5 @@ public class AddressSimpleEditor extends CForm<InternationalAddress> {
                 get(proto().postalCode()).setTitle(proto().postalCode().getMeta().getCaption());
             }
         }
-    }
-
-    @Override
-    public void generateMockData() {
-        get(proto().addressLine1()).setMockValue("100 King St. W");
-        get(proto().city()).setMockValue("Toronto");
-        get(proto().postalCode()).setMockValue("M5H 1A1");
-        get(proto().province()).setMockValueByString("Ontario");
     }
 }

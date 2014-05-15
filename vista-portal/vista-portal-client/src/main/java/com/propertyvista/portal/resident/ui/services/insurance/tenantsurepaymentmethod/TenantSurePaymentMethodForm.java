@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -95,7 +95,7 @@ public class TenantSurePaymentMethodForm extends PortalPaymentMethodEditor<Insur
     }
 
     @Override
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, AddressSimple, ?> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<?, InternationalAddress, ?> comp) {
         if (set) {
             onSameAsCurrentAddressSelected.execute();
         }

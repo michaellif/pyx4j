@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -73,7 +73,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
+    public void getCurrentAddress(AsyncCallback<InternationalAddress> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 }

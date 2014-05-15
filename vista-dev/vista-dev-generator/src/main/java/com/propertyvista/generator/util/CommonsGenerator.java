@@ -25,7 +25,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
@@ -163,13 +163,13 @@ public class CommonsGenerator {
         }
     }
 
-    public static AddressSimple createAddressSimple() {
+    public static InternationalAddress createAddressSimple() {
         loadAddress();
         AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
-        AddressSimple address = EntityFactory.create(AddressSimple.class);
-        address.street1().setValue(addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue());
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
+        address.addressLine1().setValue(addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue());
         address.city().setValue(addressStructured.city().getValue());
-        address.province().setValue(addressStructured.province().getValue());
+        address.province().setValue(addressStructured.province().name().getValue());
         address.country().setValue(addressStructured.country().getValue());
         address.postalCode().setValue(addressStructured.postalCode().getValue());
         return address;

@@ -17,7 +17,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -78,26 +78,26 @@ public class AddressRetriever {
 
     // Simple form address retrieving: 
 
-    public static AddressSimple getLeaseParticipantCurrentAddressSimple(LeaseParticipant<?> participant) {
-        AddressSimple address = EntityFactory.create(AddressSimple.class);
+    public static InternationalAddress getLeaseParticipantCurrentAddressSimple(LeaseParticipant<?> participant) {
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseParticipantCurrentAddress(participant), address);
         return address;
     }
 
-    public static AddressSimple getLeaseParticipantCurrentAddressSimple(LeaseTermParticipant<?> participant) {
-        AddressSimple address = EntityFactory.create(AddressSimple.class);
+    public static InternationalAddress getLeaseParticipantCurrentAddressSimple(LeaseTermParticipant<?> participant) {
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseParticipantCurrentAddress(participant), address);
         return address;
     }
 
-    public static AddressSimple getLeaseAddressSimple(Lease lease) {
-        AddressSimple address = EntityFactory.create(AddressSimple.class);
+    public static InternationalAddress getLeaseAddressSimple(Lease lease) {
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseAddress(lease), address);
         return address;
     }
 
-    public static AddressSimple getOnlineApplicationAddressSimple(OnlineApplication onlineApplication) {
-        AddressSimple address = EntityFactory.create(AddressSimple.class);
+    public static InternationalAddress getOnlineApplicationAddressSimple(OnlineApplication onlineApplication) {
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getOnlineApplicationAddress(onlineApplication), address);
         return address;
     }

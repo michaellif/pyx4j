@@ -15,7 +15,7 @@ package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
 
@@ -23,6 +23,6 @@ public interface PaymentMethodView extends IEditorView<PaymentMethodDTO> {
 
     public interface Presenter extends IEditorPresenter<PaymentMethodDTO> {
 
-        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+        void getCurrentAddress(AsyncCallback<InternationalAddress> callback);
     }
 }

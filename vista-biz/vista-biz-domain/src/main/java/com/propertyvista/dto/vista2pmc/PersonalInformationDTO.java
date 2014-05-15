@@ -15,13 +15,13 @@ package com.propertyvista.dto.vista2pmc;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 
 //solution to CRM country namespace editing in CRM and saving in admin
 @Transient
 public interface PersonalInformationDTO extends PersonalInformation {
 
-    AddressSimple dto_personalAddress();
+    InternationalAddress dto_personalAddress();
 
 }
