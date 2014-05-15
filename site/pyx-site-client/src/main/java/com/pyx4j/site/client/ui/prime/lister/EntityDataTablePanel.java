@@ -31,7 +31,9 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
@@ -53,7 +55,7 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
-public class EntityDataTablePanel<E extends IEntity> extends LayoutPanel {
+public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implements RequiresResize, ProvidesResize {
 
     private static final Logger log = LoggerFactory.getLogger(EntityDataTablePanel.class);
 
@@ -155,7 +157,6 @@ public class EntityDataTablePanel<E extends IEntity> extends LayoutPanel {
         dataTablePanel.setStyleName(DefaultPaneTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
-        dataTablePanel.getDataTable().setAutoColumnsWidth(true);
 
         add(dataTablePanel);
 
@@ -477,4 +478,12 @@ public class EntityDataTablePanel<E extends IEntity> extends LayoutPanel {
         return criteria;
     }
 
+    @Override
+    public void onResize() {
+        for (Widget child : getChildren()) {
+            if (child instanceof RequiresResize) {
+                ((RequiresResize) child).onResize();
+            }
+        }
+    }
 }

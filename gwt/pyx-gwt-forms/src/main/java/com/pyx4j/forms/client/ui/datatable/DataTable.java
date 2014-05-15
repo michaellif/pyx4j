@@ -30,12 +30,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.TableLayout;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -73,8 +73,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private boolean hasColumnClickSorting = false;
 
-    private boolean autoColumnsWidth = false;
-
     private boolean hasCheckboxColumn = false;
 
     private boolean markSelectedRow = true;
@@ -95,7 +93,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public DataTable() {
         setStyleName(DataTableTheme.StyleName.DataTable.name());
-        getElement().getStyle().setTableLayout(TableLayout.FIXED);
+        getElement().getStyle().setTableLayout(TableLayout.AUTO);
 
         this.addClickHandler(new ClickHandler() {
             @Override
@@ -274,18 +272,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             markRow(getSelectedRow(), false);
         }
         selectedRow = -1;
-    }
-
-    public boolean isAutoColumnsWidth() {
-        return autoColumnsWidth;
-    }
-
-    public void setAutoColumnsWidth(boolean autoColumnsWidth) {
-        if (this.autoColumnsWidth = autoColumnsWidth) {
-            getElement().getStyle().setTableLayout(TableLayout.AUTO);
-        } else {
-            getElement().getStyle().setTableLayout(TableLayout.FIXED);
-        }
     }
 
     public boolean hasColumnClickSorting() {
