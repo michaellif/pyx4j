@@ -13,18 +13,26 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.creditchecks;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
+import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDTO> {
 
@@ -34,7 +42,17 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
         super(CustomerCreditCheckDTO.class, view);
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Left, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
+
+        formPanel.append(Location.Left, proto().screening().screene().person().name(), new CEntityHyperlink<Name>(new Command() {
+            @Override
+            public void execute() {
+                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
+                place.formListerPlace().queryArg(
+                        EntityFactory.getEntityPrototype(LeaseApplicationDTO.class).leaseParticipants().$().customer().customerId().getPath().toString(),
+                        getValue().screening().screene().customerId().getValue().toString());
+                AppSite.getPlaceController().goTo(place);
+            }
+        })).decorate().customLabel(i18n.tr("Customer"));
 
         formPanel.h1(i18n.tr("Details"));
         formPanel.append(Location.Left, proto().creditCheckDate()).decorate();
