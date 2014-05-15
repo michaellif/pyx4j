@@ -88,6 +88,10 @@ public class OperationsSiteMap implements SiteMap {
                 formViewerPlace(new Key(-1));
             }
         }
+
+        @PlaceProperties(navigLabel = "Credit Check Transactions")
+        public static class CreditCheckTransaction extends CrudAppPlace {
+        }
     }
 
     public static class FundsTransfer extends AppPlace {

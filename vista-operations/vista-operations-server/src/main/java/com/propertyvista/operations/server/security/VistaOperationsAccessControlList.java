@@ -20,6 +20,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
@@ -52,6 +53,7 @@ import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 import com.propertyvista.operations.rpc.services.AdminUserService;
 import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
+import com.propertyvista.operations.rpc.services.CustomerCreditCheckTransactionCrudService;
 import com.propertyvista.operations.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.operations.rpc.services.EncryptedStorageService;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
@@ -110,6 +112,9 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcDataReportService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DBIntegrityCheckService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExportDownloadService.class));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CustomerCreditCheckTransactionCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CustomerCreditCheckTransaction.class, EntityPermission.READ));
 
         //TODO review and grant to VistaOperationsBehavior.SecurityAdmin
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));

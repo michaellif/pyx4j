@@ -72,6 +72,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new OperationsSiteMap.Management.TriggerRun(), VistaOperationsBehavior.ProcessAdmin);
         folder.addNavigItem(new OperationsSiteMap.Management.TriggerRunData(), VistaOperationsBehavior.ProcessAdmin);
         folder.addNavigItem(new OperationsSiteMap.Management.BillingSetup(), VistaOperationsBehavior.SystemAdmin);
+        folder.addNavigItem(new OperationsSiteMap.Management.CreditCheckTransaction(), VistaOperationsBehavior.SystemAdmin);
         list.add(folder);
 
         // Security

@@ -31,6 +31,8 @@ import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserLis
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordViewerActivity;
+import com.propertyvista.operations.client.activity.crud.creditcheck.CustomerCreditCheckTransactionListerActivity;
+import com.propertyvista.operations.client.activity.crud.creditcheck.CustomerCreditCheckTransactionViewerActivity;
 import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordViewerActivity;
@@ -166,7 +168,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new RunDataViewerActivity(crudPlace);
                             break;
                         }
-
+                    } else if (place instanceof OperationsSiteMap.Management.CreditCheckTransaction) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new CustomerCreditCheckTransactionListerActivity(place);
+                            break;
+                        case viewer:
+                            activity = new CustomerCreditCheckTransactionViewerActivity(crudPlace);
+                        default:
+                            break;
+                        }
 // - Security:
                     } else if (place instanceof OperationsSiteMap.Security.AuditRecord) {
                         switch (crudPlace.getType()) {
