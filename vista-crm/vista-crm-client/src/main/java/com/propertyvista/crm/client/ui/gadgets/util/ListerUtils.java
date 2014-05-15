@@ -122,7 +122,6 @@ public class ListerUtils {
             dataTablePanel.getDataTable().setHasColumnClickSorting(true);
             dataTablePanel.getDataTable().setHasCheckboxColumn(false);
             dataTablePanel.getDataTable().setMarkSelectedRow(false);
-            dataTablePanel.getDataTable().setAutoColumnsWidth(true);
 
         }
     }
