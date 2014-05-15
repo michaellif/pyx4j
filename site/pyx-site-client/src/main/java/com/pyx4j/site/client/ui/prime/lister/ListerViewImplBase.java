@@ -23,8 +23,7 @@ package com.pyx4j.site.client.ui.prime.lister;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -47,7 +46,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
      */
     protected void setLister(AbstractLister<E> lister) {
         if (getContentPane() == null) { // finalise UI here:
-            setContentPane(new SimplePanel());
+            setContentPane(new LayoutPanel());
             setSize("100%", "100%");
         }
 
@@ -55,7 +54,7 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
             return; // already!?.
         }
 
-        ((SimplePanel) getContentPane()).setWidget(this.lister = lister);
+        ((LayoutPanel) getContentPane()).add(this.lister = lister);
     }
 
     @Override
@@ -129,4 +128,5 @@ public class ListerViewImplBase<E extends IEntity> extends AbstractPane implemen
     public void discard() {
         getLister().discard();
     }
+
 }

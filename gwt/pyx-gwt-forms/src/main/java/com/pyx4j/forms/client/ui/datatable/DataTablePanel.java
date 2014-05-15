@@ -25,8 +25,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
@@ -43,13 +43,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class DataTablePanel<E extends IEntity> extends FlowPanel {
+public class DataTablePanel<E extends IEntity> extends FlowPanel implements RequiresResize {
 
     private static final I18n i18n = I18n.get(DataTableFilterItem.class);
 
     private final E entityPrototype;
 
     private final DataTable<E> dataTable;
+
+    private DataTableScrollPanel dataTableScroll;
 
     private final DataTableActionsBar topActionsBar;
 
@@ -91,7 +93,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel {
         add(filterPanel);
 
         dataTable = new DataTable<E>();
-        ScrollPanel dataTableScroll = new ScrollPanel(dataTable);
+        dataTableScroll = new DataTableScrollPanel();
         dataTableScroll.setStyleName(DataTableTheme.StyleName.DataTableHolder.name());
         add(dataTableScroll);
 
@@ -281,5 +283,26 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel {
 
     public void setFilteringEnabled(boolean enabled) {
         filterButton.setVisible(enabled);
+    }
+
+    @Override
+    public void onResize() {
+        dataTableScroll.updateColumnVizibility();
+    }
+
+    class DataTableScrollPanel extends ScrollPanel {
+
+        public DataTableScrollPanel() {
+            super(dataTable);
+        }
+
+        @Override
+        public com.google.gwt.user.client.Element getContainerElement() {
+            return super.getContainerElement();
+        }
+
+        protected void updateColumnVizibility() {
+            dataTable.updateColumnVizibility(getContainerElement().getOffsetWidth(), getMaximumHorizontalScrollPosition() > 0);
+        }
     }
 }

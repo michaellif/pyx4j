@@ -30,11 +30,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.dom.client.Style.TableLayout;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -59,9 +59,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final int HEADER_RAW_INDEX = 0;
 
-    private static final String CHECK_MARK_COLUMN_SIZE = "1px";
+    private static final int CHECK_MARK_COLUMN_SIZE = 1;
 
-    private static final String COLUMNS_SELECTOR_COLUMN_SIZE = "1px";
+    private static final int COLUMNS_SELECTOR_COLUMN_SIZE = 1;
 
     private DataTableModel<E> model;
 
@@ -95,7 +95,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public DataTable() {
         setStyleName(DataTableTheme.StyleName.DataTable.name());
-        DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
+        getElement().getStyle().setTableLayout(TableLayout.FIXED);
 
         this.addClickHandler(new ClickHandler() {
             @Override
@@ -282,9 +282,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public void setAutoColumnsWidth(boolean autoColumnsWidth) {
         if (this.autoColumnsWidth = autoColumnsWidth) {
-            DOM.setStyleAttribute(getElement(), "tableLayout", "auto");
+            getElement().getStyle().setTableLayout(TableLayout.AUTO);
         } else {
-            DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
+            getElement().getStyle().setTableLayout(TableLayout.FIXED);
         }
     }
 
@@ -335,7 +335,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
         } else {
             for (int i = 0; i < 30; i++) {
-                DOM.setStyleAttribute(getColumnFormatter().getElement(i), "width", "0px");
+                getColumnFormatter().getElement(i).getStyle().setWidth(0, Unit.PX);
             }
 
         }
@@ -372,9 +372,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
             if (!BrowserType.isIE()) {
-                getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE);
+                getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE + "px");
             } else {
-                DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", CHECK_MARK_COLUMN_SIZE);
+                getColumnFormatter().getElement(colIndex).getStyle().setWidth(CHECK_MARK_COLUMN_SIZE, Unit.PX);
             }
             getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
             ++colIndex;
@@ -400,7 +400,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 if (!BrowserType.isIE()) {
                     getColumnFormatter().setWidth(colIndex, columnDescriptor.getWidth());
                 } else {
-                    DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", columnDescriptor.getWidth());
+                    getColumnFormatter().getElement(colIndex).getStyle().setProperty("width", columnDescriptor.getWidth());
                 }
             }
 
@@ -411,9 +411,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         if (isColumnSelectorVisible()) {
             setWidget(0, colIndex, createHeaderColumnSelector());
             if (!BrowserType.isIE()) {
-                getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE);
+                getColumnFormatter().setWidth(colIndex, COLUMNS_SELECTOR_COLUMN_SIZE + "px");
             } else {
-                DOM.setStyleAttribute(getColumnFormatter().getElement(colIndex), "width", COLUMNS_SELECTOR_COLUMN_SIZE);
+                getColumnFormatter().getElement(colIndex).getStyle().setWidth(COLUMNS_SELECTOR_COLUMN_SIZE, Unit.PX);
             }
 
             getCellFormatter().setStyleName(0, colIndex, DataTableTheme.StyleName.DataTableColumnSelector.name());
@@ -464,7 +464,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
                     selectionCheckBoxes.add(selectionCheckBox);
 
-                    selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
+                    selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE + "px");
 
                     setWidget(rowIndex, 0, selectionCheckBox);
                     getCellFormatter().setAlignment(rowIndex, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -494,15 +494,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     Element rowElement = getRowFormatter().getElement(rowIndex);
                     UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name());
                     if (rowIndex % 2 == 0) {
-                        UIObject.setStyleName(rowElement,
-                                DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.even.name(), true);
+                        UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.even.name(), true);
                     } else {
-                        UIObject.setStyleName(rowElement,
-                                DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.odd.name(), true);
+                        UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.odd.name(), true);
                     }
                     if (!hasDetailsNavigation()) {
-                        UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-"
-                                + DataTableTheme.StyleDependent.nodetails.name(), true);
+                        UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.nodetails.name(),
+                                true);
                     }
 
                     ++rowIndex;
@@ -543,8 +541,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     protected void markRow(int row, boolean selected) {
         if (isMarkSelectedRow() && row >= 0) {
             Element previous = getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
-            UIObject.setStyleName(previous, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.selected.name(),
-                    selected);
+            UIObject.setStyleName(previous, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.selected.name(), selected);
         }
     }
 
@@ -583,6 +580,10 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         });
 
         return selector;
+    }
+
+    public void updateColumnVizibility(int offsetWidth, boolean reduceColumns) {
+        System.out.println("+++++++++++++++++++ offsetWidth=" + offsetWidth + " reduceColumns=" + reduceColumns);
     }
 
     private class ColumnSelectorDialog extends OkCancelDialog {
@@ -695,4 +696,5 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     public interface ColumnSelectionHandler {
         void onColumSelectionChanged();
     }
+
 }

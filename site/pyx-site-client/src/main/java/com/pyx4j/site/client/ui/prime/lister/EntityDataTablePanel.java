@@ -31,7 +31,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
@@ -53,7 +53,7 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
-public class EntityDataTablePanel<E extends IEntity> extends SimplePanel {
+public class EntityDataTablePanel<E extends IEntity> extends LayoutPanel {
 
     private static final Logger log = LoggerFactory.getLogger(EntityDataTablePanel.class);
 
@@ -96,6 +96,7 @@ public class EntityDataTablePanel<E extends IEntity> extends SimplePanel {
     public EntityDataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
         this.clazz = clazz;
         setStyleName(DefaultPaneTheme.StyleName.Lister.name());
+        setSize("100%", "100%");
         dataTablePanel = new DataTablePanel<E>(clazz, criteriaForm);
 
         dataTablePanel.setFilterApplyCommand(new Command() {
@@ -156,7 +157,7 @@ public class EntityDataTablePanel<E extends IEntity> extends SimplePanel {
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
 
-        setWidget(dataTablePanel);
+        add(dataTablePanel);
 
         setAllowZoomIn(allowZoomIn);
         setAllowAddNew(allowAddNew);
@@ -475,4 +476,5 @@ public class EntityDataTablePanel<E extends IEntity> extends SimplePanel {
 
         return criteria;
     }
+
 }

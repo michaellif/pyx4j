@@ -222,7 +222,6 @@ public class DefaultPaneTheme extends Theme {
     protected void initListerStyles() {
 
         Style style = new Style(".", StyleName.Lister);
-        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.ListerFiltersPanel);
