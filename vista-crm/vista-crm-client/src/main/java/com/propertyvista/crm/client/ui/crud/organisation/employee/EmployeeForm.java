@@ -86,11 +86,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
-                if (getComponent().getValue() != null && getComponent().getValue().equals(get(proto().password()).getValue())) {
-                    return null;
-                } else {
+                if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().password()).getValue())) {
                     return new FieldValidationError(getComponent(), i18n.tr("The passwords don't match. Please retype the passwords."));
                 }
+                return null;
             }
         });
 
