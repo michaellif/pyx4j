@@ -157,6 +157,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
+        log.info("authenticated {}; UserAgent {}", Context.getVisit().getUserVisit().getEmail(), clientSystemInfo.getUserAgent());
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 

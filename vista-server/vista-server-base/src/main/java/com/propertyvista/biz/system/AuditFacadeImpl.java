@@ -47,7 +47,7 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void login(VistaApplication application) {
-        record(AuditRecordEventType.Login, null, null);
+        record(AuditRecordEventType.Login, null, getLoginUserDetails());
     }
 
     @Override
@@ -191,4 +191,15 @@ public class AuditFacadeImpl implements AuditFacade {
             return Context.getRequestRemoteAddr();
         }
     }
+
+    private String getLoginUserDetails() {
+        if (Context.getRequest() == null) {
+            return null;
+        } else {
+            StringBuilder info = new StringBuilder();
+            info.append("User-Agent: ").append(Context.getRequest().getHeader("User-Agent"));
+            return info.toString();
+        }
+    }
+
 }
