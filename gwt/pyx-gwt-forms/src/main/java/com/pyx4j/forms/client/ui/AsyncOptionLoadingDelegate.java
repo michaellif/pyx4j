@@ -109,12 +109,18 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
-        optionLoadingHandler.cancel();
+        resetOptions();
+        if (optionLoadingHandler != null) {
+            optionLoadingHandler.cancel();
+        }
         return criteria.add(criterion);
     }
 
     public void resetCriteria() {
-        optionLoadingHandler.cancel();
+        resetOptions();
+        if (optionLoadingHandler != null) {
+            optionLoadingHandler.cancel();
+        }
         criteria.resetCriteria();
     }
 
