@@ -131,6 +131,20 @@ public class XmlCreator {
         }
     }
 
+    public static String toToWireXMl(CNConsAndCommRequestType requestMessage) throws JAXBException {
+
+        QName qname = new QName("http://www.equifax.ca/XMLSchemas/CustToEfx", "CNCustTransmitToEfx");
+        JAXBElement<CNConsAndCommRequestType> element = new JAXBElement<CNConsAndCommRequestType>(qname, CNConsAndCommRequestType.class, requestMessage);
+
+        JAXBContext context = JAXBContext.newInstance(CNConsAndCommRequestType.class);
+        Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        StringWriter xml = new StringWriter();
+        m.marshal(element, xml);
+        return xml.toString();
+    }
+
     public static String devToXMl(EfxTransmit efxResponse) {
         try {
             QName qname = new QName("http://www.equifax.ca/XMLSchemas/EfxToCust", "CNEfxTransmitToCust");

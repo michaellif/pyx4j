@@ -235,7 +235,18 @@ public class EquifaxCreditCheck {
 
         pcc.creditCheckResult().setValue(creditCheckResult);
 
+        if (!ApplicationMode.isDevelopment() && creditCheckResult == CreditCheckResult.Error) {
+            EntityFileLogger.logXml("equifax-errors", "request", logSec(XmlCreator.devToXMl(requestMessage)));
+            EntityFileLogger.logXml("equifax-errors", "response", XmlCreator.toStorageXMl(efxResponse));
+        }
+
         return pcc;
+    }
+
+    private static String logSec(String xml) {
+        return xml//
+                .replaceAll("<CustomerNumber>.*</CustomerNumber>", "<CustomerNumber>***</CustomerNumber>") //
+                .replaceAll("<SecurityCode>.*</SecurityCode>", "<SecurityCode>***</SecurityCode>");
     }
 
     public static CustomerCreditCheckLongReportDTO createLongReport(CustomerCreditCheck ccc) {

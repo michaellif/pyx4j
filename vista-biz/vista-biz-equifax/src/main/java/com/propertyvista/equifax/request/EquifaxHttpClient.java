@@ -13,15 +13,9 @@
  */
 package com.propertyvista.equifax.request;
 
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -74,18 +68,8 @@ public class EquifaxHttpClient {
         }
 
         try {
-            QName qname = new QName("http://www.equifax.ca/XMLSchemas/CustToEfx", "CNCustTransmitToEfx");
-            JAXBElement<CNConsAndCommRequestType> element = new JAXBElement<CNConsAndCommRequestType>(qname, CNConsAndCommRequestType.class, requestMessage);
-
-            JAXBContext context = JAXBContext.newInstance(CNConsAndCommRequestType.class);
-            Marshaller m = context.createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-            StringWriter xml = new StringWriter();
-            m.marshal(element, xml);
-
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-            nvps.add(new BasicNameValuePair("InputSegments", xml.toString()));
+            nvps.add(new BasicNameValuePair("InputSegments", XmlCreator.toToWireXMl(requestMessage)));
             nvps.add(new BasicNameValuePair("cmdSubmit", "Submit"));
 
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
