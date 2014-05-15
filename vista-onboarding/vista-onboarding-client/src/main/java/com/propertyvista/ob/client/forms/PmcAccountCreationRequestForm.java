@@ -15,10 +15,7 @@ package com.propertyvista.ob.client.forms;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -33,7 +30,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -41,11 +37,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -87,32 +83,23 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
 
     @Override
     protected IsWidget createContent() {
-        FlowPanel formPanel = new FlowPanel();
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
+        BasicCFormPanel contentPanel = new BasicCFormPanel(this);
         contentPanel.addStyleName(Styles.PmcAccountCreationRequestForm.name());
-        final double SPACE = 10.0;
-        int row = -1;
 
-        FlowPanel dnsNamePanel = new FlowPanel();
-        dnsNamePanel.getElement().getStyle().setPosition(Position.RELATIVE);
-
-        SimplePanel dnsSubdomainNameHolder = new SimplePanel();
-        int domainNameFieldWidth = 13;
-        dnsSubdomainNameHolder.setWidget(inject(proto().dnsName(), new FieldDecoratorBuilder(domainNameFieldWidth).customLabel("").labelWidth(0)
-                .useLabelSemicolon(false).mandatoryMarker(false).build()));
-
-        Label pmcDomainNameSuffixLabel = new Label(".propertyvista.com");
-        pmcDomainNameSuffixLabel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setTop(0, Unit.PX);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setLeft(domainNameFieldWidth + 2.5, Unit.EM);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setRight(0, Unit.PX);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setBottom(0, Unit.PX);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        pmcDomainNameSuffixLabel.getElement().getStyle().setLineHeight(2, Unit.EM);
-
-        dnsNamePanel.add(dnsSubdomainNameHolder);
-        dnsNamePanel.add(pmcDomainNameSuffixLabel);
+        contentPanel.append(Location.Left, proto().dnsName()).decorate().assistantWidget(new Label(".propertyvista.com")).componentWidth(180).customLabel("")
+                .labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.append(Location.Left, proto().name()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.append(Location.Left, proto().countryOfOperation()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false);
+        contentPanel.br();
+        contentPanel.append(Location.Left, proto().firstName()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.append(Location.Left, proto().lastName()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.br();
+        contentPanel.append(Location.Left, proto().email()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.append(Location.Left, proto().confirmEmail()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.br();
+        contentPanel.append(Location.Left, proto().password()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
+        contentPanel.append(Location.Left, proto().confirmPassword()).decorate().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false);
 
         get(proto().dnsName()).addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
@@ -124,6 +111,7 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
                 }
             }
         });
+
         get(proto().dnsName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
@@ -135,35 +123,6 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
             }
         });
 
-        contentPanel.setWidget(++row, 0, dnsNamePanel);
-        contentPanel.setWidget(
-                ++row,
-                0,
-                inject(proto().name(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).customLabel("")
-                        .labelWidth(0).build()));
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
-
-        contentPanel.setWidget(
-                ++row,
-                0,
-                inject(proto().countryOfOperation(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
-                        .build()));
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
-
-        contentPanel.setWidget(++row, 0,
-                inject(proto().firstName(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
-        contentPanel.setWidget(++row, 0,
-                inject(proto().lastName(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
-
-        contentPanel.setWidget(++row, 0,
-                inject(proto().email(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
-        contentPanel
-                .setWidget(
-                        ++row,
-                        0,
-                        inject(proto().confirmEmail(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
-                                .build()));
         get(proto().confirmEmail()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
@@ -175,15 +134,7 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
                 }
             }
         });
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0,
-                inject(proto().password(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build()));
-        contentPanel.setWidget(
-                ++row,
-                0,
-                inject(proto().confirmPassword(), new FieldDecoratorBuilder().customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
-                        .build()));
         get(proto().confirmPassword()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public FieldValidationError isValid() {
@@ -240,7 +191,7 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
         signUpPanel.setCellWidth(termsAgreementShortcutPanel, "60%");
         signUpPanel.setCellHorizontalAlignment(submitButton, HasHorizontalAlignment.ALIGN_CENTER);
         signUpPanel.setCellVerticalAlignment(submitButton, HasVerticalAlignment.ALIGN_MIDDLE);
-        contentPanel.setWidget(++row, 0, signUpPanel);
+        contentPanel.append(Location.Left, signUpPanel);
 
         if (ApplicationMode.isDevelopment()) {
             this.addDevShortcutHandler(new DevShortcutHandler() {
@@ -255,8 +206,7 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
             });
         }
 
-        formPanel.add(contentPanel);
-        return formPanel;
+        return contentPanel;
     }
 
     @Override
