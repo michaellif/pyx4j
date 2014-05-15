@@ -24,6 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -94,6 +95,10 @@ public class BreadcrumbsHelper {
 
     private static List<IEntity> getOwners(IEntity startFromTarget) {
         final List<IEntity> trail = new ArrayList<IEntity>();
+
+        if (startFromTarget instanceof CustomerCreditCheckDTO) {
+            return trail; // no trail to display (we have no Customer view)!..
+        }
 
         // Special case for no business owned
         if (startFromTarget instanceof LeaseParticipantScreeningTO) {
