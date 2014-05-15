@@ -79,6 +79,9 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
         b.append("  BankingSimulatorConfiguration         :\n    ").append(conf.getBankingSimulatorConfiguration().toString().replaceAll("\n", "\n    "))
                 .append("\n");
 
+        b.append("  EquifaxInterfaceConfiguration         :\n      ").append(conf.getEquifaxInterfaceConfiguration().toString().replaceAll("\n", "\n      "))
+                .append("\n");
+
         return b.toString();
     }
 }
