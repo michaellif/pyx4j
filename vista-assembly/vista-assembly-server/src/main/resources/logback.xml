@@ -114,6 +114,8 @@ start new log file on each application start
             <level>${logstashLogLevel}</level>
         </filter>
 
+        <filter class="com.propertyvista.server.config.logback.LogstashFilter"/>
+
         <file>${container-home}/logs/${application-name}/logstash/${logs-name}.json</file>
                 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
