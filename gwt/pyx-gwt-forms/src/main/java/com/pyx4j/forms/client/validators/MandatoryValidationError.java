@@ -22,9 +22,9 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class MandatoryValidationFailure extends FieldValidationError {
+public class MandatoryValidationError extends BasicValidationError {
 
-    public MandatoryValidationFailure(CComponent<?, ?, ?> component, String message) {
+    public MandatoryValidationError(CComponent<?, ?, ?> component, String message) {
         super(component, message);
     }
 

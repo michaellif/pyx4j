@@ -53,8 +53,9 @@ import com.pyx4j.forms.client.ui.CComponentTheme.StyleDependent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.AsyncValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.ComponentValidator;
-import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
+import com.pyx4j.forms.client.validators.MandatoryValidationError;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
@@ -330,7 +331,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public boolean isMandatoryConditionMet() {
         for (AbstractValidationError error : validationErrors) {
-            if (error instanceof MandatoryValidationFailure) {
+            if (error instanceof MandatoryValidationError) {
                 return true;
             }
         }
@@ -345,8 +346,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return mandatoryValidationMessage;
     }
 
-    public void setAsyncValidationError(AbstractValidationError error) {
-        if (error == null) {
+    public void setAsyncValidationErrorMessage(String message) {
+        if (message == null) {
             if (asyncValidator != null) {
                 asyncValidator.setValidationError(null);
             }
@@ -354,7 +355,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             if (asyncValidator == null) {
                 addComponentValidator(asyncValidator = new AsyncValidator<DATA_TYPE>());
             }
-            asyncValidator.setValidationError(error);
+            asyncValidator.setValidationError(new BasicValidationError(this, message));
         }
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         revalidate();

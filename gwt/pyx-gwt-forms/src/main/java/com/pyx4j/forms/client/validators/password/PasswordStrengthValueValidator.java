@@ -25,7 +25,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -47,7 +47,7 @@ public class PasswordStrengthValueValidator extends AbstractComponentValidator<S
     }
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         if (rule == null || getComponent().getValue() == null || getComponent().getValue().isEmpty()) {
             return null;
         }
@@ -55,7 +55,7 @@ public class PasswordStrengthValueValidator extends AbstractComponentValidator<S
         if (acceptVerdict == null || acceptVerdict.contains(verdict)) {
             return null;
         } else {
-            return new FieldValidationError(getComponent(), i18n.tr("Password is {0}", verdict));
+            return new BasicValidationError(getComponent(), i18n.tr("Password is {0}", verdict));
         }
     }
 

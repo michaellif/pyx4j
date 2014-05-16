@@ -48,7 +48,7 @@ import com.pyx4j.forms.client.ui.AsyncLoadingHandler.Status;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.ComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -79,8 +79,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
         this.asyncOptionDelegate = new AsyncOptionLoadingDelegate<E>(entityClass, this, null);
         this.unavailableValidator = new AbstractComponentValidator<E>() {
             @Override
-            public FieldValidationError isValid() {
-                return new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+            public BasicValidationError isValid() {
+                return new BasicValidationError(getComponent(), i18n.tr("Reference data unavailable"));
             }
         };
         setFormatter(new EntitySuggestFormatter());

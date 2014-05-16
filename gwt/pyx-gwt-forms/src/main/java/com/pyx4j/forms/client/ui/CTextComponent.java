@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA>> extends CFocusComponent<DATA, WIDGET> implements IAcceptsWatermark {
@@ -65,13 +65,13 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusField<DATA
         }
 
         @Override
-        public FieldValidationError isValid() {
+        public BasicValidationError isValid() {
             DATA value = getComponent().getValue();
             if (value == null) {
                 return null;
             }
             if (value instanceof String) {
-                return ((String) value).length() <= length ? null : new FieldValidationError(CTextComponent.this, validationMessage);
+                return ((String) value).length() <= length ? null : new BasicValidationError(CTextComponent.this, validationMessage);
             } else {
                 return null;
             }

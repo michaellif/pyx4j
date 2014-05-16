@@ -41,7 +41,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 // TODO - this is a logical copy of CEntityComboBox; a generic base class may make sense
@@ -211,8 +211,8 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
                 unavailableValidator = new AbstractComponentValidator<List<E>>() {
 
                     @Override
-                    public FieldValidationError isValid() {
-                        return !isUnavailable ? null : new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+                    public BasicValidationError isValid() {
+                        return !isUnavailable ? null : new BasicValidationError(getComponent(), i18n.tr("Reference data unavailable"));
                     }
                 };
             }

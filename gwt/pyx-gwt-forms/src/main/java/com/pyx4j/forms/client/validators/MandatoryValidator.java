@@ -14,7 +14,7 @@ public class MandatoryValidator<E> extends AbstractComponentValidator<E> {
     }
 
     @Override
-    public MandatoryValidationFailure isValid() {
-        return getComponent().isValueEmpty() ? new MandatoryValidationFailure(getComponent(), getComponent().getMandatoryValidationMessage()) : null;
+    public MandatoryValidationError isValid() {
+        return getComponent().isValueEmpty() ? new MandatoryValidationError(getComponent(), getComponent().getMandatoryValidationMessage()) : null;
     }
 }

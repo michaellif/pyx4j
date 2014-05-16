@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.ComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.view.widget.CAddressStateComboBox.NAddressStateBox;
 import com.pyx4j.widgets.client.IFocusWidget;
@@ -59,8 +59,8 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
         this.asyncOptionDelegate = new AsyncOptionLoadingDelegate<OPTION>(entityClass, this, null);
         this.unavailableValidator = new AbstractComponentValidator<E>() {
             @Override
-            public FieldValidationError isValid() {
-                return new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+            public BasicValidationError isValid() {
+                return new BasicValidationError(getComponent(), i18n.tr("Reference data unavailable"));
             }
         };
         retrieveOptions(null);

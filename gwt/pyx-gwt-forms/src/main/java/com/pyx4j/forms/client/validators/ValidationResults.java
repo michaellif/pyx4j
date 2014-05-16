@@ -50,11 +50,11 @@ public class ValidationResults {
     }
 
     public String getValidationMessage(boolean html) {
-        ArrayList<FieldValidationError> fieldValidationErrors = new ArrayList<>();
+        ArrayList<BasicValidationError> fieldValidationErrors = new ArrayList<>();
 
         for (AbstractValidationError error : validationErrors) {
-            if (error instanceof FieldValidationError) {
-                fieldValidationErrors.add((FieldValidationError) error);
+            if (error instanceof BasicValidationError) {
+                fieldValidationErrors.add((BasicValidationError) error);
             }
         }
 

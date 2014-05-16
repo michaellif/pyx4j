@@ -33,10 +33,10 @@ public class RegexValidator<E> extends AbstractComponentValidator<E> {
     }
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         E value = getComponent().getValue();
         return (getComponent().isValueEmpty() && !getComponent().isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null
-                : new FieldValidationError(getComponent(), getValidationMessage());
+                : new BasicValidationError(getComponent(), getValidationMessage());
     }
 
     private String getValidationMessage() {

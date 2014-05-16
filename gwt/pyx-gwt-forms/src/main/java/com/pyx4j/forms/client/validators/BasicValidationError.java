@@ -22,13 +22,13 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class FieldValidationError extends AbstractValidationError {
+public class BasicValidationError extends AbstractValidationError {
 
     private CComponent<?, ?, ?> originator;
 
     private String message;
 
-    public FieldValidationError(CComponent<?, ?, ?> originator, String message) {
+    public BasicValidationError(CComponent<?, ?, ?> originator, String message) {
         this.message = message;
     }
 

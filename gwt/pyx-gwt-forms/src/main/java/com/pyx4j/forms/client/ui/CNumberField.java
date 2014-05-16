@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.i18n.client.NumberFormat;
 
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NTextBox<E>> {
@@ -65,15 +65,15 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         }
 
         @Override
-        public FieldValidationError isValid() {
-            FieldValidationError failure = super.isValid();
+        public BasicValidationError isValid() {
+            BasicValidationError failure = super.isValid();
             if (failure == null) {
                 if (getComponent().getValue() == null) {
                     return null;
                 } else if (isInRange(getComponent().getValue(), from, to)) {
                     return null;
                 } else {
-                    return new FieldValidationError(CNumberField.this, i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
+                    return new BasicValidationError(CNumberField.this, i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
                 }
             } else {
                 return failure;

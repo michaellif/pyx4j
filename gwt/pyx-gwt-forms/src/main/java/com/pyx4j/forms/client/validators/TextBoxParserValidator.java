@@ -22,13 +22,13 @@ public class TextBoxParserValidator<E> extends AbstractComponentValidator<E> {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         if (getComponent() instanceof CTextFieldBase) {
             CTextFieldBase<E, ?> field = (CTextFieldBase) getComponent();
             try {
                 field.getNativeComponent().getNativeValue();
             } catch (ParseException e) {
-                return new FieldValidationError(getComponent(), e.getMessage());
+                return new BasicValidationError(getComponent(), e.getMessage());
             }
         }
         return null;

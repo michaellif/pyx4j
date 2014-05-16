@@ -48,7 +48,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
@@ -214,9 +214,9 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         AbstractComponentValidator<String> passwordConfirmValidator = new AbstractComponentValidator<String>() {
 
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 return CommonsStringUtils.equals(get(proto().enterPassword()).getValue(), get(proto().confirmPassword()).getValue()) ? null
-                        : new FieldValidationError(getComponent(), "Passwords do not match.");
+                        : new BasicValidationError(getComponent(), "Passwords do not match.");
             }
 
         };
