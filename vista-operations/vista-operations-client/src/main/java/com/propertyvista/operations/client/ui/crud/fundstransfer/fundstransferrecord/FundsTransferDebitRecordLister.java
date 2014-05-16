@@ -22,7 +22,6 @@ public class FundsTransferDebitRecordLister extends AbstractLister<FundsTransfer
 
     public FundsTransferDebitRecordLister() {
         super(FundsTransferRecordDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(),    

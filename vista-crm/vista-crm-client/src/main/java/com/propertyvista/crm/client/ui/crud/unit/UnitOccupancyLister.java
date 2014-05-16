@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -27,7 +28,14 @@ public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment>
     public UnitOccupancyLister() {
         super(AptUnitOccupancySegment.class, false);
         getDataTablePanel().setFilteringEnabled(false);
-        setAllowZoomIn(true);
+        setItemZoomInCommand(new ItemZoomInCommand<AptUnitOccupancySegment>() {
+            @Override
+            public void execute(AptUnitOccupancySegment item) {
+                if (item.status().getValue() == Status.occupied) {
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Lease.class).formViewerPlace(item.lease().getPrimaryKey()));
+                }
+            }
+        });
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(),
@@ -40,10 +48,4 @@ public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment>
         );//@formatter:on        
     }
 
-    @Override
-    protected void onItemSelect(AptUnitOccupancySegment item) {
-        if (item.status().getValue() == Status.occupied) {
-            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Lease.class).formViewerPlace(item.lease().getPrimaryKey()));
-        }
-    }
 }

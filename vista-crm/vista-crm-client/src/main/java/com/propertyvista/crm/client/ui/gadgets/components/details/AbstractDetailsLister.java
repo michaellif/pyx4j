@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.gadgets.components.details;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
@@ -25,10 +26,12 @@ public class AbstractDetailsLister<E extends IEntity> extends EntityDataTablePan
 
     public AbstractDetailsLister(Class<E> clazz) {
         super(clazz, true, false);
+        setItemZoomInCommand(new ItemZoomInCommand<E>() {
+            @Override
+            public void execute(E item) {
+                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(proto().getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
+            }
+        });
     }
 
-    @Override
-    protected void onItemSelect(E item) {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(proto().getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));
-    };
 }

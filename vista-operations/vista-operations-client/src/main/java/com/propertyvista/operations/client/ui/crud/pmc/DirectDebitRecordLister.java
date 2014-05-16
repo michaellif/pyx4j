@@ -29,7 +29,6 @@ public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
 
     public DirectDebitRecordLister(boolean addPmcColumn) {
         super(DirectDebitRecord.class, false, false);
-        setAllowZoomIn(true);
 
         if (addPmcColumn) {
             setColumnDescriptors(//@formatter:off                

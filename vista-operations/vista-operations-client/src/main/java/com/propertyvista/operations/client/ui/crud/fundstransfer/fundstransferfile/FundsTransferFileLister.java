@@ -26,7 +26,6 @@ public class FundsTransferFileLister extends AbstractLister<FundsTransferFileDTO
 
     public FundsTransferFileLister() {
         super(FundsTransferFileDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off                
                     new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),

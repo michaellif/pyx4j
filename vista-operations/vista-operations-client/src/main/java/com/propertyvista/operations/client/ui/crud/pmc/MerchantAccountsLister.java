@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
@@ -27,6 +28,14 @@ public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAcco
 
     public MerchantAccountsLister() {
         super(PmcMerchantAccountDTO.class, true, true);
+
+        setItemZoomInCommand(new ItemZoomInCommand<PmcMerchantAccountDTO>() {
+            @Override
+            public void execute(PmcMerchantAccountDTO item) {
+                AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccount().formViewerPlace(item.getPrimaryKey()));
+            }
+        });
+
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(),
@@ -48,11 +57,6 @@ public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAcco
         if (parentPmc != null && parentPmc.getPrimaryKey() != null) {
             AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccount().formNewItemPlace(parentPmc.getPrimaryKey()));
         }
-    }
-
-    @Override
-    protected void onItemSelect(PmcMerchantAccountDTO item) {
-        AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccount().formViewerPlace(item.getPrimaryKey()));
     }
 
 }

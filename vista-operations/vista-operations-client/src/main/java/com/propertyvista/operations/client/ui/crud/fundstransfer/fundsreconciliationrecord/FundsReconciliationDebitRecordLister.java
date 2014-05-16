@@ -22,7 +22,6 @@ public class FundsReconciliationDebitRecordLister extends AbstractLister<FundsRe
 
     public FundsReconciliationDebitRecordLister() {
         super(FundsReconciliationRecordRecordDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off       
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().id()).columnTitle("Summary Id").searchableOnly().build(),    

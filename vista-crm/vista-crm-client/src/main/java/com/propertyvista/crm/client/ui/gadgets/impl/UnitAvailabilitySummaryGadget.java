@@ -109,7 +109,6 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
         table.getElement().getStyle().setProperty("tableLayout", "auto");
         table.setHasColumnClickSorting(false);
         table.setColumnSelectorVisible(false);
-        table.setHasDetailsNavigation(false);
         table.setMarkSelectedRow(false);
 
         contentPanel.add(table);

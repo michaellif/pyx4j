@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,6 +46,15 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
 
     public ExecutionReportSectionLister() {
         super(ExecutionReportSection.class);
+
+        setItemZoomInCommand(new ItemZoomInCommand<ExecutionReportSection>() {
+            @Override
+            public void execute(ExecutionReportSection item) {
+                messageLister.getDataSource().setParentFiltering(item.getPrimaryKey(), ExecutionReportSection.class);
+                messageLister.restoreState();
+                messageDialog.show();
+            }
+        });
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
@@ -76,8 +86,6 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
         setDataSource(new ListerDataSource<ExecutionReportSection>(ExecutionReportSection.class,
                 GWT.<AbstractListService<ExecutionReportSection>> create(ExecutionReportSectionService.class)));
 
-        setAllowZoomIn(true);
-
         messageDialog = new OkDialog(i18n.tr("Execution Messages")) {
             @Override
             public boolean onClickOk() {
@@ -85,13 +93,6 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
             }
         };
         messageDialog.setBody(messageLister = new ExecutionReportMessageLister());
-    }
-
-    @Override
-    protected void onItemSelect(ExecutionReportSection item) {
-        messageLister.getDataSource().setParentFiltering(item.getPrimaryKey(), ExecutionReportSection.class);
-        messageLister.restoreState();
-        messageDialog.show();
     }
 
     public class ExecutionReportMessageLister extends EntityDataTablePanel<ExecutionReportMessage> {

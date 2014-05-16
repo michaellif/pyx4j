@@ -22,7 +22,6 @@ public class FundsTransferBatchLister extends AbstractLister<FundsTransferBatchD
 
     public FundsTransferBatchLister() {
         super(FundsTransferBatchDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().padFile().id()).columnTitle("File Id").searchableOnly().build(),    

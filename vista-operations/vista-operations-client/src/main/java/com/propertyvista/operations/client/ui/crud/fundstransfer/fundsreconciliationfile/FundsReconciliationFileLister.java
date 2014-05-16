@@ -22,7 +22,6 @@ public class FundsReconciliationFileLister extends AbstractLister<FundsReconcili
 
     public FundsReconciliationFileLister() {
         super(FundsReconciliationFileDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off                
                     new MemberColumnDescriptor.Builder(proto().fileName()).build(),

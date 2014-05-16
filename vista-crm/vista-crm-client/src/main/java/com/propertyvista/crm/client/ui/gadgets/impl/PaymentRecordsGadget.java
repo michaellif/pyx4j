@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -46,7 +47,6 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.PaymentRecordsGadgetMetadataForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
-import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
@@ -143,7 +143,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
                 saveMetadata();
             }
         })
-        .onItemSelectedCommand(new ItemSelectCommand<PaymentRecordForReportDTO>() {                
+        .itemZoomInCommand(new ItemZoomInCommand<PaymentRecordForReportDTO>() {                
             @Override
             public void execute(PaymentRecordForReportDTO item) {
                 AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(PaymentRecord.class).formViewerPlace(item.getPrimaryKey()));

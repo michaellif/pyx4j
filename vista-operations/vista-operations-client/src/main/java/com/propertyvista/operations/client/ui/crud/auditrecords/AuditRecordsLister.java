@@ -50,8 +50,4 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO>
         return Arrays.asList(new Sort(proto().when(), true), new Sort(proto().pmc(), false));
     }
 
-    @Override
-    protected void onItemSelect(AuditRecordOperationsDTO item) {
-        super.onItemSelect(item);
-    }
 }

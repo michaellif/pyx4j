@@ -22,7 +22,6 @@ public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconc
 
     public FundsReconciliationSummaryLister() {
         super(FundsReconciliationSummaryDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors( //
                 new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(),//

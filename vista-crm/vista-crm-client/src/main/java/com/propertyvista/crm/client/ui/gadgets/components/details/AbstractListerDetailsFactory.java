@@ -29,6 +29,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
@@ -36,7 +37,6 @@ import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
-import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
@@ -114,7 +114,7 @@ public abstract class AbstractListerDetailsFactory<E extends IEntity, F extends 
                     AbstractListerDetailsFactory.this.listerSettingsProxy.save();
                 }
             })
-            .onItemSelectedCommand(new ItemSelectCommand<E>() {                
+            .itemZoomInCommand(new ItemZoomInCommand<E>() {                
                 @Override
                 public void execute(E item) {
                     AbstractListerDetailsFactory.this.onItemSelected(item);

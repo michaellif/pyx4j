@@ -28,6 +28,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -44,7 +45,6 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.forms.UnitAvailabilityGadgetMetatadaForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
-import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
 import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
@@ -180,7 +180,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
                     saveMetadata();
                 }
             })
-            .onItemSelectedCommand(new ItemSelectCommand<UnitAvailabilityStatusDTO>() {                
+            .itemZoomInCommand(new ItemZoomInCommand<UnitAvailabilityStatusDTO>() {                
                 @Override
                 public void execute(UnitAvailabilityStatusDTO item) {
                     AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(AptUnit.class).formViewerPlace(item.unitId().getValue()));

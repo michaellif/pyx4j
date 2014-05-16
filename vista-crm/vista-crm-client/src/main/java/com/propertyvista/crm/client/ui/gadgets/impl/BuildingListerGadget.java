@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -34,7 +35,6 @@ import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.forms.BuildingListerGadgetMetadataForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
-import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
@@ -97,7 +97,7 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
                     saveMetadata();
                 }
             })
-            .onItemSelectedCommand(new ItemSelectCommand<BuildingDTO>() {                
+            .itemZoomInCommand(new ItemZoomInCommand<BuildingDTO>() {                
                 @Override
                 public void execute(BuildingDTO item) {
                     AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(item.getInstanceValueClass()).formViewerPlace(item.getPrimaryKey()));                    

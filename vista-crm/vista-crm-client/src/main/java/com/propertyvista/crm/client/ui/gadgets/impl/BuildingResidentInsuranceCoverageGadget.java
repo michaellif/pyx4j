@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
@@ -33,7 +34,6 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
-import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
 import com.propertyvista.crm.rpc.dto.gadgets.BuildingResidentInsuranceCoverageDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.BuildingResidentInsuranceListService;
@@ -106,7 +106,7 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
                     saveMetadata();
                 }                
             })
-            .onItemSelectedCommand(new ItemSelectCommand<BuildingResidentInsuranceCoverageDTO>() {
+            .itemZoomInCommand(new ItemZoomInCommand<BuildingResidentInsuranceCoverageDTO>() {
                 @Override
                 public void execute(BuildingResidentInsuranceCoverageDTO item) {
                     

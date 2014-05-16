@@ -22,7 +22,6 @@ public class MerchantAccountLister extends AbstractLister<PmcMerchantAccountDTO>
 
     public MerchantAccountLister() {
         super(PmcMerchantAccountDTO.class, false, false);
-        setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
