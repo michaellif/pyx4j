@@ -659,6 +659,11 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
             onEditingStart();
             editingInProgress = true;
+
+            if (asyncValidator != null) {
+                asyncValidator.setValidationError(null);
+            }
+
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
         }
     }

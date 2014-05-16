@@ -8,11 +8,6 @@
  */
 package com.pyx4j.forms.client.validators;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
-
 /**
  * This validator is set by external source asynchronously. It resets on editing stop event.
  */
@@ -30,20 +25,6 @@ public class AsyncValidator<DATA_TYPE> extends AbstractComponentValidator<DATA_T
     @Override
     public AbstractValidationError isValid() {
         return error;
-    }
-
-    @Override
-    public void setComponent(CComponent<?, DATA_TYPE, ?> component) {
-        super.setComponent(component);
-        component.addPropertyChangeHandler(new PropertyChangeHandler() {
-
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.editingInProgress) {
-                    error = null;
-                }
-            }
-        });
     }
 
 }
