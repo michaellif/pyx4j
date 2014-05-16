@@ -67,8 +67,6 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private int selectedRow = -1;
 
-    private boolean hasDetailsNavigation = false;
-
     private boolean hasColumnClickSorting = false;
 
     private boolean hasCheckboxColumn = false;
@@ -110,13 +108,18 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                         processHeaderClick(hasCheckboxColumn() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
                 } else if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0)) {
-                    setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
                     if (itemZoomInCommand != null) {
-                        itemZoomInCommand.execute(getSelectedItem());
+                        itemZoomInCommand.execute(model.getData().get(cell.getRowIndex() - 1).getEntity());
+                    } else {
+                        setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
                     }
                 }
             }
         });
+    }
+
+    public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
+        this.itemZoomInCommand = itemZoomInCommand;
     }
 
     public DataTable(DataTableModel<E> model) {
@@ -260,12 +263,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.columnSelectorVisible = columnSelectorVisible;
     }
 
-    public boolean hasDetailsNavigation() {
-        return hasDetailsNavigation;
-    }
-
-    public void setHasDetailsNavigation(boolean hasDetailsNavigation) {
-        this.hasDetailsNavigation = hasDetailsNavigation;
+    public boolean isItemZoomInAvailable() {
+        return itemZoomInCommand != null;
     }
 
 //
@@ -443,7 +442,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     } else {
                         UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.odd.name(), true);
                     }
-                    if (!hasDetailsNavigation()) {
+                    if (!isItemZoomInAvailable()) {
                         UIObject.setStyleName(rowElement, DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.nodetails.name(),
                                 true);
                     }

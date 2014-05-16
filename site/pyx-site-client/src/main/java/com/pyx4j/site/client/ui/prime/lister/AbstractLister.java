@@ -26,6 +26,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -60,8 +61,20 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     }
 
     public AbstractLister(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
-        super(clazz, criteriaForm, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew, allowDelete);
+        super(clazz, criteriaForm, allowAddNew, allowDelete);
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
+        setItemZoomInCommand(new ItemZoomInCommand<E>() {
+            @Override
+            public void execute(E item) {
+                if (itemOpenPlaceClass != null) {
+                    if (openEditor) {
+                        getPresenter().edit(itemOpenPlaceClass, item.getPrimaryKey());
+                    } else {
+                        getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
+                    }
+                }
+            }
+        });
     }
 
     public boolean isOpenEditor() {
@@ -73,19 +86,6 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     }
 
     // Actions:
-    /**
-     * Override in derived class for your own select item procedure.
-     */
-    @Override
-    protected void onItemSelect(E item) {
-        if (itemOpenPlaceClass != null) {
-            if (openEditor) {
-                getPresenter().edit(itemOpenPlaceClass, item.getPrimaryKey());
-            } else {
-                getPresenter().view(itemOpenPlaceClass, item.getPrimaryKey());
-            }
-        }
-    }
 
     /**
      * Override in derived class for your own new item creation procedure.

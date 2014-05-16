@@ -248,7 +248,6 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
             }
 
             setColumnDescriptors(EntitySelectorTableVisorController.this.defineColumnDescriptors());
-            setAllowZoomIn(true);
         }
 
         public VersionDisplayMode getVersionDisplayMode() {

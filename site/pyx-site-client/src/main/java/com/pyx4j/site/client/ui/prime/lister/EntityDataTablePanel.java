@@ -46,6 +46,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
@@ -81,21 +82,19 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
 
     private List<Criterion> externalFilters;
 
-    private DataTable.ItemSelectionHandler zoomInHandler;
-
-    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
-        this(clazz, null, allowZoomIn, allowAddNew, allowDelete);
-    }
-
     public EntityDataTablePanel(Class<E> clazz) {
-        this(clazz, false, false, false);
+        this(clazz, false, false);
     }
 
-    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
-        this(clazz, allowZoomIn, allowAddNew, false);
+    public EntityDataTablePanel(Class<E> clazz, boolean allowAddNew) {
+        this(clazz, allowAddNew, false);
     }
 
-    public EntityDataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
+    public EntityDataTablePanel(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
+        this(clazz, null, allowAddNew, allowDelete);
+    }
+
+    public EntityDataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
         this.clazz = clazz;
         setStyleName(DefaultPaneTheme.StyleName.Lister.name());
         setSize("100%", "100%");
@@ -160,33 +159,13 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
 
         add(dataTablePanel);
 
-        setAllowZoomIn(allowZoomIn);
         setAllowAddNew(allowAddNew);
         setAllowDelete(allowDelete);
 
     }
 
-    public boolean isAllowZoomIn() {
-        return (zoomInHandler != null);
-    }
-
-    public void setAllowZoomIn(boolean allowZoomIn) {
-        if (allowZoomIn) {
-            dataTablePanel.getDataTable().addItemSelectionHandler(zoomInHandler = new DataTable.ItemSelectionHandler() {
-                @Override
-                public void onSelect(int selectedRow) {
-                    E item = getDataTablePanel().getDataTable().getSelectedItem();
-                    if (item != null) {
-                        onItemSelect(item);
-                    }
-                }
-            });
-            dataTablePanel.getDataTable().setHasDetailsNavigation(true);
-        } else {
-            dataTablePanel.getDataTable().setHasDetailsNavigation(false);
-            dataTablePanel.getDataTable().remItemSelectionHandler(zoomInHandler);
-            zoomInHandler = null;
-        }
+    public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
+        dataTablePanel.setItemZoomInCommand(itemZoomInCommand);
     }
 
     protected void setAllowDelete(boolean allowDelete) {
@@ -251,9 +230,6 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
     }
 
     protected void onItemNew() {
-    }
-
-    protected void onItemSelect(E item) {
     }
 
     protected void onItemsDelete(List<E> items) {

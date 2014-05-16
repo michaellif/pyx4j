@@ -35,6 +35,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
@@ -116,6 +117,10 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         dataTable.setDataTableModel(model);
         topActionsBar.setDataTableModel(model);
         bottomActionsBar.setDataTableModel(model);
+    }
+
+    public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
+        dataTable.setItemZoomInCommand(itemZoomInCommand);
     }
 
     public Button getFilterButton() {
