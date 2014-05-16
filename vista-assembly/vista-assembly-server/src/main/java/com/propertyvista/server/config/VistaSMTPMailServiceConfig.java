@@ -20,10 +20,12 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.operations.domain.dev.DevelopmentUser;
@@ -57,18 +59,6 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         config.user = credentials.userName;
         config.password = credentials.password;
 
-        if (VistaDemo.isDemo() || serverSideConfiguration.isVistaQa() || ApplicationMode.isDevelopment()) {
-            DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
-            if (developmentUser != null) {
-                if (developmentUser.forwardAll().getValue(false)) {
-                    config.forwardAllTo = developmentUser.email().getValue();
-                }
-            }
-        }
-        if (CommonsStringUtils.isEmpty(config.forwardAllTo) && VistaDeployment.isVistaStaging()) {
-            config.forwardAllTo = "support@propertyvista.com";
-        }
-
         return config;
     }
 
@@ -85,6 +75,28 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
             config.credentialsFile = mailCredentialsFile;
         }
         return config;
+    }
+
+    @Override
+    public String getForwardAllTo() {
+        if (VistaDeployment.isVistaProduction()) {
+            return super.getForwardAllTo();
+        } else if (VistaDeployment.isVistaStaging()) {
+            if (CommonsStringUtils.isEmpty(super.getForwardAllTo())) {
+                return "support@propertyvista.com";
+            } else {
+                return super.getForwardAllTo();
+            }
+        } else if (VistaDemo.isDemo() || ApplicationMode.isDevelopment()
+                || ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isVistaQa()) {
+            DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
+            if (developmentUser != null) {
+                if (developmentUser.forwardAll().getValue(false)) {
+                    return developmentUser.email().getValue();
+                }
+            }
+        }
+        return super.getForwardAllTo();
     }
 
     @Override
