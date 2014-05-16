@@ -283,8 +283,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             this.entityValidationException = caught;
             if (caught != null) {
                 for (MemberValidationError memberError : caught.getErrors()) {
-                    CComponent<?, ?, ?> comp = get(memberError.getMember());
-                    comp.setAsyncValidationErrorMessage(memberError.getMessage());
+                    get(memberError.getMember()).setAsyncValidationErrorMessage(memberError.getMessage());
                 }
             }
         }
