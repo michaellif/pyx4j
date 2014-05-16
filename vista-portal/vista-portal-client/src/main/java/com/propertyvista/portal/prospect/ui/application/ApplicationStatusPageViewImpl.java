@@ -259,7 +259,8 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 @Override
                 public List<FolderColumnDescriptor> columns() {
                     ArrayList<FolderColumnDescriptor> columns = new ArrayList<>();
-                    columns.add(new FolderColumnDescriptor(proto().customer(), "200px"));
+                    columns.add(new FolderColumnDescriptor(proto().customer(), "250px"));
+                    columns.add(new FolderColumnDescriptor(proto().role(), "150px"));
                     columns.add(new FolderColumnDescriptor(proto().progress(), "80px"));
                     return columns;
                 }
