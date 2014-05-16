@@ -26,4 +26,6 @@ public interface IMailServiceConfigConfiguration {
 
     int maxDeliveryAttempts();
 
+    int queuePriority();
+
 }

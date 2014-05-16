@@ -133,6 +133,7 @@ public class MailQueue implements Runnable {
         persistable.namespace().setValue(NamespaceManager.getNamespace());
         persistable.status().setValue(MailQueueStatus.Queued);
         persistable.attempts().setValue(0);
+        persistable.priority().setValue(mailConfig.queuePriority());
         persistable.configurationId().setValue(mailConfig.configurationId());
         persistable.data().setValue(SerializationUtils.serialize(mailMessage));
         if (callbackClass != null) {
@@ -345,6 +346,7 @@ public class MailQueue implements Runnable {
                                             .create(persistableEntityClass);
                                     criteria.eq(criteria.proto().status(), MailQueueStatus.Queued);
                                     criteria.asc(criteria.proto().attempts());
+                                    criteria.desc(criteria.proto().priority());
                                     criteria.asc(criteria.proto().updated());
                                     return Persistence.service().retrieve(criteria);
                                 }
