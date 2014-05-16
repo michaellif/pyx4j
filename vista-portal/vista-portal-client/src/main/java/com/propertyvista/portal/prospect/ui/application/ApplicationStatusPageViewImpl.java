@@ -262,6 +262,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                     columns.add(new FolderColumnDescriptor(proto().customer(), "250px"));
                     columns.add(new FolderColumnDescriptor(proto().role(), "150px"));
                     columns.add(new FolderColumnDescriptor(proto().progress(), "80px"));
+                    columns.add(new FolderColumnDescriptor(proto().daysOpen(), "50px"));
                     return columns;
                 }
             }
