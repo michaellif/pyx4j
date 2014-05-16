@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,8 +32,8 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -84,19 +83,40 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         };
     }
 
-    private TwoColumnFlexFormPanel createMarketingTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+    private IsWidget createGeneralTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        main.setWidget(++row, 0, 2, inject(proto().marketingName(), new FieldDecoratorBuilder(true).build()));
+        formPanel.h1(i18n.tr("Floorplan Information"));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().bedrooms()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().dens()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
+
+        formPanel.append(Location.Right, proto().floorCount()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().bathrooms()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().halfBath()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().areaUnits()).decorate().componentWidth(120);
+
+        formPanel.append(Location.Dual, proto().description()).decorate();
+
+        formPanel.h1(proto().amenities().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().amenities(), createAmenitiesListEditor());
+
+        return formPanel;
+    }
+
+    private IsWidget createMarketingTab() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+
+        formPanel.h1(i18n.tr("Marketing Summary"));
+        formPanel.append(Location.Left, proto().marketingName()).decorate();
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-            main.setH1(++row, 0, 2, proto().ilsSummary().getMeta().getCaption());
-            main.setWidget(++row, 0, 2, inject(proto().ilsSummary(), new ILSSummaryFolder()));
+            formPanel.h1(proto().ilsSummary().getMeta().getCaption());
+            formPanel.append(Location.Dual, proto().ilsSummary(), new ILSSummaryFolder());
         }
 
-        main.setH1(++row, 0, 2, i18n.tr("Images"));
+        formPanel.h1(i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
                 GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder()) {
             @Override
@@ -108,52 +128,22 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
 
-                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150);
-                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150);
-                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70);
+                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().componentWidth(70);
 
                 return formPanel.asWidget();
             }
         };
         imageSlider.setImageSize(240, 160);
-        main.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
+        formPanel.append(Location.Dual, proto().media(), imageSlider);
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-            main.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
-            main.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileFloorplanFolder()));
+            formPanel.h1(i18n.tr("ILS Profile"));
+            formPanel.append(Location.Dual, proto().ilsProfile(), new ILSProfileFloorplanFolder());
         }
 
-        return main;
-    }
-
-    private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-        int leftRow = -1;
-        int rightRow = -1;
-
-        main.setH1(++leftRow, 0, 2, i18n.tr("Floorplan Information"));
-
-        leftRow = rightRow = Math.max(leftRow, rightRow);
-
-        main.setWidget(++leftRow, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
-        main.setWidget(++leftRow, 0, inject(proto().bedrooms(), new FieldDecoratorBuilder(3).build()));
-        main.setWidget(++leftRow, 0, inject(proto().dens(), new FieldDecoratorBuilder(3).build()));
-        main.setWidget(++leftRow, 0, inject(proto().area(), new FieldDecoratorBuilder(8).build()));
-
-        main.setWidget(++rightRow, 1, inject(proto().floorCount(), new FieldDecoratorBuilder(3).build()));
-        main.setWidget(++rightRow, 1, inject(proto().bathrooms(), new FieldDecoratorBuilder(3).build()));
-        main.setWidget(++rightRow, 1, inject(proto().halfBath(), new FieldDecoratorBuilder(3).build()));
-        main.setWidget(++rightRow, 1, inject(proto().areaUnits(), new FieldDecoratorBuilder(8).build()));
-
-        leftRow = rightRow = Math.max(leftRow, rightRow);
-
-        main.setWidget(++leftRow, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
-
-        main.setH1(++leftRow, 0, 2, proto().amenities().getMeta().getCaption());
-        main.setWidget(++leftRow, 0, 2, inject(proto().amenities(), createAmenitiesListEditor()));
-
-        return main;
+        return formPanel;
     }
 
     private class ILSSummaryFolder extends VistaBoxFolder<ILSSummaryFloorplan> {
@@ -236,15 +226,12 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().vendor(), new CEnumLabel(), new FieldDecoratorBuilder().build()));
-                content.setWidget(row, 1, inject(proto().priority(), new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().vendor(), new CEnumLabel()).decorate();
+                formPanel.append(Location.Right, proto().priority()).decorate();
 
-                content.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
-
-                return content;
+                return formPanel;
             }
         }
     }

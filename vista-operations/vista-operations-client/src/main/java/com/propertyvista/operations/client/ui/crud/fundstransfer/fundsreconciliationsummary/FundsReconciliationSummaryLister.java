@@ -24,7 +24,7 @@ public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconc
         super(FundsReconciliationSummaryDTO.class, false, false);
 
         setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(),//
+                new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().fileName()).build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().fundsTransferType()).build(), //
@@ -33,7 +33,7 @@ public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconc
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), //
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //  
                 new MemberColumnDescriptor.Builder(proto().merchantAccount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().reconciliationStatus()).build(),//   
+                new MemberColumnDescriptor.Builder(proto().reconciliationStatus()).build(), //   
                 new MemberColumnDescriptor.Builder(proto().processingStatus()).build(), //
                 new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), //
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
