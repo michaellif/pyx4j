@@ -236,7 +236,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
                     updateTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
                     updateNote();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.editingInProgress)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.editingInProgress, PropertyName.editingCompleted)) {
                     renderValidationMessage();
                 }
                 if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable,

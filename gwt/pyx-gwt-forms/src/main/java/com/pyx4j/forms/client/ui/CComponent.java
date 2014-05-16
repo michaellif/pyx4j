@@ -52,6 +52,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme.StyleDependent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
+import com.pyx4j.forms.client.validators.AsyncValidator;
 import com.pyx4j.forms.client.validators.ComponentValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
@@ -111,6 +112,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     private List<ComponentValidator<DATA_TYPE>> componentValidators;
 
     private MandatoryValidator<DATA_TYPE> mandatoryValidator;
+
+    private AsyncValidator<DATA_TYPE> asyncValidator;
 
     private boolean visited = false;
 
@@ -340,6 +343,20 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public String getMandatoryValidationMessage() {
         return mandatoryValidationMessage;
+    }
+
+    public void setAsyncValidationError(AbstractValidationError error) {
+        if (error == null) {
+            removeComponentValidator(asyncValidator);
+            asyncValidator = null;
+        } else {
+            if (asyncValidator == null) {
+                addComponentValidator(asyncValidator = new AsyncValidator<DATA_TYPE>());
+            }
+            asyncValidator.setValidationError(error);
+        }
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
+        revalidate();
     }
 
     @Override
@@ -609,10 +626,8 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         }
     }
 
-    public void removeAllComponentValidators() {
-        if (componentValidators != null) {
-            componentValidators.clear();
-        }
+    public List<ComponentValidator<DATA_TYPE>> getComponentValidators() {
+        return componentValidators;
     }
 
     @Override
@@ -664,7 +679,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             } else {
                 setVisited(wasVisited);
             }
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingInProgress);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editingCompleted);
         }
     }
 

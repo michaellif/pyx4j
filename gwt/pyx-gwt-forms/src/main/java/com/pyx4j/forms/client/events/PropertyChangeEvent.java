@@ -69,6 +69,8 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         editingInProgress,
 
+        editingCompleted,
+
     };
 
     private final PropertyName propertyName;
