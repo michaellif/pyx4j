@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -50,15 +50,15 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
         formPanel.append(Location.Left, proto().minimumRequiredLiability()).decorate().componentWidth(200);
         get(proto().minimumRequiredLiability()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 // HARD CODED by request form Leonard and due to TenantSure max possible liability which is $5,000,000
                 // if we do it like that, we don't have to worry about what to do with TenantSure in portal if the policy sets the min liability is over 5 million
                 final BigDecimal MAX_FLOOR = new BigDecimal("5000000.00");
                 if (getComponent().getValue() != null && getComponent().getValue().compareTo(MAX_FLOOR) > 0) {
-                    return new FieldValidationError(getComponent(), i18n.tr("The maximum of minimum required liability is ${0,number,#,##0.00}", MAX_FLOOR));
+                    return new BasicValidationError(getComponent(), i18n.tr("The maximum of minimum required liability is ${0,number,#,##0.00}", MAX_FLOOR));
                 }
                 if (getComponent().getValue() != null && getComponent().getValue().compareTo(BigDecimal.ZERO) < 0) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please provide a non-negative value"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a non-negative value"));
                 } else {
                     return null;
                 }

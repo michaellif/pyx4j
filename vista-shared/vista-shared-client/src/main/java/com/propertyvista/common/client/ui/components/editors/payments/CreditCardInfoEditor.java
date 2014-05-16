@@ -38,7 +38,7 @@ import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -61,7 +61,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
     private boolean isCreditCardNumberCheckRecieved;
 
-    private FieldValidationError isCreditCardNumberValid;
+    private BasicValidationError isCreditCardNumberValid;
 
     protected final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
 
@@ -135,7 +135,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         // set up async validation for credit card number:
         cardEditor.addComponentValidator(new AbstractComponentValidator<CreditCardNumberIdentity>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (isCreditCardNumberCheckRecieved) {
                         isCreditCardNumberCheckRecieved = false;
@@ -144,7 +144,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                     } else if (!isCreditCardNumberCheckSent) {
                         return CreditCardInfoEditor.this.validateCreditCardNumberAsync(getComponent(), getComponent().getValue());
                     } else {
-                        return new FieldValidationError(getComponent(), i18n.tr("Validation in progress"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Validation in progress"));
                     }
                 } else {
                     return null;
@@ -172,9 +172,9 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
 
         get(proto().securityCode()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-                    return ValidationUtils.isCreditCardCodeValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(), i18n
+                    return ValidationUtils.isCreditCardCodeValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(), i18n
                             .tr("Security Code should consist of 3 to 4 digits"));
                 } else {
                     return null;
@@ -188,7 +188,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         return EnumSet.allOf(CreditCardType.class);
     }
 
-    private FieldValidationError validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
+    private BasicValidationError validateCreditCardNumberAsync(final CComponent<?, ?, ?> component, CreditCardNumberIdentity value) {
         if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
             if (ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue())) {
                 if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {
@@ -199,7 +199,7 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                     GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
                         @Override
                         public void onSuccess(Boolean result) {
-                            setCreditCardNumberValidationResult(result ? null : new FieldValidationError(component, i18n.tr("Invalid Card Number")));
+                            setCreditCardNumberValidationResult(result ? null : new BasicValidationError(component, i18n.tr("Invalid Card Number")));
                         }
 
                         @Override
@@ -209,19 +209,19 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
                         }
                     }, ccInfo);
                     isCreditCardNumberCheckSent = true;
-                    return new FieldValidationError(component, i18n.tr("Validation in progress"));
+                    return new BasicValidationError(component, i18n.tr("Validation in progress"));
                 }
             } else {
-                return new FieldValidationError(component, i18n.tr("Invalid Card Number"));
+                return new BasicValidationError(component, i18n.tr("Invalid Card Number"));
             }
         } else if (value != null && value.obfuscatedNumber().isNull()) {
-            return new FieldValidationError(component, i18n.tr("Invalid Card Number"));
+            return new BasicValidationError(component, i18n.tr("Invalid Card Number"));
         } else {
             return null;
         }
     }
 
-    private void setCreditCardNumberValidationResult(FieldValidationError error) {
+    private void setCreditCardNumberValidationResult(BasicValidationError error) {
         isCreditCardNumberCheckRecieved = true;
         isCreditCardNumberValid = error;
         cardEditor.revalidate();

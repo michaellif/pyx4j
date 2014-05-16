@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -144,7 +144,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
 
         this.addComponentValidator(new AbstractComponentValidator<IList<Building>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && !getComponent().getValue().isEmpty()) {
                     boolean primaryFound = false;
                     for (Building item : getComponent().getValue()) {
@@ -154,7 +154,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                         }
                     }
                     if (!primaryFound) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Primary building should be selected"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Primary building should be selected"));
                     }
                 }
                 return null;

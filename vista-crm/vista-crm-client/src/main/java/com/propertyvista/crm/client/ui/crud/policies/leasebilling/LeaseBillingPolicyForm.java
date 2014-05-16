@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -220,7 +220,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 addComponentValidator(new AbstractComponentValidator<IList<LeaseBillingTypePolicyItem>>() {
                     @Override
                     public AbstractValidationError isValid() {
-                        return getValue().size() > 0 ? null : new FieldValidationError(LeaseBillingTypeFolder.this, i18n.tr("No Billing Types added."));
+                        return getValue().size() > 0 ? null : new BasicValidationError(LeaseBillingTypeFolder.this, i18n.tr("No Billing Types added."));
                     }
                 });
             }

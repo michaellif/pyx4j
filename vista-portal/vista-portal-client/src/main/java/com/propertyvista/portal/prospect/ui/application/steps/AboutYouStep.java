@@ -22,7 +22,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -91,11 +91,11 @@ public class AboutYouStep extends ApplicationWizardStep {
         get(proto().applicant().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
         get(proto().applicant().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
                         if (!TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                            return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement is {0} years.", ageOfMajority()));
+                            return new BasicValidationError(getComponent(), i18n.tr("The minimum age requirement is {0} years.", ageOfMajority()));
                         }
                     }
                 }

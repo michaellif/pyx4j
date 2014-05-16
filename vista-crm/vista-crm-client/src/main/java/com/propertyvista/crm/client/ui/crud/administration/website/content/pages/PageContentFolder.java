@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -98,12 +98,12 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         super.addValidations();
         this.addComponentValidator(new AbstractComponentValidator<IList<PageContent>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null) {
                     return null;
                 }
                 return !getComponent().getValue().isEmpty() ? null
-                        : new FieldValidationError(getComponent(), i18n.tr("At least one content item is necessary"));
+                        : new BasicValidationError(getComponent(), i18n.tr("At least one content item is necessary"));
             }
         });
     }

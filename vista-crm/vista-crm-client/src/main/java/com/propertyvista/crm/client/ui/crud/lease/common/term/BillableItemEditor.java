@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -416,18 +416,18 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
                 get(proto().effectiveDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
-                    public FieldValidationError isValid() {
+                    public BasicValidationError isValid() {
                         if (getComponent().getValue() != null) {
                             if (leaseTerm.getValue().lease().status().getValue() != Lease.Status.ExistingLease && (itemEffectiveDateEditor.getValue() != null)
                                     && getComponent().getValue().before(ClientContext.getServerDate())) {
-                                return new FieldValidationError(getComponent(), "The date should not precede the today's date");
+                                return new BasicValidationError(getComponent(), "The date should not precede the today's date");
                             }
                             if ((itemEffectiveDateEditor.getValue() != null) && getComponent().getValue().before(itemEffectiveDateEditor.getValue())) {
-                                return new FieldValidationError(getComponent(), "The date should not precede the Item Effective date");
+                                return new BasicValidationError(getComponent(), "The date should not precede the Item Effective date");
                             }
                             if ((leaseTerm.getValue().termFrom().getValue() != null)
                                     && getComponent().getValue().before(leaseTerm.getValue().termFrom().getValue())) {
-                                return new FieldValidationError(getComponent(), "The date should not precede the Lease Start date");
+                                return new BasicValidationError(getComponent(), "The date should not precede the Lease Start date");
                             }
                         }
                         return null;
@@ -440,13 +440,13 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
                 get(proto().expirationDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
-                    public FieldValidationError isValid() {
+                    public BasicValidationError isValid() {
                         if (getComponent().getValue() != null) {
                             if (itemExpirationDateEditor.getValue() != null && getComponent().getValue().after(itemExpirationDateEditor.getValue())) {
-                                return new FieldValidationError(getComponent(), "The date should not exceed the Item Expiration date");
+                                return new BasicValidationError(getComponent(), "The date should not exceed the Item Expiration date");
                             }
                             if (leaseTerm.getValue().termTo().getValue() != null && getComponent().getValue().after(leaseTerm.getValue().termTo().getValue())) {
-                                return new FieldValidationError(getComponent(), "The date should not exceed the Lease Expiration date");
+                                return new BasicValidationError(getComponent(), "The date should not exceed the Lease Expiration date");
                             }
                         }
                         return null;
@@ -455,7 +455,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
                 get(proto().value()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
                     @Override
-                    public FieldValidationError isValid() {
+                    public BasicValidationError isValid() {
                         if (getComponent().getValue() != null) {
                             if (getComponent().getValue().signum() < 0) {
                                 // TODO : some validation here...
@@ -479,14 +479,14 @@ public class BillableItemEditor extends CForm<BillableItem> {
         get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
         get(proto().effectiveDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (leaseTerm.getValue().termTo().getValue() != null && getComponent().getValue().before(leaseTerm.getValue().termFrom().getValue())) {
-                        return new FieldValidationError(getComponent(), "The date should not precede the Lease Start date");
+                        return new BasicValidationError(getComponent(), "The date should not precede the Lease Start date");
                     }
                     for (BillableItemAdjustment a : getValue().adjustments()) {
                         if (a.effectiveDate().getValue() != null && a.effectiveDate().getValue().before(getComponent().getValue())) {
-                            return new FieldValidationError(getComponent(), "One or more adjustments for this item start before the specified date");
+                            return new BasicValidationError(getComponent(), "One or more adjustments for this item start before the specified date");
                         }
                     }
                 }
@@ -497,14 +497,14 @@ public class BillableItemEditor extends CForm<BillableItem> {
         get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
         get(proto().expirationDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (leaseTerm.getValue().termTo().getValue() != null && getComponent().getValue().after(leaseTerm.getValue().termTo().getValue())) {
-                        return new FieldValidationError(getComponent(), "The date should not exceed the Lease Expiration date");
+                        return new BasicValidationError(getComponent(), "The date should not exceed the Lease Expiration date");
                     }
                     for (BillableItemAdjustment a : getValue().adjustments()) {
                         if (a.expirationDate().getValue() != null && a.expirationDate().getValue().after(getComponent().getValue())) {
-                            return new FieldValidationError(getComponent(), "One or more adjustments for this item expire after the specificed date");
+                            return new BasicValidationError(getComponent(), "One or more adjustments for this item expire after the specificed date");
                         }
                     }
                 }

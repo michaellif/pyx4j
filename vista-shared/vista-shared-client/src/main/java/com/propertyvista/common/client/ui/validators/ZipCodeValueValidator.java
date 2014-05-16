@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.Path;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.Country;
@@ -45,7 +45,7 @@ public class ZipCodeValueValidator extends AbstractComponentValidator<String> {
     }
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         String value = getComponent().getValue();
         CComponent<?, String, ?> component = getComponent();
         if (value == null) {
@@ -53,11 +53,11 @@ public class ZipCodeValueValidator extends AbstractComponentValidator<String> {
         }
         String c = countryName();
         if ("Canada".equals(c)) {
-            return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new FieldValidationError(component, i18n.tr("Invalid Canadian Postal Code"));
+            return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new BasicValidationError(component, i18n.tr("Invalid Canadian Postal Code"));
         } else if ("United States".equals(c)) {
-            return ValidationUtils.isUSZipCodeValid(value) ? null : new FieldValidationError(component, i18n.tr("Invalid US Zip Code"));
+            return ValidationUtils.isUSZipCodeValid(value) ? null : new BasicValidationError(component, i18n.tr("Invalid US Zip Code"));
         } else if ("United Kingdom".equals(c)) {
-            return ValidationUtils.isUKPostalCodeValid(value) ? null : new FieldValidationError(component, i18n.tr("Invalid UK Postal Code"));
+            return ValidationUtils.isUKPostalCodeValid(value) ? null : new BasicValidationError(component, i18n.tr("Invalid UK Postal Code"));
         } else {
             return null;
         }

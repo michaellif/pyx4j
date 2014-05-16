@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -84,9 +84,9 @@ public class FinancialStep extends ApplicationWizardStep {
 
         get(proto().applicant().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getValue().applicant().assets().size() > 0) || (getValue().applicant().incomes().size() > 0) ? null : new FieldValidationError(
+                    return (getValue().applicant().assets().size() > 0) || (getValue().applicant().incomes().size() > 0) ? null : new BasicValidationError(
                             getComponent(), i18n.tr("At least one source of income or one asset is required"));
                 }
                 return null;

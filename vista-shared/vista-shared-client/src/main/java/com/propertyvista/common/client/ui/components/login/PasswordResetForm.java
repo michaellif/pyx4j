@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.HasDescription;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
@@ -91,9 +91,9 @@ public class PasswordResetForm extends CForm<PasswordChangeRequest> {
     public void addValidations() {
         get(proto().newPasswordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().newPassword()).getValue())) {
-                    return new FieldValidationError(getComponent(), i18n.tr("The passwords don't match."));
+                    return new BasicValidationError(getComponent(), i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

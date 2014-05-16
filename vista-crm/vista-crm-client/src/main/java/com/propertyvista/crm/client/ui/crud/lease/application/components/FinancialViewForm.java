@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -63,8 +63,8 @@ public class FinancialViewForm extends CForm<TenantFinancialDTO> {
     public void addValidations() {
         this.addComponentValidator(new AbstractComponentValidator<TenantFinancialDTO>() {
             @Override
-            public FieldValidationError isValid() {
-                return (getComponent().getValue().assets().size() > 0) || (getComponent().getValue().incomes().size() > 0) ? null : new FieldValidationError(
+            public BasicValidationError isValid() {
+                return (getComponent().getValue().assets().size() > 0) || (getComponent().getValue().incomes().size() > 0) ? null : new BasicValidationError(
                         getComponent(), i18n.tr("At least one source of income or one asset is required"));
             }
         });

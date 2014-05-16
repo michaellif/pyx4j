@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
@@ -143,9 +143,9 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
         get(proto().propertyAccounts()).addComponentValidator(new AbstractComponentValidator<List<PropertyAccountInfo>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                    return new FieldValidationError(getComponent(), i18n.tr("At least one property account is required"));
+                    return new BasicValidationError(getComponent(), i18n.tr("At least one property account is required"));
                 } else {
                     return null;
                 }

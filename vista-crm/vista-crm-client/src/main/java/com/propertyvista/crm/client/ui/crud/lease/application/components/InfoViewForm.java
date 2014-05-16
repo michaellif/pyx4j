@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -171,16 +171,16 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     if (getComponent().getValue() == null || getValue() == null) {
                         return null;
                     }
 
                     if (getComponent().getValue().isEmpty()) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Empty Emergency Contacts list"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Empty Emergency Contacts list"));
                     }
 
-                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new FieldValidationError(getComponent(), i18n
+                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new BasicValidationError(getComponent(), i18n
                             .tr("Duplicate Emergency Contacts specified"));
                 }
             });
@@ -206,7 +206,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         value1.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
 
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }
@@ -215,7 +215,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
                 long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
                 long limit2 = date.getTime() - 2678400000L;
                 return (date == null || (getComponent().getValue().getTime() > limit2 && getComponent().getValue().getTime() < limit1)) ? null
-                        : new FieldValidationError(getComponent(), message);
+                        : new BasicValidationError(getComponent(), message);
             }
         });
     }

@@ -17,7 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class StartEndDateValidation {
@@ -36,24 +36,24 @@ public class StartEndDateValidation {
 
         start.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
                 LogicalDate endDate = end.getValue();
-                return (!getComponent().getValue().after(endDate) ? null : new FieldValidationError(getComponent(), msg));
+                return (!getComponent().getValue().after(endDate) ? null : new BasicValidationError(getComponent(), msg));
             }
         });
         start.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(end));
 
         end.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
                 LogicalDate startDate = start.getValue();
-                return (!getComponent().getValue().before(startDate) ? null : new FieldValidationError(getComponent(), msg));
+                return (!getComponent().getValue().before(startDate) ? null : new BasicValidationError(getComponent(), msg));
             }
         });
         end.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(start));

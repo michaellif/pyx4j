@@ -20,7 +20,7 @@ import java.util.List;
 import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -31,7 +31,7 @@ public class OriginalSignatureValidator extends AbstractComponentValidator<Custo
     private static final I18n i18n = I18n.get(OriginalSignatureValidator.class);
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         ISignature value = getComponent().getValue();
         if (value != null) {
             SignatureFormat signatureFormat = value.signatureFormat().isNull() ? SignatureFormat.None : value.signatureFormat().getValue();
@@ -39,12 +39,12 @@ public class OriginalSignatureValidator extends AbstractComponentValidator<Custo
             case AgreeBoxAndFullName:
             case FullName:
                 if (value.fullName().getValue() != null && !isSignatureOriginal(value.fullName().getValue())) {
-                    return new FieldValidationError(getComponent(), i18n.tr("You have to enter first name followed by last name"));
+                    return new BasicValidationError(getComponent(), i18n.tr("You have to enter first name followed by last name"));
                 }
                 break;
             case Initials:
                 if (value.initials().getValue() != null && !isInitialsOriginal(value.initials().getValue())) {
-                    return new FieldValidationError(getComponent(), i18n.tr("You have to enter your initials without space"));
+                    return new BasicValidationError(getComponent(), i18n.tr("You have to enter your initials without space"));
                 }
                 break;
             default:

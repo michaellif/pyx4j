@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -148,20 +148,20 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     boolean applicant = false;
                     for (LeaseTermTenant item : getComponent().getValue()) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                                return new FieldValidationError(getComponent(), i18n.tr("Just one person with role 'Tenant' could be selected!"));
+                                return new BasicValidationError(getComponent(), i18n.tr("Just one person with role 'Tenant' could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseTermParticipant.Role.Applicant);
                         }
                     }
                     if (!applicant) {
-                        return new FieldValidationError(getComponent(), i18n.tr("A person with role 'Tenant' should be present!"));
+                        return new BasicValidationError(getComponent(), i18n.tr("A person with role 'Tenant' should be present!"));
                     }
                 }
                 return null;
@@ -170,10 +170,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (getComponent().getValue().isEmpty()) {
-                        return new FieldValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
+                        return new BasicValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
                     }
                 }
                 return null;
@@ -270,12 +270,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             get(proto().role()).addComponentValidator(new AbstractComponentValidator<LeaseTermParticipant.Role>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     if (getComponent().getValue() != null && getValue() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (getEnforceAgeOfMajority()) {
                             if (Role.resposible().contains(getComponent().getValue())) {
                                 if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
-                                    return new FieldValidationError(
+                                    return new BasicValidationError(
                                             getComponent(),
                                             i18n.tr("This person is too young to be a tenant or a co-tenant: the minimum age required is {0}. Please mark the person as a Dependent instead",
                                                     getAgeOfMajority()));
@@ -285,7 +285,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                         if (getMaturedOccupantsAreApplicants()) {
                             if (Role.Dependent == getComponent().getValue()) {
                                 if (TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority())) {
-                                    return new FieldValidationError(getComponent(), i18n
+                                    return new BasicValidationError(getComponent(), i18n
                                             .tr("According to internal regulations and age this person cannot be a Dependent"));
                                 }
                             }

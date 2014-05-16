@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -91,11 +91,11 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
         if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
             addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFolder>>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     if (getComponent().getValue() != null && documentationPolicy != null) {
                         int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {
-                            return new FieldValidationError(getComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
+                            return new BasicValidationError(getComponent(), i18n.tr("{0} more document(s) is/are required", numOfRemainingDocs));
                         }
                     }
                     return null;
@@ -168,9 +168,9 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
             if (!VistaTODO.VISTA_4498_Remove_Unnecessary_Validation_Screening_CRM) {
                 docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                     @Override
-                    public FieldValidationError isValid() {
+                    public BasicValidationError isValid() {
                         if (getComponent().getValue() != null && getComponent().getValue().size() < 1) {
-                            return new FieldValidationError(getComponent(), i18n.tr("At least one document file is required"));
+                            return new BasicValidationError(getComponent(), i18n.tr("At least one document file is required"));
                         } else {
                             return null;
                         }
@@ -198,12 +198,12 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocumentFolde
 
             get(proto().idNumber()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     if (get(proto().idType()).getValue() != null && getComponent().getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:
                             if (!ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", ""))) {
-                                return new FieldValidationError(getComponent(), i18n.tr("Invalid SIN"));
+                                return new BasicValidationError(getComponent(), i18n.tr("Invalid SIN"));
                             }
                             break;
                         case citizenship:

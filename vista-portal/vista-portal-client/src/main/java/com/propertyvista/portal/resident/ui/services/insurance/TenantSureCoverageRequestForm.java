@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
@@ -87,11 +87,11 @@ public class TenantSureCoverageRequestForm extends CForm<TenantSureCoverageDTO> 
             public AbstractValidationError isValid() {
                 if (TenantSureCoverageRequestForm.this.lastInceptionDate != null) {
                     if (getComponent().getValue() != null && getComponent().getValue().compareTo(lastInceptionDate) > 0) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Maximum possible value for inception date is {0,short,date}",
+                        return new BasicValidationError(getComponent(), i18n.tr("Maximum possible value for inception date is {0,short,date}",
                                 lastInceptionDate));
                     }
                     if (getComponent().getValue() != null & getComponent().getValue().compareTo(new LogicalDate()) < 0) {
-                        return new FieldValidationError(getComponent(), i18n.tr("This date cannot be in the past", lastInceptionDate));
+                        return new BasicValidationError(getComponent(), i18n.tr("This date cannot be in the past", lastInceptionDate));
                     }
                 }
                 return null;

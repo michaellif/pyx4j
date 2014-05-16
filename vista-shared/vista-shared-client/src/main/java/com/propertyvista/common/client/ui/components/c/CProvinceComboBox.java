@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.ComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.Country;
@@ -60,8 +60,8 @@ public class CProvinceComboBox extends CFocusComponent<String, NProvinceComboBox
         this.asyncOptionDelegate = new AsyncOptionLoadingDelegate<Province>(Province.class, this, null);
         this.unavailableValidator = new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
-                return new FieldValidationError(getComponent(), i18n.tr("Reference data unavailable"));
+            public BasicValidationError isValid() {
+                return new BasicValidationError(getComponent(), i18n.tr("Reference data unavailable"));
             }
         };
     }

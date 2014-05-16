@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -92,9 +92,9 @@ public class LeaseAgreementDocumentForm extends CForm<LeaseTermAgreementDocument
         get(proto().signedParticipants()).addComponentValidator(new AbstractComponentValidator<List<LeaseTermParticipant<?>>>() {
 
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please select signed lease participants"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please select signed lease participants"));
                 }
                 return null;
             }

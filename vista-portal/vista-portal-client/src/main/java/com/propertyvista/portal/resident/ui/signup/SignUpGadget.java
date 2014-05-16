@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -242,10 +242,10 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
 
             get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     String password = (get(proto().password())).getValue();
                     if ((password == null && getComponent().getValue() != null) || (password != null && !password.equals(getComponent().getValue()))) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Passwords don't match"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Passwords don't match"));
                     }
                     return null;
                 }
@@ -284,7 +284,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             if (caught != null) {
                 for (MemberValidationError memberError : caught.getErrors()) {
                     CComponent<?, ?, ?> comp = get(memberError.getMember());
-                    comp.setAsyncValidationError((memberError == null || memberError.getMessage() == null) ? null : new FieldValidationError(comp, memberError
+                    comp.setAsyncValidationError((memberError == null || memberError.getMessage() == null) ? null : new BasicValidationError(comp, memberError
                             .getMessage()));
                 }
             }

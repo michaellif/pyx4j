@@ -51,7 +51,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -251,8 +251,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         CSignature cSignature = new CSignature(signatureDescriptionPanel);
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
-            public FieldValidationError isValid() {
-                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new FieldValidationError(getComponent(), i18n
+            public BasicValidationError isValid() {
+                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new BasicValidationError(getComponent(), i18n
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });
@@ -273,9 +273,9 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new FieldValidationError(getComponent(), i18n
+                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getComponent(), i18n
                             .tr("Payment amount should be greater than zero!")));
                 }
                 return null;
@@ -284,9 +284,9 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         profiledPaymentMethodsCombo.addComponentValidator(new AbstractComponentValidator<LeasePaymentMethod>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new FieldValidationError(
+                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new BasicValidationError(
                             getComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;

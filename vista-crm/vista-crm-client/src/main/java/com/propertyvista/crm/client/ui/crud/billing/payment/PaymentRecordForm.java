@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -437,9 +437,9 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
     public void addValidations() {
         get(proto().amount()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new FieldValidationError(getComponent(), i18n
+                    return (getComponent().getValue().compareTo(BigDecimal.ZERO) > 0 ? null : new BasicValidationError(getComponent(), i18n
                             .tr("Payment amount should be greater than zero!")));
                 }
                 return null;

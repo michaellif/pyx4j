@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.GeoLocation;
@@ -65,20 +65,20 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
 
         get(proto().latitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 CComponent<?, LatitudeType, ?> latitudeType = get(proto().latitudeType());
                 Double value = getComponent().getValue();
                 return ((value == null && latitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 90))) ? null
-                        : new FieldValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
+                        : new BasicValidationError(getComponent(), i18n.tr("Latitude may be in range [0-90] degree"));
             }
         });
         get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
 
         get(proto().latitudeType()).addComponentValidator(new AbstractComponentValidator<LatitudeType>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 CComponent<?, Double, ?> latitude = get(proto().latitude());
-                return (getComponent().getValue() != null || latitude.getValue() == null) ? null : new FieldValidationError(getComponent(), i18n
+                return (getComponent().getValue() != null || latitude.getValue() == null) ? null : new BasicValidationError(getComponent(), i18n
                         .tr("This field is Mandatory"));
             }
         });
@@ -89,10 +89,10 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
 
         get(proto().longitude()).addComponentValidator(new AbstractComponentValidator<Double>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 CComponent<?, LongitudeType, ?> longitudeType = get(proto().longitudeType());
                 return ((getComponent().getValue() == null && longitudeType.getValue() == null) || (getComponent().getValue() != null && (getComponent()
-                        .getValue() >= 0 && getComponent().getValue() <= 180))) ? null : new FieldValidationError(getComponent(), i18n
+                        .getValue() >= 0 && getComponent().getValue() <= 180))) ? null : new BasicValidationError(getComponent(), i18n
                         .tr("Longitude may be in range [0-180] degree"));
             }
         });
@@ -100,9 +100,9 @@ public class GeoLocationEditor extends CForm<GeoLocation> {
 
         get(proto().longitudeType()).addComponentValidator(new AbstractComponentValidator<LongitudeType>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 CComponent<?, Double, ?> longitude = get(proto().longitude());
-                return (getComponent().getValue() != null || longitude.getValue() == null) ? null : new FieldValidationError(getComponent(), i18n
+                return (getComponent().getValue() != null || longitude.getValue() == null) ? null : new BasicValidationError(getComponent(), i18n
                         .tr("This field is Mandatory"));
             }
         });

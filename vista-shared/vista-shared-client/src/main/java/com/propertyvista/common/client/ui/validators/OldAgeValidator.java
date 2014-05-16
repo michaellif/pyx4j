@@ -17,7 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class OldAgeValidator extends AbstractComponentValidator<LogicalDate> {
@@ -26,13 +26,13 @@ public class OldAgeValidator extends AbstractComponentValidator<LogicalDate> {
 
     @SuppressWarnings("deprecation")
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         LogicalDate value = getComponent().getValue();
         if (value == null) {
             return null;
         }
         Date current = new Date();
-        return current.getYear() - value.getYear() < 150 ? null : new FieldValidationError(getComponent(), i18n.tr("Age cannot be greater than 150 years"));
+        return current.getYear() - value.getYear() < 150 ? null : new BasicValidationError(getComponent(), i18n.tr("Age cannot be greater than 150 years"));
     }
 
 }

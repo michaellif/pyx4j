@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
@@ -90,46 +90,46 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         super.addValidations();
         get(proto().certificate().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (GeneralPolicyUploadWizard.this.minRequiredLiability != null && getComponent().getValue() != null
                         && getComponent().getValue().compareTo(minRequiredLiability) < 0) {
-                    return new FieldValidationError(getComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
+                    return new BasicValidationError(getComponent(), i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;
             }
         });
         get(proto().certificate().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please enter a positive value"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please enter a positive value"));
                 }
                 return null;
             }
         });
         get(proto().certificate().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) > 0) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please provide a date less than or equal of today"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a date less than or equal of today"));
                 }
                 return null;
             }
         });
         get(proto().certificate().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().compareTo(new LogicalDate()) < 0) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please provide a date greater than or equal of today"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please provide a date greater than or equal of today"));
                 }
                 return null;
             }
         });
         get(proto().certificate().certificateDocs()).addComponentValidator(new AbstractComponentValidator<List<InsuranceCertificateScan>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please upload a scan of your insurance certificate"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please upload a scan of your insurance certificate"));
                 }
                 return null;
             }

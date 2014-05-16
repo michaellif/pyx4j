@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -84,8 +84,8 @@ public class ConfirmationStep extends ApplicationWizardStep {
         CSignature cSignature = new CSignature(signatureDescriptionPanel);
         cSignature.setSignatureCompletionValidator(new AbstractComponentValidator<ISignature>() {
             @Override
-            public FieldValidationError isValid() {
-                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new FieldValidationError(getComponent(), i18n
+            public BasicValidationError isValid() {
+                return (getComponent().getValue() == null || !getComponent().getValue().agree().getValue(false) ? new BasicValidationError(getComponent(), i18n
                         .tr("Please agree to all applicable Terms and Conditions and our Privacy Policy in order to submit your payment.")) : null);
             }
         });

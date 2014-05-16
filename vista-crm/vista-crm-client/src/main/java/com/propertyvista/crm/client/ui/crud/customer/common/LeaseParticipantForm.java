@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -115,10 +115,10 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         get(proto().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
         get(proto().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && !getValue().ageOfMajority().isNull()) {
                     if (!TimeUtils.isOlderThan(getComponent().getValue(), getValue().ageOfMajority().getValue())) {
-                        return new FieldValidationError(getComponent(), i18n.tr("This lease participant is too young: the minimum age required is {0}.",
+                        return new BasicValidationError(getComponent(), i18n.tr("This lease participant is too young: the minimum age required is {0}.",
                                 getValue().ageOfMajority().getValue()));
                     }
                 }

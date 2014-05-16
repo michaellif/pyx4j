@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -98,13 +98,13 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
                                 if (!employer.ends().isNull() && !employer.starts().isNull()) {
                                     // valid, if more than 1 year, otherwise - more employment needed! 
                                     if (CalendarUtil.getDaysBetween(employer.starts().getValue(), employer.ends().getValue()) < 366) {
-                                        return new FieldValidationError(getComponent(), i18n.tr("You need to enter more employment information"));
+                                        return new BasicValidationError(getComponent(), i18n.tr("You need to enter more employment information"));
                                     }
                                 }
                             }
                         }
                     } else if (getComponent().getValue().size() > 3) {
-                        return new FieldValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
+                        return new BasicValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
                     }
                 }
                 return null;

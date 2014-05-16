@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -51,9 +51,9 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
         this.addComponentValidator(new AbstractComponentValidator<IList<Guest>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getComponent().getValue().isEmpty() ? new FieldValidationError(getComponent(), i18n.tr("At least one guest data should be entered"))
+                    return (getComponent().getValue().isEmpty() ? new BasicValidationError(getComponent(), i18n.tr("At least one guest data should be entered"))
                             : null);
                 }
                 return null;

@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -200,11 +200,11 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
             get(proto().leaseParticipant().customer().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     if (getComponent().getValue() != null) {
                         if (getEnforceAgeOfMajority()) {
                             if (!TimeUtils.isOlderThan(getComponent().getValue(), getAgeOfMajority())) {
-                                return new FieldValidationError(getComponent(), i18n.tr("The minimum age requirement for a guarantor is {0}.",
+                                return new BasicValidationError(getComponent(), i18n.tr("The minimum age requirement for a guarantor is {0}.",
                                         getAgeOfMajority()));
                             }
                         }

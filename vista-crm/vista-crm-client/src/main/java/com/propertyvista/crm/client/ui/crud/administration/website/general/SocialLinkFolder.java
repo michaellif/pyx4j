@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -142,11 +142,11 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             formPanel.append(Location.Left, proto().siteUrl()).decorate();
             get(proto().siteUrl()).addComponentValidator(new AbstractComponentValidator<String>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     if (getComponent().getValue() == null || getComponent().getValue().length() == 0) {
-                        return new FieldValidationError(getComponent(), i18n.tr("URL should not be empty"));
+                        return new BasicValidationError(getComponent(), i18n.tr("URL should not be empty"));
                     } else if (!ValidationUtils.isCorrectUrl(getComponent().getValue())) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Please use proper URL format"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Please use proper URL format"));
                     }
                     return null;
                 }

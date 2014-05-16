@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
@@ -114,9 +114,9 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
 
         get(proto().dnsName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
-                    return new FieldValidationError(getComponent(), i18n.tr("DNS is not available"));
+                    return new BasicValidationError(getComponent(), i18n.tr("DNS is not available"));
                 } else {
                     return null;
                 }
@@ -125,10 +125,10 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
 
         get(proto().confirmEmail()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 String email = get(proto().email()).getValue();
                 if (email != null && !email.equals(getComponent().getValue())) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Email and Email Confirmation don't match"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Email and Email Confirmation don't match"));
                 } else {
                     return null;
                 }
@@ -137,10 +137,10 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
 
         get(proto().confirmPassword()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 String password = get(proto().password()).getValue();
                 if (password != null && !password.equals(getComponent().getValue())) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Password and Password Confirmation don't match"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Password and Password Confirmation don't match"));
                 } else {
                     return null;
                 }

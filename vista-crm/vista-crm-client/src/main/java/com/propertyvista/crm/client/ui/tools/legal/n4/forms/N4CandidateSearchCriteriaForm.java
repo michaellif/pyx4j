@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
@@ -100,9 +100,9 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
         super.addValidations();
         addComponentValidator(new AbstractComponentValidator<N4CandidateSearchCriteriaDTO>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && !CommonsStringUtils.isEmpty(getComponent().getValue().n4PolicyErrors().getValue())) {
-                    return new FieldValidationError(getComponent(), getComponent().getValue().n4PolicyErrors().getValue());
+                    return new BasicValidationError(getComponent(), getComponent().getValue().n4PolicyErrors().getValue());
                 }
                 return null;
             }

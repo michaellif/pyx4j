@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class StartEndDateWithinPeriodValidation {
@@ -39,12 +39,12 @@ public class StartEndDateWithinPeriodValidation {
 
         start.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null || !end.isVisible() || end.getValue() == null) {
                     return null;
                 }
                 LogicalDate endDate = add(end.getValue(), -months, -days);
-                return (!getComponent().getValue().after(end.getValue()) && !getComponent().getValue().before(endDate) ? null : new FieldValidationError(
+                return (!getComponent().getValue().after(end.getValue()) && !getComponent().getValue().before(endDate) ? null : new BasicValidationError(
                         getComponent(), msg));
             }
         });
@@ -53,12 +53,12 @@ public class StartEndDateWithinPeriodValidation {
 
         end.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() == null || !start.isVisible() || start.getValue() == null) {
                     return null;
                 }
                 LogicalDate startDate = add(start.getValue(), months, days);
-                return (!getComponent().getValue().before(start.getValue()) && !getComponent().getValue().after(startDate) ? null : new FieldValidationError(
+                return (!getComponent().getValue().before(start.getValue()) && !getComponent().getValue().after(startDate) ? null : new BasicValidationError(
                         getComponent(), msg));
             }
         });

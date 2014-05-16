@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -226,8 +226,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     datePicker.setMandatory(true);
                     datePicker.addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                         @Override
-                        public FieldValidationError isValid() {
-                            return (getComponent().getValue().before(new LogicalDate(mr.submitted().getValue())) ? new FieldValidationError(getComponent(),
+                        public BasicValidationError isValid() {
+                            return (getComponent().getValue().before(new LogicalDate(mr.submitted().getValue())) ? new BasicValidationError(getComponent(),
                                     i18n.tr("Request cannot be Resolved before it was Submitted")) : null);
                         }
                     });

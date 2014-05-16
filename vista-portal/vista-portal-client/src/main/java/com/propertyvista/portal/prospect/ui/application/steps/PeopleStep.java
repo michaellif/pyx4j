@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -203,11 +203,11 @@ public class PeopleStep extends ApplicationWizardStep {
                 get(proto().birthDate()).addComponentValidator(new BirthdayDateValidator());
                 get(proto().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
                     @Override
-                    public FieldValidationError isValid() {
+                    public BasicValidationError isValid() {
                         if (getComponent().getValue() != null && getValue() != null) {
                             if (maturedOccupantsAreApplicants()) {
                                 if (TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                                    return new FieldValidationError(getComponent(), i18n.tr(
+                                    return new BasicValidationError(getComponent(), i18n.tr(
                                             "According to internal regulations and age this person cannot be a Dependent. Age of majority is {0}",
                                             ageOfMajority()));
                                 }

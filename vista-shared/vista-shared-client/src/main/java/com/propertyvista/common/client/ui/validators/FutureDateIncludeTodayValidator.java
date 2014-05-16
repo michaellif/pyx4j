@@ -17,7 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -43,9 +43,9 @@ public class FutureDateIncludeTodayValidator extends AbstractComponentValidator<
     }
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         return (getComponent().getValue() == null) || !getComponent().getValue().before(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null
-                : new FieldValidationError(getComponent(), message);
+                : new BasicValidationError(getComponent(), message);
     }
 
     public AbstractValidationError isValid(CComponent<?, LogicalDate, ?> component) {

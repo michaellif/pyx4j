@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
@@ -143,7 +143,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         this.addComponentValidator(new AbstractComponentValidator<OnlineApplicationDTO>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     boolean duplicate = false;
 
@@ -162,7 +162,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                     }
 
                     if (duplicate) {
-                        new FieldValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
+                        new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
                     }
                 }
 

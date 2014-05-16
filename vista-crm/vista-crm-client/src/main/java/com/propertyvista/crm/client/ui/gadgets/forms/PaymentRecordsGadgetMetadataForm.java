@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -68,9 +68,9 @@ public class PaymentRecordsGadgetMetadataForm extends CForm<PaymentRecordsGadget
         CComponent<?, Set<PaymentType>, ?> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
         paymentTypeSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentType>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please select at least one payment method option"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please select at least one payment method option"));
                 } else {
                     return null;
                 }
@@ -83,9 +83,9 @@ public class PaymentRecordsGadgetMetadataForm extends CForm<PaymentRecordsGadget
                 .of(PaymentStatus.Processing)), Layout.Horizontal);
         paymentStatusSelector.addComponentValidator(new AbstractComponentValidator<Set<PaymentRecord.PaymentStatus>>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getComponent().getValue().isEmpty()) {
-                    return new FieldValidationError(getComponent(), i18n.tr("Please select at least one payment status option"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

@@ -44,7 +44,7 @@ import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -249,12 +249,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         get(proto().contacts().website()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (ValidationUtils.isSimpleUrl(getComponent().getValue())) {
                         return null;
                     } else {
-                        return new FieldValidationError(getComponent(), i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
                 }
                 return null;

@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.ValidationUtils;
@@ -28,7 +28,7 @@ public class EcheckBranchTransitValidator extends AbstractComponentValidator<Str
     @Override
     public AbstractValidationError isValid() {
         if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-            return ValidationUtils.isBranchTransitNumberValid(getComponent().getValue()) ? null : new FieldValidationError(getComponent(),
+            return ValidationUtils.isBranchTransitNumberValid(getComponent().getValue()) ? null : new BasicValidationError(getComponent(),
                     i18n.tr("Number should consist of 5 digits"));
         } else {
             return null;

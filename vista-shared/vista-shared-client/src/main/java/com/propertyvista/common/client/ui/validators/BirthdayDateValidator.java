@@ -14,7 +14,7 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class BirthdayDateValidator extends PastDateIncludeTodayValidator {
@@ -34,10 +34,10 @@ public class BirthdayDateValidator extends PastDateIncludeTodayValidator {
     }
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         if (getComponent().getValue() != null
                 && getComponent().getValue().compareTo(new LogicalDate(System.currentTimeMillis() - 120L * 365 * 24 * 60 * 60 * 1000)) < 0) {
-            return new FieldValidationError(getComponent(), message2);
+            return new BasicValidationError(getComponent(), message2);
         }
         return super.isValid();
     }

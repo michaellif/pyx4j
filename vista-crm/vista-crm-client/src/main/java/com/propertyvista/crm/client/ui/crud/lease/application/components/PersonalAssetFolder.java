@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -48,7 +48,7 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
             public AbstractValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (getComponent().getValue().size() > 3) {
-                        return new FieldValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
+                        return new BasicValidationError(getComponent(), i18n.tr("No need to supply more than 3 items"));
                     }
                 }
                 return null;
@@ -84,9 +84,9 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
         public void addValidations() {
             get(proto().percent()).addComponentValidator(new AbstractComponentValidator<Double>() {
                 @Override
-                public FieldValidationError isValid() {
+                public BasicValidationError isValid() {
                     return (getComponent().getValue() == null) || ((getComponent().getValue() >= 0) && (getComponent().getValue() <= 100)) ? null
-                            : new FieldValidationError(getComponent(), i18n.tr("Value Should Be In Range Of 0-100%"));
+                            : new BasicValidationError(getComponent(), i18n.tr("Value Should Be In Range Of 0-100%"));
                 }
 
             });

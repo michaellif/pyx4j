@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -300,9 +300,9 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         profiledPaymentMethodsCombo.addComponentValidator(new AbstractComponentValidator<LeasePaymentMethod>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new FieldValidationError(
+                    return (paymentMethodEditor.getPaymentTypes().contains(getComponent().getValue().type().getValue()) ? null : new BasicValidationError(
                             getComponent(), i18n.tr("Not allowed payment type!")));
                 }
                 return null;

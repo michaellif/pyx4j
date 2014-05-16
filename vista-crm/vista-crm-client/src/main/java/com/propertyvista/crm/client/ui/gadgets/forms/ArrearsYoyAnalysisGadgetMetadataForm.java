@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -41,15 +41,15 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CForm<ArrearsYOYAnalys
         p.setWidget(++row, 0, inject(proto().yearsToCompare(), new FieldDecoratorBuilder().build()));
         get(proto().yearsToCompare()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (getComponent().getValue() != null & getComponent().getValue() >= 0) {
                     if (getComponent().getValue() > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
-                        return new FieldValidationError(getComponent(), i18n.tr("Please enter a value between 0 and {0}",
+                        return new BasicValidationError(getComponent(), i18n.tr("Please enter a value between 0 and {0}",
                                 ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
                     }
                     return null;
                 } else {
-                    return new FieldValidationError(getComponent(), i18n.tr("Non-negative value expected"));
+                    return new BasicValidationError(getComponent(), i18n.tr("Non-negative value expected"));
                 }
             }
         });

@@ -23,7 +23,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -82,9 +82,9 @@ public class PmcSignatureForm extends CForm<PmcSignature> {
         ((CTextField) get(proto().fullName())).setWatermark(i18n.tr("SIGN FULL NAME HERE"));
         get(proto().fullName()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
-            public FieldValidationError isValid() {
+            public BasicValidationError isValid() {
                 if (realFullName != null && getComponent().getValue() != null && !realFullName.equals(getComponent().getValue())) {
-                    return new FieldValidationError(getComponent(), i18n.tr("The signature doesn't match the name"));
+                    return new BasicValidationError(getComponent(), i18n.tr("The signature doesn't match the name"));
                 } else {
                     return null;
                 }

@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.FieldValidationError;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.ValidationUtils;
@@ -25,9 +25,9 @@ public class CanadianSinValidator extends AbstractComponentValidator<String> {
     private static final I18n i18n = I18n.get(CanadianSinValidator.class);
 
     @Override
-    public FieldValidationError isValid() {
+    public BasicValidationError isValid() {
         if (CommonsStringUtils.isStringSet(getComponent().getValue())) {
-            return ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", "")) ? null : new FieldValidationError(getComponent(),
+            return ValidationUtils.isSinValid(getComponent().getValue().trim().replaceAll(" ", "")) ? null : new BasicValidationError(getComponent(),
                     i18n.tr("Invalid SIN"));
         } else {
             return null;
