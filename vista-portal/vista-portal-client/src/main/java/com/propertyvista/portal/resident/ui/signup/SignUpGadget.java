@@ -284,8 +284,7 @@ public class SignUpGadget extends AbstractGadget<SignUpView> {
             if (caught != null) {
                 for (MemberValidationError memberError : caught.getErrors()) {
                     CComponent<?, ?, ?> comp = get(memberError.getMember());
-                    comp.setAsyncValidationError((memberError == null || memberError.getMessage() == null) ? null : new BasicValidationError(comp, memberError
-                            .getMessage()));
+                    comp.setAsyncValidationErrorMessage(memberError.getMessage());
                 }
             }
         }
