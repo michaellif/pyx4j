@@ -347,14 +347,12 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public void setAsyncValidationErrorMessage(String message) {
+        if (asyncValidator != null) {
+            asyncValidator.setValidationError(null);
+        }
         if (message == null || message.trim().equals("")) {
-            if (asyncValidator != null) {
-                asyncValidator.setValidationError(null);
-            }
+            asyncValidator.setValidationError(null);
         } else {
-            if (asyncValidator == null) {
-                addComponentValidator(asyncValidator = new AsyncValidator<DATA_TYPE>());
-            }
             asyncValidator.setValidationError(new BasicValidationError(this, message));
         }
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
