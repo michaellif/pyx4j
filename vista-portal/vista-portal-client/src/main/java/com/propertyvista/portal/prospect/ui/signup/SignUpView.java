@@ -16,7 +16,6 @@ package com.propertyvista.portal.prospect.ui.signup;
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
-import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public interface SignUpView extends IsView {
 
@@ -29,7 +28,5 @@ public interface SignUpView extends IsView {
     void setPresenter(SignUpPresenter presenter);
 
     void showError(String message);
-
-    void showValidationError(EntityValidationException caught);
 
 }

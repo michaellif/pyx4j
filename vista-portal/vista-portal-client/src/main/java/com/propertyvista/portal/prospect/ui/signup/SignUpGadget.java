@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,17 +26,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.FieldValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
@@ -51,8 +45,6 @@ import com.propertyvista.common.client.ui.components.security.TenantPasswordStre
 import com.propertyvista.domain.legal.TermsAndPoliciesType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
-import com.propertyvista.portal.rpc.shared.EntityValidationException;
-import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
@@ -86,10 +78,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         setContent(contentPanel);
     }
 
-    public void showValidationError(EntityValidationException caught) {
-        signupForm.setEntityValidationError(caught);
-    }
-
     public void init() {
         signupForm.populateNew();
     }
@@ -118,7 +106,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             signUpButton = new Button(i18n.tr("CREATE ACCOUNT"), new Command() {
                 @Override
                 public void execute() {
-                    signupForm.setEntityValidationError(null);
                     signupForm.setVisitedRecursive();
                     if (signupForm.isValid()) {
                         getGadgetView().getPresenter().signUp(signupForm.getValue());
@@ -133,8 +120,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
     class SignUpForm extends CForm<ProspectSignUpDTO> {
 
-        private EntityValidationException entityValidationException;
-
         private Image signUpTimeImage;
 
         private Image signUpPersonalImage;
@@ -143,12 +128,9 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         private final TenantPasswordStrengthRule passwordStrengthRule;
 
-        private final List<CComponent<?, ?, ?>> validationList;
-
         public SignUpForm() {
             super(ProspectSignUpDTO.class);
             this.passwordStrengthRule = new TenantPasswordStrengthRule(null, null);
-            validationList = new ArrayList<CComponent<?, ?, ?>>();
         }
 
         @Override
@@ -224,22 +206,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             get(proto().passwordConfirm()).setMockValue(email);
         }
 
-        public void setEntityValidationError(EntityValidationException caught) {
-            this.entityValidationException = caught;
-            if (caught != null) {
-                for (MemberValidationError memberError : caught.getErrors()) {
-                    // add member validator if not done before
-                    CComponent<?, ?, ?> comp = get(memberError.getMember());
-                    if (!validationList.contains(comp)) {
-                        comp.addComponentValidator(new FormMemberValidator(memberError.getMember()));
-                        validationList.add(comp);
-                    }
-                    // call revalidate() explicitly as the children have already been visited (visited = true)
-                    comp.revalidate();
-                }
-            }
-        }
-
         @Override
         public void addValidations() {
             ((CTextFieldBase<?, ?>) get(proto().password())).addNValueChangeHandler(new NValueChangeHandler<String>() {
@@ -253,22 +219,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             get(proto().password()).addComponentValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
         }
 
-        class FormMemberValidator<T> extends AbstractComponentValidator<T> {
-            private final IObject<T> member;
-
-            public FormMemberValidator(IObject<T> member) {
-                this.member = member;
-            }
-
-            @Override
-            public AbstractValidationError isValid() {
-                if (SignUpForm.this.entityValidationException != null) {
-                    MemberValidationError error = SignUpForm.this.entityValidationException.getError(member);
-                    return (error == null || error.getMessage() == null) ? null : new FieldValidationError(getComponent(), error.getMessage());
-                }
-                return null;
-            }
-        }
     }
 
 }

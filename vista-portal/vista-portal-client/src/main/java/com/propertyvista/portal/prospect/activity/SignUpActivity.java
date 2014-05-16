@@ -31,7 +31,6 @@ import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
-import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class SignUpActivity extends AbstractActivity implements SignUpPresenter {
@@ -62,9 +61,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
             @Override
             public void onFailure(Throwable caught) {
-                if (caught instanceof EntityValidationException) {
-                    view.showValidationError((EntityValidationException) caught);
-                } else if (caught instanceof UserRuntimeException) {
+                if (caught instanceof UserRuntimeException) {
                     view.showError(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);

@@ -72,11 +72,6 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
         MessageDialog.error(i18n.tr("Registration Error"), message);
     }
 
-    @Override
-    public void showValidationError(EntityValidationException caught) {
-        gadget.showValidationError(caught);
-    }
-
     public SignUpPresenter getPresenter() {
         return presenter;
     }
