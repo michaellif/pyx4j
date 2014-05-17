@@ -69,7 +69,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private boolean hasColumnClickSorting = false;
 
-    private boolean hasCheckboxColumn = false;
+    private boolean multipleSelection = false;
 
     private boolean markSelectedRow = true;
 
@@ -101,13 +101,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             @Override
             public void onClick(ClickEvent event) {
                 Cell cell = getCellForEvent(event);
+
                 if (cell == null) {
                     return; // do not process empty clicks!...
                 } else if (cell.getRowIndex() == 0) {
-                    if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (isColumnSelectorVisible() ? 1 : 0)) {
-                        processHeaderClick(hasCheckboxColumn() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
+                    if (cell.getCellIndex() >= (isMultipleSelection() ? 1 : 0) && cell.getCellIndex() < getCellCount(0) - (isColumnSelectorVisible() ? 1 : 0)) {
+                        processHeaderClick(isMultipleSelection() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
-                } else if (cell.getCellIndex() >= (hasCheckboxColumn() ? 1 : 0)) {
+                } else if (cell.getCellIndex() >= (isMultipleSelection() ? 1 : 0)) {
                     if (itemZoomInCommand != null) {
                         itemZoomInCommand.execute(model.getData().get(cell.getRowIndex() - 1).getEntity());
                     } else {
@@ -247,12 +248,12 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         this.hasColumnClickSorting = hasColumnClickSorting;
     }
 
-    public boolean hasCheckboxColumn() {
-        return hasCheckboxColumn;
+    public boolean isMultipleSelection() {
+        return multipleSelection;
     }
 
-    public void setHasCheckboxColumn(boolean hasCheckboxColumn) {
-        this.hasCheckboxColumn = hasCheckboxColumn;
+    public void setMultipleSelection(boolean multipleSelection) {
+        this.multipleSelection = multipleSelection;
     }
 
     public boolean isColumnSelectorVisible() {
@@ -312,7 +313,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         }
 
         int colIndex = 0;
-        if (hasCheckboxColumn()) {
+        if (isMultipleSelection()) {
             selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, model.isAllChecked());
             setWidget(0, 0, selectionCheckBoxAll);
             if (!BrowserType.isIE()) {
@@ -404,7 +405,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
 
                 int colIndex = 0;
-                if (hasCheckboxColumn()) {
+                if (isMultipleSelection()) {
                     SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
                     selectionCheckBoxes.add(selectionCheckBox);
 

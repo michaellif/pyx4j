@@ -146,7 +146,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
                 .insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
-        getDataTable().setHasCheckboxColumn(true);
+        getDataTable().setMultipleSelection(true);
         getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
             @Override
             public void onCheck(boolean isAnyChecked) {

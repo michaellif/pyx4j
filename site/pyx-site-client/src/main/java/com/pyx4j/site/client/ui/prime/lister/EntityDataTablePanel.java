@@ -139,7 +139,7 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
             }
         });
 
-        dataTablePanel.getDataTable().setHasCheckboxColumn(true);
+        dataTablePanel.getDataTable().setMultipleSelection(true);
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
@@ -154,7 +154,7 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
 
         dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
         dataTablePanel.setStyleName(DefaultPaneTheme.StyleName.ListerListPanel.name());
-        dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+        dataTablePanel.getDataTable().setMultipleSelection(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
         add(dataTablePanel);
@@ -287,12 +287,12 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
         dataTablePanel.addUpperActionItem(widget);
     }
 
-    public boolean hasCheckboxColumn() {
-        return dataTablePanel.getDataTable().hasCheckboxColumn();
+    public boolean isMultipleSelection() {
+        return dataTablePanel.getDataTable().isMultipleSelection();
     }
 
     public void setHasCheckboxColumn(boolean hasCheckboxColumn) {
-        dataTablePanel.getDataTable().setHasCheckboxColumn(hasCheckboxColumn);
+        dataTablePanel.getDataTable().setMultipleSelection(hasCheckboxColumn);
     }
 
     public List<E> getCheckedItems() {
