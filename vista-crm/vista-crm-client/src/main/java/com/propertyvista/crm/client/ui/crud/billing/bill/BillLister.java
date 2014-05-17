@@ -64,7 +64,7 @@ public class BillLister extends AbstractLister<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
         );//@formatter:on
 
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
+        getDataTablePanel().getDataTable().setMultipleSelection(true);
         addActionItem(new Button(i18n.tr("Confirm Checked"), new Command() {
             @Override
             public void execute() {

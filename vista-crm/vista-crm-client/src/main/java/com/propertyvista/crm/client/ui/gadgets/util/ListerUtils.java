@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ColumnSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
@@ -101,7 +100,7 @@ public class ListerUtils {
             dataTablePanel.setFilteringEnabled(false);
             dataTablePanel.setPageSizeOptions(null); // turn off page size selection control 
             dataTablePanel.getDataTable().setHasColumnClickSorting(true);
-            dataTablePanel.getDataTable().setHasCheckboxColumn(false);
+            dataTablePanel.getDataTable().setMultipleSelection(false);
             dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
         }

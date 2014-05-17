@@ -26,7 +26,7 @@ public class BillingCycleBillLister extends AbstractLister<BillDataDTO> {
 
     public BillingCycleBillLister() {
         super(BillDataDTO.class, false);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
+        getDataTablePanel().getDataTable().setMultipleSelection(true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().bill().billType()).build(),
