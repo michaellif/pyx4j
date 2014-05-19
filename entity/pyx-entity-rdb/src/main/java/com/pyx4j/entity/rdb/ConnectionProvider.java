@@ -42,6 +42,7 @@ import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.DerbyDialect;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.rdb.dialect.H2Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.rdb.dialect.MySQLDialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
@@ -105,6 +106,9 @@ public class ConnectionProvider {
         switch (configuration.databaseType()) {
         case HSQLDB:
             dialect = new HSQLDialect(namingConvention, configuration.getMultitenancyType(), configuration.sequencesBaseIdentity());
+            break;
+        case H2:
+            dialect = new H2Dialect(namingConvention, configuration.getMultitenancyType(), configuration.sequencesBaseIdentity());
             break;
         case MySQL:
             dialect = new MySQLDialect(namingConvention, configuration.getMultitenancyType());

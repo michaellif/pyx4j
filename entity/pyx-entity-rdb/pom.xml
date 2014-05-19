@@ -106,6 +106,12 @@
             <scope>test</scope>
         </dependency>
 
+	    <dependency>
+        	<groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+	    </dependency>
+
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
@@ -202,6 +208,8 @@
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/h2/*.*</exclude>
+                                <exclude>**/derby/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -249,6 +257,8 @@
                             <excludes>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/h2/*.*</exclude>
+                                <exclude>**/derby/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -296,6 +306,8 @@
                             <excludes>
                                 <exclude>**/mysql/*.*</exclude>
                                 <exclude>**/postgresql/*.*</exclude>
+                                <exclude>**/h2/*.*</exclude>
+                                <exclude>**/derby/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
@@ -349,6 +361,8 @@
                             <excludes>
                                 <exclude>**/oracle/*.*</exclude>
                                 <exclude>**/mysql/*.*</exclude>
+                                <exclude>**/h2/*.*</exclude>
+                                <exclude>**/derby/*.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
