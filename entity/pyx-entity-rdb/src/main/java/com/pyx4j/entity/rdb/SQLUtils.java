@@ -31,7 +31,6 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 
 public class SQLUtils {
@@ -115,4 +114,24 @@ public class SQLUtils {
         }
     }
 
+    public static void executeQuietly(Connection connection, List<String> sqls) throws SQLException {
+        if (sqls.size() == 0) {
+            return;
+        }
+        Statement stmt = null;
+        try {
+            stmt = connection.createStatement();
+            for (String sql : sqls) {
+                if (sql == null) {
+                    continue;
+                }
+                try {
+                    stmt.executeUpdate(sql);
+                } catch (SQLException ignore) {
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
 }
