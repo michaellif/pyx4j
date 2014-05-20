@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.occupancy.UnitAvailabilityCriteria;
 
@@ -71,5 +72,14 @@ public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Build
         dto.name().setValue(building.info().name().getValue());
         dto.address().setValue(building.info().address().getStringView());
         return dto;
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Building bo, Building to) {
+        super.enhanceListRetrieved(bo, to);
+
+        EntityQueryCriteria<Portfolio> criteria = new EntityQueryCriteria<>(Portfolio.class);
+        criteria.eq(criteria.proto().buildings(), bo);
+        to.portfolios().addAll(Persistence.service().query(criteria));
     }
 }

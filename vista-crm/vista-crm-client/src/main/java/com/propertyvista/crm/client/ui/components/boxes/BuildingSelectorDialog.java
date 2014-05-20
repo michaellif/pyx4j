@@ -61,6 +61,7 @@ public abstract class BuildingSelectorDialog extends EntitySelectorTableVisorCon
                 new MemberColumnDescriptor.Builder(proto().complex(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().externalId(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().propertyManager(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().portfolios(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().info().type(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().info().shape(), false).build(),

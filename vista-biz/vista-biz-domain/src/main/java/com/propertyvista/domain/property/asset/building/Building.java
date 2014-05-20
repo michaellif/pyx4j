@@ -35,6 +35,7 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IList;
@@ -43,6 +44,7 @@ import com.pyx4j.entity.core.ISet;
 import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
@@ -213,4 +215,6 @@ public interface Building extends PolicyNode, HasNotesAndAttachments {
     @Detached(level = AttachLevel.Detached)
     ISet<PaymentPostingBatch> postingBatches();
 
+    @Transient
+    IList<Portfolio> portfolios();
 }
