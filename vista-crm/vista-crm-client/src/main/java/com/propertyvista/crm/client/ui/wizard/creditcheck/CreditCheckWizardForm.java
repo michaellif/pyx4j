@@ -20,10 +20,10 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
@@ -34,7 +34,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
-import com.propertyvista.crm.client.ui.components.WidgetDecoratorRightLabel;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CCreditCheckReportTypeSelector;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
@@ -54,7 +53,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 
     private Label companyNameLabel;
 
-    private TwoColumnFlexFormPanel personalInfoStepPanel;
+    private BasicCFormPanel personalInfoStepPanel;
 
     private Label costPerApplicantLabel;
 
@@ -67,10 +66,10 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
     public CreditCheckWizardForm(IWizard<CreditCheckSetupDTO> view, Command onDisplayTermsOfServiceRequest) {
         super(CreditCheckSetupDTO.class, view);
         this.onDisplayTermsOfServiceRequest = onDisplayTermsOfServiceRequest;
-        addStep(createPricingStep(), PRICING_STEP_NAME);
-        addStep(createBusinessInfoStep(), BUSINESS_INFO_STEP_NAME);
-        addStep(createPersonalInfoStep(), PERSONAL_INFO_STEP_NAME);
-        addStep(createConfirmationStep(), CONFIRMATION_STEP_NAME);
+        addStep(createPricingStep().asWidget(), PRICING_STEP_NAME);
+        addStep(createBusinessInfoStep().asWidget(), BUSINESS_INFO_STEP_NAME);
+        addStep(createPersonalInfoStep().asWidget(), PERSONAL_INFO_STEP_NAME);
+        addStep(createConfirmationStep().asWidget(), CONFIRMATION_STEP_NAME);
     }
 
     public void setPricingOptions(AbstractEquifaxFee creditCheckFees) {
@@ -111,71 +110,58 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         }
     }
 
-    private TwoColumnFlexFormPanel createPricingStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Pricing"));
-        main.setWidget(++row, 0,
-                new WidgetDecoratorRightLabel(inject(proto().creditPricingOption(), new CCreditCheckReportTypeSelector(CreditCheckWizardResources.INSTANCE)),
-                        50, 0));
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        return main;
+    private BasicCFormPanel createPricingStep() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.h1(i18n.tr("Pricing"));
+        formPanel.h2(proto().creditPricingOption().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().creditPricingOption(), new CCreditCheckReportTypeSelector(CreditCheckWizardResources.INSTANCE));
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createBusinessInfoStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Business & Corporate Information"));
+    private BasicCFormPanel createBusinessInfoStep() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.h1(i18n.tr("Business & Corporate Information"));
 
         Label collectionOfbusinessInformationExplanation = new Label();
         collectionOfbusinessInformationExplanation.setHTML(CreditCheckWizardResources.INSTANCE.collectionOfBusinessInformationExplanation().getText());
-        main.setWidget(row++, 0, collectionOfbusinessInformationExplanation);
+        formPanel.append(Location.Dual, collectionOfbusinessInformationExplanation);
+        formPanel.append(Location.Dual, proto().businessInformation(), new BusinessInformationForm());
 
-        main.setWidget(row++, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
-
-        return main;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createPersonalInfoStep() {
-        personalInfoStepPanel = new TwoColumnFlexFormPanel();
-        int row = 0;
-        personalInfoStepPanel.setH1(++row, 0, 2, i18n.tr("Personal Information"));
+    private BasicCFormPanel createPersonalInfoStep() {
+        personalInfoStepPanel = new BasicCFormPanel(this);
+        personalInfoStepPanel.h1(i18n.tr("Personal Information"));
 
         Label collectionOfPersonalInformationForEquifaxExplanation = new Label();
         collectionOfPersonalInformationForEquifaxExplanation.setHTML(CreditCheckWizardResources.INSTANCE.collectionOfPersonalInformationForEquifaxExplanation()
                 .getText());
-        personalInfoStepPanel.setWidget(++row, 0, collectionOfPersonalInformationForEquifaxExplanation);
-
-        personalInfoStepPanel.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
-
+        personalInfoStepPanel.append(Location.Dual, collectionOfPersonalInformationForEquifaxExplanation);
+        personalInfoStepPanel.append(Location.Dual, proto().personalInformation(), new PersonalInformationForm());
         Widget termsOfService = makePersonalInfoServiceAgreementText();
-        personalInfoStepPanel.setWidget(++row, 0, termsOfService);
+        personalInfoStepPanel.append(Location.Dual, termsOfService);
 
         return personalInfoStepPanel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Confirmation and Payment Information"));
+    private BasicCFormPanel createConfirmationStep() {
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.h1(i18n.tr("Confirmation and Payment Information"));
 
         Label confirmationAndPaymentText = new Label();
         confirmationAndPaymentText.setHTML(CreditCheckWizardResources.INSTANCE.confirmationAndPaymentText().getText());
-        main.setWidget(++row, 0, confirmationAndPaymentText);
+        formPanel.append(Location.Dual, confirmationAndPaymentText);
 
         costPerApplicantLabel = new Label();
-        main.setWidget(++row, 0, costPerApplicantLabel);
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.append(Location.Dual, costPerApplicantLabel);
 
         setupFeeLabel = new Label();
-        main.setWidget(++row, 0, setupFeeLabel);
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.append(Location.Dual, setupFeeLabel);
 
-        main.setWidget(++row, 0, inject(proto().creditCardInfo(), new CreditCardInfoEditor()));
-
-        main.setWidget(++row, 0, makeConfirmationServiceAgreementText());
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        return main;
+        formPanel.append(Location.Dual, proto().creditCardInfo(), new CreditCardInfoEditor());
+        formPanel.append(Location.Dual, makeConfirmationServiceAgreementText());
+        return formPanel;
     }
 
     private HTMLPanel makePersonalInfoServiceAgreementText() {

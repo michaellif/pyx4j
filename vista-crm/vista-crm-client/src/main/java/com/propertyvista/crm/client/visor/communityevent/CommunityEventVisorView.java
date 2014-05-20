@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.visor.communityevent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -34,10 +33,10 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -96,11 +95,9 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-
-            content.setWidget(0, 0, 2, inject(proto().events(), new CommunityEventFolder()));
-
-            return content;
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            formPanel.append(Location.Left, proto().events(), new CommunityEventFolder());
+            return formPanel;
         }
 
         private class CommunityEventFolder extends VistaBoxFolder<CommunityEvent> {
@@ -172,16 +169,12 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                    int row = -1;
-
-                    content.setWidget(++row, 0, 2, inject(proto().caption(), new FieldDecoratorBuilder(20, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().date(), new FieldDecoratorBuilder(10, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().time(), new FieldDecoratorBuilder(10, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().description(), new FieldDecoratorBuilder(50, true).build()));
-                    content.setWidget(++row, 0, 2, createLowerToolbar());
-                    content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-
+                    BasicCFormPanel content = new BasicCFormPanel(this);
+                    content.append(Location.Dual, proto().caption()).decorate().componentWidth(240);
+                    content.append(Location.Dual, proto().date()).decorate().componentWidth(120);
+                    content.append(Location.Dual, proto().time()).decorate().componentWidth(120);
+                    content.append(Location.Dual, proto().description()).decorate().componentWidth(300);
+                    content.append(Location.Dual, createLowerToolbar());
                     return content;
                 }
 

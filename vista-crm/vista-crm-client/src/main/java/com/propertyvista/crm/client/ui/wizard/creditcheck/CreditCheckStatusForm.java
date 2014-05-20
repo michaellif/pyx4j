@@ -18,14 +18,12 @@ import java.math.BigDecimal;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
@@ -37,32 +35,21 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
 
     public CreditCheckStatusForm(IForm<CreditCheckStatusDTO> view) {
         super(CreditCheckStatusDTO.class, view);
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        Label poweredByLabel = new Label();
-        poweredByLabel.setText(i18n.tr("Powered By"));
-        contentPanel.setWidget(++row, 0, poweredByLabel);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, new Image(CreditCheckWizardResources.INSTANCE.equifaxLogo()));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.h1(i18n.tr("Powered By"));
+        formPanel.append(Location.Dual, new Image(CreditCheckWizardResources.INSTANCE.equifaxLogo()));
+        formPanel.append(Location.Dual, new HTML("&nbsp;"));
 
-        contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
+        formPanel.append(Location.Dual, proto().status());
+        get(proto().status()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        get(proto().status()).asWidget().getElement().getStyle().setFontSize(1.3, Unit.EM);
+        formPanel.append(Location.Dual, new HTML("&nbsp;"));
 
-        contentPanel.setWidget(++row, 0, inject(proto().status()));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontWeight(FontWeight.BOLD);
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontSize(1.3, Unit.EM);
-        contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
+        formPanel.append(Location.Dual, proto().reportType()).decorate();
+        formPanel.append(Location.Dual, proto().setupFee()).decorate();
+        formPanel.append(Location.Dual, proto().perApplicantFee()).decorate();
 
-        contentPanel.setWidget(++row, 0, inject(proto().reportType(), new FieldDecoratorBuilder().build()));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, inject(proto().setupFee(), new FieldDecoratorBuilder().build()));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, inject(proto().perApplicantFee(), new FieldDecoratorBuilder().build()));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-
-        selectTab(addTab(contentPanel, i18n.tr("Credit Check Status")));
+        selectTab(addTab(formPanel, i18n.tr("Credit Check Status")));
     }
 
     @Override

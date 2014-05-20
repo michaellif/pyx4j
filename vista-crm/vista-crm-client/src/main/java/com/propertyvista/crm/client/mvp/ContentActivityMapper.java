@@ -1437,6 +1437,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new CommunicationMessageEditorActivity(crudPlace);
                             break;
                         }
+
+                    } else if (crudPlace instanceof Administration.Settings.CreditCheck.Setup) {
+                        activity = new CreditCheckWizardActivity(crudPlace);
+                    } else if (crudPlace instanceof Administration.Settings.OnlinePaymentSetup) {
+                        activity = new OnlinePaymentWizardActivity(crudPlace);
                     }
                     // CRUD APP PLACE IF ENDS HERE
                     else if ((crudPlace instanceof CrmSiteMap.Administration.Settings.CommunicationSettings)) {
@@ -1465,10 +1470,6 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
-                } else if (place instanceof Administration.Settings.CreditCheck.Setup) {
-                    activity = new CreditCheckWizardActivity((Administration.Settings.CreditCheck.Setup) place);
-                } else if (place instanceof Administration.Settings.OnlinePaymentSetup) {
-                    activity = new OnlinePaymentWizardActivity((Administration.Settings.OnlinePaymentSetup) place);
 
                 } else if (place instanceof PasswordChange) {
                     activity = new PasswordChangeActivity(place);
