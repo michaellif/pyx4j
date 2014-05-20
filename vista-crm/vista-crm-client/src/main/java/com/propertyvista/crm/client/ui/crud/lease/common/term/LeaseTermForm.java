@@ -250,15 +250,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
         }).decorate();
 
-        formPanel.br();
         if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
             formPanel.append(Location.Left, proto().type()).decorate().componentWidth(180).customLabel(i18n.tr("Term Type"));
         } else {
             formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Term Type"));
         }
         formPanel.append(Location.Left, proto().status(), new CEnumLabel()).decorate().componentWidth(180).customLabel(i18n.tr("Term Status"));
-
-        int rightRow = 0;
 
         if (isEditable()) {
             FlowPanel idHolder = new FlowPanel();

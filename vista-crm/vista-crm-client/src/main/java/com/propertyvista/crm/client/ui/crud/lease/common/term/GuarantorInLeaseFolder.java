@@ -143,18 +143,12 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             if (isEditable()) {
                 formPanel.append(Location.Left, proto().tenant(), new CSimpleEntityComboBox<Tenant>()).decorate();
             } else {
-                formPanel.append(
-                        Location.Left,
-                        inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)),
-                                new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))).decorate();
             }
 
             formPanel.append(Location.Left, proto().relationship()).decorate().componentWidth(180);
-            formPanel.append(
-                    Location.Left,
-                    inject(proto().effectiveScreening(),
-                            new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class)),
-                            new FieldDecoratorBuilder(9).build()));
+            formPanel.append(Location.Left, proto().effectiveScreening(),
+                    new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))).decorate();
             formPanel.append(Location.Left, proto().leaseParticipant().customer().person().email()).decorate();
 
             formPanel.append(Location.Right, proto().leaseParticipant().yardiApplicantId()).decorate().componentWidth(120);

@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -30,23 +29,22 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -109,11 +107,9 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-
-            content.setWidget(0, 0, 2, inject(proto().notes(), new NotesAndAttachmentsFolder()));
-
-            return content;
+            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            formPanel.append(Location.Dual, proto().notes(), new NotesAndAttachmentsFolder());
+            return formPanel;
         }
 
         private class NotesAndAttachmentsFolder extends VistaBoxFolder<NotesAndAttachments> {
@@ -189,24 +185,22 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 @Override
                 protected IsWidget createContent() {
-                    TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                    int row = -1;
+                    BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-                    content.setWidget(++row, 0, 2, inject(proto().subject(), new FieldDecoratorBuilder(50, true).build()));
-                    content.setWidget(++row, 0, 2, inject(proto().note(), new FieldDecoratorBuilder(50, true).build()));
+                    formPanel.append(Location.Dual, proto().subject()).decorate();
+                    formPanel.append(Location.Dual, proto().note()).decorate();
 
-                    content.setWidget(++row, 0, inject(proto().created(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
-                    content.setWidget(row, 1, inject(proto().updated(), new CDateLabel(), new FieldDecoratorBuilder(10).build()));
+                    formPanel.append(Location.Left, proto().created()).decorate().componentWidth(120);
+                    formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
 
-                    content.setWidget(++row, 0, inject(proto().user(), new CEntityLabel<CrmUser>(), new FieldDecoratorBuilder(25).build()));
+                    formPanel.append(Location.Left, proto().user(), new CEntityLabel<CrmUser>()).decorate().componentWidth(250);
 
-                    content.setH3(++row, 0, 2, i18n.tr("Attachments"));
-                    content.setWidget(++row, 0, 2, inject(proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder()));
+                    formPanel.h3(i18n.tr("Attachments"));
+                    formPanel.append(Location.Dual, proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder());
 
-                    content.setWidget(++row, 0, createLowerToolbar());
-                    content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+                    formPanel.append(Location.Right, createLowerToolbar());
 
-                    return content;
+                    return formPanel;
                 }
 
                 protected Toolbar createLowerToolbar() {
@@ -354,14 +348,13 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     @Override
                     protected IsWidget createContent() {
-                        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                        int row = -1;
+                        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                         CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(NoteAttachmentUploadService.class), new VistaFileURLBuilder(
                                 NoteAttachment.class));
-                        content.setWidget(++row, 0, 2, inject(proto().file(), cfile, new FieldDecoratorBuilder(40, true).build()));
+                        formPanel.append(Location.Dual, proto().file(), cfile).decorate();
 
-                        return content;
+                        return formPanel;
                     }
                 }
             }

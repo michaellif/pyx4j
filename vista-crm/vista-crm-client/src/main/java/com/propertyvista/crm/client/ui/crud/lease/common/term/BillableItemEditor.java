@@ -36,15 +36,14 @@ import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -135,7 +134,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
         formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Dual, inject(proto().description(), new FieldDecoratorBuilder(true).build()));
+        formPanel.append(Location.Dual, proto().description()).decorate();
         formPanel.append(Location.Dual, extraDataPanel);
         formPanel.append(Location.Dual, adjustmentPanel);
         formPanel.append(Location.Dual, depositPanel);
