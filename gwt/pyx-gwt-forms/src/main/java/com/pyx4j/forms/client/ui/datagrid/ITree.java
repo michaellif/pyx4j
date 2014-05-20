@@ -24,6 +24,6 @@ import com.pyx4j.entity.core.IEntity;
 
 public interface ITree extends IEntity {
 
-    ITreeFolder root();
+//    ITreeFolder root();
 
 }
