@@ -52,13 +52,13 @@ public class DualColumnFormPanel extends DualColumnFluidPanel {
     public Widget hr() {
         HTML space = new HTML("&nbsp;");
         space.setStyleName(FormPanelHR.name());
-        append(Location.Dual, space);
+        super.append(Location.Dual, space);
         return space;
     }
 
     public Widget br() {
         HTML space = new HTML("&nbsp;");
-        append(Location.Dual, space);
+        super.append(Location.Dual, space);
         return space;
     }
 
