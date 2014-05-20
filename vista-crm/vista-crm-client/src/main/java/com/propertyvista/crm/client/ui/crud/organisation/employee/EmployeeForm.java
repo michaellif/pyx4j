@@ -190,15 +190,15 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         });
 
         buildingsAccessPanel.h3(i18n.tr("Buildings"));
-        buildingsAccessPanel.append(Location.Left, proto().buildingAccess(), new BuildingFolder(this));
+        buildingsAccessPanel.append(Location.Dual, proto().buildingAccess(), new BuildingFolder(this));
 
         buildingsAccessPanel.h3(i18n.tr("Portfolios"));
-        buildingsAccessPanel.append(Location.Left, proto().portfolios(), new PortfolioFolder(getParentView(), isEditable()));
+        buildingsAccessPanel.append(Location.Dual, proto().portfolios(), new PortfolioFolder(getParentView(), isEditable()));
 
-        formPanel.append(Location.Left, buildingsAccessPanel);
+        formPanel.append(Location.Dual, buildingsAccessPanel);
 
         formPanel.h1(i18n.tr("Subordinates"));
-        formPanel.append(Location.Left, proto().employees(), new EmployeeFolder(this, new ParentEmployeeGetter() {
+        formPanel.append(Location.Dual, proto().employees(), new EmployeeFolder(this, new ParentEmployeeGetter() {
             @Override
             public Key getParentId() {
                 return (getValue() != null ? getValue().getPrimaryKey() : null);
