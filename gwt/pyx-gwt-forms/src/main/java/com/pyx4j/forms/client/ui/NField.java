@@ -51,8 +51,8 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 
-public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
-        INativeField<DATA> {
+public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CField<DATA_TYPE, ?>, VIEWER extends Widget> extends SimplePanel implements
+        INativeField<DATA_TYPE> {
 
     private EDITOR editor;
 

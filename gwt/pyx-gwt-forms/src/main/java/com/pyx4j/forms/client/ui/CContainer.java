@@ -33,9 +33,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
@@ -63,11 +60,11 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private boolean initiated = false;
 
-    private final NEntityContainer nativeComponent;
+    private final NContainer<DATA_TYPE> nativeComponent;
 
     @SuppressWarnings("unchecked")
     public CContainer() {
-        nativeComponent = new NEntityContainer();
+        nativeComponent = new NContainer<DATA_TYPE>(this);
 
         if (false) {
             Button debugButton = new Button("Debug", new Command() {
@@ -313,48 +310,6 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     public ImageResource getIcon() {
         return icon;
-    }
-
-    class NEntityContainer extends SimplePanel implements RequiresResize, ProvidesResize, INativeComponent<DATA_TYPE> {
-
-        private IsWidget content;
-
-        public NEntityContainer() {
-        }
-
-        @Override
-        public IsWidget getContent() {
-            return content;
-        }
-
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        public void setContent(IsWidget content) {
-            this.content = content;
-            if (getWidget() instanceof IDecorator) {
-                ((IDecorator) getWidget()).setContent(content);
-                ((IDecorator) getWidget()).init(CContainer.this);
-            } else {
-                setWidget(content);
-            }
-        }
-
-        @Override
-        public SimplePanel getContentHolder() {
-            return this;
-        }
-
-        @Override
-        public void onResize() {
-            if (content instanceof RequiresResize) {
-                ((RequiresResize) content).onResize();
-            }
-        }
-
-        @Override
-        public CComponent<?, ?, ?> getCComponent() {
-            return CContainer.this;
-        }
-
     }
 
 }
