@@ -44,6 +44,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.forms.client.ui.datagrid.CDataGrid;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
@@ -71,6 +72,8 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
     public static int PAGESIZE_LARGE = 50;
 
     private final DataTablePanel<E> dataTablePanel;
+
+    private CDataGrid dataGridPanel;
 
     private ListerDataSource<E> dataSource;
 
@@ -158,6 +161,12 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
         add(dataTablePanel);
+
+        //experimental CDataGrid
+        if (false) {
+            dataGridPanel = new CDataGrid<E>(clazz);
+            add(dataGridPanel);
+        }
 
         setAllowAddNew(allowAddNew);
         setAllowDelete(allowDelete);

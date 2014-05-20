@@ -301,11 +301,6 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
             super(dataTable);
         }
 
-        @Override
-        public com.google.gwt.user.client.Element getContainerElement() {
-            return super.getContainerElement();
-        }
-
         protected void updateColumnVizibility() {
             dataTable.updateColumnVizibility(getContainerElement().getOffsetWidth(), getMaximumHorizontalScrollPosition() > 0);
         }
