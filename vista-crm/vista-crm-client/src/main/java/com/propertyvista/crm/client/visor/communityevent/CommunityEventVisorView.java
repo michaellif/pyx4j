@@ -96,7 +96,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
         @Override
         protected IsWidget createContent() {
             BasicCFormPanel formPanel = new BasicCFormPanel(this);
-            formPanel.append(Location.Left, proto().events(), new CommunityEventFolder());
+            formPanel.append(Location.Dual, proto().events(), new CommunityEventFolder());
             return formPanel;
         }
 
@@ -170,10 +170,10 @@ public class CommunityEventVisorView extends AbstractVisorPane {
                 @Override
                 protected IsWidget createContent() {
                     BasicCFormPanel content = new BasicCFormPanel(this);
-                    content.append(Location.Dual, proto().caption()).decorate().componentWidth(240);
-                    content.append(Location.Dual, proto().date()).decorate().componentWidth(120);
-                    content.append(Location.Dual, proto().time()).decorate().componentWidth(120);
-                    content.append(Location.Dual, proto().description()).decorate().componentWidth(300);
+                    content.append(Location.Dual, proto().caption()).decorate();
+                    content.append(Location.Left, proto().date()).decorate().componentWidth(120);
+                    content.append(Location.Left, proto().time()).decorate().componentWidth(120);
+                    content.append(Location.Dual, proto().description()).decorate();
                     content.append(Location.Dual, createLowerToolbar());
                     return content;
                 }
