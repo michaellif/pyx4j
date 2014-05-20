@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.MarketingContacts;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
@@ -251,9 +251,9 @@ public class GottarentBuildingMapper {
     }
 
     private Address getAddress(com.propertyvista.domain.property.asset.building.Building from) {
-        AddressStructured address = GottarentMapperUtils.getAddress(from);
+        InternationalAddress address = GottarentMapperUtils.getAddress(from);
         // if no mandatory fields, return
-        if (GottarentMapperUtils.isNull(address) || address.isEmpty() || GottarentMapperUtils.isNull(address.province()) || address.province().isEmpty()
+        if (GottarentMapperUtils.isNull(address) || GottarentMapperUtils.isNullOrEmpty(address.province())
                 || GottarentMapperUtils.isNullOrEmpty(address.city())) {
             return null;
         }
@@ -266,7 +266,7 @@ public class GottarentBuildingMapper {
         }
 
         Address to = factory.createAddress();
-        to.setBuildingProvinceAbbreviation(address.province().code().getStringView());
+        to.setBuildingProvinceAbbreviation(GottarentMapperUtils.getProvinceCode(address));
         to.setBuildingCity(address.city().getStringView());
         if (!GottarentMapperUtils.isNullOrEmpty(address.postalCode())) {
             to.setBuildingPostalCode(address.postalCode().getStringView());

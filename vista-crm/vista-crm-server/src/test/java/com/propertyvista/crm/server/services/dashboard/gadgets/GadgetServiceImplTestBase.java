@@ -91,7 +91,8 @@ public class GadgetServiceImplTestBase extends IntegrationTestBase {
 
             EntityQueryCriteria<Province> provinceCriteria = EntityQueryCriteria.create(Province.class);
             provinceCriteria.eq(provinceCriteria.proto().code(), provinceCode);
-            building.info().address().province().set(Persistence.service().retrieve(provinceCriteria));
+            Province prov = Persistence.service().retrieve(provinceCriteria);
+            building.info().address().province().set(prov == null ? null : prov.name());
             Persistence.service().persist(building);
 
             // TODO:

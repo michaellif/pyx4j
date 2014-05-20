@@ -471,7 +471,7 @@ public class PMSiteContentManager implements Serializable {
             }
             item.setPropCode(building.propertyCode().getValue());
             item.setImg(getFistVisibleMediaImgUrl(building.media(), ThumbnailSize.medium));
-            item.setAddress(building.info().address().streetNumber().getValue() + " " + building.info().address().streetName().getValue() + ", "
+            item.setAddress(building.info().address().addressLine1().getValue() + " " + building.info().address().addressLine2().getValue() + ", "
                     + building.info().address().city().getValue());
             promo.add(item);
         }

@@ -46,7 +46,7 @@ import com.propertyvista.biz.communication.mail.template.model.TenantT;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
@@ -243,7 +243,7 @@ public class EmailTemplateRootObjectLoader {
             } else {
                 t.SignUpUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             }
-            AddressStructured address = AddressRetriever.getLeaseLegalAddress(context.lease());
+            InternationalAddress address = AddressRetriever.getLeaseLegalAddress(context.lease());
             t.UnitAddress().setValue(address.getStringView());
         } else if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
@@ -268,7 +268,7 @@ public class EmailTemplateRootObjectLoader {
             t.ApplicantName().setValue(context.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
             t.StartDate().setValue(context.lease().currentTerm().termFrom().getStringView());
             t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
-            AddressStructured address = AddressRetriever.getLeaseLegalAddress(context.lease());
+            InternationalAddress address = AddressRetriever.getLeaseLegalAddress(context.lease());
             t.UnitAddress().setValue(address.getStringView());
         } else if (tObj instanceof MaintenanceRequestT) {
             MaintenanceRequestT t = (MaintenanceRequestT) tObj;

@@ -35,7 +35,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -130,11 +130,11 @@ public class CityPage extends BasePage {
         List<Building> searchResult = PropertyFinder.getPropertyList(searchCrit);
         if (searchResult != null) {
             for (Building building : PropertyFinder.getPropertyList(searchCrit)) {
-                AddressStructured addr = building.info().address();
+                InternationalAddress addr = building.info().address();
                 String title = addr.getStringView();
                 // No-Street-City-Province-Code
-                String ref = SimpleMessageFormat.format("{0} {1} {2} {3} {4}", addr.streetNumber().getValue(), addr.streetName().getValue(),
-                        addr.city().getValue(), addr.province().name().getValue(), building.propertyCode().getValue()).replaceAll(" ", "-");
+                String ref = SimpleMessageFormat.format("{0} {1} {2} {3}", addr.addressLine1().getValue(), addr.city().getValue(), addr.province().getValue(),
+                        building.propertyCode().getValue()).replaceAll(" ", "-");
                 WebMarkupContainer propEntry = new WebMarkupContainer(linkPanel.newChildId());
                 propEntry.add(new PageLink("propertyLink", AptDetailsPage.class, new PageParameters().set(0, ref)).setText(title));
                 linkPanel.add(propEntry);

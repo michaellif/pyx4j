@@ -26,11 +26,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import templates.TemplateResources;
 
 import com.pyx4j.commons.MinMaxPair;
-import com.pyx4j.commons.SimpleMessageFormat;
 
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -71,13 +69,7 @@ public class FloorplanInfoPanel extends Panel {
             }
         });
         Building bld = PropertyFinder.getBuildingDetails(fp.building().getPrimaryKey().asLong());
-        AddressStructured addr = bld.info().address();
-        String addrFmt = "";
-        if (addr != null) {
-            addrFmt += SimpleMessageFormat.format("{0} {1}, {2}, {3} {4}", addr.streetNumber().getValue(), addr.streetName().getValue(),
-                    addr.city().getValue(), addr.province().code().getValue(), addr.postalCode().getValue());
-        }
-        add(new Label("address", addrFmt));
+        add(new Label("address", bld.info().address().getStringView()));
         // get price range
         MinMaxPair<BigDecimal> minMaxMarketRent = PropertyFinder.getMinMaxMarketRent(fpUnits);
         String priceFmt = "Not available";

@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -40,7 +39,6 @@ import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.model.types.BuildingTypeIO;
 import com.propertyvista.oapi.model.types.ParkingTypeIO;
-import com.propertyvista.oapi.model.types.StreetTypeIO;
 import com.propertyvista.oapi.ws.WSOapiTestBase;
 import com.propertyvista.oapi.xml.DoubleIO;
 import com.propertyvista.oapi.xml.IntegerIO;
@@ -79,9 +77,8 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         assertEquals(buildingIO.info.address.country.getValue(), buildingIO2.info.address.country.getValue());
         assertEquals(buildingIO.info.address.postalCode.getValue(), buildingIO2.info.address.postalCode.getValue());
         assertEquals(buildingIO.info.address.province.getValue(), buildingIO2.info.address.province.getValue());
-        assertEquals(buildingIO.info.address.streetName.getValue(), buildingIO2.info.address.streetName.getValue());
-        assertEquals(buildingIO.info.address.streetNumber.getValue(), buildingIO2.info.address.streetNumber.getValue());
-        assertEquals(buildingIO.info.address.streetType.getValue(), buildingIO2.info.address.streetType.getValue());
+        assertEquals(buildingIO.info.address.addressLine1.getValue(), buildingIO2.info.address.addressLine1.getValue());
+        assertEquals(buildingIO.info.address.addressLine2.getValue(), buildingIO2.info.address.addressLine2.getValue());
         assertEquals(buildingIO.info.buildingType.getValue(), buildingIO2.info.buildingType.getValue());
 
         // marketing
@@ -135,9 +132,8 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         addressIO.country = new StringIO("Canada");
         addressIO.postalCode = new StringIO("M9A 4X9");
         addressIO.province = new StringIO("Ontario");
-        addressIO.streetName = new StringIO("Bathurst");
-        addressIO.streetNumber = new StringIO("255");
-        addressIO.streetType = new StreetTypeIO(AddressStructured.StreetType.street);
+        addressIO.addressLine1 = new StringIO("255 Bathurst St");
+        addressIO.addressLine2 = new StringIO("unit 4");
 
         BuildingInfoIO info = new BuildingInfoIO();
         info.address = addressIO;

@@ -68,7 +68,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
         building.integrationSystemId().setValue(IntegrationSystem.internal);
 
-        building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode(provinceCode));
+        building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode(provinceCode).name());
 
         generateParking(building);
         generateLockerArea(building);

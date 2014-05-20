@@ -51,7 +51,6 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -1122,19 +1121,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         building = EntityFactory.create(Building.class);
         building.propertyCode().setValue("B001");
         building.integrationSystemId().setValue(IntegrationSystem.internal);
-        building.info().address().streetName().setValue(TestLoaderRandomGen.getStreetName());
-        building.info().address().streetType().setValue(StreetType.street);
-        building.info().address().streetNumber().setValue(String.valueOf(100 + TestLoaderRandomGen.randomInt(99)));
+        building.info().address().addressLine1()
+                .setValue(String.valueOf(100 + TestLoaderRandomGen.randomInt(99)) + " " + TestLoaderRandomGen.getStreetName() + " St");
         building.info().address().city().setValue("Toronto");
         building.info().address().postalCode().setValue("A1B2C3");
-        building.info().address().province().set(prov);
-        building.info().address().county().setValue("CA");
-        building.marketing().name().setValue(SimpleMessageFormat.format(//@formatter:off
-            "{0} {1} {2}",
-            building.info().address().streetNumber().getValue(),
-            building.info().address().streetName().getValue(),
-            building.info().address().streetType().getValue().toString()
-        ));//@formatter:on
+        building.info().address().province().set(prov.name());
+        building.info().address().country().set(prov.country());
+        building.marketing().name().set(building.info().address().addressLine1());
         building.contacts().website().setValue("www.property-" + building.propertyCode().getValue() + ".com");
         // create admin contact
         PropertyContact admin = EntityFactory.create(PropertyContact.class);

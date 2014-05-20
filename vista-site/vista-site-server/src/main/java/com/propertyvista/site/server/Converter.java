@@ -50,11 +50,11 @@ public class Converter {
         PropertyDTO to = EntityFactory.create(PropertyDTO.class);
         to.id().set(from.id());
         to.propertyCode().set(from.propertyCode());
-        to.address().addressLine1().set(from.info().address().streetName());
-        to.address().addressLine2().set(from.info().address().streetNumber());
+        to.address().addressLine1().set(from.info().address().addressLine1());
+        to.address().addressLine2().set(from.info().address().addressLine2());
 
         to.address().city().set(from.info().address().city());
-        to.address().province().set(from.info().address().province().name());
+        to.address().province().set(from.info().address().province());
         to.address().country().set(from.info().address().country());
         to.address().postalCode().set(from.info().address().postalCode());
 

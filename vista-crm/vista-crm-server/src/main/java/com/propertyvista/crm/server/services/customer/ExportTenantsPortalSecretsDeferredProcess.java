@@ -34,6 +34,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.domain.tenant.access.TenantPortalAccessInformationPerLeaseDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -195,13 +196,13 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         TenantPortalAccessInformationDTO dto = EntityFactory.create(TenantPortalAccessInformationDTO.class);
         dto.leaseId().setValue(tenant.lease().leaseId().getValue());
 
-        AddressStructured address = AddressRetriever.getLeaseLegalAddress(tenant.lease());
-        dto.address().setValue(getAddressLine1(address));
+        InternationalAddress address = AddressRetriever.getLeaseLegalAddress(tenant.lease());
+        dto.address().setValue(address.addressLine1().getValue());
         dto.cityZip().setValue(getCityZip(address));
         dto.city().setValue(address.city().getValue());
         dto.postalCode().setValue(address.postalCode().getValue());
         dto.province().setValue(address.province().getStringView());
-        dto.unit().setValue(address.suiteNumber().getValue());
+        dto.unit().set(tenant.lease().unit().info().number());
         dto.firstName().setValue(tenant.customer().person().name().firstName().getStringView());
         if (!tenant.customer().person().name().middleName().isNull()) {
             dto.middleName().setValue(tenant.customer().person().name().middleName().getStringView());
@@ -226,10 +227,10 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
                 address.streetDirection());
     }
 
-    private static String getCityZip(AddressStructured address) {
+    private static String getCityZip(InternationalAddress address) {
         return SimpleMessageFormat.format("{0,choice,null#|!null#{0}, }{1,choice,null#|!null# {1}}{2,choice,null#|!null# {2}}", //
                 address.city(),//
-                address.province().name(), //
+                address.province(), //
                 address.postalCode());
     }
 

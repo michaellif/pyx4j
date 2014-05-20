@@ -137,17 +137,26 @@ class PolicyManager {
                 if (parentComplex != null) {
                     policyNode = parentComplex;
                 } else {
-                    policyNode = Persistence.service().retrieve(Province.class, ((Building) node.cast()).info().address().province().getPrimaryKey());
+                    EntityQueryCriteria<Province> criteria = new EntityQueryCriteria<>(Province.class);
+                    criteria.eq(criteria.proto().name(), ((Building) node.cast()).info().address().province());
+                    criteria.eq(criteria.proto().country(), ((Building) node.cast()).info().address().country());
+                    policyNode = Persistence.service().retrieve(criteria);
                 }
                 break;
             }
             if (Complex.class.equals(nodeClass)) {
-                EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-                criteria.eq(criteria.proto().complex(), node.getPrimaryKey());
-                criteria.eq(criteria.proto().complexPrimary(), true);
-                Building primaryBuilding = Persistence.service().retrieve(criteria);
+                Building primaryBuilding = null;
+                {
+                    EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
+                    criteria.eq(criteria.proto().complex(), node.getPrimaryKey());
+                    criteria.eq(criteria.proto().complexPrimary(), true);
+                    primaryBuilding = Persistence.service().retrieve(criteria);
+                }
                 if (primaryBuilding != null) {
-                    policyNode = primaryBuilding.info().address().province();
+                    EntityQueryCriteria<Province> criteria = new EntityQueryCriteria<>(Province.class);
+                    criteria.eq(criteria.proto().name(), primaryBuilding.info().address().province());
+                    criteria.eq(criteria.proto().country(), primaryBuilding.info().address().country());
+                    policyNode = Persistence.service().retrieve(criteria);
                 }
                 break;
             }
@@ -196,7 +205,7 @@ class PolicyManager {
 
         } else if (Province.class.equals(nodeClass)) {
             EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), node));
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), ((Province) node).name()));
             criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), true));
 
             List<Building> primaryBuildings = Persistence.service().query(criteria);
@@ -210,7 +219,7 @@ class PolicyManager {
             // now add 'orphan' buildings that have no parent complex
 
             criteria = new EntityQueryCriteria<Building>(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), node));
+            criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), ((Province) node).name()));
             criteria.add(PropertyCriterion.eq(criteria.proto().complex(), (Serializable) null)); // the casting here is only to choose the overloaded method
 
             children.addAll(Persistence.service().query(criteria));

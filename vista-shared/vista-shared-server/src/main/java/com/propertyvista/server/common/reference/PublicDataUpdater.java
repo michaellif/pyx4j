@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.Province;
 
 public class PublicDataUpdater {
 
@@ -47,9 +48,15 @@ public class PublicDataUpdater {
                 Persistence.service().persist(city);
             }
         } else {
+            // find province
+            EntityQueryCriteria<Province> crit = EntityQueryCriteria.create(Province.class);
+            crit.eq(crit.proto().name(), building.info().address().province());
+            crit.eq(crit.proto().country(), building.info().address().country());
+            Province prov = Persistence.service().retrieve(crit);
+
             city = EntityFactory.create(City.class);
             city.name().setValue(building.info().address().city().getValue());
-            city.province().set(building.info().address().province());
+            city.province().set(prov);
             city.location().setValue(building.info().location().getValue());
             city.hasProperties().setValue(visibleBuildingExists);
             Persistence.service().persist(city);

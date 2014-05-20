@@ -27,8 +27,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -198,11 +198,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
                     new MemberColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().type(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().shape(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumber(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetNumberSuffix(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetName(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetType(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address().streetDirection(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().addressLine1(), false).build(),
+                    new MemberColumnDescriptor.Builder(proto().building().info().address().addressLine2(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().address().city(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().address().province(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().address().country(), false).build(),

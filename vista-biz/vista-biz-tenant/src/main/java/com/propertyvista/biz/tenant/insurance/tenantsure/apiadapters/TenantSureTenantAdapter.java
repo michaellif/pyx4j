@@ -15,12 +15,12 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 
 import com.cfcprograms.api.SimpleClient;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantSureTenantAdapter {
@@ -34,13 +34,13 @@ public class TenantSureTenantAdapter {
         Persistence.service().retrieveMember(tenant.lease());
         Persistence.service().retrieveMember(tenant.lease().unit().building());
 
-        AddressStructured address = tenant.lease().unit().building().info().address();
+        InternationalAddress address = tenant.lease().unit().building().info().address();
 
-        parameters.setAddress1(SimpleMessageFormat.format("{0} {1}", getStreetNumber(address), getStreetName(address)));
-        parameters.setAddress2("unit " + tenant.lease().unit().info().number().getStringView());
+        parameters.setAddress1(address.addressLine1().getValue());
+        parameters.setAddress2(address.addressLine2().getValue());
 
         parameters.setCity(tenant.lease().unit().building().info().address().city().getValue());
-        parameters.setState(tenant.lease().unit().building().info().address().province().code().getValue());
+        parameters.setState(tenant.lease().unit().building().info().address().province().getValue());
         parameters.setPostcode(tenant.lease().unit().building().info().address().postalCode().getValue());
 
         String country = tenant.lease().unit().building().info().address().country().name().getValue();

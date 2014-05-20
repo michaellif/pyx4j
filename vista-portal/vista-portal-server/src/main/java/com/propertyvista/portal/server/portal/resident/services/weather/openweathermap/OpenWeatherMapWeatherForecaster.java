@@ -20,7 +20,7 @@ import java.util.List;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO.WeatherType;
 import com.propertyvista.portal.server.portal.resident.services.weather.WeatherForecaster;
@@ -41,7 +41,7 @@ public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
     }
 
     @Override
-    public List<WeatherGadgetDTO> forecastWeather(AddressStructured address) {
+    public List<WeatherGadgetDTO> forecastWeather(InternationalAddress address) {
         Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().name().getValue());
         List<WeatherGadgetDTO> forecast = new LinkedList<WeatherGadgetDTO>();
         if (wd != null) {
@@ -92,7 +92,7 @@ public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
     }
 
     @Override
-    public WeatherGadgetDTO currentWeather(AddressStructured address) {
+    public WeatherGadgetDTO currentWeather(InternationalAddress address) {
         Time time = CacheService.get(WheatherCacheKey.getCacheKey(address.city().getValue(), address.country().name().getValue()));
         if (isCachedDataExpired(time)) {
             Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().name().getValue());

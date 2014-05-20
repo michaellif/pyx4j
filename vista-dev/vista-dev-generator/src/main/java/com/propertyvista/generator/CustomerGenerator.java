@@ -49,7 +49,7 @@ public class CustomerGenerator {
 
         contact.set(CommonsGenerator.createPerson().duplicate(EmergencyContact.class));
         contact.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
-        contact.address().set(CommonsGenerator.createAddressSimple());
+        contact.address().set(CommonsGenerator.createInternationalAddress());
 
         return contact;
     }

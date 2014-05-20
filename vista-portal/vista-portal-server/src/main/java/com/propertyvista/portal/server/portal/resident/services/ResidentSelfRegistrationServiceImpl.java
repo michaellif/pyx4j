@@ -47,13 +47,13 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
             public int compare(Building o1, Building o2) {
                 int c = o1.info().address().country().name().compareTo(o2.info().address().country().name());
                 if (c == 0) {
-                    c = o1.info().address().province().name().compareTo(o2.info().address().province().name());
+                    c = o1.info().address().province().compareTo(o2.info().address().province());
                     if (c == 0) {
                         c = o1.info().address().city().compareTo(o2.info().address().city());
                         if (c == 0) {
-                            c = o1.info().address().streetName().compareTo(o2.info().address().streetName());
+                            c = o1.info().address().addressLine1().compareTo(o2.info().address().addressLine1());
                             if (c == 0) {
-                                c = o1.info().address().streetNumber().compareTo(o2.info().address().streetNumber());
+                                c = o1.info().address().addressLine2().compareTo(o2.info().address().addressLine2());
                             }
                         }
                     }

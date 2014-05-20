@@ -72,6 +72,7 @@ public class XmlBeanTest {
 
         Province province = EntityFactory.create(Province.class);
         province.code().setValue("CA");
+        province.name().setValue("California");
         province.country().set(country);
         Persistence.service().persist(province);
     }
@@ -134,8 +135,7 @@ public class XmlBeanTest {
             Assert.assertFalse(building.marketing().name().isNull());
 
             Assert.assertFalse(building.info().address().isNull());
-            Assert.assertFalse(building.info().address().streetName().isNull());
-            Assert.assertFalse(building.info().address().streetNumber().isNull());
+            Assert.assertFalse(building.info().address().addressLine1().isNull());
             Assert.assertFalse(building.info().address().city().isNull());
             Assert.assertFalse(building.info().address().postalCode().isNull());
 

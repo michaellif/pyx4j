@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -70,7 +70,7 @@ public class BuildingInfoPanel extends Panel {
             }
         });
         // address
-        AddressStructured addr = bld.info().address();
+        InternationalAddress addr = bld.info().address();
         add(new Label("address", addr != null ? addr.getStringView() : ""));
         // get price range
         MinMaxPair<BigDecimal> minMaxMarketRent = new MinMaxPair<BigDecimal>();

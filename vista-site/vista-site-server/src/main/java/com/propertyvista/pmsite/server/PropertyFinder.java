@@ -63,7 +63,7 @@ public class PropertyFinder {
         if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
             String prov = searchCriteria.province().getValue();
             if (!StringUtils.isEmpty(prov)) {
-                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().province().name(), prov));
+                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().province(), prov));
             }
             String city = searchCriteria.city().getValue();
             if (!StringUtils.isEmpty(city)) {

@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @ExtendsBO
 public interface AptUnitDTO extends AptUnit {
 
-    AddressStructured buildingLegalAddress();
+    InternationalAddress buildingLegalAddress();
 
     IPrimitive<String> buildingCode();
 

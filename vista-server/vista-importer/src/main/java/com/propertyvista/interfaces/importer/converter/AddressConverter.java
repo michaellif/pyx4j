@@ -16,37 +16,31 @@ package com.propertyvista.interfaces.importer.converter;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.interfaces.importer.model.AddressIO;
 
-public class AddressConverter extends EntityBinder<AddressStructured, AddressIO> {
+public class AddressConverter extends EntityBinder<InternationalAddress, AddressIO> {
 
     public AddressConverter() {
-        super(AddressStructured.class, AddressIO.class, false);
+        super(InternationalAddress.class, AddressIO.class, false);
     }
 
     @Override
     protected void bind() {
-        bind(toProto.unitNumber(), boProto.suiteNumber());
-        bind(toProto.streetNumber(), boProto.streetNumber());
-        bind(toProto.streetNumberSuffix(), boProto.streetNumberSuffix());
-        bind(toProto.streetName(), boProto.streetName());
-        bind(toProto.streetType(), boProto.streetType());
-        bind(toProto.streetDirection(), boProto.streetDirection());
+        bind(toProto.addressLine1(), boProto.addressLine1());
+        bind(toProto.addressLine2(), boProto.addressLine2());
         bind(toProto.city(), boProto.city());
-        bind(toProto.county(), boProto.county());
-        bind(toProto.provinceCode(), boProto.province().code());
+        bind(toProto.provinceName(), boProto.province());
         bind(toProto.countryName(), boProto.country().name());
         bind(toProto.postalCode(), boProto.postalCode());
     }
 
     @Override
-    protected void onUpdateBOmember(AddressIO dto, AddressStructured dbo, IObject<?> dboM) {
+    protected void onUpdateBOmember(AddressIO dto, InternationalAddress dbo, IObject<?> dboM) {
         if (dboM == dbo.country().name()) {
             dbo.country().setPrimaryKey(null);
-        } else if (dboM == dbo.province().code()) {
-            dbo.province().setPrimaryKey(null);
-            dbo.province().name().setValue(null);
+        } else if (dboM == dbo.province()) {
+            dbo.province().setValue(null);
         }
     }
 }

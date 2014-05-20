@@ -18,8 +18,11 @@ import java.text.DecimalFormat;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.Province;
 
 public class GottarentMapperUtils {
 
@@ -57,35 +60,43 @@ public class GottarentMapperUtils {
         return value == null || !value.booleanValue() ? "1" : "0";
     }
 
-    public static AddressStructured getAddress(com.propertyvista.domain.property.asset.building.Building building) {
-        AddressStructured address = building.marketing().marketingAddress();
+    public static InternationalAddress getAddress(com.propertyvista.domain.property.asset.building.Building building) {
+        InternationalAddress address = building.marketing().marketingAddress();
         if (isNull(address) || address.isEmpty() || !building.marketing().useCustomAddress().getValue(false)) {
             address = building.info().address();
         }
         return address;
     }
 
-    public static String formatStreetOnly(AddressStructured address) {
-        if (isNull(address) || address.isEmpty()) {
-            return null;
-        }
-        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}{2,choice,null#|!null# {2}}", address.streetName().getValue(), address.streetType()
-                .getValue(), address.streetDirection().getValue());
+    public static String getProvinceCode(InternationalAddress address) {
+        EntityQueryCriteria<Province> crit = EntityQueryCriteria.create(Province.class);
+        crit.eq(crit.proto().name(), address.province());
+        crit.eq(crit.proto().country(), address.country());
+        Province prov = Persistence.service().retrieve(crit);
+        return prov == null ? null : prov.code().getValue();
     }
 
-    public static String formatStreetAndNumber(AddressStructured address) {
+    public static String formatStreetOnly(InternationalAddress address) {
         if (isNull(address) || address.isEmpty()) {
             return null;
         }
-        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}{2}{3,choice,null#|!null# {3}}", address.streetNumber().getValue(), address
-                .streetNumberSuffix().getValue(), address.streetName().getValue(), address.streetDirection().getValue());
+        String[] parts = parseStreetAddress(address.addressLine1().getValue(), address.addressLine2().getValue());
+
+        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}", parts[1], parts[2]);
     }
 
-    public static String formatStreetNumber(AddressStructured address) {
+    public static String formatStreetAndNumber(InternationalAddress address) {
         if (isNull(address) || address.isEmpty()) {
             return null;
         }
-        return SimpleMessageFormat.format("{0}{1,choice,null#|!null#-{1}}", address.streetNumber().getValue(), address.streetNumberSuffix().getValue());
+        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}", address.addressLine1().getValue(), address.addressLine2().getValue());
+    }
+
+    public static String formatStreetNumber(InternationalAddress address) {
+        if (isNull(address) || address.isEmpty()) {
+            return null;
+        }
+        return parseStreetAddress(address.addressLine1().getValue(), address.addressLine2().getValue())[0];
     }
 
     public static String getBedrooms(Integer beds) {
@@ -104,5 +115,14 @@ public class GottarentMapperUtils {
             return (addBaths > 0 ? new DecimalFormat("#.#").format(baths + addBaths) : baths.toString());
         }
         return null;
+    }
+
+    private static String[] parseStreetAddress(String line1, String line2) {
+        String[] parts = new String[3];
+        String[] numberStreet = line1.split("\\s", 2);
+        parts[0] = numberStreet[0];
+        parts[1] = numberStreet[1];
+        parts[2] = line2;
+        return parts;
     }
 }

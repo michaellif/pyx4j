@@ -29,7 +29,6 @@ import com.propertyvista.crm.server.util.BuildingsCriteriaNormalizer;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4CandidateSearcher {
@@ -87,8 +86,7 @@ public class N4CandidateSearcher {
         Persistence.service().retrieve(lease.unit().building());
         dto.building().setValue(lease.unit().building().propertyCode().getValue());
 
-        dto.address().setValue(
-                new AddressConverter.StructuredToSimpleAddressConverter().createTO(AddressRetriever.getUnitLegalAddress(lease.unit())).getStringView());
+        dto.address().setValue(AddressRetriever.getUnitLegalAddress(lease.unit()).getStringView());
         dto.unit().setValue(lease.unit().info().number().getValue());
         dto.leaseIdString().setValue(lease.leaseId().getValue());
         dto.moveIn().setValue(lease.expectedMoveIn().getValue());

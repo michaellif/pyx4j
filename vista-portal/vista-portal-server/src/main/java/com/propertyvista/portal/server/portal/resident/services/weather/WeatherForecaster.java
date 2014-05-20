@@ -15,12 +15,12 @@ package com.propertyvista.portal.server.portal.resident.services.weather;
 
 import java.util.List;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 
 public interface WeatherForecaster {
 
-    List<WeatherGadgetDTO> forecastWeather(AddressStructured address);
+    List<WeatherGadgetDTO> forecastWeather(InternationalAddress address);
 
-    WeatherGadgetDTO currentWeather(AddressStructured address);
+    WeatherGadgetDTO currentWeather(InternationalAddress address);
 }

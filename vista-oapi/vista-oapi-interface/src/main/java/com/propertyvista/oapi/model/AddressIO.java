@@ -13,27 +13,15 @@
  */
 package com.propertyvista.oapi.model;
 
-import javax.xml.bind.annotation.XmlElement;
-
-import com.propertyvista.oapi.model.types.StreetTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
 public class AddressIO extends AbstractElementIO {
 
     //mandatory for portal
-    @XmlElement(nillable = true)
-    public StringIO streetNumber;
+    public StringIO addressLine1;
 
-    //mandatory for portal
-    public StringIO streetName;
-
-    public StringIO streetNumberSuffix;
-
-    public StringIO streetDirection;
-
-    //mandatory for portal
-    public StreetTypeIO streetType;
+    public StringIO addressLine2;
 
     //mandatory for portal
     public StringIO city;

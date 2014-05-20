@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -59,17 +59,18 @@ public class AddressRetriever {
 
     // Legal Address:
 
-    public static AddressStructured getLeaseLegalAddress(Lease lease) {
+    public static InternationalAddress getLeaseLegalAddress(Lease lease) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         return getUnitLegalAddress(lease.unit());
     }
 
-    public static AddressStructured getUnitLegalAddress(AptUnit unit) {
+    public static InternationalAddress getUnitLegalAddress(AptUnit unit) {
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
         if (!unit.info().legalAddressOverride().getValue(false)) {
-            AddressStructured address = EntityFactory.create(AddressStructured.class);
+            InternationalAddress address = EntityFactory.create(InternationalAddress.class);
             address.set(unit.building().info().address());
-            address.suiteNumber().set(unit.info().number());
+            String line1 = address.addressLine1().getValue() + ", Apt " + unit.info().number().getValue();
+            address.addressLine1().setValue(line1);
             return address;
         } else {
             return unit.info().legalAddress();

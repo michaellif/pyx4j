@@ -23,9 +23,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.MarketingContact;
 import com.propertyvista.domain.marketing.MarketingContactEmail;
@@ -38,9 +38,9 @@ public class MarketingEditor extends CForm<Marketing> {
 
     private final CForm<? extends Building> parentForm;
 
-    private final AddressStructuredEditor addressEditor = new AddressStructuredEditor(false);
+    private final InternationalAddressEditor addressEditor = new InternationalAddressEditor();
 
-    private AddressStructured emptyAddr;
+    private InternationalAddress emptyAddr;
 
     public MarketingEditor(CForm<? extends Building> parentForm) {
         super(Marketing.class);
@@ -52,7 +52,7 @@ public class MarketingEditor extends CForm<Marketing> {
         if (getValue() != null && !getValue().useCustomAddress().getValue(false)) {
             // clear custom address
             if (emptyAddr == null) {
-                emptyAddr = EntityFactory.create(AddressStructured.class);
+                emptyAddr = EntityFactory.create(InternationalAddress.class);
             }
             addressEditor.populate(emptyAddr);
         }
@@ -94,7 +94,7 @@ public class MarketingEditor extends CForm<Marketing> {
         if (useCustomizedAddress) {
             addressEditor.setVisible(true);
             if (getValue() == null || getValue().marketingAddress().isNull()) {
-                addressEditor.populate((AddressStructured) parentForm.getValue().info().address().duplicate());
+                addressEditor.populate((InternationalAddress) parentForm.getValue().info().address().duplicate());
             } else {
                 addressEditor.populate(getValue().marketingAddress());
             }

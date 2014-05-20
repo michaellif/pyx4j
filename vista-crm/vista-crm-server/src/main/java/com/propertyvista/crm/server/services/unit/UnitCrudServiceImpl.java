@@ -35,6 +35,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
@@ -72,8 +73,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         Persistence.service().retrieve(to.building());
         to.buildingCode().setValue(to.building().propertyCode().getValue());
 
-        to.buildingLegalAddress().set(to.building().info().address());
-        to.buildingLegalAddress().suiteNumber().set(to.info().number());
+        to.buildingLegalAddress().set(AddressRetriever.getUnitLegalAddress(to));
 
         // retrieve market rent prices
         retrieveServicePrices(to);

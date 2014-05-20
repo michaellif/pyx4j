@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.yardi.entity.mits.Address;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
@@ -33,15 +32,13 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.CanadianPostalCodeValidator;
-import com.propertyvista.server.common.util.CanadianStreetAddressParser;
-import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class MappingUtils {
 
@@ -82,7 +79,7 @@ public class MappingUtils {
         }
     }
 
-    public static AddressStructured getAddress(Address mitsAddress, StringBuilder error) {
+    public static InternationalAddress getAddress(Address mitsAddress, StringBuilder error) {
         // TODO instantiate address parser according to the building country
         StringBuilder address2 = new StringBuilder();
         for (String addressPart : mitsAddress.getAddress2()) {
@@ -91,19 +88,9 @@ public class MappingUtils {
             }
             address2.append(addressPart);
         }
-        AddressStructured address = EntityFactory.create(AddressStructured.class);
-
-        try {
-            StreetAddress streetAddress = new CanadianStreetAddressParser().parse(CommonsStringUtils.nvl(mitsAddress.getAddress1()), address2.toString());
-
-            address.streetNumber().setValue(streetAddress.streetNumber);
-            address.streetName().setValue(streetAddress.streetName);
-            address.streetType().setValue(streetAddress.streetType);
-            address.streetDirection().setValue(streetAddress.streetDirection);
-        } catch (Throwable e) {
-            address.streetName().setValue(mitsAddress.getAddress1() + (address2.length() > 0 ? "; " + address2.toString() : ""));
-            error.append(e.getMessage());
-        }
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
+        address.addressLine1().setValue(mitsAddress.getAddress1());
+        address.addressLine2().setValue(address2.toString());
 
         String importedCountry = mitsAddress.getCountry();
         if (StringUtils.isEmpty(importedCountry)) {
@@ -123,11 +110,11 @@ public class MappingUtils {
         Province province = null;
         try {
             province = getProvinceByCode(mitsAddress.getState());
+            address.province().set(province.name());
         } catch (Throwable e) {
-            error.append("\n");
-            error.append("failed to get province from MITS address: " + e.getMessage());
+            error.append("\nProvince from MITS address not found; used as is: " + mitsAddress.getState());
+            address.province().setValue(mitsAddress.getState());
         }
-        address.province().set(province);
 
         address.city().setValue(mitsAddress.getCity());
 

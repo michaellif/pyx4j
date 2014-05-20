@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.shared.config.YardiImported;
 
 public interface Marketing extends IEntity {
@@ -44,7 +44,7 @@ public interface Marketing extends IEntity {
     IPrimitive<Boolean> useCustomAddress();
 
     @EmbeddedEntity
-    AddressStructured marketingAddress();
+    InternationalAddress marketingAddress();
 
     @Owned
     MarketingContacts marketingContacts();

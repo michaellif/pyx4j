@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.shared.config.YardiImported;
 
@@ -74,7 +74,7 @@ public interface AptUnitInfo extends IEntity {
     @Caption(name = "Unit Legal Address is different from Building Address")
     IPrimitive<Boolean> legalAddressOverride();
 
-    AddressStructured legalAddress();
+    InternationalAddress legalAddress();
 
     // ---- Physical: ----------------
 

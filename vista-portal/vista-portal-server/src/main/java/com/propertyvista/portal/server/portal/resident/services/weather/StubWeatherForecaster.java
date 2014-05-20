@@ -16,18 +16,18 @@ package com.propertyvista.portal.server.portal.resident.services.weather;
 import java.util.Collections;
 import java.util.List;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 
 public class StubWeatherForecaster implements WeatherForecaster {
 
     @Override
-    public List<WeatherGadgetDTO> forecastWeather(AddressStructured address) {
+    public List<WeatherGadgetDTO> forecastWeather(InternationalAddress address) {
         return Collections.emptyList();
     }
 
     @Override
-    public WeatherGadgetDTO currentWeather(AddressStructured address) {
+    public WeatherGadgetDTO currentWeather(InternationalAddress address) {
         // TODO Auto-generated method stub
         return null;
     }

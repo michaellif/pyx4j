@@ -19,7 +19,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -38,7 +38,7 @@ public class KijijiLocationMapper {
         to.setSalesforceId(SALES_FORCE_ID);
         to.setBuildingName(from.ilsSummary().isNull() ? info.name().getValue() : from.ilsSummary().title().getValue());
         // address
-        AddressStructured address = info.marketingAddress();
+        InternationalAddress address = info.marketingAddress();
         if (address.isEmpty()) {
             address = from.building().info().address();
         }
@@ -79,18 +79,8 @@ public class KijijiLocationMapper {
         to.setWebSite(url);
     }
 
-    private String formatStreetAddress(AddressStructured address) {
-        Object[] args = new Object[] {
-                // @formatter:off
-                address.suiteNumber().getValue(),
-                address.streetNumber().getValue(),
-                address.streetNumberSuffix().getValue(),
-                address.streetName().getValue(),
-                address.streetType().getValue(),
-                address.streetDirection().getValue()
-        }; // @formatter:on
-        return SimpleMessageFormat.format(
-                "{0,choice,null#|!null#{0}-}{1}{2,choice,null#|!null# {2}} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}", args);
+    private String formatStreetAddress(InternationalAddress address) {
+        return SimpleMessageFormat.format("{0}{2,choice,null#|!null# {2}}", address.addressLine1().getValue(), address.addressLine2().getValue());
     }
 
 }

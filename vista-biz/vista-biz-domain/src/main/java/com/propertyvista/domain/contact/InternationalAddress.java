@@ -16,9 +16,9 @@ package com.propertyvista.domain.contact;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -27,7 +27,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.CountryReferenceAdapter;
 
-@Transient
+@EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface InternationalAddress extends IEntity {
 

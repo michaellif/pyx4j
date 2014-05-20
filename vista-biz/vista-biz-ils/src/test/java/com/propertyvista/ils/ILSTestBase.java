@@ -68,8 +68,7 @@ public abstract class ILSTestBase extends IntegrationTestBase {
     private void generateBuildingData() {
         building = getDataModel(BuildingDataModel.class).addBuilding();
 
-        building.info().address().streetName().setValue("Talwood Drive");
-        building.info().address().streetNumber().setValue("9");
+        building.info().address().addressLine1().setValue("9 Talwood Drive");
         building.info().address().city().setValue("Toronto");
         building.info().name().setValue("Testing building");
         Persistence.service().persist(building);

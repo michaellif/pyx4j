@@ -36,7 +36,7 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -84,7 +84,7 @@ public class AptListPanel extends Panel {
                     item.add(new Label("aptMapview").setVisible(false));
                 }
                 // address
-                AddressStructured addr = propInfo.info().address();
+                InternationalAddress addr = propInfo.info().address();
                 item.add(new Label("address", addr != null ? addr.getStringView() : ""));
                 String desc = propInfo.marketing().description().getValue();
                 if (desc == null) {

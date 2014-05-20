@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -97,11 +97,9 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
             @Override
             public String convert(IEntity entity) {
                 if (entity instanceof MaintenanceRequestDTO) {
-                    AddressStructured addr = ((MaintenanceRequestDTO) entity).building().info().address();
-                    return SimpleMessageFormat.format(
-                            "{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,other#|null#|!null# {4}}{5,choice,null#|!null# {5}}, {6}", //
-                            addr.suiteNumber().getValue(), addr.streetNumber().getValue(), addr.streetNumberSuffix().getValue(), addr.streetName().getValue(),
-                            addr.streetType().getValue(), addr.streetDirection().getValue(), addr.city().getValue());
+                    InternationalAddress addr = ((MaintenanceRequestDTO) entity).building().info().address();
+                    return SimpleMessageFormat.format("{0}{1,choice,other#|null#|!null# {1}}, {2}", //
+                            addr.addressLine1().getValue(), addr.addressLine2().getValue(), addr.city().getValue());
                 }
                 return super.convert(entity);
             }

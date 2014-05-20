@@ -16,7 +16,7 @@ package com.propertyvista.yardi.mergers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -42,11 +42,9 @@ public class BuildingsMerger {
         merge(imported.address(), existing.address());
     }
 
-    private void merge(AddressStructured imported, AddressStructured existing) {
-        existing.streetNumber().setValue(imported.streetNumber().getValue());
-        existing.streetName().setValue(imported.streetName().getValue());
-        existing.streetType().setValue(imported.streetType().getValue());
-        existing.streetDirection().setValue(imported.streetDirection().getValue());
+    private void merge(InternationalAddress imported, InternationalAddress existing) {
+        existing.addressLine1().setValue(imported.addressLine1().getValue());
+        existing.addressLine2().setValue(imported.addressLine2().getValue());
         existing.city().setValue(imported.city().getValue());
         existing.province().set(imported.province());
         existing.country().set(imported.country());

@@ -31,7 +31,7 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.shared.config.YardiImported;
 
 @EmbeddedEntity
@@ -209,7 +209,7 @@ public interface BuildingInfo extends IEntity {
 
     @EmbeddedEntity
     @YardiImported
-    AddressStructured address();
+    InternationalAddress address();
 
     IPrimitive<GeoPoint> location();
 

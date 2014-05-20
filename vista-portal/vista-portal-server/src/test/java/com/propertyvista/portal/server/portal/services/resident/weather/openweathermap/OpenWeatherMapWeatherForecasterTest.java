@@ -21,7 +21,7 @@ import com.google.gwt.editor.client.Editor.Ignore;
 
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapApiImpl;
 import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapWeatherForecaster;
@@ -30,7 +30,7 @@ public class OpenWeatherMapWeatherForecasterTest extends TestCase {
 
     public void testOpenWeatherMapWeatherData2WeatherForecastDTOMapping() {
         OpenWeatherMapWeatherForecaster forecaster = new OpenWeatherMapWeatherForecaster(new MockupOpenWeatherMapApiImpl("mock-forecast-1.xml"));
-        List<WeatherGadgetDTO> forecast = forecaster.forecastWeather(EntityFactory.create(AddressStructured.class));
+        List<WeatherGadgetDTO> forecast = forecaster.forecastWeather(EntityFactory.create(InternationalAddress.class));
         assertFalse("Forecast data should be present.", forecast.isEmpty());
 
         assertTrue(Math.abs(22.32 - forecast.get(0).temperature().getValue()) < 0.001);
@@ -44,7 +44,7 @@ public class OpenWeatherMapWeatherForecasterTest extends TestCase {
     @Ignore
     public void testRealOpenWeatherMapApiSanity() {
         OpenWeatherMapWeatherForecaster forecaster = new OpenWeatherMapWeatherForecaster(new OpenWeatherMapApiImpl(null));
-        AddressStructured address = EntityFactory.create(AddressStructured.class);
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
         address.country().name().setValue("Canada");
         address.city().setValue("Toronto");
 

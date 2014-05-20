@@ -25,10 +25,10 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
@@ -163,16 +163,43 @@ public class CommonsGenerator {
         }
     }
 
-    public static InternationalAddress createAddressSimple() {
+    public static InternationalAddress createInternationalAddress() {
         loadAddress();
         AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        address.addressLine1().setValue(addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue());
+        address.addressLine1().setValue(
+                addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue() + " "
+                        + addressStructured.streetType().getStringView());
         address.city().setValue(addressStructured.city().getValue());
         address.province().setValue(addressStructured.province().name().getValue());
         address.country().setValue(addressStructured.country().getValue());
         address.postalCode().setValue(addressStructured.postalCode().getValue());
         return address;
+    }
+
+    public static InternationalAddress createInternationalAddress(String provinceCode) {
+        if (provinceCode == null) {
+            return createInternationalAddress();
+        } else {
+            loadAddress();
+            List<AddressStructured> adressesFiltered = new ArrayList<AddressStructured>();
+            for (AddressStructured addressStructured : adresses) {
+                if (provinceCode.equalsIgnoreCase(addressStructured.province().code().getValue())) {
+                    adressesFiltered.add(addressStructured);
+                }
+            }
+            AddressStructured addressStructured = adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
+
+            InternationalAddress address = EntityFactory.create(InternationalAddress.class);
+            address.addressLine1().setValue(
+                    addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue() + " "
+                            + addressStructured.streetType().getStringView());
+            address.city().setValue(addressStructured.city().getValue());
+            address.province().setValue(addressStructured.province().name().getValue());
+            address.country().setValue(addressStructured.country().getValue());
+            address.postalCode().setValue(addressStructured.postalCode().getValue());
+            return address;
+        }
     }
 
     public static AddressStructured createAddressStructured() {

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class GeoLocator {
@@ -103,22 +103,20 @@ public class GeoLocator {
         }
     }
 
-    public static String constructGeo(AddressStructured address) {
+    public static String constructGeo(InternationalAddress address) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(address.streetNumber().getStringView());
+        sb.append(address.addressLine1().getStringView());
         sb.append(" ");
-        sb.append(address.streetName().getStringView());
+        sb.append(address.addressLine2().getStringView());
         sb.append(", ");
         sb.append(address.city().getStringView());
         sb.append(", ");
-        sb.append(address.province().code().getStringView());
+        sb.append(address.province().getStringView());
         sb.append(" ");
         sb.append(address.postalCode().getStringView());
-        if (!address.province().country().name().isNull()) {
-            sb.append(", ");
-            sb.append(address.province().country().name().getStringView());
-        }
+        sb.append(", ");
+        sb.append(address.country().name().getStringView());
 
         return sb.toString();
     }

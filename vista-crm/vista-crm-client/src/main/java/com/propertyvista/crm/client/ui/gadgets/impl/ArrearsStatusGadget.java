@@ -61,9 +61,9 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().name()).title(i18n.ntr("Building")).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.ntr("Province")).build(),                    
+                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().addressLine1()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().addressLine2()).visible(false).build(),                    
+                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province()).visible(false).title(i18n.ntr("Province")).build(),                    
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.ntr("Country")).build(),                    
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.ntr("Complex")).build(),
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.ntr("Unit")).build(),

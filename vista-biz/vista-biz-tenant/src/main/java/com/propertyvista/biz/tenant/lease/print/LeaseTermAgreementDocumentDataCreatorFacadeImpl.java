@@ -30,9 +30,10 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.blob.LandlordMediaBlob;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.policy.policies.domain.LeaseAgreementLegalTerm;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUserSignature;
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.lease.AgreementDigitalSignatures;
@@ -47,7 +48,6 @@ import com.propertyvista.dto.LeaseAgreementDocumentDataDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTerm4PrintDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermSignaturePlaceholderDTO;
 import com.propertyvista.dto.LeaseAgreementDocumentLegalTermTenantDTO;
-import com.propertyvista.server.common.util.AddressRetriever;
 
 public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTermAgreementDocumentDataCreatorFacade {
 
@@ -68,7 +68,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
 
         leaseAgreementData.applicants().addAll(makeApplicants(leaseTerm));
         leaseAgreementData.terms().add(makeOccupantsTerm(leaseTerm));
-        leaseAgreementData.terms().add(makePremisesTerm(AddressRetriever.getUnitLegalAddress(leaseTerm.lease().unit())));
+        leaseAgreementData.terms().add(makePremisesTerm(leaseTerm.lease().unit()));
         leaseAgreementData.terms().add(makeTermTerm(leaseTerm));
         leaseAgreementData.terms().add(makeRentTerm(leaseTerm));
         leaseAgreementData.terms().addAll(makeTermsForPrint(leaseTerm, !makeDraft ? signaturesMode : LeaseTermAgreementSignaturesMode.None));
@@ -132,24 +132,17 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         Persistence.ensureRetrieve(leaseTerm.lease().unit().building().landlord().logo(), AttachLevel.Attached);
     }
 
-    private LeaseAgreementDocumentLegalTerm4PrintDTO makePremisesTerm(AddressStructured premisesAddress) {
+    private LeaseAgreementDocumentLegalTerm4PrintDTO makePremisesTerm(AptUnit unit) {
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+        InternationalAddress premisesAddress = unit.building().info().address();
+
         LeaseAgreementDocumentLegalTerm4PrintDTO premisesTerm = EntityFactory.create(LeaseAgreementDocumentLegalTerm4PrintDTO.class);
         StringBuilder premisesTermBody = new StringBuilder();
         premisesTermBody.append("The Landlord agrees to rent to the Tenant:<br>");
-        premisesTermBody.append("Suite No: ").append(premisesAddress.suiteNumber().getValue()).append("<br>");
-
-        String streetAddress = premisesAddress.streetNumber().getValue() + premisesAddress.streetNumberSuffix().getValue("");
-        streetAddress += " " + premisesAddress.streetName().getValue();
-        if (!premisesAddress.streetType().isNull()) {
-            streetAddress += " " + premisesAddress.streetType().getValue().toString();
-        }
-        if (!premisesAddress.streetDirection().isNull()) {
-            streetAddress += " " + premisesAddress.streetDirection().getValue().toString();
-        }
-
-        premisesTermBody.append("Address: ").append(streetAddress).append("<br>");
+        premisesTermBody.append("Suite No: ").append(unit.info().number().getValue()).append("<br>");
+        premisesTermBody.append("Address: ").append(premisesAddress.addressLine1()).append(" " + premisesAddress.addressLine2()).append("<br>");
         premisesTermBody.append("City: ").append(premisesAddress.city().getValue()).append("<br>");
-        premisesTermBody.append("Province: ").append(premisesAddress.province().name().getValue()).append("<br>");
+        premisesTermBody.append("Province: ").append(premisesAddress.province().getValue()).append("<br>");
         premisesTermBody.append("Postal Code: ").append(premisesAddress.postalCode().getValue()).append("<br>");
 
         premisesTerm.title().setValue("Premises / Rental Unit to be Rented");

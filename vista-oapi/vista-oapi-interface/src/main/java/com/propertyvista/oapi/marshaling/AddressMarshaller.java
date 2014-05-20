@@ -20,14 +20,12 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.oapi.model.AddressIO;
-import com.propertyvista.oapi.model.types.StreetTypeIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class AddressMarshaller implements Marshaller<AddressStructured, AddressIO> {
+public class AddressMarshaller implements Marshaller<InternationalAddress, AddressIO> {
 
     private static class SingletonHolder {
         public static final AddressMarshaller INSTANCE = new AddressMarshaller();
@@ -41,51 +39,36 @@ public class AddressMarshaller implements Marshaller<AddressStructured, AddressI
     }
 
     @Override
-    public AddressIO marshal(AddressStructured address) {
+    public AddressIO marshal(InternationalAddress address) {
         if (address == null || address.isNull()) {
             return null;
         }
         AddressIO addressIO = new AddressIO();
 
         addressIO.country = MarshallerUtils.createIo(StringIO.class, address.country().name());
-        addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province().name());
+        addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province());
         addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
         addressIO.postalCode = MarshallerUtils.createIo(StringIO.class, address.postalCode());
-        addressIO.streetNumber = MarshallerUtils.createIo(StringIO.class, address.streetNumber());
-        addressIO.streetName = MarshallerUtils.createIo(StringIO.class, address.streetName());
-        addressIO.streetType = MarshallerUtils.createIo(StreetTypeIO.class, address.streetType());
+        addressIO.addressLine1 = MarshallerUtils.createIo(StringIO.class, address.addressLine1());
+        addressIO.addressLine2 = MarshallerUtils.createIo(StringIO.class, address.addressLine2());
         return addressIO;
     }
 
     @Override
-    public AddressStructured unmarshal(AddressIO addressIO) {
-        AddressStructured address = EntityFactory.create(AddressStructured.class);
+    public InternationalAddress unmarshal(AddressIO addressIO) {
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
 
         if (addressIO.country != null) {
             address.country().set(getCountry(addressIO.country.getValue()));
         }
-        if (addressIO.province != null) {
-            address.province().set(getProvince(addressIO.province.getValue()));
-        }
 
+        MarshallerUtils.setValue(address.province(), addressIO.province);
         MarshallerUtils.setValue(address.city(), addressIO.city);
         MarshallerUtils.setValue(address.postalCode(), addressIO.postalCode);
-        MarshallerUtils.setValue(address.streetNumber(), addressIO.streetNumber);
-        MarshallerUtils.setValue(address.streetName(), addressIO.streetName);
-        MarshallerUtils.setValue(address.streetType(), addressIO.streetType);
+        MarshallerUtils.setValue(address.addressLine1(), addressIO.addressLine1);
+        MarshallerUtils.setValue(address.addressLine2(), addressIO.addressLine2);
 
         return address;
-    }
-
-    private Province getProvince(String name) {
-        EntityQueryCriteria<Province> provinceCriteria = EntityQueryCriteria.create(Province.class);
-        provinceCriteria.add(PropertyCriterion.eq(provinceCriteria.proto().name(), name));
-        List<Province> provinces = Persistence.service().query(provinceCriteria);
-        if (provinces.size() > 0) {
-            return provinces.get(0);
-        } else {
-            return null;
-        }
     }
 
     private Country getCountry(String name) {

@@ -90,7 +90,7 @@ public class PmcDataBuildingsReportDeferredProcess extends SearchReportDeferredP
 
     private void exportPmcBuilding(Pmc pmc, Building building, Floorplan floorplan) {
         super.reportEntity(pmc);
-        formatter.cell(escapeURI(building.info().address().province().name().getStringView()));
+        formatter.cell(escapeURI(building.info().address().province().getStringView()));
         formatter.cell(escapeURI(building.info().address().city().getStringView()));
         formatter.cell(building.getPrimaryKey());
         formatter.cell(building.propertyCode().getStringView());

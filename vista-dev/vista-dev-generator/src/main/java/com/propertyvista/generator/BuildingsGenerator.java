@@ -25,7 +25,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -83,7 +83,7 @@ public class BuildingsGenerator {
         String website = "www.property" + (counter + 1) + ".com";
 
         // address
-        AddressStructured address = CommonsGenerator.createAddressStructured(config.provinceCode);
+        InternationalAddress address = CommonsGenerator.createInternationalAddress(config.provinceCode);
 
         // email
         String email = "building" + (counter + 1) + "@propertyvista.com";
@@ -98,12 +98,11 @@ public class BuildingsGenerator {
         return building;
     }
 
-    private String getName(AddressStructured address) {
-        return address.streetName().getStringView().toLowerCase().replaceAll("ave", "").replaceAll("st", "").replaceAll("\\s+", "")
-                + address.streetNumber().getStringView();
+    private String getName(InternationalAddress address) {
+        return address.addressLine1().getValue();
     }
 
-    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, AddressStructured address, String email) {
+    private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, InternationalAddress address, String email) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
         building.integrationSystemId().setValue(IntegrationSystem.internal);
