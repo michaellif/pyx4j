@@ -18,8 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 
@@ -31,27 +31,27 @@ public class ArrearsGadgetSummaryMetadataForm extends CForm<ArrearsSummaryGadget
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().customizeCategory(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate().componentWidth(120);
+
+        formPanel.append(Location.Left, proto().customizeCategory()).decorate().componentWidth(120);
         get(proto().customizeCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().category()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, inject(proto().category(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().category()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().customizeDate()).decorate().componentWidth(120);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().asOf()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
-        return content;
+        formPanel.append(Location.Left, proto().asOf()).decorate().componentWidth(120);
+        return formPanel;
     }
 
     @Override

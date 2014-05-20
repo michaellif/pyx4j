@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
@@ -29,10 +29,9 @@ public class CounterGadgetSetupForm<E extends CounterGadgetBaseMetadata> extends
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
-        return content;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate().componentWidth(100);
+        return formPanel;
     }
 
 }

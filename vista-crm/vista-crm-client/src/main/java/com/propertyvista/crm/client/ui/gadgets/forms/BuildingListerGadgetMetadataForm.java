@@ -17,10 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.gwt.commons.css.CssVariable;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 
@@ -32,11 +29,10 @@ public class BuildingListerGadgetMetadataForm extends CForm<BuildingListerGadget
 
     @Override
     protected IsWidget createContent() {
-        CssVariable.setVariable(asWidget().getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.huge.name());
 
         BasicCFormPanel formPanel = new BasicCFormPanel(this);
-        formPanel.append(Location.Left, proto().refreshInterval()).decorate();
-        formPanel.append(Location.Left, proto().buildingListerSettings().pageSize()).decorate();
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().buildingListerSettings().pageSize()).decorate().componentWidth(100);
         return formPanel;
     }
 

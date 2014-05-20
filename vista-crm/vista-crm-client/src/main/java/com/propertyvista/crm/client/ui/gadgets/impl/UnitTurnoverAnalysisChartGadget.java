@@ -37,7 +37,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -233,10 +234,9 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
         CForm<UnitTurnoverAnalysisGadgetMetadata> form = new CForm<UnitTurnoverAnalysisGadgetMetadata>(UnitTurnoverAnalysisGadgetMetadata.class) {
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
-                int row = -1;
-                p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
-                p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                formPanel.append(Location.Left, proto().refreshInterval()).decorate();
+                formPanel.append(Location.Left, proto().customizeDate()).decorate();
                 get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -245,9 +245,9 @@ public class UnitTurnoverAnalysisChartGadget extends GadgetInstanceBase<UnitTurn
                         }
                     }
                 });
-                p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
+                formPanel.append(Location.Left, proto().asOf()).decorate();
                 get(proto().asOf()).setVisible(false);
-                return p;
+                return formPanel;
             }
 
             @Override

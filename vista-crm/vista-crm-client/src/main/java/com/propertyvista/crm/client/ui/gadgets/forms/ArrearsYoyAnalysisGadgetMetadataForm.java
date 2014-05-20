@@ -16,11 +16,11 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
@@ -35,10 +35,9 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CForm<ArrearsYOYAnalys
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
-        int row = -1;
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().yearsToCompare(), new FieldDecoratorBuilder().build()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate();
+        formPanel.append(Location.Left, proto().yearsToCompare()).decorate();
         get(proto().yearsToCompare()).addComponentValidator(new AbstractComponentValidator<Integer>() {
             @Override
             public BasicValidationError isValid() {
@@ -53,6 +52,6 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CForm<ArrearsYOYAnalys
                 }
             }
         });
-        return p;
+        return formPanel;
     }
 }

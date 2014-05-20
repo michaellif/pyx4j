@@ -18,7 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
@@ -31,11 +32,10 @@ public class ArrearsStatusGadgetMetadataForm extends CForm<ArrearsStatusGadgetMe
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
-        int row = -1;
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().arrearsStatusListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().filterByCategory(), new FieldDecoratorBuilder().build()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate();
+        formPanel.append(Location.Left, proto().arrearsStatusListerSettings().pageSize()).decorate();
+        formPanel.append(Location.Left, proto().filterByCategory()).decorate();
         get(proto().filterByCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -45,8 +45,8 @@ public class ArrearsStatusGadgetMetadataForm extends CForm<ArrearsStatusGadgetMe
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().category(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().category()).decorate();
+        formPanel.append(Location.Left, proto().customizeDate()).decorate();
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -56,10 +56,10 @@ public class ArrearsStatusGadgetMetadataForm extends CForm<ArrearsStatusGadgetMe
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().asOf()).decorate();
         get(proto().category()).setVisible(false);
         get(proto().asOf()).setVisible(false);
-        return p;
+        return formPanel;
     }
 
     @Override

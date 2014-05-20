@@ -20,6 +20,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel;
+import com.pyx4j.gwt.commons.css.CssVariable;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
@@ -64,6 +68,10 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
         this.panel.addNorth(buildingsFilterProvider, 2.5);
         this.panel.add(dashboard);
         setContentPane(panel);
+
+        CssVariable.setVariable(asWidget().getElement(), DualColumnFluidPanel.CSS_VAR_FORM_COLLAPSING_LAYOUT_TYPE, LayoutType.huge.name());
+        CssVariable.setVariable(asWidget().getElement(), FieldDecorator.CSS_VAR_FIELD_DECORATOR_LABEL_POSITION_LAYOUT_TYPE, LayoutType.tabletPortrait.name());
+
         setSize("100%", "100%");
     }
 

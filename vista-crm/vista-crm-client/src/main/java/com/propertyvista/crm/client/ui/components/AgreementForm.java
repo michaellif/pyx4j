@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.components;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,14 +40,12 @@ public class AgreementForm extends CForm<AgreementDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        contentPanel.setWidget(++row, 0, inject(proto().terms()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+
+        formPanel.append(Location.Left, proto().terms());
         get(proto().terms()).setViewable(true);
 
-        contentPanel.setWidget(++row, 0, new WidgetDecoratorRightLabel(inject(proto().isAgreed()), 2, 40));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(20, Unit.PX);
+        formPanel.append(Location.Left, new WidgetDecoratorRightLabel(inject(proto().isAgreed()), 2, 40));
         get(proto().isAgreed()).addComponentValidator(new AbstractComponentValidator<Boolean>() {
             @Override
             public BasicValidationError isValid() {
@@ -62,13 +59,12 @@ public class AgreementForm extends CForm<AgreementDTO> {
 
         Label caledonSignatureText = new Label();
         caledonSignatureText.setHTML(signatureTextHtml);
-        contentPanel.setWidget(++row, 0, caledonSignatureText);
+        formPanel.append(Location.Left, caledonSignatureText);
 
         pmcSigatureForm = new PmcSignatureForm();
-        contentPanel.setWidget(++row, 0, inject(proto().agreementSignature(), pmcSigatureForm));
-        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.append(Location.Left, proto().agreementSignature(), pmcSigatureForm);
 
-        return contentPanel;
+        return formPanel;
     }
 
     public void setIsAgreedTitle(String label) {

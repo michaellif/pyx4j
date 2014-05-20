@@ -33,11 +33,9 @@ import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -163,17 +161,16 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
                 CImage frontImage = new CImage(GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 160);
 
-                content.setWidget(0, 0, inject(proto().frontImage().file(), frontImage));
-                content.setWidget(0, 1, inject(proto().title(), new FieldDecoratorBuilder(10, 50).build()));
-                content.setWidget(1, 0, inject(proto().description(), new FieldDecoratorBuilder(10, 50).build()));
-                content.getFlexCellFormatter().setRowSpan(0, 0, 2);
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
+                formPanel.append(Location.Right, proto().title()).decorate();
+                formPanel.append(Location.Dual, proto().description()).decorate();
 
-                return content;
+                return formPanel;
             }
         }
     }
