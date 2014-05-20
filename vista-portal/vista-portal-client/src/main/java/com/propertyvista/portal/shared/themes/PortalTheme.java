@@ -193,13 +193,13 @@ public class PortalTheme extends Theme {
             }
 
             @Override
-            protected String getSingleColumnWidth() {
-                return "280px";
+            protected int getSingleColumnWidth() {
+                return 280;
             }
 
             @Override
-            protected String getDualColumnWidth() {
-                return "710px";
+            protected int getDualColumnWidth() {
+                return 710;
             }
 
             @Override

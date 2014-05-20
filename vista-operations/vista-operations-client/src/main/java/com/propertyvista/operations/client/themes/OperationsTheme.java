@@ -80,13 +80,13 @@ public class OperationsTheme extends VistaTheme {
             }
 
             @Override
-            protected String getSingleColumnWidth() {
-                return "250px";
+            protected int getSingleColumnWidth() {
+                return 250;
             }
 
             @Override
-            protected String getDualColumnWidth() {
-                return "650px";
+            protected int getDualColumnWidth() {
+                return 650;
             }
         });
         addTheme(new DefaultFolderTheme() {
