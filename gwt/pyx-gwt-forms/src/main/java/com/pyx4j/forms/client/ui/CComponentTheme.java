@@ -58,13 +58,20 @@ public class CComponentTheme extends Theme {
         initNoteStyle();
         initTabbedFormStyle();
         initImageHolderStyle();
-        initCheckBoxStyle();
+        initEditorPanelStyle();
+        initViewerPanelStyle();
     }
 
-    private void initCheckBoxStyle() {
+    private void initEditorPanelStyle() {
         Style style = new Style(".", StyleName.FieldEditorPanel, " .", StyleName.Signature);
         style.addProperty("line-height", "20px");
         style.addProperty("width", "100%");
+        addStyle(style);
+    }
+
+    private void initViewerPanelStyle() {
+        Style style = new Style(".", StyleName.FieldViewerPanel, " .", DefaultWidgetsTheme.StyleName.Label);
+        style.addProperty("white-space", "normal");
         addStyle(style);
     }
 
