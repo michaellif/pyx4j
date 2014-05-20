@@ -58,8 +58,8 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -210,7 +210,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Right, proto().suspended()).decorate().componentWidth(50);
 
         formPanel.h1(proto().info().address().getMeta().getCaption());
-        formPanel.append(Location.Dual, proto().info().address(), new AddressStructuredEditor(false));
+        formPanel.append(Location.Dual, proto().info().address(), new InternationalAddressEditor());
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }

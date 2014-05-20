@@ -40,7 +40,7 @@ public class PublicDataUpdater {
 
         EntityQueryCriteria<City> criteriaCity = EntityQueryCriteria.create(City.class);
         criteriaCity.eq(criteriaCity.proto().name(), building.info().address().city().getValue());
-        criteriaCity.eq(criteriaCity.proto().province(), building.info().address().province());
+        criteriaCity.eq(criteriaCity.proto().province().name(), building.info().address().province());
         City city = Persistence.service().retrieve(criteriaCity);
         if (city != null) {
             if (city.hasProperties().getValue(false) != visibleBuildingExists) {

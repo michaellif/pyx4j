@@ -45,7 +45,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -159,10 +159,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         formPanel.append(Location.Left, proto().info().legalAddressOverride()).decorate().labelWidth("360px");
         unitLegalAddressLabel = formPanel.h1(proto().info().legalAddress().getMeta().getCaption());
-        formPanel.append(Location.Left, proto().info().legalAddress(), new AddressStructuredEditor(true));
+        formPanel.append(Location.Left, proto().info().legalAddress(), new InternationalAddressEditor());
 
         buildingLegalAddressLabel = formPanel.h1(proto().buildingLegalAddress().getMeta().getCaption());
-        formPanel.append(Location.Left, proto().buildingLegalAddress(), new AddressStructuredEditor(true));
+        formPanel.append(Location.Left, proto().buildingLegalAddress(), new InternationalAddressEditor());
         get(proto().buildingLegalAddress()).setViewable(true);
 
         get(proto().info().legalAddressOverride()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
