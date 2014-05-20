@@ -21,16 +21,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -54,23 +54,17 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.br();
+        formPanel.append(Location.Left, proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()).decorate();
+        get(proto().tenantInfo()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        get(proto().tenantInfo()).asWidget().getElement().getStyle().setFontSize(1.2, Unit.EM);
 
-        main.setBR(++row, 0, 2);
-        main.setWidget(++row, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
-        main.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
-        main.getWidget(row, 0).setWidth("25em");
+        formPanel.append(Location.Right, proto().nextPaymentDate(), new CDateLabel()).decorate().labelWidth(200);
 
-        main.setWidget(row, 1, inject(proto().nextPaymentDate(), new CDateLabel(), new FieldDecoratorBuilder().labelWidth(20).build()));
-
-        main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-        main.setWidget(++row, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        return main;
+        formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().preauthorizedPayments(), new PreauthorizedPaymentFolder());
+        return formPanel;
     }
 
     @Override
@@ -118,17 +112,13 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
 
             @Override
             protected IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-                int row = -1;
+                BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
-                content.setWidget(++row, 0, inject(proto().id(), new CNumberLabel(), new FieldDecoratorBuilder(10).build()));
-
-                content.setWidget(++row, 0, inject(proto().creationDate(), new FieldDecoratorBuilder(15).build()));
-                content.setWidget(row, 1, inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>(), new FieldDecoratorBuilder(22).build()));
-
-                content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(15).build()));
-
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
+                formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
+                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().updated()).decorate().componentWidth(180);
+                formPanel.append(Location.Left, proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, PreauthorizedPaymentsForm.this
@@ -140,13 +130,12 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
                             }
                         };
                     }
-                }, new FieldDecoratorBuilder(35).build()));
+                }).decorate().componentWidth(300);
 
-                content.setBR(++row, 0, 2);
+                formPanel.br();
+                formPanel.append(Location.Dual, proto().coveredItemsDTO(), new PapCoveredItemDtoFolder());
 
-                content.setWidget(++row, 0, 2, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
-
-                return content;
+                return formPanel;
             }
 
             @Override

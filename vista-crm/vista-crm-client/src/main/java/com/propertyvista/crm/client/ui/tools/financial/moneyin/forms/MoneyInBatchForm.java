@@ -26,9 +26,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -66,8 +66,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
 
         @Override
         protected CForm<DepositSlipCheckDetailsRecordDTO> createItemForm(IObject<?> member) {
-            return new CFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(),
-                    new VistaViewersComponentFactory()) {
+            return new CFolderRowEditor<DepositSlipCheckDetailsRecordDTO>(DepositSlipCheckDetailsRecordDTO.class, columns(), new VistaViewersComponentFactory()) {
                 @Override
                 public CField<?, ?> create(IObject<?> member) {
                     if (proto().id().getFieldName().equals(member.getFieldName())) {
@@ -98,25 +97,22 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
     }
 
     private Widget createGeneralTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 1, inject(proto().building(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().totalReceivedAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().numberOfReceipts(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().postingStatus(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().batchNumber(), new FieldDecoratorBuilder().build()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().building()).decorate();
+        formPanel.append(Location.Left, proto().totalReceivedAmount()).decorate();
+        formPanel.append(Location.Left, proto().numberOfReceipts()).decorate();
+        formPanel.append(Location.Left, proto().postingStatus()).decorate();
+        formPanel.append(Location.Left, proto().batchNumber()).decorate();
 
-        row = -1;
-        panel.setWidget(++row, 1, 1, inject(proto().depositSlipNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().depositDate(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankAccountName(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankId(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankTransitNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 1, 1, inject(proto().bankAccountNumber(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().depositSlipNumber()).decorate();
+        formPanel.append(Location.Right, proto().depositDate()).decorate();
+        formPanel.append(Location.Right, proto().bankAccountName()).decorate();
+        formPanel.append(Location.Right, proto().bankId()).decorate();
+        formPanel.append(Location.Right, proto().bankTransitNumber()).decorate();
+        formPanel.append(Location.Right, proto().bankAccountNumber()).decorate();
 
-        ++row;
-        panel.setH2(++row, 0, 2, i18n.tr("Payments"));
-        panel.setWidget(++row, 0, 2, inject(proto().payments(), new DepositSlipPaymentRecordFolder()));
+        formPanel.h2(i18n.tr("Payments"));
+        formPanel.append(Location.Dual, proto().payments(), new DepositSlipPaymentRecordFolder());
 
         get(proto().building()).setViewable(true);
         get(proto().depositSlipNumber()).setViewable(true);
@@ -130,7 +126,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
         get(proto().bankAccountNumber()).setViewable(true);
         get(proto().bankAccountName()).setViewable(true);
 
-        return panel;
+        return formPanel.asWidget();
     }
 
 }
