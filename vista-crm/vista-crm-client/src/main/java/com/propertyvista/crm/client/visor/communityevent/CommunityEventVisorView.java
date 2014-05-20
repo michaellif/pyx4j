@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.visor.communityevent;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -41,9 +40,7 @@ import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
-import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -139,20 +136,18 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
             @Override
             protected void removeItem(final CFolderItem<CommunityEvent> item) {
-                Dialog confirm = new OkCancelDialog(i18n.tr("Delete Community Event")) {
+                MessageDialog.confirm(i18n.tr("Delete Community Event"), i18n.tr("This Event will be permanently deleted!"), new Command() {
+
                     @Override
-                    public boolean onClickOk() {
+                    public void execute() {
                         getController().remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
                             @Override
                             public void onSuccess(Boolean result) {
                                 CommunityEventFolder.super.removeItem(item);
                             }
                         });
-                        return true;
                     }
-                };
-                confirm.setBody(new HTML(i18n.tr("This Event will be permanently deleted!")));
-                confirm.show();
+                });
             }
 
             private class EventEditor extends CForm<CommunityEvent> {
