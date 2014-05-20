@@ -61,6 +61,7 @@ public abstract class DualColumnFormPanelTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
+        style.addProperty("max-width", "1200px");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanelBlock);
