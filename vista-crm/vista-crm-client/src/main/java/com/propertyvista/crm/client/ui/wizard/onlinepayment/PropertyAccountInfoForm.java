@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
@@ -34,19 +34,14 @@ public class PropertyAccountInfoForm extends CForm<OnlinePaymentSetupDTO.Propert
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, inject(proto().averageMonthlyRent(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().numberOfRentedUnits(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, new HTML("&nbsp;"));
-        panel.setWidget(++row, 0, inject(proto().transitNumber(), new FieldDecoratorBuilder().build()));
-
-        int irow = row; // save the row that will hold the image with the cheque guide
-        panel.setWidget(++row, 0, inject(proto().institutionNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().accountNumber(), new FieldDecoratorBuilder().build()));
-
-        panel.setWidget(irow, 1, new Image(VistaImages.INSTANCE.eChequeGuide()));
-        panel.getFlexCellFormatter().setRowSpan(irow, 1, 3);
-        return panel;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Dual, proto().averageMonthlyRent()).decorate();
+        formPanel.append(Location.Dual, proto().numberOfRentedUnits()).decorate();
+        formPanel.append(Location.Dual, new HTML("&nbsp;"));
+        formPanel.append(Location.Dual, new Image(VistaImages.INSTANCE.eChequeGuide()));
+        formPanel.append(Location.Dual, proto().transitNumber()).decorate();
+        formPanel.append(Location.Dual, proto().institutionNumber()).decorate();
+        formPanel.append(Location.Dual, proto().accountNumber()).decorate();
+        return formPanel;
     }
 }

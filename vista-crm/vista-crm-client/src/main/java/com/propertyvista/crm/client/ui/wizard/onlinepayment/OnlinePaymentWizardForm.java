@@ -28,7 +28,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -64,12 +65,12 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         super(OnlinePaymentSetupDTO.class, view);
         this.onTermsOfServiceDisplayRequest = onTermsOfServiceDisplayRequest;
 
-        addStep(createPricingStep(), i18n.tr("Pricing"));
-        addStep(createBusinessInfoStep(), i18n.tr("Business Information"));
-        addStep(createPersonalInfoStep(), i18n.tr("Personal Information"));
-        addStep(createPropertyAndBankingStep(), i18n.tr("Property and Banking"));
-        addStep(createConfirmationStep(), CONFIRMATION_STEP_TITLE);
-        addStep(createSignatureStep(), SIGNATURE_STEP_TITLE);
+        addStep(createPricingStep().asWidget(), i18n.tr("Pricing"));
+        addStep(createBusinessInfoStep().asWidget(), i18n.tr("Business Information"));
+        addStep(createPersonalInfoStep().asWidget(), i18n.tr("Personal Information"));
+        addStep(createPropertyAndBankingStep().asWidget(), i18n.tr("Property and Banking"));
+        addStep(createConfirmationStep().asWidget(), CONFIRMATION_STEP_TITLE);
+        addStep(createSignatureStep().asWidget(), SIGNATURE_STEP_TITLE);
 
     }
 
@@ -104,43 +105,39 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         }
     }
 
-    private TwoColumnFlexFormPanel createPricingStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = 0;
-        main.setH1(++row, 0, 1, i18n.tr("Pricing Information for Online Payments"));
-        main.setWidget(++row, 0, onlinePaymentPricingTab = new OnlinePaymentPricingTab());
+    private BasicCFormPanel createPricingStep() {
+        BasicCFormPanel main = new BasicCFormPanel(this);
+        main.h1(i18n.tr("Pricing Information for Online Payments"));
+        main.append(Location.Dual, onlinePaymentPricingTab = new OnlinePaymentPricingTab());
         return main;
     }
 
-    private TwoColumnFlexFormPanel createBusinessInfoStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Business Information"));
+    private BasicCFormPanel createBusinessInfoStep() {
+        BasicCFormPanel main = new BasicCFormPanel(this);
+
+        main.h1(i18n.tr("Business Information"));
         Label collectionOfBusinessInformation = new Label();
         collectionOfBusinessInformation.setHTML(OnlinePaymentWizardResources.INSTANCE.collectionOfBusinessInformationExplanation().getText());
-        main.setWidget(++row, 0, collectionOfBusinessInformation);
-        main.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm()));
+        main.append(Location.Dual, collectionOfBusinessInformation);
+        main.append(Location.Dual, proto().businessInformation(), new BusinessInformationForm());
         return main;
     }
 
-    private TwoColumnFlexFormPanel createPersonalInfoStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
-
-        main.setH1(++row, 0, 1, i18n.tr("Personal Information"));
+    private BasicCFormPanel createPersonalInfoStep() {
+        BasicCFormPanel main = new BasicCFormPanel(this);
+        main.h1(i18n.tr("Personal Information"));
         Label collectionOfPersonalInformation = new Label();
         collectionOfPersonalInformation.setHTML(OnlinePaymentWizardResources.INSTANCE.collectionOfPersonalInformationForEquifaxExplanation().getText());
-        main.setWidget(++row, 0, collectionOfPersonalInformation);
-        main.setWidget(++row, 0, inject(proto().personalInformation(), new PersonalInformationForm()));
+        main.append(Location.Dual, collectionOfPersonalInformation);
+        main.append(Location.Dual, inject(proto().personalInformation(), new PersonalInformationForm()));
         return main;
     }
 
-    private TwoColumnFlexFormPanel createPropertyAndBankingStep() {
+    private BasicCFormPanel createPropertyAndBankingStep() {
         // TODO add 'refundable deposit'? or not?
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Property and Banking"));
-        main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
+        BasicCFormPanel main = new BasicCFormPanel(this);
+        main.h1(i18n.tr("Property and Banking"));
+        main.append(Location.Dual, proto().propertyAccounts(), new PropertyAccountInfoFolder());
         get(proto().propertyAccounts()).addComponentValidator(new AbstractComponentValidator<List<PropertyAccountInfo>>() {
             @Override
             public BasicValidationError isValid() {
@@ -154,24 +151,22 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
-        main.setWidget(++row, 0, makeServiceAgreementLabel());
+    private BasicCFormPanel createConfirmationStep() {
+        BasicCFormPanel main = new BasicCFormPanel(this);
+        main.h1(i18n.tr("Confirmation"));
+        main.append(Location.Dual, makeServiceAgreementLabel());
         return main;
     }
 
-    private TwoColumnFlexFormPanel createSignatureStep() {
+    private BasicCFormPanel createSignatureStep() {
         // TODO need to add actual signature, but pending the following questions:
         //     - the full text of the agreements is required
         //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla> 
         final int TOP_I_AGREE_PANEL_PADDING = 20;
         final int AGREEMENTS_SEPARATOR_PADDING = 20;
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Signature"));
+        BasicCFormPanel main = new BasicCFormPanel(this);
+        main.h1(i18n.tr("Signature"));
 
         // CALEDON START
         HorizontalPanel caledonPaymentMethodsLogoHeader = new HorizontalPanel();
@@ -183,15 +178,15 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.masterCardLogo()));
         caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.visaDebitLogo()));
         caledonPaymentMethodsLogoHeader.add(new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo()));
-        main.setWidget(++row, 0, caledonPaymentMethodsLogoHeader);
+        main.append(Location.Dual, caledonPaymentMethodsLogoHeader);
 
-        main.setWidget(++row, 0, inject(proto().caledonAgreement(), new AgreementForm(OnlinePaymentWizardResources.INSTANCE.caledonSignatureText().getText())));
-        main.setWidget(++row, 0,
-                inject(proto().caledonSoleProprietorshipAgreement(), new AgreementForm(OnlinePaymentWizardResources.INSTANCE.caledonSignatureText().getText())));
-
-        main.setWidget(++row, 0, new HTML("&nbsp;")); // separator        
-        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
-        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
+        main.append(Location.Dual, proto().caledonAgreement(), new AgreementForm(OnlinePaymentWizardResources.INSTANCE.caledonSignatureText().getText()));
+        main.append(Location.Dual, proto().caledonSoleProprietorshipAgreement(), new AgreementForm(OnlinePaymentWizardResources.INSTANCE.caledonSignatureText()
+                .getText()));
+        HTML sep = new HTML("&nbsp;");
+        sep.getElement().getStyle().setPaddingTop(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
+        sep.getElement().getStyle().setPaddingBottom(AGREEMENTS_SEPARATOR_PADDING, Unit.PX);
+        main.append(Location.Dual, sep); // separator        
 
         HorizontalPanel paypadPaymentMethodsLogoHader = new HorizontalPanel();
         paypadPaymentMethodsLogoHader.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -200,9 +195,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         paypadPaymentMethodsLogoHader.add(paypadCaption);
         paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentWizardResources.INSTANCE.interacLogo()));
         paypadPaymentMethodsLogoHader.add(new Image(OnlinePaymentWizardResources.INSTANCE.directBankingLogo()));
-        main.setWidget(++row, 0, paypadPaymentMethodsLogoHader);
-        main.setWidget(++row, 0,
-                inject(proto().paymentPadAgreement(), new AgreementForm(OnlinePaymentWizardResources.INSTANCE.paymentPadSignatureText().getText())));
+        main.append(Location.Dual, paypadPaymentMethodsLogoHader);
+        main.append(Location.Dual, proto().paymentPadAgreement(), new AgreementForm(OnlinePaymentWizardResources.INSTANCE.paymentPadSignatureText().getText()));
 
         return main;
     }

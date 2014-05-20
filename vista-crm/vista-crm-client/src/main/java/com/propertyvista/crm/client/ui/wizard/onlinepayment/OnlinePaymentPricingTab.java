@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -32,11 +32,11 @@ public class OnlinePaymentPricingTab extends Composite {
 
     private static final I18n i18n = I18n.get(OnlinePaymentPricingTab.class);
 
-    private final TwoColumnFlexFormPanel contentPanel;
+    private final BasicFlexFormPanel contentPanel;
 
     public OnlinePaymentPricingTab() {
         int row = -1;
-        contentPanel = new TwoColumnFlexFormPanel();
+        contentPanel = new BasicFlexFormPanel();
         contentPanel.setWidth("500px");
 
         contentPanel.setWidget(++row, 0, makePoweredByPanel());
@@ -54,7 +54,7 @@ public class OnlinePaymentPricingTab extends Composite {
 
         contentPanel.setWidget(+row, 0, otherText);
 
-        TwoColumnFlexFormPanel containerPanel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel containerPanel = new BasicFlexFormPanel();
         containerPanel.setWidget(0, 0, contentPanel);
         containerPanel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
         initWidget(containerPanel);
@@ -65,7 +65,7 @@ public class OnlinePaymentPricingTab extends Composite {
     }
 
     private Widget makePriceListPanel() {
-        TwoColumnFlexFormPanel priceListPanel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel priceListPanel = new BasicFlexFormPanel();
         int row = -1;
         makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.echequeLogo()), "$1.50", i18n.tr(" per transaction"));
         makePaymentMethodPriceRow(priceListPanel, ++row, new Image(OnlinePaymentWizardResources.INSTANCE.interacLogo()), "$1.50", i18n.tr(" per transaction"));
@@ -88,7 +88,7 @@ public class OnlinePaymentPricingTab extends Composite {
 
     }
 
-    private Widget makePaymentMethodPriceRow(TwoColumnFlexFormPanel panel, int row, Image paymentMethodLogo, String price, String unit) {
+    private Widget makePaymentMethodPriceRow(BasicFlexFormPanel panel, int row, Image paymentMethodLogo, String price, String unit) {
         panel.setWidget(row, 0, paymentMethodLogo);
         Label priceLabel = new Label();
         priceLabel.setText(price);
