@@ -138,6 +138,7 @@ public abstract class SMTPMailServiceConfig implements IMailServiceConfigConfigu
         b.append("allowSendToEmailSufix                             : ").append(this.allowSendToEmailSufix).append("\n");
         b.append("blockedMailForwardTo                              : ").append(this.blockedMailForwardTo).append("\n");
         b.append("forwardAllTo                                      : ").append(this.forwardAllTo).append("\n");
+        b.append("forwardAllTo (active)                             : ").append(getForwardAllTo()).append("\n");
         b.append("maxDeliveryAttempts                               : ").append(this.maxDeliveryAttempts).append("\n");
         b.append("queuePriority                                     : ").append(this.queuePriority).append("\n");
 
