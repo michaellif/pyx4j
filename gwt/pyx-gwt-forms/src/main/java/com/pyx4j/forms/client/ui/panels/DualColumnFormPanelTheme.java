@@ -100,17 +100,17 @@ public abstract class DualColumnFormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.FieldPanel, " .",
                 DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getSingleColumnWidth());
+        style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right, ">.", CComponentTheme.StyleName.FieldPanel, " .",
                 DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getSingleColumnWidth());
+        style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.", CComponentTheme.StyleName.FieldPanel, " .",
                 DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getDualColumnWidth());
+        style.addProperty("width", getDualColumnWidth() + "px");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCaptionLabel);
@@ -206,14 +206,14 @@ public abstract class DualColumnFormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
                 CComponentTheme.StyleName.FieldPanel, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorContainerPanel);
-        style.addProperty("width", getSingleColumnWidth());
+        style.addProperty("width", getSingleColumnWidth() + "px");
         addStyle(style);
     }
 
     protected abstract ThemeColor getBackgroundColor();
 
-    protected abstract String getSingleColumnWidth();
+    protected abstract int getSingleColumnWidth();
 
-    protected abstract String getDualColumnWidth();
+    protected abstract int getDualColumnWidth();
 
 }
