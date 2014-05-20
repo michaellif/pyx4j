@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
@@ -43,7 +43,7 @@ public class AvailabilityReportSettingsSimpleForm extends CForm<AvailabilityRepo
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().asOf()).decorate().labelWidth("10em").componentWidth("10em");
         formPanel
                 .append(Location.Left, proto().vacancyStatus(),

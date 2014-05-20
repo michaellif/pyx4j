@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -82,7 +82,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     private IsWidget createGeneralTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Floorplan Information"));
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
@@ -104,7 +104,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     private IsWidget createMarketingTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Marketing Summary"));
         formPanel.append(Location.Left, proto().marketingName()).decorate();
@@ -124,7 +124,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
             @Override
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
-                DualColumnForm formPanel = new DualColumnForm(entryForm);
+                FormPanel formPanel = new FormPanel(entryForm);
 
                 formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().componentWidth(150);
                 formPanel.append(Location.Dual, entryForm.proto().description()).decorate().componentWidth(150);
@@ -161,7 +161,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 CImage frontImage = new CImage(GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 160);
@@ -223,7 +223,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().vendor(), new CEnumLabel()).decorate();
                 formPanel.append(Location.Right, proto().priority()).decorate();

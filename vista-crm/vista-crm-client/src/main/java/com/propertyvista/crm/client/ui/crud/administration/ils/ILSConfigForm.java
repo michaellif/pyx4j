@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.ils;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -36,7 +36,7 @@ public class ILSConfigForm extends CrmEntityForm<ILSConfigDTO> {
     }
 
     private IsWidget createProvidersTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(proto().vendors().getMeta().getCaption());
         formPanel.append(Location.Dual, inject(proto().vendors(), new ILSVendorConfigEditorFolder()));

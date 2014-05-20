@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -45,7 +45,7 @@ public class LegalStatusForm extends CForm<LegalStatusDTO> {
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().status()).decorate();
         get(proto().status()).setEditable(false);
@@ -104,7 +104,7 @@ public class LegalStatusForm extends CForm<LegalStatusDTO> {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Dual, proto().file(),
                     new CFile(GWT.<UploadService<?, ?>> create(LegalLetterUploadService.class), new VistaFileURLBuilder(LegalLetter.class))).decorate();
             formPanel.append(Location.Dual, proto().notes()).decorate();

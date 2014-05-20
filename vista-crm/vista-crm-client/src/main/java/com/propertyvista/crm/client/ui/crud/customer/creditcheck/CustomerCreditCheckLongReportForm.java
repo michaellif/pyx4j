@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -50,7 +50,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     public CustomerCreditCheckLongReportForm(IForm<CustomerCreditCheckLongReportDTO> view) {
         super(CustomerCreditCheckLongReportDTO.class, view);
 
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("QUICK SUMMARY"));
         formPanel.append(Location.Dual, createQuickSummary());
@@ -98,7 +98,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
     @SuppressWarnings("unused")
     private IsWidget createQuickSummary() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().percentOfRentCovered()).decorate();
         formPanel.append(Location.Left, proto().totalAccounts()).decorate();
@@ -144,7 +144,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     }
 
     private IsWidget createIdentity() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().identity().name(), new NameEditor(i18n.tr("Name")));
 
@@ -196,7 +196,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate();
                 formPanel.append(Location.Left, proto().number()).decorate().componentWidth(180);
@@ -235,7 +235,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().caseNumber()).decorate();
                 formPanel.append(Location.Left, proto().customerNumber()).decorate();
@@ -273,7 +273,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().caseNumber()).decorate();
                 formPanel.append(Location.Left, proto().customerNumber()).decorate();
@@ -311,7 +311,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().caseNumber()).decorate();
                 formPanel.append(Location.Left, proto().customerNumber()).decorate();
@@ -350,7 +350,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().landlord()).decorate();
                 formPanel.append(Location.Left, proto().rent()).decorate();
@@ -390,7 +390,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.append(Location.Left, proto().onBehalf()).decorate();
                 formPanel.append(Location.Left, proto().date()).decorate();
                 formPanel.append(Location.Left, proto().lastActive()).decorate();

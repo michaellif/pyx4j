@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -78,7 +78,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
     }
 
     public IsWidget createGeneralForm() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().threadDTO().created()).decorate();
         formPanel.append(Location.Left, proto().subject()).decorate();
@@ -137,7 +137,7 @@ public class CommunicationMessageForm extends CrmEntityForm<CommunicationMessage
 
         @Override
         public IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.h1("Details");
             formPanel.append(Location.Left, proto().date()).decorate();

@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
@@ -93,7 +93,7 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
 
             transactionLister = new CardServiceSimulationTransactionListerViewImpl.CardServiceSimulationTransactionLister();
 
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().cardType()).decorate();
             formPanel.append(Location.Left, proto().number()).decorate();

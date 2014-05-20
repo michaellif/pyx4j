@@ -14,10 +14,10 @@
 package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.FormFieldDecoratorOptions;
 
-public class PortalFormPanel extends DualColumnForm {
+public class PortalFormPanel extends FormPanel {
 
     public PortalFormPanel(CForm<?> parent) {
         super(parent);

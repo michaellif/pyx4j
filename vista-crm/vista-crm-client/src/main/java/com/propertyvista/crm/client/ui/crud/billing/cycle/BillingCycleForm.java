@@ -17,7 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -35,7 +35,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     public BillingCycleForm(IForm<BillingCycleDTO> view) {
         super(BillingCycleDTO.class, view);
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().billingType()).decorate();
         formPanel.append(Location.Left, proto().billingCycleStartDate()).decorate();

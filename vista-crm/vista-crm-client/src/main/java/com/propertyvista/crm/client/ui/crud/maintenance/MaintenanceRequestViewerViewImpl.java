@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -163,7 +163,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
                 protected IsWidget createContent() {
-                    DualColumnForm main = new DualColumnForm(this);
+                    FormPanel main = new FormPanel(this);
 
                     main.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
                     main.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
@@ -217,7 +217,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CForm<MaintenanceRequestDTO>(MaintenanceRequestDTO.class) {
                 @Override
                 protected IsWidget createContent() {
-                    DualColumnForm main = new DualColumnForm(this);
+                    FormPanel main = new FormPanel(this);
 
                     main.append(Location.Dual, inject(proto().resolvedDate())).decorate().componentWidth(100);
                     main.append(Location.Dual, inject(proto().resolution())).decorate().componentWidth(250);
@@ -275,7 +275,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
                 protected IsWidget createContent() {
-                    DualColumnForm main = new DualColumnForm(this);
+                    FormPanel main = new FormPanel(this);
 
                     main.append(Location.Dual, inject(proto().rating())).decorate().componentWidth(30);
                     main.append(Location.Dual, inject(proto().description())).decorate().componentWidth(200);

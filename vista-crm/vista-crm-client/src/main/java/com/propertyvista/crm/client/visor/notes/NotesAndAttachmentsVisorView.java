@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -107,7 +107,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Dual, proto().notes(), new NotesAndAttachmentsFolder());
             return formPanel;
         }
@@ -185,7 +185,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 @Override
                 protected IsWidget createContent() {
-                    DualColumnForm formPanel = new DualColumnForm(this);
+                    FormPanel formPanel = new FormPanel(this);
 
                     formPanel.append(Location.Dual, proto().subject()).decorate();
                     formPanel.append(Location.Dual, proto().note()).decorate();
@@ -348,7 +348,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     @Override
                     protected IsWidget createContent() {
-                        DualColumnForm formPanel = new DualColumnForm(this);
+                        FormPanel formPanel = new FormPanel(this);
 
                         CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(NoteAttachmentUploadService.class), new VistaFileURLBuilder(
                                 NoteAttachment.class));

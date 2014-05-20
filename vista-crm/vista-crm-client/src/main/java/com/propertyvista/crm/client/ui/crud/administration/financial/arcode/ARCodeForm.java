@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.administration.financial.arcode;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IShowable;
@@ -31,12 +31,12 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
     private static final I18n i18n = I18n.get(ARCodeForm.class);
 
-    private final DualColumnForm yardiIntegrationPanel;
+    private final FormPanel yardiIntegrationPanel;
 
     public ARCodeForm(IForm<ARCode> view) {
         super(ARCode.class, view);
 
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().type()).decorate().componentWidth(250);
@@ -59,7 +59,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
             }
         }).decorate().componentWidth(250);
 
-        yardiIntegrationPanel = new DualColumnForm(this);
+        yardiIntegrationPanel = new FormPanel(this);
         yardiIntegrationPanel.h1(i18n.tr("Yardi Integration"));
         yardiIntegrationPanel.append(Location.Dual, proto().yardiChargeCodes(), new YardiChargeCodeFolder());
 

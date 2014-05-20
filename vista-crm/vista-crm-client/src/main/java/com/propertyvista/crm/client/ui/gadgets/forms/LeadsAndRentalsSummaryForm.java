@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -32,7 +32,7 @@ public class LeadsAndRentalsSummaryForm extends ZoomableViewForm<LeadsAndRentals
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().leads()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().appointmentsLabel()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().rentalsLabel()).decorate().componentWidth(200);

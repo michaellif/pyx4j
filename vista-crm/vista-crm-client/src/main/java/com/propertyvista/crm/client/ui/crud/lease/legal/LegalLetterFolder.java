@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -37,7 +37,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Dual, proto().file(), new CFile(null, new VistaFileURLBuilder(N4LegalLetter.class))).decorate();
             formPanel.append(Location.Dual, proto().generatedOn()).decorate();
@@ -55,7 +55,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Dual, proto().file(), new CFile(null, new VistaFileURLBuilder(LegalLetter.class))).decorate();
             formPanel.append(Location.Dual, proto().generatedOn()).decorate();
             formPanel.append(Location.Dual, proto().notes()).decorate();
@@ -85,7 +85,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Dual, polymorphicFormContainer = new SimplePanel());
             return formPanel;
         }

@@ -18,7 +18,7 @@ import java.util.Arrays;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 
@@ -34,7 +34,7 @@ public class AvailabilityReportSettingsAdvancedForm extends CForm<AvailabilityRe
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().asOf()).decorate().labelWidth("120px").componentWidth("120px");
         formPanel.append(Location.Left, proto().availbilityTableCriteria(), new PropertyCriteriaFolder(VistaImages.INSTANCE, UnitAvailabilityStatus.class,
                 Arrays.asList(AvailabilityReportTableColumnsHolder.AVAILABILITY_TABLE_COLUMNS)));

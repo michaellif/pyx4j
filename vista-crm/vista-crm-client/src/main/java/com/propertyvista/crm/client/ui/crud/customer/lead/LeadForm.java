@@ -27,7 +27,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -97,7 +97,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     private IsWidget createGuestsTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().guests(), new GuestFolder(isEditable()));
 
@@ -110,7 +110,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     private IsWidget createDetailsTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().leadId()).decorate().componentWidth(220);
         formPanel.append(Location.Left, proto().leaseType()).decorate().componentWidth(220);

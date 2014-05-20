@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -71,7 +71,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     }
 
     private IsWidget createScopeTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
@@ -206,7 +206,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         @SuppressWarnings("unchecked")
         @Override
         protected IsWidget createContent() {
-            DualColumnForm internalFormPanel = new DualColumnForm(this);
+            FormPanel internalFormPanel = new FormPanel(this);
 
             nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CField<? extends PolicyNode, ?>>();
             for (NodeType nodeType : AVAILABLE_NODE_TYPES) {

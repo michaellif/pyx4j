@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -63,7 +63,7 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
 
             @Override
             public IsWidget format(TransactionHistoryDTO value) {
-                DualColumnFormPanel formPanel = new DualColumnFormPanel();
+                FormPanel formPanel = new FormPanel(null);
                 if (value != null) {
                     formPanel.h1(i18n.tr("Transactions History"));
                     formPanel.append(Location.Dual, createLineItems(value.lineItems()));

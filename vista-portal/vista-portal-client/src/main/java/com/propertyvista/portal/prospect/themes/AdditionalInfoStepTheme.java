@@ -18,7 +18,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme;
+import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 
 public class AdditionalInfoStepTheme extends Theme {
 
@@ -27,7 +27,7 @@ public class AdditionalInfoStepTheme extends Theme {
     }
 
     public AdditionalInfoStepTheme() {
-        Style style = new Style(".", StyleName.GeneralQuestionsSection, " .", DualColumnFormPanelTheme.StyleName.FluidPanelBlock);
+        Style style = new Style(".", StyleName.GeneralQuestionsSection, " .", FormPanelTheme.StyleName.FluidPanelBlock);
         style.addProperty("text-align", "left");
         addStyle(style);
 

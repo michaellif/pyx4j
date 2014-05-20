@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -54,7 +54,7 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.br();
         formPanel.append(Location.Left, proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()).decorate();
         get(proto().tenantInfo()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -112,7 +112,7 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
 
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
                 formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);

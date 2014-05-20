@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -28,7 +28,7 @@ public class PortalForm extends CrmEntityForm<SiteDescriptorDTO> {
         PortalBannerImageFolder imageFolder = new PortalBannerImageFolder(isEditable());
         imageFolder.setImageSize(600, 100);
 
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Dual, proto().portalBanner(), imageFolder);
         selectTab(addTab(formPanel, proto().portalBanner().getMeta().getCaption()));
     }

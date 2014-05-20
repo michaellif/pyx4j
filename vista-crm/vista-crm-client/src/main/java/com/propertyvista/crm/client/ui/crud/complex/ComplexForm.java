@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -41,8 +41,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     }
 
-    private DualColumnForm createGeneralPanel() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+    private FormPanel createGeneralPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Right, proto().website()).decorate();
@@ -79,8 +79,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         return formPanel;
     }
 
-    private DualColumnForm createBuildingsPanel() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+    private FormPanel createBuildingsPanel() {
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Dual, proto().buildings(), new ComplexBuildingFolder(this));
 

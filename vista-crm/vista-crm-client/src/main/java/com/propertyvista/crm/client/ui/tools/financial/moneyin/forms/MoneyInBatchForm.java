@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -97,7 +97,7 @@ public class MoneyInBatchForm extends CrmEntityForm<MoneyInBatchDTO> {
     }
 
     private Widget createGeneralTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().building()).decorate();
         formPanel.append(Location.Left, proto().totalReceivedAmount()).decorate();
         formPanel.append(Location.Left, proto().numberOfReceipts()).decorate();

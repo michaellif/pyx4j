@@ -31,7 +31,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -62,12 +62,12 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private Widget unitLegalAddressLabel;
 
-    private final DualColumnForm catalogMarketPricesPanel;
+    private final FormPanel catalogMarketPricesPanel;
 
     public UnitForm(IForm<AptUnitDTO> view) {
         super(AptUnitDTO.class, view);
 
-        catalogMarketPricesPanel = new DualColumnForm(this);
+        catalogMarketPricesPanel = new FormPanel(this);
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
 
@@ -113,7 +113,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private IsWidget createGeneralTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel
                 .append(Location.Left, proto().building(),
@@ -155,7 +155,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     private IsWidget createLegalAddresslTab() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().info().legalAddressOverride()).decorate().labelWidth("360px");
         unitLegalAddressLabel = formPanel.h1(proto().info().legalAddress().getMeta().getCaption());

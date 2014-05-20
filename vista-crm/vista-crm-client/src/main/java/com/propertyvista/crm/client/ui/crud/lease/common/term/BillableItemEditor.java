@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -75,9 +75,9 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
-    private final DualColumnForm adjustmentPanel = new DualColumnForm(this);
+    private final FormPanel adjustmentPanel = new FormPanel(this);
 
-    private final DualColumnForm depositPanel = new DualColumnForm(this);
+    private final FormPanel depositPanel = new FormPanel(this);
 
     private final CForm<LeaseTermDTO> leaseTerm;
 
@@ -95,7 +95,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
             @Override

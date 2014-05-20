@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -92,7 +92,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
             formPanel.append(Location.Dual, proto().events(), new CommunityEventFolder());
             return formPanel;
         }
@@ -164,7 +164,7 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
                 @Override
                 protected IsWidget createContent() {
-                    DualColumnForm content = new DualColumnForm(this);
+                    FormPanel content = new FormPanel(this);
                     content.append(Location.Dual, proto().caption()).decorate();
                     content.append(Location.Left, proto().date()).decorate().componentWidth(120);
                     content.append(Location.Left, proto().time()).decorate().componentWidth(120);

@@ -16,11 +16,11 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IAcceptsWatermark;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.FormFieldDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFieldDecoratorOptions;
 
-public class LoginFormPanel extends DualColumnForm {
+public class LoginFormPanel extends FormPanel {
 
     public LoginFormPanel(CForm<?> parent) {
         super(parent);

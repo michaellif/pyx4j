@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -56,7 +56,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         panelMap.put(GadgetType.testimonials, getTestimContentEditor());
         panelMap.put(GadgetType.promo, getPromoContentEditor());
 
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.h1(i18n.tr("General"));
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
@@ -97,7 +97,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<CustomGadgetContent> editor = new CForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.h1(proto().htmlContent().getMeta().getCaption());
                 formPanel.append(Location.Dual, proto().htmlContent(), new RichTextContentEditor(true));
                 return formPanel;
@@ -110,7 +110,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<NewsGadgetContent> editor = new CForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.h1(proto().news().getMeta().getCaption());
                 formPanel.append(Location.Dual, proto().news(), new NewsFolder(isEditable()));
                 return formPanel;
@@ -123,7 +123,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<TestimonialsGadgetContent> editor = new CForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.h1(proto().testimonials().getMeta().getCaption());
                 formPanel.append(Location.Dual, proto().testimonials(), new TestimonialFolder(isEditable()));
                 return formPanel;
@@ -136,7 +136,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CForm<PromoGadgetContent> editor = new CForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
             protected IsWidget createContent() {
-                DualColumnForm formPanel = new DualColumnForm(this);
+                FormPanel formPanel = new FormPanel(this);
                 formPanel.h1(i18n.tr("Promotions"));
                 formPanel.append(Location.Dual, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));
                 return formPanel;

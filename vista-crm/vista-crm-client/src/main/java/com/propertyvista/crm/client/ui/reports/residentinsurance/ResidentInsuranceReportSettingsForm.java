@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.reports.residentinsurance;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
@@ -29,7 +29,7 @@ public class ResidentInsuranceReportSettingsForm extends CForm<ResidentInsurance
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().onlyLeasesWithInsurance()).decorate();
         return formPanel;
     }

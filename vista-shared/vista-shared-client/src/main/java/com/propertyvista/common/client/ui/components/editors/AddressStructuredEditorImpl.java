@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -47,8 +47,8 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         this.showUnit = showUnit;
     }
 
-    protected DualColumnForm internalCreateContent() {
-        DualColumnForm content = new DualColumnForm(this);
+    protected FormPanel internalCreateContent() {
+        FormPanel content = new FormPanel(this);
 
         if (showUnit) {
             content.append(Location.Left, proto().suiteNumber()).decorate().componentWidth(100);
