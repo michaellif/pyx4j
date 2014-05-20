@@ -95,14 +95,14 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeField<DATA_TY
         return nativeComponent;
     }
 
-    protected final void setNativeComponent(WIDGET_TYPE widget) {
-        this.nativeComponent = widget;
-        widget.init();
+    protected final void setNativeComponent(WIDGET_TYPE nativeComponent) {
+        this.nativeComponent = nativeComponent;
+        nativeComponent.init();
         applyAccessibilityRules();
 
-        widget.setNavigationCommand(navigationCommand);
+        nativeComponent.setNavigationCommand(navigationCommand);
         if (getDebugId() != null) {
-            widget.setDebugId(getDebugId());
+            nativeComponent.setDebugId(getDebugId());
         }
 
     }
