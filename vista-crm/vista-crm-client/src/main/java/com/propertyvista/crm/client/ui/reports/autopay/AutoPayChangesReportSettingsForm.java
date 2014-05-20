@@ -13,14 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.reports.autopay;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
@@ -38,12 +39,14 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
 
         FlowPanel leftSidePanel = new FlowPanel();
 
         leftSidePanel.add(inject(proto().leasesOnNoticeOnly(), new FieldDecoratorBuilder().build()));
+        get(proto().leasesOnNoticeOnly()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
         leftSidePanel.add(inject(proto().filterByExpectedMoveOut(), new FieldDecoratorBuilder().build()));
+        get(proto().filterByExpectedMoveOut()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -51,8 +54,10 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
                 get(proto().maximum()).setVisible(event.getValue() == true);
             }
         });
-        leftSidePanel.add(inject(proto().minimum(), new FieldDecoratorBuilder().build()));
-        leftSidePanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().build()));
+        leftSidePanel.add(inject(proto().minimum(), new FieldDecoratorBuilder().componentWidth("100px").build()));
+        get(proto().minimum()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
+        leftSidePanel.add(inject(proto().maximum(), new FieldDecoratorBuilder().componentWidth("100px").build()));
+        get(proto().maximum()).asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
 
         FlowPanel buildingFilterPanel = new FlowPanel();
         buildingFilterPanel.add(inject(proto().filterByBuildings(), new FieldDecoratorBuilder().build()));
@@ -66,10 +71,8 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
         buildingFilterPanel.add(inject(proto().buildings(), new SelectedBuildingsFolder(parentView)));
         get(proto().buildings()).setVisible(false);
 
-        formPanel.setWidget(0, 0, leftSidePanel);
-        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        formPanel.setWidget(0, 1, buildingFilterPanel);
-        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+        formPanel.append(Location.Left, leftSidePanel);
+        formPanel.append(Location.Right, buildingFilterPanel);
 
         return formPanel;
     }

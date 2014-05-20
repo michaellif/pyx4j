@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.reports.eftvariance;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
@@ -29,10 +29,9 @@ public class EftVarianceReportSettingsForm extends CForm<EftVarianceReportMetada
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, inject(proto().billingCycleStartDate(), new FieldDecoratorBuilder().build()));
-        return panel;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().billingCycleStartDate()).decorate();
+        return formPanel;
     }
 
 }

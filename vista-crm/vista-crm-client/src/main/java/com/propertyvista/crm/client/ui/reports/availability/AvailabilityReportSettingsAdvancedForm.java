@@ -18,8 +18,8 @@ import java.util.Arrays;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -34,15 +34,10 @@ public class AvailabilityReportSettingsAdvancedForm extends CForm<AvailabilityRe
 
     @Override
     protected IsWidget createContent() {
-        int row = -1;
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().labelWidth(10).componentWidth(10).build()));
-        panel.setWidget(
-                ++row,
-                0,
-                inject(proto().availbilityTableCriteria(),
-                        new PropertyCriteriaFolder(VistaImages.INSTANCE, UnitAvailabilityStatus.class, Arrays
-                                .asList(AvailabilityReportTableColumnsHolder.AVAILABILITY_TABLE_COLUMNS))));
-        return panel;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().asOf()).decorate().labelWidth("120px").componentWidth("120px");
+        formPanel.append(Location.Left, proto().availbilityTableCriteria(), new PropertyCriteriaFolder(VistaImages.INSTANCE, UnitAvailabilityStatus.class,
+                Arrays.asList(AvailabilityReportTableColumnsHolder.AVAILABILITY_TABLE_COLUMNS)));
+        return formPanel;
     }
 }
