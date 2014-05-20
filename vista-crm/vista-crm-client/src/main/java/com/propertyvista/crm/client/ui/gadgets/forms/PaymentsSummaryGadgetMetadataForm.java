@@ -23,11 +23,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
@@ -44,15 +44,13 @@ public class PaymentsSummaryGadgetMetadataForm extends CForm<PaymentsSummaryGadg
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
-        int row = -1;
-
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().paymentsSummaryListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, new HTML("&nbsp"));
-        p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, new HTML("&nbsp"));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().paymentsSummaryListerSettings().pageSize()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, new HTML("&nbsp"));
+        formPanel.append(Location.Left, proto().customizeDate()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().asOf()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, new HTML("&nbsp"));
         get(proto().asOf()).setVisible(false);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -75,8 +73,8 @@ public class PaymentsSummaryGadgetMetadataForm extends CForm<PaymentsSummaryGadg
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().paymentStatus(), paymentStatusSelector));
-        return p;
+        formPanel.append(Location.Left, proto().paymentStatus(), paymentStatusSelector);
+        return formPanel;
     }
 
     @Override

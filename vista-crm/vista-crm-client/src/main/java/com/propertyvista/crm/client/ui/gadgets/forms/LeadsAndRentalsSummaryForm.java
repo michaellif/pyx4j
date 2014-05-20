@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
@@ -32,14 +32,11 @@ public class LeadsAndRentalsSummaryForm extends ZoomableViewForm<LeadsAndRentals
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-
-        content.setWidget(++row, 0, inject(proto().leads(), new FieldDecoratorBuilder().componentWidth(15).build()));
-        content.setWidget(++row, 0, inject(proto().appointmentsLabel(), new FieldDecoratorBuilder().componentWidth(15).build()));
-        content.setWidget(++row, 0, inject(proto().rentalsLabel(), new FieldDecoratorBuilder().componentWidth(15).build()));
-
-        return content;
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().leads()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().appointmentsLabel()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().rentalsLabel()).decorate().componentWidth(200);
+        return formPanel;
     }
 
     @Override

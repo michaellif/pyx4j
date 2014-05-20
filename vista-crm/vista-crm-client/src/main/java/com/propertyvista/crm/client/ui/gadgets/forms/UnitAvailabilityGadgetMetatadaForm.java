@@ -18,8 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 
@@ -31,13 +31,11 @@ public class UnitAvailabilityGadgetMetatadaForm extends CForm<UnitAvailabilityGa
 
     @Override
     protected IsWidget createContent() {
-        // TODO Auto-generated method stub
-        TwoColumnFlexFormPanel p = new TwoColumnFlexFormPanel();
-        int row = -1;
-        p.setWidget(++row, 0, inject(proto().refreshInterval(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().unitStatusListerSettings().pageSize(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().filterPreset(), new FieldDecoratorBuilder().build()));
-        p.setWidget(++row, 0, inject(proto().customizeDate(), new FieldDecoratorBuilder().build()));
+        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        formPanel.append(Location.Left, proto().refreshInterval()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().unitStatusListerSettings().pageSize()).decorate().componentWidth(80);
+        formPanel.append(Location.Left, proto().filterPreset()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().customizeDate()).decorate().componentWidth(80);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -46,9 +44,9 @@ public class UnitAvailabilityGadgetMetatadaForm extends CForm<UnitAvailabilityGa
                 }
             }
         });
-        p.setWidget(++row, 0, inject(proto().asOf(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().asOf()).decorate().componentWidth(80);
         get(proto().asOf()).setVisible(false);
-        return p;
+        return formPanel;
     }
 
     @Override
