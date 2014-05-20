@@ -165,19 +165,19 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="50">
-						<printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("BuildingDTO/info/address/streetName/")]]></printWhenExpression>
+						<printWhenExpression><![CDATA[$P{COLUMNS}.containsKey("BuildingDTO/info/address/addressLine1/")]]></printWhenExpression>
 						<jr:columnHeader style="table_TH" height="10" rowSpan="1">
 							<textField isStretchWithOverflow="true">
 								<reportElement style="table_TH_text" x="0" y="0" width="50" height="10"/>
 								<textElement markup="none"/>
-								<textFieldExpression><![CDATA[$P{COLUMNS}.get("BuildingDTO/info/address/streetName/")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{COLUMNS}.get("BuildingDTO/info/address/addressLine1/")]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="10" rowSpan="1">
 							<textField isStretchWithOverflow="true">
 								<reportElement style="table_TD_text" x="0" y="0" width="50" height="10"/>
 								<textElement/>
-								<textFieldExpression><![CDATA[$F{info}.address().streetName().getStringView()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{info}.address().addressLine1().getStringView()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
