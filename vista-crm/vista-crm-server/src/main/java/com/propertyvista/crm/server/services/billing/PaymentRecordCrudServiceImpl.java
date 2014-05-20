@@ -185,7 +185,7 @@ public class PaymentRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pay
 
     @Override
     public void getCurrentAddress(AsyncCallback<InternationalAddress> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> participant) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(participant));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(participant));
     }
 
     @Override

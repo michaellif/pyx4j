@@ -63,7 +63,7 @@ public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePayment
 
     @Override
     public void getCurrentAddress(AsyncCallback<InternationalAddress> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(ResidentPortalContext.getTenant()));
     }
 
     @Override

@@ -105,7 +105,6 @@ import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.lease.SignedLeaseApplicationDocumentCreatorDeferredProcess;
-import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
@@ -806,7 +805,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         dto.billingAccount().set(lease.billingAccount());
         dto.allowedPaymentsSetup().set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(to.policyNode(), VistaApplication.prospect));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());

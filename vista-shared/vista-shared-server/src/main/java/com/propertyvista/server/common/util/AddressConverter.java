@@ -25,9 +25,9 @@ public class AddressConverter {
 
     private static final I18n i18n = I18n.get(AddressConverter.class);
 
-    public static class StructuredToSimpleAddressConverter extends EntityBinder<AddressStructured, InternationalAddress> {
+    public static class StructuredToInternationalAddressConverter extends EntityBinder<AddressStructured, InternationalAddress> {
 
-        public StructuredToSimpleAddressConverter() {
+        public StructuredToInternationalAddressConverter() {
             super(AddressStructured.class, InternationalAddress.class);
         }
 

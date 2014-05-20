@@ -141,7 +141,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
 
     @Override
     public void getCurrentAddress(AsyncCallback<InternationalAddress> callback, TO participantId) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(EntityFactory.createIdentityStub(boClass, participantId.getPrimaryKey())));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(EntityFactory.createIdentityStub(boClass, participantId.getPrimaryKey())));
     }
 
     private LeaseTerm.LeaseTermV retrieveLeaseTerm(BO leaseParticipant) {

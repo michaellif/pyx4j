@@ -146,7 +146,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void getCurrentTenantAddress(AsyncCallback<InternationalAddress> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(ResidentPortalContext.getTenant()));
     }
 
     @Override

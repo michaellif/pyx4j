@@ -223,7 +223,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     private String formatStreetAddress(AddressStructured companyAddress) {
-        return new AddressConverter.StructuredToSimpleAddressConverter().getStreetAddress(companyAddress);
+        return new AddressConverter.StructuredToInternationalAddressConverter().getStreetAddress(companyAddress);
     }
 
     private String sanitzeSuiteNumber(String suiteNumber) {

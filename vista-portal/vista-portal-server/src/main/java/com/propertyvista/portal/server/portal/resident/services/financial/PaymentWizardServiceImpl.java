@@ -47,7 +47,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.rpc.portal.shared.dto.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
-import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentDTO> implements PaymentWizardService {
@@ -76,7 +75,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.allowedPaymentsSetup()
                 .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -141,7 +140,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     public void getCurrentAddress(AsyncCallback<InternationalAddress> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(ResidentPortalContext.getTenant()));
     }
 
     @Override

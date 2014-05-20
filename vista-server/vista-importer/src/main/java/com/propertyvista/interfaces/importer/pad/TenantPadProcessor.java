@@ -901,7 +901,7 @@ public class TenantPadProcessor {
             method.type().setValue(PaymentType.Echeck);
             method.details().set(details);
             method.customer().set(tenant.customer());
-            method.billingAddress().set(AddressRetriever.getLeaseAddressSimple(tenant.lease()));
+            method.billingAddress().set(AddressRetriever.getLeaseAddress(tenant.lease()));
 
             Persistence.service().retrieve(tenant.lease());
             Persistence.service().retrieve(tenant.lease().unit());

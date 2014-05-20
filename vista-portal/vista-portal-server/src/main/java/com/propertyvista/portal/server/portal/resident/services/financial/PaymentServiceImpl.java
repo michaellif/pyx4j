@@ -50,7 +50,6 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodI
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
-import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentServiceImpl implements PaymentService {
@@ -73,7 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
         dto.allowedPaymentsSetup()
                 .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -138,7 +137,7 @@ public class PaymentServiceImpl implements PaymentService {
         dto.allowedPaymentsSetup()
                 .set(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentsSetup(lease.billingAccount(), VistaApplication.resident));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());

@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
@@ -41,10 +40,7 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
         for (Lease lease : activeLeases) {
             LeaseContextChoiceDTO choice = EntityFactory.create(LeaseContextChoiceDTO.class);
             choice.leaseId().set(lease.createIdentityStub());
-
-            AddressStructured address = AddressRetriever.getLeaseAddress(lease);
-            choice.leasedUnitAddress().setValue(address.getStringView());
-
+            choice.leasedUnitAddress().setValue(AddressRetriever.getLeaseAddress(lease).getStringView());
             choices.add(choice);
         }
 

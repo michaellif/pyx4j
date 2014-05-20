@@ -45,7 +45,6 @@ import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
-import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAgreement, AutoPayDTO> implements AutoPayWizardService {
@@ -72,7 +71,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
         dto.allowedPaymentsSetup().allowedCardTypes().removeAll(dto.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        dto.address().set(AddressRetriever.getLeaseAddress(lease));
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -126,7 +125,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
         to.allowedPaymentsSetup().allowedCardTypes().removeAll(to.allowedPaymentsSetup().convenienceFeeApplicableCardTypes());
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), to.address());
+        to.address().set(AddressRetriever.getLeaseAddress(lease));
 
         to.propertyCode().set(lease.unit().building().propertyCode());
         to.unitNumber().set(lease.unit().info().number());
@@ -149,7 +148,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     public void getCurrentAddress(AsyncCallback<InternationalAddress> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(ResidentPortalContext.getTenant()));
     }
 
     @Override

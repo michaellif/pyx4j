@@ -13,11 +13,11 @@
  */
 package com.propertyvista.server.common.util;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -26,36 +26,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 public class AddressRetriever {
-
-    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseParticipant<?> participant) {
-        Persistence.ensureRetrieve(participant, AttachLevel.Attached);
-        return getLeaseAddress(participant.lease());
-    }
-
-    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseTermParticipant<?> participant) {
-        Persistence.ensureRetrieve(participant, AttachLevel.Attached);
-        Persistence.ensureRetrieve(participant.leaseTermV(), AttachLevel.Attached);
-
-        return getLeaseAddress(participant.leaseTermV().holder().lease());
-    }
-
-    public static AddressStructured getLeaseAddress(Lease lease) {
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-
-        AddressStructured address = EntityFactory.create(AddressStructured.class);
-        address.set(lease.unit().building().info().address());
-        address.suiteNumber().set(lease.unit().info().number());
-
-        return address;
-    }
-
-    public static AddressStructured getOnlineApplicationAddress(OnlineApplication onlineApplication) {
-        Persistence.ensureRetrieve(onlineApplication, AttachLevel.Attached);
-        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication(), AttachLevel.Attached);
-        return getLeaseAddress(onlineApplication.masterOnlineApplication().leaseApplication().lease());
-    }
 
     // Legal Address:
 
@@ -69,8 +39,8 @@ public class AddressRetriever {
         if (!unit.info().legalAddressOverride().getValue(false)) {
             InternationalAddress address = EntityFactory.create(InternationalAddress.class);
             address.set(unit.building().info().address());
-            String line1 = address.addressLine1().getValue() + ", Apt " + unit.info().number().getValue();
-            address.addressLine1().setValue(line1);
+            String line2 = address.addressLine2().getValue();
+            address.addressLine2().setValue((CommonsStringUtils.isEmpty(line2) ? "" : line2 + ", ") + "Apt " + unit.info().number().getValue());
             return address;
         } else {
             return unit.info().legalAddress();
@@ -79,27 +49,19 @@ public class AddressRetriever {
 
     // Simple form address retrieving: 
 
-    public static InternationalAddress getLeaseParticipantCurrentAddressSimple(LeaseParticipant<?> participant) {
-        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseParticipantCurrentAddress(participant), address);
-        return address;
+    public static InternationalAddress getLeaseParticipantCurrentAddress(LeaseParticipant<?> participant) {
+        return getLeaseAddress(participant.lease());
     }
 
-    public static InternationalAddress getLeaseParticipantCurrentAddressSimple(LeaseTermParticipant<?> participant) {
-        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseParticipantCurrentAddress(participant), address);
-        return address;
+    public static InternationalAddress getLeaseParticipantCurrentAddress(LeaseTermParticipant<?> participant) {
+        return getLeaseAddress(participant.leaseTermV().holder().lease());
     }
 
-    public static InternationalAddress getLeaseAddressSimple(Lease lease) {
-        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseAddress(lease), address);
-        return address;
+    public static InternationalAddress getLeaseAddress(Lease lease) {
+        return getLeaseLegalAddress(lease);
     }
 
-    public static InternationalAddress getOnlineApplicationAddressSimple(OnlineApplication onlineApplication) {
-        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getOnlineApplicationAddress(onlineApplication), address);
-        return address;
+    public static InternationalAddress getOnlineApplicationAddress(OnlineApplication onlineApplication) {
+        return getLeaseAddress(onlineApplication.masterOnlineApplication().leaseApplication().lease());
     }
 }

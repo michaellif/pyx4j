@@ -23,7 +23,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
@@ -42,10 +41,7 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
         for (OnlineApplication onlineApplication : activeApplications) {
             OnlineApplicationContextChoiceDTO choice = EntityFactory.create(OnlineApplicationContextChoiceDTO.class);
             choice.onlineApplication().set(onlineApplication.createIdentityStub());
-
-            AddressStructured address = AddressRetriever.getOnlineApplicationAddress(onlineApplication);
-            choice.leaseApplicationUnitAddress().setValue(address.getStringView());
-
+            choice.leaseApplicationUnitAddress().setValue(AddressRetriever.getOnlineApplicationAddress(onlineApplication).getStringView());
             choices.add(choice);
         }
 
