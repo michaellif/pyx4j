@@ -32,7 +32,6 @@ import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleNam
 import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH4Label;
 import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelHR;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -43,32 +42,23 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName;
 
-public class DualColumnFormPanel implements IsWidget {
-
-    private final DualColumnFluidPanel fluidPanel;
+public class DualColumnFormPanel extends DualColumnFluidPanel {
 
     public DualColumnFormPanel() {
-        fluidPanel = new DualColumnFluidPanel();
-    }
-
-    @Override
-    public Widget asWidget() {
-        return fluidPanel.asWidget();
     }
 
     public Widget hr() {
         HTML space = new HTML("&nbsp;");
         space.setStyleName(FormPanelHR.name());
-        fluidPanel.append(Location.Dual, space);
+        append(Location.Dual, space);
         return space;
     }
 
     public Widget br() {
         HTML space = new HTML("&nbsp;");
-        fluidPanel.append(Location.Dual, space);
+        append(Location.Dual, space);
         return space;
     }
 
@@ -116,10 +106,6 @@ public class DualColumnFormPanel implements IsWidget {
         return hx(null, caption, actionWidget, imageStyle, labelStyle, headerStyle);
     }
 
-    public void clear() {
-        fluidPanel.clear();
-    }
-
     private Widget hx(ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
         FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
@@ -149,10 +135,11 @@ public class DualColumnFormPanel implements IsWidget {
             header.add(actionWidgetHolder);
         }
 
-        fluidPanel.append(Location.Dual, header);
+        super.append(Location.Dual, header);
         return header;
     }
 
+    @Override
     public void append(Location location, IsWidget widget) {
         Widget handlerPanel = new SimplePanel(widget.asWidget());
         handlerPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FormPanelCell.name());
@@ -167,15 +154,7 @@ public class DualColumnFormPanel implements IsWidget {
             handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
             break;
         }
-        fluidPanel.append(location, handlerPanel);
-    }
-
-    public void setVisible(boolean visible) {
-        fluidPanel.setVisible(visible);
-    }
-
-    public void addStyleName(String style) {
-        fluidPanel.addStyleName(style);
+        super.append(location, handlerPanel);
     }
 
 }

@@ -25,7 +25,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 public class BasicCFormPanel extends DualColumnFormPanel {
 
