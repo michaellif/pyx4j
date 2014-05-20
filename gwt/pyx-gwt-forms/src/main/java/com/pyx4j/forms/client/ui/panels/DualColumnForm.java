@@ -26,11 +26,11 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 
-public class BasicCFormPanel extends DualColumnFormPanel {
+public class DualColumnForm extends DualColumnFormPanel {
 
     private final CForm<?> parent;
 
-    public BasicCFormPanel(CForm<?> parent) {
+    public DualColumnForm(CForm<?> parent) {
         super();
         this.parent = parent;
     }

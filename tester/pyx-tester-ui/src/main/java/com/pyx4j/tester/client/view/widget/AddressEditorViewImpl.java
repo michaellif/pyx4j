@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.EntityDataSource;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
@@ -70,7 +70,7 @@ public class AddressEditorViewImpl extends ScrollPanel implements AddressEditorV
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel content = new BasicCFormPanel(this);
+            DualColumnForm content = new DualColumnForm(this);
 
             content.append(Location.Left, proto().country(), new CountrySelector()).decorate().componentWidth(150);
             content.append(Location.Left, proto().addressLine1()).decorate().componentWidth(150);
