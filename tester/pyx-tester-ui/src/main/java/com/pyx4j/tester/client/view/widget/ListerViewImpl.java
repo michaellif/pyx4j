@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
@@ -47,7 +47,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
     public ListerViewImpl() {
         setSize("100%", "100%");
 
-        DualColumnFormPanel formPanel = new DualColumnFormPanel();
+        FormPanel formPanel = new FormPanel(null);
 
         formPanel.h1("Settings");
         formPanel.append(Location.Left, new HTML("Container: width = 100px, height = 100px"));
@@ -93,8 +93,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
         }
 
         @Override
-        public AsyncLoadingHandler obtain(EntityQueryCriteria<ListerDataItem> criteria,
-                final AsyncCallback<EntitySearchResult<ListerDataItem>> handlingCallback) {
+        public AsyncLoadingHandler obtain(EntityQueryCriteria<ListerDataItem> criteria, final AsyncCallback<EntitySearchResult<ListerDataItem>> handlingCallback) {
             EntitySearchResult<ListerDataItem> result = new EntitySearchResult<ListerDataItem>();
             // use data to populate result
             int dataSize = data.size();

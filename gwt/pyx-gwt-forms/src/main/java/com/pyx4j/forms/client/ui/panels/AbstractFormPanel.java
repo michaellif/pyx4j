@@ -20,17 +20,17 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelActionWidget;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH1;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH1Image;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH1Label;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH2;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH2Label;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH3;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH3Label;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH4;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelH4Label;
-import static com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName.FormPanelHR;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelActionWidget;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH1;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH1Image;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH1Label;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH2;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH2Label;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH3;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH4;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelH4Label;
+import static com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName.FormPanelHR;
 
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
@@ -42,23 +42,32 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme.StyleName;
+import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.panels.FormPanelTheme.StyleName;
 
-public class DualColumnFormPanel extends DualColumnFluidPanel {
+public abstract class AbstractFormPanel {
 
-    public DualColumnFormPanel() {
+    private final CForm<?> parent;
+
+    public AbstractFormPanel(CForm<?> parent) {
+        this.parent = parent;
+    }
+
+    public CForm<?> getParent() {
+        return parent;
     }
 
     public Widget hr() {
-        HTML space = new HTML("&nbsp;");
-        space.setStyleName(FormPanelHR.name());
-        super.append(Location.Dual, space);
-        return space;
+        Widget br = br();
+        br.setStyleName(FormPanelHR.name());
+        return br;
     }
 
     public Widget br() {
         HTML space = new HTML("&nbsp;");
-        super.append(Location.Dual, space);
+        append(space);
         return space;
     }
 
@@ -135,26 +144,33 @@ public class DualColumnFormPanel extends DualColumnFluidPanel {
             header.add(actionWidgetHolder);
         }
 
-        super.append(Location.Dual, header);
+        append(header);
         return header;
     }
 
-    @Override
-    public void append(Location location, IsWidget widget) {
-        Widget handlerPanel = new SimplePanel(widget.asWidget());
-        handlerPanel.setStyleName(DualColumnFormPanelTheme.StyleName.FormPanelCell.name());
-        switch (location) {
-        case Left:
-            handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.left.name());
-            break;
-        case Right:
-            handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.right.name());
-            break;
-        case Dual:
-            handlerPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
-            break;
+    protected abstract void append(IsWidget widget);
+
+    public class CompOptions {
+
+        private final CField<?, ?> comp;
+
+        public CompOptions(CField<?, ?> comp) {
+            this.comp = comp;
         }
-        super.append(location, handlerPanel);
+
+        public FormFieldDecoratorOptions decorate() {
+            final FormFieldDecoratorOptions options = createFieldDecoratorOptions();
+            // Until init() method called, FieldDecoratorOptions can be updated.
+            comp.setDecorator(createFieldDecorator(options));
+            return options;
+        }
     }
 
+    protected FormFieldDecoratorOptions createFieldDecoratorOptions() {
+        return new FormFieldDecoratorOptions();
+    }
+
+    protected FieldDecorator createFieldDecorator(final FormFieldDecoratorOptions options) {
+        return new FormFieldDecorator(options);
+    }
 }

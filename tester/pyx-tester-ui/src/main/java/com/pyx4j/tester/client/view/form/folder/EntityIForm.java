@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
@@ -57,7 +57,7 @@ public class EntityIForm extends CForm<EntityI> {
 
     @Override
     protected IsWidget createContent() {
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Main Form"));
         formPanel.append(Location.Left, proto().textBox()).decorate();
@@ -103,7 +103,7 @@ public class EntityIForm extends CForm<EntityI> {
 
         @Override
         protected IsWidget createContent() {
-            DualColumnForm formPanel = new DualColumnForm(this);
+            FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().optionalTextI()).decorate();
             formPanel.append(Location.Left, proto().optionalInteger()).decorate();

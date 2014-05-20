@@ -30,7 +30,7 @@ import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 
-public abstract class DualColumnFormPanelTheme extends Theme {
+public abstract class FormPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         FluidPanel, FluidPanelBlock,
@@ -41,12 +41,10 @@ public abstract class DualColumnFormPanelTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        collapsed,
-
-        left, right, dual;
+        collapsed, left, right, dual;
     }
 
-    public DualColumnFormPanelTheme() {
+    public FormPanelTheme() {
         initStyles();
     }
 

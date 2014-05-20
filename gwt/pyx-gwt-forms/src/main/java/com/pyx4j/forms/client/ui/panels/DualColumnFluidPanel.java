@@ -121,7 +121,7 @@ public class DualColumnFluidPanel implements IsWidget {
     protected class ContentPanel extends FlowPanel implements ILayoutable {
 
         public ContentPanel() {
-            setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanel.name());
+            setStyleName(FormPanelTheme.StyleName.FluidPanel.name());
         }
 
         @Override
@@ -139,9 +139,9 @@ public class DualColumnFluidPanel implements IsWidget {
 
         public void setCollapsed(boolean collapsed) {
             if (collapsed) {
-                contentPanel.addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
+                contentPanel.addStyleDependentName(FormPanelTheme.StyleDependent.collapsed.name());
             } else {
-                contentPanel.removeStyleDependentName(DualColumnFormPanelTheme.StyleDependent.collapsed.name());
+                contentPanel.removeStyleDependentName(FormPanelTheme.StyleDependent.collapsed.name());
             }
         }
 
@@ -158,16 +158,16 @@ public class DualColumnFluidPanel implements IsWidget {
 
         public BlockPanel(Location location) {
             this.location = location;
-            setStyleName(DualColumnFormPanelTheme.StyleName.FluidPanelBlock.name());
+            setStyleName(FormPanelTheme.StyleName.FluidPanelBlock.name());
             switch (location) {
             case Left:
-                addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.left.name());
+                addStyleDependentName(FormPanelTheme.StyleDependent.left.name());
                 break;
             case Right:
-                addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.right.name());
+                addStyleDependentName(FormPanelTheme.StyleDependent.right.name());
                 break;
             case Dual:
-                addStyleDependentName(DualColumnFormPanelTheme.StyleDependent.dual.name());
+                addStyleDependentName(FormPanelTheme.StyleDependent.dual.name());
                 break;
             }
         }

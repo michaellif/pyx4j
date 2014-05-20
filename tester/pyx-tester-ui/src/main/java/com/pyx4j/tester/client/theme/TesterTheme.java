@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.datatable.DataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultFolderTheme;
-import com.pyx4j.forms.client.ui.panels.DualColumnFormPanelTheme;
+import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -77,7 +77,7 @@ public class TesterTheme extends Theme {
             }
         });
 
-        addTheme(new DualColumnFormPanelTheme() {
+        addTheme(new FormPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.object1;

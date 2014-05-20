@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.TextBox;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.DualColumnFormPanel;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -52,7 +52,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
     public NativeWidgetBasicViewImpl() {
         setSize("100%", "100%");
 
-        DualColumnFormPanel formPanel = new DualColumnFormPanel();
+        FormPanel formPanel = new FormPanel(null);
 
         formPanel.h1(i18n.tr("Main Form"));
 

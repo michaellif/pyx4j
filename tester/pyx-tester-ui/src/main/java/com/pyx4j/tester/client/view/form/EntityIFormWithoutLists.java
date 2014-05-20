@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 import com.pyx4j.forms.client.ui.CSignature;
 import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.DualColumnForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -72,7 +72,7 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
     @Override
     protected IsWidget createContent() {
 
-        DualColumnForm formPanel = new DualColumnForm(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Main Form"));
 
