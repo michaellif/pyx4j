@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -38,7 +38,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
     }
 
     private IsWidget createGeneralPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(proto().permissionToEnterNote().getMeta().getCaption());
         formPanel.append(Location.Left, proto().permissionToEnterNote(), new PermissionToEnterNoteFolder(isEditable()));
@@ -54,7 +54,7 @@ public class MaintenanceRequestPolicyForm extends PolicyDTOTabPanelBasedForm<Mai
 
         @Override
         public IsWidget createEditorContent(CForm<PermissionToEnterNote> editor) {
-            BasicCFormPanel formPanel = new BasicCFormPanel(editor);
+            DualColumnForm formPanel = new DualColumnForm(editor);
 
             formPanel.append(Location.Left, proto().locale(), new CEntityLabel<AvailableLocale>()).decorate().componentWidth(120);
             formPanel.append(Location.Left, proto().text()).decorate();

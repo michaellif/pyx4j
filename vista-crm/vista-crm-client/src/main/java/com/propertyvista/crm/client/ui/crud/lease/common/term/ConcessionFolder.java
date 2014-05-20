@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -55,7 +55,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
 
             formPanel.append(Location.Left, proto().version().type()).decorate().componentWidth(160);
             formPanel.append(Location.Left, proto().version().value()).decorate().componentWidth(100);

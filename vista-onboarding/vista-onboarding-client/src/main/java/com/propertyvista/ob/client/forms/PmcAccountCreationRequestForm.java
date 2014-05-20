@@ -37,7 +37,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -83,7 +83,7 @@ public class PmcAccountCreationRequestForm extends CForm<PmcAccountCreationReque
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel contentPanel = new BasicCFormPanel(this);
+        DualColumnForm contentPanel = new DualColumnForm(this);
         contentPanel.addStyleName(Styles.PmcAccountCreationRequestForm.name());
 
         contentPanel.append(Location.Left, proto().dnsName()).decorate().assistantWidget(new Label(".propertyvista.com")).componentWidth(180).customLabel("")

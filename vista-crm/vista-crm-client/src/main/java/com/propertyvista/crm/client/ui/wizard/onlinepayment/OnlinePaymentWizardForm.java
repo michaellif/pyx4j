@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -105,15 +105,15 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         }
     }
 
-    private BasicCFormPanel createPricingStep() {
-        BasicCFormPanel main = new BasicCFormPanel(this);
+    private DualColumnForm createPricingStep() {
+        DualColumnForm main = new DualColumnForm(this);
         main.h1(i18n.tr("Pricing Information for Online Payments"));
         main.append(Location.Dual, onlinePaymentPricingTab = new OnlinePaymentPricingTab());
         return main;
     }
 
-    private BasicCFormPanel createBusinessInfoStep() {
-        BasicCFormPanel main = new BasicCFormPanel(this);
+    private DualColumnForm createBusinessInfoStep() {
+        DualColumnForm main = new DualColumnForm(this);
 
         main.h1(i18n.tr("Business Information"));
         Label collectionOfBusinessInformation = new Label();
@@ -123,8 +123,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private BasicCFormPanel createPersonalInfoStep() {
-        BasicCFormPanel main = new BasicCFormPanel(this);
+    private DualColumnForm createPersonalInfoStep() {
+        DualColumnForm main = new DualColumnForm(this);
         main.h1(i18n.tr("Personal Information"));
         Label collectionOfPersonalInformation = new Label();
         collectionOfPersonalInformation.setHTML(OnlinePaymentWizardResources.INSTANCE.collectionOfPersonalInformationForEquifaxExplanation().getText());
@@ -133,9 +133,9 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private BasicCFormPanel createPropertyAndBankingStep() {
+    private DualColumnForm createPropertyAndBankingStep() {
         // TODO add 'refundable deposit'? or not?
-        BasicCFormPanel main = new BasicCFormPanel(this);
+        DualColumnForm main = new DualColumnForm(this);
         main.h1(i18n.tr("Property and Banking"));
         main.append(Location.Dual, proto().propertyAccounts(), new PropertyAccountInfoFolder());
         get(proto().propertyAccounts()).addComponentValidator(new AbstractComponentValidator<List<PropertyAccountInfo>>() {
@@ -151,21 +151,21 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private BasicCFormPanel createConfirmationStep() {
-        BasicCFormPanel main = new BasicCFormPanel(this);
+    private DualColumnForm createConfirmationStep() {
+        DualColumnForm main = new DualColumnForm(this);
         main.h1(i18n.tr("Confirmation"));
         main.append(Location.Dual, makeServiceAgreementLabel());
         return main;
     }
 
-    private BasicCFormPanel createSignatureStep() {
+    private DualColumnForm createSignatureStep() {
         // TODO need to add actual signature, but pending the following questions:
         //     - the full text of the agreements is required
         //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla> 
         final int TOP_I_AGREE_PANEL_PADDING = 20;
         final int AGREEMENTS_SEPARATOR_PADDING = 20;
 
-        BasicCFormPanel main = new BasicCFormPanel(this);
+        DualColumnForm main = new DualColumnForm(this);
         main.h1(i18n.tr("Signature"));
 
         // CALEDON START

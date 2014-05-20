@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
@@ -64,7 +64,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Dual, proto().incomeSource(), new CEnumLabel());
         formPanel.append(Location.Dual, detailsHolder);
@@ -137,7 +137,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
                 formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(80);
@@ -187,7 +187,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
 
@@ -217,7 +217,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Dual, proto().name()).decorate().componentWidth(240);
 
@@ -248,7 +248,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
                 formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(80);
@@ -283,7 +283,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         return new CForm<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
 
@@ -314,7 +314,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
                 formPanel.append(Location.Left, proto().monthlyAmount()).decorate().componentWidth(160);
@@ -347,7 +347,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
         };
     }
 
-    private static void injectIEmploymentInfo(BasicCFormPanel formPanel, CForm<? extends IEmploymentInfo> parent) {
+    private static void injectIEmploymentInfo(DualColumnForm formPanel, CForm<? extends IEmploymentInfo> parent) {
         formPanel.h3(i18n.tr("Employment Info"));
         formPanel.append(Location.Left, parent.proto().monthlyAmount()).decorate().componentWidth(120);
         formPanel.append(Location.Right, parent.proto().position()).decorate().componentWidth(240);

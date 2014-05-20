@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -128,7 +128,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     }
 
     protected IsWidget createDetailsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         String participant = null;
         if (rootClass.equals(TenantDTO.class)) {
@@ -205,7 +205,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     }
 
     protected IsWidget createPaymentMethodsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Dual, proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")

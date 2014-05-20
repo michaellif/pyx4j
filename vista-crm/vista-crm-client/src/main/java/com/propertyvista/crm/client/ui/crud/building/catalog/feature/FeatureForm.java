@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -44,8 +44,8 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         addTab(createItemsTab(), i18n.tr("Items"));
     }
 
-    public BasicCFormPanel createGeneralTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    public DualColumnForm createGeneralTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("Information"));
         formPanel.append(Location.Left, proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))).decorate()
@@ -92,8 +92,8 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         return formPanel;
     }
 
-    public BasicCFormPanel createItemsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    public DualColumnForm createItemsTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Dual, proto().version().items(), new FeatureItemFolder(this));
 

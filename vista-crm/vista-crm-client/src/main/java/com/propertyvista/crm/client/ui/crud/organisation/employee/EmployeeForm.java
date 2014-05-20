@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -69,11 +69,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private final Tab privilegesTab, auditingTab, alertsTab;
 
-    private final BasicCFormPanel buildingsAccessPanel;
+    private final DualColumnForm buildingsAccessPanel;
 
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
-        buildingsAccessPanel = new BasicCFormPanel(this);
+        buildingsAccessPanel = new DualColumnForm(this);
         selectTab(addTab(createInfoTab(), i18n.tr("Personal Information")));
         privilegesTab = addTab(createPrivilegesTab(), i18n.tr("Privileges"));
         auditingTab = addTab(createAuditingConfigurationTab(), i18n.tr("Auditing"));
@@ -136,7 +136,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private IsWidget createInfoTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().employeeId()).decorate().componentWidth(100);
         formPanel.append(Location.Right, proto().title()).decorate().componentWidth(150);
@@ -166,7 +166,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private IsWidget createPrivilegesTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("Information"));
         formPanel.append(Location.Left, proto().password()).decorate();
@@ -209,7 +209,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private IsWidget createAuditingConfigurationTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().userAuditingConfiguration(), new UserAuditingConfigurationForm());
 
@@ -217,7 +217,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     private IsWidget createAlertsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().notifications(), new NotificationFolder());
 
@@ -266,7 +266,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
                 formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().componentWidth(200);
 
                 formPanel.h3(proto().buildings().getMeta().getCaption());

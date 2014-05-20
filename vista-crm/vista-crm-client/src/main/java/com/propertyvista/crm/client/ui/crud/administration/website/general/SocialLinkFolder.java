@@ -32,7 +32,7 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -134,7 +134,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
 
             CLabel<String> site = new CLabel<String>();
             site.setEditable(false);

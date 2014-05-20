@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -77,7 +77,7 @@ public class NameEditor extends CForm<Name> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         if (!isViewable()) {
             formPanel.append(Location.Left, proto().firstName()).decorate().componentWidth(220);

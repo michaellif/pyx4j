@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -40,7 +40,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
-    private BasicCFormPanel onlineStatusPanel;
+    private DualColumnForm onlineStatusPanel;
 
     public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
@@ -77,13 +77,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createInfoTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Dual, inject(proto().tenantInfo(), createTenantView()));
         return formPanel;
     }
 
     private IsWidget createFinancialTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Dual, inject(proto().tenantFinancials(), createFinancialView()));
         return formPanel;
     }
@@ -123,7 +123,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createApprovalTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().leaseApplication().status(), new CEnumLabel()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().leaseApplication().decidedBy()).decorate();
@@ -155,8 +155,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createOnlineStatusPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createOnlineStatusPanel() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h2(i18n.tr("Online Status Details"));
         formPanel.append(Location.Left, proto().leaseApplication().onlineApplication().status()).decorate();
@@ -169,7 +169,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private IsWidget createApplicationDocumentsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Dual, proto().applicationDocuments(), new LeaseApplicationDocumentFolder());
         return formPanel;
     }

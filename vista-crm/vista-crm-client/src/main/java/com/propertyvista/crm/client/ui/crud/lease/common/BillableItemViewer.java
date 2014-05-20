@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -61,9 +61,9 @@ public class BillableItemViewer extends CForm<BillableItem> {
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
-    private final BasicCFormPanel adjustmentPanel = new BasicCFormPanel(this);
+    private final DualColumnForm adjustmentPanel = new DualColumnForm(this);
 
-    private final BasicCFormPanel depositPanel = new BasicCFormPanel(this);
+    private final DualColumnForm depositPanel = new DualColumnForm(this);
 
     public BillableItemViewer() {
         super(BillableItem.class);
@@ -73,7 +73,7 @@ public class BillableItemViewer extends CForm<BillableItem> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().item(), new CEntityLabel<ProductItem>()).decorate();
         ((CEntityLabel<ProductItem>) get(proto().item())).setNavigationCommand(new Command() {

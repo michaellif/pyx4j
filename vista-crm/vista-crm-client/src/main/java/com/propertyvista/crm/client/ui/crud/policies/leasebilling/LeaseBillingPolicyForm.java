@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -86,7 +86,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     private IsWidget createBillingPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Left, proto().prorationMethod()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().confirmationMethod()).decorate().componentWidth(120);
 
@@ -102,7 +102,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     private IsWidget createLateFeesPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().lateFee().baseFeeType()).decorate().componentWidth(120);
         get(proto().lateFee().baseFeeType()).addValueChangeHandler(new ValueChangeHandler<LateFeeItem.BaseFeeType>() {
@@ -126,7 +126,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     private IsWidget createNsfFeesPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Left, proto().nsfFees(), new NsfFeeItemFolder(isEditable()));
 
         return formPanel;
@@ -302,7 +302,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
                 formPanel.append(Location.Left, proto().billingPeriod(), new CLabel<BillingPeriod>()).decorate().componentWidth(200).labelWidth(250);
                 formPanel.append(Location.Left, proto().billingCycleStartDay(), startDay).decorate().componentWidth(200).labelWidth(250);
                 formPanel.append(Location.Left, proto().paymentDueDayOffset(), dueDayOffset).decorate().componentWidth(200).labelWidth(250);

@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -34,7 +34,7 @@ public class PmcCompanyInfoForm extends CrmEntityForm<PmcCompanyInfoDTO> {
     public PmcCompanyInfoForm(IForm<PmcCompanyInfoDTO> view) {
         super(PmcCompanyInfoDTO.class, view);
 
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().companyName()).decorate();
 

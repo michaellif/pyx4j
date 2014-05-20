@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -504,7 +504,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
             formPanel.append(Location.Left, proto().selectParticipant(), selectCombo).decorate();
             return formPanel;
         }
@@ -553,7 +553,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
             formPanel
                     .append(Location.Left,
                             proto().file(),

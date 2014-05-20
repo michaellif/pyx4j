@@ -23,7 +23,7 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,7 +54,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
     }
 
     private IsWidget createGeneralPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().name()).decorate();
         formPanel.append(Location.Right, proto().website()).decorate();
@@ -79,7 +79,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
     }
 
     private IsWidget createBuildingsPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Dual, proto().buildings(), new LandlordBuildingFolder(this));
         return formPanel;
     }

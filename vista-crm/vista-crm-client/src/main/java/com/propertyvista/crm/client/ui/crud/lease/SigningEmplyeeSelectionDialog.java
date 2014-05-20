@@ -21,7 +21,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -73,7 +73,7 @@ public abstract class SigningEmplyeeSelectionDialog extends OkCancelDialog {
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
             formPanel.append(Location.Left, proto().employee(), createAgentComboBox()).decorate().componentWidth(160);
             return formPanel;
         }

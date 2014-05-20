@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -32,7 +32,7 @@ public class MaintenanceGadgetSummaryForm extends ZoomableViewForm<MaintenanceGa
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.h2(i18n.tr("Open:"));
         formPanel.append(Location.Left, proto().openWorkOrders()).decorate().customLabel("").useLabelSemicolon(false).componentWidth(50);
         formPanel.h2(i18n.tr("Urgent:"));

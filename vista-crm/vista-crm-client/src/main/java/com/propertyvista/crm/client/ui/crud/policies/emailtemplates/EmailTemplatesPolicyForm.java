@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -68,7 +68,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     private IsWidget createEmailTemplatesHeaderFooterPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Dual, proto().header()).decorate();
         formPanel.append(Location.Dual, proto().footer()).decorate();
@@ -77,7 +77,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     private IsWidget createEmailTemplatesPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Dual, proto().templates(), new EmailTemplateEditorFolder());
 
@@ -120,7 +120,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
                 formPanel.append(Location.Dual, proto().type()).decorate();
                 formPanel.append(Location.Dual, proto().subject()).decorate();

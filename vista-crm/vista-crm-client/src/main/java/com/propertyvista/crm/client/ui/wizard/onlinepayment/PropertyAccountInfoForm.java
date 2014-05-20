@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -34,7 +34,7 @@ public class PropertyAccountInfoForm extends CForm<OnlinePaymentSetupDTO.Propert
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Dual, proto().averageMonthlyRent()).decorate();
         formPanel.append(Location.Dual, proto().numberOfRentedUnits()).decorate();
         formPanel.append(Location.Dual, new HTML("&nbsp;"));

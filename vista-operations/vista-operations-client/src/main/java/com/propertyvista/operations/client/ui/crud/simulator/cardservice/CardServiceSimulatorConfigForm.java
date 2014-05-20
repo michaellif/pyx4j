@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,7 +30,7 @@ public class CardServiceSimulatorConfigForm extends OperationsEntityForm<CardSer
     public CardServiceSimulatorConfigForm(IForm<CardServiceSimulatorConfigDTO> view) {
         super(CardServiceSimulatorConfigDTO.class, view);
 
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().responseDelay()).decorate().componentWidth(80);
 

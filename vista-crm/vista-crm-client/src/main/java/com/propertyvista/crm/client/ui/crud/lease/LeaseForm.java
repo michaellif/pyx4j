@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -72,7 +72,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         CViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()
                 : new TransactionHistoryViewer();
@@ -82,7 +82,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     private IsWidget createCommunicationsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.append(Location.Dual, proto().letters(), new LegalLetterFolder());
         return formPanel;
     }

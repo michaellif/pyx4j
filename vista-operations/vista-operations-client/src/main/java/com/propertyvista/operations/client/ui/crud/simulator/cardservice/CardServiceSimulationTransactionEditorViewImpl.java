@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -33,7 +33,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
         public CardServiceSimulationTransactionForm(IForm<CardServiceSimulationTransaction> view) {
             super(CardServiceSimulationTransaction.class, view);
 
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
 
             formPanel.append(Location.Left, inject(proto().card(), // 
                     OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class), new FieldDecoratorBuilder(18).build()));

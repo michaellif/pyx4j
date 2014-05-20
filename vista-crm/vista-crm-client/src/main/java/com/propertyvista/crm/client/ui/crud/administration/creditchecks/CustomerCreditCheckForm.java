@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -41,7 +41,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
     public CustomerCreditCheckForm(IForm<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().screening().screene().person().name(), new CEntityHyperlink<Name>(new Command() {
             @Override

@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -94,7 +94,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private Tab catalogTab = null;
 
-    private BasicCFormPanel ilsEmailProfilePanel;
+    private DualColumnForm ilsEmailProfilePanel;
 
     public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
@@ -178,8 +178,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         });
     }
 
-    private BasicCFormPanel createGeneralTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createGeneralTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("Building Summary"));
         formPanel.append(Location.Left, proto().propertyCode()).decorate().componentWidth(120);
@@ -220,8 +220,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createDetailsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createDetailsTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("Information"));
 
@@ -279,8 +279,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createMachanicalsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createMachanicalsTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h4(i18n.tr("Elevators"));
         formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
@@ -292,8 +292,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createAddOnsTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createAddOnsTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h4(i18n.tr("Parking"));
         formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
@@ -303,8 +303,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createFinancialTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createFinancialTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().financial().dateAcquired()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().financial().purchasePrice()).decorate().componentWidth(100);
@@ -328,8 +328,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createMarketingTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createMarketingTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("Marketing Summary"));
         formPanel.append(Location.Dual, proto().marketing(), new MarketingEditor(this));
@@ -349,7 +349,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
-                BasicCFormPanel formPanel = new BasicCFormPanel(entryForm);
+                DualColumnForm formPanel = new DualColumnForm(entryForm);
 
                 formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150);
                 formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150);
@@ -372,8 +372,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createCatalogTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createCatalogTab() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h4(i18n.tr("Services"));
         formPanel.append(Location.Dual, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
@@ -387,8 +387,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createContactTab() {
-        BasicCFormPanel flexPanel = new BasicCFormPanel(this);
+    private DualColumnForm createContactTab() {
+        DualColumnForm flexPanel = new DualColumnForm(this);
 
         flexPanel.append(Location.Left, proto().contacts().supportPhone()).decorate().componentWidth(200);
 
@@ -469,7 +469,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 160);
@@ -483,8 +483,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
     }
 
-    private BasicCFormPanel createILSEmailProfilePanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createILSEmailProfilePanel() {
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("ILS Email Profile"));
         formPanel.append(Location.Left, proto().ilsEmail().maxAds()).decorate().componentWidth(60);
@@ -540,7 +540,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Dual, proto().vendor(), new CEnumLabel()).decorate();
                 formPanel.append(Location.Left, proto().maxAds()).decorate().componentWidth(50);

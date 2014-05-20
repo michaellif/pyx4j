@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.profile.paymentmetho
 import java.util.List;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,7 +35,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     public PmcPaymentMethodsForm(IForm<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         noPaymentMethodsMessage = new Label();
         noPaymentMethodsMessage.setText(i18n.tr("There are no payment methods. Click 'Edit' to add a new payment method"));

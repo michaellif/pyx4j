@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -39,7 +39,7 @@ public class AutoPayChangesReportSettingsForm extends CForm<AutoPayChangesReport
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         FlowPanel leftSidePanel = new FlowPanel();
 

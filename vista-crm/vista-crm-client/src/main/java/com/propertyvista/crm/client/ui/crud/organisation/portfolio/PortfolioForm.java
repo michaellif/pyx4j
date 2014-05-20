@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -29,7 +29,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
     public PortfolioForm(IForm<Portfolio> view) {
         super(Portfolio.class, view);
 
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(i18n.tr("Information"));
         formPanel.append(Location.Left, proto().name()).decorate();

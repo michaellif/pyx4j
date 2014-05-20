@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -87,19 +87,19 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private BasicCFormPanel categoryPanel;
+    private DualColumnForm categoryPanel;
 
-    private BasicCFormPanel accessPanel;
+    private DualColumnForm accessPanel;
 
-    private BasicCFormPanel unitAccessPanel;
+    private DualColumnForm unitAccessPanel;
 
-    private BasicCFormPanel statusPanel;
+    private DualColumnForm statusPanel;
 
-    private BasicCFormPanel scheduledPanel;
+    private DualColumnForm scheduledPanel;
 
-    private BasicCFormPanel resolvedPanel;
+    private DualColumnForm resolvedPanel;
 
-    private BasicCFormPanel surveyPanel;
+    private DualColumnForm surveyPanel;
 
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
@@ -167,8 +167,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
     }
 
-    private BasicCFormPanel createGeneralTab() {
-        BasicCFormPanel panel = new BasicCFormPanel(this);
+    private DualColumnForm createGeneralTab() {
+        DualColumnForm panel = new DualColumnForm(this);
 
         panel.append(Location.Left, inject(proto().reportedDate())).decorate().componentWidth(100);
         panel.append(Location.Right, inject(proto().requestId())).decorate().componentWidth(200);
@@ -207,7 +207,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         // category panel
         panel.h1(i18n.tr("Issue Classification"));
-        panel.append(Location.Dual, categoryPanel = new BasicCFormPanel(this));
+        panel.append(Location.Dual, categoryPanel = new DualColumnForm(this));
         // bind root category component
         bind(mrCategory = new MaintenanceRequestCategoryChoice(), proto().category());
 
@@ -227,7 +227,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
-                BasicCFormPanel main = new BasicCFormPanel(entryForm);
+                DualColumnForm main = new DualColumnForm(entryForm);
                 main.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150).componentWidth(160).build();
 
                 return main.asWidget();
@@ -237,12 +237,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(320);
 
         // --------------------------------------------------------------------------------------------------------------------
-        unitAccessPanel = new BasicCFormPanel(this);
+        unitAccessPanel = new DualColumnForm(this);
 
         unitAccessPanel.h1(i18n.tr("Unit Access"));
 
         unitAccessPanel.append(Location.Dual, inject(proto().permissionToEnter())).decorate().componentWidth(200);
-        unitAccessPanel.append(Location.Dual, accessPanel = new BasicCFormPanel(this));
+        unitAccessPanel.append(Location.Dual, accessPanel = new DualColumnForm(this));
 
         get(proto().permissionToEnter()).setNote(i18n.tr("Indicate whether Permission to Enter has been granted by Tenant."));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -266,7 +266,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.append(Location.Dual, unitAccessPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
-        statusPanel = new BasicCFormPanel(this);
+        statusPanel = new DualColumnForm(this);
 
         statusPanel.h1(i18n.tr("Status"));
 
@@ -279,14 +279,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         //       statusPanel.getFlexCellFormatter().getElement(rowAnchor, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
 
         // --------------------------------------------------------------------------------------------------------------------
-        scheduledPanel = new BasicCFormPanel(this);
+        scheduledPanel = new DualColumnForm(this);
 
         scheduledPanel.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
         scheduledPanel.append(Location.Left, inject(proto().scheduledTimeFrom(), new CTimeLabel())).decorate().componentWidth(100);
         scheduledPanel.append(Location.Left, inject(proto().scheduledTimeTo(), new CTimeLabel())).decorate().componentWidth(100);
 
         // --------------------------------------------------------------------------------------------------------------------
-        resolvedPanel = new BasicCFormPanel(this);
+        resolvedPanel = new DualColumnForm(this);
 
         resolvedPanel.append(Location.Left, inject(proto().resolvedDate(), new CDateLabel())).decorate().componentWidth(100);
         resolvedPanel.append(Location.Left, inject(proto().resolution(), new CLabel<String>())).decorate().componentWidth(400);
@@ -297,7 +297,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.append(Location.Dual, statusPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
-        surveyPanel = new BasicCFormPanel(this);
+        surveyPanel = new DualColumnForm(this);
 
         surveyPanel.h1(proto().surveyResponse().getMeta().getCaption());
 
@@ -385,14 +385,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         return value;
     }
 
-    private BasicCFormPanel createWorkHistoryTab() {
-        BasicCFormPanel panel = new BasicCFormPanel(this);
+    private DualColumnForm createWorkHistoryTab() {
+        DualColumnForm panel = new DualColumnForm(this);
         panel.append(Location.Dual, inject(proto().workHistory(), new MaintenanceRequestScheduleFolder()));
         return panel;
     }
 
-    private BasicCFormPanel createStatusHistoryTab() {
-        BasicCFormPanel panel = new BasicCFormPanel(this);
+    private DualColumnForm createStatusHistoryTab() {
+        DualColumnForm panel = new DualColumnForm(this);
         panel.append(Location.Dual, inject(proto().statusHistory(), new StatusHistoryFolder()));
         return panel;
     }
@@ -638,7 +638,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                                     @Override
                                     protected IsWidget createContent() {
-                                        BasicCFormPanel main = new BasicCFormPanel(this);
+                                        DualColumnForm main = new DualColumnForm(this);
 
                                         main.append(Location.Left, inject(proto().workDescription(), new CLabel<String>())).decorate().componentWidth(400);
                                         main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
@@ -683,7 +683,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel content = new BasicCFormPanel(this);
+                DualColumnForm content = new DualColumnForm(this);
                 content.h1(i18n.tr("Work Order"));
                 content.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
                 content.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
@@ -715,7 +715,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel content = new BasicCFormPanel(this);
+                DualColumnForm content = new DualColumnForm(this);
 
                 content.h1(i18n.tr("Notice Of Entry"));
                 content.append(Location.Dual, inject(proto().messageDate())).decorate().componentWidth(350);
@@ -747,7 +747,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel content = new BasicCFormPanel(this);
+                DualColumnForm content = new DualColumnForm(this);
                 // left side
                 content.append(Location.Left, inject(proto().created())).decorate();
                 content.append(Location.Left, inject(proto().updatedBy(), new CEntityLabel<AbstractPmcUser>())).decorate();

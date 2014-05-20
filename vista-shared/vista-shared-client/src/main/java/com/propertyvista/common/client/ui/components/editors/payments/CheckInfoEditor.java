@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.payment.AccountType;
@@ -30,7 +30,7 @@ public class CheckInfoEditor extends CForm<CheckInfo> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().bankName()).decorate().componentWidth(250);

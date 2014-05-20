@@ -22,7 +22,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
@@ -53,7 +53,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
 
     private Label companyNameLabel;
 
-    private BasicCFormPanel personalInfoStepPanel;
+    private DualColumnForm personalInfoStepPanel;
 
     private Label costPerApplicantLabel;
 
@@ -110,16 +110,16 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         }
     }
 
-    private BasicCFormPanel createPricingStep() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createPricingStep() {
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.h1(i18n.tr("Pricing"));
         formPanel.h2(proto().creditPricingOption().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().creditPricingOption(), new CCreditCheckReportTypeSelector(CreditCheckWizardResources.INSTANCE));
         return formPanel;
     }
 
-    private BasicCFormPanel createBusinessInfoStep() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createBusinessInfoStep() {
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.h1(i18n.tr("Business & Corporate Information"));
 
         Label collectionOfbusinessInformationExplanation = new Label();
@@ -130,8 +130,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         return formPanel;
     }
 
-    private BasicCFormPanel createPersonalInfoStep() {
-        personalInfoStepPanel = new BasicCFormPanel(this);
+    private DualColumnForm createPersonalInfoStep() {
+        personalInfoStepPanel = new DualColumnForm(this);
         personalInfoStepPanel.h1(i18n.tr("Personal Information"));
 
         Label collectionOfPersonalInformationForEquifaxExplanation = new Label();
@@ -145,8 +145,8 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
         return personalInfoStepPanel;
     }
 
-    private BasicCFormPanel createConfirmationStep() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+    private DualColumnForm createConfirmationStep() {
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.h1(i18n.tr("Confirmation and Payment Information"));
 
         Label confirmationAndPaymentText = new Label();

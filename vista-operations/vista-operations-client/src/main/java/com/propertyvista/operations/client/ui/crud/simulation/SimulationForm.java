@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -49,7 +49,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private IsWidget createGeneralTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h2(i18n.tr("Cache"));
         formPanel.append(Location.Left, proto().generalCacheEnabled()).decorate().componentWidth(80);
@@ -69,7 +69,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private IsWidget createCaledonTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h2(i18n.tr("Funds Transfer"));
         formPanel.append(Location.Left, proto().systems().useFundsTransferSimulator()).decorate().componentWidth(80);
@@ -82,7 +82,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private IsWidget createYardiTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().systems().yardiAllTenantsToHaveEmails()).decorate().componentWidth(80);
 
@@ -95,7 +95,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private IsWidget createEquifaxTab() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().systems().useEquifaxSimulator()).decorate().componentWidth(80);
 

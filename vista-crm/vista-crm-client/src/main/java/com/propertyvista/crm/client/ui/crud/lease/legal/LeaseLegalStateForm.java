@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
@@ -43,7 +43,7 @@ public class LeaseLegalStateForm extends CForm<LeaseLegalStateDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
         formPanel.h1(i18n.tr("Current Status"));
         formPanel.append(Location.Dual, proto().current(), new LegalStatusForm(false));
         formPanel.append(Location.Dual, createCommandBar());

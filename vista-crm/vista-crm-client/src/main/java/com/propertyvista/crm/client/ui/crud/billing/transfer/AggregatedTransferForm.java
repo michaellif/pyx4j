@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -31,7 +31,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
     }
 
     public void createTabs() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().paymentDate()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().status()).decorate().componentWidth(120);

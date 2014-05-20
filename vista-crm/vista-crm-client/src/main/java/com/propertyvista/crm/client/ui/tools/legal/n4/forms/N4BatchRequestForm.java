@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -65,7 +65,7 @@ public class N4BatchRequestForm extends CForm<N4BatchRequestDTO> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         FlowPanel n4FillingSettingsPanel = new FlowPanel();
         n4FillingSettingsPanel.add(inject(proto().noticeDate(), new MyDecoratorBuilder().width("150px").build()));

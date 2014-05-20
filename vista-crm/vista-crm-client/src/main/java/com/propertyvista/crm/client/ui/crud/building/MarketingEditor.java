@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
@@ -61,7 +61,7 @@ public class MarketingEditor extends CForm<Marketing> {
 
     @Override
     protected IsWidget createContent() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(160);
         formPanel.append(Location.Right, proto().visibility()).decorate().componentWidth(100);
@@ -119,7 +119,7 @@ public class MarketingEditor extends CForm<Marketing> {
 
         @Override
         protected IsWidget createContent() {
-            BasicCFormPanel formPanel = new BasicCFormPanel(this);
+            DualColumnForm formPanel = new DualColumnForm(this);
 
             formPanel.append(Location.Left, proto().value()).decorate();
             formPanel.append(Location.Right, proto().description()).decorate();
@@ -146,7 +146,7 @@ public class MarketingEditor extends CForm<Marketing> {
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().eventDate()).decorate();
                 formPanel.append(Location.Left, proto().startTime()).decorate();

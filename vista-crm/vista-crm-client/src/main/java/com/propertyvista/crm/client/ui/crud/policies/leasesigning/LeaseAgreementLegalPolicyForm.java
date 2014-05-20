@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicCFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -41,7 +41,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
     }
 
     private IsWidget createTermsPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(proto().legal().getMeta().getCaption());
         formPanel.append(Location.Left, proto().legal(), new LegalTermFolder(isEditable()));
@@ -50,7 +50,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
     }
 
     private IsWidget createConfirmationPanel() {
-        BasicCFormPanel formPanel = new BasicCFormPanel(this);
+        DualColumnForm formPanel = new DualColumnForm(this);
 
         formPanel.h1(proto().confirmation().getMeta().getCaption());
         formPanel.append(Location.Left, inject(proto().confirmation(), new ConfirmationTermFolder(isEditable())));
@@ -77,7 +77,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
@@ -106,7 +106,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
 
             @Override
             protected IsWidget createContent() {
-                BasicCFormPanel formPanel = new BasicCFormPanel(this);
+                DualColumnForm formPanel = new DualColumnForm(this);
 
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
                 formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
