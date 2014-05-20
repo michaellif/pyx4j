@@ -81,10 +81,8 @@ public class ChargesSummaryGadget extends FlowPanel {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getValue()));
             }
 
-            if (!onlineApplication.leaseChargesData().totalMonthlyCharge().isNull()) {
-                contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
-                        .totalMonthlyCharge().getMeta().getCaption()));
-            }
+            contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
+                    .totalMonthlyCharge().getMeta().getCaption()));
         }
 
         monthlySection.setContentHTML(contentBuilder.length() > 0 ? contentBuilder.toString() : "&nbsp;");
@@ -97,6 +95,11 @@ public class ChargesSummaryGadget extends FlowPanel {
         if (onlineApplication != null && !onlineApplication.payment().isNull()) {
             for (Deposit d : onlineApplication.payment().deposits()) {
                 contentBuilder.append(formatCharge(d.amount().getValue(), d.description().getValue()));
+            }
+
+            if (!onlineApplication.payment().deposits().isEmpty()) {
+                contentBuilder.append(formatCharge(onlineApplication.payment().totalDeposits().getValue(), onlineApplication.payment().totalDeposits()
+                        .getMeta().getCaption()));
             }
         }
 

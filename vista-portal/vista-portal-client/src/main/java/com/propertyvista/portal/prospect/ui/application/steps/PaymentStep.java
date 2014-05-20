@@ -100,6 +100,7 @@ public class PaymentStep extends ApplicationWizardStep {
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             depositHeader = formPanel.h3(i18n.tr("Deposits"));
             formPanel.append(Location.Left, proto().payment().deposits(), new DepositFolder());
+            formPanel.append(Location.Left, proto().payment().totalDeposits()).decorate();
         }
 
         feesHeader = formPanel.h3(i18n.tr("Fees"));
@@ -197,6 +198,7 @@ public class PaymentStep extends ApplicationWizardStep {
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             depositHeader.setVisible(isDepositsPresent);
             get(proto().payment().deposits()).setVisible(isDepositsPresent);
+            get(proto().payment().totalDeposits()).setVisible(isDepositsPresent);
         }
 
         boolean isFeesPresent = !getValue().payment().applicationFee().isNull();

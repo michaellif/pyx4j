@@ -823,7 +823,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // current balance: -------------------------------------------------------------------------------------------------------
 
         // calculate deposits/fee:
-        dto.deposits().addAll(calculateDeposits(lease));
+        dto.deposits().addAll(fillDeposits(lease));
+        dto.totalDeposits().setValue(calculateTotalDeposits(dto.deposits()));
 
         ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ProspectPortalPolicy.class);
         if (policy.feePayment().getValue() == FeePayment.perApplicant) {
@@ -843,7 +844,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.payment().set(dto);
     }
 
-    private List<Deposit> calculateDeposits(Lease lease) {
+    private List<Deposit> fillDeposits(Lease lease) {
         List<Deposit> deposits = new ArrayList<>();
 
         LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
@@ -854,6 +855,16 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         }
 
         return deposits;
+    }
+
+    private BigDecimal calculateTotalDeposits(List<Deposit> deposits) {
+        BigDecimal value = BigDecimal.ZERO;
+
+        for (Deposit deposit : deposits) {
+            value = value.add(deposit.amount().getValue());
+        }
+
+        return value;
     }
 
     private class NonZeroDepositPredicate implements Predicate<Deposit> {

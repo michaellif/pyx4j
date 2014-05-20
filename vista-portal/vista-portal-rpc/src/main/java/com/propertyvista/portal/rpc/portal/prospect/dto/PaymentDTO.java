@@ -46,5 +46,10 @@ public interface PaymentDTO extends PaymentDataDTO, PaymentRecord {
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.moneylabel)
+    IPrimitive<BigDecimal> totalDeposits();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> applicationFee();
 }
