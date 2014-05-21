@@ -145,28 +145,44 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    boolean duplicate = false;
-
-                    Collection<String> emails = new ArrayList<>();
-                    emails.add(getComponent().getValue().applicant().person().email().getValue());
-
-                    for (CoapplicantDTO coap : getComponent().getValue().coapplicants()) {
-                        emails.add(coap.email().getValue());
+                    if (hasDuplicateEmails(getComponent().getValue())) {
+                        return new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
                     }
 
-                    for (GuarantorDTO grnt : getComponent().getValue().guarantors()) {
-                        if (emails.contains(grnt.email().getValue())) {
-                            duplicate = true;
-                            break;
-                        }
-                    }
-
-                    if (duplicate) {
-                        new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
+                    if (hasNoPhone(getComponent().getValue())) {
+                        return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant!"));
                     }
                 }
 
                 return null;
+            }
+
+            private boolean hasDuplicateEmails(OnlineApplicationDTO value) {
+                boolean duplicate = false;
+
+                Collection<String> emails = new ArrayList<>();
+                emails.add(value.applicant().person().email().getValue());
+
+                for (CoapplicantDTO coap : value.coapplicants()) {
+                    emails.add(coap.email().getValue());
+                }
+
+                for (GuarantorDTO grnt : value.guarantors()) {
+                    if (emails.contains(grnt.email().getValue())) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+
+                return duplicate;
+            }
+
+            private boolean hasNoPhone(OnlineApplicationDTO value) {
+                //@formatter:off
+                return ( value.applicant().person().homePhone().isNull() &&
+                         value.applicant().person().mobilePhone().isNull() &&
+                         value.applicant().person().workPhone().isNull() );
+                //@formatter:on
             }
         });
     }
