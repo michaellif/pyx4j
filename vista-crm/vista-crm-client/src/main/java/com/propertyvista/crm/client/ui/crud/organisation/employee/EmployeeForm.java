@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -84,15 +85,18 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     @Override
     public void addValidations() {
         super.addValidations();
+
         get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() == null || !getComponent().getValue().equals(get(proto().password()).getValue())) {
+                if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().password()).getValue())) {
                     return new BasicValidationError(getComponent(), i18n.tr("The passwords don't match. Please retype the passwords."));
                 }
                 return null;
             }
         });
+
+        get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
         get(proto().birthDate()).addComponentValidator(new BirthdayDateValidator());
     }
