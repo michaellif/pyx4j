@@ -41,7 +41,7 @@ public class AddressMapper {
         address.streetName().setValue(streetName);
 
         address.city().setValue(mitsAddress.getCity());
-        address.province().code().setValue(mitsAddress.getState());
+        address.province().setValue(mitsAddress.getState());
         address.postalCode().setValue(mitsAddress.getPostalCode());
 
         return address;

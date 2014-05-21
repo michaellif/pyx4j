@@ -185,10 +185,14 @@ public class CommonsGenerator {
         }
     }
 
+    public static InternationalAddress createRandomInternationalAddress() {
+        return toInternational(createRandomAddress());
+    }
+
     private static InternationalAddress toInternational(AddressStructured as) {
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
         address.streetNumber().setValue(as.streetNumber().getValue());
-        address.streetName().setValue(as.streetName().getValue() + " " + as.streetType().getStringView());
+        address.streetName().setValue(as.streetName().getStringView() + " " + as.streetType().getStringView());
         address.city().setValue(as.city().getValue());
         address.province().setValue(as.province().name().getValue());
         address.country().setValue(as.country().getValue());

@@ -25,13 +25,7 @@ public interface LeaseApplicationDocumentDataResidenceDTO extends IEntity {
 
     IPrimitive<String> streetNumber();
 
-    IPrimitive<String> streetNumberSuffix();
-
     IPrimitive<String> streetName();
-
-    IPrimitive<String> streetType();
-
-    IPrimitive<String> streetDirection();
 
     IPrimitive<String> city();
 

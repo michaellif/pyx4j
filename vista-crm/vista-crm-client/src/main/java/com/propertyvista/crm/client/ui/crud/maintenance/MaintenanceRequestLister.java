@@ -98,7 +98,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
             public String convert(IEntity entity) {
                 if (entity instanceof MaintenanceRequestDTO) {
                     InternationalAddress addr = ((MaintenanceRequestDTO) entity).building().info().address();
-                    return SimpleMessageFormat.format("{0} {1}, {3}", //
+                    return SimpleMessageFormat.format("{0,choice,null#|!null#{0} }{1}, {3}", //
                             addr.streetNumber().getValue(), addr.streetName().getValue(), addr.city().getValue());
                 }
                 return super.convert(entity);

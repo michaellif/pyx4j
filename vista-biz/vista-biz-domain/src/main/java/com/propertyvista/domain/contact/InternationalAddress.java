@@ -42,7 +42,7 @@ public interface InternationalAddress extends IEntity {
     IPrimitive<String> streetName();
 
     @ToString(index = 2)
-    IPrimitive<String> unitNumber();
+    IPrimitive<String> suiteNumber();
 
     @NotNull
     @ToString(index = 3)

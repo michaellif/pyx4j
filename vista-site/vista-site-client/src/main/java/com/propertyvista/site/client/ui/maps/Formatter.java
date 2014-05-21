@@ -34,9 +34,9 @@ class Formatter {
         StringBuffer addrString = new StringBuffer();
 
         addrString.append(address.streetNumber().getStringView()).append(" ").append(address.streetName().getStringView());
-        if (!address.unitNumber().isNull()) {
+        if (!address.suiteNumber().isNull()) {
             addrString.append(", ");
-            addrString.append(address.unitNumber().getStringView());
+            addrString.append(address.suiteNumber().getStringView());
         }
 
         if (!address.city().isNull()) {

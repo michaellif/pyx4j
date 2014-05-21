@@ -99,7 +99,7 @@ public class BuildingsGenerator {
     }
 
     private String getName(InternationalAddress address) {
-        return address.streetNumber().getValue() + " " + address.streetName().getValue();
+        return address.streetNumber().getStringView() + " " + address.streetName().getStringView();
     }
 
     private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, InternationalAddress address, String email) {

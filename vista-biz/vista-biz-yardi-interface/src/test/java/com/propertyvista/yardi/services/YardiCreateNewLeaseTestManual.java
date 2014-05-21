@@ -37,7 +37,6 @@ import com.propertyvista.biz.system.yardi.YardiLeaseApplicationFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -401,12 +400,11 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
     private PriorAddress getAddress() {
         PriorAddress addr = EntityFactory.create(PriorAddress.class);
         addr.country().name().setValue("Canada");
-        addr.province().name().setValue("Ontario");
+        addr.province().setValue("Ontario");
         addr.postalCode().setValue("M5H 1A1");
         addr.city().setValue("Toronto");
-        addr.streetName().setValue("King");
+        addr.streetName().setValue("King St");
         addr.streetNumber().setValue("100");
-        addr.streetType().setValue(StreetType.street);
         return addr;
     }
 

@@ -48,11 +48,13 @@ import com.yardi.entity.mits.Information;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -94,7 +96,7 @@ public class YardiGuestProcessor {
         return prospect;
     }
 
-    public Prospect getProspect(Name name, AddressStructured addr, String prospectId, String propertyId) {
+    public Prospect getProspect(Name name, InternationalAddress addr, String prospectId, String propertyId) {
         Prospect guest = new Prospect();
         guest.setLastUpdateDate(new Timestamp(new Date().getTime()));
         // add prospect
@@ -249,7 +251,7 @@ public class YardiGuestProcessor {
         return appEvent;
     }
 
-    private Customer getCustomer(CustomerInfo type, Name name, AddressStructured addr, String propertyId, String thirdPartyId) {
+    private Customer getCustomer(CustomerInfo type, Name name, InternationalAddress addr, String propertyId, String thirdPartyId) {
         Customer customer = new Customer();
         customer.setType(type);
         customer.getIdentification().add(getThirdPartyId(thirdPartyId));
@@ -261,7 +263,7 @@ public class YardiGuestProcessor {
         return customer;
     }
 
-    private AddressStructured getCurrentAddress(com.propertyvista.domain.tenant.Customer customer) {
+    private InternationalAddress getCurrentAddress(com.propertyvista.domain.tenant.Customer customer) {
         try {
             return ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftOrFinal(customer, AttachLevel.Attached).version()
                     .currentAddress();
@@ -270,19 +272,20 @@ public class YardiGuestProcessor {
         }
     }
 
-    private AddressType getAddress(AddressStructured as) {
+    private AddressType getAddress(InternationalAddress ia) {
         AddressType addr = null;
-        if (as != null && !as.isNull()) {
+        if (ia != null && !ia.isNull()) {
             addr = new AddressType();
-            addr.setCountry(as.country().name().getValue());
-            if (addr.getCountry().equalsIgnoreCase("Canada")) {
-                addr.setProvince(as.province().name().getValue());
+            addr.setCountyName(ia.country().name().getValue());
+            if ("United States".equalsIgnoreCase(addr.getCountyName())) {
+                addr.setCountry("US");
+                addr.setState(getStateCode(ia.province().getValue()));
             } else {
-                addr.setState(as.province().code().getValue());
+                addr.setProvince(ia.province().getValue());
             }
-            addr.setPostalCode(as.postalCode().getValue());
-            addr.setCity(as.city().getValue());
-            addr.setAddressLine1(as.streetNumber().getValue() + " " + as.streetName().getValue() + " " + as.streetType().getValue().name());
+            addr.setPostalCode(ia.postalCode().getValue());
+            addr.setCity(ia.city().getValue());
+            addr.setAddressLine1(ia.streetNumber().getStringView() + " " + ia.streetName().getStringView());
             addr.setAddressType(AddressInfo.CURRENT);
         }
         return addr;
@@ -340,5 +343,13 @@ public class YardiGuestProcessor {
         agentName.setLastName(name);
         agent.setAgentName(agentName);
         return agent;
+    }
+
+    private String getStateCode(String stateName) {
+        EntityQueryCriteria<Province> crit = EntityQueryCriteria.create(Province.class);
+        crit.eq(crit.proto().name(), stateName);
+        crit.eq(crit.proto().country(), "United States");
+        Province prov = Persistence.service().retrieve(crit);
+        return prov == null ? null : prov.code().getValue();
     }
 }

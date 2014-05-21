@@ -98,7 +98,7 @@ public class MappingUtils {
         } else {
             address.streetName().setValue(mitsAddress.getAddress1());
         }
-        address.unitNumber().setValue(address2.toString());
+        address.suiteNumber().setValue(address2.toString());
 
         String importedCountry = mitsAddress.getCountry();
         if (StringUtils.isEmpty(importedCountry)) {

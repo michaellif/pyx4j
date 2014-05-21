@@ -55,7 +55,7 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
                             if (c == 0) {
                                 c = o1.info().address().streetName().compareTo(o2.info().address().streetName());
                                 if (c == 0) {
-                                    c = o1.info().address().unitNumber().compareTo(o2.info().address().unitNumber());
+                                    c = o1.info().address().suiteNumber().compareTo(o2.info().address().suiteNumber());
                                 }
                             }
                         }

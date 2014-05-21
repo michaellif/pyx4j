@@ -42,7 +42,7 @@ public class AddressConverter {
 
             dto.streetNumber().setValue(val(dbo.streetNumber()) + val(dbo.streetNumberSuffix()));
             dto.streetName().setValue(getStreetName(dbo));
-            dto.unitNumber().setValue(val(dbo.suiteNumber()));
+            dto.suiteNumber().setValue(val(dbo.suiteNumber()));
         }
 
         public String getStreetName(AddressStructured as) {

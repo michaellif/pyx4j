@@ -110,7 +110,7 @@ public class GeoLocator {
         sb.append(" ");
         sb.append(address.streetName().getStringView());
         sb.append(", ");
-        sb.append(address.unitNumber().getStringView());
+        sb.append(address.suiteNumber().getStringView());
         sb.append(", ");
         sb.append(address.city().getStringView());
         sb.append(", ");

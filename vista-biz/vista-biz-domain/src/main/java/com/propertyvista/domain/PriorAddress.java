@@ -27,11 +27,11 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 
 @EmbeddedEntity
 @Table(name = "pt_address")
-public interface PriorAddress extends AddressStructured {
+public interface PriorAddress extends InternationalAddress {
 
     @I18n
     public enum OwnedRented {

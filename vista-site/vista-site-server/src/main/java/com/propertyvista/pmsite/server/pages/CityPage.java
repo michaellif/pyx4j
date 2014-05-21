@@ -133,8 +133,8 @@ public class CityPage extends BasePage {
                 InternationalAddress addr = building.info().address();
                 String title = addr.getStringView();
                 // No-Street-City-Province-Code
-                String ref = SimpleMessageFormat.format("{0} {1} {2} {3} {4}", addr.streetNumber().getValue(), addr.streetName().getValue(),
-                        addr.city().getValue(), addr.province().getValue(), building.propertyCode().getValue()).replaceAll(" ", "-");
+                String ref = SimpleMessageFormat.format("{0} {1} {2} {3} {4}", addr.streetNumber().getStringView(), addr.streetName().getStringView(),
+                        addr.city().getStringView(), addr.province().getStringView(), building.propertyCode().getStringView()).replaceAll(" ", "-");
                 WebMarkupContainer propEntry = new WebMarkupContainer(linkPanel.newChildId());
                 propEntry.add(new PageLink("propertyLink", AptDetailsPage.class, new PageParameters().set(0, ref)).setText(title));
                 linkPanel.add(propEntry);

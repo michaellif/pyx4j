@@ -114,7 +114,7 @@ public class ScreeningGenerator {
     private PriorAddress createPriorAddress() {
         PriorAddress address = EntityFactory.create(PriorAddress.class);
 
-        address.set(CommonsGenerator.createRandomAddress().duplicate(PriorAddress.class));
+        address.set(CommonsGenerator.createRandomInternationalAddress().duplicate(PriorAddress.class));
 
         address.moveInDate().setValue(RandomUtil.randomLogicalDate(2009, 2011));
         address.moveOutDate().setValue(RandomUtil.randomLogicalDate(2011, 2013));

@@ -196,7 +196,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         dto.leaseId().setValue(tenant.lease().leaseId().getValue());
 
         InternationalAddress address = AddressRetriever.getLeaseLegalAddress(tenant.lease());
-        dto.address().setValue(address.streetNumber().getValue() + " " + address.streetName().getValue());
+        dto.address().setValue(address.streetNumber().getStringView() + " " + address.streetName().getStringView());
         dto.cityZip().setValue(getCityZip(address));
         dto.city().setValue(address.city().getValue());
         dto.postalCode().setValue(address.postalCode().getValue());

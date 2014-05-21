@@ -45,7 +45,7 @@ public class BuildingsMerger {
     private void merge(InternationalAddress imported, InternationalAddress existing) {
         existing.streetNumber().setValue(imported.streetNumber().getValue());
         existing.streetName().setValue(imported.streetName().getValue());
-        existing.unitNumber().setValue(imported.unitNumber().getValue());
+        existing.suiteNumber().setValue(imported.suiteNumber().getValue());
         existing.city().setValue(imported.city().getValue());
         existing.province().set(imported.province());
         existing.country().set(imported.country());

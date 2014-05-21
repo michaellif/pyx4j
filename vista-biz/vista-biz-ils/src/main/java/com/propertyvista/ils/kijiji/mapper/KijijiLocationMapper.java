@@ -80,8 +80,8 @@ public class KijijiLocationMapper {
     }
 
     private String formatStreetAddress(InternationalAddress address) {
-        return SimpleMessageFormat.format("{0} {1}{2,choice,null#|!null#, {2}}", address.streetNumber().getValue(), address.streetName().getValue(), address
-                .unitNumber().getValue());
+        return SimpleMessageFormat.format("{0,choice,null#|!null#{0} }{1}{2,choice,null#|!null#, {2}}", address.streetNumber().getValue(), address.streetName()
+                .getValue(), address.suiteNumber().getValue());
     }
 
 }

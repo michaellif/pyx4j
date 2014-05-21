@@ -19,26 +19,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 
-public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress> {
+public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddress> {
 
     public PriorAddressEditor() {
         super(PriorAddress.class);
     }
 
-    public PriorAddressEditor(boolean twoColumns) {
-        super(PriorAddress.class, twoColumns);
-    }
-
     @Override
     protected IsWidget createContent() {
-        FormPanel main = internalCreateContent();
+        FormPanel main = (FormPanel) super.createContent();
 
         main.hr();
 

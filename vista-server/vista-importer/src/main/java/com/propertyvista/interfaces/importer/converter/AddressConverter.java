@@ -29,7 +29,7 @@ public class AddressConverter extends EntityBinder<InternationalAddress, Address
     protected void bind() {
         bind(toProto.streetNumber(), boProto.streetNumber());
         bind(toProto.streetName(), boProto.streetName());
-        bind(toProto.unitNumber(), boProto.unitNumber());
+        bind(toProto.unitNumber(), boProto.suiteNumber());
         bind(toProto.city(), boProto.city());
         bind(toProto.provinceName(), boProto.province());
         bind(toProto.countryName(), boProto.country().name());

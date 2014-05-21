@@ -52,7 +52,7 @@ public class Converter {
         to.propertyCode().set(from.propertyCode());
         to.address().streetNumber().set(from.info().address().streetNumber());
         to.address().streetName().set(from.info().address().streetName());
-        to.address().unitNumber().set(from.info().address().unitNumber());
+        to.address().suiteNumber().set(from.info().address().suiteNumber());
 
         to.address().city().set(from.info().address().city());
         to.address().province().set(from.info().address().province());

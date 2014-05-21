@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.util.editors;
+package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,31 +22,29 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
-import com.propertyvista.common.client.ui.components.editors.CountryContextCComponentProvider;
-import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.Country;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
-public class InternationalAddressEditor<A extends InternationalAddress> extends CForm<A> {
+public abstract class InternationalAddressEditorBase<A extends InternationalAddress> extends CForm<A> {
 
     private final CProvinceComboBox province = new CProvinceComboBox();
 
-    public InternationalAddressEditor(Class<A> entityClass) {
+    public InternationalAddressEditorBase(Class<A> entityClass) {
         this(entityClass, FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
     }
 
-    public InternationalAddressEditor(Class<A> entityClass, double labelWidth, double maxCompWidth, double contentWidth) {
+    public InternationalAddressEditorBase(Class<A> entityClass, double labelWidth, double maxCompWidth, double contentWidth) {
         super(entityClass);
     }
 
     @Override
     protected IsWidget createContent() {
-        PortalFormPanel formPanel = new PortalFormPanel(this);
+        FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().streetNumber()).decorate();
         formPanel.append(Location.Left, proto().streetName()).decorate();

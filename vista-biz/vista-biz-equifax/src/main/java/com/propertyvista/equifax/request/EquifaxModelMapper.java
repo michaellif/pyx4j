@@ -341,7 +341,7 @@ public class EquifaxModelMapper {
         city.setValue(vistaAddress.city().getValue());
         efxAddress.setCity(city);
         CodeType province = factory.createCodeType();
-        province.setCode(vistaAddress.province().code().getValue());
+        province.setCode(vistaAddress.province().getValue());
         //TODO Need to know Equifax point of view on this
         //province.setDescription(vistaAddress.province().name().getValue());
         efxAddress.setProvince(province);

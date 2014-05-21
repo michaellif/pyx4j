@@ -288,15 +288,11 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
     private void fillResidence(LeaseApplicationDocumentDataResidenceDTO residence, PriorAddress address) {
         residence.suiteNumber().setValue(address.suiteNumber().getValue());
         residence.streetNumber().setValue(address.streetNumber().getValue());
-
-        residence.streetNumberSuffix().setValue(address.streetNumberSuffix().getValue());
         residence.streetName().setValue(address.streetName().getValue());
-        residence.streetType().setValue(address.streetType().getStringView());
-        residence.streetDirection().setValue(address.streetDirection().getStringView());
         residence.city().setValue(address.city().getValue());
-        residence.province().setValue(address.province().name().getStringView());
+        residence.province().setValue(address.province().getStringView());
         residence.postalCode().setValue(address.postalCode().getStringView());
-        residence.country().setValue(address.province().country().name().getStringView());
+        residence.country().setValue(address.country().name().getStringView());
 
         residence.moveInDate().setValue(address.moveInDate().getValue());
         residence.moveOutDate().setValue(address.moveOutDate().getValue());
