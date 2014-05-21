@@ -52,7 +52,6 @@ public class NImage extends NField<IFile<?>, ImageSlider, CImage, ImageSlider> {
 
     public NImage(CImage cComponent) {
         super(cComponent);
-        setStyleName(CComponentTheme.StyleName.ImageHolder.name());
 
         imageSlider = new ImageSlider(getCComponent().getImageSize(), new ImageSliderDataProvider() {
 

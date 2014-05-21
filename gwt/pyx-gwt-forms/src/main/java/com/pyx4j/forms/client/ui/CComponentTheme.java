@@ -36,7 +36,7 @@ public class CComponentTheme extends Theme {
 
         TabbedFormTab,
 
-        ImageHolder, ImageEditorMenu
+        ImageEditorMenu
     }
 
     public static enum StyleDependent implements IStyleDependent {
