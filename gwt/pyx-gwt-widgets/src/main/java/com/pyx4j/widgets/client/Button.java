@@ -226,6 +226,7 @@ public class Button extends FocusPanel implements IFocusWidget {
     public void toggleActive() {
         this.fireEvent(new ClickEvent() {
         });
+        buttonFacesHandler.setActive(isActive());
     }
 
     public void click() {
@@ -296,8 +297,10 @@ public class Button extends FocusPanel implements IFocusWidget {
             if (button == null) {
                 return;
             }
-            if (button.isEnabled()) {
+            if (button.isEnabled() && active) {
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+            } else {
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
             }
         }
 
@@ -305,9 +308,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         public void onMouseOver(MouseOverEvent event) {
             mouseOver = true;
             if (button.isEnabled()) {
-                if (!button.active) {
-                    button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
-                }
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
             }
         }
 
@@ -315,9 +316,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         public void onMouseOut(MouseOutEvent event) {
             mouseOver = false;
             if (button.isEnabled()) {
-                if (!button.active) {
-                    button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
-                }
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
             }
         }
 
