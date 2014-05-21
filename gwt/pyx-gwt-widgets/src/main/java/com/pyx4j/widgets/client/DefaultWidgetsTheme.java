@@ -191,7 +191,7 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        style.addProperty("padding", "0 3px");
+        style.addProperty("padding", "6px 3px");
         style.addProperty("display", "inline-block");
         style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "pointer");

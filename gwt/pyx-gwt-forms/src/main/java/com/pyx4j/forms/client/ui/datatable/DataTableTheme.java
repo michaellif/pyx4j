@@ -133,11 +133,12 @@ public class DataTableTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.9);
         style.addProperty("height", "20px");
         style.addProperty("margin", "0 6px");
+        style.addProperty("padding", "0 6px");
         style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
-        style.addProperty("line-height", "22px");
+        style.addProperty("line-height", "21px");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
