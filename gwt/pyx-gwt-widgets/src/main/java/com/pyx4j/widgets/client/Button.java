@@ -347,10 +347,9 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         @Override
         public void onClick(ClickEvent event) {
-            if (!button.active) {
-                // fix for Buttons remain in Mouse Over position after they are clicked.
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
-            }
+            // fix for Buttons remain in Mouse Over position after they are clicked.
+            button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+
         }
 
         public Button getButton() {
