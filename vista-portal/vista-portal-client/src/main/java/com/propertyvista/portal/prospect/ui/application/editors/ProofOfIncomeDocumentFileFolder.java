@@ -55,7 +55,7 @@ public class ProofOfIncomeDocumentFileFolder extends PortalBoxFolder<ProofOfInco
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfIncomeDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfIncomeDocumentFile.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate().customLabel("").labelWidth(0);
+            formPanel.append(Location.Left, proto().file(), cfile).decorate();
             formPanel.append(Location.Left, proto().description()).decorate();
 
             return formPanel;

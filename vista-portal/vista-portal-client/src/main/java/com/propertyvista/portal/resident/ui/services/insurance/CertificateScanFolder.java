@@ -56,7 +56,7 @@ public class CertificateScanFolder extends PortalBoxFolder<InsuranceCertificateS
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(InsuranceCertificateScanResidentUploadService.class), new VistaFileURLBuilder(
                     InsuranceCertificateScan.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate().customLabel("").labelWidth(0);
+            formPanel.append(Location.Left, proto().file(), cfile).decorate();
             formPanel.append(Location.Left, proto().description()).decorate();
 
             return formPanel;

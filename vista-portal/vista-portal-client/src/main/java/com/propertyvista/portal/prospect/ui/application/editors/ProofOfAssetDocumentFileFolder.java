@@ -55,7 +55,7 @@ public class ProofOfAssetDocumentFileFolder extends PortalBoxFolder<ProofOfAsset
             CFile cfile = new CFile(GWT.<UploadService<?, ?>> create(ProofOfAssetDocumentProspectUploadService.class), new VistaFileURLBuilder(
                     ProofOfAssetDocumentFile.class));
 
-            formPanel.append(Location.Left, proto().file(), cfile).decorate().customLabel("").labelWidth(0);
+            formPanel.append(Location.Left, proto().file(), cfile).decorate();
             formPanel.append(Location.Left, proto().description()).decorate();
 
             return formPanel;
