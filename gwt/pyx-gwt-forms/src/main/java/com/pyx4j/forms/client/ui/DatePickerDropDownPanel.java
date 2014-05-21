@@ -99,7 +99,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
             selectedDate = new Date();
         }
         picker.setDate(selectedDate);
-        showRelativeTo(nativeDatePicker);
+        showRelativeTo(nativeDatePicker.getTriggerButton());
         focusPanel.setFocus(true);
 
     }

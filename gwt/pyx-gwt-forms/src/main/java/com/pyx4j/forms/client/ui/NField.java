@@ -110,6 +110,10 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
         }
     }
 
+    public Button getTriggerButton() {
+        return triggerButton;
+    }
+
     public void setClearButton(Button clearButton) {
         this.clearButton = clearButton;
         if (editorPanel != null) {
