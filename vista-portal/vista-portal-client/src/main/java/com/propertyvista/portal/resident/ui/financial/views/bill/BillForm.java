@@ -16,7 +16,6 @@ package com.propertyvista.portal.resident.ui.financial.views.bill;
 import java.math.BigDecimal;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -35,7 +34,6 @@ import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.CBuildingLabel;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class BillForm extends CForm<BillDTO> {
 
@@ -95,10 +93,10 @@ public class BillForm extends CForm<BillDTO> {
             formPanel.append(Location.Left, proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer());
             formPanel.append(Location.Left, proto().paymentLineItems(), new LineItemCollapsibleViewer());
 
-            Widget pastDueAmount = inject(proto().pastDueAmount(), new CMoneyLabel(),
-                    new FieldDecoratorBuilder().customLabel(i18n.tr("Previous Bill Balance")).build()).asWidget();
-            pastDueAmount.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-            formPanel.append(Location.Left, pastDueAmount);
+            formPanel.append(Location.Left, proto().pastDueAmount(), new CMoneyLabel()).decorate().componentWidth(100)
+                    .customLabel(i18n.tr("Previous Bill Balance"));
+            get(proto().pastDueAmount()).asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
+
         }
 
         formPanel.h1(i18n.tr("Current Bill"));
@@ -117,9 +115,8 @@ public class BillForm extends CForm<BillDTO> {
         formPanel.append(Location.Left, proto().taxes(), new CMoneyLabel()).decorate();
 
         // Dues:
-        Widget grandTotal = inject(proto().totalDueAmount(), new CMoneyLabel(), new FieldDecoratorBuilder().build()).asWidget();
-        grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-        formPanel.append(Location.Left, grandTotal);
+        formPanel.append(Location.Left, proto().totalDueAmount(), new CMoneyLabel()).decorate().componentWidth(100);
+        get(proto().totalDueAmount()).asWidget().addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
 
         return formPanel;
     }
