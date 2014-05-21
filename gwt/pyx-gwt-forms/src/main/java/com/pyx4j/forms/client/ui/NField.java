@@ -46,13 +46,15 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.validators.IValidatable;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 
 public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CField<DATA_TYPE, ?>, VIEWER extends Widget> extends SimplePanel implements
-        INativeField<DATA_TYPE> {
+        INativeField<DATA_TYPE>, IValidatable {
 
     private EDITOR editor;
 
@@ -515,4 +517,15 @@ public abstract class NField<DATA_TYPE, EDITOR extends IWidget, CCOMP extends CF
         }
 
     }
+
+    @Override
+    public ValidationResults getValidationResults() {
+        return getCComponent().getValidationResults();
+    }
+
+    @Override
+    public void showErrors(boolean show) {
+        getCComponent().setVisited(show);
+    }
+
 }
