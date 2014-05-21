@@ -84,6 +84,10 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("font-size", "1em");
         addStyle(style);
 
+        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ToolbarItem, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("padding", "0 6px");
+        addStyle(style);
+
         style = new Style(".", StyleName.BrandImage);
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
