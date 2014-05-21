@@ -47,6 +47,6 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     @Caption(name = "Matured Occupants are Applicants", description = "Some landlords force all matured occupants (over 18-19) to be on LEASE and therefore anyone OVER Age of Majority MUST be Applicant/Co-Applicant and cannot be Dependent")
     IPrimitive<Boolean> maturedOccupantsAreApplicants();
 
-    @Caption(description = "If Guarantors are not necessary")
+    @Caption(name = "Guarantors are optional", description = "If Guarantors are not necessary")
     IPrimitive<Boolean> noNeedGuarantors();
 }
