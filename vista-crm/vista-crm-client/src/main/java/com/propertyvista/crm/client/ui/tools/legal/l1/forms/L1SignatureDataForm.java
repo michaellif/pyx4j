@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.l1.L1SignatureData;
 
@@ -29,11 +29,10 @@ public class L1SignatureDataForm extends CForm<L1SignatureData> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, inject(proto().landlordOrAgent(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().date(), new FieldDecoratorBuilder().build()));
-        return panel;
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().landlordOrAgent()).decorate();
+        formPanel.append(Location.Left, proto().date()).decorate();
+        return formPanel;
     }
 
 }

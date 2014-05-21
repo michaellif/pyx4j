@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
@@ -32,15 +32,14 @@ public class LtbOwedRentForm extends CForm<LtbOwedRent> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().rentOwingBreakdown(), new LtbRentOwedBreakdownFolder() {
+        FormPanel panel = new FormPanel(this);
+        panel.append(Location.Left, proto().rentOwingBreakdown(), new LtbRentOwedBreakdownFolder() {
             @Override
             public void onTotalOwedRentChanged() {
                 LtbOwedRentForm.this.updateTotal();
             }
-        }));
-        panel.setWidget(++row, 0, 1, inject(proto().totalRentOwing(), new FieldDecoratorBuilder().build()));
+        });
+        panel.append(Location.Left, proto().totalRentOwing()).decorate();
         get(proto().totalRentOwing()).setViewable(true);
         return panel;
     }

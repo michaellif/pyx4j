@@ -18,9 +18,9 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Button;
@@ -45,14 +45,14 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
 
     public L1FormDataReviewWizardForm(IWizard<? extends IEntity> view) {
         super(L1FormDataReviewWizardDTO.class, view);
-        addStep(createRentalUnitAddressStep(), i18n.tr("Rental Unit Address"));
-        addStep(createRelatedFilesStep(), i18n.tr("Related Files"));
-        addStep(createTenantsStep(), i18n.tr("Tenants"));
-        addStep(createReasonForApplicationStep(), i18n.tr("Reason for Application"));
-        addStep(createDetailsOfLandlordsClaimStep(), i18n.tr("Details of Landlord's Claim"));
-        addStep(createLandlordContactInfoStep(), i18n.tr("Landlord(s) Details"));
-        addStep(createAgentsSignatureStep(), i18n.tr("Signature"));
-        addStep(createPaymentAndSchedulingStep(), i18n.tr("Payment and Scheduling"));
+        addStep(createRentalUnitAddressStep().asWidget(), i18n.tr("Rental Unit Address"));
+        addStep(createRelatedFilesStep().asWidget(), i18n.tr("Related Files"));
+        addStep(createTenantsStep().asWidget(), i18n.tr("Tenants"));
+        addStep(createReasonForApplicationStep().asWidget(), i18n.tr("Reason for Application"));
+        addStep(createDetailsOfLandlordsClaimStep().asWidget(), i18n.tr("Details of Landlord's Claim"));
+        addStep(createLandlordContactInfoStep().asWidget(), i18n.tr("Landlord(s) Details"));
+        addStep(createAgentsSignatureStep().asWidget(), i18n.tr("Signature"));
+        addStep(createPaymentAndSchedulingStep().asWidget(), i18n.tr("Payment and Scheduling"));
     }
 
     @Override
@@ -71,9 +71,8 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
         editToggleButton.setTextLabel(isEditable ? i18n.tr("Accept") : i18n.tr("Change"));
     }
 
-    private TwoColumnFlexFormPanel createRentalUnitAddressStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+    private FormPanel createRentalUnitAddressStep() {
+        FormPanel formPanel = new FormPanel(this);
         editToggleButton = new Button("");
         editToggleButton.setCommand(new Command() {
             @Override
@@ -81,85 +80,78 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
                 toggleRentalUnitAddressEdit();
             }
         });
-        panel.setWidget(++row, 0, editToggleButton);
-        panel.setWidget(++row, 0, inject(proto().formData().rentalUnitInfo(), new LtbRentalUnitAddressForm()));
+        formPanel.append(Location.Left, editToggleButton);
+        formPanel.append(Location.Left, proto().formData().rentalUnitInfo(), new LtbRentalUnitAddressForm());
+        return formPanel;
+    }
+
+    private FormPanel createRelatedFilesStep() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().formData().relatedApplicationFileNumber1()).decorate().labelWidth("20em");
+        formPanel.append(Location.Left, proto().formData().relatedApplicationFileNumber2()).decorate().labelWidth("20em");
+        return formPanel;
+    }
+
+    private FormPanel createTenantsStep() {
+        FormPanel panel = new FormPanel(this);
+        panel.h1(i18n.tr("Tenants"));
+        panel.append(Location.Dual, proto().formData().tenants(), new L1TenantInfoFolder());
+        panel.h1(i18n.tr("Contact Information (fill in mailing address only if different from rental unit address from step 1)"));
+        panel.append(Location.Dual, proto().formData().tenantContactInfo(), new L1TenantContactInfoForm());
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createRelatedFilesStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber1(), new FieldDecoratorBuilder().labelWidth("20em").build()));
-        panel.setWidget(++row, 0, inject(proto().formData().relatedApplicationFileNumber2(), new FieldDecoratorBuilder().labelWidth("20em").build()));
-        return panel;
+    private FormPanel createReasonForApplicationStep() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().formData().reasonForApplication(), new L1ReasonForApplicationForm());
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createTenantsStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Tenants"));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().tenants(), new L1TenantInfoFolder()));
-        panel.setH1(++row, 0, 2, i18n.tr("Contact Information (fill in mailing address only if different from rental unit address from step 1)"));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().tenantContactInfo(), new L1TenantContactInfoForm()));
-        return panel;
-    }
-
-    private TwoColumnFlexFormPanel createReasonForApplicationStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, inject(proto().formData().reasonForApplication(), new L1ReasonForApplicationForm()));
-        return panel;
-    }
-
-    private TwoColumnFlexFormPanel createDetailsOfLandlordsClaimStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Rent Owing")));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedRent(), new LtbOwedRentForm() {
+    private FormPanel createDetailsOfLandlordsClaimStep() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n.tr(i18n.tr("Rent Owing")));
+        formPanel.append(Location.Dual, proto().formData().owedRent(), new LtbOwedRentForm() {
             @Override
             public void onTotalUpdated() {
                 updateTotalOwed();
             }
-        }));
-        panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("NSF Check Charges")));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedNsfCharges(), new L1OwedNsfChargesForm() {
+        });
+        formPanel.h1(i18n.tr(i18n.tr("NSF Check Charges")));
+        formPanel.append(Location.Dual, proto().formData().owedNsfCharges(), new L1OwedNsfChargesForm() {
             @Override
             public void onTotalUpdated() {
                 updateTotalOwed();
             }
-        }));
-        panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Summary")));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().applicationFillingFee(), new FieldDecoratorBuilder().build()));
+        });
+        formPanel.h1(i18n.tr(i18n.tr("Summary")));
+        formPanel.append(Location.Dual, proto().formData().owedSummary().applicationFillingFee()).decorate();
         get(proto().formData().owedSummary().applicationFillingFee()).setViewable(true);
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedSummary().total(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Dual, proto().formData().owedSummary().total()).decorate();
         get(proto().formData().owedSummary().total()).setViewable(true);
 
-        return panel;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createLandlordContactInfoStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().formData().landlordsContactInfos(), new L1LandlordsContactInfoFolder()));
-        return panel;
+    private FormPanel createLandlordContactInfoStep() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().formData().landlordsContactInfos(), new L1LandlordsContactInfoFolder());
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createAgentsSignatureStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setH1(++row, 0, 2,
-                i18n.tr("If the person who signs this application is an agent or an officer of a corporation, you must provide the following information:"));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().agentContactInfo(), new LtbAgentContactInfoForm()));
-        panel.setH1(++row, 0, 2, i18n.tr("Signature:"));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().signatureData(), new L1SignatureDataForm()));
-        return panel;
+    private FormPanel createAgentsSignatureStep() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n
+                .tr("If the person who signs this application is an agent or an officer of a corporation, you must provide the following information:"));
+        formPanel.append(Location.Dual, proto().formData().agentContactInfo(), new LtbAgentContactInfoForm());
+        formPanel.h1(i18n.tr("Signature:"));
+        formPanel.append(Location.Dual, proto().formData().signatureData(), new L1SignatureDataForm());
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createPaymentAndSchedulingStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().formData().scheduleAndPayment(), new L1ScheduleAndPaymentForm()));
-        return panel;
+    private FormPanel createPaymentAndSchedulingStep() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().formData().scheduleAndPayment(), new L1ScheduleAndPaymentForm());
+        return formPanel;
     }
 
     private void updateTotalOwed() {

@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
 
@@ -29,20 +29,19 @@ public class L1LandlordsContactInfoForm extends CForm<L1LandlordsContactInfo> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().typeOfLandlord(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().firstName(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().lastName(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().streetAddress(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().unit(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().municipality(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().province(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().dayPhoneNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().eveningPhoneNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().faxNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().emailAddress(), new FieldDecoratorBuilder().build()));
-        return panel;
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().typeOfLandlord()).decorate();
+        formPanel.append(Location.Dual, proto().firstName()).decorate();
+        formPanel.append(Location.Dual, proto().lastName()).decorate();
+        formPanel.append(Location.Dual, proto().streetAddress()).decorate();
+        formPanel.append(Location.Dual, proto().unit()).decorate();
+        formPanel.append(Location.Dual, proto().municipality()).decorate();
+        formPanel.append(Location.Dual, proto().province()).decorate();
+        formPanel.append(Location.Dual, proto().postalCode()).decorate();
+        formPanel.append(Location.Dual, proto().dayPhoneNumber()).decorate();
+        formPanel.append(Location.Dual, proto().eveningPhoneNumber()).decorate();
+        formPanel.append(Location.Dual, proto().faxNumber()).decorate();
+        formPanel.append(Location.Dual, proto().emailAddress()).decorate();
+        return formPanel;
     }
 }

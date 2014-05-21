@@ -20,8 +20,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.l1.L1OwedNsfCharges;
 import com.propertyvista.domain.legal.l1.NsfChargeDetails;
@@ -34,15 +34,14 @@ public class L1OwedNsfChargesForm extends CForm<L1OwedNsfCharges> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().nsfChargesBreakdown(), new L1NsfChargesBreakdownFolder() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().nsfChargesBreakdown(), new L1NsfChargesBreakdownFolder() {
             @Override
             public void onTotalChargeChanged() {
                 updateTotalCharge();
             }
-        }));
-        panel.setWidget(++row, 0, 1, inject(proto().nsfTotalChargeOwed(), new FieldDecoratorBuilder().build()));
+        });
+        formPanel.append(Location.Dual, proto().nsfTotalChargeOwed()).decorate();
         get(proto().nsfTotalChargeOwed()).setViewable(true);
         get(proto().nsfTotalChargeOwed()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
             @Override
@@ -50,7 +49,7 @@ public class L1OwedNsfChargesForm extends CForm<L1OwedNsfCharges> {
                 onTotalUpdated();
             }
         });
-        return panel;
+        return formPanel;
     }
 
     private void updateTotalCharge() {

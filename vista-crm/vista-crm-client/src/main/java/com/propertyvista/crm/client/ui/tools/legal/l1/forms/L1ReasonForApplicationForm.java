@@ -17,9 +17,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication;
 
@@ -33,41 +33,24 @@ public class L1ReasonForApplicationForm extends CForm<L1ReasonForApplication> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = 0;
-        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectCharges(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 1, inject(proto().applyingToCollectNsf(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().isTenatStillInPossesionOfTheUnit(),
-                        new FieldDecoratorBuilder()
-                                .customLabel(
-                                        i18n.tr("Is the tenant still in possession of the rental unit on the date this application is filed with the Board?"))
-                                .componentWidth("100px").build()));
-        panel.setWidget(++row, 0, 1, inject(proto().rentPaymentPeriod(), new FieldDecoratorBuilder().componentWidth("100px").build()));
-        panel.setWidget(row, 1, 1, inject(proto().otherRentPaymentPeriodDescription(), new FieldDecoratorBuilder().componentWidth("100px").build()));
-        panel.setWidget(++row, 0, 1, new HTML("&nbsp;"));
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().applyingToCollectCharges()).decorate();
+        formPanel.append(Location.Left, proto().applyingToCollectNsf()).decorate();
+        formPanel.append(Location.Left, proto().isTenatStillInPossesionOfTheUnit()).decorate()
+                .customLabel(i18n.tr("Is the tenant still in possession of the rental unit on the date this application is filed with the Board?"))
+                .componentWidth("100px");
+        formPanel.append(Location.Left, proto().rentPaymentPeriod()).decorate().componentWidth("100px");
+        formPanel.append(Location.Left, proto().otherRentPaymentPeriodDescription()).decorate().componentWidth("100px");
+        formPanel.append(Location.Left, new HTML("&nbsp;"));
 
-        panel.setH2(++row, 0, 2, i18n.tr("Deposit"));
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().amountOfRentOnDeposit(),
-                        new FieldDecoratorBuilder().customLabel(i18n.tr("The amount of rent currently on deposit")).labelWidth("25em").build()));
-        panel.setWidget(
-                ++row,
-                0,
-                1,
-                inject(proto().dateOfDepositCollection(), new FieldDecoratorBuilder().customLabel(i18n.tr("The date the rent deposit was collected"))
-                        .labelWidth("25em").build()));
-        panel.setH3(++row, 0, 2, i18n.tr("The last period for which interest on the rent deposit was paid:"));
-        panel.setWidget(++row, 0, 1,
-                inject(proto().lastPeriodInterestPaidFrom(), new FieldDecoratorBuilder().customLabel(i18n.tr("From")).componentWidth("150px").build()));
-        panel.setWidget(++row, 0, 1,
-                inject(proto().lastPeriodInterestPaidTo(), new FieldDecoratorBuilder().customLabel(i18n.tr("To")).componentWidth("150px").build()));
-        return panel;
+        formPanel.h2(i18n.tr("Deposit"));
+        formPanel.append(Location.Left, proto().amountOfRentOnDeposit()).decorate().customLabel(i18n.tr("The amount of rent currently on deposit"))
+                .labelWidth("25em");
+        formPanel.append(Location.Left, proto().dateOfDepositCollection()).decorate().customLabel(i18n.tr("The date the rent deposit was collected"))
+                .labelWidth("25em");
+        formPanel.h3(i18n.tr("The last period for which interest on the rent deposit was paid:"));
+        formPanel.append(Location.Left, proto().lastPeriodInterestPaidFrom()).decorate().customLabel(i18n.tr("From")).componentWidth("150px");
+        formPanel.append(Location.Left, proto().lastPeriodInterestPaidTo()).decorate().customLabel(i18n.tr("To")).componentWidth("150px");
+        return formPanel;
     }
 }

@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.legal.l1.L1TenantContactInfo;
 
@@ -32,21 +32,19 @@ public class L1TenantContactInfoForm extends CForm<L1TenantContactInfo> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel panel = new FormPanel(this);
+        panel.h2(i18n.tr("Mailing Address"));
+        panel.append(Location.Left, proto().mailingAddress()).decorate();
+        panel.append(Location.Left, proto().unit()).decorate();
+        panel.append(Location.Left, proto().municipality()).decorate();
+        panel.append(Location.Left, proto().province()).decorate();
+        panel.append(Location.Left, proto().postalCode()).decorate();
 
-        panel.setH2(++row, 0, 2, i18n.tr("Mailing Address"));
-        panel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().unit(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().municipality(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().province(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
-
-        panel.setH2(++row, 0, 2, i18n.tr("Phones and Email"));
-        panel.setWidget(++row, 0, 2, inject(proto().dayPhoneNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().eveningPhoneNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().faxNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().emailAddress(), new FieldDecoratorBuilder().build()));
+        panel.h2(i18n.tr("Phones and Email"));
+        panel.append(Location.Left, proto().dayPhoneNumber()).decorate();
+        panel.append(Location.Left, proto().eveningPhoneNumber()).decorate();
+        panel.append(Location.Left, proto().faxNumber()).decorate();
+        panel.append(Location.Left, proto().emailAddress()).decorate();
 
         return panel;
     }

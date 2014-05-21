@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
@@ -52,12 +52,11 @@ public class L1TenantInfoFolder extends VistaBoxFolder<L1TenantInfo> {
 
         @Override
         protected IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-            int row = -1;
-            panel.setWidget(++row, 0, inject(proto().firstName(), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, inject(proto().lastName(), new FieldDecoratorBuilder().build()));
-            panel.setWidget(++row, 0, inject(proto().gender(), new FieldDecoratorBuilder().build()));
-            return panel;
+            FormPanel formPanel = new FormPanel(this);
+            formPanel.append(Location.Left, proto().firstName()).decorate();
+            formPanel.append(Location.Left, proto().lastName()).decorate();
+            formPanel.append(Location.Left, proto().gender()).decorate();
+            return formPanel;
         }
 
     }

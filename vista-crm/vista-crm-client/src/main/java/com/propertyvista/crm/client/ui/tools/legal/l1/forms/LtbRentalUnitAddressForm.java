@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.tools.legal.l1.forms;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
 
@@ -29,17 +29,14 @@ public class LtbRentalUnitAddressForm extends CForm<LtbRentalUnitAddress> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-
-        panel.setWidget(++row, 0, inject(proto().streetNumber(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().streetName(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().streetType(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().direction(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().unit(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().municipality(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
-
+        FormPanel panel = new FormPanel(this);
+        panel.append(Location.Left, proto().streetNumber()).decorate();
+        panel.append(Location.Left, proto().streetName()).decorate();
+        panel.append(Location.Left, proto().streetType()).decorate();
+        panel.append(Location.Left, proto().direction()).decorate();
+        panel.append(Location.Left, proto().unit()).decorate();
+        panel.append(Location.Left, proto().municipality()).decorate();
+        panel.append(Location.Left, proto().postalCode()).decorate();
         return panel;
     }
 
