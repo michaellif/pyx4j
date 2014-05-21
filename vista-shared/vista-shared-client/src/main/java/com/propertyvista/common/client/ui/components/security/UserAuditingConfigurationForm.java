@@ -16,7 +16,8 @@ package com.propertyvista.common.client.ui.components.security;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
@@ -31,13 +32,11 @@ public class UserAuditingConfigurationForm extends CForm<UserAuditingConfigurati
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.h1(i18n.tr("Login Notifications"));
+        formPanel.append(Location.Dual, proto().loginNotifications(), new LoginNotificationsConfigurationForm());
 
-        contentPanel.setH1(++row, 0, 2, i18n.tr("Login Notifications"));
-        contentPanel.setWidget(++row, 0, 2, inject(proto().loginNotifications(), new LoginNotificationsConfigurationForm()));
-
-        return contentPanel;
+        return formPanel;
     }
 
 }

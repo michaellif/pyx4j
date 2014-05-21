@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
@@ -111,7 +112,6 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
-        get(proto().isSecurityQuestionSet()).setViewable(true);
         get(proto().enabled()).setVisible(isManager);
         get(proto().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
 
@@ -138,10 +138,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().employeeId()).decorate().componentWidth(100);
-        formPanel.append(Location.Right, proto().title()).decorate().componentWidth(150);
+        formPanel.append(Location.Right, proto().employeeId()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().title()).decorate().componentWidth(150);
 
-        formPanel.append(Location.Left, proto().name(), new NameEditor(i18n.tr("Employee")));
+        formPanel.append(Location.Dual, proto().name(), new NameEditor(i18n.tr("Employee")));
         formPanel.append(Location.Left, proto().sex()).decorate().componentWidth(100);
         formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(100);
 
@@ -161,7 +161,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        formPanel.append(Location.Left, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
+        formPanel.append(Location.Dual, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
         return formPanel;
     }
 
@@ -174,7 +174,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         formPanel.br();
         formPanel.append(Location.Left, proto().enabled()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().requiredPasswordChangeOnNextLogIn()).decorate().componentWidth(50);
-        formPanel.append(Location.Left, proto().isSecurityQuestionSet()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().isSecurityQuestionSet(), new CBooleanLabel()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().credentialUpdated()).decorate().componentWidth(150);
 
         formPanel.h1(i18n.tr("Roles"));
@@ -211,7 +211,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     private IsWidget createAuditingConfigurationTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().userAuditingConfiguration(), new UserAuditingConfigurationForm());
+        formPanel.append(Location.Dual, proto().userAuditingConfiguration(), new UserAuditingConfigurationForm());
 
         return formPanel;
     }
@@ -219,7 +219,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     private IsWidget createAlertsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().notifications(), new NotificationFolder());
+        formPanel.append(Location.Dual, proto().notifications(), new NotificationFolder());
 
         return formPanel;
     }
@@ -270,10 +270,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 formPanel.append(Location.Left, proto().type(), new CEnumLabel()).decorate().componentWidth(200);
 
                 formPanel.h3(proto().buildings().getMeta().getCaption());
-                formPanel.append(Location.Left, proto().buildings(), new BuildingFolder(EmployeeForm.this));
+                formPanel.append(Location.Dual, proto().buildings(), new BuildingFolder(EmployeeForm.this));
 
                 formPanel.h3(proto().portfolios().getMeta().getCaption());
-                formPanel.append(Location.Left, proto().portfolios(), new PortfolioFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable()));
+                formPanel.append(Location.Dual, proto().portfolios(), new PortfolioFolder(EmployeeForm.this.getParentView(), EmployeeForm.this.isEditable()));
 
                 return formPanel;
             }

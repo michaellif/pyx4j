@@ -18,8 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.security.LoginNotificationsConfigurationDTO;
 
@@ -31,10 +31,10 @@ public class LoginNotificationsConfigurationForm extends CForm<LoginNotification
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        contentPanel.setWidget(0, 0, inject(proto().isEmailNotificationEnabled(), new FieldDecoratorBuilder(5).build()));
-        contentPanel.setWidget(0, 1, inject(proto().email(), new FieldDecoratorBuilder(22).build()));
+        formPanel.append(Location.Left, proto().isEmailNotificationEnabled()).decorate().componentWidth(80);
+        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(250);
 
         get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -43,10 +43,7 @@ public class LoginNotificationsConfigurationForm extends CForm<LoginNotification
             }
         });
 
-        contentPanel.getColumnFormatter().setWidth(0, "20%");
-        contentPanel.getColumnFormatter().setWidth(1, "80%");
-
-        return contentPanel;
+        return formPanel;
     }
 
     @Override
