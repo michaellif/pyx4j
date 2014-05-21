@@ -152,16 +152,15 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200);
         get(proto().email()).setMandatory(true);
 
-        formPanel.br();
-        formPanel.append(Location.Left, proto().description()).decorate().componentWidth(100);
-
-        formPanel.br();
         CImage signature = new CImage(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class), new VistaFileURLBuilder(
                 EmployeeSignature.class));
         signature.setScaleMode(ScaleMode.Contain);
-        signature.setImageSize(368, 60);
+        signature.setImageSize(250, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
         formPanel.append(Location.Dual, proto().signature().file(), signature).decorate().customLabel(i18n.tr("Signature"));
+
+        formPanel.append(Location.Dual, proto().description()).decorate();
+
         return formPanel;
     }
 
