@@ -39,8 +39,8 @@ public class AddressRetriever {
         if (!unit.info().legalAddressOverride().getValue(false)) {
             InternationalAddress address = EntityFactory.create(InternationalAddress.class);
             address.set(unit.building().info().address());
-            String line2 = address.addressLine2().getValue();
-            address.addressLine2().setValue((CommonsStringUtils.isEmpty(line2) ? "" : line2 + ", ") + "Apt " + unit.info().number().getValue());
+            String line2 = address.unitNumber().getValue();
+            address.unitNumber().setValue((CommonsStringUtils.isEmpty(line2) ? "" : line2 + ", ") + "Apt " + unit.info().number().getValue());
             return address;
         } else {
             return unit.info().legalAddress();

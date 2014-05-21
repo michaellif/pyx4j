@@ -1121,13 +1121,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         building = EntityFactory.create(Building.class);
         building.propertyCode().setValue("B001");
         building.integrationSystemId().setValue(IntegrationSystem.internal);
-        building.info().address().addressLine1()
-                .setValue(String.valueOf(100 + TestLoaderRandomGen.randomInt(99)) + " " + TestLoaderRandomGen.getStreetName() + " St");
+        building.info().address().streetNumber().setValue(String.valueOf(100));
+        building.info().address().streetName().setValue(TestLoaderRandomGen.getStreetName() + " St");
         building.info().address().city().setValue("Toronto");
         building.info().address().postalCode().setValue("A1B2C3");
         building.info().address().province().set(prov.name());
         building.info().address().country().set(prov.country());
-        building.marketing().name().set(building.info().address().addressLine1());
+        building.marketing().name().setValue(building.info().address().streetNumber().getValue() + " " + building.info().address().streetName().getValue());
         building.contacts().website().setValue("www.property-" + building.propertyCode().getValue() + ".com");
         // create admin contact
         PropertyContact admin = EntityFactory.create(PropertyContact.class);

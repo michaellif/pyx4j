@@ -140,7 +140,7 @@ public class LeaseTermAgreementDocumentDataCreatorFacadeImpl implements LeaseTer
         StringBuilder premisesTermBody = new StringBuilder();
         premisesTermBody.append("The Landlord agrees to rent to the Tenant:<br>");
         premisesTermBody.append("Suite No: ").append(unit.info().number().getValue()).append("<br>");
-        premisesTermBody.append("Address: ").append(premisesAddress.addressLine1()).append(" " + premisesAddress.addressLine2()).append("<br>");
+        premisesTermBody.append("Address: ").append(premisesAddress.streetNumber()).append(" " + premisesAddress.streetName()).append("<br>");
         premisesTermBody.append("City: ").append(premisesAddress.city().getValue()).append("<br>");
         premisesTermBody.append("Province: ").append(premisesAddress.province().getValue()).append("<br>");
         premisesTermBody.append("Postal Code: ").append(premisesAddress.postalCode().getValue()).append("<br>");

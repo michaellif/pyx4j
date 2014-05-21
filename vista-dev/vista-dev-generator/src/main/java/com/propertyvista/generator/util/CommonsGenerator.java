@@ -166,15 +166,7 @@ public class CommonsGenerator {
     public static InternationalAddress createInternationalAddress() {
         loadAddress();
         AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
-        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        address.addressLine1().setValue(
-                addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue() + " "
-                        + addressStructured.streetType().getStringView());
-        address.city().setValue(addressStructured.city().getValue());
-        address.province().setValue(addressStructured.province().name().getValue());
-        address.country().setValue(addressStructured.country().getValue());
-        address.postalCode().setValue(addressStructured.postalCode().getValue());
-        return address;
+        return toInternational(addressStructured);
     }
 
     public static InternationalAddress createInternationalAddress(String provinceCode) {
@@ -189,17 +181,19 @@ public class CommonsGenerator {
                 }
             }
             AddressStructured addressStructured = adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
-
-            InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-            address.addressLine1().setValue(
-                    addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue() + " "
-                            + addressStructured.streetType().getStringView());
-            address.city().setValue(addressStructured.city().getValue());
-            address.province().setValue(addressStructured.province().name().getValue());
-            address.country().setValue(addressStructured.country().getValue());
-            address.postalCode().setValue(addressStructured.postalCode().getValue());
-            return address;
+            return toInternational(addressStructured);
         }
+    }
+
+    private static InternationalAddress toInternational(AddressStructured as) {
+        InternationalAddress address = EntityFactory.create(InternationalAddress.class);
+        address.streetNumber().setValue(as.streetNumber().getValue());
+        address.streetName().setValue(as.streetName().getValue() + " " + as.streetType().getStringView());
+        address.city().setValue(as.city().getValue());
+        address.province().setValue(as.province().name().getValue());
+        address.country().setValue(as.country().getValue());
+        address.postalCode().setValue(as.postalCode().getValue());
+        return address;
     }
 
     public static AddressStructured createAddressStructured() {

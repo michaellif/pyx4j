@@ -80,23 +80,21 @@ public class GottarentMapperUtils {
         if (isNull(address) || address.isEmpty()) {
             return null;
         }
-        String[] parts = parseStreetAddress(address.addressLine1().getValue(), address.addressLine2().getValue());
-
-        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}", parts[1], parts[2]);
+        return address.streetName().getValue();
     }
 
     public static String formatStreetAndNumber(InternationalAddress address) {
         if (isNull(address) || address.isEmpty()) {
             return null;
         }
-        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}", address.addressLine1().getValue(), address.addressLine2().getValue());
+        return SimpleMessageFormat.format("{0,choice,null#|!null#{0} }{1}", address.streetNumber().getValue(), address.streetName().getValue());
     }
 
     public static String formatStreetNumber(InternationalAddress address) {
         if (isNull(address) || address.isEmpty()) {
             return null;
         }
-        return parseStreetAddress(address.addressLine1().getValue(), address.addressLine2().getValue())[0];
+        return address.streetNumber().getValue();
     }
 
     public static String getBedrooms(Integer beds) {
@@ -115,14 +113,5 @@ public class GottarentMapperUtils {
             return (addBaths > 0 ? new DecimalFormat("#.#").format(baths + addBaths) : baths.toString());
         }
         return null;
-    }
-
-    private static String[] parseStreetAddress(String line1, String line2) {
-        String[] parts = new String[3];
-        String[] numberStreet = line1.split("\\s", 2);
-        parts[0] = numberStreet[0];
-        parts[1] = numberStreet[1];
-        parts[2] = line2;
-        return parts;
     }
 }

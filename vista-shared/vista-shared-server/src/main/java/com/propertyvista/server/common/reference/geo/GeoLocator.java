@@ -106,9 +106,11 @@ public class GeoLocator {
     public static String constructGeo(InternationalAddress address) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(address.addressLine1().getStringView());
+        sb.append(address.streetNumber().getStringView());
         sb.append(" ");
-        sb.append(address.addressLine2().getStringView());
+        sb.append(address.streetName().getStringView());
+        sb.append(", ");
+        sb.append(address.unitNumber().getStringView());
         sb.append(", ");
         sb.append(address.city().getStringView());
         sb.append(", ");

@@ -33,10 +33,10 @@ class Formatter {
 
         StringBuffer addrString = new StringBuffer();
 
-        addrString.append(address.addressLine1().getStringView());
-        if (!address.addressLine2().isNull()) {
-            addrString.append(" ");
-            addrString.append(address.addressLine2().getStringView());
+        addrString.append(address.streetNumber().getStringView()).append(" ").append(address.streetName().getStringView());
+        if (!address.unitNumber().isNull()) {
+            addrString.append(", ");
+            addrString.append(address.unitNumber().getStringView());
         }
 
         if (!address.city().isNull()) {

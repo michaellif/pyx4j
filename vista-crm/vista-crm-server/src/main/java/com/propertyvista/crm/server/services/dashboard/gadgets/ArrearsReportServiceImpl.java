@@ -68,10 +68,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             // references
             bind(toProto.billingAccount().lease().unit().building().propertyCode(), boProto.billingAccount().lease().unit().building().propertyCode());
             bind(toProto.billingAccount().lease().unit().building().info().name(), boProto.billingAccount().lease().unit().building().info().name());
-            bind(toProto.billingAccount().lease().unit().building().info().address().addressLine1(), boProto.billingAccount().lease().unit().building().info()
-                    .address().addressLine1());
-            bind(toProto.billingAccount().lease().unit().building().info().address().addressLine2(), boProto.billingAccount().lease().unit().building().info()
-                    .address().addressLine2());
+            bind(toProto.billingAccount().lease().unit().building().info().address().streetNumber(), boProto.billingAccount().lease().unit().building().info()
+                    .address().streetNumber());
+            bind(toProto.billingAccount().lease().unit().building().info().address().streetName(), boProto.billingAccount().lease().unit().building().info()
+                    .address().streetName());
+            bind(toProto.billingAccount().lease().unit().building().info().address().unitNumber(), boProto.billingAccount().lease().unit().building().info()
+                    .address().unitNumber());
             bind(toProto.billingAccount().lease().unit().building().info().address().province(), boProto.billingAccount().lease().unit().building().info()
                     .address().province());
             bind(toProto.billingAccount().lease().unit().building().info().address().country().name(), boProto.billingAccount().lease().unit().building()

@@ -19,9 +19,12 @@ import com.propertyvista.oapi.xml.StringIO;
 public class AddressIO extends AbstractElementIO {
 
     //mandatory for portal
-    public StringIO addressLine1;
+    public StringIO streetNumber;
 
-    public StringIO addressLine2;
+    //mandatory for portal
+    public StringIO streetName;
+
+    public StringIO unitNumber;
 
     //mandatory for portal
     public StringIO city;

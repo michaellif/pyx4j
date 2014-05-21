@@ -81,6 +81,9 @@ public class MappingUtils {
 
     public static InternationalAddress getAddress(Address mitsAddress, StringBuilder error) {
         // TODO instantiate address parser according to the building country
+        // extract street name and number
+        String[] streetNumName = mitsAddress.getAddress1().split("\\s+", 2);
+        // combine address2 parts
         StringBuilder address2 = new StringBuilder();
         for (String addressPart : mitsAddress.getAddress2()) {
             if (address2.length() > 0) {
@@ -89,8 +92,13 @@ public class MappingUtils {
             address2.append(addressPart);
         }
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        address.addressLine1().setValue(mitsAddress.getAddress1());
-        address.addressLine2().setValue(address2.toString());
+        if (streetNumName.length == 2) {
+            address.streetNumber().setValue(streetNumName[0]);
+            address.streetName().setValue(streetNumName[1]);
+        } else {
+            address.streetName().setValue(mitsAddress.getAddress1());
+        }
+        address.unitNumber().setValue(address2.toString());
 
         String importedCountry = mitsAddress.getCountry();
         if (StringUtils.isEmpty(importedCountry)) {

@@ -33,7 +33,6 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.domain.tenant.access.TenantPortalAccessInformationPerLeaseDTO;
@@ -197,7 +196,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         dto.leaseId().setValue(tenant.lease().leaseId().getValue());
 
         InternationalAddress address = AddressRetriever.getLeaseLegalAddress(tenant.lease());
-        dto.address().setValue(address.addressLine1().getValue());
+        dto.address().setValue(address.streetNumber().getValue() + " " + address.streetName().getValue());
         dto.cityZip().setValue(getCityZip(address));
         dto.city().setValue(address.city().getValue());
         dto.postalCode().setValue(address.postalCode().getValue());
@@ -215,16 +214,6 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         dto.portalRegistrationBuiding().setValue(tenant.lease().unit().building().info().address().getStringView());
         dto.portalRegistrationToken().setValue(tenant.customer().portalRegistrationToken().getValue());
         return dto;
-    }
-
-    private static String getAddressLine1(AddressStructured address) {
-        // This is fragment form AddressStructured @ToStringFormat
-        return SimpleMessageFormat.format("{1} {2} {3}{4,choice,other#|null#|!null# {4}}{5,choice,null#|!null# {5}}", //
-                "", address.streetNumber(),//
-                address.streetNumberSuffix(),//
-                address.streetName(),//
-                address.streetType().getValue(),//
-                address.streetDirection());
     }
 
     private static String getCityZip(InternationalAddress address) {

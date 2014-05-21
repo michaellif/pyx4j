@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -29,31 +30,36 @@ import com.propertyvista.domain.ref.CountryReferenceAdapter;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@ToStringFormat("{0,choice,null#|!null#{0} }{1}{2,choice,null#|!null# {2}}, {3}, {4} {5}, {6}")
 public interface InternationalAddress extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<String> addressLine1();
-
-    @ToString(index = 1)
-    IPrimitive<String> addressLine2();
+    IPrimitive<String> streetNumber();
 
     @NotNull
+    @ToString(index = 1)
+    IPrimitive<String> streetName();
+
     @ToString(index = 2)
-    IPrimitive<String> city();
+    IPrimitive<String> unitNumber();
 
     @NotNull
     @ToString(index = 3)
+    IPrimitive<String> city();
+
+    @NotNull
+    @ToString(index = 4)
     @Caption(name = "Province/State/Region")
     IPrimitive<String> province();
 
     @NotNull
-    @ToString(index = 4)
+    @ToString(index = 5)
     @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
     @NotNull
-    @ToString(index = 5)
+    @ToString(index = 6)
     IPrimitive<String> postalCode();
 }

@@ -46,8 +46,9 @@ public class InternationalAddressEditor extends CForm<InternationalAddress> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().addressLine1()).decorate();
-        formPanel.append(Location.Left, proto().addressLine2()).decorate();
+        formPanel.append(Location.Left, proto().streetNumber()).decorate();
+        formPanel.append(Location.Left, proto().streetName()).decorate();
+        formPanel.append(Location.Left, proto().unitNumber()).decorate();
         formPanel.append(Location.Left, proto().city()).decorate();
 
         formPanel.append(Location.Right, proto().province(), province).decorate();
@@ -85,20 +86,32 @@ public class InternationalAddressEditor extends CForm<InternationalAddress> {
     private void onCountrySelected(Country country) {
         if (!country.isEmpty()) {
             if (country.name().getStringView().compareTo("Canada") == 0) {
+                get(proto().streetNumber()).setVisible(true);
+                get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
+                get(proto().unitNumber()).setTitle(proto().streetNumber().getMeta().getCaption());
                 province.setCountry(country);
                 province.setVisible(true);
                 province.setTitle("Province");
                 get(proto().postalCode()).setTitle("Postal Code");
             } else if (country.name().getStringView().compareTo("United States") == 0) {
+                get(proto().streetNumber()).setVisible(true);
+                get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
+                get(proto().unitNumber()).setTitle(proto().streetNumber().getMeta().getCaption());
                 province.setCountry(country);
                 province.setVisible(true);
                 province.setTitle("State");
                 get(proto().postalCode()).setTitle("Zip Code");
             } else if (country.name().getStringView().compareTo("United Kingdom") == 0) {
+                get(proto().streetNumber()).setVisible(true);
+                get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
+                get(proto().unitNumber()).setTitle(proto().streetNumber().getMeta().getCaption());
                 province.setVisible(false);
                 get(proto().postalCode()).setTitle("Postal Code");
             } else {
                 // International
+                get(proto().streetNumber()).setVisible(false);
+                get(proto().streetName()).setTitle("Address Line 1");
+                get(proto().unitNumber()).setTitle("Address Line 2");
                 province.setTextMode(true);
                 province.setVisible(true);
                 province.setTitle(proto().province().getMeta().getCaption());

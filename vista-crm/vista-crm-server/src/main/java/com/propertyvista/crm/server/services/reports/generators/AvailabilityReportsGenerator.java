@@ -173,7 +173,8 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             status.building().propertyCode().setValue("mockup1234");
             status.building().externalId().setValue("bb");
             status.building().info().name().setValue("bla-bla");
-            status.building().info().address().addressLine1().setValue("1 haShalom");
+            status.building().info().address().streetNumber().setValue("1");
+            status.building().info().address().streetName().setValue("haShalom");
             status.building().info().address().country().name().setValue("Canada");
             status.building().info().address().province().setValue("Ontario");
             status.building().info().address().postalCode().setValue("TBD G2G");

@@ -77,8 +77,9 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         assertEquals(buildingIO.info.address.country.getValue(), buildingIO2.info.address.country.getValue());
         assertEquals(buildingIO.info.address.postalCode.getValue(), buildingIO2.info.address.postalCode.getValue());
         assertEquals(buildingIO.info.address.province.getValue(), buildingIO2.info.address.province.getValue());
-        assertEquals(buildingIO.info.address.addressLine1.getValue(), buildingIO2.info.address.addressLine1.getValue());
-        assertEquals(buildingIO.info.address.addressLine2.getValue(), buildingIO2.info.address.addressLine2.getValue());
+        assertEquals(buildingIO.info.address.streetNumber.getValue(), buildingIO2.info.address.streetNumber.getValue());
+        assertEquals(buildingIO.info.address.streetName.getValue(), buildingIO2.info.address.streetName.getValue());
+        assertEquals(buildingIO.info.address.unitNumber.getValue(), buildingIO2.info.address.unitNumber.getValue());
         assertEquals(buildingIO.info.buildingType.getValue(), buildingIO2.info.buildingType.getValue());
 
         // marketing
@@ -132,8 +133,9 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         addressIO.country = new StringIO("Canada");
         addressIO.postalCode = new StringIO("M9A 4X9");
         addressIO.province = new StringIO("Ontario");
-        addressIO.addressLine1 = new StringIO("255 Bathurst St");
-        addressIO.addressLine2 = new StringIO("unit 4");
+        addressIO.streetNumber = new StringIO("255");
+        addressIO.streetName = new StringIO("Bathurst St");
+        addressIO.unitNumber = new StringIO("unit 4");
 
         BuildingInfoIO info = new BuildingInfoIO();
         info.address = addressIO;

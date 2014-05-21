@@ -15,15 +15,12 @@ package com.propertyvista.server.common.util;
 
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.utils.EntityBinder;
-import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.contact.InternationalAddress;
 
 public class AddressConverter {
-
-    private static final I18n i18n = I18n.get(AddressConverter.class);
 
     public static class StructuredToInternationalAddressConverter extends EntityBinder<AddressStructured, InternationalAddress> {
 
@@ -43,28 +40,28 @@ public class AddressConverter {
         public void copyBOtoTO(AddressStructured dbo, InternationalAddress dto) {
             super.copyBOtoTO(dbo, dto);
 
-            //@formatter:off
-            StringBuilder address = new StringBuilder(getStreetAddress(dbo));
-            address.append(", ").append(i18n.tr("Suite")).append(' ').append(val(dbo.suiteNumber()));
-            dto.addressLine1().setValue(address.toString());
-            //@formatter:on
+            dto.streetNumber().setValue(val(dbo.streetNumber()) + val(dbo.streetNumberSuffix()));
+            dto.streetName().setValue(getStreetName(dbo));
+            dto.unitNumber().setValue(val(dbo.suiteNumber()));
+        }
+
+        public String getStreetName(AddressStructured as) {
+            StringBuilder streetName = new StringBuilder().append(val(as.streetName()));
+            String streetType = valenum(as.streetType());
+            if (!"".equals(streetType) && as.streetType().getValue() != StreetType.other) {
+                streetName.append(' ').append(streetType);
+            }
+            String streetDirection = valenum(as.streetDirection());
+            if (!"".equals(streetDirection)) {
+                streetName.append(' ').append(streetDirection);
+            }
+            return streetName.toString();
         }
 
         public String getStreetAddress(AddressStructured addressToConvert) {
-            //@formatter:off
-            StringBuilder address = new StringBuilder();            
-            address.append(val(addressToConvert.streetNumber())).append(val(addressToConvert.streetNumberSuffix()))
-                .append(' ')
-                .append(val(addressToConvert.streetName()));
-            
-            String streetType = valenum(addressToConvert.streetType());
-            if (!"".equals(streetType) && addressToConvert.streetType().getValue() != StreetType.other) {
-                address.append(' ').append(streetType);
-            }
-            String streetDirection = valenum(addressToConvert.streetDirection());
-            if (!"".equals(streetDirection)) {
-                address.append(' ').append(streetDirection);
-            }
+            StringBuilder address = new StringBuilder();
+            address.append(val(addressToConvert.streetNumber())).append(val(addressToConvert.streetNumberSuffix())).append(' ')
+                    .append(getStreetName(addressToConvert));
             return address.toString();
         }
 

@@ -56,7 +56,8 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
                 new MemberColumnDescriptor.Builder(proto.info().name()).build(),
                 new MemberColumnDescriptor.Builder(proto.info().type()).build(),
                 new MemberColumnDescriptor.Builder(proto.info().shape()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto.info().address().addressLine1()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.info().address().streetNumber()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.info().address().streetName()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto.info().address().city()).build(),
                 new MemberColumnDescriptor.Builder(proto.info().address().province()).build(),
                 new MemberColumnDescriptor.Builder(proto.info().address().country()).build()

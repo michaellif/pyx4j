@@ -35,6 +35,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
@@ -65,7 +66,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
 
         billingAddressHeader = formPanel.h4(proto().billingAddress().getMeta().getCaption());
         formPanel.append(Location.Left, proto().sameAsCurrent()).decorate();
-        formPanel.append(Location.Left, proto().billingAddress(), new AddressSimpleEditor());
+        formPanel.append(Location.Left, proto().billingAddress(), new InternationalAddressEditor<>(InternationalAddress.class));
 
         // tweaks:
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {

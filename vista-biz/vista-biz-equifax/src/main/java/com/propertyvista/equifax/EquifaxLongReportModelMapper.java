@@ -370,14 +370,8 @@ public class EquifaxLongReportModelMapper {
             InternationalAddress address = EntityFactory.create(InternationalAddress.class);
             address.city().setValue(cnAddress.getCity() != null ? cnAddress.getCity().getValue() : null);
             address.postalCode().setValue(cnAddress.getPostalCode());
-            String streetName = "";
-            if (cnAddress.getCivicNumber() != null) {
-                streetName = streetName + cnAddress.getCivicNumber();
-            }
-            if (cnAddress.getStreetName() != null) {
-                streetName = streetName + " " + cnAddress.getStreetName();
-            }
-            address.addressLine1().setValue(streetName);
+            address.streetNumber().setValue(cnAddress.getCivicNumber());
+            address.streetName().setValue(cnAddress.getStreetName());
             if (cnAddress.getProvince() != null) {
                 List<Province> provinces = getProvinces();
                 address.country().name().setValue(getCountry(provinces, cnAddress.getProvince().getCode()));

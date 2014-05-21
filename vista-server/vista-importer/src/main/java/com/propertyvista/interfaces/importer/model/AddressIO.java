@@ -22,9 +22,11 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AddressIO extends IEntity {
 
-    IPrimitive<String> addressLine1();
+    IPrimitive<String> streetNumber();
 
-    IPrimitive<String> addressLine2();
+    IPrimitive<String> streetName();
+
+    IPrimitive<String> unitNumber();
 
     IPrimitive<String> city();
 

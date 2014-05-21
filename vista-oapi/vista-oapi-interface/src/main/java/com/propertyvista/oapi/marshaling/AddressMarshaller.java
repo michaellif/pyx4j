@@ -49,8 +49,9 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province());
         addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
         addressIO.postalCode = MarshallerUtils.createIo(StringIO.class, address.postalCode());
-        addressIO.addressLine1 = MarshallerUtils.createIo(StringIO.class, address.addressLine1());
-        addressIO.addressLine2 = MarshallerUtils.createIo(StringIO.class, address.addressLine2());
+        addressIO.streetNumber = MarshallerUtils.createIo(StringIO.class, address.streetNumber());
+        addressIO.streetName = MarshallerUtils.createIo(StringIO.class, address.streetName());
+        addressIO.unitNumber = MarshallerUtils.createIo(StringIO.class, address.unitNumber());
         return addressIO;
     }
 
@@ -65,8 +66,9 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         MarshallerUtils.setValue(address.province(), addressIO.province);
         MarshallerUtils.setValue(address.city(), addressIO.city);
         MarshallerUtils.setValue(address.postalCode(), addressIO.postalCode);
-        MarshallerUtils.setValue(address.addressLine1(), addressIO.addressLine1);
-        MarshallerUtils.setValue(address.addressLine2(), addressIO.addressLine2);
+        MarshallerUtils.setValue(address.streetNumber(), addressIO.streetNumber);
+        MarshallerUtils.setValue(address.streetName(), addressIO.streetName);
+        MarshallerUtils.setValue(address.unitNumber(), addressIO.unitNumber);
 
         return address;
     }
