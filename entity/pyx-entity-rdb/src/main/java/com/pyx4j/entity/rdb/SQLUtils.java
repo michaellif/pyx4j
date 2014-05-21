@@ -28,6 +28,8 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
+import javax.sql.PooledConnection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +40,15 @@ public class SQLUtils {
     private static final Logger log = LoggerFactory.getLogger(SQLUtils.class);
 
     public static void closeQuietly(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (Throwable e) {
+        }
+    }
+
+    public static void closeQuietly(PooledConnection connection) {
         try {
             if (connection != null) {
                 connection.close();
