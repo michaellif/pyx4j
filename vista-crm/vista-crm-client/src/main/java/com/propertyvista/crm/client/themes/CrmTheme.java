@@ -27,7 +27,7 @@ import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
-import com.pyx4j.widgets.client.dashboard.CSSNames;
+import com.pyx4j.widgets.client.dashboard.DashboardTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
@@ -154,6 +154,8 @@ public class CrmTheme extends VistaTheme {
 
         addTheme(new CommunicationCrmTheme());
 
+        addTheme(new DashboardTheme());
+
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();
@@ -163,7 +165,6 @@ public class CrmTheme extends VistaTheme {
         initButtonStylesEx();
 
         initDashboardView();
-        initDashboardReport();
 
         initTabPanelStyles();
         initDialogBoxStyles();
@@ -355,77 +356,6 @@ public class CrmTheme extends VistaTheme {
         style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin-bottom", "0.2em");
-        addStyle(style);
-    }
-
-    protected void initDashboardReport() {
-        String prefix = CSSNames.BASE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-//        style.addProperty("border", "1px solid #aaa");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnSpacer));
-        style.addProperty("height", "4em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColor.background);
-        style.addProperty("border", "1px solid #ccc");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder, CSSNames.StyleDependent.maximized));
-        style.addProperty("margin", "0");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
-        style.addProperty("background-color", ThemeColor.contrast1, 0.1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
-        style.addProperty("background-color", ThemeColor.foreground);
-        style.addProperty("color", ThemeColor.foreground, 0.1);
-        style.addProperty("font", "caption");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("height", "20px");
-        style.addProperty("padding-left", "1em");
-        style.addProperty("cursor", "move");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption, CSSNames.StyleDependent.readonly));
-        style.addProperty("cursor", "default");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
-        style.addProperty("padding-top", "2px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
-        style.addProperty("background-color", ThemeColor.foreground);
-        style.addProperty("border", "1px solid #aaa");
-        style.addProperty("font", "menu");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
-        style.addProperty("border", "1px dotted #555");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndReportPositioner));
-        style.addProperty("border", "1px dotted #555");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        // overriding gwt-dnd styles:
-        style = new Style(".dragdrop-handle");
-//        style.addProperty("cursor", "pointer");
         addStyle(style);
     }
 
