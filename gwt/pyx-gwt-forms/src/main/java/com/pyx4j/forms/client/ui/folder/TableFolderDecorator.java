@@ -70,6 +70,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
 
         asWidget().setStyleName(CFolderTableDecorator.name());
 
+        add(getValidationMessageHolder());
+
         header = new HorizontalPanel();
         header.setStyleName(CFolderTableHeader.name());
         setHeaderVisible(false);
@@ -129,8 +131,6 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         if (isAddable()) {
             add(getAddButton());
         }
-
-        add(getValidationMessageHolder());
 
     }
 

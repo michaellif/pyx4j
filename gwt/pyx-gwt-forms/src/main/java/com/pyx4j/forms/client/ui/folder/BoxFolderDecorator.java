@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui.folder;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.IEntity;
@@ -43,6 +42,8 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
 
         asWidget().setStyleName(DefaultFolderTheme.StyleName.CFolderBoxDecorator.name());
 
+        add(getValidationMessageHolder());
+
         add(getContainer());
 
         SimplePanel addButtonHolder = new SimplePanel(getAddButton());
@@ -52,7 +53,6 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
 
         setAddButtonVisible(addable);
 
-        add(getValidationMessageHolder());
     }
 
     @Override

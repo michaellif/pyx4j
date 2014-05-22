@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
@@ -225,4 +226,13 @@ public abstract class CFolderItem<E extends IEntity> extends CContainer<CFolderI
         return Arrays.asList(new CComponent<?, ?, ?>[] { entityForm });
     }
 
+    public ValidationResults getComponentsValidationResults() {
+        ValidationResults results = new ValidationResults();
+        for (CComponent<?, ?, ?> component : entityForm.getComponents()) {
+            if (!component.isValid()) {
+                results.appendValidationResults(component.getValidationResults());
+            }
+        }
+        return results;
+    }
 }

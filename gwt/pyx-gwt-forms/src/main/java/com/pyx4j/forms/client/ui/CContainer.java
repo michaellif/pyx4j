@@ -116,6 +116,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             @Override
             public void onPropertyChange(final PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid)) {
+                    revalidate();
                     PropertyChangeEvent.fire(CContainer.this, PropertyName.valid);
                 }
             }

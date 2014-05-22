@@ -42,7 +42,7 @@ public class EntityContainerValidator extends AbstractComponentValidator {
         if (container.getComponents() != null) {
             for (CComponent<?, ?, ?> ccomponent : container.getComponents()) {
                 if (!ccomponent.isValid()) {
-                    return new EntityContainerValidationError(container, i18n.tr("Form is not valid"));
+                    return new EntityContainerValidationError(container, i18n.tr("There are validation errors below."));
                 }
             }
         }

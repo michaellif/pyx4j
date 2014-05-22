@@ -99,7 +99,6 @@ public abstract class DefaultFolderTheme extends Theme {
 
         style = new Style(".", StyleName.CFolderRowItemDecorator);
         //style.addProperty("width", "0");
-        style.addProperty("margin", "6px");
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderActionsBar);
@@ -148,6 +147,7 @@ public abstract class DefaultFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderTableHeader);
+        style.addProperty("margin-top", "6px");
         style.addProperty("border-bottom", "1px dotted");
         style.addProperty("border-bottom-color", getBackgroundColor());
         addStyle(style);

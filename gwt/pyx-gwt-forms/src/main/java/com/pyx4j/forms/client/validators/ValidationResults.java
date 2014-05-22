@@ -50,6 +50,10 @@ public class ValidationResults {
     }
 
     public String getValidationMessage(boolean html) {
+        return getValidationMessage(html, false);
+    }
+
+    public String getValidationMessage(boolean html, boolean showFieldName) {
         ArrayList<BasicValidationError> fieldValidationErrors = new ArrayList<>();
 
         for (AbstractValidationError error : validationErrors) {
@@ -62,11 +66,19 @@ public class ValidationResults {
         if (html) {
             if (fieldValidationErrors.size() == 0) {
             } else if (fieldValidationErrors.size() == 1) {
-                messagesBuffer.append(fieldValidationErrors.get(0).getMessage());
+                AbstractValidationError ve = fieldValidationErrors.get(0);
+                if (showFieldName) {
+                    messagesBuffer.append("<b>").append(ve.getOriginator().getTitle()).append(" - </b> ");
+                }
+                messagesBuffer.append(ve.getMessage());
             } else {
                 messagesBuffer.append("<ul style='text-align:left'>");
                 for (AbstractValidationError ve : fieldValidationErrors) {
-                    messagesBuffer.append("<li>").append(ve.getMessage()).append("</li>");
+                    messagesBuffer.append("<li>");
+                    if (showFieldName) {
+                        messagesBuffer.append("<b>").append(ve.getOriginator().getTitle()).append(" - </b> ");
+                    }
+                    messagesBuffer.append(ve.getMessage()).append("</li>");
                 }
                 messagesBuffer.append("</ul>");
             }
@@ -75,14 +87,25 @@ public class ValidationResults {
             for (AbstractValidationError ve : fieldValidationErrors) {
                 switch (c.next()) {
                 case SINGLE:
+                    if (showFieldName) {
+                        messagesBuffer.append(ve.getOriginator().getTitle()).append(" - ");
+                    }
                     messagesBuffer.append(ve.getMessage());
                     break;
                 case FIRST:
                 case ITEM:
-                    messagesBuffer.append("- ").append(ve.getMessage()).append(";\n");
+                    messagesBuffer.append("- ");
+                    if (showFieldName) {
+                        messagesBuffer.append(ve.getOriginator().getTitle()).append(" - ");
+                    }
+                    messagesBuffer.append(ve.getMessage()).append(";\n");
                     break;
                 case LAST:
-                    messagesBuffer.append("- ").append(ve.getMessage());
+                    messagesBuffer.append("- ");
+                    if (showFieldName) {
+                        messagesBuffer.append(ve.getOriginator().getTitle()).append(" - ");
+                    }
+                    messagesBuffer.append(ve.getMessage());
                     break;
                 }
             }
