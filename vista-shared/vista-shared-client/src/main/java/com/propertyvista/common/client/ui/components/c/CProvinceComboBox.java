@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.AsyncOptionLoadingDelegate;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.ComponentValidator;
+import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -48,7 +48,7 @@ public class CProvinceComboBox extends CFocusComponent<String, NProvinceComboBox
 
     private final AsyncOptionLoadingDelegate<Province> asyncOptionDelegate;
 
-    private ComponentValidator<String> unavailableValidator;
+    private IValidator<String> unavailableValidator;
 
     public CProvinceComboBox() {
         super();
