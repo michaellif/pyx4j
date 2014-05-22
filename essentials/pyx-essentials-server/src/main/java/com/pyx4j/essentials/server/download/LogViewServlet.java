@@ -144,7 +144,9 @@ public class LogViewServlet extends HttpServlet {
     private void listDirectory(HttpServletRequest request, String path, String urlPrefix, HttpServletResponse response) throws ServletException, IOException {
         File dir = new File(rootDirectory, path);
         if (!dir.isDirectory()) {
-            throw new ServletException("No such directory: " + dir);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            //throw new ServletException("No such directory: " + dir);
+            return;
         }
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
