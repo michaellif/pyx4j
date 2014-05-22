@@ -29,6 +29,8 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.ClientFilter;
 import com.sun.jersey.core.util.ReaderWriter;
 
+import com.propertyvista.domain.ref.ISOCountry;
+
 public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
 
     private final static Logger log = LoggerFactory.getLogger(OpenWeatherMapApiImpl.class);
@@ -47,9 +49,9 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
     }
 
     @Override
-    public Weatherdata getWeatherdata(String cityName, String countryName) {
+    public Weatherdata getWeatherdata(String cityName, ISOCountry country) {
         Weatherdata weatherData = null;
-        if (cityName == null || countryName == null) {
+        if (cityName == null || country == null) {
             return null;
         }
         try {
@@ -59,7 +61,7 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
             }
             //@formatter:off
             WebResource r = c.resource("http://api.openweathermap.org/data/2.5/forecast")
-                             .queryParam("q", cityName + "," + countryName)
+                             .queryParam("q", cityName + "," + country.name)
                              .queryParam("mode", "xml")
                              .queryParam("units", "metric");
             //@formatter:on

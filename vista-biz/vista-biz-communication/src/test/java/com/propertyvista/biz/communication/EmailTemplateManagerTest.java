@@ -27,6 +27,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -80,8 +81,8 @@ import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -1108,16 +1109,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         crmUser = EntityFactory.create(CrmUser.class);
         crmUser.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
         Persistence.service().persist(crmUser);
-        // country
-        Country country = EntityFactory.create(Country.class);
-        country.name().setValue("CA");
-        Persistence.service().persist(country);
-        Province prov = EntityFactory.create(Province.class);
-        prov.name().setValue("Ontario");
-        prov.code().setValue("ON");
-        prov.country().set(country);
-        Persistence.service().persist(prov);
         // load building
+        ISOProvince prov = ISOProvince.Ontario;
+        ensureProvincePolicyNode(prov);
         building = EntityFactory.create(Building.class);
         building.propertyCode().setValue("B001");
         building.integrationSystemId().setValue(IntegrationSystem.internal);
@@ -1125,8 +1119,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         building.info().address().streetName().setValue(TestLoaderRandomGen.getStreetName() + " St");
         building.info().address().city().setValue("Toronto");
         building.info().address().postalCode().setValue("A1B2C3");
-        building.info().address().province().set(prov.name());
-        building.info().address().country().set(prov.country());
+        building.info().address().province().setValue(prov.name);
+        building.info().address().country().setValue(prov.country);
         building.marketing().name().setValue(building.info().address().streetNumber().getValue() + " " + building.info().address().streetName().getValue());
         building.contacts().website().setValue("www.property-" + building.propertyCode().getValue() + ".com");
         // create admin contact
@@ -1387,4 +1381,16 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         Persistence.service().persist(policy);
     }
+
+    private void ensureProvincePolicyNode(ISOProvince prov) {
+        EntityQueryCriteria<ProvincePolicyNode> crit = EntityQueryCriteria.create(ProvincePolicyNode.class);
+        crit.eq(crit.proto().province(), prov);
+        ProvincePolicyNode node = Persistence.service().retrieve(crit);
+        if (node == null) {
+            node = EntityFactory.create(ProvincePolicyNode.class);
+            node.province().setValue(prov);
+            Persistence.service().persist(node);
+        }
+    }
+
 }

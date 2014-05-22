@@ -31,7 +31,7 @@ import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
@@ -89,10 +89,8 @@ public class GadgetServiceImplTestBase extends IntegrationTestBase {
 
             building.propertyCode().setValue(propertyCode);
 
-            EntityQueryCriteria<Province> provinceCriteria = EntityQueryCriteria.create(Province.class);
-            provinceCriteria.eq(provinceCriteria.proto().code(), provinceCode);
-            Province prov = Persistence.service().retrieve(provinceCriteria);
-            building.info().address().province().set(prov == null ? null : prov.name());
+            ISOProvince prov = ISOProvince.forCode(provinceCode);
+            building.info().address().province().setValue(prov == null ? null : prov.name);
             Persistence.service().persist(building);
 
             // TODO:

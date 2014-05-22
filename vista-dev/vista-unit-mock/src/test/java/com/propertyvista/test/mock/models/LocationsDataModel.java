@@ -15,7 +15,6 @@ package com.propertyvista.test.mock.models;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.entity.server.Persistence;
@@ -23,54 +22,42 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class LocationsDataModel extends MockDataModel<Country> {
+public class LocationsDataModel extends MockDataModel<ProvincePolicyNode> {
 
-    final HashMap<String, Province> provincesMap;
+    final HashMap<ISOProvince, ProvincePolicyNode> provincesMap;
 
     public LocationsDataModel() {
-        provincesMap = new HashMap<String, Province>();
+        provincesMap = new HashMap<>();
     }
 
     @Override
     protected void generate() {
-        List<Province> provinces = loadProvincesFromFile();
+        List<ProvincePolicyNode> provinces = loadProvincesFromFile();
 
-        Map<String, Country> countriesByName = new HashMap<String, Country>();
-
-        for (Province province : provinces) {
-            Country country = countriesByName.get(province.country().name().getValue());
-            if (country == null) {
-                country = province.country();
-                countriesByName.put(country.name().getValue(), country);
-                addItem(country);
-            }
-            country.provinces().add(province);
-
-            provincesMap.put(province.code().getValue(), province);
-        }
-
-        for (Country country : getAllItems()) {
-            Persistence.service().persist(country);
+        for (ProvincePolicyNode province : provinces) {
+            provincesMap.put(province.province().getValue(), province);
+            Persistence.service().persist(province);
         }
     }
 
-    private static List<Province> loadProvincesFromFile() {
-        List<Province> provinces = EntityCSVReciver.create(Province.class).loadResourceFile(IOUtils.resourceFileName("Province.csv", LocationsDataModel.class));
+    private static List<ProvincePolicyNode> loadProvincesFromFile() {
+        List<ProvincePolicyNode> provinces = EntityCSVReciver.create(ProvincePolicyNode.class).loadResourceFile(
+                IOUtils.resourceFileName("Province.csv", LocationsDataModel.class));
         return provinces;
     }
 
     private static List<City> updateCitiesWithProvince(List<City> list) {
         List<City> all = new Vector<City>();
-        String provinceName = null;
+        ISOProvince province = null;
         for (City c : list) {
-            if (c.province().name().isNull()) {
-                c.province().name().setValue(provinceName);
+            if (c.province().isNull()) {
+                c.province().setValue(province);
             } else {
-                provinceName = c.province().name().getValue();
+                province = c.province().getValue();
             }
             if (!c.name().isNull()) {
                 all.add(c);
@@ -88,7 +75,11 @@ public class LocationsDataModel extends MockDataModel<Country> {
         return all;
     }
 
-    Province getProvinceByCode(String code) {
-        return provincesMap.get(code);
+    ProvincePolicyNode getProvincePolicyNode(ISOProvince prov) {
+        return prov == null ? null : provincesMap.get(prov);
+    }
+
+    ProvincePolicyNode getProvincePolicyNode(String code) {
+        return getProvincePolicyNode(ISOProvince.forCode(code));
     }
 }

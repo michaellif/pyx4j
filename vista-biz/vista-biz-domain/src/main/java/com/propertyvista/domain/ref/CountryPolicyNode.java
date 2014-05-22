@@ -7,33 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-25
- * @author vlads
+ * Created on Jan 28, 2011
+ * @author Misha
  * @version $Id$
  */
 package com.propertyvista.domain.ref;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
-@DiscriminatorValue("Province")
-public interface Province extends PolicyNode {
+@DiscriminatorValue("Country")
+public interface CountryPolicyNode extends PolicyNode {
 
-    @ToString
-    @Indexed
-    IPrimitive<String> name();
-
-    @Indexed
-    IPrimitive<String> code();
-
-    @Owner
-    @JoinColumn
-    Country country();
-
+    IPrimitive<ISOCountry> country();
 }

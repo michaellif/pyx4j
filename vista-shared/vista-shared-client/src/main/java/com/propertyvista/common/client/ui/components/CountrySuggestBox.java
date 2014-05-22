@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2013
+ * Created on May 22, 2014
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.selections;
+package com.propertyvista.common.client.ui.components;
 
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOCountry;
 
-public interface SelectProvinceListService extends AbstractListService<Province> {
+public class CountrySuggestBox extends CAbstractSuggestBox<ISOCountry> {
 
 }

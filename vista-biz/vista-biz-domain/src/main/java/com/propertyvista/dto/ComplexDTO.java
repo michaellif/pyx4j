@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IList;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -32,7 +32,7 @@ public interface ComplexDTO extends Complex {
 //    BuildingContactInfo contactInfo();
 
     /** Address of complex's primary building */
-    AddressStructured address();
+    InternationalAddress address();
 
     // TODO additional properties:
     // * propertyManager/anyOtherKindOfManager - fetch from primary building

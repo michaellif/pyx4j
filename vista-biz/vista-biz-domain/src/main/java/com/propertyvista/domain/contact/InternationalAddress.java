@@ -14,10 +14,7 @@
 package com.propertyvista.domain.contact;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -25,8 +22,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.CountryReferenceAdapter;
+import com.propertyvista.domain.ref.ISOCountry;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -55,9 +51,7 @@ public interface InternationalAddress extends IEntity {
 
     @NotNull
     @ToString(index = 5)
-    @Editor(type = EditorType.combo)
-    @Reference(adapter = CountryReferenceAdapter.class)
-    Country country();
+    IPrimitive<ISOCountry> country();
 
     @NotNull
     @ToString(index = 6)

@@ -39,6 +39,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class AvailabilityReportsGenerator implements ReportGenerator {
@@ -175,7 +176,7 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             status.building().info().name().setValue("bla-bla");
             status.building().info().address().streetNumber().setValue("1");
             status.building().info().address().streetName().setValue("haShalom");
-            status.building().info().address().country().name().setValue("Canada");
+            status.building().info().address().country().setValue(ISOCountry.Canada);
             status.building().info().address().province().setValue("Ontario");
             status.building().info().address().postalCode().setValue("TBD G2G");
             status.unit().info().number().setValue("unit #" + i);

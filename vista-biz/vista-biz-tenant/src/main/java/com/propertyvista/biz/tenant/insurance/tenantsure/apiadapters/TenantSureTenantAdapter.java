@@ -19,8 +19,8 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantSureTenantAdapter {
@@ -43,32 +43,12 @@ public class TenantSureTenantAdapter {
         parameters.setState(tenant.lease().unit().building().info().address().province().getValue());
         parameters.setPostcode(tenant.lease().unit().building().info().address().postalCode().getValue());
 
-        String country = tenant.lease().unit().building().info().address().country().name().getValue();
-        if ("Canada".equals(country)) {
-            parameters.setCountryCode("CA");
-        } else {
+        ISOCountry country = tenant.lease().unit().building().info().address().country().getValue();
+        if (!ISOCountry.Canada.equals(country)) {
             throw new UserRuntimeException(i18n.tr("Country \"{0}\" is not supported by TenantSure!", country));
         }
+        parameters.setCountryCode(country.iso2);
 
         parameters.setEmailAddress(tenant.customer().person().email().getValue());
-    }
-
-    private static String getStreetNumber(AddressStructured address) {
-        String streetNumber = address.streetNumber().getValue();
-        if (!address.streetNumberSuffix().isNull()) {
-            streetNumber += address.streetNumberSuffix().getValue();
-        }
-        return streetNumber;
-    }
-
-    private static String getStreetName(AddressStructured address) {
-        String fullStreetName = address.streetName().getValue();
-        if (!address.streetType().isNull()) {
-            fullStreetName += " " + address.streetType().getStringView();
-        }
-        if (!address.streetDirection().isNull()) {
-            fullStreetName += " " + address.streetDirection().getValue();
-        }
-        return fullStreetName;
     }
 }

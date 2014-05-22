@@ -76,8 +76,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                     .address().suiteNumber());
             bind(toProto.billingAccount().lease().unit().building().info().address().province(), boProto.billingAccount().lease().unit().building().info()
                     .address().province());
-            bind(toProto.billingAccount().lease().unit().building().info().address().country().name(), boProto.billingAccount().lease().unit().building()
-                    .info().address().country().name());
+            bind(toProto.billingAccount().lease().unit().building().info().address().country(), boProto.billingAccount().lease().unit().building().info()
+                    .address().country());
             bind(toProto.billingAccount().lease().unit().building().complex().name(), boProto.billingAccount().lease().unit().building().complex().name());
             bind(toProto.billingAccount().lease().unit().info().number(), boProto.billingAccount().lease().unit().info().number());
             bind(toProto.billingAccount().lease().leaseId(), boProto.billingAccount().lease().leaseId());

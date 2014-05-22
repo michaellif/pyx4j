@@ -14,10 +14,7 @@
 package com.propertyvista.domain.ref;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
@@ -33,9 +30,7 @@ public interface City extends IEntity {
     IPrimitive<GeoPoint> location();
 
     @Caption(name = "Province/State")
-    @Editor(type = EditorType.combo)
-    @Reference(adapter = ProvinceReferenceAdapter.class)
-    Province province();
+    IPrimitive<ISOProvince> province();
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Boolean> hasProperties();

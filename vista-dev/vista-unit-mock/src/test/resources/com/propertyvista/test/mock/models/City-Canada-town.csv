@@ -1,4 +1,4 @@
-﻿Name,province.name
+Name,province
 ,Alberta
 Athabasca,
 Banff,
@@ -108,7 +108,7 @@ Wainwright,
 Wembley,
 Westlock,
 Whitecourt,
-,British Columbia
+,BritishColumbia
 Comox,
 Creston,
 Cumberland,
@@ -178,7 +178,7 @@ Teulon,
 Treherne,
 Virden,
 Winnipeg Beach,
-,New Brunswick
+,NewBrunswick
 Beresford,
 Bouctouche,
 Caraquet,
@@ -188,7 +188,7 @@ Grand Bay-Westfield,
 Grand Falls,
 Hampton,
 Hartland,
-Lamèque,
+Lam�que,
 Nackawic,
 Oromocto,
 Quispamsis,
@@ -206,7 +206,7 @@ St. Stephen,
 Sussex,
 Tracadie-Sheila,
 Woodstock,
-,Newfoundland and Labrador
+,Newfoundland
 Bay Roberts,
 Bishop's Falls,
 Bonavista,
@@ -231,12 +231,12 @@ Portugal Cove-St. Philip's,
 St. Anthony,
 Stephenville,
 Torbay,
-,Northwest Territories
+,NorthwestTerritories
 Fort Smith,
 Hay River,
 Inuvik,
 Norman Wells,
-,Nova Scotia
+,NovaScotia
 Amherst,
 Annapolis Royal,
 Antigonish,
@@ -380,7 +380,7 @@ Wasaga Beach,
 West Nipissing,
 Whitby,
 Whitchurch-Stouffville,
-,Prince Edward Island
+,PrinceEdwardIsland
 Alberton,
 Cornwall,
 Georgetown,

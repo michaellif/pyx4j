@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
@@ -66,7 +66,7 @@ public class PolicyManagerTestBase extends IntegrationTestBase {
         return models;
     }
 
-    protected void makeBuilding(Province province) {
+    protected void makeBuilding(ISOProvince province) {
         Building buildingOn1 = getDataModel(BuildingDataModel.class).addBuilding("ON");
         getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(buildingOn1, new BigDecimal("1.00"));
         getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(buildingOn1, new BigDecimal("1.00"));

@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapApi;
 import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.Weatherdata;
 
@@ -32,7 +33,7 @@ public class MockupOpenWeatherMapApiImpl implements OpenWeatherMapApi {
     }
 
     @Override
-    public Weatherdata getWeatherdata(String cityName, String countryName) {
+    public Weatherdata getWeatherdata(String cityName, ISOCountry country) {
         Weatherdata weatherData = null;
         try {
             JAXBContext jc = JAXBContext.newInstance(Weatherdata.class);

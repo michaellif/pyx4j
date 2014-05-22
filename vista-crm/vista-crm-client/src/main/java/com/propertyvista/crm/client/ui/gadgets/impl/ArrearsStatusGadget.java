@@ -64,7 +64,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province()).visible(false).title(i18n.ntr("Province")).build(),                    
-                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.ntr("Country")).build(),                    
+                new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country()).visible(false).title(i18n.ntr("Country")).build(),                    
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.ntr("Complex")).build(),
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.ntr("Unit")).build(),
                 new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).build(),

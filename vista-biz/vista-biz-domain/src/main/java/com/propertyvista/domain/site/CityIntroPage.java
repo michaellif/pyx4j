@@ -19,14 +19,14 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
 
 public interface CityIntroPage extends IEntity {
     @NotNull
     IPrimitive<String> cityName();
 
     @NotNull
-    Province province();
+    IPrimitive<ISOProvince> province();
 
     @Owned
     IList<HtmlContent> content();

@@ -40,6 +40,7 @@ import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
@@ -345,7 +346,7 @@ public class PMSiteContentManager implements Serializable {
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
         for (City city : Persistence.secureQuery(criteria.asc(criteria.proto().name()))) {
             // sanity check
-            if (city.name().isNull() || city.province().name().isNull() || city.province().code().isNull()) {
+            if (city.name().isNull() || city.province().isNull()) {
                 continue;
             }
             cityList.add(city);
@@ -365,10 +366,11 @@ public class PMSiteContentManager implements Serializable {
             if (cityName == null) {
                 continue;
             }
-            String provName = useCode ? city.province().code().getValue() : city.province().name().getValue();
-            if (provName == null) {
+            ISOProvince prov = city.province().getValue();
+            if (prov == null) {
                 continue;
             }
+            String provName = useCode ? prov.code : prov.name;
             List<String> cityList = provCityMap.get(provName);
             if (cityList == null) {
                 cityList = new ArrayList<String>();
@@ -481,7 +483,7 @@ public class PMSiteContentManager implements Serializable {
 
     public PageMetaTags getCityPageMetaTags(AvailableLocale curLocale, City city) {
         PageMetaTags meta = EntityFactory.create(PageMetaTags.class);
-        meta.title().setValue(i18n.tr("Rent Apartments in {0}, {1}", city.name().getValue(), city.province().name().getValue()));
+        meta.title().setValue(i18n.tr("Rent Apartments in {0}, {1}", city.name().getValue(), city.province().getValue()));
         meta.description().setValue(
                 i18n.tr("{0} apartments for rent by {1}, find your next rental apartment in {0} fast and easy using our apartment search.", city.name()
                         .getValue(), getSiteTitles(curLocale).residentPortalTitle().getValue()));

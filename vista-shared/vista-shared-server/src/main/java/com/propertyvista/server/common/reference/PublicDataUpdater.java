@@ -21,7 +21,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 
 public class PublicDataUpdater {
 
@@ -38,9 +39,11 @@ public class PublicDataUpdater {
         buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().marketing().visibility(), PublicVisibilityType.global));
         boolean visibleBuildingExists = Persistence.service().exists(buildingCriteria);
 
+        ISOCountry country = building.info().address().country().getValue();
+        ISOProvince prov = ISOProvince.forName(building.info().address().province().getValue(), country);
         EntityQueryCriteria<City> criteriaCity = EntityQueryCriteria.create(City.class);
         criteriaCity.eq(criteriaCity.proto().name(), building.info().address().city().getValue());
-        criteriaCity.eq(criteriaCity.proto().province().name(), building.info().address().province());
+        criteriaCity.eq(criteriaCity.proto().province(), prov);
         City city = Persistence.service().retrieve(criteriaCity);
         if (city != null) {
             if (city.hasProperties().getValue(false) != visibleBuildingExists) {
@@ -48,15 +51,9 @@ public class PublicDataUpdater {
                 Persistence.service().persist(city);
             }
         } else {
-            // find province
-            EntityQueryCriteria<Province> crit = EntityQueryCriteria.create(Province.class);
-            crit.eq(crit.proto().name(), building.info().address().province());
-            crit.eq(crit.proto().country(), building.info().address().country());
-            Province prov = Persistence.service().retrieve(crit);
-
             city = EntityFactory.create(City.class);
             city.name().setValue(building.info().address().city().getValue());
-            city.province().set(prov);
+            city.province().setValue(prov);
             city.location().setValue(building.info().location().getValue());
             city.hasProperties().setValue(visibleBuildingExists);
             Persistence.service().persist(city);

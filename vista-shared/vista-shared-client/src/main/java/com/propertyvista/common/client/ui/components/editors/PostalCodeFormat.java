@@ -19,6 +19,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.util.ValidationUtils;
 
 public class PostalCodeFormat implements IFormatter<String, String>, IParser<String> {
@@ -26,7 +27,7 @@ public class PostalCodeFormat implements IFormatter<String, String>, IParser<Str
     /** returns country name in English converted to lower case */
     interface ICountryContextProvider {
 
-        String getCountry();
+        ISOCountry getCountry();
 
     }
 
@@ -42,10 +43,10 @@ public class PostalCodeFormat implements IFormatter<String, String>, IParser<Str
             return null;
         }
 
-        String country = countryContextProvider.getCountry();
+        ISOCountry country = countryContextProvider.getCountry();
         String formattedValue;
 
-        if ("canada".equals(country)) {
+        if (ISOCountry.Canada.equals(country)) {
             String trimmed = removeWhitespace(value);
             if (trimmed.length() == 6) {
                 formattedValue = (trimmed.substring(0, 3) + " " + trimmed.substring(3, 6)).toUpperCase();
@@ -64,10 +65,10 @@ public class PostalCodeFormat implements IFormatter<String, String>, IParser<Str
             return null;
         }
 
-        String country = countryContextProvider.getCountry();
+        ISOCountry country = countryContextProvider.getCountry();
 
         String unformattedPostalCode = postalCode;
-        if ("canada".equals(country)) {
+        if (ISOCountry.Canada.equals(country)) {
             unformattedPostalCode = removeWhitespace(unformattedPostalCode);
             if (!ValidationUtils.isCanadianPostalCodeValid(unformattedPostalCode)) {
                 // TODO there already should be a an attached validator so this is redundant and in case of wrong format the field will complain about "field is empty"

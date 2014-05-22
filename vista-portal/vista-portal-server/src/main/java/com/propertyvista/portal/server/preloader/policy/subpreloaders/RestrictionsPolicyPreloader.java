@@ -19,7 +19,8 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<RestrictionsPolicy> {
@@ -60,11 +61,17 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
         if (provinceCode == null) {
             return super.getTopNode();
         } else {
-            EntityQueryCriteria<Province> c = EntityQueryCriteria.create(Province.class);
-            c.eq(c.proto().code(), provinceCode);
-            Province p = Persistence.service().retrieve(c);
+            ISOProvince province = ISOProvince.forCode(provinceCode);
+            if (province == null) {
+                throw new Error("ISOProvince with code '" + provinceCode + "' not found");
+            }
+            EntityQueryCriteria<ProvincePolicyNode> c = EntityQueryCriteria.create(ProvincePolicyNode.class);
+            c.eq(c.proto().province(), province);
+            ProvincePolicyNode p = Persistence.service().retrieve(c);
             if (p == null) {
-                throw new Error("Province with code '" + provinceCode + "' was not found");
+                p = EntityFactory.create(ProvincePolicyNode.class);
+                p.province().setValue(province);
+                Persistence.service().persist(p);
             }
             return p;
         }

@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.building.LandlordMediaUploadService;
 import com.propertyvista.domain.property.LandlordMedia;
@@ -60,7 +60,7 @@ public class LandlordForm extends CrmEntityForm<LandlordDTO> {
         formPanel.append(Location.Right, proto().website()).decorate();
 
         formPanel.h1(proto().address().getMeta().getCaption());
-        formPanel.append(Location.Dual, proto().address(), new AddressStructuredEditor(false));
+        formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
         formPanel.br();
         CImage logo = new CImage(GWT.<LandlordMediaUploadService> create(LandlordMediaUploadService.class), new VistaFileURLBuilder(LandlordMedia.class));

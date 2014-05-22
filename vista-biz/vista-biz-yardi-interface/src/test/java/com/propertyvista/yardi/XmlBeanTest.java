@@ -45,8 +45,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.TaskRunner;
 import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.UnitsMapper;
@@ -65,16 +63,6 @@ public class XmlBeanTest {
 
         createPmc();
 
-        // mock countries and provinces
-        Country country = EntityFactory.create(Country.class);
-        country.name().setValue("United States");
-        Persistence.service().persist(country);
-
-        Province province = EntityFactory.create(Province.class);
-        province.code().setValue("CA");
-        province.name().setValue("California");
-        province.country().set(country);
-        Persistence.service().persist(province);
     }
 
     public static synchronized void createPmc() {

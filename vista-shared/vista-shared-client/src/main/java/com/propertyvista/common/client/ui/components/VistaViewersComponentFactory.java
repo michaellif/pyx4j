@@ -30,9 +30,6 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
-
 public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
 
     @Override
@@ -66,8 +63,6 @@ public class VistaViewersComponentFactory extends BaseEditableComponentFactory {
             } else {
                 return super.create(member);
             }
-        } else if ((member.getValueClass().equals(Province.class)) || (member.getValueClass().equals(Country.class))) {
-            return new CEntityLabel();
         } else if (mm.isEntity() && !mm.isDetached() && !mm.isOwnedRelationships()) {
             return new CEntityLabel();
         } else {

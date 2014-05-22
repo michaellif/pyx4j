@@ -1,5 +1,5 @@
-Name,province.name
-Aberdare,Mid Glamorgan
+Name,province
+Aberdare,Mid_Glamorgan
 Aberdeen,Aberdeenshire
 Aberdovey,Gwynedd
 Abergavenny,Gwent
@@ -24,20 +24,20 @@ Ambleside,Cumbria
 Amersham,Buckinghamshire
 Andover,Hampshire
 Anstruther,Fife
-Antrim,Co Antrim
+Antrim,Co_Antrim
 Appleby-in-Westmorland,Cumbria
 Arbroath,Angus
 Ardrossan,Ayrshire
-Armagh,Co Armagh
+Armagh,Co_Armagh
 Arthog,Gwynedd
-Arundel,West Sussex
+Arundel,West_Sussex
 Ascot,Berkshire
 Ashbourne,Derbyshire
 Ashford,Kent
 Ashford,Middlesex
 Ashington,Northumberland
 Ashtead,Surrey
-Ashton-under-Lyne,Greater Manchester
+Ashton-under-Lyne,Greater_Manchester
 Attleborough,Norfolk
 Aviemore,Inverness-shire
 Axminster,Devon
@@ -46,28 +46,28 @@ Ayr,Ayrshire
 Bala,Gwynedd
 Baldock,Hertfordshire
 Ballachulish,Argyll
-Ballycastle,Co Antrim
-Ballyclare,Co Antrim
-Ballymena,Co Antrim
-Ballymoney,Co Antrim
+Ballycastle,Co_Antrim
+Ballyclare,Co_Antrim
+Ballymena,Co_Antrim
+Ballymoney,Co_Antrim
 Bamstaple,Devon
-Banbridge,Co Down
+Banbridge,Co_Down
 Banbury,Oxfordshire
 Banchory,Kincardineshire
-Bangor,Co Down
+Bangor,Co_Down
 Bangor,Gwynedd
 Banstead,Surrey
 Barking,Essex
-Barnard Castle,Co Durham
+Barnard Castle,Co_Durham
 Barnet,Hertfordshire
-Barnsley,South Yorkshire
-Barry,South Glamorgan
-Barton-upon-Humber,South Humberside
+Barnsley,South_Yorkshire
+Barry,South_Glamorgan
+Barton-upon-Humber,South_Humberside
 Basildon,Essex
 Basingstoke,Hampshire
 Bath,Avon
-Bathgate,West Lothian
-Battle,East Sussex
+Bathgate,West_Lothian
+Battle,East_Sussex
 Beaumaris,Gwynedd
 Beccles,Suffolk
 Beckenham,Kent
@@ -77,98 +77,98 @@ Belvedere,Kent
 Benneet,Essex
 Berkhamsted,Hertfordshire
 Berwick-upon-Tweed,Northumberland
-Beverley,North Humberside
-Bexhill-on-Sea,East Sussex
+Beverley,North_Humberside
+Bexhill-on-Sea,East_Sussex
 Bicester,Oxfordshire
 Bideford,Devon
 Biggar,Lanarkshire
 Biggleswade,Bedfordshire
 Billericay,Essex
-Billingshurst,West Sussex
-Bingley,West Yorkshire
+Billingshurst,West_Sussex
+Bingley,West_Yorkshire
 Birkenhead,Merseyside
-Birmingham,West Midlands
-Bishop Auckland,Co Durham
+Birmingham,West_Midlands
+Bishop Auckland,Co_Durham
 Bishop's Stortford,Hertfordshire
 Blackburn,Lancashire
 Blackpool,Lancashire
 Blaenau Ffestiniog,Gwynedd
 Blairgowrie,Perthshire
 Blandford Forum,Dorset
-Blaydon-on-Tyne,Tyne and Wear
+Blaydon-on-Tyne,Tyne_and_Wear
 Bodmin,Cornwall
-Bognor Regis,West Sussex
-Boldon Colliery,Tyne and Wear
+Bognor Regis,West_Sussex
+Boldon Colliery,Tyne_and_Wear
 Bolton,Lancashire
 Bonnyrigg,Midlothian
 Bootle,Merseyside
 Bordon,Hampshire
 Borehamwood,Hertfordshire
 Boston,Lincolnshire
-Botness,West Lothian
+Botness,West_Lothian
 Bourne,Lincolnshire
 Bournemouth,Dorset
 Brackley,Northamptonshire
 Bracknell,Berkshire
-Bradford,West Yorkshire
+Bradford,West_Yorkshire
 Braintree,Essex
 Braunton,Devon
 Brecon,Powys
 Brentford,Middlesex
 Brentwood,Essex
-Bridgend,Mid Glamorgan
+Bridgend,Mid_Glamorgan
 Bridgnorth,Shropshire
 Bridgwater,Somerset
-Bridlington,North Humberside
+Bridlington,North_Humberside
 Bridport,Dorset
-Brighouse,West Yorkshire
-Brighton,East Sussex
+Brighouse,West_Yorkshire
+Brighton,East_Sussex
 Bristol,Avon
 Brixham,Devon
-Broadford,Isle of Skye
+Broadford,Isle_of_Skye
 Broadstairs,Kent
-Broadway,Hereford and Worcester
+Broadway,Hereford_and_Worcester
 Brockenhurst,Hampshire
-Brodick,Isle of Arran
+Brodick,Isle_of_Arran
 Bromley,Kent
-Bromsgrove,Hereford and Worcester
-Broxburn,West Lothian
+Bromsgrove,Hereford_and_Worcester
+Broxburn,West_Lothian
 Buckfastleigh,Devon
 Buckhurst Hill,Essex
 Buckie,Banffshire
 Buckingham,Buckinghamshire
 Bude,Cornwall
 Builth Wells,Powys
-Bunessan,Isle of Mull
+Bunessan,Isle_of_Mull
 Bungay,Suffolk
-Burgess Hill,West Sussex
+Burgess Hill,West_Sussex
 Burnham-on-Sea,Somerset
 Burnley,Lancashire
 Burton-on-Trent,Staffordshire
 Bury,Lancashire
 Bury St Edmunds,Suffolk
-Bushmills,Co Antrim
+Bushmills,Co_Antrim
 Buxton,Derbyshire
-Caerphilly,Mid Glamorgan
+Caerphilly,Mid_Glamorgan
 Calne,Wiltshire
 Camberley,Surrey
 Cambridge,Cambridgeshire
 Camelford,Cornwall
 Campbeltown,Argyll
 Canterbury,Kent
-Cardiff,South Glamorgan
+Cardiff,South_Glamorgan
 Cardigan,Dyfed
 Carlisle,Cumbria
-Carloway,Isle of Lewis
+Carloway,Isle_of_Lewis
 Carluke,Lanarkshire
 Carmarthen,Dyfed
 Carnforth,Lancashire
-Carrickfergus,Co Antrim
+Carrickfergus,Co_Antrim
 Carshalton,Surrey
 Castle Douglas,Kirkcudbrightshire
-Castlederg,Co Tyrone
-Castletown,Isle of Man
-Castlewellan,Co Down
+Castlederg,Co_Tyrone
+Castletown,Isle_of_Man
+Castlewellan,Co_Down
 Caterham,Surrey
 Cemaes Bay,Gwynedd
 Chard,Somerset
@@ -182,9 +182,9 @@ Chepstow,Gwent
 Chertsey,Surrey
 Chesham,Buckinghamshire
 Chester,Cheshire
-Chester-le-Street,Co Durham
+Chester-le-Street,Co_Durham
 Chesterfield,Derbyshire
-Chichester,West Sussex
+Chichester,West_Sussex
 Chippenham,Wiltshire
 Chipping Norton,Oxfordshire
 Chorley,Lancashire
@@ -192,39 +192,39 @@ Christchurch,Dorset
 Cinderford,Gloucestershne
 Cirencester,Gloucestershire
 Clacton-on-Sea,Essex
-Cleethorpes,South Humberside
+Cleethorpes,South_Humberside
 Clevedon,Avon
 Clitheroe,Lancashire
-Clogher,Co Tyrone
+Clogher,Co_Tyrone
 Coalville,Leicestershire
 Coatbridge,Lanarkshire
 Cobham,Surrey
 Cockermouth,Cumbria
 Colchester,Essex
-Coleraine,Co Londonderry
+Coleraine,Co_Londonderry
 Colwyn Bay,Clwyd
 Coniston,Cumbria
-Consett,Co Durham
+Consett,Co_Durham
 Conwy,Gwynedd
-Cookstown,Co Tyrone
+Cookstown,Co_Tyrone
 Corbridge,Northumberland
 Corby,Northamptonshire
 Corwen,Clwyd
 Coulsdon,Surrey
-Coventry,West Midlands
-Craigavon,Co Armagh
+Coventry,West_Midlands
+Craigavon,Co_Armagh
 Cramlington,Northumberland
 Cranleigh,Surrey
 Craven Arms,Shropshire
-Crawley,West Sussex
+Crawley,West_Sussex
 Crediton,Devon
 Crewe,Cheshire
 Crieff,Perthshire
 Cromer,Norfolk
-Crowborough,East Sussex
+Crowborough,East_Sussex
 Croy,Inverness-shire
 Croydon,Surrey
-Crumlin,Co Antrim
+Crumlin,Co_Antrim
 Cullompton,Devon
 Cupar,Fife
 Cwmbran,Gwent
@@ -232,7 +232,7 @@ Dagenham,Essex
 Dalbeattie,Kirkcudbrightshire
 Dalmally,Argyll
 Dalry,Ayrshire
-Darlington,Co Durham
+Darlington,Co_Durham
 Dartford,Kent
 Darvel,Ayrshire
 Deal,Kent
@@ -240,39 +240,39 @@ Deeside,Clwyd
 Derby,Derbyshire
 Dereham,Norfolk
 Devizes,Wiltshire
-Dewsbury,West Yorkshire
+Dewsbury,West_Yorkshire
 Didcot,Oxfordshire
-Dinas Powis,South Glamorgan
+Dinas Powis,South_Glamorgan
 Dingwall,Ross-shire
 Diss,Norfolk
 Dolgellau,Gwynedd
-Doncaster,South Yorkshire
+Doncaster,South_Yorkshire
 Dorking,Surrey
 Dornoch,Sutherland
-Douglas,Isle of Man
+Douglas,Isle_of_Man
 Dover,Kent
-Downpatrick,Co Down
-Driffield,North Humberside
-Droitwich,Hereford and Worcester
-Dromore,Co Down
-Dudley,West Midlands
+Downpatrick,Co_Down
+Driffield,North_Humberside
+Droitwich,Hereford_and_Worcester
+Dromore,Co_Down
+Dudley,West_Midlands
 Dumbarton,Dunbartonshire
 Dumfries,Dumfriesshire
-Dunbar,East Lothian
+Dunbar,East_Lothian
 Dunblane,Perthshire
 Dundee,Angus
 Dunfermline,Fife
-Dungannon,Co Tyrone
+Dungannon,Co_Tyrone
 Dunkeld,Perthshire
 Dunmow,Essex
 Dunmurry,Belfast
 Dunoon,Argyll
 Duns,Berwickshire
 Dunstable,Bedfordshire
-Durham,Co Durham
-East Grinstead,West Sussex
+Durham,Co_Durham
+East Grinstead,West_Sussex
 East Molesey,Surrey
-Eastbourne,East Sussex
+Eastbourne,East_Sussex
 Eastleigh,Hampshire
 Ebbw Vale,Gwent
 Edenbridge,Kent
@@ -284,7 +284,7 @@ Ellesmere Port,Cheshire
 Ely,Cambridgeshire
 Emsworth,Hampshire
 Enfeld,Middlesex
-Enniskillen,Co Fermanagh
+Enniskillen,Co_Fermanagh
 Epping,Essex
 Epsom,Surrey
 Erith,Kent
@@ -298,7 +298,7 @@ Farnborough,Hampshire
 Farnham,Surrey
 Felixstowe,Suffolk
 Fishguard,Dyfed
-Fivemiletown,Co Tyrone
+Fivemiletown,Co_Tyrone
 Fleet,Hampshire
 Fleetwood,Lancashire
 Flint,Clwyd
@@ -308,12 +308,12 @@ Fort William,Inverness-shire
 Fortrose,Ross-shire
 Fowey,Cornwall
 Fraserburgh,Aberdeenshire
-Freshwater,Isle of Wight
+Freshwater,Isle_of_Wight
 Frinton-on-Sea,Essex
 Frome,Somerset
 Gairloch,Ross-shire
 Galasheils,Selkirkshire
-Gateshead,Tyne and Wear
+Gateshead,Tyne_and_Wear
 Gerrards Cross,Buckinghamshire
 Gillingham,Dorset
 Gillingham,Kent
@@ -334,51 +334,51 @@ Great Missenden,Buckinghamshire
 Greenford,Middlesex
 Greenock,Renfrewshire
 Gretna,Dumfriesshire
-Grimsby,South Humberside
-Guernsey,Channel Islands
+Grimsby,South_Humberside
+Guernsey,Channel_Islands
 Guildford,Surrey
-Guisborough,North Yorkshire
-Gullane,East Lothian
-Hamilton,Lanark shire
-Haddington,East Lothian
-Hailsham,East Sussex
-Halesowen,West Midlands
-Halifax,West Yorkshire
+Guisborough,North_Yorkshire
+Gullane,East_Lothian
+Hamilton,Lanark_shire
+Haddington,East_Lothian
+Hailsham,East_Sussex
+Halesowen,West_Midlands
+Halifax,West_Yorkshire
 Halstead,Essex
 Haltwhistle,Northumberland
 Hampton,Middlesex
 Harlow,Essex
 Harpenden,Hertfordshire
-Harrogate,North Yorkshire
+Harrogate,North_Yorkshire
 Harrow,Middlesex
 Hartlepool,Cleveland
 Harwich,Essex
 Haslemere,Surrey
-Hassocks,West Sussex
-Hastings,East Sussex
+Hassocks,West_Sussex
+Hastings,East_Sussex
 Hatfield,Hertfordshire
 Havant,Hampshire
 Haverfordwest,Dyfed
 Hawick,Roxburghshire
 Hayes,Middlesex
 Hayling Island,Hampshire
-Haywards Heath,West Sussex
+Haywards Heath,West_Sussex
 Heanor,Derbyshire
-Heathfield,East Sussex
+Heathfield,East_Sussex
 Helensburgh,Dunbartonshire
 Helston,Cornwall
 HemelHempstead,Hertfordshire
-Henfield,West Sussex
+Henfield,West_Sussex
 Henley-on-Thames,Oxfordshire
-Hereford,Hereford and Worcester
+Hereford,Hereford_and_Worcester
 Herne Bay,Kent
 Hertford,Hertfordshire
-Hessle,North Humberside
+Hessle,North_Humberside
 Hexham,Northumberland
 Heywood,Lancashire
 High Wycombe,Buckinghamshire
 Highbridge,Somerset
-Hillsborough,Co Down
+Hillsborough,Co_Down
 Hinckley,Leicestershire
 Hindhead,Surrey
 Hitchin,Hertfordshire
@@ -387,16 +387,16 @@ Hoddesdon,Hertfordshire
 Holsworthy,Devon
 Holt,Norfolk
 Holyhead,Gwynedd
-Holywood,Co Down
+Holywood,Co_Down
 Honiton,Devon
 Hook,Hampshire
 Horley,Surrey
 Hornchurch,Essex
-Horsham,West Sussex
-Houghton le Spring,Tyne and Wear
+Horsham,West_Sussex
+Houghton le Spring,Tyne_and_Wear
 Hounslow,Middlesex
-Hove,East Sussex
-Hull,North Humberside
+Hove,East_Sussex
+Hull,North_Humberside
 Hungerford,Berkshire
 Hunstanton,Norfolk
 Huntingdon,Cambridgeshire
@@ -405,26 +405,26 @@ Hythe,Kent
 Ilford,Essex
 Ilfracombe,Devon
 Ilkeston,Derbyshire
-Ilkley,West Yorkshire
-Immingham,South Humberside
+Ilkley,West_Yorkshire
+Immingham,South_Humberside
 Ingatestone,Essex
 Inveraray,Argyll
 Inverness,Inverness-shire
 Inverurie,Aberdeenshire
-Iona,Isle of Iona
+Iona,Isle_of_Iona
 Ipswich,Suffolk
 Ironbridge,Shropshire
-Isle of Wight,Isle of Wight
+Isle of Wight,Isle_of_Wight
 Isleworth,Middlesex
-Jersey,Channel Islands
+Jersey,Channel_Islands
 Johnston,Renfrewshire
-Keighley,West Yorkshire
+Keighley,West_Yorkshire
 Kelso,Roxburghshire
 Kendal,Cumbria
 Kenilworth,Warwickshire
 Keswick,Cumbria
 Kettering,Northamptonshire
-Kidderminster,Hereford and Worcester
+Kidderminster,Hereford_and_Worcester
 Kilbirnie,Ayrshire
 Killin,Perthshire
 Kilmacolm,Renfrewshire
@@ -432,49 +432,49 @@ Kilmarnock,Ayrshire
 King's Lynn,Norfolk
 Kings Langley,Hertfordshire
 Kingston upon Thames,Surrey
-Kingswinford,West Midlands
+Kingswinford,West_Midlands
 Kingussie,Inverness-shire
 Kirkby Stephen,Cumbria
 Kirkcaldy,Fife
 Kirriemuir,Angus
 Knutsford,Cheshire
 Kyle,Ross-shire
-Kyleakin,Isle of Skye
+Kyleakin,Isle_of_Skye
 Laindon,Essex
 Lairg,Sutherland
 Lanark,Lanarkshire
 Lancaster,Lancashire
-Lancing,West Sussex
+Lancing,West_Sussex
 Larbert,Stirlingshire
 Latheron,Caithness
 Launceston,Cornwall
 Leamington Spa,Warwickshire
 Leatherhead,Surrey
-Ledbury,Hereford and Worcester
-Leeds,West Yorkshire
+Ledbury,Hereford_and_Worcester
+Leeds,West_Yorkshire
 Leicester,Leicestershire
 Leigh,Lancashire
 Leigh-on-Sea,Essex
 Leighton Buzzar,Bedfordshire
 Leiston,Suffolk
-Leominster,Hereford and Worcester
-Lerwick,Isle of Shetland
+Leominster,Hereford_and_Worcester
+Lerwick,Isle_of_Shetland
 Letchworth,Hertfordshire
-Lewes,East Sussex
-Leyburn,North Yorkshire
+Lewes,East_Sussex
+Leyburn,North_Yorkshire
 Leyland,Lancashire
 Lichfield,Staffordshire
 Lightwater,Surrey
-Limavady,Co Londonderry
+Limavady,Co_Londonderry
 Lincoln,Lincolnshire
 Lingfield,Surrey
 Liphook,Hampshire
-Lisburn,Co Antrim
+Lisburn,Co_Antrim
 Liss,Hampshire
 Littleborough,Lancashire
-Littlehampton,West Sussex
+Littlehampton,West_Sussex
 Liverpool,Merseyside
-Livingston,West Lothian
+Livingston,West_Lothian
 Llanbedr,Gwynedd
 Llandrindod Wells,Powys
 Llandudno,Gwynedd
@@ -483,22 +483,22 @@ Llanelli,Dyfed
 Llangollen,Clwyd
 Llanidloes,Powys
 Llanrwst,Gwynedd
-Llantwit,South Glamorgan
+Llantwit,South_Glamorgan
 Llanwrda,Dyfed
 Loanhead,Midlothian
-Lochboisdale,Isle of Uist
+Lochboisdale,Isle_of_Uist
 Lochcarron,Ross-shire
 Lochgilphead,Argyll
 Lochwinnoch,Renfrewshire
 Lockerbie,Dumfriesshire
 London,London
-Londonderry,Co Londonderry
+Londonderry,Co_Londonderry
 Loughborough,Leicestershire
 Loughton,Essex
 Louth,Lincolnshire
 Lowestoft,Suffolk
 Ludlow,Shropshire
-Lurgan,Co Antrim
+Lurgan,Co_Antrim
 Luton,Bedfordshire
 Lutterworth,Leicestershire
 Lydney,Gloucestershire
@@ -508,15 +508,15 @@ Lynton,Devon
 Lytham StAnnes,Lancashire
 Macclesfield,Cheshire
 Machynlleth,Powys
-Maesteg,Mid Glamorgan
-Magharafelt,Co Londonderry
+Maesteg,Mid_Glamorgan
+Magharafelt,Co_Londonderry
 Maidenhead,Berkshire
 Maidstone,Kent
 Maldon,Essex
 Malmesbury,Wiltshire
 Malpas,Cheshire
-Malvern,Hereford and Worcester
-Manchester,Greater Manchester
+Malvern,Hereford_and_Worcester
+Manchester,Greater_Manchester
 March,Cambridgeshire
 Margate,Kent
 Market Harborough,Leicestershire
@@ -527,15 +527,15 @@ Meifod,Powys
 Melksham,Wiltshire
 Melton Mowbray,Leicestershire
 Mere,Wiltshire
-Methyr Tydfil,Mid Glamorgan
-Mexborough,South Yorkshire
+Methyr Tydfil,Mid_Glamorgan
+Mexborough,South_Yorkshire
 Middlesbrough,Cleveland
 Middlewich,Cheshire
-Midhurst,West Sussex
+Midhurst,West_Sussex
 Mildenhall,Suffolk
 Milton Keynes,Buckinghamshire
 Minehead,Somerset
-Mirfield,West Yorkshire
+Mirfield,West_Yorkshire
 Mitcham,Surrey
 Mitcheldean,Gloucestershire
 Mold,Clwyd
@@ -556,26 +556,26 @@ Nethy Bridge,Inverness-shire
 New Malden,Surrey
 Newark,Nottinghamshire
 Newbury,Berkshire
-Newcastle,Co Down
+Newcastle,Co_Down
 Newcastle,Staffordshire
 Newcastle Emlyn,Dyfed
-Newcastle upon Tyne,Tyne and Wear
+Newcastle upon Tyne,Tyne_and_Wear
 Newcastleton,Roxburghshire
 Newent,Gloucestershire
-Newhaven,East Sussex
+Newhaven,East_Sussex
 Newmarket,Suffolk
 Newport,Gwent
-Newport,Isle of Wight
+Newport,Isle_of_Wight
 Newport,Shropshire
 Newport Pagnell,Buckinghamshire
 Newquay,Cornwall
 Newton Abbot,Devon
 Newtown,Powys
 Newtown-le- Willows,Merseyside
-Newtownabbey,Co Antrim
-Newtownards,Co Down
-North Berwick,East Lothian
-North Shields,Tyne and Wear
+Newtownabbey,Co_Antrim
+Newtownards,Co_Down
+North Berwick,East_Lothian
+North Shields,Tyne_and_Wear
 Northampton,Northamptonshire
 Northwich,Cheshire
 Northwood,Middlesex
@@ -587,47 +587,47 @@ Oakham,Leicestershire
 Oban,Argyll
 Okehampton,Devon
 Oldham,Lancashire
-Omagh,Co Tyrone
+Omagh,Co_Tyrone
 Ongar,Essex
 Ormskirk,Lancashire
 Orpington,Kent
-Ossett,West Yorkshire
+Ossett,West_Yorkshire
 Oswestry,Shropshire
-Otley,West Yorkshire
+Otley,West_Yorkshire
 Oxford,Oxfordshire
 Oxted,Surrey
 Paignton,Devon
 Paisley,Renfrewshire
 Par,Cornwall
 Pembroke,Dyfed
-Penarth,South Glamorgan
+Penarth,South_Glamorgan
 Penicuik,Midlothian
 Penmaenmawr,Gwynedd
 Penrhyndeudraeth,Gwynedd
 Penrith,Cumbria
 Penryn,Cornwall
 Penzance,Cornwall
-Pershore,Hereford and Worcester
+Pershore,Hereford_and_Worcester
 Perth,Perthshire
 Peterborough,Cambridgeshire
 Peterhead,Aberdeenshire
 Petersfeld,Hampshire
-Petworth,West Sussex
-Pevensey,East Sussex
+Petworth,West_Sussex
+Pevensey,East_Sussex
 Pewsey,Wiltshire
 Pinner,Middlesex
 Pitlochry,Perthshire
 Plymouth,Devon
-Pontefract,West Yorkshire
-Pontyclun,Mid Glamorgan
-Pontypridd,Mid Glamorgan
+Pontefract,West_Yorkshire
+Pontyclun,Mid_Glamorgan
+Pontypridd,Mid_Glamorgan
 Poole,Dorset
 Port Isaac,Cornwall
-Port Talbot,West Glamorgan
-Porthcawl,Mid Glamorgan
+Port Talbot,West_Glamorgan
+Porthcawl,Mid_Glamorgan
 Porthmadog,Gwynedd
-Portree,Isle of Skye
-Portrush,Co Antrim
+Portree,Isle_of_Skye
+Portrush,Co_Antrim
 Portsmouth,Hampshire
 Potters Bar,Hertfordshire
 Poulton-le-Fylde,Lancashire
@@ -637,44 +637,44 @@ Preston,Lancashire
 Prestwick,Ayrshire
 Princes Risborough,Buckinghamshire
 Prudhoe,Northumberland
-Pulborough,West Sussex
+Pulborough,West_Sussex
 Purley,Surrey
 Pwllheli,Gwynedd
 Radlett,Hertfordshire
-Ramsey,Isle of Man
+Ramsey,Isle_of_Man
 Ramsgate,Kent
 Rayleigh,Essex
 Reading,Berkshire
 Redcar,Cleveland
-Redditch,Hereford and
+Redditch,Hereford_and
 Redhill,Surrey
 Redruth,Cornwall
 Reigate,Surrey
 Retford,Nottmghamshire
 Rhyl,Clwyd
-Richmond,North Yorkshire
+Richmond,North_Yorkshire
 Richmond,Surrey
 Rickmansworth,Hertfordshire
 Riding Mill,Northumberland
 Ringwood,Hampshire
 Ripley,Derbyshire
-Ripon,North Yorkshire
-Robertsbridge,East Sussex
+Ripon,North_Yorkshire
+Robertsbridge,East_Sussex
 Rochdale,Lancashire
 Rochester,Kent
 Rochford,Essex
 Romford,Essex
 Romsey,Hampshire
-Ross-on-Wye,Hereford and
+Ross-on-Wye,Hereford_and
 Rossendale,Lancashire
-Rotherham,South Yorkshire
-Rothesay,Isle ofBute
+Rotherham,South_Yorkshire
+Rothesay,Isle_ofBute
 Royston,Hertfordshire
 Rugeley,Staffordshire
 Ruislip,Middlesex
 Rushden,Northamptonshire
 Ruthin,Clwyd
-Ryton,Tyne and Wear
+Ryton,Tyne_and_Wear
 Saffron Walden,Essex
 Salford,Lancashire
 Salisbury,Wiltshire
@@ -683,41 +683,41 @@ Saltburn-by-the-Sea,Cleveland
 Saltcoats,Ayrshire
 Sandbach,Cheshire
 Sandhurst,Berkshire
-Sandown,Isle of Wight
+Sandown,Isle_of_Wight
 Sandwich,Kent
 Sandy,Bedfordshire
 Sanquhar,Dumfriesshire
 Sawbridgeworth,Hertfordshire
-Scarborough,North Yorkshire
-Scarinish,Isle of Tiree
-Scunthorpe,South Humberside
-Seaford,East Sussex
-Seaham,Co Durham
+Scarborough,North_Yorkshire
+Scarinish,Isle_of_Tiree
+Scunthorpe,South_Humberside
+Seaford,East_Sussex
+Seaham,Co_Durham
 Seahouses,Northumberland
 Seaton,Devon
-Selby,North Yorkshire
+Selby,North_Yorkshire
 Selkirk,Selkirkshire
 Sevenoaks,Kent
 Shaftesbury,Wiltshire
-Shawbost,Isle of Lewis
-Sheffield,South Yorkshire
+Shawbost,Isle_of_Lewis
+Sheffield,South_Yorkshire
 Shepperton,Middlesex
 Sherborne,Dorset
 Sheringham,Norfolk
-Shetland,Isle of Shetland
+Shetland,Isle_of_Shetland
 Shifnal,Shropshire
-Shipley,West Yorkshire
+Shipley,West_Yorkshire
 Shrewsbury,Shropshire
 Sidcup,Kent
 Sidmouth,Devon
 Sittingbourne,Kent
 Skelmersdale,Lancashire
-Skipton,North Yorkshire
+Skipton,North_Yorkshire
 Sleaford,Lincolnshire
 Slough,Berkshire
-Solihull,West Midlands
+Solihull,West_Midlands
 South Croydon,Surrey
-South Oueensferry,West Lothian
+South Oueensferry,West_Lothian
 South Petherton,Somerset
 South Wirral,Merseyside
 Southall,Middlesex
@@ -728,14 +728,14 @@ Southminster,Essex
 Southport,Merseyside
 Southsea,Hampshire
 Southwell,Nottinghamshire
-Sowerby,North Yorkshire
+Sowerby,North_Yorkshire
 Spalding,Lincolnshire
 St Albans,Hertfordshire
 St Andrews,Fife
 St Asaph,Clwyd
 St Helens,Merseyside
 St Ives,Cornwall
-St Leonards-on-Sea,East Sussex
+St Leonards-on-Sea,East_Sussex
 Stafford,Staffordshire
 Staines,Middlesex
 Stamford,Lincolnshire
@@ -749,9 +749,9 @@ Stockton-on-Tees,Cleveland
 Stoke-on-Trent,Staffordshire
 Stone,Staffordshire
 Stonehaven,Kincardineshire
-Stornoway,Isle of Lewis
-Stourbridge,West Midlands
-Stourport-on-Severn,Hereford and Worcester
+Stornoway,Isle_of_Lewis
+Stourbridge,West_Midlands
+Stourport-on-Severn,Hereford_and_Worcester
 Stowmarket,Suffolk
 Stranraer,Wigtownshire
 Stratford-upon-Avon,Warwickshire
@@ -761,15 +761,15 @@ Street,Somerset
 Stroud,Gloucestershire
 Sudbury,Suffolk
 Sunbury-on-Thames,Middlesex
-Sunderland,Tyne and Wear
+Sunderland,Tyne_and_Wear
 Surbiton,Surrey
 Sutton,Surrey
-Sutton Coldfield,West Midlands
+Sutton Coldfield,West_Midlands
 Sutton-in-Ashfield,Nottinghamshire
 Swaffham,Norfolk
 Swanage,Dorset
 Swanley,Kent
-Swansea,West Glamorgan
+Swansea,West_Glamorgan
 Swindon,Wiltshire
 Tain,Ross-shire
 Talybont,Gwynedd
@@ -785,17 +785,17 @@ Tewkesbury,Gloucestershire
 Thame,Oxfordshire
 Thatcham,Berkshire
 Thetford,Norfolk
-Thirsk,North Yorkshire
+Thirsk,North_Yorkshire
 Thornton Heath,Surrey
 Thurso,Caithness
 Tilbury,Essex
-Tipton,West Midlands
+Tipton,West_Midlands
 Tiverton,Devon
 Tonbridge,Kent
 Torquay,Devon
-Totland Bay,Isle of Wight
+Totland Bay,Isle_of_Wight
 Towcester,Northamptonshire
-Tranent,East Lothian
+Tranent,East_Lothian
 Tredegar,Gwent
 Tring,Hertfordshire
 Trowbridge,Wiltshire
@@ -804,18 +804,18 @@ Tunbridge Wells,Kent
 Turriff,Aberdeenshire
 Twickenham,Middlesex
 Tywyn,Gwynedd
-Uckfield,East Sussex
+Uckfield,East_Sussex
 Ulverston,Cumbria
 Umberleigh,Devon
 Uttoxeter,Staffordshire
 Uxbridge,Middlesex
-Ventnor,Isle ofWight
+Ventnor,Isle_ofWight
 Wadebridge,Cornwall
-Wakefield,West Yorkshire
+Wakefield,West_Yorkshire
 Wallasey,Merseyside
 Wallingford,Oxfordshire
 Wallington,Surrey
-Walsall,West Midlands
+Walsall,West_Midlands
 Walsingham,Norfolk
 Waltham Cross,Hertfordshire
 Walton on the Naze,Essex
@@ -823,12 +823,12 @@ Walton-on-Thames,Surrey
 Wantage,Oxfordshire
 Ware,Hertfordshire
 Wareham,Dorset
-Warley,West Midlands
+Warley,West_Midlands
 Warminster,Wiltshire
 Warrington,Cheshire
 Warwick,Warwickshire
 Warwickshire,Warwickshire
-Washington,Tyne and Wear
+Washington,Tyne_and_Wear
 Watford,Hertfordshire
 Wedmore,Somerset
 Welling,Kent
@@ -839,7 +839,7 @@ Welshpool,Powys
 Welwyn,Hertfordshire
 Welwyn Garden City,Hertfordshire
 Wembley,Middlesex
-West Bromwich,West Midlands
+West Bromwich,West_Midlands
 West Byfleet,Surrey
 West Drayton,Middlesex
 West Kilbride,Ayrshire
@@ -850,15 +850,15 @@ Westbury,Wiltshire
 Westcliff-on-Sea,Essex
 Westerham,Kent
 Weston-super-Mare,Avon
-Wetherby,West Yorkshire
+Wetherby,West_Yorkshire
 Weybridge,Surrey
 Weymouth,Dorset
-Whitby,North Yorkshire
+Whitby,North_Yorkshire
 Whitchurch,Hampshire
 Whitchurch,Shropshire
 Whitehaven,Cumbria
 Whitland,Dyfed
-Whitley Bay,Tyne and Wear
+Whitley Bay,Tyne_and_Wear
 Whitstable,Kent
 Wick,Caithness
 Wickford,Essex
@@ -878,14 +878,14 @@ Witham,Essex
 Witney,Oxfordshire
 Woking,Surrey
 Wokingham,Berkshire
-Wolverhampton,West Midlands
+Wolverhampton,West_Midlands
 Woodford Green,Essex
-Worcester,Hereford and Worcester
+Worcester,Hereford_and_Worcester
 Workington,Cumbria
-Worthing,West Sussex
+Worthing,West_Sussex
 Wotton-under-Edge,Gloucestershire
 Wrexham,Clwyd
 Yateley,Surrey
 Yelverton,Devon
 Yeovil,Somerset
-York,North Yorkshire
+York,North_Yorkshire

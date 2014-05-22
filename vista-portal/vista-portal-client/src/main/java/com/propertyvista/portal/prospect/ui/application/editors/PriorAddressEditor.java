@@ -24,9 +24,9 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
-import com.propertyvista.portal.shared.ui.util.editors.InternationalAddressEditor;
+import com.propertyvista.portal.shared.ui.util.editors.InternationalAddressEditorBase;
 
-public class PriorAddressEditor extends InternationalAddressEditor<PriorAddress> {
+public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddress> {
 
     public PriorAddressEditor() {
         super(PriorAddress.class);

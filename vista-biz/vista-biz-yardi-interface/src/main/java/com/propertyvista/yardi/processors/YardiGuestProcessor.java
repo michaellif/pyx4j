@@ -48,13 +48,13 @@ import com.yardi.entity.mits.Information;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -276,10 +276,10 @@ public class YardiGuestProcessor {
         AddressType addr = null;
         if (ia != null && !ia.isNull()) {
             addr = new AddressType();
-            addr.setCountyName(ia.country().name().getValue());
-            if ("United States".equalsIgnoreCase(addr.getCountyName())) {
-                addr.setCountry("US");
-                addr.setState(getStateCode(ia.province().getValue()));
+            addr.setCountyName(ia.country().getValue().name);
+            if (ISOCountry.UnitedStates.equals(ia.country().getValue())) {
+                addr.setCountry(ISOCountry.UnitedStates.iso2);
+                addr.setState(getStateCode(ia.province().getValue(), ISOCountry.UnitedStates));
             } else {
                 addr.setProvince(ia.province().getValue());
             }
@@ -345,11 +345,8 @@ public class YardiGuestProcessor {
         return agent;
     }
 
-    private String getStateCode(String stateName) {
-        EntityQueryCriteria<Province> crit = EntityQueryCriteria.create(Province.class);
-        crit.eq(crit.proto().name(), stateName);
-        crit.eq(crit.proto().country(), "United States");
-        Province prov = Persistence.service().retrieve(crit);
-        return prov == null ? null : prov.code().getValue();
+    private String getStateCode(String stateName, ISOCountry country) {
+        ISOProvince prov = ISOProvince.forName(stateName, country);
+        return prov == null ? null : prov.code;
     }
 }

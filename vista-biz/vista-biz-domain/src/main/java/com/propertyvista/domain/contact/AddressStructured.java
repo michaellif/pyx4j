@@ -14,10 +14,7 @@
 package com.propertyvista.domain.contact;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -27,10 +24,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.CountryReferenceAdapter;
-import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -177,16 +172,12 @@ public interface AddressStructured extends IEntity {
     @NotNull
     @ToString(index = 7)
     @Caption(name = "Province")
-    @Editor(type = EditorType.combo)
-    @Reference(adapter = ProvinceReferenceAdapter.class)
-    Province province();
+    IPrimitive<ISOProvince> province();
 
     @NotNull
     @ToString(index = 9)
     @Caption(name = "Country")
-    @Editor(type = EditorType.combo)
-    @Reference(adapter = CountryReferenceAdapter.class)
-    Country country();
+    IPrimitive<ISOCountry> country();
 
     @NotNull
     @ToString(index = 8)

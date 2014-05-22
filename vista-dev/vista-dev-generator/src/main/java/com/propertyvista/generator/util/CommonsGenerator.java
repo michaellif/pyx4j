@@ -25,13 +25,13 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.generator.PreloadData;
 
 public class CommonsGenerator {
@@ -44,7 +44,7 @@ public class CommonsGenerator {
 
     private static String[] lipsumShort;
 
-    private static List<AddressStructured> adresses;
+    private static List<InternationalAddress> adresses;
 
     public static String lipsum() {
         if (lipsum == null) {
@@ -158,99 +158,54 @@ public class CommonsGenerator {
 
     private static void loadAddress() {
         if (adresses == null) {
-            adresses = EntityCSVReciver.create(AddressStructured.class)
-                    .loadResourceFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
+            adresses = EntityCSVReciver.create(InternationalAddress.class).loadResourceFile(
+                    IOUtils.resourceFileName("address-intern.csv", CommonsGenerator.class));
         }
     }
 
     public static InternationalAddress createInternationalAddress() {
         loadAddress();
-        AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
-        return toInternational(addressStructured);
+        return adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
     }
 
     public static InternationalAddress createInternationalAddress(String provinceCode) {
-        if (provinceCode == null) {
-            return createInternationalAddress();
-        } else {
-            loadAddress();
-            List<AddressStructured> adressesFiltered = new ArrayList<AddressStructured>();
-            for (AddressStructured addressStructured : adresses) {
-                if (provinceCode.equalsIgnoreCase(addressStructured.province().code().getValue())) {
-                    adressesFiltered.add(addressStructured);
+        if (provinceCode != null) {
+            ISOProvince prov = ISOProvince.forCode(provinceCode);
+            if (prov != null) {
+                loadAddress();
+                List<InternationalAddress> adressesFiltered = new ArrayList<>();
+                for (InternationalAddress addr : adresses) {
+                    if (prov.name.equalsIgnoreCase(addr.province().getValue())) {
+                        adressesFiltered.add(addr);
+                    }
                 }
+                return adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
             }
-            AddressStructured addressStructured = adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
-            return toInternational(addressStructured);
         }
+        return createInternationalAddress();
     }
 
     public static InternationalAddress createRandomInternationalAddress() {
-        return toInternational(createRandomAddress());
-    }
-
-    private static InternationalAddress toInternational(AddressStructured as) {
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        address.streetNumber().setValue(as.streetNumber().getValue());
-        address.streetName().setValue(as.streetName().getStringView() + " " + as.streetType().getStringView());
-        address.city().setValue(as.city().getValue());
-        address.province().setValue(as.province().name().getValue());
-        address.country().setValue(as.country().getValue());
-        address.postalCode().setValue(as.postalCode().getValue());
-        return address;
-    }
-
-    public static AddressStructured createAddressStructured() {
-        loadAddress();
-        AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
-        if (addressStructured.streetType().isNull()) {
-            addressStructured.streetType().setValue(StreetType.other);
-        }
-        return addressStructured;
-    }
-
-    public static AddressStructured createAddressStructured(String provinceCode) {
-        if (provinceCode == null) {
-            return createAddressStructured();
-        } else {
-            loadAddress();
-            List<AddressStructured> adressesFiltered = new ArrayList<AddressStructured>();
-            for (AddressStructured addressStructured : adresses) {
-                if (provinceCode.equalsIgnoreCase(addressStructured.province().code().getValue())) {
-                    adressesFiltered.add(addressStructured);
-                }
-            }
-
-            AddressStructured addressStructured = adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
-            if (addressStructured.streetType().isNull()) {
-                addressStructured.streetType().setValue(StreetType.other);
-            }
-            return addressStructured;
-        }
-    }
-
-    public static AddressStructured createRandomAddress() {
-        AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         address.suiteNumber().setValue(Integer.toString(RandomUtil.randomInt(1000)));
         address.streetNumber().setValue(Integer.toString(RandomUtil.randomInt(10000)));
-        address.streetNumberSuffix().setValue("");
 
-        address.streetName().setValue(RandomUtil.random(PreloadData.STREETS));
-        address.streetType().setValue(RandomUtil.random(StreetType.values()));
-        address.streetDirection().setValue(RandomUtil.random(StreetDirection.values()));
+        address.streetName().setValue(RandomUtil.random(PreloadData.STREETS) + " " + RandomUtil.random(StreetType.values()));
 
         address.city().setValue(RandomUtil.random(PreloadData.CITIES));
-        address.county().setValue("");
-
-        address.province().code().setValue(RandomUtil.random(PreloadData.PROVINCES));
-        address.country().name().setValue("Canada");
 
         // for now we support only two countries
-        if (address.country().name().getValue().toLowerCase().startsWith("c")) {
-            address.postalCode().setValue(RandomUtil.randomPostalCode());
-        } else {
+        ISOCountry country = RandomUtil.randomBoolean() ? ISOCountry.Canada : ISOCountry.UnitedStates;
+        ISOProvince prov = RandomUtil.random(ISOProvince.forCountry(country));
+
+        address.province().setValue(prov.name);
+        address.country().setValue(country);
+
+        if (country == ISOCountry.UnitedStates) {
             address.postalCode().setValue(RandomUtil.randomZipCode());
+        } else {
+            address.postalCode().setValue(RandomUtil.randomPostalCode());
         }
 
         return address;

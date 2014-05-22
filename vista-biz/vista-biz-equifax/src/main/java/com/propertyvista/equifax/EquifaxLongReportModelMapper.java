@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,15 +37,14 @@ import ca.equifax.uat.from.ParsedTelephone;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RatingLevel;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RiskLevel;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
 public class EquifaxLongReportModelMapper {
@@ -372,10 +370,9 @@ public class EquifaxLongReportModelMapper {
             address.postalCode().setValue(cnAddress.getPostalCode());
             address.streetNumber().setValue(cnAddress.getCivicNumber());
             address.streetName().setValue(cnAddress.getStreetName());
+            address.country().setValue(ISOCountry.Canada);
             if (cnAddress.getProvince() != null) {
-                List<Province> provinces = getProvinces();
-                address.country().name().setValue(getCountry(provinces, cnAddress.getProvince().getCode()));
-                address.province().setValue(getProvince(provinces, cnAddress.getProvince().getCode()));
+                address.province().setValue(getProvince(cnAddress.getProvince().getCode()));
             }
             return address;
         }
@@ -393,25 +390,10 @@ public class EquifaxLongReportModelMapper {
         return null;
     }
 
-    private static List<Province> getProvinces() {
-        EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
-        criteria.asc(criteria.proto().name());
-        return Persistence.service().query(criteria);
-    }
-
-    private static String getProvince(List<Province> provinces, String code) {
-        for (Province province : provinces) {
-            if (StringUtils.equals(province.code().getValue(), code)) {
-                return province.name().getValue();
-            }
-        }
-        return null;
-    }
-
-    private static String getCountry(List<Province> provinces, String stateCode) {
-        for (Province province : provinces) {
-            if (StringUtils.equals(province.code().getValue(), stateCode)) {
-                return province.country().name().getValue();
+    private static String getProvince(String code) {
+        for (ISOProvince province : ISOProvince.forCountry(ISOCountry.Canada)) {
+            if (province.code.equals(code)) {
+                return province.name;
             }
         }
         return null;

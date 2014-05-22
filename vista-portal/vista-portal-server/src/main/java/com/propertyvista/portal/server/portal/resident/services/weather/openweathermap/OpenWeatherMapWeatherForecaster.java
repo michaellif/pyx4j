@@ -21,6 +21,7 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO.WeatherType;
 import com.propertyvista.portal.server.portal.resident.services.weather.WeatherForecaster;
@@ -31,7 +32,7 @@ public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
     private final OpenWeatherMapApi openWeatherApi;
 
     private static class WheatherCacheKey {
-        static String getCacheKey(String city, String country) {
+        static String getCacheKey(String city, ISOCountry country) {
             return String.format("%s_%s_%s", OpenWeatherMapWeatherForecaster.class.getName(), city, country);
         }
     }
@@ -42,7 +43,7 @@ public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
 
     @Override
     public List<WeatherGadgetDTO> forecastWeather(InternationalAddress address) {
-        Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().name().getValue());
+        Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().getValue());
         List<WeatherGadgetDTO> forecast = new LinkedList<WeatherGadgetDTO>();
         if (wd != null) {
             for (Weatherdata.Forecast.Time weatherDataForecastPerTime : wd.getForecast().getTime()) {
@@ -93,14 +94,14 @@ public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
 
     @Override
     public WeatherGadgetDTO currentWeather(InternationalAddress address) {
-        Time time = CacheService.get(WheatherCacheKey.getCacheKey(address.city().getValue(), address.country().name().getValue()));
+        Time time = CacheService.get(WheatherCacheKey.getCacheKey(address.city().getValue(), address.country().getValue()));
         if (isCachedDataExpired(time)) {
-            Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().name().getValue());
+            Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().getValue());
             if (wd == null || wd.getForecast() == null || wd.getForecast().getTime() == null) {
                 return null;
             }
             time = wd.getForecast().getTime().get(0);
-            CacheService.put(WheatherCacheKey.getCacheKey(address.city().getValue(), address.country().name().getValue()), time);
+            CacheService.put(WheatherCacheKey.getCacheKey(address.city().getValue(), address.country().getValue()), time);
         }
         if (time == null) {
             return null;

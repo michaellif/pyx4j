@@ -46,7 +46,7 @@ import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 
 public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBase> extends CrmEntityForm<POLICY_DTO> {
 
@@ -58,7 +58,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     // This list MUST be ordered in descending order by the NodeType hierarchy
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
             new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build(),
-            new NodeType.Builder(Province.class).build(),
+            new NodeType.Builder(ProvincePolicyNode.class).build(),
             new NodeType.Builder(Complex.class).build(),
             new NodeType.Builder(Building.class).build()
     );//@formatter:on

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.interfaces.importer.model.AddressSimpleIO;
 
 public class AddressSimpleConverter extends EntityBinder<InternationalAddress, AddressSimpleIO> {
@@ -32,16 +32,27 @@ public class AddressSimpleConverter extends EntityBinder<InternationalAddress, A
         bind(toProto.unitNumber(), boProto.suiteNumber());
         bind(toProto.city(), boProto.city());
         bind(toProto.provinceName(), boProto.province());
-        bind(toProto.country(), boProto.country().name());
         bind(toProto.postalCode(), boProto.postalCode());
     }
 
     @Override
-    protected void onUpdateBOmember(AddressSimpleIO dto, InternationalAddress dbo, IObject<?> dboM) {
-        if (dboM == dbo.country().name()) {
-            dbo.country().setPrimaryKey(null);
-        } else if (dboM == dbo.province()) {
-            dbo.province().setValue(null);
+    public void copyBOtoTO(InternationalAddress dbo, AddressSimpleIO dto) {
+        super.copyBOtoTO(dbo, dto);
+
+        if (!dbo.country().isNull()) {
+            dto.country().setValue(dbo.country().getValue().name());
+        }
+    }
+
+    @Override
+    public void copyTOtoBO(AddressSimpleIO dto, InternationalAddress dbo) {
+        super.copyTOtoBO(dto, dbo);
+
+        if (!dto.country().isNull()) {
+            try {
+                dbo.country().setValue(ISOCountry.forName(dto.country().getValue()));
+            } catch (IllegalArgumentException ignore) {
+            }
         }
     }
 }

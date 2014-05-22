@@ -162,7 +162,6 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingUtilityListService;
-import com.propertyvista.crm.rpc.services.selections.SelectCityListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationGroupListService;
 import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
@@ -176,7 +175,6 @@ import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReason
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
-import com.propertyvista.crm.rpc.services.selections.SelectProvinceListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
@@ -234,7 +232,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.CountryPolicyNode;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -522,9 +520,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectConcessionListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLeaseAdjustmentReasonListService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectProvinceListService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCityListService.class));
-
 // - Organization:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
         grant(VistaCrmBehavior.Organization, new EntityPermission(Employee.class, EntityPermission.ALL));
@@ -621,7 +616,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCustomerUserListService.class));
 
 // - Old services:
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(CountryPolicyNode.class.getPackage().getName() + ".*", EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReferenceDataService.class));
 
         // All other roles have everything the same

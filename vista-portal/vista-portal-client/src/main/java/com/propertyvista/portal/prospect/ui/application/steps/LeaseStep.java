@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -53,7 +53,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
         formPanel.h3(i18n.tr("Unit"));
         formPanel.append(Location.Left, proto().unit().info().number(), new CLabel<String>()).decorate();
-        formPanel.append(Location.Left, proto().unit().info().legalAddress(), new CEntityLabel<AddressStructured>()).decorate();
+        formPanel.append(Location.Left, proto().unit().info().legalAddress(), new CEntityLabel<InternationalAddress>()).decorate();
         formPanel.append(Location.Left, proto().unit().floorplan(), new CEntityLabel<Floorplan>()).decorate();
         formPanel.append(Location.Left, proto().utilities(), new CLabel<String>()).decorate();
 

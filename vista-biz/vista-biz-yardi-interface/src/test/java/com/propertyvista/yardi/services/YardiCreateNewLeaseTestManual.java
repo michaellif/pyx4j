@@ -44,6 +44,7 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -399,7 +400,7 @@ public class YardiCreateNewLeaseTestManual extends IntegrationTestBase {
 
     private PriorAddress getAddress() {
         PriorAddress addr = EntityFactory.create(PriorAddress.class);
-        addr.country().name().setValue("Canada");
+        addr.country().setValue(ISOCountry.Canada);
         addr.province().setValue("Ontario");
         addr.postalCode().setValue("M5H 1A1");
         addr.city().setValue("Toronto");

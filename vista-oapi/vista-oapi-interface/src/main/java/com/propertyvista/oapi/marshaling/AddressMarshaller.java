@@ -13,15 +13,10 @@
  */
 package com.propertyvista.oapi.marshaling;
 
-import java.util.List;
-
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.contact.InternationalAddress;
-import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.oapi.model.AddressIO;
 import com.propertyvista.oapi.xml.StringIO;
 
@@ -45,7 +40,7 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         }
         AddressIO addressIO = new AddressIO();
 
-        addressIO.country = MarshallerUtils.createIo(StringIO.class, address.country().name());
+        addressIO.country = new StringIO(MarshallerUtils.getValue(address.country()).name);
         addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province());
         addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
         addressIO.postalCode = MarshallerUtils.createIo(StringIO.class, address.postalCode());
@@ -60,7 +55,7 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
 
         if (addressIO.country != null) {
-            address.country().set(getCountry(addressIO.country.getValue()));
+            address.country().setValue(ISOCountry.forName(addressIO.country.getValue()));
         }
 
         MarshallerUtils.setValue(address.province(), addressIO.province);
@@ -71,16 +66,5 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         MarshallerUtils.setValue(address.suiteNumber(), addressIO.unitNumber);
 
         return address;
-    }
-
-    private Country getCountry(String name) {
-        EntityQueryCriteria<Country> countryCriteria = EntityQueryCriteria.create(Country.class);
-        countryCriteria.add(PropertyCriterion.eq(countryCriteria.proto().name(), name));
-        List<Country> countries = Persistence.service().query(countryCriteria);
-        if (countries.size() > 0) {
-            return countries.get(0);
-        } else {
-            return null;
-        }
     }
 }

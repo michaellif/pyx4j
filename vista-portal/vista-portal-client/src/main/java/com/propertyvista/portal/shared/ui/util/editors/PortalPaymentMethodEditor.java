@@ -66,7 +66,7 @@ public abstract class PortalPaymentMethodEditor<E extends AbstractPaymentMethod>
 
         billingAddressHeader = formPanel.h4(proto().billingAddress().getMeta().getCaption());
         formPanel.append(Location.Left, proto().sameAsCurrent()).decorate();
-        formPanel.append(Location.Left, proto().billingAddress(), new InternationalAddressEditor<>(InternationalAddress.class));
+        formPanel.append(Location.Left, proto().billingAddress(), new InternationalAddressEditorBase<>(InternationalAddress.class));
 
         // tweaks:
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {

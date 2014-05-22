@@ -45,7 +45,7 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
         Collections.sort(buildingsDbo, new Comparator<Building>() {
             @Override
             public int compare(Building o1, Building o2) {
-                int c = o1.info().address().country().name().compareTo(o2.info().address().country().name());
+                int c = o1.info().address().country().compareTo(o2.info().address().country());
                 if (c == 0) {
                     c = o1.info().address().province().compareTo(o2.info().address().province());
                     if (c == 0) {

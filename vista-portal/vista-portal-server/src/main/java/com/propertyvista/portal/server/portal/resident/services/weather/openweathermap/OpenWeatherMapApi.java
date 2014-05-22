@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.server.portal.resident.services.weather.openweathermap;
 
+import com.propertyvista.domain.ref.ISOCountry;
+
 public interface OpenWeatherMapApi {
 
-    Weatherdata getWeatherdata(String cityName, String countryName);
+    Weatherdata getWeatherdata(String cityName, ISOCountry country);
 }

@@ -38,6 +38,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.CityIntroPage;
 import com.propertyvista.domain.site.HtmlContent;
@@ -76,7 +78,7 @@ public class CityPage extends BasePage {
         PropertySearchCriteria searchCrit = EntityFactory.create(PropertySearchCriteria.class);
         searchCrit.searchType().setValue(SearchType.city);
         searchCrit.city().set(city.name());
-        searchCrit.province().set(city.province().name());
+        searchCrit.province().setValue(city.province().isNull() ? null : city.province().getValue().name);
         final CompoundIEntityModel<PropertySearchCriteria> model = new CompoundIEntityModel<PropertySearchCriteria>(searchCrit);
 
         final StatelessForm<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
@@ -123,7 +125,7 @@ public class CityPage extends BasePage {
         add(new Label("cityPageContent", html).setEscapeModelStrings(false));
 
         // add property links title
-        add(new Label("cityPropertiesTitle", i18n.tr("Properties in {0}, {1}", city.name().getValue(), city.province().name().getValue())));
+        add(new Label("cityPropertiesTitle", i18n.tr("Properties in {0}, {1}", city.name().getValue(), city.province().getValue())));
         // link panel
         RepeatingView linkPanel = new RepeatingView("propertyEntry");
         add(linkPanel);
@@ -151,7 +153,7 @@ public class CityPage extends BasePage {
         String provName = cityProvPair[1];
         EntityQueryCriteria<City> criteria = EntityQueryCriteria.create(City.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().hasProperties(), Boolean.TRUE));
-        criteria.add(PropertyCriterion.eq(criteria.proto().province().name(), provName));
+        criteria.add(PropertyCriterion.eq(criteria.proto().province(), ISOProvince.forName(provName, ISOCountry.Canada)));
         criteria.add(PropertyCriterion.isNotNull(criteria.proto().name()));
         City foundCity = null;
         for (City city : Persistence.secureQuery(criteria)) {
@@ -169,7 +171,7 @@ public class CityPage extends BasePage {
 
     @Override
     public String getLocalizedPageTitle() {
-        return i18n.tr("Rent Apartments in {0}, {1}", city.name().getValue(), city.province().name().getValue());
+        return i18n.tr("Rent Apartments in {0}, {1}", city.name().getValue(), city.province().getValue());
     }
 
     @Override

@@ -18,6 +18,8 @@ import java.util.Random;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
@@ -70,8 +72,8 @@ public class PTGenerator {
         vehicle.year().setValue(RandomUtil.randomYear(1992, 2012));
         vehicle.make().setValue(RandomUtil.random(PreloadData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(PreloadData.CAR_MODELS));
-        vehicle.province().code().setValue(RandomUtil.random(PreloadData.PROVINCES));
-        vehicle.country().set(vehicle.province().country());
+        vehicle.province().setValue(RandomUtil.random(ISOProvince.forCountry(ISOCountry.Canada)));
+        vehicle.country().setValue(ISOCountry.Canada);
 
         return vehicle;
     }

@@ -292,7 +292,7 @@ public class LeaseApplicationDocumentDataCreatorFacadeImpl implements LeaseAppli
         residence.city().setValue(address.city().getValue());
         residence.province().setValue(address.province().getStringView());
         residence.postalCode().setValue(address.postalCode().getStringView());
-        residence.country().setValue(address.country().name().getStringView());
+        residence.country().setValue(address.country().getValue().name);
 
         residence.moveInDate().setValue(address.moveInDate().getValue());
         residence.moveOutDate().setValue(address.moveOutDate().getValue());

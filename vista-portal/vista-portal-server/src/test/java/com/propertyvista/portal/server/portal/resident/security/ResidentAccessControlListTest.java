@@ -33,8 +33,8 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.CountryPolicyNode;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 
 public class ResidentAccessControlListTest {
@@ -55,9 +55,9 @@ public class ResidentAccessControlListTest {
         TestLifecycle.beginRequest();
 
         Set<Class<?>> noAccessRules = new HashSet<>();
-        noAccessRules.add(Country.class);
+        noAccessRules.add(CountryPolicyNode.class);
         noAccessRules.add(City.class);
-        noAccessRules.add(Province.class);
+        noAccessRules.add(ProvincePolicyNode.class);
         noAccessRules.add(MaintenanceRequestCategory.class);
 
         for (Class<? extends IEntity> entityClass : ServerEntityFactory.getAllEntityClasses()) {

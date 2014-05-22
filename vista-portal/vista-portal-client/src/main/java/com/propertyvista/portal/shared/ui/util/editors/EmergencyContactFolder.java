@@ -24,8 +24,8 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
@@ -89,7 +89,7 @@ public class EmergencyContactFolder extends PortalBoxFolder<EmergencyContact> {
             formPanel.append(Location.Left, proto().email()).decorate().componentWidth(250);
 
             formPanel.h3(i18n.tr("Address"));
-            formPanel.append(Location.Left, inject(proto().address(), new InternationalAddressEditor<>(InternationalAddress.class)));
+            formPanel.append(Location.Left, inject(proto().address(), new InternationalAddressEditor()));
 
             return formPanel;
         }

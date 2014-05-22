@@ -37,8 +37,8 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.CountryPolicyNode;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
@@ -128,8 +128,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         // Old TODO remove
         grant(new IServiceExecutePermission(ReferenceDataService.class));
         grant(new EntityPermission(City.class, EntityPermission.READ));
-        grant(new EntityPermission(Country.class, EntityPermission.READ));
-        grant(new EntityPermission(Province.class, EntityPermission.READ));
+        grant(new EntityPermission(CountryPolicyNode.class, EntityPermission.READ));
+        grant(new EntityPermission(ProvincePolicyNode.class, EntityPermission.READ));
 
         grant(new IServiceExecutePermission(SiteThemeServices.class));
 
@@ -144,8 +144,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         // Old TODO remove
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ReferenceDataService.class));
 
-        grant(PortalProspectBehavior.Prospect, new EntityPermission(Country.class, EntityPermission.READ));
-        grant(PortalProspectBehavior.Prospect, new EntityPermission(Province.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(CountryPolicyNode.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(ProvincePolicyNode.class, EntityPermission.READ));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
         grant(PortalProspectBehavior.Prospect, new EntityPermission(OnlineApplication.class, userEntityAccess, CRUD));

@@ -15,19 +15,19 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.ISOCountry;
 
 public class CountryContextCComponentProvider implements PostalCodeFormat.ICountryContextProvider {
 
-    private final CComponent<?, Country, ?> component;
+    private final CComponent<?, ISOCountry, ?> component;
 
-    public CountryContextCComponentProvider(CComponent<?, Country, ?> component) {
+    public CountryContextCComponentProvider(CComponent<?, ISOCountry, ?> component) {
         assert component != null;
         this.component = component;
     }
 
     @Override
-    public String getCountry() {
-        return component.getValue() != null ? component.getValue().getStringView().toLowerCase() : "";
+    public ISOCountry getCountry() {
+        return component.getValue();
     }
 }

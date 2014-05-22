@@ -118,7 +118,7 @@ public class GeoLocator {
         sb.append(" ");
         sb.append(address.postalCode().getStringView());
         sb.append(", ");
-        sb.append(address.country().name().getStringView());
+        sb.append(address.country().getStringView());
 
         return sb.toString();
     }

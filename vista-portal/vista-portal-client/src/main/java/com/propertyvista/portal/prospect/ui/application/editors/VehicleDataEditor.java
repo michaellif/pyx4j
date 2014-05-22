@@ -15,18 +15,12 @@ package com.propertyvista.portal.prospect.ui.application.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
@@ -56,22 +50,8 @@ public class VehicleDataEditor extends CForm<Vehicle> {
         panel.setWidget(++row, 0, inject(proto().year(), new FieldDecoratorBuilder(60).build()));
 
         panel.setWidget(++row, 0, inject(proto().plateNumber(), new FieldDecoratorBuilder(120).build()));
-        CComponent<?, Province, ?> province;
-        panel.setWidget(++row, 0, province = (CComponent<?, Province, ?>) inject(proto().province(), new FieldDecoratorBuilder(200).build()));
-        CComponent<?, Country, ?> country;
-        panel.setWidget(++row, 0, country = (CComponent<?, Country, ?>) inject(proto().country(), new FieldDecoratorBuilder(150).build()));
-
-        ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
-            @Override
-            public boolean acceptOption(Province entity) {
-                if (getValue() == null) {
-                    return true;
-                } else {
-                    Country country = (Country) getValue().getMember(proto().country().getPath());
-                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
-                }
-            }
-        });
+        panel.setWidget(++row, 0, inject(proto().province(), new FieldDecoratorBuilder(200).build()));
+        panel.setWidget(++row, 0, inject(proto().country(), new FieldDecoratorBuilder(150).build()));
 
         return panel;
     }

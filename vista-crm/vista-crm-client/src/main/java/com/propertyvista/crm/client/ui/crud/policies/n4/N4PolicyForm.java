@@ -33,7 +33,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -64,8 +64,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         signatureFormPanel.append(Location.Left, companyNameAndPhonesFormPanel);
 
-        AddressStructuredEditor addressEditor = new AddressStructuredEditor();
-        signatureFormPanel.append(Location.Left, proto().mailingAddress(), addressEditor);
+        signatureFormPanel.append(Location.Left, proto().mailingAddress(), new InternationalAddressEditor());
 
         FormPanel arCodesFormPanel = new FormPanel(this);
         arCodesFormPanel.h1(i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));

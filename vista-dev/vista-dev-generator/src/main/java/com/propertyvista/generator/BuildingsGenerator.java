@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -48,6 +50,8 @@ import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.CompanyVendor;
 import com.propertyvista.generator.util.RandomUtil;
@@ -94,7 +98,7 @@ public class BuildingsGenerator {
 
         Building building = createBuilding(propertyCode, buildingType, website, address, email);
         // log.info("Created: " + building);
-
+        ensureProvincePolicyNode(ISOProvince.forName(address.province().getValue(), address.country().getValue()));
         return building;
     }
 
@@ -572,4 +576,14 @@ public class BuildingsGenerator {
         return pmc;
     }
 
+    private void ensureProvincePolicyNode(ISOProvince prov) {
+        EntityQueryCriteria<ProvincePolicyNode> crit = EntityQueryCriteria.create(ProvincePolicyNode.class);
+        crit.eq(crit.proto().province(), prov);
+        ProvincePolicyNode node = Persistence.service().retrieve(crit);
+        if (node == null) {
+            node = EntityFactory.create(ProvincePolicyNode.class);
+            node.province().setValue(prov);
+            Persistence.service().persist(node);
+        }
+    }
 }

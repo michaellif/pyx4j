@@ -67,7 +67,7 @@ public class TaxesDataModel extends MockDataModel<Tax> {
         Tax tax = EntityFactory.create(Tax.class);
         tax.name().setValue(name);
         tax.authority().setValue(authority);
-        tax.policyNode().set(getDataModel(LocationsDataModel.class).provincesMap.get(authority));
+        tax.policyNode().set(getDataModel(LocationsDataModel.class).getProvincePolicyNode(authority));
         tax.rate().setValue(rate);
         tax.compound().setValue(compound);
         return tax;

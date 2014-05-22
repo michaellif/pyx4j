@@ -46,7 +46,7 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
         CityIntroPage dup = findDuplicate(dto);
         if (dup != null) {
             callback.onFailure(new UserRuntimeException(i18n.tr("CityIntroPage already exists for city: {0}, {1}", dup.cityName().getValue(), dup.province()
-                    .name().getValue())));
+                    .getValue())));
         } else {
             super.save(callback, dto);
         }

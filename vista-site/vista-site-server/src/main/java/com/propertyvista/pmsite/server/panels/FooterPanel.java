@@ -34,6 +34,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
 import com.propertyvista.pmsite.server.PMSiteApplication;
@@ -65,13 +66,12 @@ public class FooterPanel extends Panel {
                     protected void populateItem(ListItem<City> item) {
                         City city = item.getModelObject();
                         String _city = city.name().getValue();
-                        String _prov = city.province().name().getValue();
-                        String _prov2 = city.province().code().getValue();
-                        if (_city != null && _prov != null && _prov2 != null) {
+                        ISOProvince _prov = city.province().getValue();
+                        if (_city != null && _prov != null) {
                             PageParameters params = new PageParameters();
-                            params.set(PMSiteApplication.ParamNameCityProv, preprocess(_city) + "-" + _prov);
+                            params.set(PMSiteApplication.ParamNameCityProv, preprocess(_city) + "-" + _prov.name);
                             BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", CityPage.class, params);
-                            link.add(new Label("city", _city + " (" + _prov2 + ")"));
+                            link.add(new Label("city", _city + " (" + _prov.code + ")"));
                             item.add(link);
                         }
                     }

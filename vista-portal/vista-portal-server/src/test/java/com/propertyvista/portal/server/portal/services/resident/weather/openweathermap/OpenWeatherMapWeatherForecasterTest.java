@@ -22,6 +22,7 @@ import com.google.gwt.editor.client.Editor.Ignore;
 import com.pyx4j.entity.core.EntityFactory;
 
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapApiImpl;
 import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapWeatherForecaster;
@@ -45,7 +46,7 @@ public class OpenWeatherMapWeatherForecasterTest extends TestCase {
     public void testRealOpenWeatherMapApiSanity() {
         OpenWeatherMapWeatherForecaster forecaster = new OpenWeatherMapWeatherForecaster(new OpenWeatherMapApiImpl(null));
         InternationalAddress address = EntityFactory.create(InternationalAddress.class);
-        address.country().name().setValue("Canada");
+        address.country().setValue(ISOCountry.Canada);
         address.city().setValue("Toronto");
 
         List<WeatherGadgetDTO> forecast = forecaster.forecastWeather(address);

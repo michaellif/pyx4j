@@ -32,8 +32,8 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.CountryPolicyNode;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 
 public class ProspectAccessControlListTest {
@@ -54,9 +54,9 @@ public class ProspectAccessControlListTest {
         TestLifecycle.beginRequest();
 
         Set<Class<?>> noAccessRules = new HashSet<>();
-        noAccessRules.add(Country.class);
+        noAccessRules.add(CountryPolicyNode.class);
+        noAccessRules.add(ProvincePolicyNode.class);
         noAccessRules.add(City.class);
-        noAccessRules.add(Province.class);
 
         for (Class<? extends IEntity> entityClass : ServerEntityFactory.getAllEntityClasses()) {
             if (noAccessRules.contains(entityClass)) {

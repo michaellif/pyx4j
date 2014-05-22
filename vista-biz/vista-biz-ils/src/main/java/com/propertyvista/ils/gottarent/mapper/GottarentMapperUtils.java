@@ -18,11 +18,9 @@ import java.text.DecimalFormat;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.contact.InternationalAddress;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
 
 public class GottarentMapperUtils {
 
@@ -69,11 +67,8 @@ public class GottarentMapperUtils {
     }
 
     public static String getProvinceCode(InternationalAddress address) {
-        EntityQueryCriteria<Province> crit = EntityQueryCriteria.create(Province.class);
-        crit.eq(crit.proto().name(), address.province());
-        crit.eq(crit.proto().country(), address.country());
-        Province prov = Persistence.service().retrieve(crit);
-        return prov == null ? null : prov.code().getValue();
+        ISOProvince prov = ISOProvince.forName(address.province().getValue(), address.country().getValue());
+        return prov == null ? null : prov.code;
     }
 
     public static String formatStreetOnly(InternationalAddress address) {

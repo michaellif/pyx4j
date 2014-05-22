@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 
 public interface Company extends IEntity {
 
@@ -33,7 +33,7 @@ public interface Company extends IEntity {
 
     //TODO Make it work in next version. For now we don't add this to DB structure
     @Transient
-    IList<AddressStructured> addresses();
+    IList<InternationalAddress> addresses();
 
     IList<CompanyPhone> phones();
 

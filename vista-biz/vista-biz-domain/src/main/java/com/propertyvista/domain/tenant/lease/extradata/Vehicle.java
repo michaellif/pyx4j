@@ -21,14 +21,12 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.CountryReferenceAdapter;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 
 @Table(name = "pt_vehicle")
@@ -55,11 +53,8 @@ public interface Vehicle extends BillableItemExtraData {
 
     @NotNull
     @Caption(name = "Province/State")
-    @Editor(type = EditorType.combo)
-    Province province();
+    IPrimitive<ISOProvince> province();
 
     @NotNull
-    @Editor(type = EditorType.combo)
-    @Reference(adapter = CountryReferenceAdapter.class)
-    Country country();
+    IPrimitive<ISOCountry> country();
 }

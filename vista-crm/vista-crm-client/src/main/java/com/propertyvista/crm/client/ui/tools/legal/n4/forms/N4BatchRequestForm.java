@@ -25,12 +25,12 @@ import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CPhoneField.PhoneType;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.InternationalAddressEditor;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.domain.company.Employee;
 
@@ -78,7 +78,7 @@ public class N4BatchRequestForm extends CForm<N4BatchRequestDTO> {
         formPanel.append(Location.Left, proto().phoneNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
         formPanel.append(Location.Left, proto().faxNumber(), new CPhoneField(PhoneType.northAmerica)).decorate();
         formPanel.append(Location.Left, proto().emailAddress()).decorate();
-        formPanel.append(Location.Dual, proto().mailingAddress(), new AddressStructuredEditor(true));
+        formPanel.append(Location.Dual, proto().mailingAddress(), new InternationalAddressEditor());
 
         return formPanel;
     }

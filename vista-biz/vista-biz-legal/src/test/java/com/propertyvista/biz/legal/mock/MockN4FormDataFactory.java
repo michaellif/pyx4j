@@ -29,8 +29,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.legal.N4GenerationFacadeImpl;
-import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
@@ -113,11 +111,8 @@ public class MockN4FormDataFactory {
         tenant1.leaseParticipant().customer().person().name().lastName().setValue("Tenantovic");
         leaseData.leaseTenants().add(tenant1);
 
-        leaseData.rentalUnitAddress().streetNumber().setValue("2222");
-        leaseData.rentalUnitAddress().streetNumberSuffix().setValue("b");
-        leaseData.rentalUnitAddress().streetName().setValue("Bathurst");
-        leaseData.rentalUnitAddress().streetType().setValue(StreetType.street);
-        leaseData.rentalUnitAddress().streetDirection().setValue(StreetDirection.north);
+        leaseData.rentalUnitAddress().streetNumber().setValue("2222b");
+        leaseData.rentalUnitAddress().streetName().setValue("Bathurst St");
         leaseData.rentalUnitAddress().suiteNumber().setValue("11");
         leaseData.rentalUnitAddress().city().setValue("Toronto");
         leaseData.rentalUnitAddress().postalCode().setValue("A9A 9A9");

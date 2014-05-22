@@ -15,19 +15,13 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
-import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
-import com.propertyvista.domain.ref.Country;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
 public class VehicleDataEditor extends CForm<Vehicle> {
@@ -57,22 +51,8 @@ public class VehicleDataEditor extends CForm<Vehicle> {
 
         row = 0; // skip header
         panel.setWidget(++row, 1, inject(proto().plateNumber(), new FieldDecoratorBuilder(10).build()));
-        CComponent<?, Province, ?> province;
-        panel.setWidget(++row, 1, province = (CComponent<?, Province, ?>) inject(proto().province(), new FieldDecoratorBuilder(17).build()));
-        CComponent<?, Country, ?> country;
-        panel.setWidget(++row, 1, country = (CComponent<?, Country, ?>) inject(proto().country(), new FieldDecoratorBuilder(13).build()));
-
-        ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
-            @Override
-            public boolean acceptOption(Province entity) {
-                if (getValue() == null) {
-                    return true;
-                } else {
-                    Country country = (Country) getValue().getMember(proto().country().getPath());
-                    return country.isNull() || EqualsHelper.equals(entity.country().name(), country.name());
-                }
-            }
-        });
+        panel.setWidget(++row, 1, inject(proto().province(), new FieldDecoratorBuilder(17).build()));
+        panel.setWidget(++row, 1, inject(proto().country(), new FieldDecoratorBuilder(13).build()));
 
         removeMandatory();
 

@@ -1,4 +1,4 @@
-Name,province.name
+Name,province
 ,Alberta
 Airdrie,
 Brooks,
@@ -17,7 +17,7 @@ Red Deer,
 Spruce Grove,
 St. Albert,
 Wetaskiwin,
-,British Columbia
+,BritishColumbia
 Abbotsford,
 Armstrong,
 Burnaby,
@@ -78,7 +78,7 @@ Steinbach,
 Thompson,
 Winkler,
 Winnipeg,
-,New Brunswick
+,NewBrunswick
 Bathurst,
 Campbellton,
 Dieppe,
@@ -87,13 +87,13 @@ Fredericton,
 Miramichi,
 Moncton,
 Saint John,
-,Newfoundland and Labrador
+,Newfoundland
 Corner Brook,
 Mount Pearl,
 St. John's,
-,Northwest Territories
+,NorthwestTerritories
 Yellowknife,
-,Nova Scotia
+,NovaScotia
 Halifax,
 Sydney,
 Dartmouth,
@@ -151,7 +151,7 @@ Waterloo,
 Welland,
 Windsor,
 Woodstock,
-,Prince Edward Island
+,PrinceEdwardIsland
 Charlottetown,
 Summerside,
 ,Quebec
@@ -396,5 +396,5 @@ Saskatoon,
 Swift Current,
 Weyburn,
 Yorkton,
-,Yukon
+,YukonTerritory
 Whitehorse,

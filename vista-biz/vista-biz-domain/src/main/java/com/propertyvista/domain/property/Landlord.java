@@ -29,7 +29,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -41,7 +41,7 @@ public interface Landlord extends IEntity, HasNotesAndAttachments {
     @Caption(name = "Legal Name")
     IPrimitive<String> name();
 
-    AddressStructured address();
+    InternationalAddress address();
 
     IPrimitive<String> website();
 

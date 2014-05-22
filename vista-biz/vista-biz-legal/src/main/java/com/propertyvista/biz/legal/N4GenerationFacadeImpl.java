@@ -40,8 +40,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
 import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.errors.FormFillError;
@@ -55,7 +54,6 @@ import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
@@ -93,11 +91,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
                 SimpleMessageFormat.format("{0}\n{1}", leaseData.landlordName().getValue(), formatBuildingOwnerAddress(leaseData.landlordAddress())));
 
         // TODO review this: refactor to eliminate unnecessary code duplication
-        fieldsData.rentalUnitAddress().streetNumber()
-                .setValue(leaseData.rentalUnitAddress().streetNumber().getStringView() + leaseData.rentalUnitAddress().streetNumberSuffix().getStringView());
+        fieldsData.rentalUnitAddress().streetNumber().setValue(leaseData.rentalUnitAddress().streetNumber().getStringView());
         fieldsData.rentalUnitAddress().streetName().setValue(leaseData.rentalUnitAddress().streetName().getStringView());
-        fieldsData.rentalUnitAddress().streetType().setValue(leaseData.rentalUnitAddress().streetType().getStringView());
-        fieldsData.rentalUnitAddress().direction().setValue(leaseData.rentalUnitAddress().streetDirection().getStringView());
         fieldsData.rentalUnitAddress().unit().setValue(leaseData.rentalUnitAddress().suiteNumber().getStringView());
         fieldsData.rentalUnitAddress().municipality().setValue(leaseData.rentalUnitAddress().city().getValue());
         fieldsData.rentalUnitAddress().postalCode().setValue(leaseData.rentalUnitAddress().postalCode().getValue());
@@ -119,7 +114,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.landlordsContactInfo().mailingAddress().setValue(formatStreetAddress(batchData.companyAddress()));
         fieldsData.landlordsContactInfo().unit().setValue(batchData.companyAddress().suiteNumber().getValue());
         fieldsData.landlordsContactInfo().municipality().setValue(batchData.companyAddress().city().getValue());
-        fieldsData.landlordsContactInfo().province().setValue(batchData.companyAddress().province().code().getStringView());
+        fieldsData.landlordsContactInfo().province().setValue(batchData.companyAddress().province().getValue());
         fieldsData.landlordsContactInfo().postalCode().setValue(batchData.companyAddress().postalCode().getValue());
 
         fieldsData.landlordsContactInfo().phoneNumber().setValue(batchData.companyPhoneNumber().getValue());
@@ -160,7 +155,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return n4LeaseData;
     }
 
-    private String formatTo(IList<LeaseTermTenant> leaseTenants, AddressStructured rentalUnitAddress) {
+    private String formatTo(IList<LeaseTermTenant> leaseTenants, InternationalAddress rentalUnitAddress) {
         StringBuilder toField = new StringBuilder();
         toField.append(formatRecipients(leaseTenants));
         toField.append("\n");
@@ -197,33 +192,30 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return lineBuilder.toString();
     }
 
-    /** Try to format according to Canada Post guidelines */
-    private String formatRentalAddress(AddressStructured address) {
+    /** Try to format according to Canada Post guidelines: <Suite>-<StreetNo> <StreetName> */
+    private String formatRentalAddress(InternationalAddress address) {
         StringBuilder formattedAddress = new StringBuilder();
-        formattedAddress.append(SimpleMessageFormat.format(//@formatter:off
-               "{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}",
-               sanitzeSuiteNumber(address.suiteNumber().getValue()),
-               address.streetNumber().getValue(),
-               address.streetNumberSuffix().getValue(),
-               address.streetName().getValue(),
-               (address.streetType().getValue() != null || address.streetType().getValue() == StreetType.other)? address.streetType().getValue().toAbbr() : null,
-               address.streetDirection().getValue() != null ? address.streetDirection().getValue().toAbbr() : null
-       ));//@formatter:on
+        formattedAddress.append(formatStreetAddress(address));
         formattedAddress.append("\n");
         formattedAddress.append(address.city().getValue());
         formattedAddress.append(" ");
-        formattedAddress.append(address.province().code().getValue());
+        formattedAddress.append(address.province().getValue());
         formattedAddress.append("  ");
         formattedAddress.append(address.postalCode().getValue());
         return formattedAddress.toString();
     }
 
-    private String formatBuildingOwnerAddress(AddressStructured address) {
+    private String formatBuildingOwnerAddress(InternationalAddress address) {
         return address.getStringView(); // TODO maybe use same function as "format street address"
     }
 
-    private String formatStreetAddress(AddressStructured companyAddress) {
-        return new AddressConverter.StructuredToInternationalAddressConverter().getStreetAddress(companyAddress);
+    private String formatStreetAddress(InternationalAddress address) {
+        return SimpleMessageFormat.format( //
+                "{0,choice,null#|!null#{0}-}{1} {2}", //
+                sanitzeSuiteNumber(address.suiteNumber().getValue()), //
+                address.streetNumber().getValue(), //
+                address.streetName().getValue() //
+                );
     }
 
     private String sanitzeSuiteNumber(String suiteNumber) {

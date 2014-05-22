@@ -19,11 +19,4 @@ import com.propertyvista.domain.contact.InternationalAddress;
 
 @EmbeddedEntity
 public interface PmcAddress extends InternationalAddress {
-
-    @EmbeddedEntity
-    PmcAddressProvince provinceInfo();
-
-    @Override
-    @EmbeddedEntity
-    PmcAddressCountry country();
 }

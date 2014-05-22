@@ -29,7 +29,8 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.tax.Tax;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.generator.ARCodesGenerator;
 
 public class ProductCatalogPreloader extends AbstractDataPreloader {
@@ -60,8 +61,9 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
         tax.name().setValue(name);
         tax.authority().setValue(authority);
 
-        EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().code(), authority));
+        ISOProvince prov = ISOProvince.forCode(authority);
+        EntityQueryCriteria<ProvincePolicyNode> criteria = EntityQueryCriteria.create(ProvincePolicyNode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().province(), prov));
         tax.policyNode().set(Persistence.service().retrieve(criteria));
         tax.rate().setValue(rate);
         tax.compound().setValue(compound);

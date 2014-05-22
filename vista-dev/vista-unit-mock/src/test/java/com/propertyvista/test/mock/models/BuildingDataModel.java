@@ -22,6 +22,7 @@ import java.util.Map;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.asset.BuildingFacade;
@@ -38,6 +39,8 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.ISOProvince;
+import com.propertyvista.domain.ref.ProvincePolicyNode;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.test.mock.MockDataModel;
 
@@ -68,7 +71,15 @@ public class BuildingDataModel extends MockDataModel<Building> {
         building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
         building.integrationSystemId().setValue(IntegrationSystem.internal);
 
-        building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode(provinceCode).name());
+        ISOProvince prov = getDataModel(LocationsDataModel.class).getProvincePolicyNode(provinceCode).province().getValue();
+        if (prov == null) {
+            throw new Error("Invalid province code: " + provinceCode);
+        }
+
+        ensureProvincePolicyNode(prov);
+
+        building.info().address().province().setValue(prov.name);
+        building.info().address().country().setValue(prov.country);
 
         generateParking(building);
         generateLockerArea(building);
@@ -106,6 +117,17 @@ public class BuildingDataModel extends MockDataModel<Building> {
         Persistence.service().persist(standardResidentialService);
 
         return productItem;
+    }
+
+    private void ensureProvincePolicyNode(ISOProvince prov) {
+        EntityQueryCriteria<ProvincePolicyNode> crit = EntityQueryCriteria.create(ProvincePolicyNode.class);
+        crit.eq(crit.proto().province(), prov);
+        ProvincePolicyNode node = Persistence.service().retrieve(crit);
+        if (node == null) {
+            node = EntityFactory.create(ProvincePolicyNode.class);
+            node.province().setValue(prov);
+            Persistence.service().persist(node);
+        }
     }
 
     private AptUnit generateResidentialUnit(Building building) {

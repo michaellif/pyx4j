@@ -75,6 +75,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
@@ -348,8 +349,8 @@ public class YardiNewGuestWorkflowTest {
 
     static InternationalAddress getAddress() {
         InternationalAddress addr = EntityFactory.create(InternationalAddress.class);
-        addr.country().name().setValue("United States");
-        addr.province().setValue("CA");
+        addr.country().setValue(ISOProvince.California.country);
+        addr.province().setValue(ISOProvince.California.code);
         addr.postalCode().setValue("90123");
         addr.city().setValue("Hometown");
         addr.streetName().setValue("Main St");
