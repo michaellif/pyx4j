@@ -96,9 +96,10 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
                             }
                         }
                     }.show();
-
+                    break;
                 case New:
                     addParticipant();
+                    break;
                 }
 
                 return true;
