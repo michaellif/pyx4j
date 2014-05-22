@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 class DashboardGadgetPositioner extends SimplePanel {
 
     public DashboardGadgetPositioner(int width, int height) {
-        addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.DndPositioner);
+        addStyleName(DashboardTheme.StyleName.DashboardDndPositioner.name());
 
         getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
         getElement().getStyle().setProperty("MozBoxSizing", "border-box");

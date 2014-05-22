@@ -35,7 +35,7 @@ class DashboardColumnFlowPanel extends FlowPanel implements BoardEvent {
 
     public DashboardColumnFlowPanel(BoardEvent handler) {
         this.handler = handler;
-        addStyleName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.Column);
+        addStyleName(DashboardTheme.StyleName.DashboardColumn.name());
         clear();
     }
 
@@ -62,7 +62,7 @@ class DashboardColumnFlowPanel extends FlowPanel implements BoardEvent {
     public void clear() {
         super.clear();
         Label spacerLabel = new Label("");
-        spacerLabel.setStylePrimaryName(CSSNames.BASE_NAME + CSSNames.StyleSuffix.ColumnSpacer);
+        spacerLabel.setStylePrimaryName(DashboardTheme.StyleName.DashboardColumnSpacer.name());
         super.add(spacerLabel);
     }
 

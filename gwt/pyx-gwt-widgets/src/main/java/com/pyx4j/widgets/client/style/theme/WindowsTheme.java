@@ -30,7 +30,6 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 
 public class WindowsTheme extends Theme {
@@ -64,7 +63,6 @@ public class WindowsTheme extends Theme {
         initSuggestBoxStyle();
         initBannerStyle();
         initMultipleDatePicker();
-        initDashboard_Report();
     }
 
     protected void initGeneralStyles() {
@@ -546,70 +544,4 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initDashboard_Report() {
-        String prefix = CSSNames.BASE_NAME;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("border", "1px solid #aaa");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Column));
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.ColumnSpacer));
-        style.addProperty("height", "4em");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColor.object1, 0.2);
-        style.addProperty("border", "1px solid #aaa");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder, CSSNames.StyleDependent.maximized));
-        style.addProperty("margin", "0");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
-        style.addProperty("background-color", ThemeColor.contrast1, 0.5);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
-        style.addProperty("background-color", ThemeColor.object1, 0.4);
-        style.addProperty("font", "caption");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("color", "#444");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption) + ":hover");
-        style.addProperty("background-color", ThemeColor.contrast1);
-        style.addProperty("color", ThemeColor.contrast1, 0.1);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderHeading));
-        style.addProperty("padding-top", "2px");
-        style.addProperty("text-align", "center");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
-        style.addProperty("background-color", ThemeColor.object1, 0.1);
-        style.addProperty("border", "1px solid #aaa");
-        style.addProperty("font", "menu");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndPositioner));
-        style.addProperty("border", "1px dotted #555");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.DndReportPositioner));
-        style.addProperty("border", "1px dotted #555");
-        style.addProperty("margin", "5px");
-        addStyle(style);
-
-        // overriding gwt-dnd styles:
-        style = new Style(".dragdrop-handle");
-        style.addProperty("cursor", "default");
-        addStyle(style);
-    }
 }

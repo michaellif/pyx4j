@@ -50,7 +50,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent.Reason;
-import com.pyx4j.widgets.client.dashboard.CSSNames.StyleSuffix;
 import com.pyx4j.widgets.client.dashboard.IGadget.ISetup;
 import com.pyx4j.widgets.client.dashboard.images.DashboardImages;
 
@@ -98,7 +97,7 @@ final class GadgetHolder extends SimplePanel {
         this.holdedGadget = gadget;
         this.gadgetDragController = gadgetDragController;
         this.root = root;
-        this.addStyleName(CSSNames.BASE_NAME + StyleSuffix.Holder);
+        this.addStyleName(DashboardTheme.StyleName.DashboardGadgetHolder.name());
 
         FlowPanel content = new FlowPanel();
 
@@ -106,7 +105,7 @@ final class GadgetHolder extends SimplePanel {
 
         // create caption with title and menu:
         title.setText(holdedGadget.getName());
-        title.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderHeading);
+        title.addStyleName(DashboardTheme.StyleName.DashboardGadgetHolderHeading.name());
         caption.add(title);
 
         caption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -126,7 +125,7 @@ final class GadgetHolder extends SimplePanel {
         caption.add(gadgetMmenu = createGadgetMenu());
         caption.setCellWidth(gadgetMmenu, "1%");
 
-        caption.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderCaption);
+        caption.addStyleName(DashboardTheme.StyleName.DashboardGadgetHolderCaption.name());
         caption.getElement().getStyle().setProperty("minHeight", "20px");
         // override possible inherited style in order to avoid caption "jumping" on mouse over in IE9
         caption.getElement().getStyle().setProperty("lineHeight", "normal");
@@ -184,7 +183,7 @@ final class GadgetHolder extends SimplePanel {
     }
 
     public void setReadOnly(boolean isReadOnly) {
-        caption.setStyleDependentName(CSSNames.StyleDependent.readonly.name(), isReadOnly);
+        caption.setStyleDependentName(DashboardTheme.StyleDependent.readonly.name(), isReadOnly);
         this.isReadOnly = isReadOnly;
     }
 
@@ -254,7 +253,7 @@ final class GadgetHolder extends SimplePanel {
         if (isMaximized()) {
             root.showNormal(this);
 
-            removeStyleDependentName(CSSNames.StyleDependent.maximized.name());
+            removeStyleDependentName(DashboardTheme.StyleDependent.maximized.name());
             maximizer.setResource(images.WindowMaximize());
             maximizer.setTitle(STR_MAXIMIZE);
             gadgetDragController.makeDraggable(this, title);
@@ -267,7 +266,7 @@ final class GadgetHolder extends SimplePanel {
 
             root.showMaximized(this);
 
-            addStyleDependentName(CSSNames.StyleDependent.maximized.name());
+            addStyleDependentName(DashboardTheme.StyleDependent.maximized.name());
             maximizer.setResource(images.WindowRestore());
             maximizer.setTitle(STR_RESTORE);
             gadgetDragController.makeNotDraggable(this);
@@ -300,7 +299,7 @@ final class GadgetHolder extends SimplePanel {
 
         // create main gadget setup panel: 
         final FlowPanel setup = new FlowPanel();
-        setup.addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderSetup);
+        setup.addStyleName(DashboardTheme.StyleName.DashboardGadgetHolderSetup.name());
         setup.add(setupGadget.asWidget());
 
         // create panel with Ok/Cancel buttons:
@@ -348,7 +347,7 @@ final class GadgetHolder extends SimplePanel {
          */
         GadgetMenu(boolean isReadOnly) {
             super(true);
-            addStyleName(CSSNames.BASE_NAME + StyleSuffix.HolderMenu);
+            addStyleName(DashboardTheme.StyleName.DashboardGadgetHolderMenu.name());
 
             // fill menu items:
             if (holdedGadget.isMinimizable()) {

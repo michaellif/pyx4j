@@ -46,7 +46,7 @@ public class Reportboard extends SimplePanel implements IBoard, IBoardRoot {
     private final List<BoardEvent> handlers = new ArrayList<>();
 
     public Reportboard() {
-        addStyleName(CSSNames.BASE_NAME);
+        addStyleName(DashboardTheme.StyleName.Dashboard.name());
 
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);

@@ -44,7 +44,7 @@ public class Dashboard extends SimplePanel implements IBoard, IBoardRoot {
     private boolean inhibitEvents = false;
 
     public Dashboard() {
-        addStyleName(CSSNames.BASE_NAME);
+        addStyleName(DashboardTheme.StyleName.Dashboard.name());
 
         boundaryPanel.setSize("100%", "100%");
         setWidget(boundaryPanel);
