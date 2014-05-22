@@ -158,6 +158,7 @@ public class SimpleMessageFormat {
         } else {
             argumentIndex = Integer.valueOf(formatPattern);
         }
+        assert arguments.length > argumentIndex : "ArrayIndexOutOfBoundsException " + argumentIndex + " in format " + formatPattern;
         Object arg = arguments[argumentIndex];
         Object formatedArg = null;
         if (formatType == null) {

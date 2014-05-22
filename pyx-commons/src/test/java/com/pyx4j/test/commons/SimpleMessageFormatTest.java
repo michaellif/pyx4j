@@ -22,6 +22,7 @@ package com.pyx4j.test.commons;
 
 import java.util.Date;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Consts;
@@ -195,6 +196,28 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("Saturday, January 3, 1970", "{0,date,EEEE, MMMM d, yyyy}", date);
 
         assertMessageFormat("", "{0,date,short}", (Date) null);
+    }
+
+    public void NOT_IN_GWT_testArryaIndexOutOfBound() {
+        boolean hasException = false;
+        String[] array = new String[] { "3", "2" };
+        String compilerWillNotRemove = "";
+        try {
+            compilerWillNotRemove = array[3];
+        } catch (ArrayIndexOutOfBoundsException ok) {
+            hasException = true;
+        }
+        Assert.assertTrue("ArrayIndexOutOfBoundsException should have been thrown in array" + compilerWillNotRemove, hasException);
+    }
+
+    public void testIndexOutOfBound() {
+        boolean hasException = false;
+        try {
+            SimpleMessageFormat.format("{0} {2}", "A");
+        } catch (AssertionError | ArrayIndexOutOfBoundsException ok) {
+            hasException = true;
+        }
+        Assert.assertTrue("ArrayIndexOutOfBoundsException should have been thrown in format", hasException);
     }
 
     /**
