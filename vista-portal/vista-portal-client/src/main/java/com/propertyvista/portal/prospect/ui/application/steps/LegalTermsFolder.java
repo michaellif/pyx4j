@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 
 import com.propertyvista.domain.security.CustomerSignature;
 import com.propertyvista.domain.tenant.prospect.SignedOnlineApplicationLegalTerm;
+import com.propertyvista.portal.shared.ui.OriginalSignatureMock;
 import com.propertyvista.portal.shared.ui.OriginalSignatureValidator;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
@@ -76,7 +77,7 @@ public class LegalTermsFolder extends PortalBoxFolder<SignedOnlineApplicationLeg
         @Override
         public void generateMockData() {
             CustomerSignature signature = get(proto().signature()).getValue().duplicate();
-            signature.agree().setValue(true);
+            OriginalSignatureMock.generateMockData(signature);
             get(proto().signature()).setMockValue(signature);
         }
     }

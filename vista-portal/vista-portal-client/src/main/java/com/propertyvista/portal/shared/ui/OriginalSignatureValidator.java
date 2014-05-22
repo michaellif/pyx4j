@@ -109,4 +109,20 @@ public class OriginalSignatureValidator extends AbstractComponentValidator<Custo
 
         return true;
     }
+
+    public static String mockSignaturesInitials() {
+        String name = ClientContext.getUserVisit().getName();
+        StringBuilder nameInitialsTokens = new StringBuilder();
+        boolean expectFirstLetter = true;
+        for (char ch : name.trim().toLowerCase().replace("\\s", " ").toCharArray()) {
+            if (expectFirstLetter == true) {
+                nameInitialsTokens.append(ch);
+                expectFirstLetter = false;
+                continue;
+            } else if (ch == ' ') {
+                expectFirstLetter = true;
+            }
+        }
+        return nameInitialsTokens.toString();
+    }
 }
