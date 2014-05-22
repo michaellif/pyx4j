@@ -45,7 +45,6 @@ public class CKeyField extends CTextFieldBase<Key, NTextBox<Key>> {
         validator = new TextBoxParserValidator<Key>();
         addComponentValidator(validator);
         setNativeComponent(new NTextBox<Key>(this));
-        asWidget().setWidth("100%");
 
         setFormatter(new IFormatter<Key, String>() {
 
