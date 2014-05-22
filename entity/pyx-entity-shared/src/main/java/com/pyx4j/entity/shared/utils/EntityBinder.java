@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.utils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -116,7 +117,15 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         }
     }
 
-    protected final <TYPE> void bind(IObject<TYPE> toMember, IObject<TYPE> boMember) {
+    protected final <TYPE extends Serializable> void bind(IPrimitive<TYPE> toMember, IPrimitive<TYPE> boMember) {
+        addBinding(new Binding(toMember, boMember, null));
+    }
+
+    protected final <TYPE extends IEntity> void bind(IList<TYPE> toMember, IList<TYPE> boMember) {
+        addBinding(new Binding(toMember, boMember, null));
+    }
+
+    protected final <TBO extends IEntity, TTO extends TBO> void bind(TTO toMember, TBO boMember) {
         addBinding(new Binding(toMember, boMember, null));
     }
 
