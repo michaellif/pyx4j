@@ -25,7 +25,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Scoping;
@@ -42,7 +42,7 @@ public interface UnitAvailabilityStatusDTO extends IEntity {
 
     IPrimitive<String> buildingName();
 
-    AddressStructured address();
+    InternationalAddress address();
 
     IPrimitive<String> propertyManager();
 
