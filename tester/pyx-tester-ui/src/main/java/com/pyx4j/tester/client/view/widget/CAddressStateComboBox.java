@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CFocusComponent;
 import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.ComponentValidator;
+import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.view.widget.CAddressStateComboBox.NAddressStateBox;
@@ -47,7 +47,7 @@ public abstract class CAddressStateComboBox<E, OPTION extends IEntity> extends C
 
     private final AsyncOptionLoadingDelegate<OPTION> asyncOptionDelegate;
 
-    private ComponentValidator<E> unavailableValidator;
+    private IValidator<E> unavailableValidator;
 
     public CAddressStateComboBox(Class<OPTION> entityClass) {
         super();

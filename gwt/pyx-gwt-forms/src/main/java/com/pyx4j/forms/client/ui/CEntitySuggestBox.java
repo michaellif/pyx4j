@@ -47,7 +47,7 @@ import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler.Status;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
-import com.pyx4j.forms.client.validators.ComponentValidator;
+import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
@@ -71,7 +71,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
 
     private final AsyncOptionLoadingDelegate<E> asyncOptionDelegate;
 
-    private ComponentValidator<E> unavailableValidator;
+    private IValidator<E> unavailableValidator;
 
     public CEntitySuggestBox(Class<E> entityClass) {
         super();

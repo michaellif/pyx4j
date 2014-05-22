@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-public abstract class AbstractComponentValidator<DATA_TYPE> implements ComponentValidator<DATA_TYPE> {
+public abstract class AbstractComponentValidator<DATA_TYPE> implements IValidator<DATA_TYPE> {
 
     private CComponent<?, DATA_TYPE, ?> component;
 

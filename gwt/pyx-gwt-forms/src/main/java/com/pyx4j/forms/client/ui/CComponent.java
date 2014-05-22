@@ -54,7 +54,7 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.AsyncValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
-import com.pyx4j.forms.client.validators.ComponentValidator;
+import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationError;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -110,7 +110,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     private DATA_TYPE value = null;
 
-    private List<ComponentValidator<DATA_TYPE>> componentValidators;
+    private List<IValidator<DATA_TYPE>> componentValidators;
 
     private MandatoryValidator<DATA_TYPE> mandatoryValidator;
 
@@ -458,7 +458,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             validationErrors = new HashSet<>();
 
             if (componentValidators != null) {
-                for (ComponentValidator<DATA_TYPE> validator : componentValidators) {
+                for (IValidator<DATA_TYPE> validator : componentValidators) {
                     AbstractValidationError ve = validator.isValid();
                     if (ve != null) {
                         validationErrors.add(ve);
@@ -610,15 +610,15 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    public void addComponentValidator(ComponentValidator<DATA_TYPE> validator) {
+    public void addComponentValidator(IValidator<DATA_TYPE> validator) {
         if (componentValidators == null) {
-            componentValidators = new Vector<ComponentValidator<DATA_TYPE>>();
+            componentValidators = new Vector<IValidator<DATA_TYPE>>();
         }
         componentValidators.add(validator);
         validator.setComponent(this);
     }
 
-    public boolean removeComponentValidator(ComponentValidator<DATA_TYPE> validator) {
+    public boolean removeComponentValidator(IValidator<DATA_TYPE> validator) {
         if (componentValidators != null) {
             return componentValidators.remove(validator);
         } else {
@@ -626,7 +626,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
         }
     }
 
-    public List<ComponentValidator<DATA_TYPE>> getComponentValidators() {
+    public List<IValidator<DATA_TYPE>> getComponentValidators() {
         return componentValidators;
     }
 

@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 /**
  * Created on 2008-08-01
  */
-public interface ComponentValidator<DATA_TYPE> {
+public interface IValidator<DATA_TYPE> {
 
     public AbstractValidationError isValid();
 
