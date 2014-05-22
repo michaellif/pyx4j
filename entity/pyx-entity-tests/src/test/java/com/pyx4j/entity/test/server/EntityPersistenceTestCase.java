@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.server;
 
 import java.util.Iterator;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;

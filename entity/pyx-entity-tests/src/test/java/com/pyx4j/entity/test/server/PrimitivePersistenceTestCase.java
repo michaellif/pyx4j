@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
@@ -258,7 +258,7 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
         Assert.assertEquals("Class of Value", Double.class, emp2.flagDouble().getValue().getClass());
-        Assert.assertEquals("Value", 77.8, emp2.flagDouble().getValue());
+        Assert.assertEquals("Value", 77.8, emp2.flagDouble().getValue(), 0.0);
     }
 
     public void testBigDecimal() {

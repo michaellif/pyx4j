@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.test.server;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.core.EntityFactory;
@@ -60,7 +60,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         srv.persist(department);
 
         Employee employee2 = srv.retrieve(Employee.class, employee.getPrimaryKey());
-        Assert.assertEquals("salary no update", origSalary, employee2.flagDouble().getValue());
+        Assert.assertEquals("salary no update", origSalary, employee2.flagDouble().getValue(), 0.0);
     }
 
     public void testUnownedSetMemebrInCascadeIsNotSaved() {
@@ -108,7 +108,7 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         assertEquals("set size", 1, org2.departments().size());
 
         Employee employee1r = srv.retrieve(Employee.class, employee1.getPrimaryKey());
-        Assert.assertEquals("salary no update", origSalary, employee1r.flagDouble().getValue());
+        Assert.assertEquals("salary no update", origSalary, employee1r.flagDouble().getValue(), 0.0);
     }
 
     public void testOwnedSetUpdate(TestCaseMethod testCaseMethod) {

@@ -22,7 +22,7 @@ package com.pyx4j.i18n.gettext;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 public class POFileReaderTest extends TestCase {

@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared;
 
 import java.util.Date;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
@@ -39,20 +39,12 @@ import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntity;
 
 public class EntityEqualsTest extends InitializerTestBase {
 
-    static public void assertNotEquals(String message, long expected, long actual) {
-        if (expected != actual) {
-            return;
-        } else {
-            Assert.failNotEquals(message, expected, actual);
-        }
-    }
-
     public void testNewEntity() {
 
         Task task1 = EntityFactory.create(Task.class);
 
         Task task2 = EntityFactory.create(Task.class);
-        assertNotEquals("new Items should have different hashCode", task1.hashCode(), task2.hashCode());
+        Assert.assertNotSame("new Items should have different hashCode", task1.hashCode(), task2.hashCode());
 
         long nullEntityHashCode = task1.hashCode();
         task1.status().setValue(Status.ACTIVE);
@@ -61,7 +53,7 @@ public class EntityEqualsTest extends InitializerTestBase {
         task2.status().setValue(Status.ACTIVE);
 
         assertFalse("new Items are different", task1.equals(task2));
-        assertNotEquals("new Items should have different hashCode", task1.hashCode(), task2.hashCode());
+        Assert.assertNotSame("new Items should have different hashCode", task1.hashCode(), task2.hashCode());
     }
 
     public void testSameValue() {

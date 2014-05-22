@@ -22,7 +22,7 @@ package com.pyx4j.test.commons;
 
 import java.util.Date;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Consts;

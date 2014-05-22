@@ -20,7 +20,7 @@
  */
 package com.pyx4j.tester.selenium;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

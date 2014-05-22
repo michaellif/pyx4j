@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;

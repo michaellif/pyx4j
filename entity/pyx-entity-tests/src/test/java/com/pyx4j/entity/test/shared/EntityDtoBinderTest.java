@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared;
 
 import java.sql.Date;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;

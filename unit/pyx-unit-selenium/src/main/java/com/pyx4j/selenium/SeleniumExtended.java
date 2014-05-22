@@ -23,7 +23,7 @@ package com.pyx4j.selenium;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;

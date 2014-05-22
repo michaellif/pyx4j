@@ -29,9 +29,9 @@ import java.util.GregorianCalendar;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import org.junit.Assert;
 import org.xml.sax.SAXException;
 
 import com.pyx4j.commons.LogicalDate;
@@ -264,7 +264,7 @@ public class XMLEntityParserTest extends TestCase {
 
         Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
         Assert.assertEquals("Class of Value", Double.class, emp2.flagDouble().getValue().getClass());
-        Assert.assertEquals("Value", 77.8, emp2.flagDouble().getValue());
+        Assert.assertEquals("Value", 77.8, emp2.flagDouble().getValue(), 0.0);
     }
 
     public void testBigDecimal() {

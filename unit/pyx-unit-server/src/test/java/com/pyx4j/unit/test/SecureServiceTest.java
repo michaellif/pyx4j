@@ -23,7 +23,7 @@ package com.pyx4j.unit.test;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;

@@ -28,7 +28,7 @@ import java.util.List;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

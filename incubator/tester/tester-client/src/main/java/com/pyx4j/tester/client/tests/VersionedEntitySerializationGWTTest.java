@@ -20,7 +20,7 @@
  */
 package com.pyx4j.tester.client.tests;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 import com.google.gwt.core.client.GWT;

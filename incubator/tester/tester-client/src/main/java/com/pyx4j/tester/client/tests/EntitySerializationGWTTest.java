@@ -24,8 +24,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import org.junit.Assert;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -92,7 +93,7 @@ public class EntitySerializationGWTTest extends TestCase {
                 Assert.assertEquals("Integer Value", Integer.valueOf(5), emp2.rating().getValue());
 
                 Assert.assertEquals("Double Class of Value", Double.class, emp2.flagDouble().getValue().getClass());
-                Assert.assertEquals("Double Value", 77.8, emp2.flagDouble().getValue());
+                Assert.assertEquals("Double Value", 77.8, emp2.flagDouble().getValue(), 0.0);
 
                 Assert.assertEquals("BigDecimal Class of Value", BigDecimal.class, emp2.salary().getValue().getClass());
                 Assert.assertTrue("BigDecimal Value", new BigDecimal("150000.00").compareTo(emp2.salary().getValue()) == 0);

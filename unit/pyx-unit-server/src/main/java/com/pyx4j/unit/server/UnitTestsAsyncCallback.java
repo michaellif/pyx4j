@@ -20,7 +20,7 @@
  */
 package com.pyx4j.unit.server;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

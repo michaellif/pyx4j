@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.test.server;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.core.AttachLevel;

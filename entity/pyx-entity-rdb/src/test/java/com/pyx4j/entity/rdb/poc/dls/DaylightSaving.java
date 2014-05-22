@@ -22,7 +22,7 @@ package com.pyx4j.entity.rdb.poc.dls;
 
 import java.util.Calendar;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;

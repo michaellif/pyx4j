@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;

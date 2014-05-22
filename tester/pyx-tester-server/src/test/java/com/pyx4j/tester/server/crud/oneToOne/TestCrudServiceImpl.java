@@ -23,7 +23,7 @@ package com.pyx4j.tester.server.crud.oneToOne;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Key;
