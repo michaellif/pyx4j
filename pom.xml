@@ -526,6 +526,14 @@
                 <gwt.compiler.force>true</gwt.compiler.force>
                 <gwtDraftCompile>true</gwtDraftCompile>
                 <appGWTModuleSufix>Developer</appGWTModuleSufix>
+                <gwtEnableAssertions>true</gwtEnableAssertions>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>gwt-ea</id>
+            <properties>
+                <gwtEnableAssertions>true</gwtEnableAssertions>
             </properties>
         </profile>
 
