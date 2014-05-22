@@ -201,6 +201,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
      * @param publicKey
      */
     public static void setPublicKey(String publicKey) {
+        log.debug("reCAPTCHA key set [{}]", publicKey);
         CaptchaComposite.publicKey = publicKey;
     }
 
@@ -254,6 +255,8 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
     }
 
     private void createChallenge() {
+        assert (publicKey != null) : "Captcha public key was not set";
+
         if (ApplicationMode.offlineDevelopment) {
             assigneRecaptchaId();
             return;
@@ -277,6 +280,7 @@ public class CaptchaComposite extends SimplePanel implements IFocusWidget {
                 assigneRecaptchaId();
                 toAudio.setVisible(true);
                 toText.setVisible(false);
+                log.debug("createChallenge with key set [{}]", publicKey);
                 createChallengeImpl();
                 created = true;
             }

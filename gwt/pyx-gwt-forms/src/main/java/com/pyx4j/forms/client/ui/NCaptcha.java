@@ -69,6 +69,12 @@ public class NCaptcha extends NFocusField<Pair<String, String>, CaptchaComposite
     }
 
     @Override
+    public void setVisible(boolean visible) {
+        captchaComposite.setVisible(visible);
+        super.setVisible(visible);
+    }
+
+    @Override
     public Pair<String, String> getNativeValue() {
         if (ApplicationMode.offlineDevelopment) {
             return new Pair<String, String>("off", captchaComposite.getValueResponse());
