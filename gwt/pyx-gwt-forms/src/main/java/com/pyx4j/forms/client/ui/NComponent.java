@@ -14,22 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 11, 2014
+ * Created on May 23, 2014
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.validators.IValidatable;
+import com.pyx4j.forms.client.validators.ValidationResults;
 
-public interface INativeComponent<E> extends IsWidget, IValidatable {
+public abstract class NComponent<DATA_TYPE, COMP_TYPE extends CComponent<?, ?, ?>> extends SimplePanel implements INativeComponent<DATA_TYPE> {
 
-    CComponent<?, ?, ?> getCComponent();
+    private final COMP_TYPE cComponent;
 
-    SimplePanel getContentHolder();
+    public NComponent(COMP_TYPE cComponent) {
+        this.cComponent = cComponent;
+    }
 
-    IsWidget getContent();
+    @Override
+    public ValidationResults getValidationResults() {
+        return getCComponent().getValidationResults();
+    }
+
+    @Override
+    public COMP_TYPE getCComponent() {
+        return cComponent;
+    }
 }

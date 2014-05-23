@@ -24,6 +24,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -94,6 +95,11 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
                 results.appendValidationResults(getValidationResults(childWidget));
             }
         }
+//        else if (widget instanceof IndexedPanel) {
+//            for (int i = 0; i < ((IndexedPanel) widget).getWidgetCount(); i++) {
+//                results.appendValidationResults(getValidationResults(((IndexedPanel) widget).getWidget(i)));
+//            }
+//        }
         return results;
     }
 

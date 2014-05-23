@@ -28,14 +28,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
-public class NContainer<DATA_TYPE extends IObject<?>> extends SimplePanel implements RequiresResize, ProvidesResize, INativeComponent<DATA_TYPE> {
+public class NContainer<DATA_TYPE extends IObject<?>> extends NComponent<DATA_TYPE, CContainer<?, DATA_TYPE, ?>> implements RequiresResize, ProvidesResize {
 
     private IsWidget content;
 
-    private final CContainer<?, DATA_TYPE, ?> cComponent;
-
     public NContainer(CContainer<?, DATA_TYPE, ?> cComponent) {
-        this.cComponent = cComponent;
+        super(cComponent);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class NContainer<DATA_TYPE extends IObject<?>> extends SimplePanel implem
         this.content = content;
         if (getWidget() instanceof IDecorator) {
             ((IDecorator) getWidget()).setContent(content);
-            ((IDecorator) getWidget()).init(cComponent);
+            ((IDecorator) getWidget()).init(getCComponent());
         } else {
             setWidget(content);
         }
@@ -67,8 +65,7 @@ public class NContainer<DATA_TYPE extends IObject<?>> extends SimplePanel implem
     }
 
     @Override
-    public CComponent<?, DATA_TYPE, ?> getCComponent() {
-        return cComponent;
+    public void showErrors(boolean show) {
     }
 
 }
