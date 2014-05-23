@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.ar;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -237,10 +238,8 @@ public class ARArrearsManager {
 
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
         LegalStatus legalStatus = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(billingAccount.lease().<Lease> createIdentityStub());
-        if (legalStatus.status().getValue() != LegalStatus.Status.None) {
-            arrearsSnapshot.legalStatus().setValue(legalStatus.status().getValue());
-            arrearsSnapshot.legalStatusDate().setValue(legalStatus.setOn().getValue());
-        }
+        arrearsSnapshot.legalStatus().setValue(legalStatus.status().getValue());
+        arrearsSnapshot.legalStatusDate().setValue(legalStatus.setOn().getValue());
         return arrearsSnapshot;
     }
 
@@ -290,7 +289,13 @@ public class ARArrearsManager {
     }
 
     private static void persistIfChanged(ArrearsSnapshot<?> currentSnapshot, ArrearsSnapshot<?> previousSnapshot) {
-        if (previousSnapshot == null || ARArreasManagerUtils.haveDifferentBucketValues(currentSnapshot, previousSnapshot)) {
+        Date defaultDate = new Date();
+        boolean hasDifferentLegalStatus = currentSnapshot instanceof BuildingArrearsSnapshot ? true :
+        // formatter:off
+                (((LeaseArrearsSnapshot) currentSnapshot).legalStatus().getValue() != ((LeaseArrearsSnapshot) previousSnapshot).legalStatus().getValue() || ((LeaseArrearsSnapshot) currentSnapshot)
+                        .legalStatusDate().getValue(defaultDate).compareTo(((LeaseArrearsSnapshot) previousSnapshot).legalStatusDate().getValue(defaultDate)) != 0);
+        // @formatter:on
+        if (previousSnapshot == null || hasDifferentLegalStatus || ARArreasManagerUtils.haveDifferentBucketValues(currentSnapshot, previousSnapshot)) {
             boolean isSameDaySnapshot = false;
 
             if (previousSnapshot != null) {

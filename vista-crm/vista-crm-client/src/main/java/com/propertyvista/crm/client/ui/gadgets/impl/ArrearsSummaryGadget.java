@@ -64,6 +64,7 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
         query.buildingsFilter().addAll(buildingsFilterContainer.getSelectedBuildingsStubs());
         query.asOf().setValue(getMetadata().customizeDate().getValue(false) ? getMetadata().asOf().getValue() : new LogicalDate());
         query.category().setValue(getMetadata().customizeCategory().getValue(false) ? getMetadata().category().getValue() : null);
+        query.legalStatus().setValue(getMetadata().filterByLegalStatus().getValue(false) ? getMetadata().legalStatus().getValue() : null);
         return query;
     }
 
@@ -87,7 +88,8 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
     protected Widget renderTitle() {
         ArrearsGadgetQueryDataDTO query = makeSummaryQuery();
         String category = query.category().isNull() ? i18n.tr("Total") : query.category().getValue().toString();
-        Label title = new Label(i18n.tr("{0} arrears as of {1,date,short}", category, query.asOf().getValue()));
+        String legalStatusString = query.legalStatus().isNull() ? "" : i18n.tr(" (LegalStatus: {0})", query.legalStatus().getValue());
+        Label title = new Label(i18n.tr("{0} arrears as of {1,date,short}{2}", category, query.asOf().getValue(), legalStatusString));
         return title;
     }
 

@@ -18,8 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 
@@ -43,6 +43,15 @@ public class ArrearsGadgetSummaryMetadataForm extends CForm<ArrearsSummaryGadget
             }
         });
         formPanel.append(Location.Left, proto().category()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().filterByLegalStatus()).decorate().componentWidth(120);
+        get(proto().filterByLegalStatus()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().legalStatus()).setVisible(event.getValue() == true);
+            }
+        });
+        formPanel.append(Location.Left, proto().legalStatus()).decorate().componentWidth(120);
+
         formPanel.append(Location.Left, proto().customizeDate()).decorate().componentWidth(120);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -59,6 +68,7 @@ public class ArrearsGadgetSummaryMetadataForm extends CForm<ArrearsSummaryGadget
         super.onValueSet(populate);
         get(proto().asOf()).setVisible(getValue().customizeDate().getValue(false));
         get(proto().category()).setVisible(getValue().customizeCategory().getValue(false));
+        get(proto().legalStatus()).setVisible(getValue().filterByLegalStatus().getValue(false));
     }
 
 }

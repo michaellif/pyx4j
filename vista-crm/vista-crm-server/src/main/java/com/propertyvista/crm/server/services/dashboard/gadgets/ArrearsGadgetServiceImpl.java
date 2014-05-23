@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -72,7 +72,18 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
     }
 
     private void calculateArrearsSummary(LeaseAgingBuckets aggregatedBuckets, ArrearsGadgetQueryDataDTO query) {
-
+        if (!query.legalStatus().isNull()) {
+            aggregatedBuckets.bucketThisMonth().setValue(null);
+            aggregatedBuckets.bucketCurrent().setValue(null);
+            aggregatedBuckets.bucket30().setValue(null);
+            aggregatedBuckets.bucket60().setValue(null);
+            aggregatedBuckets.bucket90().setValue(null);
+            aggregatedBuckets.bucketOver90().setValue(null);
+            aggregatedBuckets.arrearsAmount().setValue(null);
+            aggregatedBuckets.totalBalance().setValue(null);
+            aggregatedBuckets.creditAmount().setValue(null);
+            return;
+        }
         aggregatedBuckets.bucketThisMonth().setValue(BigDecimal.ZERO);
         aggregatedBuckets.bucketCurrent().setValue(BigDecimal.ZERO);
         aggregatedBuckets.bucket30().setValue(BigDecimal.ZERO);
@@ -92,7 +103,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         ICursorIterator<Building> i = Persistence.secureQuery(null, criteria, AttachLevel.IdOnly);
         while (i.hasNext()) {
             Building b = i.next();
-            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, query.asOf().getValue(), true);
+            ArrearsSnapshot<?> snapshot = arFacade.getArrearsSnapshot(b, query.asOf().getValue(), true);
             if (snapshot == null) {
                 continue;
             } else {
@@ -141,6 +152,10 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         }
         criteria.eq(criteria.proto().arrears().arCode(), query.category().getValue());
         criteria.eq(criteria.proto().asOf(), query.asOf().getValue());
+
+        if (!query.legalStatus().isNull()) {
+            criteria.eq(criteria.proto().legalStatus(), query.legalStatus().getValue());
+        }
 
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));
