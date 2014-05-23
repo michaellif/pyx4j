@@ -53,9 +53,9 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
         formPanel.append(Location.Left, proto().suiteNumber()).decorate();
         formPanel.append(Location.Left, proto().city()).decorate();
 
-        formPanel.append(Location.Right, proto().province()).decorate();
-        formPanel.append(Location.Right, proto().country()).decorate();
-        formPanel.append(Location.Right, proto().postalCode()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().province(), province).decorate();
+        formPanel.append(Location.Left, proto().country()).decorate();
+        formPanel.append(Location.Left, proto().postalCode()).decorate().componentWidth(120);
 
         return formPanel;
     }
@@ -87,27 +87,26 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
 
     private void onCountrySelected(ISOCountry country) {
         if (country != null) {
+            province.setCountry(country);
             if (ISOCountry.Canada.equals(country)) {
                 get(proto().streetNumber()).setVisible(true);
                 get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
-                get(proto().suiteNumber()).setTitle(proto().streetNumber().getMeta().getCaption());
+                get(proto().suiteNumber()).setTitle(proto().suiteNumber().getMeta().getCaption());
                 // ensure correct option list for "known" countries
-//TODO                province.setCountry(country);
                 province.setVisible(true);
                 province.setTitle("Province");
                 get(proto().postalCode()).setTitle("Postal Code");
             } else if (ISOCountry.UnitedStates.equals(country)) {
                 get(proto().streetNumber()).setVisible(true);
                 get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
-                get(proto().suiteNumber()).setTitle(proto().streetNumber().getMeta().getCaption());
-//TODO                province.setCountry(country);
+                get(proto().suiteNumber()).setTitle(proto().suiteNumber().getMeta().getCaption());
                 province.setVisible(true);
                 province.setTitle("State");
                 get(proto().postalCode()).setTitle("Zip Code");
             } else if (ISOCountry.UnitedKingdom.equals(country)) {
                 get(proto().streetNumber()).setVisible(true);
                 get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
-                get(proto().suiteNumber()).setTitle(proto().streetNumber().getMeta().getCaption());
+                get(proto().suiteNumber()).setTitle(proto().suiteNumber().getMeta().getCaption());
                 province.setVisible(false);
                 get(proto().postalCode()).setTitle("Postal Code");
             } else {
@@ -115,7 +114,6 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
                 get(proto().streetNumber()).setVisible(false);
                 get(proto().streetName()).setTitle("Address Line 1");
                 get(proto().suiteNumber()).setTitle("Address Line 2");
-                province.setTextMode(true);
                 province.setVisible(true);
                 province.setTitle(proto().province().getMeta().getCaption());
                 get(proto().postalCode()).setVisible(true);

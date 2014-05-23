@@ -61,8 +61,14 @@ public class CProvinceComboBox extends CFocusComponent<String, NProvinceComboBox
     }
 
     public void setCountry(ISOCountry country) {
-        setTextMode(false);
-        setOptions(ISOProvince.forCountry(country));
+        List<ISOProvince> opts = ISOProvince.forCountry(country);
+        if (opts == null || opts.size() == 0) {
+            setTextMode(true);
+            setValue(null);
+        } else {
+            setTextMode(false);
+            setOptions(opts);
+        }
     }
 
     public void retrieveOptions(final AsyncOptionsReadyCallback<ISOProvince> optionsReadyCallback) {
