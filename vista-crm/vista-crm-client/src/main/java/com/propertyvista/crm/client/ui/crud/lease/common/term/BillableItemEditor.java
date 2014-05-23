@@ -36,8 +36,8 @@ import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -391,7 +391,6 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 }
 
                 if (comp != null) {
-                    @SuppressWarnings("unchecked")
                     IFieldDecorator decor = (IFieldDecorator) get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
