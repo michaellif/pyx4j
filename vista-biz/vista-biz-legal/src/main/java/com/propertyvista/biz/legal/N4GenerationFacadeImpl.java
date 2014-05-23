@@ -51,6 +51,7 @@ import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
 import com.propertyvista.domain.policy.policies.N4Policy;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -114,7 +115,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.landlordsContactInfo().mailingAddress().setValue(formatStreetAddress(batchData.companyAddress()));
         fieldsData.landlordsContactInfo().unit().setValue(batchData.companyAddress().suiteNumber().getValue());
         fieldsData.landlordsContactInfo().municipality().setValue(batchData.companyAddress().city().getValue());
-        fieldsData.landlordsContactInfo().province().setValue(batchData.companyAddress().province().getValue());
+        fieldsData.landlordsContactInfo().province()
+                .setValue(ISOProvince.forName(batchData.companyAddress().province().getValue(), batchData.companyAddress().country().getValue()).code);
         fieldsData.landlordsContactInfo().postalCode().setValue(batchData.companyAddress().postalCode().getValue());
 
         fieldsData.landlordsContactInfo().phoneNumber().setValue(batchData.companyPhoneNumber().getValue());
@@ -199,7 +201,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         formattedAddress.append("\n");
         formattedAddress.append(address.city().getValue());
         formattedAddress.append(" ");
-        formattedAddress.append(address.province().getValue());
+        formattedAddress.append(ISOProvince.forName(address.province().getValue(), address.country().getValue()).code);
         formattedAddress.append("  ");
         formattedAddress.append(address.postalCode().getValue());
         return formattedAddress.toString();
@@ -212,7 +214,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     private String formatStreetAddress(InternationalAddress address) {
         return SimpleMessageFormat.format( //
                 "{0,choice,null#|!null#{0}-}{1} {2}", //
-                sanitzeSuiteNumber(address.suiteNumber().getValue()), //
+                sanitzeSuiteNumber(address.suiteNumber().getValue("")), //
                 address.streetNumber().getValue(), //
                 address.streetName().getValue() //
                 );
