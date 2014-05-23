@@ -48,13 +48,13 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
     protected IsWidget createContent() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
 
+        formPanel.append(Location.Left, proto().country()).decorate();
         formPanel.append(Location.Left, proto().streetNumber()).decorate();
         formPanel.append(Location.Left, proto().streetName()).decorate();
         formPanel.append(Location.Left, proto().suiteNumber()).decorate();
-        formPanel.append(Location.Left, proto().city()).decorate();
 
         formPanel.append(Location.Left, proto().province(), province).decorate();
-        formPanel.append(Location.Left, proto().country()).decorate();
+        formPanel.append(Location.Left, proto().city()).decorate();
         formPanel.append(Location.Left, proto().postalCode()).decorate().componentWidth(120);
 
         return formPanel;
@@ -86,9 +86,14 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
     }
 
     private void onCountrySelected(ISOCountry country) {
-        if (country != null) {
-            province.setCountry(country);
-            if (ISOCountry.Canada.equals(country)) {
+        province.setCountry(country);
+        if (country == null) {
+            applyDefaultSettings();
+            showDetails(false);
+        } else {
+            showDetails(true);
+            switch (country) {
+            case Canada:
                 get(proto().streetNumber()).setVisible(true);
                 get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
                 get(proto().suiteNumber()).setTitle(proto().suiteNumber().getMeta().getCaption());
@@ -96,29 +101,46 @@ public class InternationalAddressEditorBase<A extends InternationalAddress> exte
                 province.setVisible(true);
                 province.setTitle("Province");
                 get(proto().postalCode()).setTitle("Postal Code");
-            } else if (ISOCountry.UnitedStates.equals(country)) {
+                break;
+            case UnitedStates:
                 get(proto().streetNumber()).setVisible(true);
                 get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
                 get(proto().suiteNumber()).setTitle(proto().suiteNumber().getMeta().getCaption());
                 province.setVisible(true);
                 province.setTitle("State");
                 get(proto().postalCode()).setTitle("Zip Code");
-            } else if (ISOCountry.UnitedKingdom.equals(country)) {
+                break;
+            case UnitedKingdom:
                 get(proto().streetNumber()).setVisible(true);
                 get(proto().streetName()).setTitle(proto().streetName().getMeta().getCaption());
                 get(proto().suiteNumber()).setTitle(proto().suiteNumber().getMeta().getCaption());
                 province.setVisible(false);
                 get(proto().postalCode()).setTitle("Postal Code");
-            } else {
-                // International
-                get(proto().streetNumber()).setVisible(false);
-                get(proto().streetName()).setTitle("Address Line 1");
-                get(proto().suiteNumber()).setTitle("Address Line 2");
-                province.setVisible(true);
-                province.setTitle(proto().province().getMeta().getCaption());
-                get(proto().postalCode()).setVisible(true);
-                get(proto().postalCode()).setTitle(proto().postalCode().getMeta().getCaption());
+                break;
+            default:
+                applyDefaultSettings();
             }
         }
+    }
+
+    private void showDetails(boolean visible) {
+        get(proto().streetNumber()).setVisible(visible);
+        get(proto().streetName()).setVisible(visible);
+        get(proto().suiteNumber()).setVisible(visible);
+        get(proto().province()).setVisible(visible);
+        get(proto().city()).setVisible(visible);
+        get(proto().postalCode()).setVisible(visible);
+
+    }
+
+    // International
+    private void applyDefaultSettings() {
+        get(proto().streetNumber()).setVisible(false);
+        get(proto().streetName()).setTitle("Address Line 1");
+        get(proto().suiteNumber()).setTitle("Address Line 2");
+        province.setVisible(true);
+        province.setTitle(proto().province().getMeta().getCaption());
+        get(proto().postalCode()).setVisible(true);
+        get(proto().postalCode()).setTitle(proto().postalCode().getMeta().getCaption());
     }
 }
