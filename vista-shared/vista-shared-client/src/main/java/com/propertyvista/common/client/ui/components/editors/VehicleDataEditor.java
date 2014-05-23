@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -22,11 +24,15 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
+import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
+import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
 public class VehicleDataEditor extends CForm<Vehicle> {
 
     private static final I18n i18n = I18n.get(VehicleDataEditor.class);
+
+    private final CProvinceComboBox province = new CProvinceComboBox();
 
     public VehicleDataEditor() {
         super(Vehicle.class);
@@ -51,8 +57,15 @@ public class VehicleDataEditor extends CForm<Vehicle> {
 
         row = 0; // skip header
         panel.setWidget(++row, 1, inject(proto().plateNumber(), new FieldDecoratorBuilder(10).build()));
-        panel.setWidget(++row, 1, inject(proto().province(), new FieldDecoratorBuilder(17).build()));
+        panel.setWidget(++row, 1, inject(proto().province(), province, new FieldDecoratorBuilder(17).build()));
         panel.setWidget(++row, 1, inject(proto().country(), new FieldDecoratorBuilder(13).build()));
+
+        get(proto().country()).addValueChangeHandler(new ValueChangeHandler<ISOCountry>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<ISOCountry> event) {
+                province.setCountry(event.getValue());
+            }
+        });
 
         removeMandatory();
 
