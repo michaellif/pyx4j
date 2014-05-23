@@ -19,9 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
@@ -72,7 +71,6 @@ public class EcheckInfoEditor extends CForm<EcheckInfo> {
         get(proto().bankId()).setMockValue("123");
         get(proto().branchTransitNumber()).setMockValue("12345");
 
-        CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
-        id.setMockValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
+        get(proto().accountNo()).setMockValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 }
