@@ -36,6 +36,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -46,7 +47,9 @@ import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.legal.LegalStatus;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ARArrearsManager {
 
@@ -232,6 +235,12 @@ public class ARArrearsManager {
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
         arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
 
+        Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
+        LegalStatus legalStatus = ServerSideFactory.create(LeaseLegalFacade.class).getCurrentLegalStatus(billingAccount.lease().<Lease> createIdentityStub());
+        if (legalStatus.status().getValue() != LegalStatus.Status.None) {
+            arrearsSnapshot.legalStatus().setValue(legalStatus.status().getValue());
+            arrearsSnapshot.legalStatusDate().setValue(legalStatus.setOn().getValue());
+        }
         return arrearsSnapshot;
     }
 

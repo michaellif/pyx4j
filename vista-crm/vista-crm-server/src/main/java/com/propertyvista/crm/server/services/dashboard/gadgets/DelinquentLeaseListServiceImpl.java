@@ -63,6 +63,9 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
         bind(toProto.arrears().bucket90(), boProto.bucket90());
         bind(toProto.arrears().bucketOver90(), boProto.bucketOver90());
         bind(toProto.arrears().arrearsAmount(), boProto.arrearsAmount());
+
+        bind(toProto.legalStatus(), boProto.arrearsSnapshot().legalStatus());
+        bind(toProto.legalStatusDate(), boProto.arrearsSnapshot().legalStatusDate());
     }
 
     @Override
@@ -118,5 +121,8 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
         dto.mobilePhone().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone().getValue());
         dto.homePhone().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone().getValue());
         dto.workPhone().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone().getValue());
+
+        dto.legalStatus().setValue(dbo.arrearsSnapshot().legalStatus().getValue());
+        dto.legalStatusDate().setValue(dbo.arrearsSnapshot().legalStatusDate().getValue());
     }
 }

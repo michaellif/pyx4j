@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.legal.LegalStatus;
 
 @Table(prefix = "billing")
 @DiscriminatorValue("LeaseArrearsSnapshot")
@@ -51,4 +53,9 @@ public interface LeaseArrearsSnapshot extends ArrearsSnapshot<LeaseAgingBuckets>
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> lmrToUnitRentDifference();
+
+    IPrimitive<LegalStatus.Status> legalStatus();
+
+    IPrimitive<Date> legalStatusDate();
+
 }

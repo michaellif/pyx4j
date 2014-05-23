@@ -53,8 +53,9 @@ public class DelinquentLeasesDetailsFactory extends AbstractListerDetailsFactory
                     new Builder(proto.arrears().bucket60()).searchable(true).sortable(true).build(),
                     new Builder(proto.arrears().bucket90()).searchable(true).sortable(true).build(),
                     new Builder(proto.arrears().bucketOver90()).searchable(true).sortable(true).build(),
-                    new Builder(proto.arrears().arrearsAmount()).searchable(true).sortable(true).build()
-                    
+                    new Builder(proto.arrears().arrearsAmount()).searchable(true).sortable(true).build(),
+                    new Builder(proto.legalStatus()).searchable(true).sortable(true).build(),
+                    new Builder(proto.legalStatusDate()).searchable(true).sortable(true).build()
              );// @formatter:on
     }
 
