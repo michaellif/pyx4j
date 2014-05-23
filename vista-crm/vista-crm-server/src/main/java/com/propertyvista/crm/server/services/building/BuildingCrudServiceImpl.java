@@ -33,12 +33,14 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -77,6 +79,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
         entity.defaultProductCatalog().setValue(!VistaFeatures.instance().yardiIntegration());
         entity.ilsEmailConfigured().setValue(Persistence.service().count(EntityQueryCriteria.create(ILSEmailConfig.class)) > 0);
+        CountryOfOperation cop = VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue();
+        entity.info().address().country().setValue(cop == null ? null : cop.country);
 
         return entity;
     }

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.ref;
 
+import com.pyx4j.i18n.shared.I18n;
+
 public enum ISOCountry {
 
     Afghanistan("Afghanistan", "AF", "AFG", "004"), //
@@ -260,6 +262,8 @@ public enum ISOCountry {
     Zambia("Zambia", "ZM", "ZMB", "894"), //
     Zimbabwe("Zimbabwe", "ZW", "ZWE", "716");
 
+    private static final I18n i18n = I18n.get(ISOCountry.class);
+
     public final String name;
 
     public final String iso2;
@@ -288,6 +292,6 @@ public enum ISOCountry {
 
     @Override
     public String toString() {
-        return name;
+        return i18n.tr(name);
     }
 }

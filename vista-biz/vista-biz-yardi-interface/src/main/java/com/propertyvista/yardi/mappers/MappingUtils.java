@@ -18,8 +18,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.yardi.entity.mits.Address;
 
 import com.pyx4j.commons.Key;
@@ -31,6 +29,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.ISOCountry;
@@ -51,11 +50,11 @@ public class MappingUtils {
 
     public static void ensureCountryOfOperation(Building building) throws YardiServiceException {
         Pmc pmc = VistaDeployment.getCurrentPmc();
-        String yardiCountry = building.info().address().country().getValue().name;
-        String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
+        ISOCountry yardiCountry = building.info().address().country().getValue();
+        CountryOfOperation countryOfOperation = pmc.features().countryOfOperation().getValue();
         if (yardiCountry == null) {
             throw new YardiServiceException("Country not set for this building. Building not imported.");
-        } else if (!yardiCountry.equals(countryOfOperation)) {
+        } else if (countryOfOperation == null || !yardiCountry.equals(countryOfOperation.country)) {
             throw new YardiServiceException("Country for this building does not match country of operation");
         }
     }
@@ -81,16 +80,14 @@ public class MappingUtils {
         }
         address.suiteNumber().setValue(address2.toString());
 
-        String importedCountry = mitsAddress.getCountry();
-        if (StringUtils.isEmpty(importedCountry)) {
+        ISOCountry country = ISOCountry.forName(mitsAddress.getCountry());
+        if (country == null && !VistaDeployment.getCurrentPmc().features().countryOfOperation().isNull()) {
             // assume country as countryOfOperation if not not set in Yardi!
-            importedCountry = VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue().toString();
+            country = VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue().country;
         }
-
-        ISOCountry country = ISOCountry.forName(importedCountry);
         if (country == null) {
             error.append("\n");
-            error.append("failed to find ISO Country from MITS address: " + importedCountry);
+            error.append("failed to find ISO Country from MITS address: " + mitsAddress.getCountry());
         }
         address.country().setValue(country);
 

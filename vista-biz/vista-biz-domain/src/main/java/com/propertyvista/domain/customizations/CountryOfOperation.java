@@ -14,23 +14,27 @@
 package com.propertyvista.domain.customizations;
 
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
-import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.ref.ISOCountry;
 
 @I18n
 public enum CountryOfOperation {
 
-    Canada,
+    Canada(ISOCountry.Canada),
 
-    @Translate("United States")
-    US,
+    US(ISOCountry.UnitedStates),
 
-    @Translate("United Kingdom")
-    UK;
+    UK(ISOCountry.UnitedKingdom);
+
+    public final ISOCountry country;
+
+    private CountryOfOperation(ISOCountry country) {
+        this.country = country;
+    }
 
     @Override
     public String toString() {
-        return I18nEnum.toString(this);
+        return country.toString();
     }
 
 }

@@ -16,6 +16,8 @@ package com.propertyvista.domain.ref;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.i18n.shared.I18n;
+
 public enum ISOProvince {
     // United states
     Alabama("Alabama", "AL", ISOCountry.UnitedStates), //
@@ -90,6 +92,8 @@ public enum ISOProvince {
     Nunavut("Nunavut", "NU", ISOCountry.Canada), //
     YukonTerritory("Yukon Territory", "YT", ISOCountry.Canada);
 
+    private static final I18n i18n = I18n.get(ISOProvince.class);
+
     public final String name;
 
     public final String code;
@@ -138,6 +142,6 @@ public enum ISOProvince {
 
     @Override
     public String toString() {
-        return name;
+        return i18n.tr(name);
     }
 }

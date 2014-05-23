@@ -34,12 +34,18 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
 
     private final CProvinceComboBox province = new CProvinceComboBox();
 
+    private boolean readOnlyCountry;
+
     public InternationalAddressEditorBase(Class<A> entityClass) {
         this(entityClass, FieldDecoratorBuilder.LABEL_WIDTH, 20, FieldDecoratorBuilder.CONTENT_WIDTH);
     }
 
     public InternationalAddressEditorBase(Class<A> entityClass, double labelWidth, double maxCompWidth, double contentWidth) {
         super(entityClass);
+    }
+
+    public void setReadonlyCountry(boolean readOnly) {
+        this.readOnlyCountry = readOnly;
     }
 
     @Override
@@ -81,6 +87,7 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         onCountrySelected(getValue().country().getValue());
+        get(proto().country()).setEditable(!(readOnlyCountry && !getValue().country().isNull()));
     }
 
     private void onCountrySelected(ISOCountry country) {

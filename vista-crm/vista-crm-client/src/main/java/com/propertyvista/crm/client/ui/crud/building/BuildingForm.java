@@ -210,7 +210,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Right, proto().suspended()).decorate().componentWidth(50);
 
         formPanel.h1(proto().info().address().getMeta().getCaption());
-        formPanel.append(Location.Dual, proto().info().address(), new InternationalAddressEditor());
+        InternationalAddressEditor addressEditor = new InternationalAddressEditor();
+        addressEditor.setReadonlyCountry(true);
+        formPanel.append(Location.Dual, proto().info().address(), addressEditor);
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
