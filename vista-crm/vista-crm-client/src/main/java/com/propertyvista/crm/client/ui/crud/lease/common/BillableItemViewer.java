@@ -95,10 +95,10 @@ public class BillableItemViewer extends CForm<BillableItem> {
             }
         });
 
+        formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().agreedPrice()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
 

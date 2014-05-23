@@ -32,7 +32,7 @@ import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 
-@ToStringFormat("{0,choice,null#{2}|!null#{0}}, agreed price: ${1}")
+@ToStringFormat("{0,choice,null#{2}|!null#{0}}, agreed price: ${1}{3,choice,null#|!null#, {3}}")
 public interface BillableItem extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
@@ -69,6 +69,8 @@ public interface BillableItem extends IEntity {
     @ToString(index = 2)
     IPrimitive<String> description();
 
+    @ToString(index = 3)
+    @Editor(type = EditorType.label)
     IPrimitive<String> yardiChargeCode();
 
     IPrimitive<Boolean> finalized();

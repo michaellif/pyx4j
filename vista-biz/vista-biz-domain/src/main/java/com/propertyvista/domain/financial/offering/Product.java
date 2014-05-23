@@ -75,6 +75,7 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     /**
      * used in yardi-integration mode for storing Rentable Item Type Code
      */
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<String> yardiCode();
 
     @AbstractEntity
