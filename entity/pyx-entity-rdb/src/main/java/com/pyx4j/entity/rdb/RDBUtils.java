@@ -344,4 +344,8 @@ public class RDBUtils implements Closeable {
             }
         }
     }
+
+    public static void deregisterDrivers() {
+        MemoryLeakReducer.deregisterDrivers();
+    }
 }

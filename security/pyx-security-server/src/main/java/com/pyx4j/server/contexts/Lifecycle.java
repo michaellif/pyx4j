@@ -141,9 +141,16 @@ public class Lifecycle {
     }
 
     public static void endContext() {
-        for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
-            lifecycleListener.onContextEnd();
+        try {
+            for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
+                lifecycleListener.onContextEnd();
+            }
+        } finally {
+            removeContext();
         }
+    }
+
+    public static void removeContext() {
         Context.remove();
         NamespaceManager.remove();
         I18nManager.removeThreadLocale();

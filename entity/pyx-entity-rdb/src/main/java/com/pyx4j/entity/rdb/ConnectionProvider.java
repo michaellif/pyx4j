@@ -20,18 +20,8 @@
  */
 package com.pyx4j.entity.rdb;
 
-import java.lang.management.ManagementFactory;
 import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,50 +138,7 @@ public class ConnectionProvider {
 
     public void deregister() {
         dispose();
-
-        // Unregister drivers during shutdown.
-        // Fix Memory leak that the singleton java.sql.DriverManager can result in.
-        Enumeration<Driver> drivers = DriverManager.getDrivers();
-        List<Driver> drvCopy = new Vector<Driver>();
-        while (drivers.hasMoreElements()) {
-            drvCopy.add(drivers.nextElement());
-        }
-        int count = 0;
-        for (Driver d : drvCopy) {
-            if (d.getClass().getClassLoader() != ConnectionProvider.class.getClassLoader()) {
-                log.debug("do not deregister {}", d.getClass().getName());
-                continue;
-            }
-            try {
-                DriverManager.deregisterDriver(d);
-                log.info("deregistered driver {}", d.getClass().getName());
-                if ("oracle.jdbc.OracleDriver".equals(d.getClass().getName())) {
-                    deregisterOracleDiagnosabilityMBean();
-                }
-                count++;
-            } catch (Throwable e) {
-                log.error("deregister error", e);
-            }
-        }
-        if (count == 0) {
-            log.warn("filed to find jdbc driver to deregister");
-        }
-    }
-
-    public void deregisterOracleDiagnosabilityMBean() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        try {
-            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-            Hashtable<String, String> keys = new Hashtable<String, String>();
-            keys.put("type", "diagnosability");
-            keys.put("name", cl.getClass().getName() + "@" + Integer.toHexString(cl.hashCode()).toLowerCase());
-            mbs.unregisterMBean(new ObjectName("com.oracle.jdbc", keys));
-            log.info("deregistered OracleDiagnosabilityMBean");
-        } catch (javax.management.InstanceNotFoundException nf) {
-            log.debug("Oracle OracleDiagnosabilityMBean not found ", nf);
-        } catch (Throwable e) {
-            log.error("Oracle  JMX unregister error", e);
-        }
+        MemoryLeakReducer.deregisterDrivers();
     }
 
     public Dialect getDialect() {
