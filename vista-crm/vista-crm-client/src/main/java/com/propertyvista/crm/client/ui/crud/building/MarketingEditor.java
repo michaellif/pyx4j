@@ -38,13 +38,15 @@ public class MarketingEditor extends CForm<Marketing> {
 
     private final CForm<? extends Building> parentForm;
 
-    private final InternationalAddressEditor addressEditor = new InternationalAddressEditor();
+    private final InternationalAddressEditor addressEditor;
 
     private InternationalAddress emptyAddr;
 
     public MarketingEditor(CForm<? extends Building> parentForm) {
         super(Marketing.class);
         this.parentForm = parentForm;
+        addressEditor = new InternationalAddressEditor();
+        addressEditor.setReadonlyCountry(true);
     }
 
     @Override

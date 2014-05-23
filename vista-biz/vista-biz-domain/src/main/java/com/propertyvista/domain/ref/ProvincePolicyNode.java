@@ -14,6 +14,7 @@
 package com.propertyvista.domain.ref;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -21,5 +22,6 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 @DiscriminatorValue("Province")
 public interface ProvincePolicyNode extends PolicyNode {
 
+    @ToString
     IPrimitive<ISOProvince> province();
 }
