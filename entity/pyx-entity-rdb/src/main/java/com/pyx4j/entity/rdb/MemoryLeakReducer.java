@@ -109,14 +109,31 @@ public class MemoryLeakReducer {
     @SuppressWarnings("deprecation")
     private static void stopOracledThreads() {
         try {
+            // Have no idea why but I Can't simply stop the thread.
+            // But Enabling TRACE and Breaking it will make it stop.
+            Class<?> oracleLogClass = Class.forName("oracle.jdbc.driver.OracleLog");
+            Field recursiveTraceField = oracleLogClass.getDeclaredField("recursiveTrace");
+            recursiveTraceField.setAccessible(true);
+            recursiveTraceField.set(null, null);
+
+            Class<?> blockSourceClass = Class.forName("oracle.jdbc.driver.BlockSource");
+            Field traceField = blockSourceClass.getDeclaredField("TRACE");
+            traceField.setAccessible(true);
+            traceField.set(null, Boolean.TRUE);
+
             Class<?> type = Class.forName("oracle.jdbc.driver.BlockSource$ThreadedCachingBlockSource");
-            Field field = type.getDeclaredField("RELEASER");
-            field.setAccessible(true);
-            Thread thread = (Thread) field.get(null);
+            Field threadField = type.getDeclaredField("RELEASER");
+            threadField.setAccessible(true);
+            Thread thread = (Thread) threadField.get(null);
             if (thread != null) {
                 thread.interrupt();
                 thread.stop();
-                log.info("stopped RELEASER OracleThread");
+                Thread.sleep(100);
+                if (thread.isAlive()) {
+                    log.error("Unable to stop {} OracleThread, MemoryLeak will exists", thread.getName());
+                } else {
+                    log.info("stopped {} OracleThread", thread.getName());
+                }
             }
         } catch (Throwable e) {
             log.error("Oracle RELEASER Thread stop error", e);
