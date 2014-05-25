@@ -90,6 +90,7 @@ public class LoggerConfig {
         } catch (NoClassDefFoundError ignore) {
         }
 
+        JulMemoryLeakReducer.shutdown();
     }
 
     public static void mdcPut(String key, String o) {
