@@ -72,6 +72,8 @@ public enum VistaCrmBehavior implements Behavior {
 
     Commandant,
 
+    MessageGroup,
+
     PropertyVistaSupport;
 
     @Override

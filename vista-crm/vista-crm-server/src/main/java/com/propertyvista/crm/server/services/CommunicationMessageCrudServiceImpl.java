@@ -31,22 +31,22 @@ import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationGroup;
-import com.propertyvista.domain.communication.CommunicationGroup.ContactType;
-import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.communication.CommunicationMessageData;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.CommunicationMessageDTO;
 import com.propertyvista.dto.CommunicationThreadDTO;
@@ -124,7 +124,11 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         if (isNew) {
             thread = EntityFactory.create(CommunicationThread.class);
             thread.subject().set(to.subject());
+            // TODO; Smolka
+            thread.topic()
+                    .set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(MessageGroupCategory.TenantOriginated));
             thread.created().setValue(SystemDateManager.getDate());
+            thread.owner().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
             Persistence.service().persist(thread);
             Persistence.service().commit();
             bo.thread().set(thread);
@@ -162,7 +166,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         List<CommunicationMessage> ms = filterRelevantMessages(false, AttachLevel.IdOnly);
 
         if (ms == null || ms.isEmpty()) {
-            callback.onSuccess(null);
+            callback.onSuccess(new EntitySearchResult<CommunicationMessageDTO>());
             return;
         }
 
@@ -202,13 +206,16 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
     }
 
     private CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
+        if (entity == null) {
+            return null;
+        }
         CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
         rec.endpoint().set(entity);
 
-        if (entity.getInstanceValueClass().equals(CommunicationGroup.class)) {
-            CommunicationGroup e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Group);
+        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
+            SystemEndpoint e = entity.cast();
+            rec.name().setValue(e.name().getValue().name());
+            rec.type().setValue(ContactType.System);
         } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
             CrmUser e = entity.cast();
             rec.name().set(e.name());
@@ -231,6 +238,8 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         Persistence.ensureRetrieve(dbo.recipient(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dbo.data().attachments(), AttachLevel.Attached);
         CommunicationThread thread = dbo.thread();
+        Persistence.ensureRetrieve(dbo.thread().topic(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.thread().owner(), AttachLevel.Attached);
         CommunicationThreadDTO toThread = EntityFactory.create(CommunicationThreadDTO.class);
         IList<CommunicationMessage> ms = thread.content();
         if (ms != null && !ms.isNull()) {
@@ -255,7 +264,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
                 toThread.id().set(m.thread().id());
                 toThread.subject().set(m.thread().subject());
                 toThread.created().set(m.thread().created());
-                toThread.responsible().set(m.thread().responsible());
+                toThread.responsible().set(m.thread().owner());
                 message.threadDTO().set(toThread);
                 message.sender().setAttachLevel(AttachLevel.Attached);
                 message.sender().set(m.data().sender());
@@ -281,12 +290,12 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
     @Override
     public void retreiveCommunicationMessages(AsyncCallback<MessagesDTO> callback, boolean newOnly) {
         if (!Context.isUserLoggedIn()) {
-            callback.onSuccess(null);
+            callback.onSuccess(EntityFactory.create(MessagesDTO.class));
             return;
         }
         CrmUser currentUser = CrmAppContext.getCurrentUser();
         if (currentUser == null || currentUser.isEmpty()) {
-            callback.onSuccess(null);
+            callback.onSuccess(EntityFactory.create(MessagesDTO.class));
             return;
         }
 
@@ -299,7 +308,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         List<CommunicationMessage> ms = filterRelevantMessages(newOnly, AttachLevel.Attached);
 
         if (ms == null || ms.isEmpty()) {
-            return null;
+            return EntityFactory.create(MessagesDTO.class);
         }
 
         HashMap<Key, CommunicationMessageDTO> visitedThreads = new HashMap<Key, CommunicationMessageDTO>();
@@ -320,6 +329,9 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
             Persistence.ensureRetrieve(m.data().sender(), AttachLevel.Attached);
             Persistence.ensureRetrieve(m.recipient(), AttachLevel.Attached);
 
+            Persistence.ensureRetrieve(m.thread().topic(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(m.thread().owner(), AttachLevel.Attached);
+
             CommunicationMessageDTO message = EntityFactory.create(CommunicationMessageDTO.class);
             message.id().set(m.id());
             message.subject().set(m.thread().subject());
@@ -331,7 +343,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
             toThread.subject().set(m.thread().subject());
             toThread.created().set(m.thread().created());
             toThread.id().set(m.thread().id());
-            toThread.responsible().set(m.thread().responsible());
+            toThread.responsible().set(m.thread().owner());
             message.threadDTO().set(toThread);
             message.sender().setAttachLevel(AttachLevel.Attached);
             message.sender().set(m.data().sender());
@@ -365,24 +377,29 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
 
     private List<CommunicationMessage> filterRelevantMessages(boolean newOnly, AttachLevel attachLevel) {
         EntityQueryCriteria<CommunicationMessage> messageCriteria = EntityQueryCriteria.create(CommunicationMessage.class);
-        if (newOnly) {
-            messageCriteria.eq(messageCriteria.proto().isRead(), false);
-        }
         messageCriteria.desc(messageCriteria.proto().data().date());
 
-        OrCriterion or2 = null;
         if (newOnly) {
-            if (SecurityController.checkBehavior(VistaCrmBehavior.Commandant)) {
-                or2 = messageCriteria.or();
-                or2.left().eq(messageCriteria.proto().recipient(), CrmAppContext.getCurrentUser());
-                or2.right().eq(messageCriteria.proto().recipient(),
-                        ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
-                or2.right().eq(messageCriteria.proto().thread().attentionRequiried(), true);
-                OrCriterion or3 = or2.right().or();
-                or3.left().eq(messageCriteria.proto().thread().responsible(), CrmAppContext.getCurrentUser());
-                or3.right().isNull(messageCriteria.proto().thread().responsible());
+            List<MessageGroup> groups = ServerSideFactory.create(CommunicationMessageFacade.class).getDispatchedGroups(CrmAppContext.getCurrentUserEmployee(),
+                    AttachLevel.IdOnly);
+            OrCriterion or = messageCriteria.or();
+            or.left().eq(messageCriteria.proto().isRead(), false);
+            or.left().eq(messageCriteria.proto().recipient(), CrmAppContext.getCurrentUser());
+            if (groups != null && !groups.isEmpty()) {
+
+                OrCriterion or2 = or.right().or();
+                or2.left().eq(messageCriteria.proto().thread().owner(), CrmAppContext.getCurrentUser());
+                or2.left().eq(messageCriteria.proto().isRead(), false);
+                or2.left().eq(messageCriteria.proto().recipient(),
+                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+
+                or2.right().isNull(messageCriteria.proto().thread().owner());
+                or2.right().in(messageCriteria.proto().thread().topic(), groups);
             } else {
-                messageCriteria.eq(messageCriteria.proto().recipient(), CrmAppContext.getCurrentUser());
+                or.right().eq(messageCriteria.proto().thread().owner(), CrmAppContext.getCurrentUser());
+                or.right().eq(messageCriteria.proto().isRead(), false);
+                or.right().eq(messageCriteria.proto().recipient(),
+                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
             }
         }
 
@@ -399,9 +416,9 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
         if (source.date().isNull()) {
             source.date().setValue(SystemDateManager.getDate());
         }
-        if (source.to().isNull() || source.to().isEmpty()) {
-            source.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
-        }
+        //if (source.to().isNull() || source.to().isEmpty()) {
+        //    source.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
+        // }
         if (source.sender().isNull()) {
             source.sender().set(CrmAppContext.getCurrentUser());
         }
@@ -421,10 +438,10 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
     }
 
     private static boolean belongsToUser(CommunicationEndpoint user, CommunicationEndpoint recipient) {
-        if (user.equals(recipient)
-                || ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant).equals(recipient)) {
-            return true;
-        }
+        //if (user.equals(recipient)
+        //         || ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant).equals(recipient)) {
+        //     return true;
+        // }
 
         return false;
     }

@@ -317,6 +317,8 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     @Override
     public void setNumberOfMessages(int number) {
+        //messages.setVisible((ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController
+        //        .checkBehavior(VistaBasicBehavior.CRM)));
         if (number > 0) {
             messages.setText("Messages (" + String.valueOf(number) + ")");
         } else {

@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationGroup.ContactType;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 
 @Transient
 public interface CommunicationEndpointDTO extends IEntity {

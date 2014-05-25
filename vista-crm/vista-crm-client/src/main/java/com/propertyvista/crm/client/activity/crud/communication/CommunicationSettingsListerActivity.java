@@ -23,14 +23,14 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationGroupListerView;
 import com.propertyvista.crm.rpc.services.CommunicationGroupCrudService;
-import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.MessageGroup;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class CommunicationSettingsListerActivity extends AbstractListerActivity<CommunicationGroup> {
+public class CommunicationSettingsListerActivity extends AbstractListerActivity<MessageGroup> {
 
     public CommunicationSettingsListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(CommunicationGroupListerView.class), (AbstractCrudService<CommunicationGroup>) GWT
-                .create(CommunicationGroupCrudService.class), CommunicationGroup.class);
+        super(place, CrmSite.getViewFactory().getView(CommunicationGroupListerView.class), (AbstractCrudService<MessageGroup>) GWT
+                .create(CommunicationGroupCrudService.class), MessageGroup.class);
     }
 
     @Override

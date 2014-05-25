@@ -28,6 +28,9 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.communication.CommunicationMessageData;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
+import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -85,6 +88,10 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             }
         }
 
+        EntityQueryCriteria<MessageGroup> criteriaMessageGroup = EntityQueryCriteria.create(MessageGroup.class);
+        criteriaMessageGroup.eq(criteriaMessageGroup.proto().category(), MessageGroupCategory.Custom);
+        MessageGroup mg = Persistence.service().retrieve(criteriaMessageGroup);
+
         // message flow:
         // m001 -> t001 (read, important)
         // t001 -> m001 (reply unread)
@@ -97,19 +104,19 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
 
         //(CommunicationPerson from, CommunicationPerson to, CommunicationMessage parent, String topic, String msgContent,boolean highImportance, boolean isRead)
         CommunicationThread msg1 = createMessage(m001, t001, null, "No Water", "It will no water in the whole year! Please go to a Sea sand bring water!",
-                true, true);
+                true, true, mg, m001);
         CommunicationThread msg2 = createMessage(t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)",
-                true, false);
+                true, false, mg, m001);
         CommunicationThread msg3 = createMessage(t002, e001, null, "How to use this?",
-                "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false);
+                "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, m001);
         CommunicationThread msg4 = createMessage(m001, e001, null, "We miss you",
-                "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false, false);
-        CommunicationThread msg5 = createMessage(m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false);
+                "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false, false, mg, m001);
+        CommunicationThread msg5 = createMessage(m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, m001);
         CommunicationThread msg6 = createMessage(m001, t001, null, "Late payment notification",
-                "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false);
+                "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, m001);
         CommunicationThread msg7 = createMessage(t001, m001, msg6, "Late payment notification",
                 "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
-                true, false);
+                true, false, mg, m001);
         return "persons and messages created";
     }
 
@@ -120,7 +127,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
     }
 
     private CommunicationThread createMessage(AbstractPmcUser from, AbstractPmcUser to, CommunicationThread parent, String topic, String msgContent,
-            boolean highImportance, boolean isRead) {
+            boolean highImportance, boolean isRead, MessageGroup mg, CrmUser owner) {
         if (from == null || to == null || topic == null || msgContent == null) {
             return null;
         }
@@ -129,6 +136,10 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         if (parent == null) {
             thread = EntityFactory.create(CommunicationThread.class);
             thread.subject().setValue(topic);
+            thread.status().setValue(ThreadStatus.Unassigned);
+            thread.owner().set(owner);
+            thread.allowedReply().setValue(true);
+            thread.topic().set(mg);
             PersistenceServicesFactory.getPersistenceService().persist(thread);
         } else
             thread = parent;

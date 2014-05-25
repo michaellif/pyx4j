@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.MessageGroup;
 
-public interface CommunicationGroupCrudService extends AbstractCrudService<CommunicationGroup> {
+public interface CommunicationGroupCrudService extends AbstractCrudService<MessageGroup> {
 
 }
