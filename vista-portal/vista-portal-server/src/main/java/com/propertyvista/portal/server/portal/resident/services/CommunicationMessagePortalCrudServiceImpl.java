@@ -30,10 +30,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
-import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
 import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.communication.CommunicationMessageData;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessagesDTO;
@@ -58,7 +58,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         dto.date().setValue(SystemDateManager.getDate());
         dto.isRead().setValue(false);
         dto.sender().set(ResidentPortalContext.getCurrentUser());
-        dto.recipient().add(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
+        dto.recipient().add(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
         return dto;
     }
 
@@ -74,7 +74,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         c.attachments().set(to.attachments());
         c.date().setValue(SystemDateManager.getDate());
         c.sender().set(ResidentPortalContext.getCurrentUser());
-        m.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
+        m.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
 
         c.text().set(to.text());
         c.isHighImportance().set(to.isHighImportance());
@@ -82,7 +82,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
         m.data().set(c);
         bo.subject().set(to.subject());
         bo.content().add(m);
-        bo.attentionRequiried().setValue(true);
+        //bo.attentionRequiried().setValue(true);
 
         return super.persist(bo, to);
     }
@@ -211,7 +211,7 @@ public class CommunicationMessagePortalCrudServiceImpl extends AbstractCrudServi
             message.data().date().setValue(SystemDateManager.getDate());
         }
         if (message.recipient().isNull() || message.recipient().isEmpty()) {
-            message.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
+            message.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
         }
         if (message.data().sender().isNull()) {
             message.data().sender().set(ResidentPortalContext.getCurrentUser());

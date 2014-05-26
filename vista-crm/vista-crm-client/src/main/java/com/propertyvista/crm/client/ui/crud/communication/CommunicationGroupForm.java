@@ -15,46 +15,47 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CBooleanLabel;
+import com.pyx4j.commons.Key;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
-import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.CrmRoleFolder;
-import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
+import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
 
-public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
+public class CommunicationGroupForm extends CrmEntityForm<MessageGroup> {
 
     private static final I18n i18n = I18n.get(CommunicationGroupForm.class);
 
     private final IsWidget mainTab;
 
-    private final CrmRoleFolder roleFolder;
+    public CommunicationGroupForm(IForm<MessageGroup> view) {
+        super(MessageGroup.class, view);
 
-    public CommunicationGroupForm(IForm<CommunicationGroup> view) {
-        super(CommunicationGroup.class, view);
-
-        roleFolder = new CrmRoleFolder(this);
         mainTab = createInfoTab();
-        selectTab(addTab(mainTab, i18n.tr("Communication Settings")));
+        selectTab(addTab(mainTab, i18n.tr("Message Group Properties")));
 
     }
 
     private IsWidget createInfoTab() {
         FormPanel formPanel = new FormPanel(this);
-        formPanel.append(Location.Left, proto().name()).decorate();
-        formPanel.append(Location.Left, proto().isPredefined(), new CBooleanLabel()).decorate();
-        formPanel.h1(i18n.tr("CRM User Roles"));
-        formPanel.append(Location.Dual, proto().roles(), roleFolder);
-        formPanel.h1(i18n.tr("Contact Associated With"));
-        formPanel.h3(i18n.tr("Buildings"));
-        formPanel.append(Location.Dual, proto().buildings(), new BuildingFolder(this.getParentView(), true));
-        formPanel.h3(i18n.tr("Portfolios"));
-        formPanel.append(Location.Dual, proto().portfolios(), new PortfolioFolder(this.getParentView(), true));
+        formPanel.append(Location.Left, proto().topic()).decorate();
+        formPanel.append(Location.Left, proto().category(), new CLabel<MessageGroupCategory>()).decorate();
+        formPanel.h1(i18n.tr("Message Group Dispatchers"));
+        formPanel.append(Location.Left, proto().dispatchers(), new EmployeeFolder(this, new ParentEmployeeGetter() {
+            @Override
+            public Key getParentId() {
+                return (getValue() != null ? getValue().getPrimaryKey() : null);
+            }
+        }));
+        formPanel.h1(i18n.tr("User Roles allowed to see group messages"));
+        formPanel.append(Location.Left, proto().roles(), new CrmRoleFolder(this));
         return formPanel;
     }
 
@@ -62,10 +63,10 @@ public class CommunicationGroupForm extends CrmEntityForm<CommunicationGroup> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        CommunicationGroup se = getValue();
+        MessageGroup se = getValue();
         if (se == null) {
             return;
         }
-        setEditable(!se.isPredefined().getValue(false));
+        //setEditable(!se.isPredefined().getValue(false));
     }
 }

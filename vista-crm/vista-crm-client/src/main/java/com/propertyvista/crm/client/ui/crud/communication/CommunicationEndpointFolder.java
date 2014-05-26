@@ -38,11 +38,9 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.services.selections.SelectCommunicationGroupListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerUserListService;
-import com.propertyvista.domain.communication.CommunicationGroup;
-import com.propertyvista.domain.communication.CommunicationGroup.ContactType;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -107,14 +105,16 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
                                 return GWT.<AbstractListService<CustomerUser>> create(SelectCustomerUserListService.class);
                             }
                         }.show();
-                    } else if (type.equals(ContactType.Group)) {
-                        new CommunicationGroupSelectorDialog(parent.getParentView()) {
-
-                            @Override
-                            protected AbstractListService<CommunicationGroup> getSelectService() {
-                                return GWT.<AbstractListService<CommunicationGroup>> create(SelectCommunicationGroupListService.class);
-                            }
-                        }.show();
+                    } else if (type.equals(ContactType.System)) {
+                        /*
+                         * new CommunicationGroupSelectorDialog(parent.getParentView()) {
+                         * 
+                         * @Override
+                         * protected AbstractListService<MessageGroup> getSelectService() {
+                         * return GWT.<AbstractListService<MessageGroup>> create(SelectCommunicationGroupListService.class);
+                         * }
+                         * }.show();
+                         */
                     }
                 }
                 return true;
@@ -163,35 +163,36 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
             }
         }
     }
-
-    private abstract class CommunicationGroupSelectorDialog extends EntitySelectorTableVisorController<CommunicationGroup> {
-
-        public CommunicationGroupSelectorDialog(IPane parentView) {
-            super(parentView, CommunicationGroup.class, true, i18n.tr("Select Communication Group"));
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build(), new MemberColumnDescriptor.Builder(proto()
-                    .isPredefined()).searchable(true).build());
-        }
-
-        @Override
-        public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().name(), false));
-        }
-
-        @Override
-        public void onClickOk() {
-            if (!getSelectedItems().isEmpty()) {
-                for (CommunicationGroup selected : getSelectedItems()) {
-                    CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
-                    proto.name().set(selected.name());
-                    proto.type().setValue(ContactType.Group);
-                    proto.endpoint().set(selected);
-                    addItem(proto);
-                }
-            }
-        }
-    }
+/*
+ * private abstract class CommunicationGroupSelectorDialog extends EntitySelectorTableVisorController<MessageGroup> {
+ * 
+ * public CommunicationGroupSelectorDialog(IPane parentView) {
+ * super(parentView, MessageGroup.class, true, i18n.tr("Select Communication Group"));
+ * }
+ * 
+ * @Override
+ * protected List<ColumnDescriptor> defineColumnDescriptors() {
+ * return Arrays.asList(new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build(), new MemberColumnDescriptor.Builder(proto()
+ * .isPredefined()).searchable(true).build());
+ * }
+ * 
+ * @Override
+ * public List<Sort> getDefaultSorting() {
+ * return Arrays.asList(new Sort(proto().name(), false));
+ * }
+ * 
+ * @Override
+ * public void onClickOk() {
+ * if (!getSelectedItems().isEmpty()) {
+ * for (MessageGroup selected : getSelectedItems()) {
+ * CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+ * proto.name().set(selected.name());
+ * proto.type().setValue(ContactType.Group);
+ * proto.endpoint().set(selected);
+ * addItem(proto);
+ * }
+ * }
+ * }
+ * }
+ */
 }

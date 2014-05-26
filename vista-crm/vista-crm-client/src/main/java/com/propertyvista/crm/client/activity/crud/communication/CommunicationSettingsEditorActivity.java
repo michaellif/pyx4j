@@ -22,13 +22,13 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationGroupEditorView;
 import com.propertyvista.crm.rpc.services.CommunicationGroupCrudService;
-import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.MessageGroup;
 
-public class CommunicationSettingsEditorActivity extends CrmEditorActivity<CommunicationGroup> implements CommunicationGroupEditorView.Presenter {
+public class CommunicationSettingsEditorActivity extends CrmEditorActivity<MessageGroup> implements CommunicationGroupEditorView.Presenter {
     public CommunicationSettingsEditorActivity(CrudAppPlace place) {
 
-        super(place, CrmSite.getViewFactory().getView(CommunicationGroupEditorView.class), (AbstractCrudService<CommunicationGroup>) GWT
-                .create(CommunicationGroupCrudService.class), CommunicationGroup.class);
+        super(place, CrmSite.getViewFactory().getView(CommunicationGroupEditorView.class), (AbstractCrudService<MessageGroup>) GWT
+                .create(CommunicationGroupCrudService.class), MessageGroup.class);
     }
 
     /*

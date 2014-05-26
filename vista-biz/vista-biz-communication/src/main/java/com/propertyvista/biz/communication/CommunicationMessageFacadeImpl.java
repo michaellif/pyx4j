@@ -15,36 +15,28 @@ package com.propertyvista.biz.communication;
 
 import java.util.List;
 
-import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.core.AttachLevel;
 
-import com.propertyvista.domain.communication.CommunicationGroup;
-import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
+import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.company.Employee;
 
 public class CommunicationMessageFacadeImpl implements CommunicationMessageFacade {
-    private static class CommunicationGroupCacheKey {
-        static String getCacheKey(EndpointGroup epType) {
-            return String.format("%s_%s", CommunicationGroup.class.getName(), epType);
-        }
-    }
 
-    public CommunicationMessageFacadeImpl() {
-        cacheCommunicationGroups();
-    }
-
-    private void cacheCommunicationGroups() {
-        EntityQueryCriteria<CommunicationGroup> criteria = EntityQueryCriteria.create(CommunicationGroup.class);
-        List<CommunicationGroup> predefinedEps = Persistence.service().query(criteria);
-        if (predefinedEps != null) {
-            for (CommunicationGroup ep : predefinedEps)
-                CacheService.put(CommunicationGroupCacheKey.getCacheKey(ep.type().getValue()), ep);
-        }
+    @Override
+    public MessageGroup getCommunicationGroupFromCache(MessageGroupCategory mgCategory) {
+        return MessageGroupManager.instance().getCommunicationGroupFromCache(mgCategory);
     }
 
     @Override
-    public CommunicationGroup getCommunicationGroupFromCache(EndpointGroup epType) {
-        CommunicationGroup ep = CacheService.get(CommunicationGroupCacheKey.getCacheKey(epType));
-        return ep;
+    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep) {
+        return SystemEndpointManager.instance().getSystemEndpointFromCache(sep);
+    }
+
+    @Override
+    public List<MessageGroup> getDispatchedGroups(Employee employee, AttachLevel attachLevel) {
+        return MessageGroupManager.instance().getDispatchedGroups(employee, attachLevel);
     }
 }

@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.domain.communication.CommunicationGroup;
-import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
+import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CommunicationGroupPreloader extends AbstractDataPreloader {
@@ -26,20 +26,23 @@ public class CommunicationGroupPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        createEnpoint(EndpointGroup.Commandant, CrmRolesPreloader.getDefaultRole(), CrmRolesPreloader.getCommandantRole());
+        createGroup(MessageGroupCategory.TenantOriginated, "Tenant Originated Communication", CrmRolesPreloader.getDefaultRole(),
+                CrmRolesPreloader.getCommandantRole());
+        createGroup(MessageGroupCategory.LandlordOriginated, "Landlord Originated Communication", CrmRolesPreloader.getDefaultRole());
+        createGroup(MessageGroupCategory.VendorOriginated, "Vendor Originated Communication", CrmRolesPreloader.getDefaultRole());
+        createGroup(MessageGroupCategory.Custom, "General Communication", CrmRolesPreloader.getDefaultRole());
         return null;
     }
 
-    private void createEnpoint(EndpointGroup epType, CrmRole... defaultRole) {
-        CommunicationGroup ep = EntityFactory.create(CommunicationGroup.class);
-        ep.type().setValue(epType);
-        ep.name().setValue(epType.toString());
-        ep.isPredefined().setValue(true);
+    private void createGroup(MessageGroupCategory category, String topic, CrmRole... defaultRole) {
+        MessageGroup mg = EntityFactory.create(MessageGroup.class);
+        mg.category().setValue(category);
+        mg.topic().setValue(topic);
         if (defaultRole != null && defaultRole.length > 0) {
             for (int i = 0; i < defaultRole.length; ++i)
-                ep.roles().add(defaultRole[i]);
+                mg.roles().add(defaultRole[i]);
         }
-        PersistenceServicesFactory.getPersistenceService().persist(ep);
+        PersistenceServicesFactory.getPersistenceService().persist(mg);
     }
 
     @Override

@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.MessageGroup;
 
-public interface CommunicationGroupListerView extends ILister<CommunicationGroup> {
+public interface CommunicationGroupListerView extends ILister<MessageGroup> {
 
 }

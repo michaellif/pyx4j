@@ -23,13 +23,13 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationGroupViewerView;
 import com.propertyvista.crm.rpc.services.CommunicationGroupCrudService;
-import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.MessageGroup;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class CommunicationSettingsViewActivity extends CrmViewerActivity<CommunicationGroup> implements CommunicationGroupViewerView.Presenter {
+public class CommunicationSettingsViewActivity extends CrmViewerActivity<MessageGroup> implements CommunicationGroupViewerView.Presenter {
     public CommunicationSettingsViewActivity(CrudAppPlace place) {
 
-        super(place, CrmSite.getViewFactory().getView(CommunicationGroupViewerView.class), (AbstractCrudService<CommunicationGroup>) GWT
+        super(place, CrmSite.getViewFactory().getView(CommunicationGroupViewerView.class), (AbstractCrudService<MessageGroup>) GWT
                 .create(CommunicationGroupCrudService.class));
     }
 
