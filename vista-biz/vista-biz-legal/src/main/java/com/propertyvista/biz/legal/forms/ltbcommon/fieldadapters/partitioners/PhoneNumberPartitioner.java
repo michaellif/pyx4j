@@ -19,17 +19,18 @@ public class PhoneNumberPartitioner implements Partitioner {
 
     @Override
     public String getPart(String value, int partIndex) {
-        if (value.matches("\\((\\d\\d\\d)\\) (\\d\\d\\d)-(\\d\\d\\d\\d)")) {
+        String numbers = value.replaceAll("\\D", "");
+        if (numbers.length() == 10) {
             String part = "";
             switch (partIndex) {
             case 0:
-                part = value.substring(1, 4);
+                part = numbers.substring(0, 3);
                 break;
             case 1:
-                part = value.substring(6, 9);
+                part = numbers.substring(3, 6);
                 break;
             case 2:
-                part = value.substring(10, value.length());
+                part = numbers.substring(6);
                 break;
             default:
                 part = "";
