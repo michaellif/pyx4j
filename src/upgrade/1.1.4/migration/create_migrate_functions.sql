@@ -25,8 +25,35 @@ BEGIN
         
         -- foreign keys
         
+        ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_info_legal_address_country_fk;
+        ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_info_legal_address_province_fk;
+        ALTER TABLE building DROP CONSTRAINT building_info_address_country_fk;
+        ALTER TABLE building DROP CONSTRAINT building_info_address_province_fk;
+        ALTER TABLE city_intro_page DROP CONSTRAINT city_intro_page_province_fk;
+        ALTER TABLE city DROP CONSTRAINT city_province_fk;
+        ALTER TABLE communication_message$to DROP CONSTRAINT communication_message$to_owner_fk;
+        ALTER TABLE communication_message_attachment DROP CONSTRAINT communication_message_attachment_message_fk;
+        ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_country_fk;
+        ALTER TABLE customer_screening_income_info DROP CONSTRAINT customer_screening_income_info_address_province_fk;
+        ALTER TABLE customer_screening_v DROP CONSTRAINT customer_screening_v_current_address_country_fk;
+        ALTER TABLE customer_screening_v DROP CONSTRAINT customer_screening_v_current_address_province_fk;
+        ALTER TABLE customer_screening_v DROP CONSTRAINT customer_screening_v_previous_address_country_fk;
+        ALTER TABLE customer_screening_v DROP CONSTRAINT customer_screening_v_previous_address_province_fk;
+        ALTER TABLE emergency_contact DROP CONSTRAINT emergency_contact_address_country_fk;
+        ALTER TABLE emergency_contact DROP CONSTRAINT emergency_contact_address_province_fk;
+        ALTER TABLE landlord DROP CONSTRAINT landlord_address_country_fk;
+        ALTER TABLE landlord DROP CONSTRAINT landlord_address_province_fk;
+        ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_country_fk;
+        ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_province_fk;
         ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_building_fk;
         ALTER TABLE master_online_application DROP CONSTRAINT master_online_application_floorplan_fk;
+        ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_country_fk;
+        ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_province_fk;
+        ALTER TABLE payment_method DROP CONSTRAINT payment_method_billing_address_country_fk;
+        ALTER TABLE payment_method DROP CONSTRAINT payment_method_billing_address_province_fk;
+        ALTER TABLE province DROP CONSTRAINT province_country_fk;
+        ALTER TABLE pt_vehicle DROP CONSTRAINT pt_vehicle_country_fk;
+        ALTER TABLE pt_vehicle DROP CONSTRAINT pt_vehicle_province_fk;
         
         
         /**
@@ -68,6 +95,14 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
+        
+        -- apt_unit
+        
+        ALTER TABLE apt_unit RENAME COLUMN info_legal_address_country TO info_legal_address_country_old;
+        ALTER TABLE apt_unit RENAME COLUMN info_legal_address_province TO info_legal_address_province_old;
+        
+        ALTER TABLE apt_unit    ADD COLUMN info_legal_address_country VARCHAR(50),
+                                ADD COLUMN info_legal_address_province VARCHAR(500);
         
         -- building 
         
@@ -111,6 +146,24 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- apt_unit
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
+                'SET    info_legal_address_country = replace(c.name,'' '','''') '
+                'FROM   '||v_schema_name||'.country AS c '
+                'WHERE  a.info_legal_address_country_old = c.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
+                'SET    info_legal_address_province = replace(p.name,'' '','''') '
+                'FROM   '||v_schema_name||'.province AS p '
+                'WHERE  a.info_legal_address_province_old = p.id ';
+        /*
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
+                'SET    info_legal_address_street_name = info_legal_address_street_name||'
+                '   CASE WHEN info_legal_address_street_type IS NOT NULL THEN '' ''||info_legal_address_street_type ELSE 
+                'FROM   '||v_schema_name||'.country AS c '
+                'WHERE  a.info_legal_address_country_old = c.id ';
+        */
         -- Phone numbers update
         
         PERFORM * FROM _dba_.update_phone_numbers(v_schema_name);
@@ -129,6 +182,9 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.restrictions_policy '
                 ||'SET  no_need_guarantors = FALSE ';
        
+       
+        SET CONSTRAINTS ALL IMMEDIATE;
+        
         /**
         ***     ==========================================================================================================
         ***
@@ -137,6 +193,10 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        -- apt_unit
+        
+        ALTER TABLE apt_unit    DROP COLUMN info_legal_address_country_old,
+                                DROP COLUMN info_legal_address_province_old;
                  
         /**
         ***     ======================================================================================================
@@ -152,6 +212,35 @@ BEGIN
             REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_floorplan_fk FOREIGN KEY(ils_floorplan) 
             REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
+            
+        -- check constraints
+        
+        ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_country_e_ck 
+            CHECK ((info_legal_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 
+                'Angola', 'Anguilla', 'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 
+                'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 
+                'Bonaire', 'BosniaHerzegovina', 'Botswana', 'BouvetIsland', 'Brazil', 'BruneiDarussalam', 'Bulgaria', 'BurkinaFaso', 
+                'Burundi', 'CaboVerde', 'Cambodia', 'Cameroon', 'Canada', 'CaymanIslands', 'CentralAfricanRepublic', 'Chad', 'Chile', 
+                'China', 'ChristmasIsland', 'CocosIslands', 'Colombia', 'Comoros', 'Congo', 'CookIslands', 'CostaRica', 'Croatia', 'Cuba', 
+                'Curacao', 'Cyprus', 'CzechRepublic', 'Denmark', 'Djibouti', 'Dominica', 'DominicanRepublic', 'Ecuador', 'Egypt', 'ElSalvador', 
+                'EquatorialGuinea', 'Eritrea', 'Estonia', 'Ethiopia', 'FalklandIslands', 'FaroeIslands', 'Fiji', 'Finland', 'France', 'FrenchGuiana', 
+                'FrenchPolynesia', 'FrenchTerritories', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 
+                'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'GuineaBissau', 'Guyana', 'Haiti', 'HeardIslands', 'Honduras', 'HongKong', 
+                'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'IsleOfMan', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 
+                'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'LaoRepublic', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 
+                'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 
+                'MarshallIslands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 
+                'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'NewCaledonia', 'NewZealand', 
+                'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'NorfolkIsland', 'NorthKorea', 'NorthernMarianaIslands', 'Norway', 'Oman', 'Pakistan', 'Palau', 
+                'Palestine', 'Panama', 'PapuaNewGuinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'PuertoRico', 'Qatar', 
+                'Reunion', 'Romania', 'RussianFederation', 'Rwanda', 'SaintBarthelemy', 'SaintHelena', 'SaintKitts', 'SaintLucia', 'SaintMartin', 
+                'SaintPierre', 'SaintVincent', 'Samoa', 'SanMarino', 'SaoTome', 'SaudiArabia', 'Senegal', 'Serbia', 'Seychelles', 'SierraLeone', 
+                'Singapore', 'SintMaartenDutch', 'Slovakia', 'Slovenia', 'SolomonIslands', 'Somalia', 'SouthAfrica', 'SouthKorea', 'SouthSudan', 
+                'Spain', 'SriLanka', 'Sudan', 'Suriname', 'Svalbard', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 
+                'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 
+                'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
+                'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
+
         
         /**
         ***     ====================================================================================================
