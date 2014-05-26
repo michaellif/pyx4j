@@ -44,7 +44,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(proto().legal().getMeta().getCaption());
-        formPanel.append(Location.Left, proto().legal(), new LegalTermFolder(isEditable()));
+        formPanel.append(Location.Dual, proto().legal(), new LegalTermFolder(isEditable()));
 
         return formPanel;
     }
@@ -53,7 +53,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(proto().confirmation().getMeta().getCaption());
-        formPanel.append(Location.Left, inject(proto().confirmation(), new ConfirmationTermFolder(isEditable())));
+        formPanel.append(Location.Dual, inject(proto().confirmation(), new ConfirmationTermFolder(isEditable())));
 
         return formPanel;
     }
@@ -80,7 +80,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
-                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
+                formPanel.append(Location.Dual, proto().body()).decorate();
                 formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(250);
                 return formPanel;
             }
@@ -109,7 +109,7 @@ public class LeaseAgreementLegalPolicyForm extends PolicyDTOTabPanelBasedForm<Le
                 FormPanel formPanel = new FormPanel(this);
 
                 formPanel.append(Location.Left, proto().title()).decorate().componentWidth(250);
-                formPanel.append(Location.Left, proto().body()).decorate().componentWidth(250);
+                formPanel.append(Location.Dual, proto().body()).decorate();
                 formPanel.append(Location.Left, proto().signatureFormat()).decorate().componentWidth(250);
                 return formPanel;
             }
