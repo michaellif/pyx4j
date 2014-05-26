@@ -1,8 +1,8 @@
 /*
  * (7C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -56,12 +56,12 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
                 buildingsFilterProvider,
                 GWT.<IGadgetFactory> create(IGadgetFactory.class),
                 LayoutManagersFactory.createLayoutManagers()) {
-            
+
             @Override
             protected void onDashboardMetadataChanged() {
                 presenter.save();
             }
-            
+
         };//@formatter:on
 
         this.panel = new DockLayoutPanel(Unit.EM);
@@ -111,7 +111,7 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
     private void updateCaption() {
         String caption = "";
         if (getDashboardMetadata() != null) {
-            caption = SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr(" - Read only mode") : "");
+            caption = SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr(" - Read-Only Mode") : "");
         }
         setCaption(caption);
     }

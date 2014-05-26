@@ -38,8 +38,8 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -802,7 +802,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     String message = i18n.tr("Can't cancel the ") + completionType.toString();
                     switch (result.reason().getValue()) {
                     case LeasedOrReserved:
-                        message += i18n.tr(" the unit is reserved/leased by another Application/Lease already!") + "<br/><br/>"
+                        message += i18n.tr(" the unit is reserved/leased by another Application/Lease already.") + "<br/><br/>"
                                 + i18n.tr("Do you want to view it?");
                         MessageDialog.confirm(caption, message, new Command() {
                             @Override
@@ -830,11 +830,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         });
                         break;
                     case RenovatedOrOffMarket:
-                        message += i18n.tr(" - the unit is Renovated/Off-Market!");
+                        message += i18n.tr(" - Unit is Renovated/Off-Market.");
                         MessageDialog.error(caption, message);
                         break;
                     case MoveOutNotExpected:
-                        message += i18n.tr(" - move out is not expected!");
+                        message += i18n.tr(" - Move-Out is not expected.");
                         MessageDialog.error(caption, message);
                         break;
                     default:

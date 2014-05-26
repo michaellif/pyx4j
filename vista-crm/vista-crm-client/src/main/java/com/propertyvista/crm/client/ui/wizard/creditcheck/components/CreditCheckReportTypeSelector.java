@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -123,9 +123,9 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
         }
 
         public void setFees(BigDecimal setupFee, BigDecimal perApplicantFee) {
-            perApplicantFeeLabel.setText(i18n.tr("${0,number,#,##0.##} per applicant", perApplicantFee));
+            perApplicantFeeLabel.setText(i18n.tr("${0,number,#,##0.##} per Applicant", perApplicantFee));
             setupFeeLabel.setText(setupFee == null || setupFee.compareTo(BigDecimal.ZERO) == 0 ? i18n.tr("No Set Up Fee!") : i18n.tr(
-                    "${0,number,#,##0.##} one-time Set Up fee", setupFee));
+                    "${0,number,#,##0.##} one-time Set-up fee", setupFee));
         }
 
     }

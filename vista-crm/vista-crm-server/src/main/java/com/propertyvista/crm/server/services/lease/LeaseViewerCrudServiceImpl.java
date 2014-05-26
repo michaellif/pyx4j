@@ -1,8 +1,8 @@
 /*
  *
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -208,7 +208,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             for (LeaseTermParticipant<?> user : users) {
                 if (user.isInstanceOf(LeaseTermGuarantor.class)) {
                     throw new UserRuntimeException(i18n.tr(
-                            "''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor. Please re-send e-mail for all valid recipients.",
+                            "''Send Mail'' operation failed: unable to send send \"{0}\" for Guarantor. Please validate email address of recipient(s).",
                             EmailTemplateType.TenantInvitation));
                 }
             }
@@ -360,7 +360,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4BatchRequestDTO n4GenerationQuery) {
-        // TODO implement this 
+        // TODO implement this
     }
 
     @Override

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -85,7 +85,7 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
      * <li>Go to login page (defined by the place that was passed via the constructor).</li>
      */
     protected void onPasswordResetRequestSuccess() {
-        MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
+        MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email."));
         AppSite.getPlaceController().goTo(loginPlace);
     }
 

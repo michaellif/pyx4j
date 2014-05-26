@@ -38,7 +38,7 @@ public interface LateFeeItem extends IEntity {
 
     @XmlType(name = "BaseFeeType")
     public enum BaseFeeType {
-        @Translate("% Owed-total")
+        @Translate("% Owed-Total")
         PercentOwedTotal,
 
         @Translate("% Monthly Rent")

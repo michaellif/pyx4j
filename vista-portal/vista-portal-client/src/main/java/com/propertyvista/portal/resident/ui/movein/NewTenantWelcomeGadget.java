@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -68,7 +68,7 @@ public class NewTenantWelcomeGadget extends AbstractGadget<NewTenantWelcomePageV
                         1,
                         1,
                         new HTML(
-                                i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Setup pre-authorised payments</li><li>Sign up for exclusive offers</li></ul>")));
+                                i18n.tr("<b>We'll help you:</b><p/><ul style='margin: auto; text-align: left; display: inline-block;'><li>Sign your lease agreement</li><li>Purchase Tenant Insurance</li><li>Book your Move-In Day & Elevators</li><li>Set up Pre-Authorised Payments</li><li>Sign up for exclusive offers</li></ul>")));
 
         setContent(welcomePanel);
     }

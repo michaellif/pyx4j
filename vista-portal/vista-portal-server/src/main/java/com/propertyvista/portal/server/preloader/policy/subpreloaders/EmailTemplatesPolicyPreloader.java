@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -207,13 +207,13 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Dear {0},<br/>"+
                 "<br/>" +
                 "Welcome to your Online Application.<br/>"+
-                "<br/>" + 
+                "<br/>" +
                 "We have created a secure and safe environment for you that allows you to complete the Application at your leisure from any internet connected device. Once you login, you will have the opportunity to select the Rental Suite that is best suited to your needs.<br/>"+
                 "<br/>" +
                 "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete where you left off when you are ready.<br/>"+
                 "<br/>" +
                 "Please keep in mind, Applications get processed on a first-come-first-served basis and will not be processed until completed in full.<br/>"+
-                "<br/>" + 
+                "<br/>" +
                 "If at anytime during the process you have any concerns or questions, please call us directly at <b>{1}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
                 "Your Application Reference Number is: <b>{2}</b><br/>"+
@@ -221,7 +221,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "To get started, please login to your account <b>[[{3}|here]]</b><br/>"+
                 "<br/>" +
                 "<i><small>(If the link does not work please copy and paste the following URL:<br/>" +
-                "{3} )<br/></small></i><br/>" + 
+                "{3} )<br/></small></i><br/>" +
                 "We look forward to making this application process as smooth as possible for you.<br/>"+
                 "<br/>"+
                 "Sincerely,<br/><br/>"+
@@ -252,9 +252,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
                 "<br/>" +
-                "Welcome to your Online Application.<br/>"+ 
+                "Welcome to your Online Application.<br/>"+
                 "<br/>" +
-                "We have created a Secure and Safe Environment for you that allows you to complete the Application at your leisure from any internet connected device.<br/>"+ 
+                "We have created a Secure and Safe Environment for you that allows you to complete the Application at your leisure from any internet connected device.<br/>"+
                 "<br/>" +
                 "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete when you are ready from where you left off.<br/>"+
                 "<br/>" +
@@ -266,7 +266,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "To get started, please login to your account <b>[[{3}|here]]</b><br/>"+
                 "<br/>" +
-                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+
                 "{3} )</small></i><br/>"+
                 "<br/>" +
                 "We look forward to making this application process as smooth as possible for you.<br/>"+
@@ -302,15 +302,15 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
                 "<br/>" +
-                "Welcome to your Online Application.<br/>"+ 
+                "Welcome to your Online Application.<br/>"+
                 "<br/>" +
-                "You have received this email invitation because {1} has indicated you as a co-applicant for {2}.<br/>"+ 
+                "You have received this email invitation because {1} has indicated you as a co-applicant for {2}.<br/>"+
                 "<br/>" +
                 "We have created a Secure and Safe Environment for you that allows you to complete the Application at your leisure from any internet connected device.<br/>"+
                 "<br/>" +
                 "During this process you and your guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete when you are ready from where you left off.<br/>"+
                 "<br/>" +
-                "Please keep in mind, Applications get processed on a First Come basis and will not be processed until completed in full.<br/>"+ 
+                "Please keep in mind, Applications get processed on a First Come basis and will not be processed until completed in full.<br/>"+
                 "<br/>" +
                 "If at anytime during the process you have any concerns or questions, please call us directly at <b>{3}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
@@ -318,7 +318,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "To get started, please login to your account <b>[[{5}|here]]</b><br/>"+
                 "<br/>" +
-                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+
                 "{5} )</small></i><br/>"+
                 "<br/>" +
                 "We look forward to making this application process as smooth as possible for you.<br/>"+
@@ -356,17 +356,17 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/>"+
                 "<br/>" +
-                "Welcome to your online Guarantor''s agreement.<br/>"+ 
+                "Welcome to your online Guarantor''s agreement.<br/>"+
                 "<br/>" +
                 "You have been asked to be a Guarantor.<br/>"+
                 "<br/>" +
-                "You have received this email invitation because {1} has indicated you as a Guarantor for {2}.<br/>"+ 
+                "You have received this email invitation because {1} has indicated you as a Guarantor for {2}.<br/>"+
                 "<br/>" +
-                "We have created a Secure and Safe Environment for you that allows you to complete the Guarantor Application at your leisure from any internet connected device.<br/>"+ 
+                "We have created a Secure and Safe Environment for you that allows you to complete the Guarantor Application at your leisure from any internet connected device.<br/>"+
                 "<br/>" +
                 "During this process you will have the opportunity to complete all necessary information needed to process your Guarantor Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete when you are ready from where you left off.<br/>"+
                 "<br/>" +
-                "Please keep in mind, the entire Application gets processed on a First Come basis and will not be processed until completed in full by all applicants and guarantors.<br/>"+ 
+                "Please keep in mind, the entire Application gets processed on a First Come basis and will not be processed until completed in full by all applicants and guarantors.<br/>"+
                 "<br/>" +
                 "If at anytime during the process you have any concerns or questions, please call us directly at <b>{3}</b> and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
@@ -374,7 +374,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "To get started, please login to your account <b>[[{5}|here]]</b><br/>"+
                 "<br/>" +
-                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+
                 "{5} )</small></i><br/>"+
                 "<br/>" +
                 "We look forward to making this application process as smooth as possible for you.<br/>"+
@@ -414,19 +414,19 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0}<br/>"+
                 "<br/>" +
-                "Welcome to your new home!<br/>"+  
+                "Welcome to your new home!<br/>"+
                 "<br/>" +
                 "Your application has been reviewed and has been successfully approved.<br/>"+
                 "<br/>" +
-                "We look forward to having you move-in to {1}.<br/>"+ 
+                "We look forward to having you move-in to {1}.<br/>"+
                 "<br/>" +
-                "In order to make the transition as smooth as possible for you we have arranged an online portal for you to complete the signing of the lease, book your move-in date, setup your automatic payment withdrawals, along with other useful tips for your big moving day.<br/>"+ 
+                "In order to make the transition as smooth as possible for you we have arranged an online portal for you to complete the signing of the lease, book your move-in date, setup your automatic payment withdrawals, along with other useful tips for your big moving day.<br/>"+
                 "<br/>" +
-                "You should use the same email and password that you have used during the application process to complete this process.<br/>"+ 
+                "You should use the same email and password that you have used during the application process to complete this process.<br/>"+
                 "<br/>" +
                 "In order to move to the next steps, click <b>[[{2}|here]]</b>.<br/>"+
                 "<br/>" +
-                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+ 
+                "<i><small>(If the link does not work please copy and paste the following URL:<br/>"+
                 "{2} )</small></i><br/><br/>"+
                 "If at anytime during the process you have any concerns or questions, please call us directly at {3} and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
@@ -466,7 +466,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0}<br/>"+
                 "<br/>" +
-                "Your application has been reviewed and, unfortunately, has not met our building criteria based on the information provided to us.<br/>"+ 
+                "Your application has been reviewed and, unfortunately, has not met our building criteria based on the information provided to us.<br/>"+
                 "<br/>" +
                 "If you have concerns about our decision you can contact us here {1} and have your Application Reference Number ready.<br/>"+
                 "<br/>" +
@@ -478,7 +478,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "{3}<br/>" +
                 "{4}<br/>" +
-                "{5}<br/>",                      
+                "{5}<br/>",
                 EmailTemplateManager.getVarname(appT.ApplicantsAndGuarantorsNames()),
                 EmailTemplateManager.getVarname(bldT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
@@ -502,7 +502,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Visit our new site"));
         template.content().setValue(i18n.tr(//@formatter:off
-                "<h3>Welcome {0}!</h3><br/><br/>" +                        
+                "<h3>Welcome {0}!</h3><br/><br/>" +
                 "We are excited to have you join the Online Tenant Portal of {1} that we created just for you! " +
                 "To access the site and create new password for your account please follow the link below:<br/>\n" +
                 "    [[{2}|Reset Your Password]]<br/>" +
@@ -590,9 +590,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
                 "<br/>" +
-                "We are in receipt of your maintenance request. <br/>" +
+                "We are in receipt of your Maintenance Request. <br/>" +
                 "If you are experiencing one of the EMERGENCY situations listed below, in addition to submitting " +
-                "the online request, please call the emergency number provided to you or see your site staff " +
+                "the online Maintenance Request, please call the emergency number provided to you or see your site staff " +
                 "immediately.<br/>" +
                 "<br/>" +
                 "<b>EMERGENCY</b> Maintenance Issues:<br/>" +
@@ -604,12 +604,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<b><u>Time To Attend</u></b><br/>" +
                 "While we endeavor to respond to every work order as soon as possible, please allow at least 2 " +
                 "business days to receive your Notice of Entry (indicating when staff will attend to your request) " +
-                "from the date you submit. Work orders are prioritized for attention.<br/>" +
+                "from the date of submission. Work orders are prioritized for attention.<br/>" +
                 "<br/>" +
                 "<b>PLEASE NOTE:</b>  Maintenance staff will review received requests and address them as required " +
                 "on a priority basis. Generally items related to safety, heat, etc. are addressed first. We thank you " +
                 "for your patience.<br/>" +
-                "To review your request please login to your account at:<br/>" +
+                "To review your request please log in to your account at:<br/>" +
                 "  {13}<br/>" +
                 "The following Maintenance Request has been registered:<br/>" +
                 "<br/>" +
@@ -625,7 +625,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Description: {6}<br/>" +
                 "<br/>" +
-                "Permission to enter: {7}<br/>" +
+                "Permission to Enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
                 " 1 - {8}<br/>" +
                 " 2 - {9}<br/>" +
@@ -686,7 +686,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Description: {6}<br/>" +
                 "<br/>" +
-                "Permission to enter: {7}<br/>" +
+                "Permission to Enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
                 " 1 - {8}<br/>" +
                 " 2 - {9}<br/>" +
@@ -748,7 +748,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Description: {6}<br/>" +
                 "<br/>" +
-                "Permission to enter: {7}<br/>" +
+                "Permission to Enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
                 " 1 - {8}<br/>" +
                 " 2 - {9}<br/>" +
@@ -793,7 +793,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
                 "<br/>" +
-                "This is to inform You that the Maintenance Request below has been completed and closed. " +
+                "This is to inform you that the Maintenance Request below has been completed and closed. " +
                 "If requested work has not been done to your satisfaction, please call the office to advise " +
                 "us accordingly.<br/>" +
                 "Please complete the survey to rate your experience [[{16}|here]].<br/>" +
@@ -812,7 +812,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Description: {6}<br/>" +
                 "<br/>" +
-                "Permission to enter: {7}<br/>" +
+                "Permission to Enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
                 " 1 - {8}<br/>" +
                 " 2 - {9}<br/>" +
@@ -859,7 +859,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
                 "<br/>" +
-                "This is to inform You that the Maintenance Request below has been cancelled for the following reason: " +
+                "This is to inform you that the Maintenance Request below has been cancelled for the following reason: " +
                 "<br/>{16}<br/>" +
                 "<br/>" +
                 "Building: {14}<br/>" +
@@ -874,7 +874,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Description: {6}<br/>" +
                 "<br/>" +
-                "Permission to enter: {7}<br/>" +
+                "Permission to Enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
                 " 1 - {8}<br/>" +
                 " 2 - {9}<br/>" +
@@ -959,8 +959,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
-                "Your payment of <b>{1}</b> was successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" + 
-                "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
+                "Your payment of <b>{1}</b> was successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" +
+                "Your Payment Identification Reference Number for this payment is:<br/><br/>" +
                 "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{4}|here]]</b><br/><br/>" +
                 "Thank you for choosing {5}.",
@@ -990,9 +990,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
-                "Your payment of <b>{1}</b> and your Web Payment Fee of <b>{2}</b> were submitted successfully on <b>{3}</b>. " + 
+                "Your payment of <b>{1}</b> and your Web Payment Fee of <b>{2}</b> were submitted successfully on <b>{3}</b>. " +
                 "You will see two transaction lines for the payments above from your payment provider. The fee will appear as ''CCS*Web Payment Fee'' on your credit card statement<br/><br/>" +
-                "Your Payment Identification Reference Number for these payments is:<br/><br/>" + 
+                "Your Payment Identification Reference Number for these payments is:<br/><br/>" +
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{5}|here]]</b><br/><br/>" +
                 "Thank you for choosing {6}.",
@@ -1023,9 +1023,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Dear {0},<br/><br/>" +
                 "Your payment of <b>{1}</b> on <b>{2}</b> was <b>not</b> successfully processed for the following reason:<br/><br/>" +
                 "<div style=\"margin-left:80px\"><b>{3}</b></div><br/><br/>" +
-                "Where applicable, an administrative fee has been added to your account for this payment reversal as per your agreement.<br/><br/>" + 
+                "Where applicable, an administrative fee has been added to your account for this payment reversal as per your agreement.<br/><br/>" +
                 "<b>Please sign in to your myCommunity account [[{4}|here]] to resubmit your payment to avoid any legal consequences.</b> <br/><br/>" +
-                "For your reference, your payment Reference number for this transaction is:<br/><br/>" + 
+                "For your reference, your payment Reference number for this transaction is:<br/><br/>" +
                 "<div style=\"margin-left:80px\">#<b>{5}</b></div><br/><br/>" +
                 "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click <b>[[{6}|here]]</b><br/><br/>" +
                 "Thank you for choosing {7}.",
@@ -1055,9 +1055,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.subject().setValue(i18n.tr("{0} - AutoPay Setup Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
-                "Thank you for setting up your AutoPay payment.<br/><br/>" + 
-                "Your payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" + 
-                "Your first payment will be processed on <b>{2}</b><br/><br/>" + 
+                "Thank you for setting up your AutoPay payment.<br/><br/>" +
+                "Your payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" +
+                "Your first payment will be processed on <b>{2}</b><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
@@ -1083,9 +1083,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
-                "Your AutoPay payment has been updated to reflect your most recent changes on your account.<br/><br/>" + 
-                "Your monthly payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" + 
-                "Your first payment with the new payment amount will be processed on <b>{2}</b><br/><br/>" + 
+                "Your AutoPay payment has been updated to reflect your most recent changes on your account.<br/><br/>" +
+                "Your monthly payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" +
+                "Your first payment with the new payment amount will be processed on <b>{2}</b><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal <b>[[{3}|here]]</b> and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
@@ -1111,8 +1111,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.subject().setValue(i18n.tr("{0} - AutoPay Change Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
-                "Your AutoPay payment of <b>{1}</b> has been cancelled effective immediately.<br/><br/>" + 
-                "Please remember all rent is due in full on the 1st of the month. If you believe the AutoPay payment has been cancelled in error you can login to your myCommunity portal <b>[[{3}|here]]</b> to add a new AutoPay payment.<br/><br/>" + 
+                "Your AutoPay payment of <b>{1}</b> has been cancelled effective immediately.<br/><br/>" +
+                "Please remember all rent is due in full on the 1st of the month. If you believe the AutoPay payment has been cancelled in error you can login to your myCommunity portal <b>[[{3}|here]]</b> to add a new AutoPay payment.<br/><br/>" +
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),

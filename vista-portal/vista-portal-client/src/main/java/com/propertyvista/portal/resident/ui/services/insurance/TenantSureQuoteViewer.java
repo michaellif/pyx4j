@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -97,7 +97,7 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
                             underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
                             underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
                             underwriterFeeLabel.setText(i18n
-                                    .tr("*A one time underwriter fee and broker fee (plus applicable taxes) will be charged upon enrollment."));
+                                    .tr("*A one-time Underwriter Fee and Broker Fee (plus applicable taxes) will be charged upon enrollment."));
                             contentPanel.add(underwriterFeeLabel);
                         }
 

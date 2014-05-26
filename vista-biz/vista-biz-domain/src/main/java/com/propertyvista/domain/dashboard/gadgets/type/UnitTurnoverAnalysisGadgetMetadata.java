@@ -29,7 +29,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 @Transient
 @Caption(name = "Unit Turnover Analysis")
 @GadgetDescription(//@formatter:off
-        description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years",
+        description = "A graph that visually demonstrates the turnover rate in either percentage or quantity over the course of multiple years.",
         keywords = { "Units", "Chart", "Turnover", "Availability", "Occupancy" },
         allowedBehaviors = {
                 VistaCrmBehavior.PropertyManagement,

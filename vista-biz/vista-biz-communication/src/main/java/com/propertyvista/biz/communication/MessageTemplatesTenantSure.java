@@ -41,7 +41,7 @@ class MessageTemplatesTenantSure {
     public static MailMessage createTenantSurePaymentNotProcessedEmail(LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
         MailMessage email = new MailMessage();
         email.setSender(getTenantSureSender());
-        email.setSubject(i18n.tr("15 Day Notice of Cancellation for Non-payment of Premium"));
+        email.setSubject(i18n.tr("15 Day Notice of Cancellation for Non-Payment of Premium"));
 
         MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-payment-not-processed.html");
 
