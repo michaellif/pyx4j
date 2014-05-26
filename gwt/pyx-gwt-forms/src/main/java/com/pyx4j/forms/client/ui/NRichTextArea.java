@@ -30,7 +30,6 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
 
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
-        setWidth("100%");
         getElement().getStyle().setProperty("resize", "none");
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
