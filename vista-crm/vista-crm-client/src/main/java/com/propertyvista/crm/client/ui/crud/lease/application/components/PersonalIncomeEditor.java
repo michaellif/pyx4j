@@ -66,7 +66,7 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Dual, proto().incomeSource(), new CEnumLabel());
+        formPanel.append(Location.Dual, proto().incomeSource(), new CEnumLabel()).decorate();
         formPanel.append(Location.Dual, detailsHolder);
         formPanel.append(Location.Dual, proto().documents(), fileUpload);
 
