@@ -15,9 +15,9 @@ package com.propertyvista.domain.communication;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -26,35 +26,11 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface CommunicationThread extends IEntity {
 
-    @I18n(context = "CommunicationThread")
-    @XmlType(name = "ThreadStatus")
-    public enum ThreadStatus {
-
-        Unassigned, New, Open, Resolved, Cancelled, Closed;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     @NotNull
     IPrimitive<String> subject();
-
-    @NotNull
-    IPrimitive<Boolean> allowedReply();
-
-    @NotNull
-    IPrimitive<ThreadStatus> status();
-
-    @NotNull
-    @Detached
-    MessageGroup topic();
 
     @NotNull
     @Owned
@@ -67,5 +43,9 @@ public interface CommunicationThread extends IEntity {
     IPrimitive<Date> created();
 
     @Detached
-    CommunicationEndpoint owner();
+    CommunicationEndpoint responsible();
+
+    @NotNull
+    @Editor(type = EditorType.combo)
+    IPrimitive<Boolean> attentionRequiried();
 }

@@ -7,31 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 28, 2014
+ * Created on Apr 9, 2014
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.domain.communication;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationGroup.ContactType;
+public interface ExpandedRecipient extends IEntity {
+    @Owner
+    @Detached
+    @NotNull
+    @MemberColumn(notNull = true, name = "msg")
+    @JoinColumn
+    CommunicationMessage message();
 
-@Transient
-public interface CommunicationEndpointDTO extends IEntity {
+    @NotNull
+    @Detached
+    CommunicationEndpoint recipient();
+
     @NotNull
     @ReadOnly
-    IPrimitive<String> name();
-
-    @NotNull
-    @ReadOnly
-    IPrimitive<ContactType> type();
-
-    @NotNull
-    CommunicationEndpoint endpoint();
+    IPrimitive<Boolean> isReadByRecipient();
 }

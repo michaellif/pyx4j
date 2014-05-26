@@ -46,7 +46,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new DashboardPreloader());
         add(new ReferenceDataPreloader());
         add(new CommunicationGroupPreloader());
-        add(new SystemEndpointPreloader());
 
         //DEMO Different data for different PMC
         DemoPmc demoPmc;

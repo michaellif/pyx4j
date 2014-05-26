@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.CommunicationGroup;
 
-public interface CommunicationGroupEditorView extends IEditor<MessageGroup> {
+public interface CommunicationGroupEditorView extends IEditor<CommunicationGroup> {
 
     interface Presenter extends IEditor.Presenter {
     }

@@ -44,7 +44,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.dto.MessagesDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaDemo;
@@ -94,7 +93,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
             if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
                 view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
             }
-            if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
+            if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
                 communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
                     @Override
                     public void onSuccess(MessagesDTO result) {
@@ -159,22 +158,20 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
 
     @Override
     public void showMessages(int x, int y) {
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
-            final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
-            PopupPanel popupPanel = new PopupPanel(true, true);
-            popupPanel.setWidget(cview);
-            popupPanel.setPopupPosition(x - popupPanel.getOffsetHeight() / 2, y);
-            popupPanel.show();
-            communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
-                @Override
-                public void onSuccess(MessagesDTO result) {
-                    cview.populate(result == null ? null : result.messages());
-                    int messagesNum = result == null || result.messages() == null || result.messages().isEmpty() ? 0 : result.messages().size();
-                    view.setNumberOfMessages(messagesNum);
+        final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
+        PopupPanel popupPanel = new PopupPanel(true, true);
+        popupPanel.setWidget(cview);
+        popupPanel.setPopupPosition(x - popupPanel.getOffsetHeight() / 2, y);
+        popupPanel.show();
+        communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
+            @Override
+            public void onSuccess(MessagesDTO result) {
+                cview.populate(result == null ? null : result.messages());
+                int messagesNum = result == null || result.messages() == null || result.messages().isEmpty() ? 0 : result.messages().size();
+                view.setNumberOfMessages(messagesNum);
 
-                }
-            }, true);
-        }
+            }
+        }, true);
     }
 
     @Override

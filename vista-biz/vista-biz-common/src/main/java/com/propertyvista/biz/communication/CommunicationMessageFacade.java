@@ -13,21 +13,10 @@
  */
 package com.propertyvista.biz.communication;
 
-import java.util.List;
-
-import com.pyx4j.entity.core.AttachLevel;
-
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
-import com.propertyvista.domain.communication.SystemEndpoint;
-import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
 
 public interface CommunicationMessageFacade {
 
-    public MessageGroup getCommunicationGroupFromCache(MessageGroupCategory mgCategory);
-
-    public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
-
-    public List<MessageGroup> getDispatchedGroups(Employee employee, AttachLevel attachLevel);
+    public CommunicationGroup getCommunicationGroupFromCache(EndpointGroup epType);
 }

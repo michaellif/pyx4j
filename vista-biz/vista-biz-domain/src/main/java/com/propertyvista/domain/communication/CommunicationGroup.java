@@ -16,36 +16,27 @@ package com.propertyvista.domain.communication;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmRole;
 
-@ToStringFormat("{0}")
-public interface MessageGroup extends IEntity {
+@DiscriminatorValue("CommunicationGroup")
+public interface CommunicationGroup extends CommunicationEndpoint {
 
-    @I18n(context = "MessageGroup")
-    @XmlType(name = "Message Group Category")
-    public enum MessageGroupCategory {
-        @Translate("Tenant Originated")
-        TenantOriginated,
+    @I18n(context = "Endpoint Group")
+    @XmlType(name = "Endpoint Group")
+    public enum EndpointGroup {
+        Commandant,
 
-        @Translate("Landlord Originated")
-        LandlordOriginated,
-
-        @Translate("Vendor Originated")
-        VendorOriginated,
-
-        @Translate("Custom")
         Custom;
 
         @Override
@@ -54,20 +45,42 @@ public interface MessageGroup extends IEntity {
         }
     }
 
-    @NotNull
-    @ToString(index = 0)
-    IPrimitive<String> topic();
+    @I18n(context = "Contact Type")
+    @XmlType(name = "Contact Type")
+    public enum ContactType {
+        @Translate("Predefined Group")
+        Group,
+
+        @Translate("Tenant")
+        Tenants,
+
+        @Translate("Corporate")
+        Employee;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @NotNull
-    IPrimitive<MessageGroupCategory> category();
+    IPrimitive<String> name();
 
     @NotNull
-    @Detached
-    @MemberColumn(name = "dispatchers")
-    IList<Employee> dispatchers();
+    IPrimitive<EndpointGroup> type();
+
+    @NotNull
+    IPrimitive<Boolean> isPredefined();
 
     @NotNull
     @Detached
     @MemberColumn(name = "rls")
     IList<CrmRole> roles();
+
+    @Detached
+    IList<Building> buildings();
+
+    @Detached
+    IList<Portfolio> portfolios();
+
 }

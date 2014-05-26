@@ -7,16 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 20, 2011
- * @author stanp
+ * Created on 2011-05-09
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.communication;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.entity.rpc.AbstractListService;
 
 import com.propertyvista.domain.communication.CommunicationGroup;
 
-public interface CommunicationGroupListerView extends ILister<CommunicationGroup> {
-
+public interface SelectCommunicationGroupListService extends AbstractListService<CommunicationGroup> {
 }

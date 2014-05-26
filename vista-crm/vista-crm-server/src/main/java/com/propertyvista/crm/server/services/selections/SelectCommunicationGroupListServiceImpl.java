@@ -7,19 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 26, 2014
- * @author smolka
+ * Created on 2012-10-17
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.communication;
+package com.propertyvista.crm.server.services.selections;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.pyx4j.entity.server.AbstractListServiceImpl;
+
+import com.propertyvista.crm.rpc.services.selections.SelectCommunicationGroupListService;
 import com.propertyvista.domain.communication.CommunicationGroup;
 
-public class CommunicationGroupEditorViewImpl extends CrmEditorViewImplBase<CommunicationGroup> implements CommunicationGroupEditorView {
+public class SelectCommunicationGroupListServiceImpl extends AbstractListServiceImpl<CommunicationGroup> implements SelectCommunicationGroupListService {
 
-    public CommunicationGroupEditorViewImpl() {
-        setForm(new CommunicationGroupForm(this));
+    public SelectCommunicationGroupListServiceImpl() {
+        super(CommunicationGroup.class);
+    }
+
+    @Override
+    protected void bind() {
+        bindCompleteObject();
     }
 
 }

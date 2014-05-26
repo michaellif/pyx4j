@@ -18,12 +18,12 @@ import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.CommunicationGroupCrudService;
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.CommunicationGroup;
+import com.propertyvista.domain.communication.CommunicationGroup.EndpointGroup;
 
-public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<MessageGroup> implements CommunicationGroupCrudService {
+public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<CommunicationGroup> implements CommunicationGroupCrudService {
     public CommunicationGroupCrudServiceImpl() {
-        super(MessageGroup.class);
+        super(CommunicationGroup.class);
     }
 
     @Override
@@ -32,46 +32,58 @@ public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<M
     }
 
     @Override
-    protected MessageGroup init(InitializationData initializationData) {
-        MessageGroup dto = super.init(initializationData);
-        dto.category().setValue(MessageGroupCategory.Custom);
+    protected CommunicationGroup init(InitializationData initializationData) {
+        CommunicationGroup dto = super.init(initializationData);
+        dto.isPredefined().setValue(false);
         return dto;
     }
 
     @Override
-    protected void enhanceRetrieved(MessageGroup bo, MessageGroup to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(CommunicationGroup bo, CommunicationGroup to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
-        Persistence.ensureRetrieve(bo.dispatchers(), AttachLevel.Attached);
-        to.dispatchers().setAttachLevel(AttachLevel.Attached);
-        to.dispatchers().set(bo.dispatchers());
+        Persistence.ensureRetrieve(bo.portfolios(), AttachLevel.Attached);
+        to.portfolios().setAttachLevel(AttachLevel.Attached);
+        to.portfolios().set(bo.portfolios());
+
+        Persistence.ensureRetrieve(bo.buildings(), AttachLevel.Attached);
+        to.buildings().setAttachLevel(AttachLevel.Attached);
+        to.buildings().set(bo.buildings());
 
         Persistence.ensureRetrieve(bo.roles(), AttachLevel.Attached);
         to.roles().setAttachLevel(AttachLevel.Attached);
         to.roles().set(bo.roles());
 
-        to.topic().set(bo.topic());
-        to.category().set(bo.category());
+        to.type().set(bo.type());
+        //to.scope().set(bo.scope());
+        to.isPredefined().set(bo.isPredefined());
+        to.name().set(bo.name());
+        to.isPredefined().set(bo.isPredefined());
     }
 
     @Override
-    protected boolean persist(MessageGroup bo, MessageGroup in) {
+    protected boolean persist(CommunicationGroup bo, CommunicationGroup in) {
         boolean isNew = bo.id().isNull() || bo.isPrototype();
         if (isNew) {
-            bo.category().setValue(MessageGroupCategory.Custom);
-            in.topic().set(bo.topic());
+            bo.isPredefined().setValue(false);
+            in.isPredefined().set(bo.isPredefined());
+            in.type().setValue(EndpointGroup.Custom);
         }
-        bo.dispatchers().clear();
-        bo.dispatchers().addAll(in.dispatchers());
-
         bo.roles().clear();
         bo.roles().addAll(in.roles());
+
+        bo.buildings().clear();
+        bo.buildings().addAll(in.buildings());
+
+        bo.portfolios().clear();
+        bo.portfolios().addAll(in.portfolios());
+
         return super.persist(bo, in);
     }
 
     @Override
-    protected void delete(MessageGroup group) {
-        if (!MessageGroupCategory.Custom.equals(group.category().getValue())) {
-            throw new Error("Cannot delete predefined message group");
+    protected void delete(CommunicationGroup group) {
+        if (group.isPredefined().getValue()) {
+            throw new Error("Cannot delete predefined group");
         }
         super.delete(group);
 
