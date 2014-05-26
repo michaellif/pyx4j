@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
+import com.propertyvista.common.client.ui.components.c.CCountryComboBox;
 import com.propertyvista.common.client.ui.components.c.CProvinceComboBox;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.InternationalAddress;
@@ -52,7 +53,7 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().country()).decorate();
+        formPanel.append(Location.Left, proto().country(), new CCountryComboBox(ISOCountry.Canada, ISOCountry.UnitedStates)).decorate();
         formPanel.append(Location.Left, proto().streetNumber()).decorate();
         formPanel.append(Location.Left, proto().streetName()).decorate();
         formPanel.append(Location.Left, proto().suiteNumber()).decorate();
