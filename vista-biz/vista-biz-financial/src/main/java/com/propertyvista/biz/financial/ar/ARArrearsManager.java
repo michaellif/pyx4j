@@ -290,10 +290,12 @@ public class ARArrearsManager {
 
     private static void persistIfChanged(ArrearsSnapshot<?> currentSnapshot, ArrearsSnapshot<?> previousSnapshot) {
         Date defaultDate = new Date();
-        boolean hasDifferentLegalStatus = currentSnapshot instanceof BuildingArrearsSnapshot ? true :
+        boolean hasDifferentLegalStatus = (currentSnapshot instanceof BuildingArrearsSnapshot) ? false :
         // formatter:off
-                (((LeaseArrearsSnapshot) currentSnapshot).legalStatus().getValue() != ((LeaseArrearsSnapshot) previousSnapshot).legalStatus().getValue() || ((LeaseArrearsSnapshot) currentSnapshot)
-                        .legalStatusDate().getValue(defaultDate).compareTo(((LeaseArrearsSnapshot) previousSnapshot).legalStatusDate().getValue(defaultDate)) != 0);
+                (previousSnapshot != null)
+                        && (((LeaseArrearsSnapshot) currentSnapshot).legalStatus().getValue() != ((LeaseArrearsSnapshot) previousSnapshot).legalStatus()
+                                .getValue() || ((LeaseArrearsSnapshot) currentSnapshot).legalStatusDate().getValue(defaultDate)
+                                .compareTo(((LeaseArrearsSnapshot) previousSnapshot).legalStatusDate().getValue(defaultDate)) != 0);
         // @formatter:on
         if (previousSnapshot == null || hasDifferentLegalStatus || ARArreasManagerUtils.haveDifferentBucketValues(currentSnapshot, previousSnapshot)) {
             boolean isSameDaySnapshot = false;

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
@@ -29,11 +30,15 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.LeaseLegalFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.legal.LegalStatus;
+import com.propertyvista.domain.legal.LegalStatus.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
@@ -44,9 +49,39 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
 
     private LogicalDate prevFromDate;
 
+    public static class LeaseLegalFacadeStub implements LeaseLegalFacade {
+
+        @Override
+        public void setLegalStatus(Lease leaseId, LegalStatus status, List<LegalLetter> attachedLetters) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void removeLegalStatus(LegalStatus legalStatusId) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public List<LegalStatus> getLegalStatusHistory(Lease leaseId) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public LegalStatus getCurrentLegalStatus(Lease leaseId) {
+            LegalStatus status = EntityFactory.create(LegalStatus.class);
+            status.status().setValue(Status.None);
+            return status;
+        }
+
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        ServerSideFactory.register(LeaseLegalFacade.class, LeaseLegalFacadeStub.class);
         cleanUp();
         preloadData();
     }
