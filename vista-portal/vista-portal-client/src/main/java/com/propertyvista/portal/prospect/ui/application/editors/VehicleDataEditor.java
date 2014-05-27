@@ -18,11 +18,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class VehicleDataEditor extends CForm<Vehicle> {
 
@@ -36,24 +36,22 @@ public class VehicleDataEditor extends CForm<Vehicle> {
         super(Vehicle.class, factory);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        int row = -1;
-        panel.setH3(++row, 0, 1, i18n.tr("Vehicle Data"));
+        formPanel.h3(i18n.tr("Vehicle Data"));
 
-        panel.setWidget(++row, 0, inject(proto().make(), new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().model(), new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().color(), new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().year(), new FieldDecoratorBuilder(60).build()));
+        formPanel.append(Location.Left, proto().make()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().model()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().color()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().year()).decorate().componentWidth(60);
 
-        panel.setWidget(++row, 0, inject(proto().plateNumber(), new FieldDecoratorBuilder(120).build()));
-        panel.setWidget(++row, 0, inject(proto().province(), new FieldDecoratorBuilder(200).build()));
-        panel.setWidget(++row, 0, inject(proto().country(), new FieldDecoratorBuilder(150).build()));
+        formPanel.append(Location.Left, proto().plateNumber()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().province()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().country()).decorate().componentWidth(150);
 
-        return panel;
+        return formPanel;
     }
 
     @Override

@@ -18,13 +18,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
 public class PetDataEditor extends CForm<Pet> {
 
@@ -40,20 +40,19 @@ public class PetDataEditor extends CForm<Pet> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        PortalFormPanel formPanel = new PortalFormPanel(this);
 
-        int row = -1;
-        panel.setH3(++row, 0, 1, i18n.tr("Pet Data"));
+        formPanel.h3(i18n.tr("Pet Data"));
 
-        panel.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(180).build()));
-        panel.setWidget(++row, 0, inject(proto().color(), new FieldDecoratorBuilder(180).build()));
-        panel.setWidget(++row, 0, inject(proto().breed(), new FieldDecoratorBuilder(180).build()));
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().color()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().breed()).decorate().componentWidth(180);
 
-        panel.setWidget(++row, 0, inject(proto().weight(), new FieldDecoratorBuilder(50).build()));
-        panel.setWidget(++row, 0, inject(proto().weightUnit(), new FieldDecoratorBuilder(50).build()));
-        panel.setWidget(++row, 0, inject(proto().birthDate(), new FieldDecoratorBuilder(120).build()));
+        formPanel.append(Location.Left, proto().weight()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().weightUnit()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(120);
 
-        return panel;
+        return formPanel;
     }
 
     @Override
