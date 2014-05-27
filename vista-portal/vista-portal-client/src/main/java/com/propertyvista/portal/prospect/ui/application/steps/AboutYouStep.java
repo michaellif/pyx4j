@@ -111,18 +111,18 @@ public class AboutYouStep extends ApplicationWizardStep {
 
             @Override
             public BasicValidationError isValid() {
-                    if (hasNoPhone(getWizard().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant!"));
-                    }
+                if (getComponent().getValue() != null && hasNoOtherPhone(getWizard().getValue())) {
+                    return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant!"));
+                }
 
                 return null;
             }
 
-            private boolean hasNoPhone(OnlineApplicationDTO value) {
+            private boolean hasNoOtherPhone(OnlineApplicationDTO value) {
                 //@formatter:off
                 return ( value.applicant().person().homePhone().isNull() &&
-                         value.applicant().person().mobilePhone().isNull() &&
-                         value.applicant().person().workPhone().isNull() );
+                         value.applicant().person().mobilePhone().isNull());
+//                         value.applicant().person().workPhone().isNull() );
                 //@formatter:on
             }
         });
