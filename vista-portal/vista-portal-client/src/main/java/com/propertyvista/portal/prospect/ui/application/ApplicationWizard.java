@@ -61,7 +61,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private ApplicationWizardPresenter presenter;
 
     public ApplicationWizard(ApplicationWizardViewImpl view, FeePayment feePaymentPolicy) {
-        super(OnlineApplicationDTO.class, view, null, i18n.tr("Submit"), ThemeColor.contrast2);
+        super(OnlineApplicationDTO.class, view, new ApplicationWizardDecorator());
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             if (SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
@@ -122,13 +122,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     public ApplicationWizardStep getStep(Class<? extends ApplicationWizardStep> stepClass) {
         return steps.get(stepClass);
-    }
-
-    @Override
-    protected ApplicationWizardDecorator createDecorator() {
-        ApplicationWizardDecorator decorator = new ApplicationWizardDecorator();
-        decorator.getBtnCancel().setVisible(false);
-        return decorator;
     }
 
     @Override
@@ -212,6 +205,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         super.updateProgress(currentStep, previousStep);
 
         ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(this, ApplicationWizardStateChangeEvent.ChangeType.stepChange));
+
         ((ApplicationWizardDecorator) getDecorator()).setCaption(currentStep.getStepTitle());
     }
 
@@ -239,12 +233,14 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         get(proto().applicant().legalQuestions().filedBankruptcy()).setMockValue(true);
     }
 
-    class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {
+    static class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {
 
         public ApplicationWizardDecorator() {
             super(i18n.tr("Submit"));
 
             setCaption(i18n.tr("Lease Application"));
+
+            getBtnCancel().setVisible(false);
 
             getMainPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
             getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));

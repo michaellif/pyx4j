@@ -56,7 +56,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     private TenantSureOrderWizardPersenter presenter;
 
-    private WizardDecorator<TenantSureInsurancePolicyDTO> wizardDecorator;
+    private final WizardDecorator<TenantSureInsurancePolicyDTO> wizardDecorator;
 
     private final TenantSureQuoteViewer quoteViewer = new TenantSureQuoteViewer(true);
 
@@ -71,6 +71,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
+
+        wizardDecorator = (WizardDecorator<TenantSureInsurancePolicyDTO>) getDecorator();
 
         addStep(createPersonalInfoStep(), i18n.tr("Personal Info"));
         addStep(createInsuranceCoverageStep(), i18n.tr("Insurance Coverage"));
@@ -204,12 +206,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     public void setPresenter(TenantSureOrderWizardPersenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    protected WizardDecorator<TenantSureInsurancePolicyDTO> createDecorator() {
-        wizardDecorator = super.createDecorator();
-        return wizardDecorator;
     }
 
     private Anchor createTermLink(String text, String href) {
