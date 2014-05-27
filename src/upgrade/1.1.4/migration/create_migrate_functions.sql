@@ -104,6 +104,12 @@ BEGIN
         ALTER TABLE apt_unit    ADD COLUMN info_legal_address_country VARCHAR(50),
                                 ADD COLUMN info_legal_address_province VARCHAR(500);
         
+        
+        -- billing_arrears_snapshot
+        
+        ALTER TABLE billing_arrears_snapshot    ADD COLUMN legal_status VARCHAR(50),
+                                                ADD COLUMN legal_status_date TIMESTAMP;
+        
         -- building 
         
         ALTER TABLE building ADD COLUMN contacts_support_phone VARCHAR(500);
@@ -157,13 +163,24 @@ BEGIN
                 'SET    info_legal_address_province = replace(p.name,'' '','''') '
                 'FROM   '||v_schema_name||'.province AS p '
                 'WHERE  a.info_legal_address_province_old = p.id ';
-        /*
-        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
-                'SET    info_legal_address_street_name = info_legal_address_street_name||'
-                '   CASE WHEN info_legal_address_street_type IS NOT NULL THEN '' ''||info_legal_address_street_type ELSE 
-                'FROM   '||v_schema_name||'.country AS c '
-                'WHERE  a.info_legal_address_country_old = c.id ';
-        */
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit '
+                ||'SET  info_legal_address_street_number = '
+                ||'     info_legal_address_street_number||info_legal_address_street_number_suffix '
+                ||'WHERE    info_legal_address_street_number_suffix IS NOT NULL';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit '
+                ||'SET  info_legal_address_street_name = '
+                ||'     TRIM(info_legal_address_street_name)||'' ''||INITCAP(TRIM(info_legal_address_street_type)) '
+                ||'WHERE    info_legal_address_street_type IS NOT NULL ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.apt_unit '
+                ||'SET  info_legal_address_street_name = '
+                ||'     TRIM(info_legal_address_street_name)||'' ''||INITCAP(TRIM(info_legal_address_street_direction)) '
+                ||'WHERE    info_legal_address_street_direction IS NOT NULL ';
+        
+               
+        
         -- Phone numbers update
         
         PERFORM * FROM _dba_.update_phone_numbers(v_schema_name);
@@ -196,7 +213,11 @@ BEGIN
         -- apt_unit
         
         ALTER TABLE apt_unit    DROP COLUMN info_legal_address_country_old,
-                                DROP COLUMN info_legal_address_province_old;
+                                DROP COLUMN info_legal_address_province_old,
+                                DROP COLUMN info_legal_address_county,
+                                DROP COLUMN info_legal_address_street_direction,
+                                DROP COLUMN info_legal_address_street_number_suffix,
+                                DROP COLUMN info_legal_address_street_type;
                  
         /**
         ***     ======================================================================================================
