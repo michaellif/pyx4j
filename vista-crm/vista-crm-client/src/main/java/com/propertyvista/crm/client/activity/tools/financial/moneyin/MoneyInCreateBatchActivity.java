@@ -27,6 +27,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -37,16 +38,23 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.Path;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.AbstractVisorController;
+import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCandidateSearchVisorView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -78,6 +86,12 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private final Map<String, Comparator<MoneyInCandidateDTO>> sortComparatorsMap;
 
+    private final AbstractVisorController addPaymentCandidatesController;
+
+    private final MoneyInCandidateSearchVisorView paymentCandidateSearchVisor;
+
+    private final ListerDataSource<MoneyInCandidateDTO> paymentDataSource;
+
     public MoneyInCreateBatchActivity() {
         proto = EntityFactory.getEntityPrototype(MoneyInCandidateDTO.class);
         validationErrorsMap = new HashMap<Key, HashMap<Path, ValidationErrors>>();
@@ -87,12 +101,33 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         service = GWT.<MoneyInToolService> create(MoneyInToolService.class);
 
         sortComparatorsMap = createSortComparatorsMap();
+
+        addPaymentCandidatesController = new AbstractVisorController(this.view) {
+            @Override
+            public void show() {
+                paymentCandidateSearchVisor.populateLister();
+                getParentView().showVisor(paymentCandidateSearchVisor);
+            }
+        };
+
+        paymentDataSource = new ListerDataSource<>(MoneyInCandidateDTO.class, new AbstractListService<MoneyInCandidateDTO>() {
+            @Override
+            public void list(AsyncCallback<EntitySearchResult<MoneyInCandidateDTO>> callback, EntityListCriteria<MoneyInCandidateDTO> criteria) {
+                new InMemeoryListService<>(searchResultsProvider.getList()).list(callback, criteria);
+            }
+
+            @Override
+            public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+                callback.onFailure(new Exception("delete operation not supported"));
+            }
+        });
+        paymentCandidateSearchVisor = new MoneyInCandidateSearchVisorView(addPaymentCandidatesController, paymentDataSource);
+
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        searchResultsProvider.addDataDisplay(view.searchResults());
         selectedForProcessingProvider.addDataDisplay(view.selectedForProcessing());
         panel.setWidget(view);
     }
@@ -103,13 +138,14 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     }
 
     @Override
-    public void search() {
+    public void addPayments() {
         searchResultsProvider.getList().clear();
         service.findCandidates(new DefaultAsyncCallback<Vector<MoneyInCandidateDTO>>() {
             @Override
             public void onSuccess(Vector<MoneyInCandidateDTO> result) {
                 merge(result, selectedForProcessingProvider.getList());
                 searchResultsProvider.setList(result);
+                addPaymentCandidatesController.show();
             }
 
             @Override
@@ -120,8 +156,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                     super.onFailure(caught);
                 }
             }
-
-        }, toDto(view.getSearchCriteria()));
+        }, EntityFactory.create(MoneyInCandidateSearchCriteriaDTO.class));
     }
 
     @Override
@@ -443,8 +478,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         Command refreshData = new Command() {
             @Override
             public void execute() {
-                selectedForProcessingProvider.getList().clear();
-                MoneyInCreateBatchActivity.this.search();
+                selectedForProcessingProvider.getList().clear();                
             }            
         };
         view.confirm(i18n.tr("Batch has been created successfully. Do you wish to see the created batches?"), displayBatches, refreshData);        

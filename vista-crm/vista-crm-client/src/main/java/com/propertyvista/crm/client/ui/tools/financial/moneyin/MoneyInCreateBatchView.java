@@ -24,7 +24,6 @@ import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.common.view.HasMessages;
-import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInLeaseParticipantDTO;
 
@@ -32,7 +31,7 @@ public interface MoneyInCreateBatchView extends IPrimePane, HasMessages {
 
     interface Presenter extends IPrimePane.Presenter, ProvidesKey<MoneyInCandidateDTO> {
 
-        void search();
+        void addPayments();
 
         void setProcessCandidate(MoneyInCandidateDTO candidate, boolean process);
 
@@ -54,12 +53,7 @@ public interface MoneyInCreateBatchView extends IPrimePane, HasMessages {
     void setPresenter(Presenter presenter);
 
     // This is used only to bind the data provider in presenter
-    HasData<MoneyInCandidateDTO> searchResults();
-
-    // This is used only to bind the data provider in presenter
     HasData<MoneyInCandidateDTO> selectedForProcessing();
-
-    MoneyInCandidateSearchCriteriaModel getSearchCriteria();
 
     LogicalDate getRecieptDate();
 

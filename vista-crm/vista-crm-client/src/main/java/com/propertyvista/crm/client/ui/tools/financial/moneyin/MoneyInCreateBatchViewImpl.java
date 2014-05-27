@@ -20,7 +20,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -47,7 +46,6 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.propertyvista.crm.client.ui.tools.common.view.AbstractPrimePaneWithMessagesPopup;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
-import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 
 public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup implements MoneyInCreateBatchView {
@@ -63,8 +61,6 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
     private LayoutPanel searchBar;
 
     private LayoutPanel gridsHolder;
-
-    private MoneyInCandidateDataGrid searchCandidateDataGrid;
 
     private MoneyInCandidateDataGrid selectedForProcessingDataGrid;
 
@@ -87,39 +83,9 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
         viewPanel.setWidgetLeftRight(gridsHolder, 0, Unit.PX, 0, Unit.PX);
 
         {
-            LayoutPanel foundHolder = new LayoutPanel();
-            gridsHolder.add(foundHolder);
-            gridsHolder.setWidgetTopBottom(foundHolder, 0, Unit.PX, 50, Unit.PCT);
-            gridsHolder.setWidgetLeftRight(foundHolder, 0, Unit.PX, 0, Unit.PX);
-
-            // found:
-            foundHolder.add(searchCandidateDataGrid = new MoneyInCandidateDataGrid() {
-                @Override
-                protected void onSort(String memberPath, boolean isAscending) {
-                    presenter.sortFoundCandidates(memberPath, isAscending);
-                }
-            });
-            foundHolder.setWidgetTopBottom(searchCandidateDataGrid, 0, Unit.PX, 33, Unit.PX);
-            foundHolder.setWidgetLeftRight(searchCandidateDataGrid, 0, Unit.PX, 0, Unit.PX);
-
-            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-            SimplePager searchResultsPager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-            searchResultsPager.setDisplay(searchCandidateDataGrid);
-
-            HorizontalPanel searchResultsPagerHolder = new HorizontalPanel();
-            searchResultsPagerHolder.setWidth("100%");
-            searchResultsPagerHolder.add(searchResultsPager);
-            searchResultsPagerHolder.setCellHorizontalAlignment(searchResultsPager, HasHorizontalAlignment.ALIGN_CENTER);
-
-            foundHolder.add(searchResultsPagerHolder);
-            foundHolder.setWidgetBottomHeight(searchResultsPagerHolder, 24, Unit.PX, 24, Unit.PX);
-            foundHolder.setWidgetLeftRight(searchResultsPagerHolder, 0, Unit.PX, 0, Unit.PX);
-        }
-
-        {
             LayoutPanel selectedHolder = new LayoutPanel();
             gridsHolder.add(selectedHolder);
-            gridsHolder.setWidgetTopBottom(selectedHolder, 51, Unit.PCT, 0, Unit.PX);
+            gridsHolder.setWidgetTopBottom(selectedHolder, 101, Unit.PX, 0, Unit.PX);
             gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
 
             // selected:
@@ -182,18 +148,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
     @Override
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
         this.presenter = presenter;
-        this.searchCandidateDataGrid.setPresenter(presenter);
         this.selectedForProcessingDataGrid.setPresenter(presenter);
-    }
-
-    @Override
-    public MoneyInCandidateSearchCriteriaModel getSearchCriteria() {
-        return this.searchForm.getValue();
-    }
-
-    @Override
-    public HasData<MoneyInCandidateDTO> searchResults() {
-        return this.searchCandidateDataGrid;
     }
 
     @Override
@@ -217,30 +172,15 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
         LayoutPanel searchBar = new LayoutPanel();
         searchBar.setWidth("100%");
 
-        searchForm = new MoneyInCandidateSearchCriteriaForm() {
-            @Override
-            protected void onSuperSelectorResized() {
-                resizeSearch();
-            }
-        };
-        searchForm.init();
-        searchForm.populateNew();
-        searchForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
-        searchForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);
-
-        searchBar.add(searchForm);
-        searchBar.setWidgetTopBottom(searchForm, 0, Unit.PX, 0, Unit.PX);
-        searchBar.setWidgetLeftRight(searchForm, 0, Unit.PX, 100, Unit.PX);
-
         Toolbar searchToolbar = new Toolbar();
         searchToolbar.getElement().getStyle().setHeight(100, Unit.PX);
         searchToolbar.getElement().getStyle().setProperty("display", "table-cell");
         searchToolbar.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        Button searchButton = new Button(i18n.tr("Search"), new Command() {
+        Button searchButton = new Button(i18n.tr("Add Payments"), new Command() {
             @Override
             public void execute() {
-                presenter.search();
+                presenter.addPayments();
             }
         });
         searchToolbar.addItem(searchButton);
@@ -251,7 +191,8 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
 
         searchBar.add(searchToolbarHolder);
         searchBar.setWidgetTopBottom(searchToolbarHolder, 0, Unit.PX, 0, Unit.PX);
-        searchBar.setWidgetRightWidth(searchToolbarHolder, 0, Unit.PX, 100, Unit.PX);
+        searchBar.setWidgetLeftRight(searchToolbarHolder, 0, Unit.PX, 0, Unit.PX);
+
         return searchBar;
     }
 
