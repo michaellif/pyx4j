@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,13 +56,26 @@ public class StackTraceViewServlet extends HttpServlet {
             threadsById.put(me.getKey().getId(), me.getKey());
         }
 
+        TreeMap<String, String> threadsInfoSorted = new TreeMap<>();
+
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         for (ThreadInfo threadInfo : threadMXBean.dumpAllThreads(true, false)) {
+            String key = "";
+            StringBuilder info = new StringBuilder();
             Thread thread = threadsById.get(threadInfo.getThreadId());
             if (thread != null) {
-
+                key = thread.getThreadGroup().getName();
+                info.append(thread.getThreadGroup().getName()).append(" ");
             }
-            out.print(threadInfo.toString());
+            key += "." + threadInfo.getThreadName();
+
+            info.append(threadInfo.toString());
+
+            threadsInfoSorted.put(key, info.toString());
+        }
+
+        for (String info : threadsInfoSorted.values()) {
+            out.print(info);
         }
 
     }
