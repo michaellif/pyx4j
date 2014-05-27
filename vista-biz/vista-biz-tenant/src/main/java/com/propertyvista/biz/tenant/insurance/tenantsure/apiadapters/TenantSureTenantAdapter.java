@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.ISOCountry;
+import com.propertyvista.domain.ref.ISOProvince;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantSureTenantAdapter {
@@ -40,7 +41,8 @@ public class TenantSureTenantAdapter {
         parameters.setAddress2(address.suiteNumber().getValue());
 
         parameters.setCity(tenant.lease().unit().building().info().address().city().getValue());
-        parameters.setState(tenant.lease().unit().building().info().address().province().getValue());
+        parameters.setState(ISOProvince.forName(tenant.lease().unit().building().info().address().province().getValue(), tenant.lease().unit().building()
+                .info().address().country().getValue()).code);
         parameters.setPostcode(tenant.lease().unit().building().info().address().postalCode().getValue());
 
         ISOCountry country = tenant.lease().unit().building().info().address().country().getValue();
