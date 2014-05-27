@@ -97,7 +97,7 @@ public class AboutYouStep extends ApplicationWizardStep {
                 if (getComponent().getValue() != null && getValue() != null) {
                     if (enforceAgeOfMajority()) {
                         if (!TimeUtils.isOlderThan(getComponent().getValue(), ageOfMajority())) {
-                            return new BasicValidationError(getComponent(), i18n.tr("The minimum age requirement is {0} years.", ageOfMajority()));
+                            return new BasicValidationError(getComponent(), i18n.tr("The minimum age requirement is {0} years", ageOfMajority()));
                         }
                     }
                 }
@@ -108,22 +108,17 @@ public class AboutYouStep extends ApplicationWizardStep {
         get(proto().applicant().person().homePhone()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().applicant().person().workPhone())));
         get(proto().applicant().person().mobilePhone()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().applicant().person().workPhone())));
         get(proto().applicant().person().workPhone()).addComponentValidator(new AbstractComponentValidator<String>() {
-
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && hasNoOtherPhone(getWizard().getValue())) {
-                    return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant!"));
+                if (getComponent().getValue() == null && hasNoOtherPhone(getWizard().getValue())) {
+                    return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant"));
                 }
 
                 return null;
             }
 
             private boolean hasNoOtherPhone(OnlineApplicationDTO value) {
-                //@formatter:off
-                return ( value.applicant().person().homePhone().isNull() &&
-                         value.applicant().person().mobilePhone().isNull());
-//                         value.applicant().person().workPhone().isNull() );
-                //@formatter:on
+                return (value.applicant().person().homePhone().isNull() && value.applicant().person().mobilePhone().isNull());
             }
         });
     }

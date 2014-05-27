@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.forms.client.validators.EntityContainerValidator;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
@@ -132,18 +133,19 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             step.addValidations();
         }
 
+        // remove standard validators:
+        this.getComponentValidators().clear();
         // some inter-step validation:
-
         this.addComponentValidator(new AbstractComponentValidator<OnlineApplicationDTO>() {
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
                     if (hasDuplicateEmails(getComponent().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)"));
                     }
                 }
 
-                return null;
+                return (BasicValidationError) new EntityContainerValidator().isValid();
             }
 
             private boolean hasDuplicateEmails(OnlineApplicationDTO value) {
