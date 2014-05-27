@@ -20,13 +20,19 @@
  */
 package com.pyx4j.security.shared;
 
+import com.pyx4j.commons.GWTSerializable;
+
 public class BasicPermission implements Permission {
 
     private static final long serialVersionUID = 7407387043880019023L;
 
-    private final boolean wildcard;
+    //Not final because of GWT
+    @GWTSerializable
+    private boolean wildcard;
 
-    private final String path;
+    //Not final because of GWT
+    @GWTSerializable
+    private String path;
 
     public BasicPermission(String path) {
         this.wildcard = path.endsWith("*");
@@ -78,6 +84,18 @@ public class BasicPermission implements Permission {
                 return this.path.equals(other.path);
             }
         }
+    }
+
+    @GWTSerializable
+    @Deprecated
+    private void setWildcard(boolean wildcard) {
+        this.wildcard = wildcard;
+    }
+
+    @GWTSerializable
+    @Deprecated
+    private void setPath(String path) {
+        this.path = path;
     }
 
 }

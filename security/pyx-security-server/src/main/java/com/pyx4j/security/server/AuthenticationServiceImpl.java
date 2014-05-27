@@ -20,8 +20,8 @@
  */
 package com.pyx4j.security.server;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 
@@ -37,12 +37,14 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
+import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -94,10 +96,8 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
                 break;
             }
 
-            // Make it serializable by RPC
-            Set<Behavior> behaviors = new HashSet<Behavior>();
-            behaviors.addAll(SecurityController.getBehaviors());
-            ar.setBehaviors(behaviors);
+            ar.setBehaviors(SecurityController.getBehaviors());
+            ar.setPermissions(filterClientPermissions(SecurityController.getPermissions()));
 
             Visit visit = Context.getVisit();
             if (visit != null) {
@@ -108,6 +108,7 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
                 } else {
                     log.warn("Invalid request sessionToken {}", sessionToken);
                     ar.setBehaviors(null);
+                    ar.setPermissions(null);
                 }
             }
 
@@ -124,6 +125,24 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
 
         ar.setServertTime(System.currentTimeMillis());
         return ar;
+    }
+
+    protected boolean isClientPermissions(Permission permission) {
+        if ((permission instanceof ServiceExecutePermission) || (permission instanceof IServiceExecutePermission)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected Collection<Permission> filterClientPermissions(Collection<Permission> permissions) {
+        Collection<Permission> cleintPermissions = new ArrayList<Permission>();
+        for (Permission permission : permissions) {
+            if (isClientPermissions(permission)) {
+                cleintPermissions.add(permission);
+            }
+        }
+        return cleintPermissions;
     }
 
     @Override

@@ -53,6 +53,7 @@ public abstract class SecurityController {
         return controller;
     }
 
+    //TODO redesign to make it non accessible
     public abstract Acl getAcl();
 
     public abstract Acl authorize(Set<Behavior> behaviours);
@@ -103,8 +104,14 @@ public abstract class SecurityController {
         }
     }
 
+    //TODO redesign to make it non accessible
     public static Set<Behavior> getBehaviors() {
         return controller.getAcl().getBehaviours();
+    }
+
+    //TODO redesign to make it non accessible
+    public static Collection<Permission> getPermissions() {
+        return controller.getAcl().getPermissions();
     }
 
     public static boolean checkPermission(Permission permission) {

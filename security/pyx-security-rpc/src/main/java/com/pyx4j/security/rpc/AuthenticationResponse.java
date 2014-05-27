@@ -21,9 +21,12 @@
 package com.pyx4j.security.rpc;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.UserVisit;
 
 public class AuthenticationResponse implements Serializable {
@@ -33,6 +36,8 @@ public class AuthenticationResponse implements Serializable {
     private UserVisit userVisit;
 
     private Set<Behavior> behaviors;
+
+    private Set<Permission> permissions;
 
     private int maxInactiveInterval;
 
@@ -64,8 +69,30 @@ public class AuthenticationResponse implements Serializable {
         return behaviors;
     }
 
-    public void setBehaviors(Set<Behavior> behaviors) {
-        this.behaviors = behaviors;
+    public void setBehaviors(Collection<Behavior> behaviors) {
+        // Make it serializable by RPC
+        if (behaviors != null) {
+            Set<Behavior> set = new HashSet<Behavior>();
+            set.addAll(behaviors);
+            this.behaviors = set;
+        } else {
+            this.behaviors = null;
+        }
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Collection<Permission> permissions) {
+        // Make it serializable by RPC
+        if (permissions != null) {
+            Set<Permission> set = new HashSet<Permission>();
+            set.addAll(permissions);
+            this.permissions = set;
+        } else {
+            this.permissions = null;
+        }
     }
 
     /**

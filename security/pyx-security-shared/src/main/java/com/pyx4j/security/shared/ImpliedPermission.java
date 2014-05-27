@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 12, 2010
+ * Created on May 26, 2014
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.security.shared;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+/**
+ * Permissions given by default without explicit grant in ACL.
+ * 
+ * Used to find the code that have unspecified security.
+ * 
+ * Each application should declare its own ImpliedPermission
+ */
+public abstract class ImpliedPermission implements Permission {
 
-public interface Acl {
+    private static final long serialVersionUID = -3624446631087758603L;
 
-    public boolean checkBehavior(Behavior behavior);
+    protected ImpliedPermission() {
+    }
 
-    public Set<Behavior> getBehaviours();
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 
-    public Collection<Permission> getPermissions();
-
-    public boolean checkPermission(Permission permission);
-
-    public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject);
+    @Override
+    public boolean implies(Permission p) {
+        return ((p != null) && (p.getClass() == getClass()));
+    }
 
 }

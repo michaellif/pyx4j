@@ -21,6 +21,7 @@
 package com.pyx4j.entity.security;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.shared.Permission;
 
@@ -64,28 +65,35 @@ public class EntityPermission extends AbstractCRUDPermission {
         return new EntityPermission(entity, DELETE);
     }
 
+    @GWTSerializable
+    protected EntityPermission() {
+        super();
+        this.entityInstance = null;
+        this.instanceAccess = null;
+    }
+
     public EntityPermission(String name, String actions) {
         super(name, actions);
         this.entityInstance = null;
-        instanceAccess = null;
+        this.instanceAccess = null;
     }
 
     public EntityPermission(Class<? extends IEntity> entityClass, int actions) {
         super(entityClass.getName(), actions);
         this.entityInstance = null;
-        instanceAccess = null;
+        this.instanceAccess = null;
     }
 
     public EntityPermission(String name, int actions) {
         super(name, actions);
         this.entityInstance = null;
-        instanceAccess = null;
+        this.instanceAccess = null;
     }
 
     public EntityPermission(IEntity entity, int actions) {
         super(entity.getObjectClass().getName(), actions);
-        entityInstance = entity;
-        instanceAccess = null;
+        this.entityInstance = entity;
+        this.instanceAccess = null;
     }
 
     public EntityPermission(String name, InstanceAccess instanceAccess, int actions) {

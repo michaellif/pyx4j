@@ -21,6 +21,7 @@
 package com.pyx4j.security.shared;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,6 +75,11 @@ public class AclSerializable implements Acl, Serializable {
     @Override
     public Set<Behavior> getBehaviours() {
         return behaviors;
+    }
+
+    @Override
+    public Collection<Permission> getPermissions() {
+        return permissions;
     }
 
     @SuppressWarnings("unchecked")

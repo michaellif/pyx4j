@@ -20,6 +20,7 @@
  */
 package com.pyx4j.security.client;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -78,6 +79,11 @@ public class ClientSecurityController extends SecurityController {
 
         boolean isUnsecure() {
             return false;
+        }
+
+        @Override
+        public Collection<Permission> getPermissions() {
+            return null;
         }
 
     }

@@ -23,6 +23,7 @@ package com.pyx4j.security.shared;
 import java.io.Serializable;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.commons.Key;
 
 /**
@@ -42,7 +43,7 @@ public class UserVisit implements Serializable {
 
     private transient boolean changed;
 
-    // to make it GWT Serializable
+    @GWTSerializable
     public UserVisit() {
 
     }

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.security;
 
+import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.security.shared.BasicPermission;
 import com.pyx4j.security.shared.Permission;
 
@@ -40,9 +41,18 @@ public abstract class AbstractCRUDPermission extends BasicPermission {
      */
     public final static int ALL = CREATE | READ | UPDATE | DELETE;
 
-    private final int mask;
+    //Not final because of GWT
+    @GWTSerializable
+    private int mask;
 
-    private final String actions;
+    //Not final because of GWT
+    @GWTSerializable
+    private String actions;
+
+    @GWTSerializable
+    protected AbstractCRUDPermission() {
+        super("");
+    }
 
     public AbstractCRUDPermission(String name, int actions) {
         super(name);
@@ -114,5 +124,17 @@ public abstract class AbstractCRUDPermission extends BasicPermission {
         addAction(sb, UPDATE, "update");
         addAction(sb, DELETE, "delete");
         return sb.toString();
+    }
+
+    @GWTSerializable
+    @Deprecated
+    private void setMask(int mask) {
+        this.mask = mask;
+    }
+
+    @GWTSerializable
+    @Deprecated
+    private void setActions(String actions) {
+        this.actions = actions;
     }
 }

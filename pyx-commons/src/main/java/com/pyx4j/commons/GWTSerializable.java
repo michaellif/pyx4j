@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 12, 2010
+ * Created on May 27, 2014
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.security.shared;
+package com.pyx4j.commons;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
-public interface Acl {
-
-    public boolean checkBehavior(Behavior behavior);
-
-    public Set<Behavior> getBehaviours();
-
-    public Collection<Permission> getPermissions();
-
-    public boolean checkPermission(Permission permission);
-
-    public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject);
+/**
+ * Added to make class GWT Serializable. of filed is set to not final
+ * 
+ * Marker for Hacks we need to do to make GWT serialization work
+ * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+ * 
+ * Should be fixed very soon in GWT 2.7.
+ */
+@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR })
+public @interface GWTSerializable {
 
 }
