@@ -23,6 +23,9 @@ package com.pyx4j.forms.client.validators;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -123,6 +126,18 @@ public class ValidationResults {
 
     public boolean isValid() {
         return validationErrors.size() == 0;
+    }
+
+    public static ValidationResults getValidationResults(Widget widget) {
+        ValidationResults results = new ValidationResults();
+        if (widget instanceof IValidatable) {
+            results.appendValidationResults(((IValidatable) widget).getValidationResults());
+        } else if (widget instanceof HasWidgets) {
+            for (Widget childWidget : ((HasWidgets) widget)) {
+                results.appendValidationResults(getValidationResults(childWidget));
+            }
+        }
+        return results;
     }
 
 }

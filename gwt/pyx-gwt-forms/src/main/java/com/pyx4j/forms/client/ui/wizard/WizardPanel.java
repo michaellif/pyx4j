@@ -48,9 +48,6 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
     public void addStep(WizardStep step) {
         add(step);
         step.setParent(this);
-        if (size() == 1) {
-            showWidget(0);
-        }
     }
 
     public void insertStep(WizardStep step, int beforeIndex) {

@@ -41,12 +41,11 @@ public class NContainer<DATA_TYPE extends IObject<?>> extends NComponent<DATA_TY
         return content;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("rawtypes")
     public void setContent(IsWidget content) {
         this.content = content;
         if (getWidget() instanceof IDecorator) {
             ((IDecorator) getWidget()).setContent(content);
-            ((IDecorator) getWidget()).init(getCComponent());
         } else {
             setWidget(content);
         }

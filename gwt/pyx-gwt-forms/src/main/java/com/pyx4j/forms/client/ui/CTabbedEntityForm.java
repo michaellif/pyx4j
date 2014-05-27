@@ -23,21 +23,17 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
-import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -69,7 +65,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
                             public void execute() {
                                 for (int i = 0; i < tabPanel.size(); i++) {
                                     Tab tab = tabPanel.getTab(i);
-                                    ValidationResults validationResults = getValidationResults(tab);
+                                    ValidationResults validationResults = ValidationResults.getValidationResults(tab);
                                     if (validationResults.isValid()) {
                                         tab.setTabWarning(null);
                                     } else {
@@ -84,23 +80,6 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
                 }
             }
         });
-    }
-
-    private ValidationResults getValidationResults(Widget widget) {
-        ValidationResults results = new ValidationResults();
-        if (widget instanceof IValidatable) {
-            results.appendValidationResults(((IValidatable) widget).getValidationResults());
-        } else if (widget instanceof HasWidgets) {
-            for (Widget childWidget : ((HasWidgets) widget)) {
-                results.appendValidationResults(getValidationResults(childWidget));
-            }
-        }
-//        else if (widget instanceof IndexedPanel) {
-//            for (int i = 0; i < ((IndexedPanel) widget).getWidgetCount(); i++) {
-//                results.appendValidationResults(getValidationResults(((IndexedPanel) widget).getWidget(i)));
-//            }
-//        }
-        return results;
     }
 
     @Override
