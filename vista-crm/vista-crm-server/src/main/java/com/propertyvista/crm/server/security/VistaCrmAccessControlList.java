@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.crm.rpc.CRMImpliedPermission;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.CommunicationGroupCrudService;
 import com.propertyvista.crm.rpc.services.CommunicationMessageAttachmentUploadService;
@@ -262,6 +263,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
     private static final boolean allowAllEntityDuringDevelopment = true;
 
     public VistaCrmAccessControlList() {
+
+        grant(VistaBasicBehavior.CRM, new CRMImpliedPermission());
 
         if (allowAllDuringDevelopment || VistaDemo.isDemo()) {
             // Debug
