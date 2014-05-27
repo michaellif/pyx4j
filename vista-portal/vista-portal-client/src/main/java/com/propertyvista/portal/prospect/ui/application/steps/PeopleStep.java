@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.prospect.ui.application.steps;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
@@ -21,10 +24,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -86,6 +91,38 @@ public class PeopleStep extends ApplicationWizardStep {
             }
         }
 
+        @Override
+        public void addValidations() {
+            super.addValidations();
+
+            this.addComponentValidator(new AbstractComponentValidator<IList<CoapplicantDTO>>() {
+                @Override
+                public AbstractValidationError isValid() {
+                    if (hasDuplicateEmails(getComponent().getValue())) {
+                        return new BasicValidationError(getComponent(), i18n.tr("Co-Applicants have the same email address"));
+                    }
+                    return null;
+                }
+
+                private boolean hasDuplicateEmails(IList<CoapplicantDTO> value) {
+                    boolean duplicate = false;
+                    Collection<String> emails = new ArrayList<>();
+
+                    for (CoapplicantDTO coap : value) {
+                        if (!coap.email().isNull()) {
+                            if (emails.contains(coap.email().getValue())) {
+                                duplicate = true;
+                                break;
+                            }
+                            emails.add(coap.email().getValue());
+                        }
+                    }
+
+                    return duplicate;
+                }
+            });
+        }
+
         class CoapplicantForm extends CForm<CoapplicantDTO> {
 
             public CoapplicantForm() {
@@ -114,7 +151,6 @@ public class PeopleStep extends ApplicationWizardStep {
                         get(proto().name().lastName()).setMockValue(person.name().lastName().getValue());
                         get(proto().relationship()).setMockValue(PersonRelationship.Spouse);
                         get(proto().email()).setMockValue(person.email().getValue());
-
                     }
                 });
             }

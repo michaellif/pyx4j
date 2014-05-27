@@ -140,28 +140,53 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    if (hasDuplicateEmails(getComponent().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)"));
+                    OnlineApplicationDTO value = getComponent().getValue();
+
+                    if (hasDuplicateEmails0(value)) {
+                        return new BasicValidationError(getComponent(), i18n.tr("Applicant and Co-applicant have the same email address"));
+                    }
+
+                    if (hasDuplicateEmails1(value)) {
+                        return new BasicValidationError(getComponent(), i18n.tr("Tenant and Guarantor have the same email address"));
                     }
                 }
 
-                return (BasicValidationError) new EntityContainerValidator().isValid();
+                EntityContainerValidator std = new EntityContainerValidator();
+                std.setComponent(getComponent());
+                return (BasicValidationError) std.isValid();
             }
 
-            private boolean hasDuplicateEmails(OnlineApplicationDTO value) {
+            private boolean hasDuplicateEmails0(OnlineApplicationDTO value) {
+                if (!value.applicant().person().email().isNull()) {
+                    for (CoapplicantDTO coap : value.coapplicants()) {
+                        if (value.applicant().person().email().getValue().equals(coap.email().getValue())) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            private boolean hasDuplicateEmails1(OnlineApplicationDTO value) {
                 boolean duplicate = false;
 
-                Collection<String> emails = new ArrayList<>();
-                emails.add(value.applicant().person().email().getValue());
+                if (!value.guarantors().isEmpty()) {
+                    Collection<String> emails = new ArrayList<>();
 
-                for (CoapplicantDTO coap : value.coapplicants()) {
-                    emails.add(coap.email().getValue());
-                }
+                    if (!value.applicant().person().email().isNull()) {
+                        emails.add(value.applicant().person().email().getValue());
+                    }
+                    for (CoapplicantDTO coap : value.coapplicants()) {
+                        if (!coap.email().isNull()) {
+                            emails.add(coap.email().getValue());
+                        }
+                    }
 
-                for (GuarantorDTO grnt : value.guarantors()) {
-                    if (emails.contains(grnt.email().getValue())) {
-                        duplicate = true;
-                        break;
+                    for (GuarantorDTO grnt : value.guarantors()) {
+                        if (emails.contains(grnt.email().getValue())) {
+                            duplicate = true;
+                            break;
+                        }
                     }
                 }
 

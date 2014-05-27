@@ -68,6 +68,7 @@ public class AboutYouStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, proto().applicant().person().mobilePhone()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().applicant().person().workPhone()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().applicant().person().email()).decorate().componentWidth(230);
+        get(proto().applicant().person().email()).setMandatory(true);
 
         formPanel.h3(i18n.tr("Identification Documents"));
         formPanel.append(Location.Left, proto().applicant().documents(), fileUpload);
