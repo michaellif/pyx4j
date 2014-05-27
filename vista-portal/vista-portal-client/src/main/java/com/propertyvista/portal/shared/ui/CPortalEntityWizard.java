@@ -85,7 +85,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     public void calculateButtonsState() {
         if (getDecorator() instanceof WizardDecorator) {
-            ((WizardDecorator) getDecorator()).calculateButtonsState();
+            ((WizardDecorator<E>) getDecorator()).calculateButtonsState();
         }
     }
 
