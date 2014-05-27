@@ -128,16 +128,4 @@ public class ValidationResults {
         return validationErrors.size() == 0;
     }
 
-    public static ValidationResults getValidationResults(Widget widget) {
-        ValidationResults results = new ValidationResults();
-        if (widget instanceof IValidatable) {
-            results.appendValidationResults(((IValidatable) widget).getValidationResults());
-        } else if (widget instanceof HasWidgets) {
-            for (Widget childWidget : ((HasWidgets) widget)) {
-                results.appendValidationResults(getValidationResults(childWidget));
-            }
-        }
-        return results;
-    }
-
 }

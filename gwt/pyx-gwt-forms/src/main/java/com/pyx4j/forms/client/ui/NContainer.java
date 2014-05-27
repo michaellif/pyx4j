@@ -65,6 +65,10 @@ public class NContainer<DATA_TYPE extends IObject<?>> extends NComponent<DATA_TY
 
     @Override
     public void showErrors(boolean show) {
+        for (CComponent<?, ?, ?> component : getCComponent().getComponents()) {
+            if (component.getNativeComponent() != null) {
+                component.getNativeComponent().showErrors(show);
+            }
+        }
     }
-
 }

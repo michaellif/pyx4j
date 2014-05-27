@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
+import com.pyx4j.forms.client.validators.ValidatableWidget;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -65,7 +66,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CForm<E> {
                             public void execute() {
                                 for (int i = 0; i < tabPanel.size(); i++) {
                                     Tab tab = tabPanel.getTab(i);
-                                    ValidationResults validationResults = ValidationResults.getValidationResults(tab);
+                                    ValidationResults validationResults = ValidatableWidget.getValidationResults(tab);
                                     if (validationResults.isValid()) {
                                         tab.setTabWarning(null);
                                     } else {

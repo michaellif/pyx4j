@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.IValidatable;
+import com.pyx4j.forms.client.validators.ValidatableWidget;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
 public class WizardStep extends SimplePanel implements IValidatable {
@@ -100,18 +101,12 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     @Override
     public ValidationResults getValidationResults() {
-        if (content instanceof IValidatable) {
-            return ((IValidatable) content).getValidationResults();
-        } else {
-            return new ValidationResults();
-        }
+        return ValidatableWidget.getValidationResults(content);
     }
 
     @Override
     public void showErrors(boolean show) {
-        if (content instanceof IValidatable) {
-            ((IValidatable) content).showErrors(show);
-        }
+        ValidatableWidget.showErrors(content, show);
     }
 
 }
