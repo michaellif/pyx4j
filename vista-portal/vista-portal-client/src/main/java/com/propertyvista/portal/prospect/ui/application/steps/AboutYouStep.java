@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.prospect.ui.application.editors.IdUploaderFolder;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
@@ -100,6 +102,28 @@ public class AboutYouStep extends ApplicationWizardStep {
                     }
                 }
                 return null;
+            }
+        });
+
+        get(proto().applicant().person().homePhone()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().applicant().person().workPhone())));
+        get(proto().applicant().person().mobilePhone()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().applicant().person().workPhone())));
+        get(proto().applicant().person().workPhone()).addComponentValidator(new AbstractComponentValidator<String>() {
+
+            @Override
+            public BasicValidationError isValid() {
+                    if (hasNoPhone(getWizard().getValue())) {
+                        return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant!"));
+                    }
+
+                return null;
+            }
+
+            private boolean hasNoPhone(OnlineApplicationDTO value) {
+                //@formatter:off
+                return ( value.applicant().person().homePhone().isNull() &&
+                         value.applicant().person().mobilePhone().isNull() &&
+                         value.applicant().person().workPhone().isNull() );
+                //@formatter:on
             }
         });
     }

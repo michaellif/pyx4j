@@ -148,10 +148,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                     if (hasDuplicateEmails(getComponent().getValue())) {
                         return new BasicValidationError(getComponent(), i18n.tr("Tenant(s) and Guarantor(s) have the same email(s)!?"));
                     }
-
-                    if (hasNoPhone(getComponent().getValue())) {
-                        return new BasicValidationError(getComponent(), i18n.tr("At least one phone number is required for applicant!"));
-                    }
                 }
 
                 return null;
@@ -175,14 +171,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 }
 
                 return duplicate;
-            }
-
-            private boolean hasNoPhone(OnlineApplicationDTO value) {
-                //@formatter:off
-                return ( value.applicant().person().homePhone().isNull() &&
-                         value.applicant().person().mobilePhone().isNull() &&
-                         value.applicant().person().workPhone().isNull() );
-                //@formatter:on
             }
         });
     }
