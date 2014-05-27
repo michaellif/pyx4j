@@ -179,7 +179,7 @@ public class CEntityWizard<E extends IEntity> extends CForm<E> {
     protected final void finish() {
         setVisitedRecursive();
         if (!isValid()) {
-            MessageDialog.error(i18n.tr("Error"), i18n.tr("Please correct errors or omissions and try to submit again."));
+            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(false));
             log.error("Wizard steps contain errors or omissions: {}", getValidationResults().getValidationMessage(false));
         } else {
             onFinish();
