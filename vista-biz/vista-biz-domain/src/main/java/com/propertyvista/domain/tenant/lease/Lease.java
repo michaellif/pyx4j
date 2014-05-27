@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
@@ -124,7 +125,7 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
 
         public static EnumSet<Status> noAutoPay() {
             EnumSet<Status> result = EnumSet.of(Completed, Cancelled, Closed);
-            result.addAll(draft()); // disable, currently, draft leases auto pay. 
+            result.addAll(draft()); // disable, currently, draft leases auto pay.
             return result;
         }
 
@@ -228,14 +229,19 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
      */
     IPrimitive<LogicalDate> terminationLeaseTo();
 
+    @Caption(name = "Expected Move-In")
     IPrimitive<LogicalDate> expectedMoveIn();
 
+    @Caption(name = "Expected Move-Out")
     IPrimitive<LogicalDate> expectedMoveOut();
 
+    @Caption(name = "Actual Move-In")
     IPrimitive<LogicalDate> actualMoveIn();
 
+    @Caption(name = "Actual Move-Out")
     IPrimitive<LogicalDate> actualMoveOut();
 
+    @Caption(name = "Move-Out Submission Date")
     IPrimitive<LogicalDate> moveOutSubmissionDate();
 
     @ReadOnly

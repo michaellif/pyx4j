@@ -252,7 +252,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     protected void createStaticPages(SiteDescriptor site, List<LocaleInfo> siteLocale) {
         {
-            final String caption = "About us";
+            final String caption = "About Us";
             final String secondaryCaption = "General";
             PageDescriptor page = createPage(caption, PageDescriptor.Type.staticContent);
             for (LocaleInfo li : siteLocale) {

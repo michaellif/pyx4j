@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -62,18 +62,18 @@ public class AccountRecoveryOptionsDialog extends Composite {
         this.cancellationTimer.schedule(CANCEL_TIMEOUT);
 
         this.dialog = new Dialog(//@formatter:off
-                i18n.tr("Account Recovery Options"), 
-                (forceSetup ? new OkOption() { @Override public boolean onClickOk() { return AccountRecoveryOptionsDialog.this.onClickOk();} }                              
-                            : new OkCancelOption() { 
+                i18n.tr("Account Recovery Options"),
+                (forceSetup ? new OkOption() { @Override public boolean onClickOk() { return AccountRecoveryOptionsDialog.this.onClickOk();} }
+                            : new OkCancelOption() {
                                 @Override public boolean onClickOk() { return AccountRecoveryOptionsDialog.this.onClickOk();}
-                                @Override public boolean onClickCancel() { return AccountRecoveryOptionsDialog.this.onClickCancel();}})            
+                                @Override public boolean onClickCancel() { return AccountRecoveryOptionsDialog.this.onClickCancel();}})
                 , this.recoveryOptionsForm.asWidget()
         ) {
             {
                 setDialogPixelWidth(700);
             }
-            @Override protected String optionTextOk() { 
-                return i18n.tr("Update"); 
+            @Override protected String optionTextOk() {
+                return i18n.tr("Update");
             }
         };//@formatter:on
     }
@@ -97,7 +97,7 @@ public class AccountRecoveryOptionsDialog extends Composite {
         service.updateRecoveryOptions(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                MessageDialog.info(i18n.tr("Account recovery options were updated successfully"));
+                MessageDialog.info(i18n.tr("Account recovery options were updated successfully."));
                 onUpdateRecoveryOptionsSuccess(result);
             }
 

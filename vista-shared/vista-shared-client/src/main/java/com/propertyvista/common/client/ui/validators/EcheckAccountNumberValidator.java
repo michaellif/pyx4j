@@ -32,7 +32,7 @@ public class EcheckAccountNumberValidator extends AbstractComponentValidator<Acc
             return null;
         } else if (CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
             return ValidationUtils.isAccountNumberValid(value.newNumber().getValue()) ? null : new BasicValidationError(getComponent(),
-                    i18n.tr("Account Number should consist of up to 12 digits"));
+                    i18n.tr("Account Number should consist of up to 12 digits."));
         } else {
             return null;
         }
