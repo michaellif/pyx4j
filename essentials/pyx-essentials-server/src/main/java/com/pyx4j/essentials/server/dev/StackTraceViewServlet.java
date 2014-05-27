@@ -27,6 +27,8 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,8 +50,17 @@ public class StackTraceViewServlet extends HttpServlet {
         out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         out.println("\n");
 
+        Map<Long, Thread> threadsById = new HashMap<>();
+        for (Map.Entry<Thread, StackTraceElement[]> me : Thread.getAllStackTraces().entrySet()) {
+            threadsById.put(me.getKey().getId(), me.getKey());
+        }
+
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         for (ThreadInfo threadInfo : threadMXBean.dumpAllThreads(true, false)) {
+            Thread thread = threadsById.get(threadInfo.getThreadId());
+            if (thread != null) {
+
+            }
             out.print(threadInfo.toString());
         }
 
