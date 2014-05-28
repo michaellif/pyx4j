@@ -21,7 +21,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
@@ -38,23 +37,22 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
 
         main.hr();
 
-        main.append(Location.Left, inject(proto().moveInDate(), new FieldDecoratorBuilder(10).build()));
-        main.append(Location.Left, inject(proto().moveOutDate(), new FieldDecoratorBuilder(10).build()));
+        main.append(Location.Left, proto().moveInDate()).decorate().componentWidth(120);
+        main.append(Location.Left, proto().moveOutDate()).decorate().componentWidth(120);
+        main.append(Location.Left, proto().rented()).decorate().componentWidth(180);
+        main.append(Location.Left, proto().payment()).decorate().componentWidth(120);
+        main.append(Location.Right, proto().propertyCompany()).decorate().componentWidth(250);
+        main.append(Location.Right, proto().managerName()).decorate().componentWidth(250);
+        main.append(Location.Right, proto().managerPhone()).decorate().componentWidth(250);
+        main.append(Location.Right, proto().managerEmail()).decorate().componentWidth(250);
 
-        CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) inject(proto().rented(), new FieldDecoratorBuilder(15).build());
+        CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) get(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
             public void onValueChange(ValueChangeEvent<OwnedRented> event) {
                 setVisibility(getValue());
             }
         });
-
-        main.append(Location.Left, rentedComponent);
-        main.append(Location.Left, inject(proto().payment(), new FieldDecoratorBuilder(8).build()));
-        main.append(Location.Right, inject(proto().propertyCompany(), new FieldDecoratorBuilder(20).build()));
-        main.append(Location.Right, inject(proto().managerName(), new FieldDecoratorBuilder(20).build()));
-        main.append(Location.Right, inject(proto().managerPhone(), new FieldDecoratorBuilder(20).build()));
-        main.append(Location.Right, inject(proto().managerEmail(), new FieldDecoratorBuilder(20).build()));
 
         return main;
     }

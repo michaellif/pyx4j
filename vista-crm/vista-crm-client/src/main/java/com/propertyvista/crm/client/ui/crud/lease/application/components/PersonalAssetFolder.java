@@ -20,12 +20,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
@@ -69,13 +69,12 @@ public class PersonalAssetFolder extends VistaBoxFolder<CustomerScreeningPersona
 
         @Override
         protected IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-            int row = -1;
+            FormPanel main = new FormPanel(this);
 
-            main.setWidget(++row, 0, inject(proto().assetType(), new FieldDecoratorBuilder(15).build()));
-            main.setWidget(++row, 0, inject(proto().percent(), new FieldDecoratorBuilder(5).build()));
-            main.setWidget(++row, 0, inject(proto().assetValue(), new FieldDecoratorBuilder(10).build()));
-            main.setWidget(++row, 0, inject(proto().documents(), new ProofOfAssetUploaderFolder()));
+            main.append(Location.Dual, proto().assetType()).decorate().componentWidth(150);
+            main.append(Location.Dual, proto().percent()).decorate().componentWidth(50);
+            main.append(Location.Dual, proto().assetValue()).decorate().componentWidth(100);
+            main.append(Location.Dual, proto().documents(), new ProofOfAssetUploaderFolder());
 
             return main;
         }
