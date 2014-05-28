@@ -127,6 +127,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         super.init(folderItem);
 
         toolbar.setEntityForm(folderItem.getEntityForm());
+        toolbar.update(collapsablePanel.isExpended());
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
