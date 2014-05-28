@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -34,10 +33,6 @@ public class PetDataEditor extends CForm<Pet> {
         super(Pet.class);
     }
 
-    public PetDataEditor(IEditableComponentFactory factory) {
-        super(Pet.class, factory);
-    }
-
     @Override
     protected IsWidget createContent() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
@@ -47,7 +42,6 @@ public class PetDataEditor extends CForm<Pet> {
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().color()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().breed()).decorate().componentWidth(180);
-
         formPanel.append(Location.Left, proto().weight()).decorate().componentWidth(50);
         formPanel.append(Location.Left, proto().weightUnit()).decorate().componentWidth(50);
         formPanel.append(Location.Left, proto().birthDate()).decorate().componentWidth(120);
