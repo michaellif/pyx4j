@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -42,6 +42,7 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         ApplicationsGadgetDataDTO data = EntityFactory.create(ApplicationsGadgetDataDTO.class);
 
         count(data.applications(), buildingsFilter);
+        count(data.inProgress(), buildingsFilter);
         count(data.pending(), buildingsFilter);
         count(data.approved(), buildingsFilter);
         count(data.declined(), buildingsFilter);
@@ -70,11 +71,12 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         IObject<?> applicationsFilterMember = proto.getMember(new Path(applicationsFilter));
 
         if (proto.applications() == applicationsFilterMember) {
-            // I don't know why but Persistence.count() works wrong in if we don't add this criterion 
-            criteria.in(criteria.proto().leaseApplication().status(), Arrays.asList(LeaseApplication.Status.Created, LeaseApplication.Status.Approved,
-                    LeaseApplication.Status.Declined, LeaseApplication.Status.Cancelled));
+            criteria.in(criteria.proto().leaseApplication().status(), EnumSet.allOf(LeaseApplication.Status.class));
+        } else if (proto.inProgress() == applicationsFilterMember) {
+            criteria.add(PropertyCriterion.in(criteria.proto().leaseApplication().status(),
+                    EnumSet.of(LeaseApplication.Status.Created, LeaseApplication.Status.OnlineApplication)));
         } else if (proto.pending() == applicationsFilterMember) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Created));
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.PendingDecision));
         } else if (proto.approved() == applicationsFilterMember) {
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Approved));
         } else if (proto.declined() == applicationsFilterMember) {
@@ -82,7 +84,7 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         } else if (proto.cancelled() == applicationsFilterMember) {
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Cancelled));
         } else {
-            throw new IllegalStateException("It's unknown to to handle the following filter context: '" + applicationsFilterMember.getPath().toString() + "'");
+            throw new IllegalStateException("Unknown filter property: '" + applicationsFilter + "'");
         }
 
         return criteria;

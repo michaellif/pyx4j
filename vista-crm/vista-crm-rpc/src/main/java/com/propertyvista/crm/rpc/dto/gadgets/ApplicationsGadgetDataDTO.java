@@ -24,6 +24,8 @@ public interface ApplicationsGadgetDataDTO extends IEntity {
     @Caption(name = "Applications This Month")
     IPrimitive<Integer> applications();
 
+    IPrimitive<Integer> inProgress();
+
     IPrimitive<Integer> pending();
 
     IPrimitive<Integer> approved();

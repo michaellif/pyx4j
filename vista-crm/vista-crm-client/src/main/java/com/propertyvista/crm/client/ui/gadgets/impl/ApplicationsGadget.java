@@ -51,6 +51,7 @@ public class ApplicationsGadget extends CounterGadgetInstanceBase<ApplicationsGa
     protected void bindDetailsFactories() {
         bind(proto().applications());
         bind(proto().approved());
+        bind(proto().inProgress());
         bind(proto().pending());
         bind(proto().declined());
         bind(proto().cancelled());
