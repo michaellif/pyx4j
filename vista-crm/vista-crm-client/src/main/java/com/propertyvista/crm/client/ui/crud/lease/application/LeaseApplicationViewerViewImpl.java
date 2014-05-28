@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -366,7 +367,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(newPaymentAction, status.isDraft() && isPaymentAccepted(value));
 
         // edit/view terms enabling logic:
-        editButton.setVisible(status.isDraft());
+        BigDecimal progress = (value.masterApplicationStatus().progress().isNull() ? BigDecimal.ZERO : value.masterApplicationStatus().progress().getValue());
+        editButton.setVisible(status.isDraft() && progress.compareTo(BigDecimal.ZERO) == 0);
         termsButton.setVisible(!status.isDraft());
 
         documentsButton.setVisible(status.isDraft());
