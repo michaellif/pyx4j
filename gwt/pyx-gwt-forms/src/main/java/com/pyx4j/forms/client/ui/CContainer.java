@@ -64,6 +64,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     @SuppressWarnings("unchecked")
     public CContainer() {
+
         nativeComponent = new NContainer<DATA_TYPE>(this);
 
         if (false) {
@@ -79,6 +80,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             nativeComponent.getElement().getStyle().setProperty("border", "red solid 1px");
         }
 
+        setVisited(true);
         applyAccessibilityRules();
 
         addComponentValidator(new EntityContainerValidator());
