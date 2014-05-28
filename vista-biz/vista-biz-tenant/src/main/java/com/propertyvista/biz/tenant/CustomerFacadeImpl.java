@@ -277,7 +277,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             persistCustomer(tenant.customer());
         } catch (UniqueConstraintUserRuntimeException e) {
             throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)//@formatter:off
-                    .addError(selfRegistration.email(), i18n.tr("Your Email already registered, Contact Property Owner"))
+                    .addError(selfRegistration.email(), i18n.tr("Your Email already registered, Contact Property Manager"))
                     .build();//@formatter:on            
         }
 
