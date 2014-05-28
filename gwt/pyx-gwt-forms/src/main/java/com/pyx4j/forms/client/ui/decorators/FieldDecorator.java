@@ -247,6 +247,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         });
 
         renderMandatoryStar();
+        renderValidationMessage();
         updateLabelPosition();
         updateLabelAlignment();
         updateNote();

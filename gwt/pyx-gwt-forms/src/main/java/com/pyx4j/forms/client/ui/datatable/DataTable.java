@@ -518,7 +518,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     public void updateColumnVizibility(int offsetWidth, boolean reduceColumns) {
-        //System.out.println("+++++++++++++++++++ offsetWidth=" + offsetWidth + " reduceColumns=" + reduceColumns);
+
     }
 
     private class ColumnSelectorDialog extends OkCancelDialog {
