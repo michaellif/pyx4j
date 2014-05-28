@@ -33,19 +33,16 @@ import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 
 public class MenuActivity extends AbstractActivity implements MenuPresenter {
 
-    private final MenuView view;
-
     private ApplicationWizard applicationWizard;
 
     private HandlerRegistration handlerRegistration;
 
     public MenuActivity(Place place) {
-        this.view = ProspectPortalSite.getViewFactory().getView(MenuView.class);
-        view.setPresenter(this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        final MenuView view = ProspectPortalSite.getViewFactory().getView(MenuView.class);
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
 
@@ -53,10 +50,9 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
             @Override
             public void onStateChange(ApplicationWizardStateChangeEvent event) {
                 if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.init
-                        || event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.discard) {
+                        || event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.discard
+                        || event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.stepChange) {
                     applicationWizard = event.getApplicationWizard();
-                    view.updateStepButtons(applicationWizard);
-                } else if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.stepChange) {
                     view.updateStepButtons(applicationWizard);
                 }
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));

@@ -28,7 +28,6 @@ import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
@@ -42,10 +41,6 @@ import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 
 public class MenuViewImpl extends DockPanel implements MenuView {
-
-    private static final I18n i18n = I18n.get(MenuViewImpl.class);
-
-    private MenuPresenter presenter;
 
     private final HeaderHolder headerHolder;
 
@@ -115,11 +110,6 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         }
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-    }
-
-    @Override
-    public void setPresenter(MenuPresenter presenter) {
-        this.presenter = presenter;
     }
 
     private void doLayout(LayoutType layoutType) {

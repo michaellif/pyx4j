@@ -25,8 +25,6 @@ public interface MenuView extends IsView {
 
     void setUserName(String userName);
 
-    public void setPresenter(MenuPresenter presenter);
-
     void updateStepButtons(ApplicationWizard applicationWizard);
 
     void setApplicationsSelectorEnabled(boolean enabled);
