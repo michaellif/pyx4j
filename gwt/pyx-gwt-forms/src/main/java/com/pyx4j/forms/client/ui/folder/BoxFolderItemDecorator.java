@@ -128,6 +128,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
         toolbar.setEntityForm(folderItem.getEntityForm());
         toolbar.update(collapsablePanel.isExpended());
+        toolbar.setWarningMessage(folderItem.getValidationResults().getValidationShortMessage());
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -136,9 +137,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                     toolbar.update(collapsablePanel.isExpended());
                 }
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.visited)) {
-                    String message = null;
-                    message = folderItem.getValidationResults().getValidationShortMessage();
-                    toolbar.setWarningMessage(message.isEmpty() ? null : message);
+                    toolbar.setWarningMessage(folderItem.getValidationResults().getValidationShortMessage());
                 }
             }
         });

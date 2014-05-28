@@ -80,7 +80,6 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
             nativeComponent.getElement().getStyle().setProperty("border", "red solid 1px");
         }
 
-        setVisited(true);
         applyAccessibilityRules();
 
         addComponentValidator(new EntityContainerValidator());
@@ -158,7 +157,7 @@ public abstract class CContainer<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
 
     @Override
     public boolean isValidatable() {
-        return isVisible() && isEditable() && isEnabled() && !isViewable() && isVisited();
+        return isVisible() && !isViewable();
     }
 
     @Override

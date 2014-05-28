@@ -141,7 +141,7 @@ public class EntityContainerDecoratorToolbar<E extends IEntity> extends Horizont
     }
 
     public void setWarningMessage(String message) {
-        if (message != null) {
+        if (message != null && !message.isEmpty()) {
             warnImage.setTitle(message);
             warnImage.setVisible(true);
         } else {
