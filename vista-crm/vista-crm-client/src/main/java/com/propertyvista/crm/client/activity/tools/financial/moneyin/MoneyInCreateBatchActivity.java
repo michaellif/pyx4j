@@ -55,6 +55,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCandidateSearchVisorView;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCandidateSearchVisorView.MoneyInCandidateSearchViewController;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaModel;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -72,6 +73,14 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private static final I18n i18n = I18n.get(MoneyInCreateBatchActivity.class);
 
+    public abstract class MoneyInCandidateSearchVisorController extends AbstractVisorController implements MoneyInCandidateSearchViewController {
+
+        public MoneyInCandidateSearchVisorController() {
+            super(MoneyInCreateBatchActivity.this.view);
+        }
+
+    }
+
     private final MoneyInCreateBatchView view;
 
     private final ListDataProvider<MoneyInCandidateDTO> searchResultsProvider;
@@ -86,7 +95,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private final Map<String, Comparator<MoneyInCandidateDTO>> sortComparatorsMap;
 
-    private final AbstractVisorController addPaymentCandidatesController;
+    private final MoneyInCandidateSearchVisorController addPaymentCandidatesController;
 
     private final MoneyInCandidateSearchVisorView paymentCandidateSearchVisor;
 
@@ -102,11 +111,20 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
         sortComparatorsMap = createSortComparatorsMap();
 
-        addPaymentCandidatesController = new AbstractVisorController(this.view) {
+        addPaymentCandidatesController = new MoneyInCandidateSearchVisorController() {
+
             @Override
             public void show() {
                 paymentCandidateSearchVisor.populateLister();
                 getParentView().showVisor(paymentCandidateSearchVisor);
+            }
+
+            @Override
+            public void addPaymentCandidate(List<MoneyInCandidateDTO> candidates) {
+                for (MoneyInCandidateDTO candidate : candidates) {
+                    setProcessCandidate(candidate, true);
+                }
+                hide();
             }
         };
 
