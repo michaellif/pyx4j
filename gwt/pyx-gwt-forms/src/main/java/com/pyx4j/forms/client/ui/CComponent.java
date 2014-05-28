@@ -347,7 +347,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public void setAsyncValidationErrorMessage(String message) {
-        if (asyncValidator != null) {
+        if (asyncValidator == null) {
             addComponentValidator(asyncValidator = new AsyncValidator<>());
         }
         if (message == null || message.trim().equals("")) {
