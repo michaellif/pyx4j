@@ -674,13 +674,15 @@ $$
 LANGUAGE SQL VOLATILE;
 
 /**
-***	-----------------------------------------------------------------------
+***	=======================================================================================
 ***
 ***		Compares schema table constraints
 ***		New and improved version, now works on primary and foreign keys
 ***		as well as check constraints.
+***
+***     THis version is intended to be less memory-consuming
 ***		
-***	------------------------------------------------------------------------
+***	=======================================================================================
 **/
 DROP FUNCTION _dba_.compare_schema_constraints(text,text);
 CREATE OR REPLACE FUNCTION _dba_.compare_schema_constraints(text,text)
@@ -695,48 +697,83 @@ RETURNS TABLE (	constraint_name         pg_catalog.name,
                 constraint_text         TEXT,
                 schema_version          VARCHAR(64)) AS
 $$
-        WITH t AS (     SELECT 	a.conname AS constraint_name,
-	                        a.contype::char AS constraint_type,
-	                        a.condeferrable AS is_deferrable,
-	                        a.condeferred AS is_deferred,
-	                        b.relname AS table_name,
-		                c.relname AS ref_table_name,
+    WITH t0 AS ( SELECT  co.conname AS constraint_name,
+                        co.contype::char AS constraint_type,
+                        co.condeferrable AS is_deferrable,
+	                    co.condeferred AS is_deferred,
+                        c0.relname AS table_name,
+		                c1.relname AS ref_table_name,
 		                d.colname AS column_name,
         		        e.ref_colname AS ref_column_name,
-                        CASE WHEN      a.contype::char = 'c' THEN
-                                regexp_replace(regexp_replace(regexp_replace(a.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
+                        CASE WHEN      co.contype::char = 'c' THEN
+                                regexp_replace(regexp_replace(regexp_replace(co.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
                                 '(\()?(''([a-zA-Z0-9_\s]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
-                        ELSE a.consrc END AS constraint_text,
-        		        f.nspname AS schema_name
-	                FROM            pg_constraint a
-                        JOIN 	        pg_class b ON (a.conrelid = b.oid)
-                        LEFT JOIN 	pg_class c ON (a.confrelid = c.oid)
-                        JOIN 	        (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
-                                        FROM    (SELECT oid,conrelid,unnest(conkey) AS conkey FROM pg_constraint) AS a
-                                        JOIN    pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum) 
-                                        GROUP BY a.oid) AS d ON (a.oid = d.oid)
-                        LEFT JOIN       (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS ref_colname
-                                        FROM    (SELECT oid,confrelid,unnest(confkey) AS confkey FROM pg_constraint) AS a
-                                        LEFT JOIN    pg_attribute b ON (a.confrelid = b.attrelid AND a.confkey = b.attnum) 
-                                        GROUP BY a.oid) AS e ON (a.oid = e.oid)
-                        JOIN 	pg_namespace f ON (a.connamespace = f.oid) )
-        SELECT a.*,$1 AS schema_name FROM 
-        (SELECT constraint_name,constraint_type,is_deferrable,is_deferred,
-                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
-        FROM t WHERE  schema_name = $1       
-        EXCEPT 
-        SELECT  constraint_name,constraint_type,is_deferrable,is_deferred,
-                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
-        FROM t WHERE schema_name = $2) AS a
-        UNION
-        SELECT a.*,$2 AS schema_name FROM 
-        (SELECT constraint_name,constraint_type,is_deferrable,is_deferred,
-                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
-        FROM t WHERE  schema_name = $2     
-        EXCEPT 
-        SELECT  constraint_name,constraint_type,is_deferrable,is_deferred,
-                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
-        FROM t WHERE schema_name = $1) AS a;
+                        ELSE co.consrc END AS constraint_text
+
+                FROM    pg_constraint co
+                JOIN 	pg_class c0 ON (co.conrelid = c0.oid)
+                LEFT JOIN 	pg_class c1 ON (co.confrelid = c1.oid)
+                JOIN    (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
+                        FROM    (SELECT c.oid,c.conrelid,unnest(c.conkey) AS conkey 
+                                FROM    pg_constraint c 
+                                JOIN    pg_namespace n ON (c.connamespace = n.oid)
+                                WHERE   n.nspname = $1) AS a
+                        JOIN    pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum) 
+                        GROUP BY a.oid) AS d ON (co.oid = d.oid)
+                LEFT JOIN   (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS ref_colname
+                            FROM    (SELECT c.oid,c.confrelid,unnest(c.confkey) AS confkey 
+                                    FROM    pg_constraint c 
+                                    JOIN    pg_namespace n ON (c.connamespace = n.oid)
+                                    WHERE   n.nspname = $1) AS a
+                            LEFT JOIN    pg_attribute b ON (a.confrelid = b.attrelid AND a.confkey = b.attnum) 
+                            GROUP BY a.oid) AS e ON (co.oid = e.oid)),
+    t1 AS ( SELECT  co.conname AS constraint_name,
+                        co.contype::char AS constraint_type,
+                        co.condeferrable AS is_deferrable,
+	                    co.condeferred AS is_deferred,
+                        c0.relname AS table_name,
+		                c1.relname AS ref_table_name,
+		                d.colname AS column_name,
+        		        e.ref_colname AS ref_column_name,
+                        CASE WHEN      co.contype::char = 'c' THEN
+                                regexp_replace(regexp_replace(regexp_replace(co.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
+                                '(\()?(''([a-zA-Z0-9_\s]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
+                        ELSE co.consrc END AS constraint_text
+
+                FROM    pg_constraint co
+                JOIN 	pg_class c0 ON (co.conrelid = c0.oid)
+                LEFT JOIN 	pg_class c1 ON (co.confrelid = c1.oid)
+                JOIN    (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
+                        FROM    (SELECT c.oid,c.conrelid,unnest(c.conkey) AS conkey 
+                                FROM    pg_constraint c 
+                                JOIN    pg_namespace n ON (c.connamespace = n.oid)
+                                WHERE   n.nspname = $2) AS a
+                        JOIN    pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum) 
+                        GROUP BY a.oid) AS d ON (co.oid = d.oid)
+                LEFT JOIN   (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS ref_colname
+                            FROM    (SELECT c.oid,c.confrelid,unnest(c.confkey) AS confkey 
+                                    FROM    pg_constraint c 
+                                    JOIN    pg_namespace n ON (c.connamespace = n.oid)
+                                    WHERE   n.nspname = $2) AS a
+                            LEFT JOIN    pg_attribute b ON (a.confrelid = b.attrelid AND a.confkey = b.attnum) 
+                            GROUP BY a.oid) AS e ON (co.oid = e.oid))
+    SELECT a.*,$1 AS schema_name 
+    FROM    (SELECT constraint_name,constraint_type,is_deferrable,is_deferred,
+                    table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+            FROM t0    
+            EXCEPT 
+            SELECT  constraint_name,constraint_type,is_deferrable,is_deferred,
+                    table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+            FROM t1 ) AS a
+    UNION
+    SELECT a.*,$2 AS schema_name 
+    FROM    (SELECT constraint_name,constraint_type,is_deferrable,is_deferred,
+                    table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+            FROM t1   
+            EXCEPT 
+            SELECT  constraint_name,constraint_type,is_deferrable,is_deferred,
+                    table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+            FROM t0) AS a;
 $$
 LANGUAGE SQL VOLATILE;
 
