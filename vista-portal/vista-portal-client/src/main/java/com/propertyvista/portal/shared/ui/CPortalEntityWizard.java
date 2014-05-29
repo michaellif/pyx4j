@@ -43,7 +43,9 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
         super.onStepSelected(selectedStep);
         calculateButtonsState();
         PortalSite.scrollToTop();
-        view.getPresenter().onStepSelected(selectedStep);
+        if (view.getPresenter() != null) {
+            view.getPresenter().onStepSelected(selectedStep);
+        }
     }
 
     public IWizardView<? extends IEntity> getView() {
