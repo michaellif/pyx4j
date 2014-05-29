@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -124,7 +124,7 @@ public class NavigStepItem implements IsWidget {
 
     private class ContentPanel extends ComplexPanel {
         private ContentPanel() {
-            setElement(DOM.createElement("li"));
+            setElement(Document.get().createElement("li"));
             setStyleName(PortalRootPaneTheme.StyleName.MainMenuNavigItem.name());
             sinkEvents(Event.ONCLICK);
 

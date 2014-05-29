@@ -16,8 +16,7 @@ package com.propertyvista.portal.shared.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -54,17 +53,6 @@ public class MenuList implements IsWidget {
         return items;
     }
 
-    public MenuItem getMenuItem(Place place) {
-        if (items == null || place == null)
-            return null;
-        for (MenuItem item : items) {
-            if (item.getPlace().equals(place)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
     public MenuItem getSelectedMenuItem() {
         if (items == null)
             return null;
@@ -82,7 +70,7 @@ public class MenuList implements IsWidget {
 
     private class ContentPanel extends ComplexPanel {
         public ContentPanel() {
-            setElement(DOM.createElement("ul"));
+            setElement(Document.get().createElement("ul"));
             setStyleName(PortalRootPaneTheme.StyleName.MainMenuHolder.name());
             setVisible(true);
         }

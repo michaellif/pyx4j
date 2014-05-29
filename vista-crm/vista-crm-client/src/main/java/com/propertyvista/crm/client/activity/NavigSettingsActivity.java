@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.NavigView;
+import com.propertyvista.crm.client.ui.NavigView_OLD;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
@@ -38,13 +38,13 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class NavigSettingsActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
+public class NavigSettingsActivity extends AbstractActivity implements NavigView_OLD.MainNavigPresenter {
     private static final I18n i18n = I18n.get(NavigSettingsActivity.class);
 
-    private final NavigView view;
+    private final NavigView_OLD view;
 
     public NavigSettingsActivity(Place place) {
-        view = CrmSite.getViewFactory().getView(NavigView.class);
+        view = CrmSite.getViewFactory().getView(NavigView_OLD.class);
         view.setPresenter(this);
         withPlace(place);
     }
