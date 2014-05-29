@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -122,6 +125,16 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
         ((LeaseTermCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView()
                 .getValue());
+    }
+
+    @Override
+    public void retirveAvailableDeposits(final AsyncCallback<List<Deposit>> callback, BillableItem item) {
+        ((LeaseTermCrudService) getService()).retirveAvailableDeposits(new DefaultAsyncCallback<Vector<Deposit>>() {
+            @Override
+            public void onSuccess(Vector<Deposit> result) {
+                callback.onSuccess(result);
+            }
+        }, item.<BillableItem> duplicate());
     }
 
     @Override

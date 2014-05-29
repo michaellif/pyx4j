@@ -59,6 +59,6 @@ public class DefaultProductCatalogFacadeYardiImpl implements DefaultProductCatal
 
     @Override
     public void fillDefaultDeposits(Product<?> entity) {
-        DefaultDepositManager.fillDefaultDeposits(entity);
+        DefaultDepositManager.fillDefaultDeposits(entity, false);
     }
 }

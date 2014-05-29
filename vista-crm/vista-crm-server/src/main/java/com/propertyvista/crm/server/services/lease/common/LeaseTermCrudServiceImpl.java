@@ -14,6 +14,10 @@
 package com.propertyvista.crm.server.services.lease.common;
 
 import java.math.BigDecimal;
+import java.util.Vector;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -230,6 +234,26 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, LeaseTermDTO currentValue) {
         callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(currentValue.lease(), productItemId));
+    }
+
+    @Override
+    public void retirveAvailableDeposits(AsyncCallback<Vector<Deposit>> callback, final BillableItem item) {
+        Vector<Deposit> deposits = new Vector<>(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item));
+
+        // filter out already existing (the same type) ones:
+        CollectionUtils.filter(deposits, new Predicate<Deposit>() {
+            @Override
+            public boolean evaluate(final Deposit object) {
+                return !CollectionUtils.exists(item.deposits(), new Predicate<Deposit>() {
+                    @Override
+                    public boolean evaluate(Deposit current) {
+                        return current.type().equals(object.type());
+                    }
+                });
+            }
+        });
+
+        callback.onSuccess(deposits);
     }
 
     @Override

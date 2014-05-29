@@ -699,10 +699,7 @@ public abstract class LeaseAbstractManager {
         // avoid policed deposits for existing Leases:
         if (lease.status().getValue() != Lease.Status.ExistingLease) {
             // set policed deposits:
-            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem);
-            if (deposits != null) {
-                newItem.deposits().addAll(deposits);
-            }
+            newItem.deposits().addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem));
         }
 
         return newItem;

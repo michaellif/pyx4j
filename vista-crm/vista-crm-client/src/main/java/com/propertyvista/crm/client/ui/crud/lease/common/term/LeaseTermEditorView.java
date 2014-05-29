@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
@@ -37,6 +39,8 @@ public interface LeaseTermEditorView extends IEditor<LeaseTermDTO> {
         void setSelectedService(ProductItem item);
 
         void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
+
+        void retirveAvailableDeposits(AsyncCallback<List<Deposit>> callback, BillableItem item);
 
         void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item);
 

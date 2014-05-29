@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.lease.common;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -54,6 +56,8 @@ public interface LeaseTermCrudService extends AbstractVersionedCrudService<Lease
     void setSelectedService(AsyncCallback<LeaseTermDTO> callback, ProductItem serviceId, LeaseTermDTO currentValue);
 
     void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, LeaseTermDTO currentValue);
+
+    void retirveAvailableDeposits(AsyncCallback<Vector<Deposit>> callback, BillableItem item);
 
     void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, LeaseTermDTO currentValue);
 

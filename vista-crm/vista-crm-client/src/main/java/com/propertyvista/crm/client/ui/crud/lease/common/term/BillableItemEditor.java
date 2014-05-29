@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMoneyField;
@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -61,12 +62,10 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseTermDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillableItemEditor extends CForm<BillableItem> {
@@ -527,6 +526,25 @@ public class BillableItemEditor extends CForm<BillableItem> {
         }
 
         @Override
+        protected void addItem() {
+            assert (leaseTermEditorView != null);
+            ((LeaseTermEditorView.Presenter) leaseTermEditorView.getPresenter()).retirveAvailableDeposits(new DefaultAsyncCallback<List<Deposit>>() {
+                @Override
+                public void onSuccess(List<Deposit> result) {
+                    new EntitySelectorListDialog<Deposit>(i18n.tr("Select Deposits"), true, result) {
+                        @Override
+                        public boolean onClickOk() {
+                            for (Deposit item : getSelectedItems()) {
+                                addItem(item);
+                            }
+                            return true;
+                        }
+                    }.show();
+                }
+            }, BillableItemEditor.this.getValue());
+        }
+
+        @Override
         protected CForm<? extends Deposit> createItemForm(IObject<?> member) {
             return new DepositEditor();
         }
@@ -553,16 +571,8 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
-                // TODO MoveIn Deposits
-                if (VistaTODO.VISTA_4340_MoveInDeposit) {
-                    if (column.getObject() == proto().type()) {
-                        CField<?, ?> component = super.createCell(column);
-                        if (component instanceof CComboBox) {
-                            CComboBox<DepositType> typeCombox = (CComboBox<DepositType>) component;
-                            typeCombox.setOptions(Arrays.asList(DepositType.LastMonthDeposit, DepositType.SecurityDeposit));
-                        }
-                        return component;
-                    }
+                if (column.getObject() == proto().type()) {
+                    return inject(column.getObject(), new CEnumLabel());
                 }
 
                 CField<?, ?> comp = super.createCell(column);

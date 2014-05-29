@@ -25,22 +25,22 @@ import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class DefaultDepositManager {
 
-    static void fillDefaultDeposits(Product<?> entity) {
-        entity.version().depositLMR().enabled().setValue(false);
+    static void fillDefaultDeposits(Product<?> entity, boolean enabled) {
+        entity.version().depositLMR().enabled().setValue(enabled);
         entity.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         entity.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.Deposit));
         entity.version().depositLMR().valueType().setValue(ValueType.Percentage);
         entity.version().depositLMR().value().setValue(BigDecimal.ONE);
         entity.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
-        entity.version().depositMoveIn().enabled().setValue(false);
+        entity.version().depositMoveIn().enabled().setValue(enabled);
         entity.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         entity.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.Deposit));
         entity.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
         entity.version().depositMoveIn().value().setValue(BigDecimal.ONE);
         entity.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
-        entity.version().depositSecurity().enabled().setValue(false);
+        entity.version().depositSecurity().enabled().setValue(enabled);
         entity.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         entity.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.Deposit));
         entity.version().depositSecurity().valueType().setValue(ValueType.Percentage);

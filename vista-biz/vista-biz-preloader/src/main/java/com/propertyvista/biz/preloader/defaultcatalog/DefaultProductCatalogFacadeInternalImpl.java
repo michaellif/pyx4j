@@ -139,7 +139,7 @@ public class DefaultProductCatalogFacadeInternalImpl implements DefaultProductCa
 
     @Override
     public void fillDefaultDeposits(Product<?> entity) {
-        DefaultDepositManager.fillDefaultDeposits(entity);
+        DefaultDepositManager.fillDefaultDeposits(entity, true);
     }
 
     private void deleteDefaultServices(ProductCatalog catalog) {
