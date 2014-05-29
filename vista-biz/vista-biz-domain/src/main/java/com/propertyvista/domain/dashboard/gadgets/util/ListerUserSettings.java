@@ -14,6 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets.util;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -24,6 +25,7 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 @I18n(strategy = I18nStrategy.IgnoreAll)
 public interface ListerUserSettings extends IEntity {
 
+    @NotNull
     IPrimitive<Integer> pageSize();
 
     IList<ColumnUserSettings> overriddenColumns();
