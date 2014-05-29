@@ -82,10 +82,15 @@ public class MemoryLeakReducer {
             Hashtable<String, String> keys = new Hashtable<String, String>();
             keys.put("type", "diagnosability");
             keys.put("name", cl.getClass().getName() + "@" + Integer.toHexString(cl.hashCode()).toLowerCase());
-            mbs.unregisterMBean(new ObjectName("com.oracle.jdbc", keys));
-            log.info("unregistered OracleDiagnosabilityMBean");
+            ObjectName name = new ObjectName("com.oracle.jdbc", keys);
+            if (mbs.isRegistered(name)) {
+                mbs.unregisterMBean(name);
+                log.info("unregistered OracleDiagnosabilityMBean");
+            } else {
+                log.debug("Oracle OracleDiagnosabilityMBean not Registered");
+            }
         } catch (javax.management.InstanceNotFoundException nf) {
-            log.debug("Oracle OracleDiagnosabilityMBean not found ", nf);
+            log.debug("Oracle OracleDiagnosabilityMBean not found", nf);
         } catch (Throwable e) {
             log.error("Oracle JMX unregister error", e);
         }
@@ -96,10 +101,15 @@ public class MemoryLeakReducer {
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
             Hashtable<String, String> keys = new Hashtable<String, String>();
             keys.put("name", "UniversalConnectionPoolManagerMBean");
-            mbs.unregisterMBean(new ObjectName("oracle.ucp.admin", keys));
-            log.info("unregistered UniversalConnectionPoolManagerMBean");
+            ObjectName name = new ObjectName("oracle.ucp.admin", keys);
+            if (mbs.isRegistered(name)) {
+                mbs.unregisterMBean(name);
+                log.info("unregistered UniversalConnectionPoolManagerMBean");
+            } else {
+                log.debug("Oracle UniversalConnectionPoolManagerMBean not Registered");
+            }
         } catch (javax.management.InstanceNotFoundException nf) {
-            log.debug("Oracle UniversalConnectionPoolManagerMBean not found ", nf);
+            log.debug("Oracle UniversalConnectionPoolManagerMBean not found", nf);
         } catch (Throwable e) {
             log.error("Oracle JMX unregister error", e);
         }
