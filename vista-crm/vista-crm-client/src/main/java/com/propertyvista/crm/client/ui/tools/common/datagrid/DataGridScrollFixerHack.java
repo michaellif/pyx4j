@@ -49,7 +49,22 @@ public class DataGridScrollFixerHack {
 		scrollable.style.overflowX = 'hidden';
 		scrollable.style.overflowY = 'scroll';
 
-		console.log("modified: " + scrollable);
+		scrollable = element
+				.getElementsByClassName('scrollable nativeHorizontalScrollbar')[0];
+		scrollable.className = new String(scrollable.className).replace(
+				'scrollable', '');
+
+		scrollable.style.position = 'absolute';
+		scrollable.style.right = '0px';
+		scrollable.style.width = '100%';
+		scrollable.style.bottom = '0px';
+		scrollable.style.height = '100px';
+
+		scrollable.style.overflow = 'auto';
+		scrollable.style.overflowX = 'scroll';
+		scrollable.style.overflowY = 'hidden';
+
+		// console.log("modified: " + scrollable);
     }-*/;
     //@formatter:on
 
