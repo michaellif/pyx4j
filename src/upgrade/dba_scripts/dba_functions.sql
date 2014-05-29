@@ -680,7 +680,7 @@ LANGUAGE SQL VOLATILE;
 ***		New and improved version, now works on primary and foreign keys
 ***		as well as check constraints.
 ***
-***     THis version is intended to be less memory-consuming
+***     This version is intended to be less memory-consuming
 ***		
 ***	=======================================================================================
 **/
@@ -709,7 +709,6 @@ $$
                                 regexp_replace(regexp_replace(regexp_replace(co.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
                                 '(\()?(''([a-zA-Z0-9_\s]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
                         ELSE co.consrc END AS constraint_text
-
                 FROM    pg_constraint co
                 JOIN 	pg_class c0 ON (co.conrelid = c0.oid)
                 LEFT JOIN 	pg_class c1 ON (co.confrelid = c1.oid)
@@ -739,7 +738,6 @@ $$
                                 regexp_replace(regexp_replace(regexp_replace(co.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
                                 '(\()?(''([a-zA-Z0-9_\s]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
                         ELSE co.consrc END AS constraint_text
-
                 FROM    pg_constraint co
                 JOIN 	pg_class c0 ON (co.conrelid = c0.oid)
                 LEFT JOIN 	pg_class c1 ON (co.confrelid = c1.oid)
@@ -809,12 +807,14 @@ $$
 LANGUAGE SQL VOLATILE;
 
 /**
-***     -------------------------------------------------------------------------------
+*** =========================================================================================
 ***     
-***             More sophisticated way to compare schema indexes,
-***             based on pg_index,pg_class and pg_indexes
+***     More sophisticated way to compare schema indexes, based on 
+***     pg_index,pg_class and pg_indexes
 ***
-***     ------------------------------------------------------------------------------
+***     This version is somewhat optimized to consume less resources
+***
+*** =========================================================================================
 **/
 DROP FUNCTION _dba_.compare_schema_indexes(text,text);
 CREATE OR REPLACE FUNCTION _dba_.compare_schema_indexes(text,text)
@@ -824,35 +824,67 @@ RETURNS TABLE   (       index_name              pg_catalog.name,
                         is_primary_key          BOOLEAN,
                         index_def               TEXT,
                         column_name             TEXT,
-                        schema_name             VARCHAR(64)) AS
+                        schema_version          VARCHAR(64)) AS
 $$
-        WITH t AS (     SELECT  b.relname AS index_name,c.relname AS table_name,
-                                a.indisunique AS is_unique,a.indisprimary AS is_primary_key,
-                                g.indexdef AS index_def,
-                                d.colname AS column_name,
-                                f.nspname AS schema_name
-                        FROM    pg_index a
-                        JOIN    pg_class b ON (a.indexrelid = b.oid)
-                        JOIN    pg_class c ON (a.indrelid = c.oid)
-                        LEFT JOIN    (SELECT a.indexrelid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
-                                        FROM    (SELECT indexrelid,indrelid,unnest(indkey) AS indkey FROM pg_index) AS a
-                                        JOIN    pg_attribute b ON (a.indrelid = b.attrelid AND a.indkey = b.attnum) 
-                                        GROUP BY a.indexrelid) AS d 
-                        ON      (a.indexrelid = d.indexrelid)
-                        JOIN    pg_namespace f ON (c.relnamespace = f.oid)
-                        JOIN    (SELECT         indexname,tablename,schemaname,
-                                                regexp_replace(indexdef,'\s'||schemaname||'\.',' ','g') AS indexdef 
-                                FROM pg_indexes) g
-                        ON      (g.indexname = b.relname AND g.tablename = c.relname AND g.schemaname = f.nspname)) 
-       ( SELECT a.*,$1 AS schema_name FROM
-        (SELECT index_name,table_name,is_unique,is_primary_key,index_def,column_name FROM t WHERE schema_name = $1 
-        EXCEPT
-        SELECT index_name,table_name,is_unique,is_primary_key,index_def,column_name FROM t WHERE schema_name = $2 ) AS a)
-        UNION
-        (SELECT a.*,$2 AS schema_name FROM
-        (SELECT index_name,table_name,is_unique,is_primary_key,index_def,column_name FROM t WHERE schema_name = $2
-        EXCEPT
-        SELECT index_name,table_name,is_unique,is_primary_key,index_def,column_name FROM t WHERE schema_name = $1 ) AS a);
+    WITH t0 AS (    SELECT  c0.relname AS index_name,
+                            c1.relname AS table_name,
+                            i.indisunique AS is_unique,
+                            i.indisprimary AS is_primary_key,
+                            g.indexdef AS index_def,
+                            d.colname AS column_name
+                    FROM    pg_index i
+                    JOIN    pg_class c0 ON (i.indexrelid = c0.oid)
+                    JOIN    pg_class c1 ON (i.indrelid = c1.oid)
+                    LEFT JOIN   (SELECT a.indexrelid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
+                                FROM    (SELECT i.indexrelid,i.indrelid,unnest(i.indkey) AS indkey 
+                                        FROM    pg_index i 
+                                        JOIN    pg_class c ON (i.indexrelid = c.oid)
+                                        JOIN    pg_namespace n ON (c.relnamespace = n.oid)
+                                        WHERE   n.nspname = $1) AS a
+                                JOIN    pg_attribute b ON (a.indrelid = b.attrelid AND a.indkey = b.attnum) 
+                                GROUP BY a.indexrelid) AS d  ON      (i.indexrelid = d.indexrelid)
+                    JOIN    (SELECT indexname,tablename,schemaname,
+                                    regexp_replace(indexdef,'\s'||schemaname||'\.',' ','g') AS indexdef 
+                            FROM pg_indexes) g
+                        ON      (g.indexname = c0.relname AND g.tablename = c1.relname AND g.schemaname = $1)),
+    t1 AS   (   SELECT c0.relname AS index_name,
+                        c1.relname AS table_name,
+                        i.indisunique AS is_unique,
+                        i.indisprimary AS is_primary_key,
+                        g.indexdef AS index_def,
+                        d.colname AS column_name
+                FROM    pg_index i
+                JOIN    pg_class c0 ON (i.indexrelid = c0.oid)
+                JOIN    pg_class c1 ON (i.indrelid = c1.oid)
+                LEFT JOIN   (SELECT a.indexrelid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
+                             FROM    (SELECT i.indexrelid,i.indrelid,unnest(i.indkey) AS indkey 
+                                     FROM    pg_index i 
+                                     JOIN    pg_class c ON (i.indexrelid = c.oid)
+                                     JOIN    pg_namespace n ON (c.relnamespace = n.oid)
+                                     WHERE   n.nspname = $2) AS a
+                             JOIN    pg_attribute b ON (a.indrelid = b.attrelid AND a.indkey = b.attnum) 
+                             GROUP BY a.indexrelid) AS d  ON      (i.indexrelid = d.indexrelid)
+                JOIN    (SELECT indexname,tablename,schemaname,
+                                regexp_replace(indexdef,'\s'||schemaname||'\.',' ','g') AS indexdef 
+                        FROM pg_indexes) g
+                        ON   (g.indexname = c0.relname AND g.tablename = c1.relname AND g.schemaname = $2))
+    SELECT a.*,$1 AS schema_name 
+    FROM    (SELECT index_name,table_name,is_unique,
+                    is_primary_key,index_def,column_name 
+            FROM t0 
+            EXCEPT
+            SELECT  index_name,table_name,is_unique,
+                    is_primary_key,index_def,column_name 
+            FROM t1 ) AS a
+    UNION
+    SELECT a.*,$2 AS schema_name 
+    FROM    (SELECT index_name,table_name,is_unique,
+                    is_primary_key,index_def,column_name 
+            FROM t1 
+            EXCEPT
+            SELECT  index_name,table_name,is_unique,
+                    is_primary_key,index_def,column_name 
+            FROM t0) AS a;
 $$
 LANGUAGE SQL VOLATILE;
         
