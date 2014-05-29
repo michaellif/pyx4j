@@ -16,10 +16,13 @@ package com.propertyvista.crm.client.ui.crud.lease.application.components;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.AbstractComponentValidator;
+import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -34,6 +37,23 @@ public class ProofOfIncomeDocumentFileFolder extends VistaBoxFolder<ProofOfIncom
 
     public ProofOfIncomeDocumentFileFolder() {
         super(ProofOfIncomeDocumentFile.class, i18n.tr("File"));
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        addComponentValidator(new AbstractComponentValidator<IList<ProofOfIncomeDocumentFile>>() {
+            @Override
+            public BasicValidationError isValid() {
+                if (getComponent().getValue() != null) {
+                    if (getValue().isEmpty()) {
+                        return new BasicValidationError(getComponent(), i18n.tr("Document file should be supplied"));
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override

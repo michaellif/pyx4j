@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,7 +44,7 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
 
         setNoDataNotificationWidget(null);
         if (documentationPolicy != null && documentationPolicy.mandatoryProofOfIncome().getValue(false)) {
-            setNoDataNotificationWidget(new Label(i18n.tr("Proof of Income should be supplied!")));
+            setNoDataNotificationWidget(new Label(i18n.tr("Proof of Income should be supplied")));
         }
     }
 
@@ -57,7 +57,7 @@ public class ProofOfIncomeUploaderFolder extends VistaBoxFolder<ProofOfIncomeDoc
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && documentationPolicy != null) {
                     if (documentationPolicy.mandatoryProofOfIncome().getValue(false) && getValue().isEmpty()) {
-                        return new BasicValidationError(getComponent(), i18n.tr("Proof of Income should be supplied!"));
+                        return new BasicValidationError(getComponent(), i18n.tr("Proof of Income should be supplied"));
                     }
                 }
                 return null;
