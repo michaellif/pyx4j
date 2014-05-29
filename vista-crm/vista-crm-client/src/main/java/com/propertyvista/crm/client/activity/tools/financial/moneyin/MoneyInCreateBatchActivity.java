@@ -112,7 +112,6 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         sortComparatorsMap = createSortComparatorsMap();
 
         addPaymentCandidatesController = new MoneyInCandidateSearchVisorController() {
-
             @Override
             public void show() {
                 paymentCandidateSearchVisor.populateLister();
@@ -122,6 +121,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
             @Override
             public void addPaymentCandidate(List<MoneyInCandidateDTO> candidates) {
                 for (MoneyInCandidateDTO candidate : candidates) {
+                    setProcessCandidate(candidate, false); // remove candidate if it's already present
                     setProcessCandidate(candidate, true);
                 }
                 hide();

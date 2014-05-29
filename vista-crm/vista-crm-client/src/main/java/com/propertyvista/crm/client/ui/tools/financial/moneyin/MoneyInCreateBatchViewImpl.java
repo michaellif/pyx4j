@@ -32,16 +32,13 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.crm.client.ui.tools.common.view.AbstractPrimePaneWithMessagesPopup;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
@@ -71,77 +68,87 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
     public MoneyInCreateBatchViewImpl() {
         setCaption(i18n.tr("Money In: Create Payments Batch"));
 
-        viewPanel = initViewPanel();
+        Button searchButton = new Button(i18n.tr("Add Payments..."), new Command() {
+            @Override
+            public void execute() {
+                presenter.addPayments();
+            }
+        });
+        addHeaderToolbarItem(searchButton);
 
-        viewPanel.add(searchBar = initSearchBar());
-        viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, 100, Unit.PX);
-        viewPanel.setWidgetLeftRight(searchBar, 0, Unit.PX, 0, Unit.PX);
+        Button createBatchesButton = new Button(i18n.tr("Create Batches"), new Command() {
+            @Override
+            public void execute() {
+                presenter.createBatch();
+            }
+        });
+        addFooterToolbarItem(createBatchesButton);
+
+        viewPanel = initViewPanel();
 
         gridsHolder = new LayoutPanel();
         viewPanel.add(gridsHolder);
-        viewPanel.setWidgetTopBottom(gridsHolder, 101, Unit.PX, 0, Unit.PX);
+        viewPanel.setWidgetTopBottom(gridsHolder, 0, Unit.PX, 0, Unit.PX);
         viewPanel.setWidgetLeftRight(gridsHolder, 0, Unit.PX, 0, Unit.PX);
 
-        {
-            LayoutPanel selectedHolder = new LayoutPanel();
-            gridsHolder.add(selectedHolder);
-            gridsHolder.setWidgetTopBottom(selectedHolder, 101, Unit.PX, 0, Unit.PX);
-            gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
+        LayoutPanel selectedHolder = new LayoutPanel();
+        gridsHolder.add(selectedHolder);
+        gridsHolder.setWidgetTopBottom(selectedHolder, 0, Unit.PX, 0, Unit.PX);
+        gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
 
-            // selected:
-            Widget selectedHeader = initSelectedItemsHeaderPanel();
-            selectedHeader.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-            selectedHeader.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        // selected:
+        Widget selectedHeader = initSelectedItemsHeaderPanel();
+        selectedHeader.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        selectedHeader.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-            selectedHolder.add(selectedHeader);
-            selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 40, Unit.PX);
-            selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
+        selectedHolder.add(selectedHeader);
+        selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 40, Unit.PX);
+        selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
 
-            selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid() {
-                @Override
-                protected void onSort(String memberPath, boolean isAscending) {
-                    presenter.sortSelectedCandidates(memberPath, isAscending);
+        selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid() {
+            @Override
+            protected void onSort(String memberPath, boolean isAscending) {
+                presenter.sortSelectedCandidates(memberPath, isAscending);
+            };
+
+            @Override
+            protected String createProcessColumnTitle() {
+                return "";
+            };
+
+            @Override
+            protected Column<MoneyInCandidateDTO, ?> createProcessColumn() {
+                Column<MoneyInCandidateDTO, MoneyInCandidateDTO> processColumn = new Column<MoneyInCandidateDTO, MoneyInCandidateDTO>(
+                        new ActionCell<MoneyInCandidateDTO>(i18n.tr("Remove"), new Delegate<MoneyInCandidateDTO>() {
+                            @Override
+                            public void execute(MoneyInCandidateDTO object) {
+                                presenter.setProcessCandidate(object, false);
+                            }
+
+                        })) {
+
+                    @Override
+                    public MoneyInCandidateDTO getValue(MoneyInCandidateDTO object) {
+                        return object;
+                    }
                 };
+                return processColumn;
+            }
+        });
+        selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 41, Unit.PX, 33, Unit.PX);
+        selectedHolder.setWidgetLeftRight(selectedForProcessingDataGrid, 0, Unit.PX, 0, Unit.PX);
 
-                @Override
-                protected String createProcessColumnTitle() {
-                    return "";
-                };
+        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+        SimplePager selectedPager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+        selectedPager.setDisplay(selectedForProcessingDataGrid);
+        HorizontalPanel selectedPagerHolder = new HorizontalPanel();
+        selectedPagerHolder.setWidth("100%");
+        selectedPagerHolder.add(selectedPager);
+        selectedPagerHolder.setCellHorizontalAlignment(selectedPager, HasHorizontalAlignment.ALIGN_CENTER);
 
-                @Override
-                protected Column<MoneyInCandidateDTO, ?> createProcessColumn() {
-                    Column<MoneyInCandidateDTO, MoneyInCandidateDTO> processColumn = new Column<MoneyInCandidateDTO, MoneyInCandidateDTO>(
-                            new ActionCell<MoneyInCandidateDTO>(i18n.tr("Remove"), new Delegate<MoneyInCandidateDTO>() {
-                                @Override
-                                public void execute(MoneyInCandidateDTO object) {
-                                    presenter.setProcessCandidate(object, false);
-                                }
-
-                            })) {
-
-                        @Override
-                        public MoneyInCandidateDTO getValue(MoneyInCandidateDTO object) {
-                            return object;
-                        }
-                    };
-                    return processColumn;
-                }
-            });
-            selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 41, Unit.PX, 33, Unit.PX);
-            selectedHolder.setWidgetLeftRight(selectedForProcessingDataGrid, 0, Unit.PX, 0, Unit.PX);
-
-            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-            SimplePager selectedPager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-            selectedPager.setDisplay(selectedForProcessingDataGrid);
-            HorizontalPanel selectedPagerHolder = new HorizontalPanel();
-            selectedPagerHolder.setWidth("100%");
-            selectedPagerHolder.add(selectedPager);
-            selectedPagerHolder.setCellHorizontalAlignment(selectedPager, HasHorizontalAlignment.ALIGN_CENTER);
-
-            selectedHolder.add(selectedPagerHolder);
-            selectedHolder.setWidgetBottomHeight(selectedPagerHolder, 24, Unit.PX, 24, Unit.PX);
-            selectedHolder.setWidgetLeftRight(selectedPagerHolder, 0, Unit.PX, 0, Unit.PX);
-        }
+        selectedHolder.add(selectedPagerHolder);
+        selectedHolder.setWidgetBottomHeight(selectedPagerHolder, 24, Unit.PX, 24, Unit.PX);
+        selectedHolder.setWidgetLeftRight(selectedPagerHolder, 0, Unit.PX, 0, Unit.PX);
 
     }
 
@@ -168,65 +175,23 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
         return viewPanel;
     }
 
-    private LayoutPanel initSearchBar() {
-        LayoutPanel searchBar = new LayoutPanel();
-        searchBar.setWidth("100%");
-
-        Toolbar searchToolbar = new Toolbar();
-        searchToolbar.getElement().getStyle().setHeight(100, Unit.PX);
-        searchToolbar.getElement().getStyle().setProperty("display", "table-cell");
-        searchToolbar.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
-        Button searchButton = new Button(i18n.tr("Add Payments"), new Command() {
-            @Override
-            public void execute() {
-                presenter.addPayments();
-            }
-        });
-        searchToolbar.addItem(searchButton);
-
-        SimplePanel searchToolbarHolder = new SimplePanel();
-        searchToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
-        searchToolbarHolder.add(searchToolbar);
-
-        searchBar.add(searchToolbarHolder);
-        searchBar.setWidgetTopBottom(searchToolbarHolder, 0, Unit.PX, 0, Unit.PX);
-        searchBar.setWidgetLeftRight(searchToolbarHolder, 0, Unit.PX, 0, Unit.PX);
-
-        return searchBar;
-    }
-
     private Widget initSelectedItemsHeaderPanel() {
-        String receiptDateHolderTagId = "receiptDateHolder";
-        String creatBatchButtonHolderTagId = "createBatchHolder";
+
+        final String receiptDateHolderTagId = "receiptDateHolder";
 
         SafeHtmlBuilder headerPanelBuilder = new SafeHtmlBuilder();
         headerPanelBuilder.appendHtmlConstant("<div>");
-        headerPanelBuilder.appendHtmlConstant(i18n.tr("Enter the receipt date {0}, and click {1} to process the following payments:", "<span id=\""
-                + receiptDateHolderTagId + "\"></span>", "<span id=\"" + creatBatchButtonHolderTagId + "\"></span>"));
+        headerPanelBuilder.appendHtmlConstant(i18n.tr("Enter the receipt date {0}, and click ''Create Batch'' to process the following payments:",
+                "<span id=\"" + receiptDateHolderTagId + "\"></span>"));
         headerPanelBuilder.appendHtmlConstant("</div>");
-
-        HTMLPanel headerPanel = new HTMLPanel(headerPanelBuilder.toSafeHtml());
 
         receiptDate = new CDatePicker();
         receiptDate.getNativeComponent().getElement().getStyle().setWidth(100, Unit.PX);
         receiptDate.getNativeComponent().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         receiptDate.getNativeComponent().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        Button createBatchButton = new Button(i18n.tr("Create Batch"), new Command() {
-            @Override
-            public void execute() {
-                presenter.createBatch();
-            }
-        });
-        SimplePanel createBatchButtonHolder = new SimplePanel(); // this panel is to apply 'toolbar style' to the button
-        createBatchButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        createBatchButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        createBatchButtonHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
-        createBatchButtonHolder.setWidget(createBatchButton);
-
+        HTMLPanel headerPanel = new HTMLPanel(headerPanelBuilder.toSafeHtml());
         headerPanel.addAndReplaceElement(receiptDate, receiptDateHolderTagId);
-        headerPanel.addAndReplaceElement(createBatchButtonHolder, creatBatchButtonHolderTagId);
 
         return headerPanel;
     }

@@ -110,6 +110,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
 
         initColumns();
         initTabKeyBasedNavigation();
+        setAlwaysShowScrollBars(false);
     }
 
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
