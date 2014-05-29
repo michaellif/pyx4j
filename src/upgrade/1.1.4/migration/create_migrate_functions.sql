@@ -23,6 +23,11 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        
+        -- primary keys 
+        
+        ALTER TABLE province DROP CONSTRAINT province_pk;
+        
         -- foreign keys
         
         ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_info_legal_address_country_fk;
@@ -64,6 +69,8 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        DROP INDEX province_code_idx;
+        DROP INDEX province_name_idx;
       
         
         /**
@@ -112,7 +119,35 @@ BEGIN
         
         -- building 
         
-        ALTER TABLE building ADD COLUMN contacts_support_phone VARCHAR(500);
+        ALTER TABLE building RENAME COLUMN info_address_country TO info_address_country_old;
+        ALTER TABLE building RENAME COLUMN info_address_province TO info_address_province_old;
+        
+        ALTER TABLE building    ADD COLUMN contacts_support_phone VARCHAR(500),
+                                ADD COLUMN info_address_country VARCHAR(50),
+                                ADD COLUMN info_address_province VARCHAR(500);
+                                
+        -- city
+        
+        ALTER TABLE city RENAME COLUMN province TO province_old;
+        ALTER TABLE city ADD COLUMN province VARCHAR(50);
+        
+        -- city_intro_page
+        
+        ALTER TABLE city_intro_page RENAME COLUMN province TO province_old;
+        ALTER TABLE city_intro_page ADD COLUMN province VARCHAR(50);
+        
+        
+        -- country_policy_node
+        
+        CREATE TABLE country_policy_node
+        (
+            id                          BIGINT              NOT NULL,
+            country                     VARCHAR(50),
+                CONSTRAINT  country_policy_node_pk  PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE country_policy_node OWNER TO vista;
+        
         
         -- legal_status
         
@@ -136,6 +171,12 @@ BEGIN
         
         ALTER TABLE online_application ADD COLUMN create_date DATE;
         
+        -- province 
+        
+        ALTER TABLE province RENAME TO province_policy_node;
+        
+        ALTER TABLE province_policy_node ADD COLUMN province VARCHAR(50);
+        
         -- restrictions_policy
         
         ALTER TABLE restrictions_policy ADD COLUMN no_need_guarantors BOOLEAN;
@@ -143,6 +184,7 @@ BEGIN
         -- site_titles
         
         ALTER TABLE site_titles RENAME COLUMN resident_portal_promotions TO site_promo_title;
+        
         
         /**
         ***     =====================================================================================================
@@ -155,14 +197,14 @@ BEGIN
         -- apt_unit
         
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
-                'SET    info_legal_address_country = replace(c.name,'' '','''') '
-                'FROM   '||v_schema_name||'.country AS c '
-                'WHERE  a.info_legal_address_country_old = c.id ';
+                ||'SET    info_legal_address_country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  a.info_legal_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
-                'SET    info_legal_address_province = replace(p.name,'' '','''') '
-                'FROM   '||v_schema_name||'.province AS p '
-                'WHERE  a.info_legal_address_province_old = p.id ';
+                ||'SET    info_legal_address_province = replace(p.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.province AS p '
+                ||'WHERE  a.info_legal_address_province_old = p.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit '
                 ||'SET  info_legal_address_street_number = '
@@ -180,12 +222,60 @@ BEGIN
                 ||'WHERE    info_legal_address_street_direction IS NOT NULL ';
         
                
+        -- building
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
+                ||'SET  info_address_country = replace(c.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.country AS c '
+                ||'WHERE b.info_address_country_old = c.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
+                ||'SET  info_address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province p '
+                ||'WHERE b.info_address_province_old = p.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.building '
+                ||'SET  info_address_street_number = '
+                ||' info_address_street_number||info_address_street_number_suffix '
+                ||'WHERE    info_address_street_number_suffix IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.building '
+                ||'SET  info_address_street_name = '
+                ||' TRIM(info_address_street_name)||'' ''||INITCAP(TRIM(info_address_street_type)) '
+                ||'WHERE    info_address_street_type IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.building '
+                ||'SET  info_address_street_name = '
+                ||' TRIM(info_address_street_name)||'' ''||INITCAP(TRIM(info_address_street_direction)) '
+                ||'WHERE    info_address_street_direction IS NOT NULL';
+                
+        
+        -- city
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.city AS c '
+                ||'SET  province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province p '
+                ||'WHERE    c.province_old = p.id ';
+                
+        
+        -- city_intro_page
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.city_intro_page AS c '
+                ||'SET  province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province p '
+                ||'WHERE    c.province_old = p.id ';
+                
+        
         
         -- Phone numbers update
         
         PERFORM * FROM _dba_.update_phone_numbers(v_schema_name);
        
         
+        -- province_policy_node
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
+                ||'SET  province = replace(name,'' '','''') ';
         
         -- online_application
         
@@ -218,6 +308,36 @@ BEGIN
                                 DROP COLUMN info_legal_address_street_direction,
                                 DROP COLUMN info_legal_address_street_number_suffix,
                                 DROP COLUMN info_legal_address_street_type;
+                                
+                                
+        -- building
+        
+        ALTER TABLE building    DROP COLUMN info_address_country_old,
+                                DROP COLUMN info_address_province_old,
+                                DROP COLUMN info_address_county,
+                                DROP COLUMN info_address_street_direction,
+                                DROP COLUMN info_address_street_number_suffix,
+                                DROP COLUMN info_address_street_type;
+                                
+        -- city 
+        
+        ALTER TABLE city DROP COLUMN province_old;
+        
+        
+        -- city_intro_page 
+        
+        ALTER TABLE city_intro_page DROP COLUMN province_old;
+        
+        -- country
+        
+        DROP TABLE country;
+        
+        
+        -- province_policy_node
+        
+        ALTER TABLE province_policy_node    DROP COLUMN code,
+                                            DROP COLUMN county,
+                                            DROP COLUMN name;
                  
         /**
         ***     ======================================================================================================

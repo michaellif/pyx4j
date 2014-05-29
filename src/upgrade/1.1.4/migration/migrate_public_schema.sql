@@ -13,10 +13,14 @@ SET search_path = 'public';
 
 BEGIN TRANSACTION;
 
+    -- Altered Sequences
+    
+    ALTER SEQUENCE province_seq RENAME TO province_policy_node_seq;
+    
     -- Sequences to drop
     DROP SEQUENCE communication_message$to_seq;
     DROP SEQUENCE country_seq;
-    DROP SEQUENCE province_seq;
+    
   
     -- New sequences
     CREATE SEQUENCE communication_message_data_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;

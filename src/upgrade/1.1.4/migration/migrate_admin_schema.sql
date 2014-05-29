@@ -45,7 +45,13 @@ SET search_path = '_admin_';
         ***     ======================================================================================================
         **/
         
+        DROP INDEX business_information_business_address_country_name_idx;
+        DROP INDEX business_information_business_address_province_code_idx;
+        DROP INDEX business_information_business_address_province_name_idx;
         DROP INDEX direct_debit_record_pmc_idx;
+        DROP INDEX personal_information_personal_address_country_name_idx;
+        DROP INDEX personal_information_personal_address_province_code_idx;
+        DROP INDEX personal_information_personal_address_province_name_idx;
 
         /**
         ***     =======================================================================================================
