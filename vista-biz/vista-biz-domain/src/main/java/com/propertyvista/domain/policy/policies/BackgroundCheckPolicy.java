@@ -16,6 +16,8 @@ package com.propertyvista.domain.policy.policies;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -68,5 +70,6 @@ public interface BackgroundCheckPolicy extends Policy {
     @Owned
     BackgroundCheckPolicy.BackgroundCheckPolicyV version();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Integer> strategyNumber();
 }

@@ -42,6 +42,7 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         formPanel.append(Location.Left, proto().version().judgment()).decorate().componentWidth(60);
         formPanel.append(Location.Left, proto().version().collection()).decorate().componentWidth(60);
         formPanel.append(Location.Left, proto().version().chargeOff()).decorate().componentWidth(60);
+        formPanel.append(Location.Left, proto().strategyNumber()).decorate().componentWidth(60);
 
         formPanel.h3(i18n.tr("Help"));
 
