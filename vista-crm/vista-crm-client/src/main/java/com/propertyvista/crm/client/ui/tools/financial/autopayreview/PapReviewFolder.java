@@ -30,10 +30,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
@@ -63,7 +64,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
         return new PapReviewForm();
     }
 
-    private static final class PapReviewForm extends CForm<PapReviewDTO> {
+    private static final class PapReviewForm extends BulkEditableEntityForm<PapReviewDTO> {
 
         private PapChargeReviewForm chargeTotals;
 
@@ -90,7 +91,7 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
             isSelected.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    formPanel.setStyleName(Styles.AutoPaySelected.name(), isSelected.getValue());
+                    formPanel.setStyleName(PapReviewFolder.Styles.AutoPaySelected.name(), isSelected.getValue());
                 }
             });
             isSelectedAndCaptionHolderPanel.add(isSelected);
@@ -129,7 +130,8 @@ public class PapReviewFolder extends BulkItemsFolder<PapReviewDTO> {
             recalculateChargesTotal();
             chargeTotals.setVisible(getValue().charges().size() > 1);
             chargeTotals.asWidget().setVisible(getValue().charges().size() > 1);
-            formPanel.setStyleName(Styles.AutoPaySelected.name(), (get(proto().isSelected()).getValue() != null && get(proto().isSelected()).getValue()));
+            formPanel.setStyleName(PapReviewFolder.Styles.AutoPaySelected.name(), (get(proto().isSelected()).getValue() != null && get(proto().isSelected())
+                    .getValue()));
         }
 
         private void recalculateChargesTotal() {

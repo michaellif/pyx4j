@@ -719,7 +719,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name());
         style.addProperty("overflow", "auto");
         style.addProperty("position", "absolute");
-        style.addProperty("top", "250px");
+        style.addProperty("top", "270px");
         style.addProperty("bottom", "0px");
         style.addProperty("left", "0px");
         style.addProperty("right", "0px");
