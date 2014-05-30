@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class SiteViewTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewNavigation, SiteViewFooter, SiteViewNavigContainer, SiteViewShortCuts, SiteViewShortCutsItem;
+        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewNavigContainer, SiteViewShortCuts, SiteViewShortCutsItem;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -51,6 +51,15 @@ public class SiteViewTheme extends Theme {
         style.addProperty("width", "100%");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
+        addStyle(style);
+
+        // NavigationContainer (Accordion menu):
+        style = new Style(".", StyleName.SiteViewSideMenu.name());
+        style.addProperty("border-right", "4px solid");
+        style.addProperty("border-right-color", ThemeColor.object1);
+        style.addProperty("line-height", "1.5em");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         // Footer:

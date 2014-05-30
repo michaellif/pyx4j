@@ -211,6 +211,159 @@ public interface CrmImages extends VistaImages {
     @Source("Nav_Icon_Profile-Inactive.png")
     ImageResource avatar();
 
+    DashboardsIconImages dashboardsIcon();
+
+    public interface DashboardsIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Dashboards_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Dashboards_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Dashboards_active.png")
+        ImageResource active();
+    }
+
+    PropertiesIconImages propertiesIcon();
+
+    public interface PropertiesIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Properties_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Properties_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Properties_active.png")
+        ImageResource active();
+    }
+
+    TenantsIconImages tenantsIcon();
+
+    public interface TenantsIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Tenants_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Tenants_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Tenants_active.png")
+        ImageResource active();
+
+    }
+
+    MarketingIconImages marketingIcon();
+
+    public interface MarketingIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Marketing_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Marketing_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Marketing_active.png")
+        ImageResource active();
+    }
+
+    LegalIconImages legalIcon();
+
+    public interface LegalIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Legal_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Legal_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Legal_active.png")
+        ImageResource active();
+    }
+
+    FinanceIconImages financeIcon();
+
+    public interface FinanceIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Finance_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Finance_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Finance_active.png")
+        ImageResource active();
+    }
+
+    OrganizationIconImages organizationIcon();
+
+    public interface OrganizationIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Company_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Company_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Company_active.png")
+        ImageResource active();
+    }
+
+    ReportsIconImages reportsIcon();
+
+    public interface ReportsIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Reports_normal.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Reports_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Reports_active.png")
+        ImageResource active();
+    }
+
     EditIconButtonImages editButton();
 
     public interface EditIconButtonImages extends ButtonImages {

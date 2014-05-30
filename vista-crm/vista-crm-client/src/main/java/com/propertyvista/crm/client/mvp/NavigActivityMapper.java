@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.crm.client.activity.NavigActivity;
 import com.propertyvista.crm.client.activity.NavigActivity_OLD;
 import com.propertyvista.crm.client.activity.NavigSettingsActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -33,8 +34,11 @@ public class NavigActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
-                return new NavigSettingsActivity(place);
-                //   return new NavigActivity(place);
+                if (true) {
+                    return new NavigSettingsActivity(place);
+                } else {
+                    return new NavigActivity(place);
+                }
             } else {
                 return new NavigActivity_OLD(place);
             }
