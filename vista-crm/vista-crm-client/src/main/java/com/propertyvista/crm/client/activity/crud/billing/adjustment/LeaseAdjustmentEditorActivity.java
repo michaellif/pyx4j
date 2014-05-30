@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.adjustment;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -35,7 +34,7 @@ public class LeaseAdjustmentEditorActivity extends CrmEditorActivity<LeaseAdjust
     }
 
     @Override
-    public void calculateTax(AsyncCallback<BigDecimal> callback, LeaseAdjustment currentValue) {
+    public void calculateTax(AsyncCallback<IMoneyPercentAmount> callback, LeaseAdjustment currentValue) {
         ((LeaseAdjustmentCrudService) getService()).calculateTax(callback, currentValue);
     }
 

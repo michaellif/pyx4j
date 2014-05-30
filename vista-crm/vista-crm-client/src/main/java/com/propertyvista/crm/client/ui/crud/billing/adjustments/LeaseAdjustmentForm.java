@@ -17,15 +17,12 @@ import java.math.BigDecimal;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
+import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,13 +40,10 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment.TaxType;
 
 public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
     private static final I18n i18n = I18n.get(LeaseAdjustmentForm.class);
-
-    private final SimplePanel taxHolder = new SimplePanel();
 
     public LeaseAdjustmentForm(IForm<LeaseAdjustment> view) {
         super(LeaseAdjustment.class, view);
@@ -76,17 +70,17 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             }
         }).decorate();
         formPanel.append(Location.Left, proto().amount()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().executionType()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().targetDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().receivedDate(), new CDateLabel()).decorate().componentWidth(90);
 
-        formPanel.append(Location.Right, proto().overwriteDefaultTax()).decorate().componentWidth(80);
-        formPanel.append(Location.Right, taxHolder);
-        formPanel.append(Location.Right, proto().taxType()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().overwriteDefaultTax()).decorate().componentWidth(80);
+        get(proto().overwriteDefaultTax()).setVisible(isEditable());
+        formPanel.append(Location.Left, proto().tax(), new CMoneyPercentCombo(ValueType.Percentage)).decorate().componentWidth(100);
         if (!isEditable()) {
-            formPanel.append(Location.Right, new HTML("&nbsp;"));
-            formPanel.append(Location.Right, proto()._total()).decorate().componentWidth(120);
+            formPanel.append(Location.Left, proto()._total()).decorate().componentWidth(120);
         }
+
+        formPanel.append(Location.Right, proto().executionType()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().receivedDate(), new CDateLabel()).decorate().componentWidth(90);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
 
@@ -106,13 +100,6 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 recalculateTaxesAndTotal();
-            }
-        });
-
-        get(proto().taxType()).addValueChangeHandler(new ValueChangeHandler<TaxType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<TaxType> event) {
-                bindValueEditor(event.getValue(), false);
             }
         });
 
@@ -141,47 +128,16 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        bindValueEditor(getValue().taxType().getValue(), true);
         recalculateTaxesAndTotal();
-    }
-
-    private void bindValueEditor(TaxType valueType, boolean repopulate) {
-        CField<BigDecimal, ?> comp = null;
-        if (valueType != null) {
-            switch (valueType) {
-            case value:
-                comp = new CMoneyField();
-                break;
-            case percent:
-                comp = new CPercentageField();
-                break;
-            }
-        }
-
-        unbind(proto().tax());
-
-        if (comp != null) {
-            comp.setDecorator(new FieldDecorator.Builder<>().componentWidth("100px").build());
-            taxHolder.setWidget(inject(proto().tax(), comp));
-
-            if (repopulate) {
-                get(proto().tax()).populate(getValue().tax().getValue(BigDecimal.ZERO));
-            }
-        }
     }
 
     private void recalculateTaxesAndTotal() {
         if (getValue().overwriteDefaultTax().getValue(false)) {
             get(proto().tax()).setEditable(true);
-            get(proto().taxType()).setEditable(true);
 
             recalculateTotal();
         } else {
-            bindValueEditor(TaxType.percent, false);
-            get(proto().taxType()).populate(TaxType.percent);
-
             get(proto().tax()).setEditable(false);
-            get(proto().taxType()).setEditable(false);
 
             LeaseAdjustmentPresenter presenter;
             if (isEditable()) {
@@ -189,9 +145,9 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             } else {
                 presenter = (LeaseAdjustmentPresenter) ((LeaseAdjustmentViewerView) getParentView()).getPresenter();
             }
-            presenter.calculateTax(new DefaultAsyncCallback<BigDecimal>() {
+            presenter.calculateTax(new DefaultAsyncCallback<IMoneyPercentAmount>() {
                 @Override
-                public void onSuccess(BigDecimal result) {
+                public void onSuccess(IMoneyPercentAmount result) {
                     get(proto().tax()).populate(result);
                     recalculateTotal();
                 }
@@ -205,13 +161,15 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         if (!getValue().isEmpty()) {
             total = total.add(getValue().amount().getValue(BigDecimal.ZERO));
 
-            switch (getValue().taxType().getValue()) {
-            case percent:
-                total = total.add(total.multiply(getValue().tax().getValue(BigDecimal.ZERO)));
-                break;
-            case value:
-                total = total.add(getValue().tax().getValue(BigDecimal.ZERO));
-                break;
+            if (!getValue().tax().isNull()) {
+                switch (getValue().tax().valueType().getValue()) {
+                case Percentage:
+                    total = total.add(total.multiply(getValue().tax().percent().getValue(BigDecimal.ZERO)));
+                    break;
+                case Monetary:
+                    total = total.add(getValue().tax().amount().getValue(BigDecimal.ZERO));
+                    break;
+                }
             }
         }
 

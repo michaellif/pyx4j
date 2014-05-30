@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -23,6 +21,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -76,9 +75,9 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     }
 
     @Override
-    public void calculateTax(final AsyncCallback<BigDecimal> callback, LeaseAdjustment currentValue) {
+    public void calculateTax(final AsyncCallback<IMoneyPercentAmount> callback, LeaseAdjustment currentValue) {
         ServerSideFactory.create(BillingFacade.class).updateLeaseAdjustmentTax(currentValue);
-        callback.onSuccess(currentValue.tax().getValue());
+        callback.onSuccess(currentValue.tax());
     }
 
     @Override

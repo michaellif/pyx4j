@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface LeaseAdjustmentPresenter {
 
-    void calculateTax(AsyncCallback<BigDecimal> callback, LeaseAdjustment currentValue);
+    void calculateTax(AsyncCallback<IMoneyPercentAmount> callback, LeaseAdjustment currentValue);
 }

@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -313,6 +314,7 @@ public class BillingManager {
             }
         }
 
-        adjustment.tax().setValue(taxRate);
+        adjustment.tax().valueType().setValue(ValueType.Percentage);
+        adjustment.tax().percent().setValue(taxRate);
     }
 }

@@ -37,6 +37,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -112,12 +113,7 @@ public interface LeaseAdjustment extends IEntity {
      * so, in case of default(policed) tax - this member effectively becomes transient field.
      */
     @NotNull
-    @ToString(index = 2)
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> tax();
-
-    @NotNull
-    IPrimitive<TaxType> taxType();
+    IMoneyPercentAmount tax();
 
     IPrimitive<Boolean> overwriteDefaultTax();
 
