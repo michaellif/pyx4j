@@ -28,11 +28,12 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implements BillViewerView.Presenter {
 
     public BillViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
     }
 
     @Override
@@ -57,8 +58,10 @@ public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implement
 
     @Override
     public void print() {
+        ReportDialog reportDialog = new ReportDialog("Bill", "Creating Bill...");
+        reportDialog.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
         EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), getEntityId()));
-        new ReportDialog("Bill", "Creating Bill...").start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
+        reportDialog.start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
     }
 }
