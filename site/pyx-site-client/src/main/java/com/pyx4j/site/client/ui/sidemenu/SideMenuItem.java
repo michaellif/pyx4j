@@ -22,7 +22,6 @@ package com.pyx4j.site.client.ui.sidemenu;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -31,7 +30,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,9 +37,10 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
-public class SideMenuItem implements IsWidget {
+public class SideMenuItem implements ISideMenuNode {
 
     private final ContentPanel contentPanel;
 
@@ -60,6 +59,8 @@ public class SideMenuItem implements IsWidget {
     private final FlowPanel itemPanel;
 
     private int indentation = 0;
+
+    private SideMenuList parent;
 
     public SideMenuItem(final Command command, SideMenuList submenu, String caption, ButtonImages images) {
         super();
@@ -86,6 +87,7 @@ public class SideMenuItem implements IsWidget {
 
         if (submenu != null) {
             contentPanel.add(submenu);
+            submenu.setParent(this);
             setIndentation(indentation);
         }
     }
@@ -98,28 +100,61 @@ public class SideMenuItem implements IsWidget {
     public void setSelected(boolean select) {
         selected = select;
         if (select) {
-            contentPanel.addStyleDependentName(SideMenuTheme.StyleDependent.active.name());
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.active.name());
             if (images != null) {
                 icon.setResource(images.active());
             }
         } else {
-            contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.active.name());
+            itemPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.active.name());
             if (images != null) {
                 icon.setResource(images.regular());
             }
         }
-    }
-
-    public Label getLabel() {
-        return label;
+        if (getParent().getParent() != null) {
+            getParent().getParent().setSelected(select);
+        }
     }
 
     public boolean isSelected() {
         return selected;
     }
 
+    public Label getLabel() {
+        return label;
+    }
+
     public void setVisible(boolean visible) {
         contentPanel.setVisible(visible);
+    }
+
+    void setIndentation(int indentation) {
+        this.indentation = indentation;
+        switch (indentation) {
+        case 0:
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
+            break;
+        case 1:
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
+            break;
+        case 2:
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
+            break;
+        default:
+            break;
+        }
+
+        if (submenu != null) {
+            submenu.setIndentation(indentation + 1);
+        }
+    }
+
+    @Override
+    public SideMenuList getParent() {
+        return parent;
+    }
+
+    public void setParent(SideMenuList parent) {
+        this.parent = parent;
     }
 
     private class ContentPanel extends ComplexPanel {
@@ -149,25 +184,9 @@ public class SideMenuItem implements IsWidget {
 
     }
 
-    void setIndentation(int indentation) {
-        this.indentation = indentation;
-        switch (indentation) {
-        case 0:
-            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
-            break;
-        case 1:
-            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
-            break;
-        case 2:
-            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
-            break;
-        default:
-            break;
-        }
-
+    public void select(AppPlace appPlace) {
         if (submenu != null) {
-            submenu.setIndentation(indentation + 1);
+            submenu.select(appPlace);
         }
     }
-
 }

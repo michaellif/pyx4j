@@ -69,7 +69,6 @@ public class SideMenuTheme extends Theme {
 
         style = new Style(".", StyleName.SideMenuItem);
         style.addProperty("white-space", "nowrap");
-        style.addProperty("font-weight", "bold");
         style.addProperty("list-style", "none");
         addStyle(style);
 
@@ -97,10 +96,21 @@ public class SideMenuTheme extends Theme {
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "5px 0px 3px 0");
+        style.addProperty("background", ThemeColor.foreground, 0.2);
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1, ".", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("color", ThemeColor.object1, 0.1);
+        style.addProperty("background", ThemeColor.object1, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2);
         style.addProperty("padding-left", "20px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2, ".", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l3);
@@ -124,5 +134,4 @@ public class SideMenuTheme extends Theme {
         addStyle(style);
 
     }
-
 }

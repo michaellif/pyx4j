@@ -45,4 +45,13 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
         return appPlace;
     }
 
+    @Override
+    public void select(AppPlace appPlace) {
+        super.select(appPlace);
+        if (appPlace == null) {
+            setSelected(false);
+        } else if (appPlace.equals(this.appPlace)) {
+            setSelected(true);
+        }
+    }
 }

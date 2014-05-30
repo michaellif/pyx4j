@@ -25,16 +25,19 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SideMenuList implements IsWidget {
+import com.pyx4j.site.rpc.AppPlace;
+
+public class SideMenuList implements ISideMenuNode {
 
     private final ContentPanel contentPanel;
 
     private final List<SideMenuItem> items;
 
     private int indentation = 0;
+
+    private SideMenuItem parent;
 
     public SideMenuList() {
         items = new ArrayList<>();
@@ -50,6 +53,7 @@ public class SideMenuList implements IsWidget {
         items.add(menuItem);
         contentPanel.addNavigItem(menuItem);
         menuItem.setIndentation(indentation);
+        menuItem.setParent(this);
     }
 
     public void clear() {
@@ -61,19 +65,28 @@ public class SideMenuList implements IsWidget {
         return items;
     }
 
-    public SideMenuItem getSelectedMenuItem() {
-        if (items == null)
-            return null;
-        for (SideMenuItem item : items) {
-            if (item.isSelected()) {
-                return item;
-            }
-        }
-        return null;
-    }
-
     public void setVisible(boolean visible) {
         contentPanel.setVisible(visible);
+    }
+
+    public boolean isEmpty() {
+        return items.size() == 0;
+    }
+
+    void setIndentation(int indentation) {
+        this.indentation = indentation;
+        for (SideMenuItem item : items) {
+            item.setIndentation(indentation);
+        }
+    }
+
+    @Override
+    public SideMenuItem getParent() {
+        return parent;
+    }
+
+    public void setParent(SideMenuItem parent) {
+        this.parent = parent;
     }
 
     private class ContentPanel extends ComplexPanel {
@@ -89,14 +102,29 @@ public class SideMenuList implements IsWidget {
 
     }
 
-    public boolean isEmpty() {
-        return items.size() == 0;
+    public SideMenuItem getSelected() {
+        if (items == null)
+            return null;
+        for (SideMenuItem item : items) {
+            if (item.isSelected()) {
+                if (getParent() == null) {
+                    return item;
+                } else {
+                    getParent().getParent().getSelected();
+                }
+            }
+        }
+        return null;
     }
 
-    void setIndentation(int indentation) {
-        this.indentation = indentation;
+    public void select(AppPlace appPlace) {
         for (SideMenuItem item : items) {
-            item.setIndentation(indentation);
+            if (getParent() == null) {
+                item.select(null);
+            }
+        }
+        for (SideMenuItem item : items) {
+            item.select(appPlace);
         }
     }
 }
