@@ -45,7 +45,7 @@ public class SideMenuItem implements IsWidget {
 
     private final ContentPanel contentPanel;
 
-    private final Image icon;
+    private Image icon;
 
     private final Label label;
 
@@ -74,9 +74,11 @@ public class SideMenuItem implements IsWidget {
         itemPanel.setStyleName(SideMenuTheme.StyleName.SideMenuItemPanel.name());
         contentPanel.add(itemPanel);
 
-        icon = new Image(images.regular());
-        icon.setStyleName(SideMenuTheme.StyleName.SideMenuIcon.name());
-        itemPanel.add(icon);
+        if (images != null) {
+            icon = new Image(images.regular());
+            icon.setStyleName(SideMenuTheme.StyleName.SideMenuIcon.name());
+            itemPanel.add(icon);
+        }
 
         label = new Label(caption);
         label.setStyleName(SideMenuTheme.StyleName.SideMenuLabel.name());
@@ -97,10 +99,14 @@ public class SideMenuItem implements IsWidget {
         selected = select;
         if (select) {
             contentPanel.addStyleDependentName(SideMenuTheme.StyleDependent.active.name());
-            icon.setResource(images.active());
+            if (images != null) {
+                icon.setResource(images.active());
+            }
         } else {
             contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.active.name());
-            icon.setResource(images.regular());
+            if (images != null) {
+                icon.setResource(images.regular());
+            }
         }
     }
 
@@ -145,7 +151,20 @@ public class SideMenuItem implements IsWidget {
 
     void setIndentation(int indentation) {
         this.indentation = indentation;
-        itemPanel.getElement().getStyle().setPaddingLeft(20 + indentation * 20, Unit.PX);
+        switch (indentation) {
+        case 0:
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
+            break;
+        case 1:
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
+            break;
+        case 2:
+            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
+            break;
+        default:
+            break;
+        }
+
         if (submenu != null) {
             submenu.setIndentation(indentation + 1);
         }

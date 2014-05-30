@@ -22,7 +22,6 @@ package com.pyx4j.site.client.ui.sidemenu;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
@@ -31,7 +30,7 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
 
     private final AppPlace appPlace;
 
-    public SideMenuAppPlaceItem(final AppPlace appPlace, ButtonImages images, ThemeColor color) {
+    public SideMenuAppPlaceItem(final AppPlace appPlace, ButtonImages images) {
         super(new Command() {
 
             @Override

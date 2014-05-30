@@ -35,7 +35,7 @@ public class SideMenuTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        active, slideOutMenu, collapsedMenu
+        active, slideOutMenu, collapsedMenu, l1, l2, l3,
     }
 
     public SideMenuTheme() {
@@ -68,7 +68,6 @@ public class SideMenuTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItem);
-        style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("white-space", "nowrap");
         style.addProperty("font-weight", "bold");
         style.addProperty("list-style", "none");
@@ -80,14 +79,32 @@ public class SideMenuTheme extends Theme {
 
         style = new Style(".", StyleName.SideMenuLabel);
         style.addProperty("display", "inline-block");
-        style.addProperty("padding", "0 10px");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("padding-left", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuIcon);
         style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("padding-left", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel);
+        style.addProperty("height", "30px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1);
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding", "5px 0px 3px 0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2);
+        style.addProperty("padding-left", "20px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l3);
+        style.addProperty("padding-left", "40px");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenu, "-", StyleDependent.collapsedMenu, " .", StyleName.SideMenuItem, ":hover .", StyleName.SideMenuLabel);
