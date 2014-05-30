@@ -238,7 +238,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
         descriptorsListForm = new GadgetDescriptorsListForm();
         descriptorsListForm.init();
         ScrollPanel descriptorListScroller = new ScrollPanel();
-        descriptorListScroller.setSize("600px", "300px");
+        descriptorListScroller.setSize("100%", "300px");
         descriptorListScroller.setWidget(descriptorsListForm);
         body.add(descriptorListScroller);
 
