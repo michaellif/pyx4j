@@ -34,13 +34,13 @@ public class NavigActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
-                if (true) {
-                    return new NavigSettingsActivity(place);
+                return new NavigSettingsActivity(place);
+            } else {
+                if (false) {
+                    return new NavigActivity_OLD(place);
                 } else {
                     return new NavigActivity(place);
                 }
-            } else {
-                return new NavigActivity_OLD(place);
             }
         } else {
             return null;

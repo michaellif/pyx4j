@@ -16,12 +16,14 @@ package com.propertyvista.crm.client.ui;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.IsView;
+import com.pyx4j.site.rpc.AppPlace;
 
 public interface NavigView extends IsWidget, IsView {
 
     public interface NavigPresenter {
     }
 
-    public void setPresenter(NavigPresenter presenter);
+    void setPresenter(NavigPresenter presenter);
 
+    void select(AppPlace appPlace);
 }

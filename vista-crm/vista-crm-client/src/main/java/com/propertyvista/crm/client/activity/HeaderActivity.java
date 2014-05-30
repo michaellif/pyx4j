@@ -59,7 +59,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     public HeaderActivity(Place place) {
         view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
-        withPlace(place);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             communicationService = (CommunicationMessageCrudService) GWT.create(CommunicationMessageCrudService.class);
         }
@@ -141,10 +140,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     @Override
     public void setLocale(CompiledLocale locale) {
         ClientNavigUtils.changeApplicationLocale(locale);
-    }
-
-    public HeaderActivity withPlace(Place place) {
-        return this;
     }
 
     @Override

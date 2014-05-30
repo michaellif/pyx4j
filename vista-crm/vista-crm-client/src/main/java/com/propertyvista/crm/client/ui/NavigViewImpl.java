@@ -20,6 +20,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -31,6 +32,8 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
     private static final I18n i18n = I18n.get(NavigViewImpl.class);
 
+    private final SideMenuList root;
+
     private NavigPresenter presenter;
 
     public NavigViewImpl() {
@@ -38,7 +41,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         setHeight("100%");
 
-        SideMenuList root = new SideMenuList();
+        root = new SideMenuList();
 
         {//Dashboards
             SideMenuList list = new SideMenuList();
@@ -146,4 +149,12 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
         this.presenter = presenter;
     }
 
+    @Override
+    public void select(AppPlace appPlace) {
+        root.select(appPlace);
+        SideMenuItem selected = root.getSelected();
+        if (selected != null) {
+            ensureVisible(selected.asWidget());
+        }
+    }
 }

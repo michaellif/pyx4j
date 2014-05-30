@@ -20,8 +20,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
@@ -40,7 +40,10 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
     private static Key previousUserPk;
 
+    private final Place place;
+
     public NavigActivity(Place place) {
+        this.place = place;
         Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
         isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
         previousUserPk = currentUserPk;
@@ -49,6 +52,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
         view = CrmSite.getViewFactory().getView(NavigView.class);
         view.setPresenter(this);
+
     }
 
     @Override
@@ -56,6 +60,9 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
         eventBus.addHandler(BoardUpdateEvent.getType(), this);
         panel.setWidget(view);
         updateDashboardItems();
+        if (place instanceof AppPlace) {
+            view.select((AppPlace) place);
+        }
     }
 
     @Override
