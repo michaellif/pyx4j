@@ -21,6 +21,9 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,8 +44,10 @@ import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -157,10 +162,6 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
 
             @Override
             protected IsWidget createContent() {
-                FlowPanel contentPanel = new FlowPanel();
-                contentPanel.add(inject(proto().name()));
-                contentPanel.add(inject(proto().description()));
-
                 ClickHandler onAddGadgetRequested = new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -168,15 +169,21 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
                                 .gadgetMetadataProto().getInstanceValueClass()));
                     }
                 };
-                contentPanel.addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionBox);
 
-                get(proto().name()).asWidget().addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetNameLabel);
+                com.pyx4j.forms.client.ui.panels.FormPanel formPanel = new com.pyx4j.forms.client.ui.panels.FormPanel(this);
+                formPanel.addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionBox);
+                formPanel.append(Location.Dual, proto().name(), new CLabel<>());
+                get(proto().name()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                get(proto().name()).asWidget().getElement().getStyle().setTextAlign(TextAlign.LEFT);
+                get(proto().name()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
                 get(proto().name()).asWidget().addDomHandler(onAddGadgetRequested, ClickEvent.getType());
 
-                get(proto().description()).asWidget().addStyleName(ADD_GADGET_DIALOG_STYLE + StyleSuffix.GadgetDescriptionText);
+                formPanel.append(Location.Dual, proto().description(), new CLabel<>());
+                get(proto().description()).asWidget().getElement().getStyle().setTextAlign(TextAlign.JUSTIFY);
+                get(proto().description()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
                 get(proto().description()).asWidget().addDomHandler(onAddGadgetRequested, ClickEvent.getType());
 
-                return contentPanel;
+                return formPanel;
             }
 
             @Override
