@@ -53,6 +53,12 @@ public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IF
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
+        String readOnlyStyle = DefaultWidgetsTheme.StyleDependent.readonly.name();
+        if (!editable) {
+            addStyleDependentName(readOnlyStyle);
+        } else {
+            removeStyleDependentName(readOnlyStyle);
+        }
         super.setEnabled(editable && this.isEnabled());
     }
 
