@@ -299,16 +299,15 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         super.onReset();
 
         if (getDecorator() instanceof WizardDecorator) {
-            ((WizardDecorator) getDecorator()).getBtnNext().setVisible(true);
+            ((WizardDecorator<?>) getDecorator()).getBtnNext().setVisible(true);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void onStepSelected(WizardStep selectedStep) {
         super.onStepSelected(selectedStep);
         if (getDecorator() instanceof WizardDecorator) {
-            ((WizardDecorator) getDecorator()).getBtnNext().setVisible(true);
+            ((WizardDecorator<?>) getDecorator()).getBtnNext().setVisible(true);
         }
         if (selectedStep.equals(confirmationStep)) {
             confirmationDetailsHolder.clear();
@@ -316,7 +315,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
             if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
                 if (getDecorator() instanceof WizardDecorator) {
-                    ((WizardDecorator) getDecorator()).getBtnNext().setVisible(false);
+                    ((WizardDecorator<?>) getDecorator()).getBtnNext().setVisible(false);
                 }
             }
         }
