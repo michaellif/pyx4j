@@ -127,4 +127,5 @@ public class SideMenuList implements ISideMenuNode {
             item.select(appPlace);
         }
     }
+
 }
