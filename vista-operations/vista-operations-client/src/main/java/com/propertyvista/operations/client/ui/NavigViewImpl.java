@@ -34,7 +34,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
     private final SideMenuList root;
 
     public NavigViewImpl() {
-        setStyleName(SiteViewTheme.StyleName.SiteViewNavigContainer.name());
+        setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
 
         setHeight("100%");
 

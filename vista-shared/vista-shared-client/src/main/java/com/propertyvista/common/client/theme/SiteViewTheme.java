@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class SiteViewTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewNavigContainer, SiteViewShortCuts, SiteViewShortCutsItem;
+        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewShortCuts, SiteViewShortCutsItem;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -66,44 +66,6 @@ public class SiteViewTheme extends Theme {
         style = new Style(".", StyleName.SiteViewFooter.name());
 //        style.addProperty("background", "url('" + VistaImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
         style.addProperty("background-color", ThemeColor.object1);
-        addStyle(style);
-
-        // NavigationContainer (Accordion menu):
-        style = new Style(".", StyleName.SiteViewNavigContainer.name());
-        style.addProperty("border-right", "4px solid");
-        style.addProperty("border-right-color", ThemeColor.object1);
-        style.addProperty("line-height", "1.5em");
-        style.addProperty("white-space", "nowrap");
-        addStyle(style);
-
-        /*
-         * components within the class:
-         */
-        // stack header
-        style = new Style(".", StyleName.SiteViewNavigContainer.name(), " .gwt-StackLayoutPanelHeader");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("padding-left", "0.5em");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColor.object1, 0.1);
-        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.6);
-        addStyle(style);
-
-        style = new Style(".", StyleName.SiteViewNavigContainer.name(), " a:link, .", StyleName.SiteViewNavigContainer.name(), " a:visited, .",
-                StyleName.SiteViewNavigContainer.name(), " a:active");
-        style.addProperty("text-decoration", "none");
-        addStyle(style);
-
-        style = new Style(".", StyleName.SiteViewNavigContainer.name(), " .gwt-StackLayoutPanelHeader-", StyleDependent.selected.name());
-        style.addProperty("font-weight", "bold");
-        style.addTextShadow(ThemeColor.foreground, "1px 1px 0");
-        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
-        addStyle(style);
-
-        // stack content
-        style = new Style(".", StyleName.SiteViewNavigContainer.name(), " .gwt-StackLayoutPanelContent");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColor.foreground, 0.02);
         addStyle(style);
 
         // Action (Header right side hyperlinks):
