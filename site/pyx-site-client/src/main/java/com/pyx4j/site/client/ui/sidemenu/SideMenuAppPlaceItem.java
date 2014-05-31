@@ -31,13 +31,17 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
     private final AppPlace appPlace;
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, ButtonImages images) {
+        this(appPlace, null, images);
+    }
+
+    public SideMenuAppPlaceItem(final AppPlace appPlace, String caption, ButtonImages images) {
         super(new Command() {
 
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(appPlace);
             }
-        }, AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel(), images);
+        }, caption == null ? AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel() : caption, images);
         this.appPlace = appPlace;
     }
 

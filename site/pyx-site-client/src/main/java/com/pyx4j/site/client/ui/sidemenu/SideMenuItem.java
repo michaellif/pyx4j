@@ -101,6 +101,10 @@ public class SideMenuItem implements ISideMenuNode {
 
     }
 
+    public void setCaption(String text) {
+        label.setText(text);
+    }
+
     public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images) {
         this((Command) null, caption, images);
         this.submenu = submenu;
@@ -151,10 +155,6 @@ public class SideMenuItem implements ISideMenuNode {
 
     public boolean isSelected() {
         return selected;
-    }
-
-    public Label getLabel() {
-        return label;
     }
 
     public void setVisible(boolean visible) {
