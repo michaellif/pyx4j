@@ -13,12 +13,13 @@
  */
 package com.propertyvista.crm.client.ui;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
@@ -35,18 +36,21 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class NavigSettingsViewImpl extends ScrollPanel implements NavigSettingsView {
+public class NavigSettingsViewImpl extends Composite implements NavigSettingsView {
 
     private static final I18n i18n = I18n.get(NavigSettingsViewImpl.class);
 
-    private final SideMenuList root;
+    private final SideMenu menu;
 
     public NavigSettingsViewImpl() {
+
+        SideMenuList root = new SideMenuList();
+        menu = new SideMenu(root);
+        initWidget(menu);
+
         setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
 
         setHeight("100%");
-
-        root = new SideMenuList();
 
         {//Profile
             if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
@@ -156,17 +160,11 @@ public class NavigSettingsViewImpl extends ScrollPanel implements NavigSettingsV
             }
         }
 
-        add(root.asWidget());
-
     }
 
     @Override
     public void select(AppPlace appPlace) {
-        root.select(appPlace);
-        SideMenuItem selected = root.getSelectedLeaf();
-        if (selected != null) {
-            ensureVisible(selected.asWidget());
-        }
+        menu.select(appPlace);
     }
 
 }

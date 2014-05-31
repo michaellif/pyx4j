@@ -13,11 +13,12 @@
  */
 package com.propertyvista.operations.client.ui;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
@@ -27,18 +28,21 @@ import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
-public class NavigViewImpl extends ScrollPanel implements NavigView {
+public class NavigViewImpl extends Composite implements NavigView {
 
     private static final I18n i18n = I18n.get(NavigViewImpl.class);
 
-    private final SideMenuList root;
+    private final SideMenu menu;
 
     public NavigViewImpl() {
+
+        SideMenuList root = new SideMenuList();
+        menu = new SideMenu(root);
+        initWidget(menu);
+
         setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
 
         setHeight("100%");
-
-        root = new SideMenuList();
 
         {//PMC Management
             SideMenuList list = new SideMenuList();
@@ -122,16 +126,10 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.DirectBankingSimFile(), VistaOperationsBehavior.Caledon));
         }
 
-        add(root.asWidget());
     }
 
     @Override
     public void select(AppPlace appPlace) {
-        root.select(appPlace);
-        SideMenuItem selected = root.getSelectedLeaf();
-        if (selected != null) {
-            ensureVisible(selected.asWidget());
-        }
+        menu.select(appPlace);
     }
-
 }

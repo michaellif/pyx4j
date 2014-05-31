@@ -17,11 +17,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
@@ -34,7 +35,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class NavigViewImpl extends ScrollPanel implements NavigView {
+public class NavigViewImpl extends Composite implements NavigView {
 
     private static final I18n i18n = I18n.get(NavigViewImpl.class);
 
@@ -45,18 +46,21 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
         }
     };
 
-    private final SideMenuList root;
+    private final SideMenu menu;
 
     private SideMenuAppPlaceItem systemDashboard;
 
     private SideMenuList customDashboards;
 
     public NavigViewImpl() {
+
+        SideMenuList root = new SideMenuList();
+        menu = new SideMenu(root);
+        initWidget(menu);
+
         setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
 
         setHeight("100%");
-
-        root = new SideMenuList();
 
         {//Dashboards
             SideMenuList list = new SideMenuList();
@@ -163,17 +167,11 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance()));
         }
 
-        add(root.asWidget());
-
     }
 
     @Override
     public void select(AppPlace appPlace) {
-        root.select(appPlace);
-        SideMenuItem selected = root.getSelectedLeaf();
-        if (selected != null) {
-            ensureVisible(selected.asWidget());
-        }
+        menu.select(appPlace);
     }
 
     @Override
