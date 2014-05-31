@@ -210,18 +210,18 @@ public class SideMenuItem implements ISideMenuNode {
 
     void setIndentation(int indentation) {
         this.indentation = indentation;
-        itemPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
-        itemPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
-        itemPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
+        contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
+        contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
+        contentPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
         switch (indentation) {
         case 0:
-            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
+            contentPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l1.name());
             break;
         case 1:
-            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
+            contentPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l2.name());
             break;
         case 2:
-            itemPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
+            contentPanel.addStyleDependentName(SideMenuTheme.StyleDependent.l3.name());
             break;
         default:
             break;

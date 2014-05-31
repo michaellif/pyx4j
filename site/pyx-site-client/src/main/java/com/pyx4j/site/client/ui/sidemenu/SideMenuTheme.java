@@ -97,7 +97,11 @@ public class SideMenuTheme extends Theme {
         style.addProperty("left", "0");
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, " .", StyleName.SideMenuList);
+        style.addProperty("padding-bottom", "15px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, ">.", StyleName.SideMenuItemPanel);
         style.addProperty("line-height", "2.2em");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
@@ -106,33 +110,33 @@ public class SideMenuTheme extends Theme {
         style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.15);
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1, ".", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, ">.", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
         style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.object1, 0.1);
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1, " .", StyleName.SideMenuExpantionHandler);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, ">.", StyleName.SideMenuItemPanel, " .", StyleName.SideMenuExpantionHandler);
         style.addProperty("display", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l2, ">.", StyleName.SideMenuItemPanel);
         style.addProperty("padding-left", "20px");
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2, ".", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l2, ">.", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2, ":hover");
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l2, ">.", StyleName.SideMenuItemPanel, ":hover");
         style.addProperty("background", ThemeColor.foreground, 0.05);
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l3);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l3, ">.", StyleName.SideMenuItemPanel);
         style.addProperty("padding-left", "40px");
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l3, ":hover");
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l3, ">.", StyleName.SideMenuItemPanel, ":hover");
         style.addProperty("background", ThemeColor.foreground, 0.05);
         addStyle(style);
 
