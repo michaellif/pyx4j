@@ -97,7 +97,7 @@ public class SideMenuTheme extends Theme {
         style.addProperty("left", "0");
         addStyle(style);
 
-        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, " .", StyleName.SideMenuList);
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, " >.", StyleName.SideMenuList);
         style.addProperty("padding-bottom", "15px");
         addStyle(style);
 
