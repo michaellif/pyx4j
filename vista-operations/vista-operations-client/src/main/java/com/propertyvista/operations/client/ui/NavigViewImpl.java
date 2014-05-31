@@ -13,396 +13,125 @@
  */
 package com.propertyvista.operations.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.NavigationIDs;
+import com.pyx4j.commons.Key;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.GlassPanel;
-import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
-import com.propertyvista.operations.client.activity.NavigFolder;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 
-public class NavigViewImpl extends StackLayoutPanel implements NavigView {
+public class NavigViewImpl extends ScrollPanel implements NavigView {
 
-    private final static double HEADER_SIZE = 3;
+    private static final I18n i18n = I18n.get(NavigViewImpl.class);
 
-    public static enum StyleSuffix implements IStyleName {
-        Item, NoBottomMargin
-    }
-
-    private MainNavigPresenter presenter;
-
-    private List<NavigFolderWidget> lastKnownPlaces = null;
+    private final SideMenuList root;
 
     public NavigViewImpl() {
-        super(Unit.EM);
         setStyleName(SiteViewTheme.StyleName.SiteViewNavigContainer.name());
 
         setHeight("100%");
 
-        addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
-            @Override
-            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-                GlassPanel.show(GlassStyle.Transparent, null);
-            }
-        });
-        addSelectionHandler(new SelectionHandler<Integer>() {
-            @Override
-            public void onSelection(SelectionEvent<Integer> event) {
-                onSelected(event.getSelectedItem());
-                GlassPanel.hide();
-            }
-        });
+        root = new SideMenuList();
+
+        {//PMC Management
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("PMC Management"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.PMC(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.PmcMerchantAccount(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.Trigger(), VistaOperationsBehavior.ProcessAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.TriggerRun(), VistaOperationsBehavior.ProcessAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.TriggerRunData(), VistaOperationsBehavior.ProcessAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.BillingSetup(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Management.CreditCheckTransaction(), VistaOperationsBehavior.SystemAdmin));
+        }
+
+        {//Funds Transfer
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Funds Transfer"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.DirectDebitRecord(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsTransferFile(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsTransferBatch(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsTransferRecord(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsReconciliationFile(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsReconciliationSummary(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsReconciliationRecord(), VistaOperationsBehavior.Caledon));
+
+        }
+
+        {//Security
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Security.AuditRecord(), VistaOperationsBehavior.SystemAdmin));
+        }
+
+        {//Legal
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.PmcTerms(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.PmcPaymentPadTerms(), VistaOperationsBehavior.SystemAdmin));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.PmcCaledonTermsTemplate(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.PmcCaledonSoleProprietorshipSection(), VistaOperationsBehavior.SystemAdmin));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ProspectPortalTermsAndConditions(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ProspectPortalPrivacyPolicy(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ResidentPortalTermsAndConditions(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.ResidentPortalPrivacyPolicy(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantBillingTerms(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantPreAuthorizedPaymentECheck(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantPreAuthorizedPaymentCreditCard(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantCaledonConvenienceFee(), VistaOperationsBehavior.SystemAdmin));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Legal.TenantSurePapAgreement(), VistaOperationsBehavior.SystemAdmin));
+
+        }
+
+        {//Administration
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Administration"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.Maintenance(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.Simulation(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.AdminUsers(), VistaOperationsBehavior.SystemAdmin));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Administration.EncryptedStorage(), VistaOperationsBehavior.SecurityAdmin));
+        }
+
+        if (ApplicationMode.isDevelopment()) {//Dev Simulation
+            SideMenuList list = new SideMenuList();
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dev Simulation"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.SimulatedDataPreload(), VistaOperationsBehavior.SecurityAdmin));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.PadSimulation.PadSimFile(), VistaOperationsBehavior.Caledon));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulatorConfiguration()
+                    .formViewerPlace(new Key(1)), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount(),
+                    VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard(),
+                    VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction(),
+                    VistaOperationsBehavior.Caledon));
+
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.DirectBankingSimRecord(), VistaOperationsBehavior.Caledon));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.DirectBankingSimFile(), VistaOperationsBehavior.Caledon));
+        }
+
+        add(root.asWidget());
     }
 
     @Override
-    public void setPresenter(final MainNavigPresenter presenter) {
-
-        if (this.presenter != null) {
-            if (presenter.getClass() != this.presenter.getClass()) {
-                clearState(); // CRM <-> Settings navigation switch!.. 
-            }
-        }
-
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void setNavigFolders(List<NavigFolder> folders) {
-/*
- * TODO when navigation item structure is finalized review this algorithm again
- * 
- * NOTE: the algorithm needs to be thoroughly tested with different data sets
- * To refresh the stack every time uncomment the lines below
- * 
- * this.clear();
- * lastKnownPlaces = null;
- */
-        List<NavigFolderWidget> obsoleteFolders = new ArrayList<NavigFolderWidget>(10);
-        if (lastKnownPlaces != null && lastKnownPlaces.size() > 0) {
-            for (NavigFolderWidget navigFolderWidget : lastKnownPlaces) {
-
-                //scrolling through known stacks
-                String headerTitle = navigFolderWidget.getStackTitle();
-                boolean folderFound = false;
-
-                //matching new folders to the existing ones
-                for (NavigFolder navigFolder : folders) {
-                    if (navigFolder.getTitle().equals(headerTitle)) {//assume that the the stack is found
-                        folderFound = true;
-
-                        List<NavigItemAnchor> obsoleteAnchors = new ArrayList<NavigViewImpl.NavigItemAnchor>(10);
-
-                        // now scrolling through the existing content
-                        for (NavigItemAnchor anchor : navigFolderWidget.getItems()) {
-                            //matching new content to the existing one
-                            boolean itemFound = false;
-                            for (AppPlace place : navigFolder.getNavigItems()) {
-                                if (anchor.equals(place)) {
-                                    itemFound = true;
-                                    break;
-                                }
-                            }
-                            if (!itemFound) {
-                                //existing item is obsolete remove it
-                                obsoleteAnchors.add(anchor);
-                            }
-                        }
-
-                        for (NavigItemAnchor oa : obsoleteAnchors) {
-                            navigFolderWidget.removeItem(oa);
-                        }
-
-                        //now the other way around - match old content to the new one to find fresh items
-                        for (AppPlace place : navigFolder.getNavigItems()) {
-                            boolean itemFound = false;
-                            for (NavigItemAnchor anchor : navigFolderWidget.getItems()) {
-                                if (anchor.equals(place)) {
-                                    itemFound = true;
-                                    anchor.update(place); // update with new place data (caption/description)
-                                    break;
-                                }
-                            }
-                            if (!itemFound) {
-                                //brand new item
-                                navigFolderWidget.addItem(new NavigItemAnchor(place));
-                            }
-                        }
-                        break;
-
-                    }
-
-                }
-
-                if (!folderFound)
-                    obsoleteFolders.add(navigFolderWidget);
-            }
-            //remove obsolete stacks
-            for (NavigFolderWidget nw : obsoleteFolders) {
-                remove(nw);
-                lastKnownPlaces.remove(nw);
-            }
-            /**
-             * now the other way around - add fresh folders
-             */
-            NavigFolderWidget navigFolderWidget = null;
-            for (NavigFolder navigFolder : folders) {
-                boolean folderFound = false;
-                for (NavigFolderWidget widget : lastKnownPlaces) {
-                    if (navigFolder.getTitle().equals(widget.getStackTitle())) {
-                        folderFound = true;
-                        navigFolderWidget = widget;
-                        break;
-                    }
-                }
-                if (folderFound) {
-// TODO not sure if we need this:                    
-//                    navigFolderWidget.updateItems(navigFolder);
-//                    navigFolderWidget = null; // just update content
-                } else {
-                    navigFolderWidget = new NavigFolderWidget(navigFolder);
-                    add(navigFolderWidget, navigFolderWidget.getStackHeaderWidget(), HEADER_SIZE);
-                    lastKnownPlaces.add(navigFolderWidget);
-                }
-            }
-
-        } else {
-            lastKnownPlaces = new ArrayList<NavigFolderWidget>(10);
-            NavigFolderWidget navigFolderWidget = null;
-            for (NavigFolder navigFolder : folders) {
-                navigFolderWidget = new NavigFolderWidget(navigFolder);
-                add(navigFolderWidget, navigFolderWidget.getStackHeaderWidget(), HEADER_SIZE);
-                lastKnownPlaces.add(navigFolderWidget);
-            }
-
+    public void select(AppPlace appPlace) {
+        root.select(appPlace);
+        SideMenuItem selected = root.getSelectedLeaf();
+        if (selected != null) {
+            ensureVisible(selected.asWidget());
         }
     }
 
-    private void onSelected(int index) {
-        for (int i = 0; i < getWidgetCount(); ++i) {
-            Widget w = getWidget(i);
-            if (w instanceof NavigFolderWidget) {
-                ((NavigFolderWidget) w).setSelected(index == i);
-            }
-        }
-    }
-
-    private void clearState() {
-        this.clear();
-        lastKnownPlaces = null;
-    }
-
-    //
-    //  Folder/Item classes:
-    //
-
-    class NavigFolderWidget extends ScrollPanel {
-
-        private NavigFolder folder;
-
-        private StackHeaderWidget stackHeaderWidget;
-
-        private final List<NavigItemAnchor> items = new ArrayList<NavigItemAnchor>(10);
-
-        private final FlowPanel list = new FlowPanel();
-
-        public NavigFolderWidget(NavigFolder folder) {
-            add(list);
-            updateItems(folder);
-        }
-
-        public void updateItems(NavigFolder folder) {
-            this.folder = folder;
-
-            items.clear();
-            for (AppPlace place : folder.getNavigItems()) {
-                addItem(new NavigItemAnchor(place));
-            }
-
-            stackHeaderWidget = new StackHeaderWidget();
-        }
-
-        public void addItem(NavigItemAnchor item) {
-            if (item != null) {
-                items.add(item);
-                list.add(item);
-            }
-
-        }
-
-        public void removeItem(NavigItemAnchor item) {
-            if (item != null) {
-                for (NavigItemAnchor a : items) {
-                    if (a.equals(item)) {
-                        items.remove(item);
-                        list.remove(item);
-                        break;
-                    }
-                }
-            }
-        }
-
-        public List<NavigItemAnchor> getItems() {
-            return items;
-        }
-
-        // TODO implement better algorithm when NavigFolder is finalized
-        @Override
-        public boolean equals(Object obj) {
-            return (getStackTitle() != null ? getStackTitle().equals(obj) : false);
-        }
-
-        //
-        //  UI stuff:
-        //
-
-        public String getStackTitle() {
-            return folder.getTitle();
-        }
-
-        public Widget getStackHeaderWidget() {
-            return stackHeaderWidget;
-        }
-
-        public void setSelected(boolean selected) {
-            stackHeaderWidget.setSelected(selected);
-        }
-
-        private class StackHeaderWidget extends HorizontalPanel {
-
-            private Image image = null;
-
-            private boolean selected = false;
-
-            private StackHeaderWidget() {
-
-                Label label = new Label(folder.getTitle());
-                label.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Folder, folder.getTitle()).toString());
-
-                if (folder.getImageNormal() != null) {
-                    image = new Image(folder.getImageNormal());
-
-                    addHandler(new MouseOverHandler() {
-                        @Override
-                        public void onMouseOver(MouseOverEvent event) {
-                            if (!selected) {
-                                image.setResource(folder.getImageHover());
-                            }
-                        }
-                    }, MouseOverEvent.getType());
-                    addHandler(new MouseOutHandler() {
-                        @Override
-                        public void onMouseOut(MouseOutEvent event) {
-                            if (!selected) {
-                                image.setResource(folder.getImageNormal());
-                            }
-                        }
-                    }, MouseOutEvent.getType());
-
-                    image.getElement().getStyle().setMarginTop(0.2, Unit.EM);
-                    image.getElement().getStyle().setMarginRight(0.5, Unit.EM);
-                    image.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
-                    add(image);
-                    setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
-                } else {
-                    label.getElement().getStyle().setMarginLeft(10, Unit.PX);
-                }
-
-                add(label);
-                setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);
-                setCellWidth(label, "100%");
-
-                setWidth("100%");
-                setHeight("100%");//VS to align header content in the middle
-                //  setHeight(HEADER_SIZE + "em");
-            }
-
-            private void setSelected(boolean selected) {
-                this.selected = selected;
-
-                if (selected) {
-                    addStyleDependentName(SiteViewTheme.StyleDependent.selected.name());
-                } else {
-                    removeStyleDependentName(SiteViewTheme.StyleDependent.selected.name());
-                }
-
-                if (image != null) {
-                    image.setResource(selected ? folder.getImageActive() : folder.getImageNormal());
-                }
-            }
-        }
-    }
-
-    class NavigItemAnchor extends SimplePanel {
-
-        private AppPlace place;
-
-        private final Anchor anchor;
-
-        public NavigItemAnchor(AppPlace place) {
-            this.place = place;
-
-            anchor = new Anchor(getNavigLabel(place));
-            anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(NavigItemAnchor.this.place);
-                }
-            });
-            anchor.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Item, getNavigLabel(place)).toString());
-            setWidget(anchor);
-        }
-
-        public void update(AppPlace place) {
-            this.place = place;
-            anchor.setText(getNavigLabel(place));
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof NavigItemAnchor) {
-                return (place != null ? place.equals(((NavigItemAnchor) obj).place) : false);
-            } else if (obj instanceof AppPlace) {
-                return (place != null ? place.equals(obj) : false);
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        public int hashCode() {
-            return (place != null ? place.hashCode() : 0);
-        }
-    }
-
-    private String getNavigLabel(AppPlace place) {
-        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
-    }
 }

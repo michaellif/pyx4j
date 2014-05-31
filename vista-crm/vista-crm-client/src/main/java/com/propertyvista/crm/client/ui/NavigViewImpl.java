@@ -61,9 +61,9 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
         {//Dashboards
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage()));
 
-            systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)), null);
+            systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)));
             list.addMenuItem(systemDashboard);
 
             customDashboards = new SideMenuList();
@@ -76,11 +76,11 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon()));
 
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex()));
             }
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Building(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Unit(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Landlord(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Building()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Unit()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Landlord()));
 
         }
 
@@ -88,14 +88,14 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest()));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant(), null));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor(), null));
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerLease(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant()));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor()));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerLease()));
             }
         }
 
@@ -103,19 +103,19 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.PotentialTenant(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.PotentialTenant()));
         }
 
         {//LegalAndCollections
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool()));
             if (false) { // TODO L1 implementation
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.L1GenerationTool()));
             }
         }
 
@@ -124,19 +124,19 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon()));
 
             if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer()));
             }
             if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay()));
             }
             if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview()));
             }
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch()));
 
             if (SecurityController.checkAnyBehavior(VistaCrmBehavior.AggregatedTransfer, VistaCrmBehavior.Billing)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment()));
             }
         }
 
@@ -144,10 +144,10 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio()));
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor(), null));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
             }
         }
 
@@ -155,12 +155,12 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.CustomerCreditCheck(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Eft(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.EftVariance(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance(), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.CustomerCreditCheck()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Eft()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.EftVariance()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance()));
         }
 
         add(root.asWidget());

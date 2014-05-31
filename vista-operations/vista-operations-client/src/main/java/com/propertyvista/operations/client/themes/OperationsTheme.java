@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
+import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -117,6 +118,9 @@ public class OperationsTheme extends VistaTheme {
                 addStyle(style);
             }
         });
+
+        addTheme(new SideMenuTheme());
+
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();
