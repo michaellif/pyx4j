@@ -45,12 +45,12 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//Dashboards
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon()));
         }
 
         {//Properties
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon()));
 
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex(), null));
@@ -63,7 +63,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//Tenants
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsIcon()));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant(), null));
@@ -78,7 +78,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//Marketing
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingIcon()));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Marketing.Lead(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.LeaseApplication(), null));
@@ -87,7 +87,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//LegalAndCollections
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalIcon()));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.LegalAndCollections.N4DownloadTool(), null));
@@ -98,7 +98,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//Finance
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon()));
 
             if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), null));
@@ -119,7 +119,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//Organization
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), null));
@@ -130,7 +130,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         {//Reports
             SideMenuList list = new SideMenuList();
-            root.addMenuItem(new SideMenuItem(null, list, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon()));
+            root.addMenuItem(new SideMenuItem(list, i18n.tr("Reports"), CrmImages.INSTANCE.reportsIcon()));
 
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.AutoPayChanges(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.Availability(), null));
