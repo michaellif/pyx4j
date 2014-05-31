@@ -13,8 +13,13 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
@@ -25,6 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -32,9 +38,20 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
     private static final I18n i18n = I18n.get(NavigViewImpl.class);
 
+    private static final Comparator<DashboardMetadata> ORDER_BY_NAME = new Comparator<DashboardMetadata>() {
+        @Override
+        public int compare(DashboardMetadata e1, DashboardMetadata e2) {
+            return e1.name().getValue().toLowerCase().compareTo(e2.name().getValue().toLowerCase());
+        }
+    };
+
     private final SideMenuList root;
 
     private NavigPresenter presenter;
+
+    private SideMenuAppPlaceItem systemDashboard;
+
+    private SideMenuList customDashboards;
 
     public NavigViewImpl() {
         setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
@@ -46,6 +63,14 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
         {//Dashboards
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsIcon()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.Manage(), null));
+
+            systemDashboard = new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(new Key(-1)), null);
+            list.addMenuItem(systemDashboard);
+
+            customDashboards = new SideMenuList();
+            list.addMenuItem(new SideMenuItem(customDashboards, i18n.tr("Custom Dashboards"), null));
+
         }
 
         {//Properties
@@ -155,6 +180,15 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
         SideMenuItem selected = root.getSelected();
         if (selected != null) {
             ensureVisible(selected.asWidget());
+        }
+    }
+
+    @Override
+    public void updateCustomDashboards(Vector<DashboardMetadata> metadataList) {
+        customDashboards.clear();
+        Collections.sort(metadataList, ORDER_BY_NAME);
+        for (DashboardMetadata metadata : metadataList) {
+            customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), null));
         }
     }
 }

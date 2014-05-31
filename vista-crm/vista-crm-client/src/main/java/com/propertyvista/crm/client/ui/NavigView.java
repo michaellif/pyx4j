@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public interface NavigView extends IsWidget, IsView {
 
@@ -26,4 +30,6 @@ public interface NavigView extends IsWidget, IsView {
     void setPresenter(NavigPresenter presenter);
 
     void select(AppPlace appPlace);
+
+    void updateCustomDashboards(Vector<DashboardMetadata> metadataList);
 }

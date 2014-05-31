@@ -386,6 +386,7 @@ public class CrmSiteMap implements SiteMap {
         public static class Manage extends CrmCrudAppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Main Dashboard")
         public static class View extends AppPlace {
         }
 

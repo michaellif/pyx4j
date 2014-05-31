@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.activity;
 
+import java.util.Collections;
+import java.util.Vector;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -20,6 +23,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -28,7 +34,9 @@ import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class NavigActivity extends AbstractActivity implements NavigPresenter, BoardUpdateHandler {
 
@@ -72,7 +80,17 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
     }
 
     private void updateDashboardItems() {
-        // TODO Auto-generated method stub
+        if (isDashboardFolderUpdateRequired) {
+            dashboardMetadataCrudService.list(new DefaultAsyncCallback<EntitySearchResult<DashboardMetadata>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<DashboardMetadata> result) {
+                    view.updateCustomDashboards(result.getData());
+                    isDashboardFolderUpdateRequired = false;
+                }
+
+            }, EntityListCriteria.create(DashboardMetadata.class));
+        }
 
     }
 }
