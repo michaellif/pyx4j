@@ -555,15 +555,15 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "LEGAL: Lease Agreement")
+            @PlaceProperties(caption = "Lease Agreement")
             public static class AgreementLegalTerms extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "LEGAL: Lease Application")
+            @PlaceProperties(caption = "Lease Application")
             public static class LeaseApplicationTerms extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(caption = "LEGAL: Portal Terms and Privacy")
+            @PlaceProperties(caption = "Portal Terms and Privacy")
             public static class LegalDocumentation extends CrmCrudAppPlace {
             }
 

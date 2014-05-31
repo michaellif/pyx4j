@@ -177,7 +177,7 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
     @Override
     public void select(AppPlace appPlace) {
         root.select(appPlace);
-        SideMenuItem selected = root.getSelected();
+        SideMenuItem selected = root.getSelectedLeaf();
         if (selected != null) {
             ensureVisible(selected.asWidget());
         }

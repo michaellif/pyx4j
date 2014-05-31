@@ -135,9 +135,14 @@ public class NavigSettingsViewImpl extends ScrollPanel implements NavigSettingsV
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment(), null));
             }
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseApplicationTerms(), null));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LegalDocumentation(), null));
+
+            SideMenuList legalList = new SideMenuList();
+            list.addMenuItem(new SideMenuItem(legalList, i18n.tr("Legal"), null));
+
+            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms(), null));
+            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LeaseApplicationTerms(), null));
+            legalList.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.LegalDocumentation(), null));
+
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.MaintenanceRequest(), null));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Policies.N4(), null));
 //          list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Settings.Policies.Pet(), null));
@@ -165,7 +170,7 @@ public class NavigSettingsViewImpl extends ScrollPanel implements NavigSettingsV
     @Override
     public void select(AppPlace appPlace) {
         root.select(appPlace);
-        SideMenuItem selected = root.getSelected();
+        SideMenuItem selected = root.getSelectedLeaf();
         if (selected != null) {
             ensureVisible(selected.asWidget());
         }
