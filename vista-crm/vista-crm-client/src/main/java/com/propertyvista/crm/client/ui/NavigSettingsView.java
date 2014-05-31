@@ -23,8 +23,6 @@ public interface NavigSettingsView extends IsWidget, IsView {
     public interface NavigSettingsPresenter {
     }
 
-    void setPresenter(NavigSettingsPresenter presenter);
-
     void select(AppPlace appPlace);
 
 }

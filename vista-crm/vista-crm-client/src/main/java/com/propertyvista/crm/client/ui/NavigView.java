@@ -27,8 +27,6 @@ public interface NavigView extends IsWidget, IsView {
     public interface NavigPresenter {
     }
 
-    void setPresenter(NavigPresenter presenter);
-
     void select(AppPlace appPlace);
 
     void updateDashboards(Vector<DashboardMetadata> metadataList);

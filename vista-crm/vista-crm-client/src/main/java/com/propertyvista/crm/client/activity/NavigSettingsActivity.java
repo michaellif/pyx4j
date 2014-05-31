@@ -33,7 +33,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigSett
     public NavigSettingsActivity(Place place) {
         this.place = place;
         view = CrmSite.getViewFactory().getView(NavigSettingsView.class);
-        view.setPresenter(this);
     }
 
     @Override

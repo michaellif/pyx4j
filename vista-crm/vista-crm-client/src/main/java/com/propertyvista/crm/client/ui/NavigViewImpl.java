@@ -47,8 +47,6 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
     private final SideMenuList root;
 
-    private NavigPresenter presenter;
-
     private SideMenuAppPlaceItem systemDashboard;
 
     private SideMenuList customDashboards;
@@ -167,11 +165,6 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
 
         add(root.asWidget());
 
-    }
-
-    @Override
-    public void setPresenter(NavigPresenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override

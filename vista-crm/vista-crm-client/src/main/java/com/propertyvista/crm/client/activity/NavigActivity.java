@@ -55,8 +55,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
         dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
 
         view = CrmSite.getViewFactory().getView(NavigView.class);
-        view.setPresenter(this);
-
     }
 
     @Override

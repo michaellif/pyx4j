@@ -41,8 +41,6 @@ public class NavigSettingsViewImpl extends ScrollPanel implements NavigSettingsV
 
     private final SideMenuList root;
 
-    private NavigSettingsPresenter presenter;
-
     public NavigSettingsViewImpl() {
         setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
 
@@ -160,11 +158,6 @@ public class NavigSettingsViewImpl extends ScrollPanel implements NavigSettingsV
 
         add(root.asWidget());
 
-    }
-
-    @Override
-    public void setPresenter(NavigSettingsPresenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override
