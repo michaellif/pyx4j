@@ -98,7 +98,7 @@ public class SideMenuTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1);
-        style.addProperty("height", "2.2em");
+        style.addProperty("line-height", "2.2em");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "5px 0px 3px 0");
