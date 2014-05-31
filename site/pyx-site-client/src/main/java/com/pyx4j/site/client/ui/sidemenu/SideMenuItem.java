@@ -50,11 +50,13 @@ public class SideMenuItem implements ISideMenuNode {
 
     private boolean selected;
 
-    private final Command command;
+    private boolean expanded;
+
+    private Command command;
 
     private final ButtonImages images;
 
-    private final SideMenuList submenu;
+    private SideMenuList submenu;
 
     private final FlowPanel itemPanel;
 
@@ -62,10 +64,9 @@ public class SideMenuItem implements ISideMenuNode {
 
     private SideMenuList parent;
 
-    public SideMenuItem(final Command command, SideMenuList submenu, String caption, ButtonImages images) {
+    public SideMenuItem(final Command command, String caption, ButtonImages images) {
         super();
         this.command = command;
-        this.submenu = submenu;
         this.images = images;
 
         contentPanel = new ContentPanel();
@@ -74,6 +75,19 @@ public class SideMenuItem implements ISideMenuNode {
         itemPanel = new FlowPanel();
         itemPanel.setStyleName(SideMenuTheme.StyleName.SideMenuItemPanel.name());
         contentPanel.add(itemPanel);
+
+        itemPanel.addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (SideMenuItem.this.command != null) {
+                    SideMenuItem.this.command.execute();
+                }
+                LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
+                if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+                }
+            }
+        }, ClickEvent.getType());
 
         if (images != null) {
             icon = new Image(images.regular());
@@ -85,11 +99,23 @@ public class SideMenuItem implements ISideMenuNode {
         label.setStyleName(SideMenuTheme.StyleName.SideMenuLabel.name());
         itemPanel.add(label);
 
+    }
+
+    public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images) {
+        this((Command) null, caption, images);
+        this.submenu = submenu;
         if (submenu != null) {
             contentPanel.add(submenu);
             submenu.setParent(this);
             setIndentation(indentation);
         }
+        this.command = new Command() {
+            @Override
+            public void execute() {
+                setExpanded(!expanded);
+            }
+        };
+        setExpanded(false);
     }
 
     @Override
@@ -104,6 +130,7 @@ public class SideMenuItem implements ISideMenuNode {
             if (images != null) {
                 icon.setResource(images.active());
             }
+            setExpanded(true);
         } else {
             itemPanel.removeStyleDependentName(SideMenuTheme.StyleDependent.active.name());
             if (images != null) {
@@ -112,6 +139,13 @@ public class SideMenuItem implements ISideMenuNode {
         }
         if (getParent().getParent() != null) {
             getParent().getParent().setSelected(select);
+        }
+    }
+
+    public void setExpanded(boolean expanded) {
+        if (submenu != null) {
+            submenu.setVisible(expanded);
+            this.expanded = expanded;
         }
     }
 
@@ -163,18 +197,6 @@ public class SideMenuItem implements ISideMenuNode {
             setStyleName(SideMenuTheme.StyleName.SideMenuItem.name());
             sinkEvents(Event.ONCLICK);
             getElement().getStyle().setCursor(Cursor.POINTER);
-            addDomHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    if (command != null) {
-                        command.execute();
-                    }
-                    LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
-                    if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
-                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
-                    }
-                }
-            }, ClickEvent.getType());
         }
 
         @Override
@@ -189,4 +211,5 @@ public class SideMenuItem implements ISideMenuNode {
             submenu.select(appPlace);
         }
     }
+
 }

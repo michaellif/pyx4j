@@ -37,7 +37,7 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
             public void execute() {
                 AppSite.getPlaceController().goTo(appPlace);
             }
-        }, null, AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel(), images);
+        }, AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel(), images);
         this.appPlace = appPlace;
     }
 
