@@ -24,6 +24,10 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -67,7 +71,7 @@ public class SideMenuItem implements ISideMenuNode {
 
     private SideMenuList parent;
 
-    public SideMenuItem(final Command command, String caption, ButtonImages images) {
+    public SideMenuItem(final Command command, String caption, final ButtonImages images) {
         super();
         this.command = command;
         this.images = images;
@@ -91,6 +95,24 @@ public class SideMenuItem implements ISideMenuNode {
                 }
             }
         }, ClickEvent.getType());
+
+        itemPanel.addDomHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                if (!selected && images != null) {
+                    icon.setResource(images.hover());
+                }
+            }
+        }, MouseOverEvent.getType());
+
+        itemPanel.addDomHandler(new MouseOutHandler() {
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                if (!selected && images != null) {
+                    icon.setResource(images.regular());
+                }
+            }
+        }, MouseOutEvent.getType());
 
         if (images != null) {
             icon = new Image(images.regular());
