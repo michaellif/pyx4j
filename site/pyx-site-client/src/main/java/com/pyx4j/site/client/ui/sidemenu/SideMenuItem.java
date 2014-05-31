@@ -37,6 +37,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
@@ -57,6 +58,8 @@ public class SideMenuItem implements ISideMenuNode {
     private final ButtonImages images;
 
     private SideMenuList submenu;
+
+    private Image expantionHandler;
 
     private final FlowPanel itemPanel;
 
@@ -101,10 +104,6 @@ public class SideMenuItem implements ISideMenuNode {
 
     }
 
-    public void setCaption(String text) {
-        label.setText(text);
-    }
-
     public SideMenuItem(SideMenuList submenu, String caption, ButtonImages images) {
         this((Command) null, caption, images);
         this.submenu = submenu;
@@ -112,19 +111,30 @@ public class SideMenuItem implements ISideMenuNode {
             contentPanel.add(submenu);
             submenu.setParent(this);
             setIndentation(indentation);
+
+            expantionHandler = new Image(SiteImages.INSTANCE.expand());
+            expantionHandler.setStyleName(SideMenuTheme.StyleName.SideMenuExpantionHandler.name());
+            itemPanel.add(expantionHandler);
+
+            this.command = new Command() {
+                @Override
+                public void execute() {
+                    setExpanded(!expanded);
+                }
+            };
+
+            setExpanded(false);
         }
-        this.command = new Command() {
-            @Override
-            public void execute() {
-                setExpanded(!expanded);
-            }
-        };
-        setExpanded(false);
+
     }
 
     @Override
     public Widget asWidget() {
         return contentPanel;
+    }
+
+    public void setCaption(String text) {
+        label.setText(text);
     }
 
     public void setSelected(boolean select) {
@@ -150,6 +160,13 @@ public class SideMenuItem implements ISideMenuNode {
         if (submenu != null) {
             submenu.setVisible(expanded);
             this.expanded = expanded;
+
+            if (expanded) {
+                expantionHandler.setResource(SiteImages.INSTANCE.collapse());
+            } else {
+                expantionHandler.setResource(SiteImages.INSTANCE.expand());
+            }
+
         }
     }
 

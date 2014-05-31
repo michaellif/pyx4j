@@ -31,7 +31,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class SideMenuTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SideMenu, SideMenuList, SideMenuItem, SideMenuLabel, SideMenuIcon, SideMenuItemPanel;
+        SideMenu, SideMenuList, SideMenuItem, SideMenuLabel, SideMenuIcon, SideMenuItemPanel, SideMenuExpantionHandler;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -89,10 +89,20 @@ public class SideMenuTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel);
-        style.addProperty("height", "30px");
+        style.addProperty("padding", "4px 0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, ":hover");
+        style.addProperty("background", ThemeColor.foreground, 0.15);
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuExpantionHandler);
+        style.addProperty("position", "absolute");
+        style.addProperty("left", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1);
+        style.addProperty("height", "2.2em");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "5px 0px 3px 0");
@@ -103,6 +113,10 @@ public class SideMenuTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("background", ThemeColor.object1, 1);
+        addStyle(style);
+
+        style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l1, " .", StyleName.SideMenuExpantionHandler);
+        style.addProperty("display", "none");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItemPanel, "-", StyleDependent.l2);
