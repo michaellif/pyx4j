@@ -85,7 +85,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
                 @Override
                 public void onSuccess(EntitySearchResult<DashboardMetadata> result) {
-                    view.updateCustomDashboards(result.getData());
+                    view.updateDashboards(result.getData());
                     isDashboardFolderUpdateRequired = false;
                 }
 

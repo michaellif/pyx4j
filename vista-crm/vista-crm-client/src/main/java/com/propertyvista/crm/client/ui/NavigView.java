@@ -31,5 +31,5 @@ public interface NavigView extends IsWidget, IsView {
 
     void select(AppPlace appPlace);
 
-    void updateCustomDashboards(Vector<DashboardMetadata> metadataList);
+    void updateDashboards(Vector<DashboardMetadata> metadataList);
 }

@@ -184,11 +184,12 @@ public class NavigViewImpl extends ScrollPanel implements NavigView {
     }
 
     @Override
-    public void updateCustomDashboards(Vector<DashboardMetadata> metadataList) {
+    public void updateDashboards(Vector<DashboardMetadata> metadataList) {
         customDashboards.clear();
         Collections.sort(metadataList, ORDER_BY_NAME);
         for (DashboardMetadata metadata : metadataList) {
-            customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), null));
+            customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), metadata.name()
+                    .getStringView(), null));
         }
     }
 }
