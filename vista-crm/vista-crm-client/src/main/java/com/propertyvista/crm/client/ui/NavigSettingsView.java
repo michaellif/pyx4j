@@ -13,21 +13,18 @@
  */
 package com.propertyvista.crm.client.ui;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.IsView;
+import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.activity.NavigFolder;
+public interface NavigSettingsView extends IsWidget, IsView {
 
-public interface NavigView_OLD extends IsWidget, IsView {
-
-
-    public interface MainNavigPresenter {
+    public interface NavigSettingsPresenter {
     }
 
-    public void setPresenter(MainNavigPresenter presenter);
+    void setPresenter(NavigSettingsPresenter presenter);
 
-    public void setNavigFolders(List<NavigFolder> folders);
+    void select(AppPlace appPlace);
+
 }

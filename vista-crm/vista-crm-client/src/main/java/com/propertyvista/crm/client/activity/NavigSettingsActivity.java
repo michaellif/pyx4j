@@ -1,157 +1,47 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on May 28, 2014
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.crm.client.activity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.NavigView_OLD;
-import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
-import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.crm.client.ui.NavigSettingsView;
+import com.propertyvista.crm.client.ui.NavigSettingsView.NavigSettingsPresenter;
 
-public class NavigSettingsActivity extends AbstractActivity implements NavigView_OLD.MainNavigPresenter {
-    private static final I18n i18n = I18n.get(NavigSettingsActivity.class);
+public class NavigSettingsActivity extends AbstractActivity implements NavigSettingsPresenter {
 
-    private final NavigView_OLD view;
+    private final NavigSettingsView view;
+
+    private final Place place;
 
     public NavigSettingsActivity(Place place) {
-        view = CrmSite.getViewFactory().getView(NavigView_OLD.class);
+        this.place = place;
+        view = CrmSite.getViewFactory().getView(NavigSettingsView.class);
         view.setPresenter(this);
-        withPlace(place);
-    }
-
-    public NavigSettingsActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setNavigFolders(createNavigFolders());
         panel.setWidget(view);
+        if (place instanceof AppPlace) {
+            view.select((AppPlace) place);
+        }
     }
 
-    public List<NavigFolder> createNavigFolders() {
-        ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
-
-        NavigFolder folder = null;
-
-        folder = new NavigFolder(i18n.tr("Profile"));
-        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1)));
-            folder.addNavigItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)));
-        }
-        list.add(folder);
-
-        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
-            if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
-                folder = new NavigFolder(i18n.tr("Settings"));
-                folder.addNavigItem(new Settings.OnlinePaymentSetup());
-                folder.addNavigItem(new Settings.CreditCheck());
-                if (ApplicationMode.isDevelopment()) {
-                    folder.addNavigItem(new Settings.CreditCheck.Setup());
-                    folder.addNavigItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1)));
-                }
-                folder.addNavigItem(new CrmSiteMap.Administration.Settings.CommunicationSettings());
-
-                if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
-                    folder.addNavigItem(new Settings.ILSConfig());
-                }
-                list.add(folder);
-            }
-        }
-
-        folder = new NavigFolder(i18n.tr("Security"));
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Security.AuditRecords());
-        }
-        folder.addNavigItem(new Security.UserRole());
-        folder.addNavigItem(new CrmSiteMap.Administration.Security.TenantSecurity());
-        list.add(folder);
-
-        folder = new NavigFolder(i18n.tr("Financial"));
-        folder.addNavigItem(new CrmSiteMap.Administration.Financial.ARCode());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
-            folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
-        }
-        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.OrganizationFinancial, VistaCrmBehavior.PropertyVistaAccountOwner)) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
-        }
-        folder.addNavigItem(new Financial.CustomerCreditCheck());
-        list.add(folder);
-
-        folder = new NavigFolder(i18n.tr("Content Management"));
-        folder.addNavigItem(new ContentManagement.General());
-        folder.addNavigItem(new ContentManagement.Website());
-        folder.addNavigItem(new ContentManagement.Portal());
-        list.add(folder);
-
-        folder = new NavigFolder(i18n.tr("Policies"));
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
-        }
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AutoPay());
-        if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.BackgroundCheck());
-        }
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Billing());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Dates());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Deposits());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.EmailTemplates());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.IdAssignment());
-// TODO VISTA-2187       folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTermination());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment());
-        }
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AgreementLegalTerms());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.LeaseApplicationTerms());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.LegalDocumentation());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.MaintenanceRequest());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.N4());
-//      folder.addNavigItem(new CrmSiteMap.Settings.Policies.Pet());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProductTax());
-        }
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProspectPortal());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.TenantInsurance());
-        if (VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.YardiInterface());
-        }
-
-        list.add(folder);
-
-        return list;
-    }
 }
