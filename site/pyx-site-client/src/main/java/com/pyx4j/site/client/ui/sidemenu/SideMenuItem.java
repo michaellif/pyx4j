@@ -156,6 +156,14 @@ public class SideMenuItem implements ISideMenuNode {
         }
     }
 
+    public SideMenuItem getSelectedLeaf() {
+        if (submenu == null) {
+            return this;
+        } else {
+            return submenu.getSelectedLeaf();
+        }
+    }
+
     public void setExpanded(boolean expanded) {
         if (submenu != null) {
             submenu.setVisible(expanded);

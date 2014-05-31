@@ -102,16 +102,12 @@ public class SideMenuList implements ISideMenuNode {
 
     }
 
-    public SideMenuItem getSelected() {
+    public SideMenuItem getSelectedLeaf() {
         if (items == null)
             return null;
         for (SideMenuItem item : items) {
             if (item.isSelected()) {
-                if (getParent() == null) {
-                    return item;
-                } else {
-                    getParent().getParent().getSelected();
-                }
+                return item.getSelectedLeaf();
             }
         }
         return null;
