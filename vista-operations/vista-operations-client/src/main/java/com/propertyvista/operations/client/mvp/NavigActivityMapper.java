@@ -23,13 +23,16 @@ import com.propertyvista.operations.client.activity.NavigActivity;
 
 public class NavigActivityMapper implements ActivityMapper {
 
+    private static NavigActivity navigActivity = new NavigActivity();
+
     public NavigActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated()) {
-            return new NavigActivity(place);
+            navigActivity.withPlace(place);
+            return navigActivity;
         } else {
             return null;
         }

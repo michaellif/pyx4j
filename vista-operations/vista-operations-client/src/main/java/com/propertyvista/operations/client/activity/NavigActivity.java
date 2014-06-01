@@ -28,11 +28,14 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
 
     private final NavigView view;
 
-    private final Place place;
+    private Place place;
 
-    public NavigActivity(Place place) {
-        this.place = place;
+    public NavigActivity() {
         view = OperationsSite.getViewFactory().getView(NavigView.class);
+    }
+
+    public void withPlace(Place place) {
+        this.place = place;
     }
 
     @Override

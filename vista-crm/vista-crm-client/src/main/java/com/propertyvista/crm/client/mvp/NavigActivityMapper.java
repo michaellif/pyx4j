@@ -26,6 +26,10 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class NavigActivityMapper implements ActivityMapper {
 
+    private static NavigActivity navigActivity = new NavigActivity();
+
+    private static NavigSettingsActivity navigSettingsActivity = new NavigSettingsActivity();
+
     public NavigActivityMapper() {
     }
 
@@ -33,9 +37,11 @@ public class NavigActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
-                return new NavigSettingsActivity(place);
+                navigSettingsActivity.withPlace(place);
+                return navigSettingsActivity;
             } else {
-                return new NavigActivity(place);
+                navigActivity.withPlace(place);
+                return navigActivity;
             }
         } else {
             return null;

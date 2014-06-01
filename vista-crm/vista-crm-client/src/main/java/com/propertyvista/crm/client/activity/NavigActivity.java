@@ -38,22 +38,13 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
     private final NavigView view;
 
-    private final DashboardMetadataCrudService dashboardMetadataCrudService;
+    private DashboardMetadataCrudService dashboardMetadataCrudService;
 
     private boolean isDashboardFolderUpdateRequired;
 
     private static Key previousUserPk;
 
-    private final Place place;
-
-    public NavigActivity(Place place) {
-        this.place = place;
-        Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
-        isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
-        previousUserPk = currentUserPk;
-
-        dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
-
+    public NavigActivity() {
         view = CrmSite.getViewFactory().getView(NavigView.class);
     }
 
@@ -61,6 +52,15 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         eventBus.addHandler(BoardUpdateEvent.getType(), this);
         panel.setWidget(view);
+    }
+
+    public void withPlace(Place place) {
+        Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
+        isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
+        previousUserPk = currentUserPk;
+
+        dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
+
         updateDashboardItems();
         if (place instanceof AppPlace) {
             view.select((AppPlace) place);
