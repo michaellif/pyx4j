@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.sidemenu;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -36,9 +37,16 @@ public class SideMenu extends ScrollPanel {
     public void select(AppPlace appPlace) {
         root.select(appPlace);
         SideMenuItem selected = root.getSelectedLeaf();
-        if (selected != null) {
+        if (selected != null && !isScrolledIntoView(selected.asWidget())) {
             ensureVisible(selected.asWidget());
         }
     }
 
+    private boolean isScrolledIntoView(Widget widget) {
+        if (widget != null) {
+            return (widget.getAbsoluteTop() > getAbsoluteTop())
+                    && (widget.getAbsoluteTop() + widget.getOffsetHeight()) < (getAbsoluteTop() + getOffsetHeight());
+        }
+        return false;
+    }
 }
