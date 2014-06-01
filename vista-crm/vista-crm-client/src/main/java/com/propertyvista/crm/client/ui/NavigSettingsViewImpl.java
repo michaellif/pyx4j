@@ -61,7 +61,7 @@ public class NavigSettingsViewImpl extends Composite implements NavigSettingsVie
             }
         }
 
-        {//Profile
+        {//Settings
             if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
                 if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
                     SideMenuList list = new SideMenuList();

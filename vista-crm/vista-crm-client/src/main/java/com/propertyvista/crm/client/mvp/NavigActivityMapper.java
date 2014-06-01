@@ -17,7 +17,10 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.activity.NavigActivity;
 import com.propertyvista.crm.client.activity.NavigSettingsActivity;
@@ -26,20 +29,33 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class NavigActivityMapper implements ActivityMapper {
 
-    private static NavigActivity navigActivity = new NavigActivity();
+    private static NavigActivity navigActivity;
 
-    private static NavigSettingsActivity navigSettingsActivity = new NavigSettingsActivity();
+    private static NavigSettingsActivity navigSettingsActivity;
 
     public NavigActivityMapper() {
+        AppSite.getEventBus().addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
+            @Override
+            public void onBehaviorChange(BehaviorChangeEvent event) {
+                navigActivity = null;
+                navigSettingsActivity = null;
+            }
+        });
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
+                if (navigSettingsActivity == null) {
+                    navigSettingsActivity = new NavigSettingsActivity();
+                }
                 navigSettingsActivity.withPlace(place);
                 return navigSettingsActivity;
             } else {
+                if (navigActivity == null) {
+                    navigActivity = new NavigActivity();
+                }
                 navigActivity.withPlace(place);
                 return navigActivity;
             }
