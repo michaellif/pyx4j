@@ -90,6 +90,7 @@ public class SideMenuTheme extends Theme {
 
         style = new Style(".", StyleName.SideMenuItemPanel);
         style.addProperty("padding", "4px 0");
+        style.addProperty("transition", "all 0.5s ease-in-out 0s");
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuExpantionHandler);
