@@ -136,6 +136,10 @@ public class SideMenuTheme extends Theme {
         style.addProperty("padding-left", "40px");
         addStyle(style);
 
+        style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l3, ">.", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
         style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l3, ">.", StyleName.SideMenuItemPanel, ":hover");
         style.addProperty("background", ThemeColor.foreground, 0.05);
         addStyle(style);
