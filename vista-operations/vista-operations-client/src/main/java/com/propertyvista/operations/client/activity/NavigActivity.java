@@ -28,22 +28,19 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
 
     private final NavigView view;
 
-    private Place place;
-
     public NavigActivity() {
         view = OperationsSite.getViewFactory().getView(NavigView.class);
     }
 
     public void withPlace(Place place) {
-        this.place = place;
+        if (place instanceof AppPlace) {
+            view.select((AppPlace) place);
+        }
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        if (place instanceof AppPlace) {
-            view.select((AppPlace) place);
-        }
     }
 
 }

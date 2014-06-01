@@ -28,22 +28,19 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigSett
 
     private final NavigSettingsView view;
 
-    private Place place;
-
     public NavigSettingsActivity() {
         view = CrmSite.getViewFactory().getView(NavigSettingsView.class);
     }
 
     public void withPlace(Place place) {
-        this.place = place;
+        if (place instanceof AppPlace) {
+            view.select((AppPlace) place);
+        }
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        if (place instanceof AppPlace) {
-            view.select((AppPlace) place);
-        }
     }
 
 }
