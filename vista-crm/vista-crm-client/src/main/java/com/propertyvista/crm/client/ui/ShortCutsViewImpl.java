@@ -13,8 +13,10 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -28,19 +30,28 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 
-public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
+public class ShortCutsViewImpl extends DockLayoutPanel implements ShortCutsView {
 
     private ShortCutsPresenter presenter;
 
     private final FlowPanel shortcutsList;
 
+    private final FlowPanel helpContent;
+
     public ShortCutsViewImpl() {
-        super();
+        super(Unit.PX);
         setStyleName(SiteViewTheme.StyleName.SiteViewShortCuts.name());
+
+        helpContent = new FlowPanel();
+        addSouth(helpContent, 200);
+
+        HTML helpTitle = new HTML("Help");
+        helpTitle.setStyleName(SiteViewTheme.StyleName.SiteViewShortCutsTitle.name());
+        addSouth(helpTitle, 40);
 
         HTML shortcutsTitle = new HTML("Shortcuts");
         shortcutsTitle.setStyleName(SiteViewTheme.StyleName.SiteViewShortCutsTitle.name());
-        add(shortcutsTitle);
+        addNorth(shortcutsTitle, 40);
 
         shortcutsList = new FlowPanel();
         add(shortcutsList);
