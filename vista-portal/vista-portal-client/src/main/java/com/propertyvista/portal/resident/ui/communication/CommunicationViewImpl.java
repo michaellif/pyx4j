@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -39,7 +39,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
@@ -106,12 +106,12 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
     }
 
     @Override
-    public void populate(List<CommunicationMessageDTO> messages) {
+    public void populate(Vector<MessageDTO> messages) {
         mainHolder.clear();
         int messagesNum = messages == null || messages.isEmpty() ? 0 : messages.size();
         headerHolder.setNumberOfMessages(messagesNum);
         if (messagesNum > 0) {
-            for (final CommunicationMessageDTO message : messages) {
+            for (final MessageDTO message : messages) {
                 mainHolder.add(new MessagePanel(message));
             }
         }
@@ -129,7 +129,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Label senderField;
 
-        public MessagePanel(final CommunicationMessageDTO message) {
+        public MessagePanel(final MessageDTO message) {
             setStyleName(PortalRootPaneTheme.StyleName.CommMessage.name());
 
             photoImage = new Image(PortalImages.INSTANCE.avatar2());
@@ -138,8 +138,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController()
-                            .goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessagePage(message.thread().getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(message.getPrimaryKey()));
                 }
             });
             messageField = new Label(message.text().getStringView());
@@ -179,7 +178,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
                 }
             });
             messagesAnchor.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderTitle.name());
@@ -192,7 +191,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             writeActionImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard());
                 }
             });
             add(messagesAnchor);

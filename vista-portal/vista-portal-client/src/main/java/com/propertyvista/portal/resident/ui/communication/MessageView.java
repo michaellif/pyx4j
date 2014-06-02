@@ -7,18 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author Dad
+ * Created on Apr 24, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
-import com.propertyvista.portal.shared.ui.AbstractEditorView;
+import com.pyx4j.site.client.IsView;
 
-public class CommunicationMessagePageViewImpl extends AbstractEditorView<CommunicationMessageDTO> implements CommunicationMessagePageView {
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 
-    public CommunicationMessagePageViewImpl() {
-        setForm(new CommunicationMessagePage(this));
+public interface MessageView extends IsView {
+
+    interface Presenter {
+
+        public MessagePortalCrudService getService();
+
     }
+
+    void setPresenter(Presenter presenter);
+
+    void populate();
+
 }

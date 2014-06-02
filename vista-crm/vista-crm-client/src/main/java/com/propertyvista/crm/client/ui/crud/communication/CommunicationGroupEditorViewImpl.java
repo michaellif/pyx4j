@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageCategory;
 
-public class CommunicationGroupEditorViewImpl extends CrmEditorViewImplBase<MessageGroup> implements CommunicationGroupEditorView {
+public class CommunicationGroupEditorViewImpl extends CrmEditorViewImplBase<MessageCategory> implements CommunicationGroupEditorView {
 
     public CommunicationGroupEditorViewImpl() {
         setForm(new CommunicationGroupForm(this));

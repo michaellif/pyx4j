@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,16 +47,18 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
 
     public CrmRoleFolder(CrmEntityForm<?> parent) {
         super(CrmRole.class, parent.isEditable());
+        setAddable(parent.isEditable());
         this.parent = parent;
         setOrderable(false);
     }
 
     @Override
     public List<FolderColumnDescriptor> columns() {
-        return Arrays.asList(//@formatter:off
-                new FolderColumnDescriptor(proto().name(), "20em"),
-                new FolderColumnDescriptor(proto().behaviors(), "40em")
-        );//@formatter:on
+        ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
+        columns.add(new FolderColumnDescriptor(proto().name(), "10em"));
+        columns.add(new FolderColumnDescriptor(proto().description(), "15em"));
+        columns.add(new FolderColumnDescriptor(proto().behaviors(), "20em"));
+        return columns;
     }
 
     @Override

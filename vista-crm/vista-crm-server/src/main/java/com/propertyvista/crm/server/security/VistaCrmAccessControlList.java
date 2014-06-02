@@ -192,10 +192,10 @@ import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
 import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.domain.communication.CommunicationMessageAttachment;
+import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
@@ -475,13 +475,13 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         // - Communication
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationGroupCrudService.class));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(MessageGroup.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.MessageGroup, new EntityPermission(MessageGroup.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(MessageCategory.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.MessageGroup, new EntityPermission(MessageCategory.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(SystemEndpoint.class, EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationMessageCrudService.class));
-        grant(VistaBasicBehavior.CRM, new CommunicationMessageAccessRule(), CommunicationMessage.class);
-        grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationMessage.class, EntityPermission.CREATE));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationMessageAttachment.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new CommunicationMessageAccessRule(), Message.class);
+        grant(VistaBasicBehavior.CRM, new EntityPermission(Message.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(MessageAttachment.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationMessageAttachmentUploadService.class));
 

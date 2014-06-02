@@ -14,10 +14,12 @@
 package com.propertyvista.domain.communication;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -25,9 +27,12 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 
 @ToStringFormat("{0}")
-public interface CommunicationMessage extends IEntity {
+@Table(prefix = "communication")
+public interface DeliveryHandle extends IEntity {
+
     @NotNull
     @Detached
+    @MemberColumn(notNull = true)
     CommunicationEndpoint recipient();
 
     @NotNull
@@ -43,12 +48,7 @@ public interface CommunicationMessage extends IEntity {
     @NotNull
     @MemberColumn(notNull = true)
     @JoinColumn
-    CommunicationThread thread();
-
-    @Detached
-    @NotNull
-    @MemberColumn(notNull = true)
-    @JoinColumn
+    @Indexed
     @ToString(index = 0)
-    CommunicationMessageData data();
+    Message message();
 }

@@ -51,23 +51,23 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     }
 
     @PlaceProperties(navigLabel = "My Messages")
-    public static class CommunicationMessage extends AppPlace {
-        public static class CommunicationMessageWizard extends AppPlace {
+    public static class Message extends AppPlace {
+        public static class MessageWizard extends AppPlace {
         }
 
-        public static class CommunicationMessagePage extends AppPlace {
-            public CommunicationMessagePage(Key threadId) {
+        public static class MessagePage extends AppPlace {
+            public MessagePage(Key threadId) {
                 formPlace(threadId);
             }
 
-            public CommunicationMessagePage() {
+            public MessagePage() {
             }
         }
 
-        public static class CommunicationMessageView extends AppPlace {
+        public static class MessageView extends AppPlace {
         }
 
-        public static class EditCommunicationMessage extends AppPlace {
+        public static class CommunicationMessage extends AppPlace {
         }
     }
 

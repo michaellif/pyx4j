@@ -21,9 +21,10 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.domain.communication.CommunicationMessageAttachment;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -57,11 +58,11 @@ import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfAssetDocumen
 import com.propertyvista.portal.rpc.portal.prospect.services.ProofOfIncomeDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
+import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
@@ -95,13 +96,14 @@ import com.propertyvista.portal.server.security.access.prospect.ProofOfIncomeDoc
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementCoveredItemTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.BillTenantDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.resident.CommunicationMessageAccessRule;
+import com.propertyvista.portal.server.security.access.resident.CommunicationThreadPortalAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CustomerPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.LeasePaymentMethodTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.MaintenanceRequestTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.MessagePortalAccessRule;
 import com.propertyvista.portal.server.security.access.resident.PaymentRecordTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 import com.propertyvista.shared.services.dev.MockDataGenerator;
@@ -204,17 +206,18 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestPictureUploadPortalService.class));
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(new IServiceExecutePermission(ExtraActivityPortalService.class));
         grant(new IServiceExecutePermission(CommunityEventPortalCrudService.class));
-        grant(new IServiceExecutePermission(CommunicationMessagePortalCrudService.class));
+        grant(new IServiceExecutePermission(MessagePortalCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
-        grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationMessage.class, CRUD));
-        grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationMessageAttachment.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(DeliveryHandle.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(MessageAttachment.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(CommunicationThread.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(Message.class, CRUD));
         grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestPicture.class, CRUD));
 
         //========================= Prospect Portal
@@ -224,7 +227,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
 
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
-        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CreditCardValidationService.class));
 
@@ -241,7 +244,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //========================= Resident Portal
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CommunicationMessageAttachmentUploadPortalService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MessageAttachmentUploadPortalService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(LeaseTermBlankAgreementDocumentDownloadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CreditCardValidationService.class));
@@ -289,7 +292,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.ResidentInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestTenantDatasetAccessRule(), MaintenanceRequest.class);
-        grant(VistaDataAccessBehavior.ResidentInPortal, new CommunicationMessageAccessRule(), CommunicationMessage.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new MessagePortalAccessRule(), Message.class);
+        grant(VistaDataAccessBehavior.ResidentInPortal, new CommunicationThreadPortalAccessRule(), CommunicationThread.class);
         grant(VistaDataAccessBehavior.ResidentInPortal, new MaintenanceRequestPictureTenantDatasetAccessRule(), MaintenanceRequestPicture.class);
 
         grant(PortalProspectBehavior.Prospect, VistaDataAccessBehavior.ProspectInPortal);

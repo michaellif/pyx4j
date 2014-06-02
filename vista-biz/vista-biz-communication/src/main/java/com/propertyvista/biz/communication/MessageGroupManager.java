@@ -21,8 +21,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -39,7 +39,7 @@ public class MessageGroupManager {
 
     private static class CommunicationGroupCacheKey {
         static String getCacheKey(MessageGroupCategory mgCategory) {
-            return String.format("%s_%s", MessageGroup.class.getName(), mgCategory);
+            return String.format("%s_%s", MessageCategory.class.getName(), mgCategory);
         }
     }
 
@@ -48,23 +48,23 @@ public class MessageGroupManager {
     }
 
     private void cacheCommunicationGroups() {
-        EntityQueryCriteria<MessageGroup> criteria = EntityQueryCriteria.create(MessageGroup.class);
+        EntityQueryCriteria<MessageCategory> criteria = EntityQueryCriteria.create(MessageCategory.class);
         criteria.ne(criteria.proto().category(), MessageGroupCategory.Custom);
-        List<MessageGroup> predefinedEps = Persistence.service().query(criteria);
+        List<MessageCategory> predefinedEps = Persistence.service().query(criteria);
         if (predefinedEps != null) {
-            for (MessageGroup ep : predefinedEps)
+            for (MessageCategory ep : predefinedEps)
                 CacheService.put(CommunicationGroupCacheKey.getCacheKey(ep.category().getValue()), ep);
         }
     }
 
-    public MessageGroup getCommunicationGroupFromCache(MessageGroupCategory mgCategory) {
-        MessageGroup ep = CacheService.get(CommunicationGroupCacheKey.getCacheKey(mgCategory));
+    public MessageCategory getCommunicationGroupFromCache(MessageGroupCategory mgCategory) {
+        MessageCategory ep = CacheService.get(CommunicationGroupCacheKey.getCacheKey(mgCategory));
         return ep;
     }
 
-    public List<MessageGroup> getUserGroups(CrmUser user, Employee employee, AttachLevel attachLevel) {
+    public List<MessageCategory> getUserGroups(CrmUser user, Employee employee, AttachLevel attachLevel) {
         CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
-        EntityQueryCriteria<MessageGroup> groupCriteria = EntityQueryCriteria.create(MessageGroup.class);
+        EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
         if (employee == null) {
             groupCriteria.in(groupCriteria.proto().roles(), crs.roles());
         } else {
@@ -74,8 +74,8 @@ public class MessageGroupManager {
         return Persistence.service().query(groupCriteria, attachLevel);
     }
 
-    public List<MessageGroup> getDispatchedGroups(Employee employee, AttachLevel attachLevel) {
-        EntityQueryCriteria<MessageGroup> groupCriteria = EntityQueryCriteria.create(MessageGroup.class);
+    public List<MessageCategory> getDispatchedGroups(Employee employee, AttachLevel attachLevel) {
+        EntityQueryCriteria<MessageCategory> groupCriteria = EntityQueryCriteria.create(MessageCategory.class);
 
         groupCriteria.in(groupCriteria.proto().dispatchers(), employee.getPrimaryKey());
 

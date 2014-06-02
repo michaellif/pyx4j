@@ -16,8 +16,8 @@ package com.propertyvista.crm.rpc.services;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.blob.CommunicationMessageAttachmentBlob;
+import com.propertyvista.domain.blob.MessageAttachmentBlob;
 
-public interface CommunicationMessageAttachmentUploadService extends UploadService<IEntity, CommunicationMessageAttachmentBlob> {
+public interface CommunicationMessageAttachmentUploadService extends UploadService<IEntity, MessageAttachmentBlob> {
 
 }

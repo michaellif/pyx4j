@@ -17,17 +17,17 @@ import java.util.List;
 
 import com.pyx4j.entity.core.AttachLevel;
 
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
 
 public interface CommunicationMessageFacade {
 
-    public MessageGroup getCommunicationGroupFromCache(MessageGroupCategory mgCategory);
+    public MessageCategory getCommunicationGroupFromCache(MessageGroupCategory mgCategory);
 
     public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
 
-    public List<MessageGroup> getDispatchedGroups(Employee employee, AttachLevel attachLevel);
+    public List<MessageCategory> getDispatchedGroups(Employee employee, AttachLevel attachLevel);
 }

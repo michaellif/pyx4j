@@ -25,10 +25,10 @@ import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.blob.CommunicationMessageAttachmentBlob;
+import com.propertyvista.domain.blob.MessageAttachmentBlob;
 import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
 
-public class AbstractCommunicationMessageAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, CommunicationMessageAttachmentBlob> {
+public class AbstractCommunicationMessageAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, MessageAttachmentBlob> {
     public AbstractCommunicationMessageAttachmentUploadServiceImpl() {
     }
 
@@ -53,8 +53,8 @@ public class AbstractCommunicationMessageAttachmentUploadServiceImpl extends Abs
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<CommunicationMessageAttachmentBlob> response) {
-        CommunicationMessageAttachmentBlob blob = EntityFactory.create(CommunicationMessageAttachmentBlob.class);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<MessageAttachmentBlob> response) {
+        MessageAttachmentBlob blob = EntityFactory.create(MessageAttachmentBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
         blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);

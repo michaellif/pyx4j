@@ -41,7 +41,7 @@ import com.propertyvista.operations.server.services.MerchantAccountFileUploadSer
 import com.propertyvista.portal.server.portal.prospect.services.IdentificationDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfAssetDocumentProspectUploadServiceImpl;
 import com.propertyvista.portal.server.portal.prospect.services.ProofOfIncomeDocumentProspectUploadServiceImpl;
-import com.propertyvista.portal.server.portal.resident.services.CommunicationMessageAttachmentUploadPortalServiceImpl;
+import com.propertyvista.portal.server.portal.resident.services.MessageAttachmentUploadPortalServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.maintenance.MaintenanceRequestPictureUploadPortalServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanResidentUploadServiceImpl;
 import com.propertyvista.portal.server.portal.shared.services.CustomerPicturePortalUploadServiceImpl;
@@ -61,7 +61,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(CustomerPictureCrmUploadServiceImpl.class);
         register(CustomerPicturePortalUploadServiceImpl.class);
         register(MaintenanceRequestPictureUploadPortalServiceImpl.class);
-        register(CommunicationMessageAttachmentUploadPortalServiceImpl.class);
+        register(MessageAttachmentUploadPortalServiceImpl.class);
         register(CommunicationMessageAttachmentUploadServiceImpl.class);
         register(InsuranceCertificateScanCrmUploadServiceImpl.class);
         register(InsuranceCertificateScanResidentUploadServiceImpl.class);

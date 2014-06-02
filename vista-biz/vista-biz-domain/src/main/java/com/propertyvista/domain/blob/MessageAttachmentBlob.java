@@ -19,7 +19,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CommunicationMessageAttachmentBlob extends IFileBlob {
+public interface MessageAttachmentBlob extends IFileBlob {
 
     /**
      * This is actual BLOB of the Image or PDF stored on server

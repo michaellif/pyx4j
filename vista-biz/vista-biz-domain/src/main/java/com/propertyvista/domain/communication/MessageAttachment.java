@@ -17,18 +17,20 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.shared.IHasFile;
 
-import com.propertyvista.domain.blob.CommunicationMessageAttachmentBlob;
+import com.propertyvista.domain.blob.MessageAttachmentBlob;
 
-public interface CommunicationMessageAttachment extends IHasFile<CommunicationMessageAttachmentBlob> {
+@Table(prefix = "communication")
+public interface MessageAttachment extends IHasFile<MessageAttachmentBlob> {
 
     @Owner
     @Detached
     @JoinColumn
     @ReadOnly
-    CommunicationMessageData message();
+    Message message();
 
     IPrimitive<String> description();
 

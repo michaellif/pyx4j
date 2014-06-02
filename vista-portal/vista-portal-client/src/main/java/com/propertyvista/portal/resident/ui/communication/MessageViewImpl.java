@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -29,62 +28,66 @@ import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 
-public class CommunicationMessageViewImpl extends SimplePanel implements CommunicationMessageView {
+public class MessageViewImpl extends SimplePanel implements MessageView {
 
-    private final static I18n i18n = I18n.get(CommunicationMessageViewImpl.class);
+    private final static I18n i18n = I18n.get(MessageViewImpl.class);
 
     private final CommunicationMessageLister lister;
 
-    public CommunicationMessageViewImpl() {
+    private Presenter presenter;
+
+    public MessageViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
         lister = new CommunicationMessageLister();
         CommunicationMessageGadget gadget = new CommunicationMessageGadget(lister);
-        setWidget(gadget);
 
+        setWidget(gadget);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
-    public void populate(List<CommunicationMessageDTO> messageChoices) {
-        lister.setDataSource(new CommunicationMessageDataSource(messageChoices));
+    public void populate() {
+        lister.setDataSource(new ListerDataSource<MessageDTO>(MessageDTO.class, presenter.getService()));
         lister.obtain(0);
     }
 
-    class CommunicationMessageGadget extends AbstractGadget<CommunicationMessageViewImpl> {
+    class CommunicationMessageGadget extends AbstractGadget<MessageViewImpl> {
 
         CommunicationMessageGadget(CommunicationMessageLister lister) {
-            super(CommunicationMessageViewImpl.this, null, i18n.tr("Select a Communication Thread"), ThemeColor.foreground, 0.3);
-
+            super(MessageViewImpl.this, null, i18n.tr("Tenant Communication"), ThemeColor.foreground, 0.3);
             lister.setWidth("100%");
+            lister.setSelectable(true);
+            lister.showColumnSelector(true);
 
-            lister.showColumnSelector(false);
-            lister.addItemSelectionHandler(new ItemSelectionHandler<CommunicationMessageDTO>() {
+            lister.addItemSelectionHandler(new ItemSelectionHandler<MessageDTO>() {
                 @Override
-                public void onSelect(CommunicationMessageDTO selectedItem) {
-                    AppSite.getPlaceController().goTo(
-                            new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessagePage(selectedItem.thread().getPrimaryKey()));
+                public void onSelect(MessageDTO selectedItem) {
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessagePage(selectedItem.getPrimaryKey()));
 
                 }
             });
+
             setContent(lister);
         }
 
     }
 
-    private static class CommunicationMessageLister extends EntityDataTablePanel<CommunicationMessageDTO> {
+    private static class CommunicationMessageLister extends EntityDataTablePanel<MessageDTO> {
 
         public CommunicationMessageLister() {
-            super(CommunicationMessageDTO.class, false, false);
-            setSelectable(true);
+            super(MessageDTO.class, false, false);
             getDataTablePanel().setFilteringEnabled(false);
+            // No filtering work for it
+            getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
             setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().isRead()).build(),
                     new MemberColumnDescriptor.Builder(proto().isHighImportance()).build(), new MemberColumnDescriptor.Builder(proto().star()).build(),
                     new MemberColumnDescriptor.Builder(proto().sender()).build(), new MemberColumnDescriptor.Builder(proto().subject()).build(),
@@ -93,16 +96,7 @@ public class CommunicationMessageViewImpl extends SimplePanel implements Communi
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().isHighImportance(), true), new Sort(
-                    proto().isHighImportance(), true));
+            return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().isHighImportance(), true));
         }
-    }
-
-    private static class CommunicationMessageDataSource extends ListerDataSource<CommunicationMessageDTO> {
-
-        public CommunicationMessageDataSource(List<CommunicationMessageDTO> choices) {
-            super(CommunicationMessageDTO.class, new InMemeoryListService<CommunicationMessageDTO>(choices));
-        }
-
     }
 }

@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageCategory;
 
-public class CommunicationGroupViewerViewImpl extends CrmViewerViewImplBase<MessageGroup> implements CommunicationGroupViewerView {
+public class CommunicationGroupViewerViewImpl extends CrmViewerViewImplBase<MessageCategory> implements CommunicationGroupViewerView {
 
     public CommunicationGroupViewerViewImpl() {
         setForm(new CommunicationGroupForm(this));

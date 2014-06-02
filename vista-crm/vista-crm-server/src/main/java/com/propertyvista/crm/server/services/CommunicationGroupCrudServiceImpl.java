@@ -18,12 +18,12 @@ import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.CommunicationGroupCrudService;
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 
-public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<MessageGroup> implements CommunicationGroupCrudService {
+public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<MessageCategory> implements CommunicationGroupCrudService {
     public CommunicationGroupCrudServiceImpl() {
-        super(MessageGroup.class);
+        super(MessageCategory.class);
     }
 
     @Override
@@ -32,14 +32,14 @@ public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<M
     }
 
     @Override
-    protected MessageGroup init(InitializationData initializationData) {
-        MessageGroup dto = super.init(initializationData);
+    protected MessageCategory init(InitializationData initializationData) {
+        MessageCategory dto = super.init(initializationData);
         dto.category().setValue(MessageGroupCategory.Custom);
         return dto;
     }
 
     @Override
-    protected void enhanceRetrieved(MessageGroup bo, MessageGroup to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(MessageCategory bo, MessageCategory to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
         Persistence.ensureRetrieve(bo.dispatchers(), AttachLevel.Attached);
         to.dispatchers().setAttachLevel(AttachLevel.Attached);
@@ -54,7 +54,7 @@ public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<M
     }
 
     @Override
-    protected boolean persist(MessageGroup bo, MessageGroup in) {
+    protected boolean persist(MessageCategory bo, MessageCategory in) {
         boolean isNew = bo.id().isNull() || bo.isPrototype();
         if (isNew) {
             bo.category().setValue(MessageGroupCategory.Custom);
@@ -69,7 +69,7 @@ public class CommunicationGroupCrudServiceImpl extends AbstractCrudServiceImpl<M
     }
 
     @Override
-    protected void delete(MessageGroup group) {
+    protected void delete(MessageCategory group) {
         if (!MessageGroupCategory.Custom.equals(group.category().getValue())) {
             throw new Error("Cannot delete predefined message group");
         }

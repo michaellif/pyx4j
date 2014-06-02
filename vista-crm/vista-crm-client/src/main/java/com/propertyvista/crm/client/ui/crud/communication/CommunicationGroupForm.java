@@ -26,19 +26,20 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.CrmRoleFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 
-public class CommunicationGroupForm extends CrmEntityForm<MessageGroup> {
+public class CommunicationGroupForm extends CrmEntityForm<MessageCategory> {
 
     private static final I18n i18n = I18n.get(CommunicationGroupForm.class);
 
     private final IsWidget mainTab;
 
-    public CommunicationGroupForm(IForm<MessageGroup> view) {
-        super(MessageGroup.class, view);
+    public CommunicationGroupForm(IForm<MessageCategory> view) {
+        super(MessageCategory.class, view);
 
         mainTab = createInfoTab();
+        setTabBarVisible(false);
         selectTab(addTab(mainTab, i18n.tr("Message Group Properties")));
 
     }
@@ -63,7 +64,7 @@ public class CommunicationGroupForm extends CrmEntityForm<MessageGroup> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        MessageGroup se = getValue();
+        MessageCategory se = getValue();
         if (se == null) {
             return;
         }

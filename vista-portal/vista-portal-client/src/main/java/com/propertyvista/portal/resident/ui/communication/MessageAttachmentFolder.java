@@ -23,28 +23,28 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
-import com.propertyvista.domain.communication.CommunicationMessageAttachment;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessageAttachmentUploadPortalService;
+import com.propertyvista.domain.communication.MessageAttachment;
+import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<CommunicationMessageAttachment> {
-    private final static I18n i18n = I18n.get(CommunicationMessageAttachmentFolder.class);
+public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> {
+    private final static I18n i18n = I18n.get(MessageAttachmentFolder.class);
 
-    public CommunicationMessageAttachmentFolder() {
-        super(CommunicationMessageAttachment.class, i18n.tr("Attachment"));
+    public MessageAttachmentFolder() {
+        super(MessageAttachment.class, i18n.tr("Attachment"));
         setOrderable(false);
     }
 
     @Override
-    protected CForm<CommunicationMessageAttachment> createItemForm(IObject<?> member) {
+    protected CForm<MessageAttachment> createItemForm(IObject<?> member) {
         return new CommunicationMessageAttachmentViewer();
     }
 
-    private class CommunicationMessageAttachmentViewer extends CForm<CommunicationMessageAttachment> {
+    private class CommunicationMessageAttachmentViewer extends CForm<MessageAttachment> {
 
         public CommunicationMessageAttachmentViewer() {
-            super(CommunicationMessageAttachment.class);
+            super(MessageAttachment.class);
         }
 
         @Override
@@ -53,8 +53,8 @@ public class CommunicationMessageAttachmentFolder extends PortalBoxFolder<Commun
             formPanel
                     .append(Location.Left,
                             proto().file(),
-                            new CFile(GWT.<CommunicationMessageAttachmentUploadPortalService> create(CommunicationMessageAttachmentUploadPortalService.class),
-                                    new VistaFileURLBuilder(CommunicationMessageAttachment.class))).decorate().componentWidth(250);
+                            new CFile(GWT.<MessageAttachmentUploadPortalService> create(MessageAttachmentUploadPortalService.class),
+                                    new VistaFileURLBuilder(MessageAttachment.class))).decorate().componentWidth(250);
             formPanel.append(Location.Left, proto().description()).decorate().componentWidth(200);
             return formPanel;
         }

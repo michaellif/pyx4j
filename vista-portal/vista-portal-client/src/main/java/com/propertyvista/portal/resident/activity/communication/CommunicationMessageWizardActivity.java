@@ -22,26 +22,26 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.communication.CommunicationMessageWizardView;
-import com.propertyvista.portal.resident.ui.communication.CommunicationMessageWizardView.CommunicationMessageWizardPresenter;
+import com.propertyvista.portal.resident.ui.communication.MessageWizardView;
+import com.propertyvista.portal.resident.ui.communication.MessageWizardView.MessageWizardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class CommunicationMessageWizardActivity extends AbstractWizardCrudActivity<CommunicationMessageDTO, CommunicationMessageWizardView> implements
-        CommunicationMessageWizardPresenter {
+public class CommunicationMessageWizardActivity extends AbstractWizardCrudActivity<MessageDTO, MessageWizardView> implements
+        MessageWizardPresenter {
 
     private static final I18n i18n = I18n.get(CommunicationMessageWizardActivity.class);
 
     public CommunicationMessageWizardActivity(AppPlace place) {
-        super(CommunicationMessageWizardView.class, GWT.<CommunicationMessagePortalCrudService> create(CommunicationMessagePortalCrudService.class),
-                CommunicationMessageDTO.class);
+        super(MessageWizardView.class, GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class),
+                MessageDTO.class);
     }
 
     @Override
     protected void onFinish(Key result) {
         Notification message = new Notification(null, i18n.tr("Message submitted Successfully!"), NotificationType.INFO);
-        ResidentPortalSite.getPlaceController().showNotification(message, new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView());
+        ResidentPortalSite.getPlaceController().showNotification(message, new ResidentPortalSiteMap.Message.MessageView());
     }
 }

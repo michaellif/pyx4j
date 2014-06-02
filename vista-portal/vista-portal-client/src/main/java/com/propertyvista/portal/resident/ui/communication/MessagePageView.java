@@ -15,15 +15,14 @@ package com.propertyvista.portal.resident.ui.communication;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
 
-public interface CommunicationMessagePageView extends IEditorView<CommunicationMessageDTO> {
+public interface MessagePageView extends IEditorView<MessageDTO> {
 
-    public interface CommunicationMessagePagePresenter extends IEditorPresenter<CommunicationMessageDTO> {
+    public interface MessagePagePresenter extends IEditorPresenter<MessageDTO> {
 
-        void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message);
+        void saveMessageItem(AsyncCallback<MessageDTO> callback, MessageDTO message);
 
     }
 

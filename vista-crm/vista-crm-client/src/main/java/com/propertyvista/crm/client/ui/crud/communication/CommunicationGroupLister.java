@@ -22,18 +22,18 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.domain.communication.MessageGroup;
+import com.propertyvista.domain.communication.MessageCategory;
 
-public class CommunicationGroupLister extends AbstractLister<MessageGroup> {
+public class CommunicationGroupLister extends AbstractLister<MessageCategory> {
 
     public CommunicationGroupLister() {
-        super(MessageGroup.class, true, true);
+        super(MessageCategory.class, true, true);
 
         setColumnDescriptors(createColumnDescriptors());
     }
 
     public static ColumnDescriptor[] createColumnDescriptors() {
-        MessageGroup proto = EntityFactory.getEntityPrototype(MessageGroup.class);
+        MessageCategory proto = EntityFactory.getEntityPrototype(MessageCategory.class);
 
         return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.topic()).build(), new MemberColumnDescriptor.Builder(proto.category()).build() };
     }

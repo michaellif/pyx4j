@@ -25,12 +25,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.domain.communication.CommunicationMessageData;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -73,7 +73,6 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // get a few existing CustomerUsers
         CustomerUser t001 = null;
         CustomerUser t002 = null;
-        CustomerUser t003 = null;
         if (listCustomerUser != null) {
             String email;
             for (CustomerUser customerUser : listCustomerUser) {
@@ -82,15 +81,13 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     t001 = customerUser;
                 } else if ("t002@pyx4j.com".equals(email)) {
                     t002 = customerUser;
-                } else if ("t003@pyx4j.com".equals(email)) {
-                    t003 = customerUser;
                 }
             }
         }
 
-        EntityQueryCriteria<MessageGroup> criteriaMessageGroup = EntityQueryCriteria.create(MessageGroup.class);
+        EntityQueryCriteria<MessageCategory> criteriaMessageGroup = EntityQueryCriteria.create(MessageCategory.class);
         criteriaMessageGroup.eq(criteriaMessageGroup.proto().category(), MessageGroupCategory.Custom);
-        MessageGroup mg = Persistence.service().retrieve(criteriaMessageGroup);
+        MessageCategory mg = Persistence.service().retrieve(criteriaMessageGroup);
 
         // message flow:
         // m001 -> t001 (read, important)
@@ -102,32 +99,34 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // t001-> t003  (read, important)
         // t003-> t001  (unread, important) - reply
 
-        //(CommunicationPerson from, CommunicationPerson to, CommunicationMessage parent, String topic, String msgContent,boolean highImportance, boolean isRead)
-        CommunicationThread msg1 = createMessage(m001, t001, null, "No Water", "It will no water in the whole year! Please go to a Sea sand bring water!",
+//        for (int i = 0; i < 100; i++) {
+        int i = 0;
+        CommunicationThread msg1 = createMessage(i, m001, t001, null, "No Water", "It will no water in the whole year! Please go to a Sea sand bring water!",
                 true, true, mg, m001);
-        CommunicationThread msg2 = createMessage(t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)",
-                true, false, mg, m001);
-        CommunicationThread msg3 = createMessage(t002, e001, null, "How to use this?",
+        createMessage(i, t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false, mg, m001);
+        createMessage(i, t002, e001, null, "How to use this?",
                 "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, m001);
-        CommunicationThread msg4 = createMessage(m001, e001, null, "We miss you",
-                "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false, false, mg, m001);
-        CommunicationThread msg5 = createMessage(m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, m001);
-        CommunicationThread msg6 = createMessage(m001, t001, null, "Late payment notification",
+        createMessage(i, m001, e001, null, "We miss you", "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false,
+                false, mg, m001);
+        createMessage(i, m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, m001);
+        CommunicationThread msg6 = createMessage(i, m001, t001, null, "Late payment notification",
                 "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, m001);
-        CommunicationThread msg7 = createMessage(t001, m001, msg6, "Late payment notification",
+        createMessage(i, t001, m001, msg6, "Late payment notification",
                 "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
                 true, false, mg, m001);
+        //       }
         return "persons and messages created";
     }
 
     @Override
     public String delete() {
-        deleteAll(CommunicationMessage.class);
+        deleteAll(DeliveryHandle.class);
         return deleteAll(CommunicationThread.class);
     }
 
-    private CommunicationThread createMessage(AbstractPmcUser from, AbstractPmcUser to, CommunicationThread parent, String topic, String msgContent,
-            boolean highImportance, boolean isRead, MessageGroup mg, CrmUser owner) {
+    private CommunicationThread createMessage(int i, AbstractPmcUser from, AbstractPmcUser to, CommunicationThread parent, String topic, String msgContent,
+            boolean highImportance, boolean isRead, MessageCategory mg, CrmUser owner) {
+
         if (from == null || to == null || topic == null || msgContent == null) {
             return null;
         }
@@ -135,7 +134,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         CommunicationThread thread = null;
         if (parent == null) {
             thread = EntityFactory.create(CommunicationThread.class);
-            thread.subject().setValue(topic);
+            thread.subject().setValue(Integer.toString(i) + "_" + topic);
             thread.status().setValue(ThreadStatus.Unassigned);
             thread.owner().set(owner);
             thread.allowedReply().setValue(true);
@@ -144,19 +143,19 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         } else
             thread = parent;
 
-        CommunicationMessage m = EntityFactory.create(CommunicationMessage.class);
-        m.data().isHighImportance().setValue(highImportance);
-        m.recipient().set(to);
-        m.isRead().setValue(isRead);
-        CommunicationMessageData c = EntityFactory.create(CommunicationMessageData.class);
+        Message c = EntityFactory.create(Message.class);
         c.sender().set(from);
         c.text().setValue(msgContent);
         c.date().setValue(new Date());
-        m.data().set(c);
-        m.thread().set(thread);
-        PersistenceServicesFactory.getPersistenceService().persist(c);
-        PersistenceServicesFactory.getPersistenceService().persist(m);
-        thread.content().add(m);
+        c.isHighImportance().setValue(false);
+
+        DeliveryHandle m = EntityFactory.create(DeliveryHandle.class);
+        m.recipient().set(to);
+        m.isRead().setValue(isRead);
+        m.star().setValue(false);
+
+        c.recipients().add(m);
+        thread.content().add(c);
         PersistenceServicesFactory.getPersistenceService().persist(thread);
 
         return thread;

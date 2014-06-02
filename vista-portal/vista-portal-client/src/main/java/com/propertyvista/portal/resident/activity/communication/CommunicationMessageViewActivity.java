@@ -18,23 +18,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-
-import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.communication.CommunicationMessageView;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessagesDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
+import com.propertyvista.portal.resident.ui.communication.MessageView;
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 
-public class CommunicationMessageViewActivity extends AbstractActivity implements CommunicationMessageView.Presenter {
+public class CommunicationMessageViewActivity extends AbstractActivity implements MessageView.Presenter {
 
-    private final CommunicationMessageView view;
+    private final MessageView view;
 
-    private final CommunicationMessagePortalCrudService service;
+    private final MessagePortalCrudService service;
 
     public CommunicationMessageViewActivity() {
-        this.service = GWT.<CommunicationMessagePortalCrudService> create(CommunicationMessagePortalCrudService.class);
-        this.view = ResidentPortalSite.getViewFactory().getView(CommunicationMessageView.class);
+        this.service = GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(MessageView.class);
         this.view.setPresenter(this);
     }
 
@@ -45,19 +41,12 @@ public class CommunicationMessageViewActivity extends AbstractActivity implement
     }
 
     public void populate() {
-        service.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
-            @Override
-            public void onSuccess(MessagesDTO result) {
-                if (result != null) {
-                    view.populate(result.messages());
-                }
-            }
-        }, false);
+        view.populate();
     }
 
     @Override
-    public void setThreadContext(CommunicationThread thread) {
-
+    public MessagePortalCrudService getService() {
+        return service;
     }
 
 }

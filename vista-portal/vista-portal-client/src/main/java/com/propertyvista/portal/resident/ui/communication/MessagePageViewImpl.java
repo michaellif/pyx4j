@@ -7,29 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 24, 2012
- * @author ArtyomB
+ * Created on May 15, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import java.util.List;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
-import com.pyx4j.site.client.IsView;
+public class MessagePageViewImpl extends AbstractEditorView<MessageDTO> implements MessagePageView {
 
-import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
-
-public interface CommunicationMessageView extends IsView {
-
-    interface Presenter {
-
-        void setThreadContext(CommunicationThread thread);
-
+    public MessagePageViewImpl() {
+        setForm(new MessagePage(this));
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(List<CommunicationMessageDTO> messageChoices);
-
 }

@@ -26,25 +26,25 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.services.CommunicationMessageAttachmentUploadService;
-import com.propertyvista.domain.communication.CommunicationMessageAttachment;
+import com.propertyvista.domain.communication.MessageAttachment;
 
-public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<CommunicationMessageAttachment> {
+public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<MessageAttachment> {
     private final static I18n i18n = I18n.get(CommunicationMessageAttachmentFolder.class);
 
     public CommunicationMessageAttachmentFolder() {
-        super(CommunicationMessageAttachment.class, i18n.tr("Attachment"));
+        super(MessageAttachment.class, i18n.tr("Attachment"));
         setOrderable(false);
     }
 
     @Override
-    protected CForm<CommunicationMessageAttachment> createItemForm(IObject<?> member) {
+    protected CForm<MessageAttachment> createItemForm(IObject<?> member) {
         return new CommunicationMessageAttachmentViewer();
     }
 
-    private class CommunicationMessageAttachmentViewer extends CForm<CommunicationMessageAttachment> {
+    private class CommunicationMessageAttachmentViewer extends CForm<MessageAttachment> {
 
         public CommunicationMessageAttachmentViewer() {
-            super(CommunicationMessageAttachment.class);
+            super(MessageAttachment.class);
         }
 
         @Override
@@ -55,7 +55,7 @@ public class CommunicationMessageAttachmentFolder extends VistaBoxFolder<Communi
                     Location.Left,
                     proto().file(),
                     new CFile(GWT.<CommunicationMessageAttachmentUploadService> create(CommunicationMessageAttachmentUploadService.class),
-                            new VistaFileURLBuilder(CommunicationMessageAttachment.class))).decorate();
+                            new VistaFileURLBuilder(MessageAttachment.class))).decorate();
 
             formPanel.append(Location.Left, proto().description()).decorate();
 

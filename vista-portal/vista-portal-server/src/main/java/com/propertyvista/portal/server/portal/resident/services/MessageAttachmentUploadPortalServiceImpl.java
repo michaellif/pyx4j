@@ -7,18 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2013
- * @author michaellif
+ * Created on Jul 19, 2013
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.portal.server.portal.resident.services;
 
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
-import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
+import com.propertyvista.server.common.upload.AbstractCommunicationMessageAttachmentUploadServiceImpl;
 
-public interface CommunicationMessageWizardView extends IWizardView<CommunicationMessageDTO> {
-
-    public interface CommunicationMessageWizardPresenter extends IWizardFormPresenter<CommunicationMessageDTO> {
-    }
+public class MessageAttachmentUploadPortalServiceImpl extends AbstractCommunicationMessageAttachmentUploadServiceImpl implements
+        MessageAttachmentUploadPortalService {
 
 }

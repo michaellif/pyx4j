@@ -7,17 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 6, 2014
+ * Created on Jan 31, 2014
  * @author smolka
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.resident.services;
 
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.blob.CommunicationMessageAttachmentBlob;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public interface CommunicationMessageAttachmentUploadPortalService extends UploadService<IEntity, CommunicationMessageAttachmentBlob> {
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 
+public interface MessagePortalCrudService extends AbstractCrudService<MessageDTO> {
+    void saveChildMessage(AsyncCallback<MessageDTO> callback, MessageDTO source);
 }

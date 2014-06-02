@@ -20,17 +20,18 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.communication.CommunicationView;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessagesDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 
 public class CommunicationActivity extends AbstractActivity implements CommunicationView.CommunicationPresenter {
 
-    private final CommunicationMessagePortalCrudService communicationMessageActivityService = (CommunicationMessagePortalCrudService) GWT
-            .create(CommunicationMessagePortalCrudService.class);
+    private final MessagePortalCrudService communicationMessageActivityService = (MessagePortalCrudService) GWT.create(MessagePortalCrudService.class);
 
     private final CommunicationView view;
 
@@ -40,24 +41,29 @@ public class CommunicationActivity extends AbstractActivity implements Communica
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+
+        if (ClientContext.getUserVisit() == null || ClientContext.getUserVisit().getPrincipalPrimaryKey() == null) {
+            return;
+        }
         panel.setWidget(view);
-        retreiveNewMessages(new DefaultAsyncCallback<MessagesDTO>() {
+        final EntityListCriteria<MessageDTO> criteria = EntityListCriteria.create(MessageDTO.class);
+        criteria.eq(criteria.proto().thread().content().$().recipients().$().isRead(), false);
+        criteria.eq(criteria.proto().thread().content().$().recipients().$().recipient(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
+        criteria.setPageSize(50);
+        criteria.setPageNumber(0);
+
+        communicationMessageActivityService.list(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
 
             @Override
-            public void onSuccess(MessagesDTO result) {
-                view.populate(result == null ? null : result.messages());
-
+            public void onFailure(Throwable caught) {
             }
-        });
-    }
 
-    public void retreiveNewMessages(final AsyncCallback<MessagesDTO> callback) {
-        communicationMessageActivityService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
             @Override
-            public void onSuccess(MessagesDTO result) {
-                callback.onSuccess(result);
-            }
-        }, true);
-    }
+            public void onSuccess(EntitySearchResult<MessageDTO> result) {
+                view.populate(result == null || result.getData() == null ? null : result.getData());
 
+            }
+        }, criteria);
+
+    }
 }

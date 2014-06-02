@@ -17,8 +17,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-import com.propertyvista.domain.communication.MessageGroup;
-import com.propertyvista.domain.communication.MessageGroup.MessageGroupCategory;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CommunicationGroupPreloader extends AbstractDataPreloader {
@@ -35,7 +35,7 @@ public class CommunicationGroupPreloader extends AbstractDataPreloader {
     }
 
     private void createGroup(MessageGroupCategory category, String topic, CrmRole... defaultRole) {
-        MessageGroup mg = EntityFactory.create(MessageGroup.class);
+        MessageCategory mg = EntityFactory.create(MessageCategory.class);
         mg.category().setValue(category);
         mg.topic().setValue(topic);
         if (defaultRole != null && defaultRole.length > 0) {

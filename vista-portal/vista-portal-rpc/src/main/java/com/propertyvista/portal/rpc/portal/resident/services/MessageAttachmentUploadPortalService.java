@@ -7,17 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 3, 2014
+ * Created on Feb 6, 2014
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.communication;
+package com.propertyvista.portal.rpc.portal.resident.services;
 
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 
-@Transient
-public interface MessagesDTO extends IEntity {
-    IList<MessageDTO> messages();
+import com.propertyvista.domain.blob.MessageAttachmentBlob;
+
+public interface MessageAttachmentUploadPortalService extends UploadService<IEntity, MessageAttachmentBlob> {
+
 }

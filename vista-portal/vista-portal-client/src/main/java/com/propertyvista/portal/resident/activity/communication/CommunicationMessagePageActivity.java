@@ -20,17 +20,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView;
-import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView.CommunicationMessagePagePresenter;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.CommunicationMessagePortalCrudService;
+import com.propertyvista.portal.resident.ui.communication.MessagePageView;
+import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
-public class CommunicationMessagePageActivity extends AbstractEditorActivity<CommunicationMessageDTO> implements CommunicationMessagePagePresenter {
+public class CommunicationMessagePageActivity extends AbstractEditorActivity<MessageDTO> implements MessagePagePresenter {
 
     public CommunicationMessagePageActivity(AppPlace place) {
-        super(CommunicationMessagePageView.class, GWT.<CommunicationMessagePortalCrudService> create(CommunicationMessagePortalCrudService.class), place);
+        super(MessagePageView.class, GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class), place);
     }
 
     @Override
@@ -40,9 +39,9 @@ public class CommunicationMessagePageActivity extends AbstractEditorActivity<Com
     }
 
     @Override
-    public void saveMessage(AsyncCallback<CommunicationMessage> callback, CommunicationMessage message) {
+    public void saveMessageItem(AsyncCallback<MessageDTO> callback, MessageDTO message) {
 
-        ((CommunicationMessagePortalCrudService) getService()).saveMessage(callback, message);
+        ((MessagePortalCrudService) getService()).saveChildMessage(callback, message);
     }
 
 }

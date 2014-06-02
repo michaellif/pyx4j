@@ -43,25 +43,25 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.portal.resident.ui.communication.CommunicationMessagePageView.CommunicationMessagePagePresenter;
+import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
-public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMessageDTO> {
+public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
-    private static final I18n i18n = I18n.get(CommunicationMessagePage.class);
+    private static final I18n i18n = I18n.get(MessagePage.class);
 
     private final Button btnReplay;
 
     private final OpenMessageFolder messagesFolder;
 
-    public CommunicationMessagePage(CommunicationMessagePageView view) {
-        super(CommunicationMessageDTO.class, view, "Message", ThemeColor.contrast5);
+    public MessagePage(MessagePageView view) {
+        super(MessageDTO.class, view, "Message", ThemeColor.contrast5);
         btnReplay = new Button(i18n.tr("Reply"), new Command() {
 
             @Override
@@ -80,8 +80,8 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
     }
 
     @Override
-    protected FormDecorator<CommunicationMessageDTO> createDecorator() {
-        FormDecorator<CommunicationMessageDTO> decorator = super.createDecorator();
+    protected FormDecorator<MessageDTO> createDecorator() {
+        FormDecorator<MessageDTO> decorator = super.createDecorator();
 
         decorator.addFooterToolbarWidget(btnReplay);
         decorator.getFooterPanel().setVisible(true);
@@ -92,24 +92,26 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
     @Override
     public IsWidget createContent() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
-        formPanel.append(Location.Left, proto().thread().created(), new CLabel<String>()).decorate().componentWidth(250);
+        inject(proto().thread());
+        formPanel.append(Location.Left, proto().created(), new CLabel<String>()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().thread().content(), messagesFolder);
+        formPanel.append(Location.Left, proto().status(), new CLabel<String>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().content(), messagesFolder);
         formPanel.br();
 
         return formPanel;
     }
 
-    private class OpenMessageFolder extends VistaBoxFolder<CommunicationMessage> {
+    private class OpenMessageFolder extends VistaBoxFolder<MessageDTO> {
 
         public OpenMessageFolder() {
-            super(CommunicationMessage.class, false);
+            super(MessageDTO.class, false);
             setAddable(true);
         }
 
         @Override
-        public BoxFolderItemDecorator<CommunicationMessage> createItemDecorator() {
-            BoxFolderItemDecorator<CommunicationMessage> decor = (BoxFolderItemDecorator<CommunicationMessage>) super.createItemDecorator();
+        public BoxFolderItemDecorator<MessageDTO> createItemDecorator() {
+            BoxFolderItemDecorator<MessageDTO> decor = (BoxFolderItemDecorator<MessageDTO>) super.createItemDecorator();
             decor.setExpended(false);
             return decor;
         }
@@ -120,19 +122,19 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        public void removeItem(CFolderItem<CommunicationMessage> item) {
+        public void removeItem(CFolderItem<MessageDTO> item) {
             super.removeItem(item);
 
         }
 
         @Override
-        protected CForm<? extends CommunicationMessage> createItemForm(IObject<?> member) {
+        protected CForm<? extends MessageDTO> createItemForm(IObject<?> member) {
             return new MessageFolderItem(this);
         }
 
     }
 
-    public class MessageFolderItem extends CForm<CommunicationMessage> {
+    public class MessageFolderItem extends CForm<MessageDTO> {
         private Anchor btnSend;
 
         private Anchor btnCancel;
@@ -146,7 +148,7 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         private final OpenMessageFolder parent;
 
         public MessageFolderItem(OpenMessageFolder parent) {
-            super(CommunicationMessage.class, new VistaViewersComponentFactory());
+            super(MessageDTO.class, new VistaViewersComponentFactory());
             inheritEditable(false);
             inheritViewable(false);
             inheritEnabled(false);
@@ -156,39 +158,44 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         @Override
         public IsWidget createContent() {
             PortalFormPanel formPanel = new PortalFormPanel(this);
+
             inject(proto().star());
+            inject(proto().thread());
             starImage = new Image(PortalImages.INSTANCE.noStar());
             starImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
             starImage.addClickHandler(new ClickHandler() {
+
                 @Override
                 public void onClick(ClickEvent event) {
-                    CommunicationMessage m = getValue();
+                    MessageDTO m = getValue();
                     m.star().setValue(!m.star().getValue(false));
                     if (m.star().getValue(false)) {
                         starImage.setResource(PortalImages.INSTANCE.fullStar());
                     } else {
                         starImage.setResource(PortalImages.INSTANCE.noStar());
                     }
-                    ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
-                            new DefaultAsyncCallback<CommunicationMessage>() {
-                                @Override
-                                public void onSuccess(CommunicationMessage result) {
-                                }
-                            }, m);
+                    ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
+
+                        @Override
+                        public void onSuccess(MessageDTO result) {
+                        }
+                    }, m);
                 }
+
             });
+
             formPanel.append(Location.Left, starImage);
             formPanel.h1("Details");
-            formPanel.append(Location.Left, proto().data().date(), new CLabel<String>()).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().date(), new CLabel<String>()).decorate().componentWidth(200);
             CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
             cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
 
-            formPanel.append(Location.Left, proto().data().isHighImportance(), cmbBoolean).decorate().componentWidth(200);
-            formPanel.append(Location.Left, proto().data().sender(), new SenderLabel()).decorate().componentWidth(200);
-            formPanel.append(Location.Left, proto().data().text()).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().isHighImportance(), cmbBoolean).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().sender(), new SenderLabel()).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().text()).decorate().componentWidth(200);
             formPanel.br();
             formPanel.h1("Attachments");
-            formPanel.append(Location.Left, proto().data().attachments(), new CommunicationMessageAttachmentFolder());
+            formPanel.append(Location.Left, proto().attachments(), new MessageAttachmentFolder());
             formPanel.append(Location.Left, createLowerToolbar());
             return formPanel;
         }
@@ -203,16 +210,12 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
-                        ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
-                                new DefaultAsyncCallback<CommunicationMessage>() {
-                                    @Override
-                                    public void onSuccess(CommunicationMessage result) {
-                                        getValue().setPrimaryKey(result.getPrimaryKey());
-                                        getValue().isRead().setValue(false);
-                                        getValue().data().date().setValue(result.data().date().getValue());
-                                        refresh(false);
-                                    }
-                                }, getValue());
+                        ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
+                            @Override
+                            public void onSuccess(MessageDTO result) {
+                                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                            }
+                        }, getValue());
 
                     }
                 };
@@ -220,23 +223,22 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
             btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
                 @Override
                 public void execute() {
-                    ((OpenMessageFolder) getParent().getParent()).removeItem((CFolderItem<CommunicationMessage>) getParent());
+                    ((OpenMessageFolder) getParent().getParent()).removeItem((CFolderItem<MessageDTO>) getParent());
                 }
             });
 
-            btnmarkAsUnread = new Anchor(i18n.tr("Mark as unread"), new Command() {
+            btnmarkAsUnread = new Anchor("Mark as unread", new Command() {
                 @Override
                 public void execute() {
-                    CommunicationMessage m = getValue();
+                    MessageDTO m = getValue();
 
                     m.isRead().setValue(false);
-                    ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
-                            new DefaultAsyncCallback<CommunicationMessage>() {
-                                @Override
-                                public void onSuccess(CommunicationMessage result) {
-                                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView());
-                                }
-                            }, m);
+                    ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
+                        @Override
+                        public void onSuccess(MessageDTO result) {
+                            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageView());
+                        }
+                    }, m);
                 }
             });
 
@@ -251,22 +253,24 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         }
 
         @Override
-        protected CommunicationMessage preprocessValue(CommunicationMessage value, boolean fireEvent, boolean populate) {
+        protected MessageDTO preprocessValue(MessageDTO value, boolean fireEvent, boolean populate) {
             if (value != null && value.getPrimaryKey() != null && !value.getPrimaryKey().isDraft()) {
-                if (!value.isRead().getValue() && ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(value.recipient().getPrimaryKey())) {
+                if (!value.isRead().getValue() && !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(value.sender().getPrimaryKey())) {
                     value.isRead().setValue(true);
-                    BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
+                    BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                     d.setExpended(true);
-                    ((CommunicationMessagePagePresenter) CommunicationMessagePage.this.getView().getPresenter()).saveMessage(
-                            new DefaultAsyncCallback<CommunicationMessage>() {
-                                @Override
-                                public void onSuccess(CommunicationMessage result) {
-                                }
-                            }, value);
+                    ((MessagePagePresenter) MessagePage.this.getView().getPresenter()).saveMessageItem(new DefaultAsyncCallback<MessageDTO>() {
+                        @Override
+                        public void onSuccess(MessageDTO result) {
+                        }
+                    }, value);
                 }
 
             } else {
                 value.isRead().setValue(false);
+                if (!value.thread().hasValues()) {
+                    value.thread().set(MessagePage.this.getValue().thread());
+                }
             }
             return super.preprocessValue(value, fireEvent, populate);
         }
@@ -274,8 +278,8 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            if (getValue().isPrototype() || getValue().data().text() == null || getValue().data().text().isNull()) {
-                BoxFolderItemDecorator<CommunicationMessage> d = (BoxFolderItemDecorator<CommunicationMessage>) getParent().getDecorator();
+            if (getValue().isPrototype() || getValue().text() == null || getValue().text().isNull()) {
+                BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
                 setEditable(true);
@@ -284,20 +288,20 @@ public class CommunicationMessagePage extends CPortalEntityForm<CommunicationMes
                 btnCancel.setVisible(true);
                 starImage.setVisible(false);
                 btnmarkAsUnread.setVisible(false);
-                get(proto().data().date()).setVisible(false);
+                get(proto().date()).setVisible(false);
                 get(proto().star()).setVisible(false);
-                get(proto().data().sender()).setVisible(false);
+                get(proto().sender()).setVisible(false);
             } else {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                get(proto().data().date()).setVisible(true);
-                get(proto().data().sender()).setVisible(true);
-                get(proto().star()).setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
-                btnmarkAsUnread.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
-                starImage.setVisible(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().recipient().getPrimaryKey()));
+                get(proto().date()).setVisible(true);
+                get(proto().sender()).setVisible(true);
+                get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
+                btnmarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
+                starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 if (get(proto().star()).getValue()) {
                     starImage.setResource(PortalImages.INSTANCE.fullStar());
                 } else {

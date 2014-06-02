@@ -174,11 +174,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation) {
                         activity = new LeaseSigningConfirmationActivity(appPlace);
 // Communication
-                    } else if (place instanceof ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageWizard) {
+                    } else if (place instanceof ResidentPortalSiteMap.Message.MessageWizard) {
                         activity = new CommunicationMessageWizardActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.CommunicationMessage.CommunicationMessagePage) {
+                    } else if (place instanceof ResidentPortalSiteMap.Message.MessagePage) {
                         activity = new CommunicationMessagePageActivity(appPlace);
-                    } else if (place instanceof ResidentPortalSiteMap.CommunicationMessage.CommunicationMessageView) {
+                    } else if (place instanceof ResidentPortalSiteMap.Message.MessageView) {
                         activity = new CommunicationMessageViewActivity();
 // Internals
                     } else if (place instanceof Login) {

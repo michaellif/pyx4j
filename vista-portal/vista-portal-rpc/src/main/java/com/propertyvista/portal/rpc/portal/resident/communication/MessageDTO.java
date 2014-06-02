@@ -7,45 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-21
+ * Created on 2013-01-23
  * @author matheszabi
  * @version $Id$
  */
-package com.propertyvista.domain.communication;
+package com.propertyvista.portal.rpc.portal.resident.communication;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface CommunicationThread extends IEntity {
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
+import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageCategory;
 
-    @I18n(context = "CommunicationThread")
-    @XmlType(name = "ThreadStatus")
-    public enum ThreadStatus {
-
-        Unassigned, New, Open, Resolved, Cancelled, Closed;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @NotNull
-    @ReadOnly
-    IPrimitive<String> subject();
+@Transient
+@ExtendsBO
+public interface MessageDTO extends Message {
 
     @NotNull
     @ReadOnly
@@ -60,18 +45,22 @@ public interface CommunicationThread extends IEntity {
     MessageCategory topic();
 
     @NotNull
-    @Owned
-    @Detached
-    @OrderBy(PrimaryKey.class)
-    IList<Message> content();
-
-    @NotNull
     @ReadOnly
     IPrimitive<Date> created();
 
-    @Detached
     @NotNull
-    @MemberColumn(notNull = true)
-    CommunicationEndpoint owner();
+    @ReadOnly
+    IPrimitive<String> subject();
 
+    @NotNull
+    @ReadOnly
+    IPrimitive<Boolean> isRead();
+
+    @NotNull
+    @ReadOnly
+    IPrimitive<Boolean> star();
+
+    @NotNull
+    @Detached
+    IList<MessageDTO> content();
 }

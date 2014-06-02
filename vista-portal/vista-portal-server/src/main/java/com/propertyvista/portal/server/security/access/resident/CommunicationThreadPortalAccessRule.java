@@ -17,17 +17,17 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 
-import com.propertyvista.domain.communication.CommunicationMessage;
+import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
-public class CommunicationMessageAccessRule implements DatasetAccessRule<CommunicationMessage> {
+public class CommunicationThreadPortalAccessRule implements DatasetAccessRule<CommunicationThread> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<CommunicationMessage> criteria) {
-        criteria.or(PropertyCriterion.eq(criteria.proto().data().sender(), ResidentPortalContext.getCurrentUser()),
-                PropertyCriterion.eq(criteria.proto().recipient(), ResidentPortalContext.getCurrentUser()));
+    public void applyRule(EntityQueryCriteria<CommunicationThread> criteria) {
+        criteria.or(PropertyCriterion.eq(criteria.proto().content().$().sender(), ResidentPortalContext.getCurrentUser()),
+                PropertyCriterion.eq(criteria.proto().content().$().recipients().$().recipient(), ResidentPortalContext.getCurrentUser()));
     }
 
 }

@@ -13,16 +13,16 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.resident.communication.CommunicationMessageDTO;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 
 public interface CommunicationView extends IsView {
 
     interface CommunicationPresenter {
     }
 
-    void populate(List<CommunicationMessageDTO> messages);
+    void populate(Vector<MessageDTO> messages);
 }

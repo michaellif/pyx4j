@@ -33,13 +33,13 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationMessage;
-import com.propertyvista.domain.communication.CommunicationMessageAttachment;
+import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.MessageAttachment;
 
 @Transient
 @ExtendsBO
 @ToStringFormat("{0} {1}")
-public interface CommunicationMessageDTO extends CommunicationMessage {
+public interface CommunicationMessageDTO extends DeliveryHandle {
 
     @NotNull
     IPrimitive<String> subject();
@@ -78,5 +78,5 @@ public interface CommunicationMessageDTO extends CommunicationMessage {
     @Owned
     @Detached
     @OrderBy(PrimaryKey.class)
-    IList<CommunicationMessageAttachment> attachments();
+    IList<MessageAttachment> attachments();
 }

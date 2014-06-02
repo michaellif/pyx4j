@@ -7,17 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 3, 2014
- * @author smolka
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.communication;
+package com.propertyvista.portal.resident.ui.communication;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
+import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
-@Transient
-public interface MessagesDTO extends IEntity {
-    IList<MessageDTO> messages();
+public interface MessageWizardView extends IWizardView<MessageDTO> {
+
+    public interface MessageWizardPresenter extends IWizardFormPresenter<MessageDTO> {
+    }
+
 }
