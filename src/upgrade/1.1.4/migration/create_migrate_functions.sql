@@ -24,10 +24,6 @@ BEGIN
         **/
         
         
-        -- primary keys 
-        
-        ALTER TABLE province DROP CONSTRAINT province_pk;
-        
         -- foreign keys
         
         ALTER TABLE apt_unit DROP CONSTRAINT apt_unit_info_legal_address_country_fk;
@@ -60,6 +56,10 @@ BEGIN
         ALTER TABLE pt_vehicle DROP CONSTRAINT pt_vehicle_country_fk;
         ALTER TABLE pt_vehicle DROP CONSTRAINT pt_vehicle_province_fk;
         
+        
+        -- primary keys 
+        
+        ALTER TABLE province DROP CONSTRAINT province_pk;
         
         /**
         ***     ======================================================================================================
@@ -149,6 +149,17 @@ BEGIN
         ALTER TABLE country_policy_node OWNER TO vista;
         
         
+        -- customer_screening_income_info
+        
+        ALTER TABLE customer_screening_income_info RENAME COLUMN address_country TO address_country_old;
+        ALTER TABLE customer_screening_income_info RENAME COLUMN address_province TO address_province_old;
+        
+        ALTER TABLE customer_screening_income_info  ADD COLUMN address_country VARCHAR(50),
+                                                    ADD COLUMN address_province VARCHAR(500),
+                                                    ADD COLUMN address_street_name VARCHAR(500),
+                                                    ADD COLUMN address_street_number VARCHAR(500),
+                                                    ADD COLUMN address_suite_number VARCHAR(500);
+        
         -- legal_status
         
         ALTER TABLE legal_status    ADD COLUMN cancellation_threshold NUMERIC(18,2),
@@ -203,7 +214,7 @@ BEGIN
                 
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
                 ||'SET    info_legal_address_province = replace(p.name,'' '','''') '
-                ||'FROM   '||v_schema_name||'.province AS p '
+                ||'FROM   '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE  a.info_legal_address_province_old = p.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit '
@@ -231,7 +242,7 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
                 ||'SET  info_address_province = replace(p.name,'' '','''') '
-                ||'FROM '||v_schema_name||'.province p '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE b.info_address_province_old = p.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.building '
@@ -254,7 +265,7 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.city AS c '
                 ||'SET  province = replace(p.name,'' '','''') '
-                ||'FROM '||v_schema_name||'.province p '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
                 
         
@@ -262,10 +273,26 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.city_intro_page AS c '
                 ||'SET  province = replace(p.name,'' '','''') '
-                ||'FROM '||v_schema_name||'.province p '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
                 
+       
+        -- customer_screening_income_info
         
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info AS i '
+                ||'SET  address_country = replace(c.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.country c '
+                ||'WHERE    i.address_country_old = c.id ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info AS i '
+                ||'SET  address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node AS p '
+                ||'WHERE i.address_province_old = p.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info '
+                ||'SET  address_street_number = UNNEST(regexp_matches(address_street1, ''^[\d]+'')),'
+                ||'     address_street_name = TRIM(regexp_replace(address_street1, ''^[\d]+\s'','''')) ';
         
         -- Phone numbers update
         
@@ -332,11 +359,18 @@ BEGIN
         
         DROP TABLE country;
         
+        -- customer_screening_income_info
+        
+        ALTER TABLE customer_screening_income_info  DROP COLUMN address_country_old,
+                                                    DROP COLUMN address_province_old,
+                                                    DROP COLUMN address_street1,
+                                                    DROP COLUMN address_street2;
+        
         
         -- province_policy_node
         
         ALTER TABLE province_policy_node    DROP COLUMN code,
-                                            DROP COLUMN county,
+                                            DROP COLUMN country,
                                             DROP COLUMN name;
                  
         /**
