@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class SiteViewTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewShortCuts, SiteViewShortCutsItem;
+        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewShortCuts, SiteViewShortCutsItem, SiteViewShortCutsTitle;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -56,7 +56,8 @@ public class SiteViewTheme extends Theme {
         // NavigationContainer (Accordion menu):
         style = new Style(".", StyleName.SiteViewSideMenu.name());
         style.addProperty("border-right", "4px solid");
-        style.addProperty("border-right-color", ThemeColor.object1);
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-color", ThemeColor.object1);
         style.addProperty("line-height", "1.5em");
         style.addProperty("white-space", "nowrap");
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
@@ -93,8 +94,9 @@ public class SiteViewTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewShortCuts.name());
-        style.addProperty("border-right", "4px solid");
-        style.addProperty("border-right-color", ThemeColor.object1);
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-left", "4px solid");
+        style.addProperty("border-color", ThemeColor.object1);
         addStyle(style);
 
         /*
@@ -107,8 +109,6 @@ public class SiteViewTheme extends Theme {
         style.addProperty("padding-left", "1em");
         style.addProperty("color", ThemeColor.foreground, 0.9);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        style.addProperty("border-top", "solid 4px");
-        style.addProperty("border-top-color", ThemeColor.object1);
         // NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
@@ -122,6 +122,26 @@ public class SiteViewTheme extends Theme {
         style = new Style(".", StyleName.SiteViewShortCuts.name(), " a:link, .", StyleName.SiteViewShortCuts.name(), " a:visited, .",
                 StyleName.SiteViewShortCuts.name(), " a:active");
         style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewShortCutsItem.name());
+        style.addProperty("padding", "3px 6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewShortCutsItem.name(), " a");
+        style.addProperty("text-overflow", "ellipsis");
+        style.addProperty("overflow", "hidden");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("width", "100%");
+        style.addProperty("display", "inline-block");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewShortCutsTitle.name());
+        style.addProperty("line-height", "2.2em");
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding", "5px");
+        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.15);
         addStyle(style);
     }
 
