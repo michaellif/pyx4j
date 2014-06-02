@@ -17,10 +17,11 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Product;
-import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
+import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class DefaultDepositManager {
@@ -30,21 +31,21 @@ public class DefaultDepositManager {
         entity.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         entity.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.Deposit));
         entity.version().depositLMR().valueType().setValue(ValueType.Percentage);
-        entity.version().depositLMR().value().setValue(BigDecimal.ONE);
+        setDepositValue(entity.version().depositLMR(), BigDecimal.ONE);
         entity.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
         entity.version().depositMoveIn().enabled().setValue(enabled);
         entity.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         entity.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.Deposit));
         entity.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
-        entity.version().depositMoveIn().value().setValue(BigDecimal.ONE);
+        setDepositValue(entity.version().depositMoveIn(), BigDecimal.ONE);
         entity.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
         entity.version().depositSecurity().enabled().setValue(enabled);
         entity.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         entity.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.Deposit));
         entity.version().depositSecurity().valueType().setValue(ValueType.Percentage);
-        entity.version().depositSecurity().value().setValue(BigDecimal.ONE);
+        setDepositValue(entity.version().depositSecurity(), BigDecimal.ONE);
         entity.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
     }
 
@@ -52,5 +53,13 @@ public class DefaultDepositManager {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.eq(criteria.proto().type(), type);
         return Persistence.service().retrieve(criteria);
+    }
+
+    static void setDepositValue(ProductDeposit deposit, BigDecimal value) {
+        if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
+            deposit.value().percent().setValue(value);
+        } else {
+            deposit.value().amount().setValue(value);
+        }
     }
 }

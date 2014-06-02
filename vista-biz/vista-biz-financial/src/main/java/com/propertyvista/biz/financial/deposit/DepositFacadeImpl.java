@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -325,7 +326,16 @@ public class DepositFacadeImpl implements DepositFacade {
         if (VistaFeatures.instance().yardiIntegration()) {
             return value; // allow null deposit value here in Yardi mode...
         } else {
-            return (value == null ? productDeposit.value().getValue() : value); // get Product value if Item not set 
+            return (value == null ? getProductDepositValue(productDeposit) : value); // get Product value if Item not set 
         }
     }
+
+    private BigDecimal getProductDepositValue(ProductDeposit deposit) {
+        if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
+            return deposit.value().percent().getValue();
+        } else {
+            return deposit.value().amount().getValue();
+        }
+    }
+
 }

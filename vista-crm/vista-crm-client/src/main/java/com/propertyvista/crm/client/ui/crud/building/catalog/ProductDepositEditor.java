@@ -13,30 +13,23 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductDeposit;
-import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 
 public class ProductDepositEditor extends CForm<ProductDeposit> {
-
-    private final SimplePanel valueHolder = new SimplePanel();
 
     public ProductDepositEditor() {
         super(ProductDeposit.class);
@@ -53,17 +46,18 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
         formPanel.append(Location.Left, proto().chargeCode(), chargeCodeSelector = new CEntityComboBox<ARCode>(ARCode.class)).decorate();
 
         formPanel.append(Location.Right, proto().valueType()).decorate().componentWidth(100);
-        formPanel.append(Location.Right, valueHolder);
+        final CMoneyPercentCombo moneyPct = new CMoneyPercentCombo();
+        formPanel.append(Location.Right, proto().value(), moneyPct).decorate().componentWidth(100);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweaks:
         chargeCodeSelector.addCriterion(PropertyCriterion.in(chargeCodeSelector.proto().type(), ARCode.Type.deposits()));
 
-        get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
+        get(proto().valueType()).addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
-            public void onValueChange(ValueChangeEvent<ValueType> event) {
-                bindValueEditor(event.getValue(), false);
+            public void onPropertyChange(PropertyChangeEvent event) {
+                moneyPct.setAmountType(get(proto().valueType()).getValue());
             }
         });
 
@@ -88,32 +82,6 @@ public class ProductDepositEditor extends CForm<ProductDeposit> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        bindValueEditor(getValue().valueType().getValue(), true);
-
         setStateEnabled(getValue().enabled().getValue(false));
-    }
-
-    private void bindValueEditor(ValueType valueType, boolean repopulatevalue) {
-        if (valueType == null)
-            return; // New item
-
-        CField<BigDecimal, ?> comp = null;
-        switch (valueType) {
-        case Monetary:
-            comp = new CMoneyField();
-            break;
-        case Percentage:
-            comp = new CPercentageField();
-            break;
-        }
-        unbind(proto().value());
-
-        if (comp != null) {
-            comp.setDecorator(new FieldDecorator.Builder().componentWidth("80px").build());
-            valueHolder.setWidget(inject(proto().value(), comp));
-            if (repopulatevalue) {
-                get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
-            }
-        }
     }
 }

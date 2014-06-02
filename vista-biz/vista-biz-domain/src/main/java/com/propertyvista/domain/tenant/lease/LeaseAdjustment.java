@@ -117,7 +117,7 @@ public interface LeaseAdjustment extends IEntity {
     IMoneyPercentAmount tax();
 
     @NotNull
-    IPrimitive<ValueType> taxAmountType();
+    IPrimitive<ValueType> taxValueType();
 
     IPrimitive<Boolean> overwriteDefaultTax();
 

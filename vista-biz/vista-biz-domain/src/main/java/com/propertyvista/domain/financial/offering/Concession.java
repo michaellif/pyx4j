@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.financial.offering;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlType;
@@ -21,8 +20,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -35,6 +32,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.core.IVersionedEntity;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -129,10 +127,8 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
          * for monetaryOff/promotionalItem - value amount
          */
         @ToString(index = 1)
-        @Format("#,##0.00")
-        @Editor(type = EditorType.money)
         @MemberColumn(name = "val")
-        IPrimitive<BigDecimal> value();
+        IMoneyPercentAmount value();
 
         @NotNull
         @ToString(index = 3)

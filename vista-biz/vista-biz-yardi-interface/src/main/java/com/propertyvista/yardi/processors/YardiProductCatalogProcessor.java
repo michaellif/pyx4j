@@ -42,6 +42,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -50,7 +51,6 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
-import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -457,7 +457,7 @@ public class YardiProductCatalogProcessor {
         updated.getB().version().depositLMR().enabled().setValue(false);
         // set Yardi deposit default value/type:
         updated.getB().version().depositLMR().valueType().setValue(ValueType.Monetary);
-        updated.getB().version().depositLMR().value().setValue(new BigDecimal("0.00"));
+        updated.getB().version().depositLMR().value().amount().setValue(new BigDecimal("0.00"));
 
         List<ProductItem> serviceItems = new ArrayList<ProductItem>(updated.getB().version().items());
         Collections.sort(serviceItems, new ProductItemByElementComparator());

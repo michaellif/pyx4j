@@ -13,14 +13,9 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
-import java.math.BigDecimal;
-
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -33,23 +28,12 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.domain.company.Employee;
 
 public interface BillableItemAdjustment extends IEntity {
-
-    @I18n
-    @XmlType(name = "AdjustmentType")
-    enum Type {
-        percentage, monetary;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
     IPrimitive<String> uid();
@@ -72,19 +56,18 @@ public interface BillableItemAdjustment extends IEntity {
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "adjustmentType")
-    IPrimitive<Type> type();
-
-    IPrimitive<String> description();
+    IPrimitive<ValueType> type();
 
     /*
      * for percentage - percentage
      * for monetary - amount
      */
     @NotNull
-    @Format("#,##0.00")
     @ToString(index = 1)
     @MemberColumn(name = "adjustmentValue")
-    IPrimitive<BigDecimal> value();
+    IMoneyPercentAmount value();
+
+    IPrimitive<String> description();
 
     @Caption(description = "Empty value assumes Billable Item effective date")
     IPrimitive<LogicalDate> effectiveDate();

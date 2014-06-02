@@ -13,14 +13,9 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
-import java.math.BigDecimal;
-
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -29,6 +24,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -78,9 +74,7 @@ public interface LateFeeItem extends IEntity {
 
     @NotNull
     @ToString(index = 1)
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> baseFee();
+    IMoneyPercentAmount baseFee();
 
     @NotNull
     @ToString(index = 0)
@@ -88,9 +82,7 @@ public interface LateFeeItem extends IEntity {
 
     @NotNull
     @ToString(index = 3)
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> maxTotalFee();
+    IMoneyPercentAmount maxTotalFee();
 
     @NotNull
     @ToString(index = 2)

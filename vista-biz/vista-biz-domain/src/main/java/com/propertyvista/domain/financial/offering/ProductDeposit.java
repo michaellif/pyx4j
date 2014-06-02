@@ -13,14 +13,9 @@
  */
 package com.propertyvista.domain.financial.offering;
 
-import java.math.BigDecimal;
-
-import javax.xml.bind.annotation.XmlType;
-
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
@@ -28,26 +23,15 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.Deposit;
 
 @EmbeddedEntity
-@ToStringFormat("{2}, {1,choice,Percentage#{0,number,percent}|Monetary#${0,number,#.##}}, {3}")
+@ToStringFormat("{2}, {1}, {3}")
 public interface ProductDeposit extends IEntity {
-
-    @I18n
-    @XmlType(name = "AmountType")
-    public enum ValueType {
-        Monetary, Percentage;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
 
     @NotNull
     @Editor(type = EditorType.radiogroup)
@@ -60,9 +44,7 @@ public interface ProductDeposit extends IEntity {
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "depositValue")
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> value();
+    IMoneyPercentAmount value();
 
     @NotNull
     @ToString(index = 1)

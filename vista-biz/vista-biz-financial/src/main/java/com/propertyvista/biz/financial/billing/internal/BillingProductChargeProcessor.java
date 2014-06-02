@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
@@ -252,10 +253,10 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
 
         BigDecimal amount = null;
 
-        if (BillableItemAdjustment.Type.percentage.equals(billableItemAdjustment.type().getValue())) {
-            amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue());
-        } else if (BillableItemAdjustment.Type.monetary.equals(billableItemAdjustment.type().getValue())) {
-            amount = billableItemAdjustment.value().getValue();
+        if (ValueType.Percentage.equals(billableItemAdjustment.type().getValue())) {
+            amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().percent().getValue());
+        } else if (ValueType.Monetary.equals(billableItemAdjustment.type().getValue())) {
+            amount = billableItemAdjustment.value().amount().getValue();
         }
 
         DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),

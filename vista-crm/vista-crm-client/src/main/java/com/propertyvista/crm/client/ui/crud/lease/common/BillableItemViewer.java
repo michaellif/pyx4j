@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,11 +23,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -48,7 +43,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -238,49 +232,6 @@ public class BillableItemViewer extends CForm<BillableItem> {
                 new FolderColumnDescriptor(proto().effectiveDate(), "9em"),
                 new FolderColumnDescriptor(proto().expirationDate(), "10em"));
             //@formatter:on
-        }
-
-        @Override
-        protected CForm<? extends BillableItemAdjustment> createItemForm(IObject<?> member) {
-            return new BillableItemAdjustmentEditor();
-        }
-
-        private class BillableItemAdjustmentEditor extends CFolderRowEditor<BillableItemAdjustment> {
-
-            public BillableItemAdjustmentEditor() {
-                super(BillableItemAdjustment.class, columns());
-            }
-
-            @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-                bindValueEditor(getValue().type().getValue(), populate);
-            }
-
-            private void bindValueEditor(Type valueType, boolean populate) {
-                CField<BigDecimal, ?> comp = null;
-                if (valueType != null) {
-                    switch (valueType) {
-                    case monetary:
-                        comp = new CMoneyField();
-                        break;
-                    case percentage:
-                        comp = new CPercentageField();
-                        break;
-                    }
-                }
-
-                if (comp != null) {
-                    IFieldDecorator decor = (IFieldDecorator) get((proto().value())).getDecorator();
-                    unbind(proto().value());
-                    inject(proto().value(), comp);
-                    comp.setDecorator(decor);
-
-                    if (populate) {
-                        get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
-                    }
-                }
-            }
         }
     }
 

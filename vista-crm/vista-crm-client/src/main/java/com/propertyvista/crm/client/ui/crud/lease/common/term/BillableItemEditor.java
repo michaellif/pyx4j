@@ -13,26 +13,24 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.shared.IMoneyPercentAmount;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.CMoneyPercentCombo;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.IFieldDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
@@ -59,7 +57,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -353,52 +350,26 @@ public class BillableItemEditor extends CForm<BillableItem> {
                 super(BillableItemAdjustment.class, columns());
             }
 
-            @SuppressWarnings("unchecked")
             @Override
             protected CField<?, ?> createCell(FolderColumnDescriptor column) {
-                CField<?, ?> comp = super.createCell(column);
-
-                if (column.getObject() == proto().type()) {
-                    ((CComponent<?, Type, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Type>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<Type> event) {
-                            bindValueEditor(event.getValue(), false);
-                        }
-                    });
+                if (column.getObject() == proto().value()) {
+                    return inject(column.getObject(), new CMoneyPercentCombo());
+                } else {
+                    return super.createCell(column);
                 }
-
-                return comp;
             }
 
             @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-                bindValueEditor(getValue().type().getValue(), populate);
-            }
-
-            private void bindValueEditor(Type valueType, boolean populate) {
-                CField<BigDecimal, ?> comp = null;
-                if (valueType != null) {
-                    switch (valueType) {
-                    case monetary:
-                        comp = new CMoneyField();
-                        break;
-                    case percentage:
-                        comp = new CPercentageField();
-                        break;
+            protected IsWidget createContent() {
+                IsWidget content = super.createContent();
+                final CMoneyPercentCombo moneyPct = (CMoneyPercentCombo) get(proto().value());
+                get(proto().type()).addPropertyChangeHandler(new PropertyChangeHandler() {
+                    @Override
+                    public void onPropertyChange(PropertyChangeEvent event) {
+                        moneyPct.setAmountType(get(proto().type()).getValue());
                     }
-                }
-
-                if (comp != null) {
-                    IFieldDecorator decor = (IFieldDecorator) get((proto().value())).getDecorator();
-                    unbind(proto().value());
-                    inject(proto().value(), comp);
-                    comp.setDecorator(decor);
-
-                    if (populate) {
-                        get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
-                    }
-                }
+                });
+                return content;
             }
 
             @Override
@@ -450,15 +421,11 @@ public class BillableItemEditor extends CForm<BillableItem> {
                     }
                 });
 
-                get(proto().value()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
+                get(proto().value()).addComponentValidator(new AbstractComponentValidator<IMoneyPercentAmount>() {
                     @Override
                     public BasicValidationError isValid() {
                         if (getComponent().getValue() != null) {
-                            if (getComponent().getValue().signum() < 0) {
-                                // TODO : some validation here...
-                            } else {
-                                // TODO : some validation here...
-                            }
+                            // TODO : some validation here...
                         }
                         return null;
                     }

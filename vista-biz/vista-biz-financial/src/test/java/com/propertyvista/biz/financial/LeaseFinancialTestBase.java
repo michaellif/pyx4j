@@ -27,6 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -431,32 +432,32 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         Persistence.service().commit();
     }
 
-    protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType, String effectiveDate, String expirationDate) {
+    protected BillableItemAdjustment addServiceAdjustment(String value, ValueType adjustmentType, String effectiveDate, String expirationDate) {
         Lease lease = retrieveLease();
         return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType,
                 getDate(effectiveDate), getDate(expirationDate));
     }
 
-    protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType) {
+    protected BillableItemAdjustment addServiceAdjustment(String value, ValueType adjustmentType) {
         Lease lease = retrieveLease();
         return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, lease
                 .currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
     }
 
-    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType) {
+    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, ValueType adjustmentType) {
         Lease lease = retrieveLease();
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo()
                 .getValue());
 
     }
 
-    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
-            String effectiveDate, String expirationDate) {
+    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, ValueType adjustmentType, String effectiveDate,
+            String expirationDate) {
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, getDate(effectiveDate), getDate(expirationDate));
     }
 
-    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
-            LogicalDate effectiveDate, LogicalDate expirationDate) {
+    protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, ValueType adjustmentType, LogicalDate effectiveDate,
+            LogicalDate expirationDate) {
 
         Lease lease = retrieveLeaseDraft();
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
@@ -465,8 +466,10 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
         if (value == null) {
             adjustment.value().setValue(null);
+        } else if (ValueType.Percentage.equals(adjustmentType)) {
+            adjustment.value().percent().setValue(new BigDecimal(value));
         } else {
-            adjustment.value().setValue(new BigDecimal(value));
+            adjustment.value().amount().setValue(new BigDecimal(value));
         }
         adjustment.type().setValue(adjustmentType);
         adjustment.effectiveDate().setValue(effectiveDate);

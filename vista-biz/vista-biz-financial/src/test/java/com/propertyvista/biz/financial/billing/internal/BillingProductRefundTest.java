@@ -23,13 +23,13 @@ package com.propertyvista.biz.financial.billing.internal;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @Category(RegressionTests.class)
@@ -99,7 +99,7 @@ public class BillingProductRefundTest extends LeaseFinancialTestBase {
 
         // Current period adjustment
         advanceSysDate("20-Mar-2011");
-        addFeatureAdjustment(parking.uid().getValue(), "-10", BillableItemAdjustment.Type.monetary, "20-Mar-2011", "10-Apr-2011");
+        addFeatureAdjustment(parking.uid().getValue(), "-10", ValueType.Monetary, "20-Mar-2011", "10-Apr-2011");
 
         //==================== RUN 3 ======================//
 

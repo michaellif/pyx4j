@@ -40,21 +40,21 @@ public class LatePaymentCalculationTest extends VistaDBTestBase {
         BigDecimal ownedTotal = new BigDecimal("205.55");
         BigDecimal monthlyRent = new BigDecimal("1500.00");
 
-        policy.lateFee().baseFee().setValue(new BigDecimal("100.00"));
+        policy.lateFee().baseFee().amount().setValue(new BigDecimal("100.00"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
-        policy.lateFee().maxTotalFee().setValue(new BigDecimal("500.00"));
+        policy.lateFee().maxTotalFee().amount().setValue(new BigDecimal("500.00"));
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.FlatAmount);
 
         BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
         assertEquals(new BigDecimal("100.00"), calculatedLateFee);
 
-        policy.lateFee().baseFee().setValue(new BigDecimal("0.1"));
+        policy.lateFee().baseFee().percent().setValue(new BigDecimal("0.1"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.PercentOwedTotal);
 
         calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
         assertEquals(new BigDecimal("20.56"), calculatedLateFee);
 
-        policy.lateFee().baseFee().setValue(new BigDecimal("0.1"));
+        policy.lateFee().baseFee().percent().setValue(new BigDecimal("0.1"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.PercentMonthlyRent);
 
         calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
@@ -68,9 +68,9 @@ public class LatePaymentCalculationTest extends VistaDBTestBase {
         BigDecimal monthlyRent = new BigDecimal("1500.00");
         BigDecimal maxTotalFee = new BigDecimal("0.1");
 
-        policy.lateFee().baseFee().setValue(new BigDecimal("200.00"));
+        policy.lateFee().baseFee().amount().setValue(new BigDecimal("200.00"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
-        policy.lateFee().maxTotalFee().setValue(maxTotalFee);
+        policy.lateFee().maxTotalFee().amount().setValue(maxTotalFee);
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.PercentMonthlyRent);
 
         BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
@@ -88,9 +88,9 @@ public class LatePaymentCalculationTest extends VistaDBTestBase {
         BigDecimal montlyRent = new BigDecimal("1500.00");
         BigDecimal maxTotalFee = new BigDecimal("0.1");
 
-        policy.lateFee().baseFee().setValue(new BigDecimal("0.1"));
+        policy.lateFee().baseFee().percent().setValue(new BigDecimal("0.1"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.PercentOwedTotal);
-        policy.lateFee().maxTotalFee().setValue(maxTotalFee);
+        policy.lateFee().maxTotalFee().percent().setValue(maxTotalFee);
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.PercentMonthlyRent);
 
         BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, montlyRent, policy);

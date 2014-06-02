@@ -24,13 +24,13 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductDeposit;
-import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.pmc.IntegrationSystem;
@@ -251,7 +251,11 @@ public class BuildingDataModel extends MockDataModel<Building> {
         deposit.enabled().setValue(true);
         deposit.depositType().setValue(depositType);
         deposit.valueType().setValue(valueType);
-        deposit.value().setValue(value);
+        if (ValueType.Percentage.equals(valueType)) {
+            deposit.value().percent().setValue(value);
+        } else {
+            deposit.value().amount().setValue(value);
+        }
         String description = deposit.depositType().getStringView() + ", " + desc;
         deposit.description().setValue(description.length() > 40 ? description.substring(0, 40) : description);
         deposit.chargeCode().set(arCodes.get(ARCode.Type.Deposit).get(0));

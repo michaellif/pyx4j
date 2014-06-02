@@ -22,10 +22,11 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
+
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.mock.MockConfig;
 
@@ -43,7 +44,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     public void testScenario1() {
 
         createLease("15-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         //==================== RUN 1 ======================//
 
@@ -73,7 +74,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     public void testScenario2() {
 
         createLease("16-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -99,7 +100,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("17-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -124,7 +125,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     public void testScenario4() {
 
         createLease("18-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -149,7 +150,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     public void testScenario5() {
 
         createLease("19-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -176,7 +177,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("20-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -203,7 +204,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("21-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -230,7 +231,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("22-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -256,7 +257,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("23-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -282,7 +283,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("24-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -308,7 +309,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("25-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -334,7 +335,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("26-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -360,7 +361,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("27-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -386,7 +387,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("28-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -412,7 +413,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("29-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -438,7 +439,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("30-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -464,7 +465,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("31-Jan-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -490,7 +491,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("01-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -516,7 +517,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("02-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -542,7 +543,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("02-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -568,7 +569,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("03-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -594,7 +595,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("04-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -620,7 +621,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("05-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -646,7 +647,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("06-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -672,7 +673,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("07-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -698,7 +699,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("08-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -724,7 +725,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("09-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -750,7 +751,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("10-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -776,7 +777,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("11-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -802,7 +803,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("12-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -828,7 +829,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("13-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
@@ -854,7 +855,7 @@ public class BillingFirstMonthProrationScenarioTest extends LeaseFinancialTestBa
     {
 
         createLease("14-Feb-2012", "14-Feb-2012");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);

@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
@@ -29,7 +30,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
-import com.propertyvista.domain.financial.offering.ProductDeposit.ValueType;
+import com.propertyvista.domain.financial.offering.ProductDeposit;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -146,21 +147,21 @@ public class ProductCatalogGenerator {
         service.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         service.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.Deposit));
         service.version().depositLMR().valueType().setValue(ValueType.Percentage);
-        service.version().depositLMR().value().setValue(BigDecimal.ONE);
+        setDepositValue(service.version().depositLMR(), BigDecimal.ONE);
         service.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
         service.version().depositMoveIn().enabled().setValue(RandomUtil.randomBoolean());
         service.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         service.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.Deposit));
         service.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
-        service.version().depositMoveIn().value().setValue(new BigDecimal(0.66));
+        setDepositValue(service.version().depositMoveIn(), new BigDecimal(0.66));
         service.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
         service.version().depositSecurity().enabled().setValue(RandomUtil.randomBoolean());
         service.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         service.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.Deposit));
         service.version().depositSecurity().valueType().setValue(ValueType.Monetary);
-        service.version().depositSecurity().value().setValue(new BigDecimal(333.3));
+        setDepositValue(service.version().depositSecurity(), new BigDecimal(333.3));
         service.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
 
         return service;
@@ -185,21 +186,21 @@ public class ProductCatalogGenerator {
         feature.version().depositLMR().depositType().setValue(DepositType.LastMonthDeposit);
         feature.version().depositLMR().chargeCode().set(getARCode(ARCode.Type.Deposit));
         feature.version().depositLMR().valueType().setValue(ValueType.Percentage);
-        feature.version().depositLMR().value().setValue(BigDecimal.ONE);
+        setDepositValue(feature.version().depositLMR(), BigDecimal.ONE);
         feature.version().depositLMR().description().setValue(DepositType.LastMonthDeposit.toString());
 
         feature.version().depositMoveIn().enabled().setValue(RandomUtil.randomBoolean());
         feature.version().depositMoveIn().depositType().setValue(DepositType.MoveInDeposit);
         feature.version().depositMoveIn().chargeCode().set(getARCode(ARCode.Type.Deposit));
         feature.version().depositMoveIn().valueType().setValue(ValueType.Percentage);
-        feature.version().depositMoveIn().value().setValue(new BigDecimal(0.33));
+        setDepositValue(feature.version().depositMoveIn(), new BigDecimal(0.33));
         feature.version().depositMoveIn().description().setValue(DepositType.MoveInDeposit.toString());
 
         feature.version().depositSecurity().enabled().setValue(RandomUtil.randomBoolean());
         feature.version().depositSecurity().depositType().setValue(DepositType.SecurityDeposit);
         feature.version().depositSecurity().chargeCode().set(getARCode(ARCode.Type.Deposit));
         feature.version().depositSecurity().valueType().setValue(ValueType.Monetary);
-        feature.version().depositSecurity().value().setValue(new BigDecimal(33.3));
+        setDepositValue(feature.version().depositSecurity(), new BigDecimal(33.3));
         feature.version().depositSecurity().description().setValue(DepositType.SecurityDeposit.toString());
 
         feature.version().items().add(createFeatureItem(feature));
@@ -238,9 +239,9 @@ public class ProductCatalogGenerator {
             break;
         }
 
-        item.depositLMR().setValue(feature.version().depositLMR().value().getValue());
-        item.depositMoveIn().setValue(feature.version().depositMoveIn().value().getValue());
-        item.depositSecurity().setValue(feature.version().depositSecurity().value().getValue());
+        item.depositLMR().setValue(getDepositValue(feature.version().depositLMR()));
+        item.depositMoveIn().setValue(getDepositValue(feature.version().depositMoveIn()));
+        item.depositSecurity().setValue(getDepositValue(feature.version().depositSecurity()));
 
         return item;
     }
@@ -253,19 +254,24 @@ public class ProductCatalogGenerator {
         item.version().type().setValue(RandomUtil.random(Concession.Type.values(), ConcessionTypeId, Concession.Type.values().length));
 
         if (item.version().type().getValue() == Concession.Type.percentageOff) {
-            item.version().value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
-            item.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service", item.version().value().getValue().floatValue() * 100));
+            item.version().value().percent().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
+            item.version()
+                    .description()
+                    .setValue(
+                            i18n.tr("Special Promotion Applies, {0}% Off The Value Of The Service",
+                                    item.version().value().percent().getValue().floatValue() * 100));
         } else if (item.version().type().getValue() == Concession.Type.monetaryOff) {
-            item.version().value().setValue(new BigDecimal(50d + RandomUtil.randomDouble(50)));
+            item.version().value().amount().setValue(new BigDecimal(50d + RandomUtil.randomDouble(50)));
             item.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", item.version().value().getValue().floatValue()));
+                    .setValue(i18n.tr("Special Promotion Applies, ${0} Off The Value Of The Service", item.version().value().amount().getValue().floatValue()));
         } else if (item.version().type().getValue() == Concession.Type.promotionalItem) {
-            item.version().value().setValue(new BigDecimal(100d + RandomUtil.randomDouble(100)));
-            item.version().description()
-                    .setValue(i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", item.version().value().getValue().floatValue()));
+            item.version().value().amount().setValue(new BigDecimal(100d + RandomUtil.randomDouble(100)));
+            item.version()
+                    .description()
+                    .setValue(
+                            i18n.tr("Special Promotion Applies, ${0} In Promotional Items Or Services", item.version().value().amount().getValue().floatValue()));
         } else if (item.version().type().getValue() == Concession.Type.free) {
-            item.version().value().setValue(new BigDecimal(200d + RandomUtil.randomDouble(100)));
+            item.version().value().amount().setValue(new BigDecimal(200d + RandomUtil.randomDouble(100)));
             item.version().description().setValue(i18n.tr("Special Promotion Applies, Everything Completely Free"));
         }
 
@@ -288,9 +294,9 @@ public class ProductCatalogGenerator {
             item.description().setValue(arCode.type().getStringView() + " description");
             item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
 
-            item.depositLMR().setValue(service.version().depositLMR().value().getValue());
-            item.depositMoveIn().setValue(service.version().depositMoveIn().value().getValue());
-            item.depositSecurity().setValue(service.version().depositSecurity().value().getValue());
+            item.depositLMR().setValue(getDepositValue(service.version().depositLMR()));
+            item.depositMoveIn().setValue(getDepositValue(service.version().depositMoveIn()));
+            item.depositSecurity().setValue(getDepositValue(service.version().depositSecurity()));
 
             Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
             service.version().items().add(item);
@@ -307,6 +313,22 @@ public class ProductCatalogGenerator {
         }
 
         return services;
+    }
+
+    private void setDepositValue(ProductDeposit deposit, BigDecimal value) {
+        if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
+            deposit.value().percent().setValue(value);
+        } else {
+            deposit.value().amount().setValue(value);
+        }
+    }
+
+    private BigDecimal getDepositValue(ProductDeposit deposit) {
+        if (ValueType.Percentage.equals(deposit.valueType().getValue())) {
+            return deposit.value().percent().getValue();
+        } else {
+            return deposit.value().amount().getValue();
+        }
     }
 
     private static BigDecimal createUnitMarketRent(AptUnit unit) {

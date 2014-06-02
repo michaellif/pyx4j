@@ -22,11 +22,12 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
+
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
@@ -45,16 +46,16 @@ public class BillingFeatureEagerScenarioTest extends LeaseFinancialTestBase {
         createLease("23-Mar-2011", "03-Aug-2011");
 
         BillableItem parking1 = addOutdoorParking();
-        addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
+        addFeatureAdjustment(parking1.uid().getValue(), "-10", ValueType.Monetary);
 
         BillableItem parking2 = addOutdoorParking("23-Apr-2011", null);
-        addFeatureAdjustment(parking2.uid().getValue(), "-10", Type.monetary);
+        addFeatureAdjustment(parking2.uid().getValue(), "-10", ValueType.Monetary);
 
         BillableItem locker1 = addLargeLocker();
-        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
+        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", ValueType.Percentage);
 
         BillableItem pet1 = addCat();
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
+        addFeatureAdjustment(pet1.uid().getValue(), "-1", ValueType.Percentage);
 
         //==================== RUN 1 ======================//
 

@@ -23,6 +23,7 @@ package com.propertyvista.biz.financial.billing.internal;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -30,7 +31,6 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
@@ -47,12 +47,12 @@ public class BillableItemAdjustmentTest extends LeaseFinancialTestBase {
         setSysDate("17-Feb-2011");
 
         createLease("01-Mar-2011", "31-Jul-2011");
-        BillableItemAdjustment svcAdj_1 = addServiceAdjustment("-30.30", Type.monetary);
-        BillableItemAdjustment svcAdj_2 = addServiceAdjustment("-100", Type.monetary, "01-Apr-2011", "30-Apr-2011");
-        BillableItemAdjustment svcAdj_3 = addServiceAdjustment("-31", Type.monetary, "15-May-2011", "14-Jun-2011");
+        BillableItemAdjustment svcAdj_1 = addServiceAdjustment("-30.30", ValueType.Monetary);
+        BillableItemAdjustment svcAdj_2 = addServiceAdjustment("-100", ValueType.Monetary, "01-Apr-2011", "30-Apr-2011");
+        BillableItemAdjustment svcAdj_3 = addServiceAdjustment("-31", ValueType.Monetary, "15-May-2011", "14-Jun-2011");
 
         BillableItem park = addOutdoorParking();
-        BillableItemAdjustment parkAdj_1 = addFeatureAdjustment(park.uid().getValue(), "-30", Type.monetary);
+        BillableItemAdjustment parkAdj_1 = addFeatureAdjustment(park.uid().getValue(), "-30", ValueType.Monetary);
 
         //==================== RUN 1 ======================//
         // Service = 900 after $30.30 adjustment; parking = 50 after $30 adjustment

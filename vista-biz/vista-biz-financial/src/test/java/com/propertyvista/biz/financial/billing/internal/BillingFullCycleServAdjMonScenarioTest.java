@@ -23,12 +23,12 @@ package com.propertyvista.biz.financial.billing.internal;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.mock.MockConfig;
 
@@ -46,7 +46,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends LeaseFinancialTestBa
     public void testScenario() throws Exception {
 
         createLease("28-Jan-2012", "16-Feb-2013");
-        addServiceAdjustment("-55.55", Type.monetary);
+        addServiceAdjustment("-55.55", ValueType.Monetary);
 
         //==================== RUN 1 ======================//
 

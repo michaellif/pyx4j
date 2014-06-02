@@ -74,7 +74,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
         formPanel.append(Location.Left, proto().overwriteDefaultTax()).decorate().componentWidth(80);
         get(proto().overwriteDefaultTax()).setVisible(isEditable());
-        formPanel.append(Location.Left, proto().taxAmountType()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().taxValueType()).decorate().componentWidth(100);
         final CMoneyPercentCombo moneyPercent = new CMoneyPercentCombo();
         formPanel.append(Location.Left, proto().tax(), moneyPercent).decorate().componentWidth(100);
         if (!isEditable()) {
@@ -88,10 +88,10 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         // tweak:
-        get(proto().taxAmountType()).addPropertyChangeHandler(new PropertyChangeHandler() {
+        get(proto().taxValueType()).addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                moneyPercent.setAmountType(get(proto().taxAmountType()).getValue());
+                moneyPercent.setAmountType(get(proto().taxValueType()).getValue());
             }
         });
         get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<ExecutionType>() {
@@ -141,12 +141,12 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
     private void recalculateTaxesAndTotal() {
         if (getValue().overwriteDefaultTax().getValue(false)) {
-            get(proto().taxAmountType()).setEditable(true);
+            get(proto().taxValueType()).setEditable(true);
             get(proto().tax()).setEditable(true);
 
             recalculateTotal();
         } else {
-            get(proto().taxAmountType()).setEditable(false);
+            get(proto().taxValueType()).setEditable(false);
             get(proto().tax()).setEditable(false);
 
             LeaseAdjustmentPresenter presenter;
@@ -172,7 +172,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             total = total.add(getValue().amount().getValue(BigDecimal.ZERO));
 
             if (!getValue().tax().isNull()) {
-                switch (getValue().taxAmountType().getValue()) {
+                switch (getValue().taxValueType().getValue()) {
                 case Percentage:
                     total = total.add(total.multiply(getValue().tax().percent().getValue(BigDecimal.ZERO)));
                     break;

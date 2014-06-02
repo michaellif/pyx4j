@@ -39,25 +39,25 @@ public class LatePaymentUtils {
 
         switch (policy.lateFee().baseFeeType().getValue()) {
         case FlatAmount:
-            fee = policy.lateFee().baseFee().getValue();
+            fee = policy.lateFee().baseFee().amount().getValue();
             break;
 
         case PercentOwedTotal:
-            fee = amount.multiply(policy.lateFee().baseFee().getValue());
+            fee = amount.multiply(policy.lateFee().baseFee().percent().getValue());
             break;
 
         case PercentMonthlyRent:
-            fee = monthlyRent.multiply(policy.lateFee().baseFee().getValue());
+            fee = monthlyRent.multiply(policy.lateFee().baseFee().percent().getValue());
             break;
         }
 
         switch (policy.lateFee().maxTotalFeeType().getValue()) {
         case FlatAmount:
-            fee = fee.min(policy.lateFee().maxTotalFee().getValue());
+            fee = fee.min(policy.lateFee().maxTotalFee().amount().getValue());
             break;
 
         case PercentMonthlyRent:
-            fee = fee.min(monthlyRent.multiply(policy.lateFee().maxTotalFee().getValue()));
+            fee = fee.min(monthlyRent.multiply(policy.lateFee().maxTotalFee().percent().getValue()));
             break;
 
         case Unlimited:

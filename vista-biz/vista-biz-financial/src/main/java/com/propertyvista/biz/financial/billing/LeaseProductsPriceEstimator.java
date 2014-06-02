@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
@@ -164,10 +165,11 @@ public class LeaseProductsPriceEstimator {
 
         BigDecimal amount = null;
 
-        if (BillableItemAdjustment.Type.percentage.equals(billableItemAdjustment.type().getValue())) {
-            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue()));
-        } else if (BillableItemAdjustment.Type.monetary.equals(billableItemAdjustment.type().getValue())) {
-            amount = billableItemAdjustment.value().getValue();
+        if (ValueType.Percentage.equals(billableItemAdjustment.type().getValue())) {
+            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue()
+                    .multiply(billableItemAdjustment.value().percent().getValue()));
+        } else if (ValueType.Monetary.equals(billableItemAdjustment.type().getValue())) {
+            amount = billableItemAdjustment.value().amount().getValue();
         }
 
         adjustment.amount().setValue(amount);

@@ -44,9 +44,9 @@ public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<L
         policy.prorationMethod().setValue(BillingAccount.ProrationMethod.Standard);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
-        lateFee.baseFee().setValue(new BigDecimal(50.00));
+        lateFee.baseFee().amount().setValue(new BigDecimal(50.00));
         lateFee.baseFeeType().setValue(BaseFeeType.FlatAmount);
-        lateFee.maxTotalFee().setValue(new BigDecimal(1000.00));
+        lateFee.maxTotalFee().amount().setValue(new BigDecimal(1000.00));
         lateFee.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
         policy.lateFee().set(lateFee);
 

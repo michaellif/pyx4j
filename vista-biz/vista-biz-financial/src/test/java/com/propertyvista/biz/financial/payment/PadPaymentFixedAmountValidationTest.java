@@ -19,13 +19,13 @@ import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 
@@ -54,8 +54,8 @@ public class PadPaymentFixedAmountValidationTest extends LeaseFinancialTestBase 
         BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
         BillableItem locker = addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
 
-        addFeatureAdjustment(parking.uid().getValue(), "-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
-        addFeatureAdjustment(locker.uid().getValue(), "-20", Type.monetary, "1-Apr-2013", "31-Mar-2014");
+        addFeatureAdjustment(parking.uid().getValue(), "-80", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
+        addFeatureAdjustment(locker.uid().getValue(), "-20", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
 
         approveApplication(true);
 
@@ -151,8 +151,8 @@ public class PadPaymentFixedAmountValidationTest extends LeaseFinancialTestBase 
         addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
         addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
 
-        addServiceAdjustment("-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
-        addServiceAdjustment("-20", Type.monetary, "1-Apr-2013", "31-Mar-2014");
+        addServiceAdjustment("-80", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
+        addServiceAdjustment("-20", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
 
         approveApplication(true);
 
@@ -228,8 +228,8 @@ public class PadPaymentFixedAmountValidationTest extends LeaseFinancialTestBase 
         BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
         BillableItem locker = addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
 
-        addFeatureAdjustment(parking.uid().getValue(), "-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
-        addFeatureAdjustment(locker.uid().getValue(), "-20", Type.monetary, "1-Apr-2013", "31-Mar-2014");
+        addFeatureAdjustment(parking.uid().getValue(), "-80", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
+        addFeatureAdjustment(locker.uid().getValue(), "-20", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
 
         approveApplication(true);
 
@@ -326,7 +326,7 @@ public class PadPaymentFixedAmountValidationTest extends LeaseFinancialTestBase 
         createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(0), null);
         BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
 
-        addFeatureAdjustment(parking.uid().getValue(), "-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
+        addFeatureAdjustment(parking.uid().getValue(), "-80", ValueType.Monetary, "1-Apr-2013", "31-Mar-2014");
 
         approveApplication(true);
 
