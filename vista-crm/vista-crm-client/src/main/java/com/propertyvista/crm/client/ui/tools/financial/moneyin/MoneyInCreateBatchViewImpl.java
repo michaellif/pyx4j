@@ -16,19 +16,13 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -36,45 +30,30 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.tools.common.view.AbstractPrimePaneWithMessagesPopup;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
-import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.ReceiptDateHolderForm;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.MoneyInCandidateDTO;
 
 public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPopup implements MoneyInCreateBatchView {
 
     private static final I18n i18n = I18n.get(MoneyInCreateBatchViewImpl.class);
 
-    private static final int MAX_SEARCH_FORM_HEIGHT = 250;
-
     private MoneyInCreateBatchView.Presenter presenter;
 
     private final LayoutPanel viewPanel;
-
-    private LayoutPanel searchBar;
 
     private LayoutPanel gridsHolder;
 
     private MoneyInCandidateDataGrid selectedForProcessingDataGrid;
 
-    private MoneyInCandidateSearchCriteriaForm searchForm;
-
-    private CDatePicker receiptDate;
+    private ReceiptDateHolderForm receiptDateHolderForm;
 
     public MoneyInCreateBatchViewImpl() {
         setCaption(i18n.tr("Money In: Create Payments Batch"));
-
-        Button searchButton = new Button(i18n.tr("Add Payments..."), new Command() {
-            @Override
-            public void execute() {
-                presenter.addPayments();
-            }
-        });
-        addHeaderToolbarItem(searchButton);
 
         Button createBatchesButton = new Button(i18n.tr("Create Batches"), new Command() {
             @Override
@@ -93,8 +72,13 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
 
         LayoutPanel selectedHolder = new LayoutPanel();
         gridsHolder.add(selectedHolder);
-        gridsHolder.setWidgetTopBottom(selectedHolder, 0, Unit.PX, 0, Unit.PX);
+        gridsHolder.setWidgetTopBottom(selectedHolder, 0, Unit.PX, 50, Unit.PX);
         gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
+
+        Widget toolbarPanel = initToolbarPanel();
+        gridsHolder.add(toolbarPanel);
+        gridsHolder.setWidgetBottomHeight(toolbarPanel, 40, Unit.PX, 40, Unit.PX);
+        gridsHolder.setWidgetLeftRight(toolbarPanel, 0, Unit.PX, 0, Unit.PX);
 
         // selected:
         Widget selectedHeader = initSelectedItemsHeaderPanel();
@@ -102,7 +86,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
         selectedHeader.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         selectedHolder.add(selectedHeader);
-        selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 40, Unit.PX);
+        selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 60, Unit.PX);
         selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
 
         selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid() {
@@ -135,7 +119,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
                 return processColumn;
             }
         });
-        selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 41, Unit.PX, 33, Unit.PX);
+        selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 61, Unit.PX, 50, Unit.PX);
         selectedHolder.setWidgetLeftRight(selectedForProcessingDataGrid, 0, Unit.PX, 0, Unit.PX);
 
         SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
@@ -165,7 +149,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
 
     @Override
     public LogicalDate getRecieptDate() {
-        return receiptDate.getValue();
+        return receiptDateHolderForm.getValue().receiptDate().getValue();
     }
 
     private LayoutPanel initViewPanel() {
@@ -176,37 +160,23 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePaneWithMessagesPop
     }
 
     private Widget initSelectedItemsHeaderPanel() {
-
-        final String receiptDateHolderTagId = "receiptDateHolder";
-
-        SafeHtmlBuilder headerPanelBuilder = new SafeHtmlBuilder();
-        headerPanelBuilder.appendHtmlConstant("<div>");
-        headerPanelBuilder.appendHtmlConstant(i18n.tr("Enter the receipt date {0}, and click ''Create Batch'' to process the following payments:",
-                "<span id=\"" + receiptDateHolderTagId + "\"></span>"));
-        headerPanelBuilder.appendHtmlConstant("</div>");
-
-        receiptDate = new CDatePicker();
-        receiptDate.getNativeComponent().getElement().getStyle().setWidth(100, Unit.PX);
-        receiptDate.getNativeComponent().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        receiptDate.getNativeComponent().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
-        HTMLPanel headerPanel = new HTMLPanel(headerPanelBuilder.toSafeHtml());
-        headerPanel.addAndReplaceElement(receiptDate, receiptDateHolderTagId);
-
-        return headerPanel;
+        receiptDateHolderForm = new ReceiptDateHolderForm();
+        receiptDateHolderForm.init();
+        receiptDateHolderForm.populateNew();
+        return receiptDateHolderForm.asWidget();
     }
 
-    private void resizeSearch() {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    private Widget initToolbarPanel() {
+        LayoutPanel panel = new LayoutPanel();
+        Button searchButton = new Button(i18n.tr("Add Payments..."), new Command() {
             @Override
             public void execute() {
-                int height = searchForm.getRequiredHeight();
-                if (height <= MAX_SEARCH_FORM_HEIGHT) {
-                    viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, height, Unit.PX);
-                    viewPanel.setWidgetTopBottom(gridsHolder, height + 1, Unit.PX, 0, Unit.PX);
-                }
+                presenter.addPayments();
             }
         });
+        panel.add(searchButton);
+        panel.setWidgetTopHeight(searchButton, 5, Unit.PX, 30, Unit.PX);
+        panel.setWidgetLeftWidth(searchButton, 5, Unit.PX, 150, Unit.PX);
+        return panel;
     }
-
 }
