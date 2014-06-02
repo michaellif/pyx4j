@@ -64,7 +64,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     private MenuBar languages;
 
-    private Anchor getSatisfaction;
+    private Anchor support;
 
     private static String brandedHeader;
 
@@ -217,16 +217,16 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         MenuItem item = new MenuItem(ClientNavigUtils.getCurrentLocale().toString(), languages);
         languageMenu.addItem(item);
 
-        getSatisfaction = new Anchor(null);
-        getSatisfaction.addClickHandler(new ClickHandler() {
+        support = new Anchor(null);
+        support.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.getSatisfaction();
             }
         });
 
-        getSatisfaction.ensureDebugId("getSatisfaction");
-        getSatisfaction.setHTML(i18n.tr("Support"));
+        support.ensureDebugId("getSatisfaction");
+        support.setHTML(i18n.tr("Support"));
 
         toolbar.addItem(thisIsProduction);
         toolbar.addItem(thisIsDemo);
@@ -240,7 +240,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         toolbar.addItem(login);
         toolbar.addItem(logout);
         toolbar.addItem(languageMenu);
-        toolbar.addItem(getSatisfaction);
+        toolbar.addItem(support);
 
         return toolbar.asWidget();
     }
@@ -259,7 +259,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             messages.setVisible(false);
         }
-        getSatisfaction.setVisible(false);
+        support.setVisible(false);
         greetings.setVisible(false);
         greetings.setHTML("");
 
@@ -279,7 +279,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
             messages.setVisible(true);
         }
         settings.setVisible(true);
-        getSatisfaction.setVisible(true);
+        support.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome {0}", userName));
         greetings.setVisible(true);
 
