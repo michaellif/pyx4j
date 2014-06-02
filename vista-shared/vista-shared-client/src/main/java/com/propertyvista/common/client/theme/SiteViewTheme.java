@@ -97,6 +97,7 @@ public class SiteViewTheme extends Theme {
         style.addProperty("border-top", "4px solid");
         style.addProperty("border-left", "4px solid");
         style.addProperty("border-color", ThemeColor.object1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         /*
