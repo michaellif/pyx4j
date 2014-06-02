@@ -39,7 +39,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 public interface ProductDeposit extends IEntity {
 
     @I18n
-    @XmlType(name = "ValueType")
+    @XmlType(name = "AmountType")
     public enum ValueType {
         Monetary, Percentage;
 
