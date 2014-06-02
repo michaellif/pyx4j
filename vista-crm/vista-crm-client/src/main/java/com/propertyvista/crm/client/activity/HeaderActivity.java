@@ -41,7 +41,6 @@ import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -153,6 +152,11 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     }
 
     @Override
+    public void showProperties() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Dashboard.Manage());
+    }
+
+    @Override
     public void showMessages(int x, int y) {
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
@@ -174,7 +178,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
 
     @Override
     public void showSettings() {
-        AppSite.getPlaceController().goTo(new Financial.ARCode());
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
     }
 
     @Override
@@ -200,5 +204,4 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     public void getSatisfaction() {
         GetSatisfaction.open();
     };
-
 }

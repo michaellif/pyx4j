@@ -44,11 +44,9 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     private Presenter presenter;
 
-    private Anchor greetings;
+    private MenuBar customer;
 
-    private Anchor logout;
-
-    private Anchor login;
+    private MenuItem customerName;
 
     private Anchor home;
 
@@ -60,7 +58,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     private HTML thisIsDemo;
 
-    private MenuBar languageMenu;
+    private MenuBar language;
 
     private MenuBar languages;
 
@@ -142,51 +140,45 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         thisIsDemo.getElement().getStyle().setProperty("textAlign", "center");
         thisIsDemo.setVisible(false);
 
-        greetings = new Anchor(null);
-        greetings.addClickHandler(new ClickHandler() {
+        customer = new MenuBar();
+        customer.setAutoOpen(false);
+        customer.setAnimationEnabled(false);
+        customer.setFocusOnHoverEnabled(true);
 
+        MenuBar customerMenu = new MenuBar(true);
+        customer.addItem(customerName = new MenuItem("", customerMenu));
+        customerMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.showAccount();
             }
-        });
-        greetings.ensureDebugId("account");
+        }));
+        customerMenu.addItem(new MenuItem(i18n.tr("Settings"), new Command() {
+            @Override
+            public void execute() {
+                presenter.showProperties();
+            }
+        }));
+        customerMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
+            @Override
+            public void execute() {
+                presenter.logout();
+            }
+        }));
 
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            messages = new Anchor(null);
+            messages = new Anchor(i18n.tr("Messages"), true);
+            messages.ensureDebugId("messages");
             messages.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     presenter.showMessages(messages.getAbsoluteLeft(), messages.getAbsoluteTop());
                 }
             });
-            messages.ensureDebugId("messages");
-            messages.setHTML(i18n.tr("Messages"));
         }
-        logout = new Anchor(null);
-        logout.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.logout();
-            }
-        });
 
-        logout.ensureDebugId("logout");
-        logout.setHTML(i18n.tr("LogOut"));
-        logout.setVisible(false);
-
-        login = new Anchor(null);
-        login.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.login();
-            }
-        });
-
-        login.ensureDebugId("login");
-        login.setHTML(i18n.tr("Log In"));
-
-        home = new Anchor(null);
+        home = new Anchor(i18n.tr("Home"), true);
+        home.ensureDebugId("home");
         home.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -194,30 +186,23 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
             }
         });
 
-        home.ensureDebugId("home");
-        home.setHTML(i18n.tr("Home"));
-
-        settings = new Anchor(null);
+        settings = new Anchor(i18n.tr("Administration"), true);
+        settings.ensureDebugId("administration");
         settings.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-
                 presenter.showSettings();
             }
         });
 
-        settings.ensureDebugId("administration");
-        settings.setHTML(i18n.tr("Administration"));
+        language = new MenuBar();
+        language.setAutoOpen(false);
+        language.setAnimationEnabled(false);
+        language.setFocusOnHoverEnabled(true);
+        language.addItem(new MenuItem(ClientNavigUtils.getCurrentLocale().toString(), languages = new MenuBar(true)));
 
-        languageMenu = new MenuBar();
-        languageMenu.setAutoOpen(false);
-        languageMenu.setAnimationEnabled(false);
-        languageMenu.setFocusOnHoverEnabled(true);
-        languages = new MenuBar(true);
-        MenuItem item = new MenuItem(ClientNavigUtils.getCurrentLocale().toString(), languages);
-        languageMenu.addItem(item);
-
-        support = new Anchor(null);
+        support = new Anchor(i18n.tr("Support"), true);
+        support.ensureDebugId("support");
         support.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -225,21 +210,18 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
             }
         });
 
-        support.ensureDebugId("getSatisfaction");
-        support.setHTML(i18n.tr("Support"));
+        // from toolbar:
 
         toolbar.addItem(thisIsProduction);
         toolbar.addItem(thisIsDemo);
 
-        toolbar.addItem(greetings);
+        toolbar.addItem(customer);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             toolbar.addItem(messages);
         }
         toolbar.addItem(home);
         toolbar.addItem(settings);
-        toolbar.addItem(login);
-        toolbar.addItem(logout);
-        toolbar.addItem(languageMenu);
+        toolbar.addItem(language);
         toolbar.addItem(support);
 
         return toolbar.asWidget();
@@ -252,16 +234,15 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     @Override
     public void onLogedOut() {
-        logout.setVisible(false);
-        login.setVisible(false);
         home.setVisible(false);
         settings.setVisible(false);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             messages.setVisible(false);
         }
         support.setVisible(false);
-        greetings.setVisible(false);
-        greetings.setHTML("");
+
+        customer.setVisible(false);
+        customerName.setText("");
 
         thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
@@ -272,16 +253,15 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     @Override
     public void onLogedIn(String userName) {
-        logout.setVisible(true);
-        login.setVisible(false);
         home.setVisible(true);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             messages.setVisible(true);
         }
         settings.setVisible(true);
         support.setVisible(true);
-        greetings.setHTML(i18n.tr("Welcome {0}", userName));
-        greetings.setVisible(true);
+
+        customer.setVisible(true);
+        customerName.setText(userName);
 
         thisIsDemo.getElement().getStyle().setPosition(Position.RELATIVE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "1em");
@@ -294,14 +274,12 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
     public void setAvailableLocales(List<CompiledLocale> localeList) {
         languages.clearItems();
         for (final CompiledLocale compiledLocale : localeList) {
-            Command changeLanguage = new Command() {
+            languages.addItem(new MenuItem(compiledLocale.getNativeDisplayName(), new Command() {
                 @Override
                 public void execute() {
                     presenter.setLocale(compiledLocale);
                 }
-            };
-            MenuItem item = new MenuItem(compiledLocale.getNativeDisplayName(), changeLanguage);
-            languages.addItem(item);
+            }));
         }
     }
 
