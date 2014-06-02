@@ -41,7 +41,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private boolean menuVisible;
 
-    private int menuWidth = 20;
+    private int menuWidth;
 
     private int headerHeight = 50;
 
@@ -81,9 +81,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
             adopt(menuPanel);
 
             menuPanel.addSouth(getDisplay(DisplayType.footer), 40);
-
             menuPanel.addSouth(getDisplay(DisplayType.extra), 200);
-
             menuPanel.add(getDisplay(DisplayType.menu));
 
         }

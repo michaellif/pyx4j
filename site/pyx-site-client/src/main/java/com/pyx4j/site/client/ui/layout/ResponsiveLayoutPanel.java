@@ -96,7 +96,7 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
 
     public final void forceLayout(int animationTime) {
         doLayout();
-        doLayout(getDisplay(DisplayType.content), getLayoutType());
+        onLayout(getDisplay(DisplayType.content), getLayoutType());
         layout.layout(animationTime);
         AppSite.getEventBus().fireEvent(new LayoutChangeEvent(getLayoutType()));
         resizeComponents();
@@ -110,14 +110,14 @@ public abstract class ResponsiveLayoutPanel extends ComplexPanel implements Requ
 
     protected abstract void doLayout();
 
-    private void doLayout(IsWidget widget, LayoutType layoutType) {
+    private void onLayout(IsWidget widget, LayoutType layoutType) {
         if (widget instanceof ILayoutable) {
             ILayoutable component = (ILayoutable) widget;
             component.doLayout(layoutType);
         }
         if (widget instanceof HasWidgets) {
             for (Widget childWidget : (HasWidgets) widget) {
-                doLayout(childWidget, layoutType);
+                onLayout(childWidget, layoutType);
             }
         }
     }
