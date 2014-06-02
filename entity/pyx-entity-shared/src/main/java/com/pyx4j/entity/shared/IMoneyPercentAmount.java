@@ -35,7 +35,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @EmbeddedEntity
-@ToStringFormat("{0,choice,null#{1}|Monetary#{1}|Percentage#{2}}")
+@ToStringFormat("{0,choice,!null#${0,number,#.##}|null#{1,number,percent}}")
 public interface IMoneyPercentAmount extends IEntity {
     @I18n
     @XmlType(name = "ValueType")
@@ -49,13 +49,10 @@ public interface IMoneyPercentAmount extends IEntity {
     }
 
     @ToString(index = 0)
-    IPrimitive<ValueType> valueType();
-
-    @ToString(index = 1)
-    @Format("#,##0.00")
+    @Format("$#,##0.00")
     IPrimitive<BigDecimal> amount();
 
-    @ToString(index = 2)
-    @Format("#,##0.00")
+    @ToString(index = 1)
+    @Format("#.00%")
     IPrimitive<BigDecimal> percent();
 }

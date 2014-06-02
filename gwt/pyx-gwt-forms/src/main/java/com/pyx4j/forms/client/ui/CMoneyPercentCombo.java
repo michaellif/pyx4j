@@ -33,21 +33,27 @@ import com.pyx4j.entity.shared.IMoneyPercentAmount;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NMoneyPercentCombo> {
+public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NTextBox<IMoneyPercentAmount>> {
 
     static final I18n i18n = I18n.get(CMoneyPercentCombo.class);
 
     private final NumberFormat nf = NumberFormat.getFormat(i18n.tr("#,##0.00"));
 
-    public CMoneyPercentCombo(ValueType defaultType) {
+    private final NumberFormat mf = NumberFormat.getFormat(i18n.tr("$#,##0.00"));
+
+    private final NumberFormat pf = NumberFormat.getFormat(i18n.tr("#0.00%"));
+
+    private ValueType amountType;
+
+    public CMoneyPercentCombo() {
         setFormatter(new MoneyPercentFormat());
         setParser(new MoneyPercentParser());
-        setNativeComponent(new NMoneyPercentCombo(this, defaultType));
+        setNativeComponent(new NTextBox<IMoneyPercentAmount>(this));
     }
 
-    /** Provide text representation of the ValueType items (in the order of declaration) to use in the select box */
-    protected String[] getValueTypeOptions() {
-        return new String[] { "$", "%" };
+    public void setAmountType(ValueType type) {
+        amountType = type;
+        setEditorValue(getValue());
     }
 
     @Override
@@ -61,7 +67,6 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NMon
     private void clearValue() {
         IMoneyPercentAmount value = getValue();
         if (value != null) {
-            value.valueType().setValue(ValueType.Percentage);
             value.percent().setValue(BigDecimal.ZERO);
             value.amount().setValue(BigDecimal.ZERO);
         }
@@ -73,11 +78,25 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NMon
         public String format(IMoneyPercentAmount value) {
             if (value == null) {
                 return nf.format(BigDecimal.ZERO);
-            } else if (ValueType.Monetary.equals(value.valueType().getValue())) {
-                return nf.format(value.amount().getValue(BigDecimal.ZERO));
-            } else {
-                return nf.format(new BigDecimal("100").multiply(value.percent().getValue(BigDecimal.ZERO)));
             }
+            String result = null;
+            switch (amountType) {
+            case Monetary:
+                if (isEditable()) {
+                    result = nf.format(value.amount().getValue(BigDecimal.ZERO));
+                } else {
+                    result = mf.format(value.amount().getValue(BigDecimal.ZERO));
+                }
+                break;
+            case Percentage:
+                if (isEditable()) {
+                    result = nf.format(value.percent().getValue(BigDecimal.ZERO).multiply(new BigDecimal("100")));
+                } else {
+                    result = pf.format(value.percent().getValue(BigDecimal.ZERO));
+                }
+                break;
+            }
+            return result;
         }
     }
 
@@ -92,12 +111,10 @@ public class CMoneyPercentCombo extends CTextFieldBase<IMoneyPercentAmount, NMon
             }
             try {
                 BigDecimal amount = new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
-                if (ValueType.Monetary.equals(getNativeComponent().getValueType())) {
-                    value.valueType().setValue(ValueType.Monetary);
+                if (ValueType.Monetary.equals(amountType)) {
                     value.amount().setValue(amount);
                     value.percent().setValue(null);
                 } else {
-                    value.valueType().setValue(ValueType.Percentage);
                     value.percent().setValue(amount.divide(new BigDecimal("100")));
                     value.amount().setValue(null);
                 }
