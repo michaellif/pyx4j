@@ -28,73 +28,41 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.site.client.DisplayPanel;
-import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.BackOfficeDevConsole;
+import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 
 public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
-    private final DockLayoutPanel menuPanel;
-
     private DevConsoleTab devConsoleTab;
 
-    private boolean menuVisible;
-
-    private int menuWidth;
-
-    private int headerHeight = 50;
-
-    private int notificationsHeight = 0;
+    private final DockLayoutPanel pageHolder;
 
     public BackOfficeLayoutPanel() {
 
-        // ============ Header ============
-        {
-            DisplayPanel headerDisplay = getDisplay(DisplayType.header);
+        pageHolder = new DockLayoutPanel(Unit.PX);
 
-            Layer layer = getLayout().attachChild(headerDisplay.asWidget().getElement(), headerDisplay);
-            headerDisplay.setLayoutData(layer);
+        pageHolder.addNorth(getDisplay(DisplayType.header), 0);
 
-            getChildren().add(headerDisplay);
-            adopt(headerDisplay);
-        }
+        pageHolder.addNorth(getDisplay(DisplayType.notification), 0);
 
-        // ============ Notifications ============
-        {
-            DisplayPanel notificationsDisplay = getDisplay(DisplayType.notification);
-            Layer layer = getLayout().attachChild(notificationsDisplay.asWidget().getElement(), notificationsDisplay);
-            notificationsDisplay.setLayoutData(layer);
+        pageHolder.addEast(getDisplay(DisplayType.extra), 200);
 
-            getChildren().add(notificationsDisplay);
-            adopt(notificationsDisplay);
-        }
+        DockLayoutPanel menuHolder = new DockLayoutPanel(Unit.PX);
+        menuHolder.addSouth(getDisplay(DisplayType.footer), 40);
+        menuHolder.add(getDisplay(DisplayType.menu));
 
-        // ============ Menu ============
-        {
-            menuPanel = new DockLayoutPanel(Unit.PX);
+        pageHolder.addWest(menuHolder, 200);
 
-            Layer layer = getLayout().attachChild(menuPanel.asWidget().getElement(), menuPanel);
-            menuPanel.setLayoutData(layer);
-
-            getChildren().add(menuPanel);
-            adopt(menuPanel);
-
-            menuPanel.addSouth(getDisplay(DisplayType.footer), 40);
-            menuPanel.addSouth(getDisplay(DisplayType.extra), 200);
-            menuPanel.add(getDisplay(DisplayType.menu));
-
-        }
+        pageHolder.add(getDisplay(DisplayType.content));
 
         // ============ Content ============
         {
-            DisplayPanel contentDisplay = getDisplay(DisplayType.content);
 
-            Layer layer = getLayout().attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
-            contentDisplay.setLayoutData(layer);
-
-            getChildren().add(contentDisplay);
-            adopt(contentDisplay);
+            Layer layer = getLayout().attachChild(pageHolder.getElement(), pageHolder);
+            pageHolder.setLayoutData(layer);
+            getChildren().add(pageHolder);
+            adopt(pageHolder);
         }
 
         // ============ Dev Console ============
@@ -110,56 +78,27 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
     @Override
     protected void doLayout() {
 
-        int top = 0;
-        int height = headerHeight;
-
         {
-            Layer layer = (Layer) getDisplay(DisplayType.header).getLayoutData();
-            layer.setTopHeight(top, Unit.PX, height, Unit.PX);
-            layer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
-        }
-
-        top += height;
-        height = notificationsHeight;
-
-        {
-            Layer layer = (Layer) getDisplay(DisplayType.notification).getLayoutData();
-            layer.setTopHeight(top, Unit.PX, height, Unit.PX);
-            layer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
-        }
-
-        top += height;
-
-        {
-            Layer layer = (Layer) menuPanel.getLayoutData();
-            layer.setVisible(menuVisible);
-            if (menuVisible) {
-                layer.setTopBottom(top, Unit.PX, 0, Unit.PX);
-                layer.setLeftWidth(0, Unit.PX, menuWidth, Unit.PX);
-            }
-        }
-
-        {
-            Layer layer = (Layer) getDisplay(DisplayType.content).getLayoutData();
-            layer.setTopBottom(top, Unit.PX, 0, Unit.PX);
-            layer.setLeftRight(menuVisible ? menuWidth : 0, Unit.PX, 0, Unit.PX);
+            Layer layer = (Layer) pageHolder.getLayoutData();
+            layer.setTopBottom(0, Unit.PX, 0, Unit.PX);
+            layer.setLeftRight(0, Unit.PX, 0, Unit.PX);
         }
     }
 
     public void setMenuVisible(boolean visible) {
-        this.menuVisible = visible;
+
     }
 
     public void setMenuWidth(int width) {
-        this.menuWidth = width;
+
     }
 
     public void setHeaderHeight(int height) {
-        this.headerHeight = height;
+        pageHolder.setWidgetSize(getDisplay(DisplayType.header), height);
     }
 
     public void setNotificationsHeight(int height) {
-        this.notificationsHeight = height;
+        pageHolder.setWidgetSize(getDisplay(DisplayType.notification), height);
     }
 
     @Override

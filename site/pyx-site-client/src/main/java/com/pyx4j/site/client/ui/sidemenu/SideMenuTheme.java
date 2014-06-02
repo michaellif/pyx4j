@@ -107,7 +107,6 @@ public class SideMenuTheme extends Theme {
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "5px 0px 3px 0");
-        style.addProperty("background", ThemeColor.foreground, 0.2);
         style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.15);
         addStyle(style);
 
