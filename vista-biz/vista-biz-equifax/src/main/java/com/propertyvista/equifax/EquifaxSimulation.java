@@ -88,7 +88,7 @@ public class EquifaxSimulation {
 
         appendCustomerInfo(efxResponse, customer);
 
-        appendScore(efxResponse, simulationDefinition);
+        appendScore(efxResponse, equifaxSimulatorConfig, simulationDefinition);
 
         return efxResponse;
     }
@@ -185,7 +185,7 @@ public class EquifaxSimulation {
 
     }
 
-    private static void appendScore(EfxTransmit efxResponse, SimulationDefinition simulationDefinition) {
+    private static void appendScore(EfxTransmit efxResponse, EquifaxSimulatorConfig equifaxSimulatorConfig, SimulationDefinition simulationDefinition) {
         CNConsumerCreditReportType creditReport = getOrCreateCreditReport(efxResponse);
 
         CNScoreType scoreIDecision = null;
@@ -214,7 +214,9 @@ public class EquifaxSimulation {
 
         String riskCode = null;
 
-        if (simulationDefinition.simulateCheckResult == CreditCheckResult.Decline) {
+        if (!equifaxSimulatorConfig.forceResultRiskCode().isNull()) {
+            riskCode = equifaxSimulatorConfig.forceResultRiskCode().getValue();
+        } else if (simulationDefinition.simulateCheckResult == CreditCheckResult.Decline) {
             riskCode = "B5"; // Bankruptcy
         } else if (simulationDefinition.simulateCheckResult == CreditCheckResult.Accept) {
             riskCode = "01";
@@ -231,6 +233,7 @@ public class EquifaxSimulation {
 
         codeType.setCode(riskCode);
         codeType.setDescription(simulationDefinition.description);
+
     }
 
     private static CNConsumerCreditReportType getOrCreateCreditReport(EfxTransmit efxResponse) {

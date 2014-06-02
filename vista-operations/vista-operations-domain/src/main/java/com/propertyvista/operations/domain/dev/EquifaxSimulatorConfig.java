@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -26,6 +27,8 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface EquifaxSimulatorConfig extends IEntity {
+
+    IPrimitive<String> forceResultRiskCode();
 
     @Owned
     EquifaxSimulatorData approve();

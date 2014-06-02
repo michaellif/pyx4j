@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -99,9 +99,11 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
         formPanel.append(Location.Left, proto().systems().useEquifaxSimulator()).decorate().componentWidth(80);
 
-        formPanel.append(Location.Dual, proto().equifax().approve().xml()).decorate();
-        formPanel.append(Location.Dual, proto().equifax().decline().xml()).decorate();
-        formPanel.append(Location.Dual, proto().equifax().moreInfo().xml()).decorate();
+        formPanel.append(Location.Left, proto().equifax().forceResultRiskCode()).decorate();
+
+        formPanel.append(Location.Dual, proto().equifax().approve().xml()).decorate().customLabel("Approve");
+        formPanel.append(Location.Dual, proto().equifax().decline().xml()).decorate().customLabel("Decline");
+        formPanel.append(Location.Dual, proto().equifax().moreInfo().xml()).decorate().customLabel("MoreInfo");
 
         return formPanel;
     }

@@ -235,9 +235,12 @@ public class EquifaxCreditCheck {
 
         pcc.creditCheckResult().setValue(creditCheckResult);
 
-        if (!ApplicationMode.isDevelopment() && creditCheckResult == CreditCheckResult.Error) {
-            EntityFileLogger.logXml("equifax-errors", "request", logSec(XmlCreator.devToXMl(requestMessage)));
-            EntityFileLogger.logXml("equifax-errors", "response", XmlCreator.toStorageXMl(efxResponse));
+        if (creditCheckResult == CreditCheckResult.Error) {
+            log.error("CreditCheck error riskCode:{}; reason:{}", pcc.riskCode(), pcc.reason());
+            if (ApplicationMode.isDevelopment()) {
+                EntityFileLogger.logXml("equifax-errors", "request", logSec(XmlCreator.devToXMl(requestMessage)));
+                EntityFileLogger.logXml("equifax-errors", "response", XmlCreator.toStorageXMl(efxResponse));
+            }
         }
 
         return pcc;
