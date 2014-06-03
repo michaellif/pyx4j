@@ -43,8 +43,8 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -213,8 +213,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         panel.h1(i18n.tr("Issue Details"));
         panel.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().summary())).decorate().componentWidth(300);
-        panel.append(Location.Left, inject(proto().description())).decorate().componentWidth(300);
+        panel.append(Location.Left, inject(proto().summary())).decorate().componentWidth(240);
+        panel.append(Location.Left, inject(proto().description())).decorate().componentWidth(240);
 
         // --------------------------------------------------------------------------------------------------------------------
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
@@ -233,8 +233,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 return main.asWidget();
             }
         };
-        imageSlider.setImageSize(320, 240);
-        panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(320);
+        imageSlider.setImageSize(240, 180);
+        panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(240);
 
         // --------------------------------------------------------------------------------------------------------------------
         unitAccessPanel = new FormPanel(this);
