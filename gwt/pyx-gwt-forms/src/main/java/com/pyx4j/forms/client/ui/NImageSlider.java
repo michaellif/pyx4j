@@ -228,6 +228,7 @@ public class NImageSlider<E extends IHasFile<?>> extends NField<IList<E>, ImageS
 
                     thumb.setImage(getCComponent().getThumbnailPlaceholder());
                     thumb.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                    thumb.getElement().getStyle().setProperty("margin", "2px 5px");
                     content.add(thumb);
                     IsWidget infoPanel = getCComponent().getImageEntryView(this);
                     infoPanel.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
