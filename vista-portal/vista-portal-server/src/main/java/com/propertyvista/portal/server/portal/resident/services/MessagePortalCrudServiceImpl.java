@@ -99,7 +99,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     @Override
     protected MessageDTO init(InitializationData initializationData) {
         MessageDTO dto = super.init(initializationData);
-        dto.date().setValue(SystemDateManager.getDate());
         dto.isRead().setValue(false);
         dto.sender().set(ResidentPortalContext.getCurrentUser());
         return dto;

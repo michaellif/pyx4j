@@ -227,6 +227,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         String forwardText = buildForwardText();
                         messagesFolder.addItem();
                         messagesFolder.getItem(messagesFolder.getItemCount() - 1).getValue().text().setValue(forwardText);
+                        messagesFolder.getItem(messagesFolder.getItemCount() - 1).refresh(false);
                     }
                 }
 
@@ -310,7 +311,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            if (getValue().isPrototype() || getValue().text() == null || getValue().text().isNull()) {
+            if (getValue().isPrototype() || getValue().date() == null || getValue().date().isNull()) {
                 BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
