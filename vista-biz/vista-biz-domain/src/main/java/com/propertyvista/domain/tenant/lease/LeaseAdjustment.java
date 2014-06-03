@@ -72,17 +72,6 @@ public interface LeaseAdjustment extends IEntity {
         }
     }
 
-    @I18n(context = "LeaseAdjustment TaxType")
-    @XmlType(name = "LeaseAdjustmentTaxType")
-    public enum TaxType {
-        percent, value;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
     IPrimitive<String> uid();
 
@@ -117,7 +106,7 @@ public interface LeaseAdjustment extends IEntity {
     IMoneyPercentAmount tax();
 
     @NotNull
-    IPrimitive<ValueType> taxValueType();
+    IPrimitive<ValueType> taxType();
 
     IPrimitive<Boolean> overwriteDefaultTax();
 

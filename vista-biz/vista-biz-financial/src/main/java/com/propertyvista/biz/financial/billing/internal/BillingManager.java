@@ -314,7 +314,7 @@ public class BillingManager {
             }
         }
 
-        adjustment.taxValueType().setValue(ValueType.Percentage);
+        adjustment.taxType().setValue(ValueType.Percentage);
         adjustment.tax().percent().setValue(taxRate);
     }
 }
