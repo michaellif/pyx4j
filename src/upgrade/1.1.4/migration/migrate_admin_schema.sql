@@ -79,6 +79,10 @@ SET search_path = '_admin_';
                                             ADD COLUMN business_address_street_number VARCHAR(500),
                                             ADD COLUMN business_address_suite_number VARCHAR(500);
         
+        -- dev_equifax_simulator_config
+        
+        ALTER TABLE dev_equifax_simulator_config ADD COLUMN force_result_risk_code VARCHAR(500);
+        
         -- outgoing_mail_queue
         
         ALTER TABLE outgoing_mail_queue ADD COLUMN priority INT;

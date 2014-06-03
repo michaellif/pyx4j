@@ -112,6 +112,13 @@ BEGIN
                                 ADD COLUMN info_legal_address_province VARCHAR(500);
         
         
+        
+        -- billable_item_adjustment
+        
+        ALTER TABLE billable_item_adjustment    ADD COLUMN adjustment_value_amount NUMERIC(18,2),
+                                                ADD COLUMN adjustment_value_percent NUMERIC(18,2);
+        
+        
         -- billing_arrears_snapshot
         
         ALTER TABLE billing_arrears_snapshot    ADD COLUMN legal_status VARCHAR(50),
@@ -137,6 +144,11 @@ BEGIN
         ALTER TABLE city_intro_page ADD COLUMN province VARCHAR(50);
         
         
+        -- concession_v
+        
+        ALTER TABLE concession_v    ADD COLUMN val_amount NUMERIC(18,2),
+                                    ADD COLUMN val_percent NUMERIC(18,2);
+        
         -- country_policy_node
         
         CREATE TABLE country_policy_node
@@ -159,6 +171,30 @@ BEGIN
                                                     ADD COLUMN address_street_name VARCHAR(500),
                                                     ADD COLUMN address_street_number VARCHAR(500),
                                                     ADD COLUMN address_suite_number VARCHAR(500);
+                                                    
+        -- customer_screening_v
+        
+        ALTER TABLE customer_screening_v RENAME COLUMN current_address_country TO current_address_country_old;
+        ALTER TABLE customer_screening_v RENAME COLUMN current_address_province TO current_address_province_old;
+        ALTER TABLE customer_screening_v RENAME COLUMN previous_address_country TO previous_address_country_old;
+        ALTER TABLE customer_screening_v RENAME COLUMN previous_address_province TO previous_address_province_old;
+        
+        ALTER TABLE customer_screening_v    ADD COLUMN current_address_country VARCHAR(50),
+                                            ADD COLUMN current_address_province VARCHAR(500),
+                                            ADD COLUMN previous_address_country VARCHAR(50),
+                                            ADD COLUMN previous_address_province VARCHAR(500);
+        
+        -- emergency_contact
+        
+        ALTER TABLE emergency_contact RENAME COLUMN address_country TO  address_country_old;
+        ALTER TABLE emergency_contact RENAME COLUMN address_province TO address_province_old;
+        
+        ALTER TABLE emergency_contact   ADD COLUMN address_country VARCHAR(50),
+                                        ADD COLUMN address_province VARCHAR(500),
+                                        ADD COLUMN address_street_name VARCHAR(500),
+                                        ADD COLUMN address_street_number VARCHAR(500),
+                                        ADD COLUMN address_suite_number VARCHAR(500);
+        
         
         -- legal_status
         
@@ -232,7 +268,16 @@ BEGIN
                 ||'     TRIM(info_legal_address_street_name)||'' ''||INITCAP(TRIM(info_legal_address_street_direction)) '
                 ||'WHERE    info_legal_address_street_direction IS NOT NULL ';
         
-               
+        -- billable_item_adjustment
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billable_item_adjustment '
+                ||'SET adjustment_value_amount = adjustment_value  '
+                ||'WHERE    adjustment_type = ''monetary'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.billable_item_adjustment '
+                ||'SET adjustment_value_percent = adjustment_value  '
+                ||'WHERE    adjustment_type = ''percentage'' ';
+        
         -- building
         
         EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
@@ -294,6 +339,64 @@ BEGIN
                 ||'SET  address_street_number = UNNEST(regexp_matches(address_street1, ''^[\d]+'')),'
                 ||'     address_street_name = TRIM(regexp_replace(address_street1, ''^[\d]+\s'','''')) ';
         
+        
+        -- customer_screening_v
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
+                ||'SET current_address_country = replace(c.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.country AS c '
+                ||'WHERE   current_address_country_old = c.id ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
+                ||'SET previous_address_country = replace(c.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.country AS c '
+                ||'WHERE   previous_address_country_old = c.id ';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
+                ||'SET current_address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node AS p '
+                ||'WHERE   current_address_province_old = p.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
+                ||'SET previous_address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node AS p '
+                ||'WHERE   previous_address_province_old = p.id ';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v '
+                ||'SET  current_address_street_number = '
+                ||' current_address_street_number||current_address_street_number_suffix '
+                ||'WHERE    current_address_street_number_suffix IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v '
+                ||'SET  previous_address_street_number = '
+                ||' previous_address_street_number||previous_address_street_number_suffix '
+                ||'WHERE    previous_address_street_number_suffix IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v '
+                ||'SET  current_address_street_name = '
+                ||' TRIM(current_address_street_name)||'' ''||INITCAP(TRIM(current_address_street_type)) '
+                ||'WHERE    current_address_street_type IS NOT NULL';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v '
+                ||'SET  previous_address_street_name = '
+                ||' TRIM(previous_address_street_name)||'' ''||INITCAP(TRIM(previous_address_street_type)) '
+                ||'WHERE    previous_address_street_type IS NOT NULL';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v '
+                ||'SET  current_address_street_name = '
+                ||' TRIM(current_address_street_name)||'' ''||INITCAP(TRIM(current_address_street_direction)) '
+                ||'WHERE    current_address_street_direction IS NOT NULL';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v '
+                ||'SET  previous_address_street_name = '
+                ||' TRIM(previous_address_street_name)||'' ''||INITCAP(TRIM(previous_address_street_direction)) '
+                ||'WHERE    previous_address_street_direction IS NOT NULL';
+        
+        
         -- Phone numbers update
         
         PERFORM * FROM _dba_.update_phone_numbers(v_schema_name);
@@ -335,7 +438,10 @@ BEGIN
                                 DROP COLUMN info_legal_address_street_direction,
                                 DROP COLUMN info_legal_address_street_number_suffix,
                                 DROP COLUMN info_legal_address_street_type;
-                                
+        
+        -- billable_item_adjustment
+        
+        ALTER TABLE billable_item_adjustment DROP COLUMN adjustment_value;
                                 
         -- building
         
@@ -355,6 +461,11 @@ BEGIN
         
         ALTER TABLE city_intro_page DROP COLUMN province_old;
         
+        
+        -- concession_v
+        
+        ALTER TABLE concession_v DROP COLUMN val;
+        
         -- country
         
         DROP TABLE country;
@@ -365,7 +476,21 @@ BEGIN
                                                     DROP COLUMN address_province_old,
                                                     DROP COLUMN address_street1,
                                                     DROP COLUMN address_street2;
-        
+                                                    
+        -- customer_screening_v
+
+        ALTER TABLE customer_screening_v    DROP COLUMN current_address_country_old,
+                                            DROP COLUMN current_address_county,
+                                            DROP COLUMN current_address_province_old,
+                                            DROP COLUMN current_address_street_direction,
+                                            DROP COLUMN current_address_street_number_suffix,
+                                            DROP COLUMN current_address_street_type,
+                                            DROP COLUMN previous_address_country_old,
+                                            DROP COLUMN previous_address_county,
+                                            DROP COLUMN previous_address_province_old,
+                                            DROP COLUMN previous_address_street_direction,
+                                            DROP COLUMN previous_address_street_number_suffix,
+                                            DROP COLUMN previous_address_street_type;
         
         -- province_policy_node
         
