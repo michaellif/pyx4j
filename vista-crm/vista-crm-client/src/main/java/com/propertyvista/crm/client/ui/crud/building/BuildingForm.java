@@ -353,14 +353,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             public Widget getImageEntryView(CForm<MediaFile> entryForm) {
                 FormPanel formPanel = new FormPanel(entryForm);
 
-                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(150);
-                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(150);
+                formPanel.append(Location.Dual, entryForm.proto().caption()).decorate().labelWidth(100).componentWidth(180);
+                formPanel.append(Location.Dual, entryForm.proto().description()).decorate().labelWidth(100).componentWidth(180);
                 formPanel.append(Location.Dual, entryForm.proto().visibility()).decorate().labelWidth(100).componentWidth(70);
 
                 return formPanel.asWidget();
             }
         };
-        imageSlider.setImageSize(240, 160);
+        imageSlider.setImageSize(240, 180);
+        imageSlider.setOrganizerWidth(550);
         formPanel.append(Location.Dual, inject(proto().media(), imageSlider));
 
         ilsEmailProfilePanel = createILSEmailProfilePanel();

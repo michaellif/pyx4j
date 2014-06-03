@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
@@ -152,7 +153,10 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             @Override
             public Widget getImageEntryView(CForm<MaintenanceRequestPicture> entryForm) {
                 PortalFormPanel main = new PortalFormPanel(entryForm);
-                main.append(Location.Left, entryForm.inject(entryForm.proto().description())).decorate().componentWidth(250);
+                CTextField descr = new CTextField();
+                descr.setWatermark(entryForm.proto().description().getMeta().getCaption());
+                main.append(Location.Dual, entryForm.inject(entryForm.proto().description(), descr)).decorate().customLabel("").labelWidth(0)
+                        .componentWidth(250);
                 return main.asWidget();
             }
         };
