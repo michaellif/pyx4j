@@ -57,6 +57,9 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
             public MessageWizard(String forwardText) {
                 setForwardText(forwardText);
             }
+
+            public MessageWizard() {
+            }
         }
 
         public static class MessagePage extends AppPlace {
