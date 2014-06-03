@@ -70,7 +70,7 @@ public class LatePaymentCalculationTest extends VistaDBTestBase {
 
         policy.lateFee().baseFee().amount().setValue(new BigDecimal("200.00"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
-        policy.lateFee().maxTotalFee().amount().setValue(maxTotalFee);
+        policy.lateFee().maxTotalFee().percent().setValue(maxTotalFee);
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.PercentMonthlyRent);
 
         BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
