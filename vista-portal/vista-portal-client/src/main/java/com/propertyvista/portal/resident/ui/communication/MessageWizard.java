@@ -50,7 +50,7 @@ public class MessageWizard extends CPortalEntityWizard<MessageDTO> {
         CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
         cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
 
-        content.append(Location.Left, proto().isHighImportance(), cmbBoolean).decorate().componentWidth(250);
+        content.append(Location.Left, proto().highImportance(), cmbBoolean).decorate().componentWidth(250);
         content.append(Location.Left, proto().text()).decorate().componentWidth(250);
         content.br();
         content.h1(i18n.tr("Attachments"));

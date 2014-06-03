@@ -120,7 +120,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         bo.date().setValue(SystemDateManager.getDate());
         bo.sender().set(ResidentPortalContext.getCurrentUser());
         bo.text().set(to.text());
-        bo.isHighImportance().set(to.isHighImportance());
+        bo.highImportance().set(to.highImportance());
         bo.recipients().add(dh);
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
@@ -217,7 +217,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 if (!currentDTO.isRead().getValue(false)) {
                     isRead = false;
                 }
-                if (!currentDTO.isHighImportance().getValue(false)) {
+                if (!currentDTO.highImportance().getValue(false)) {
                     isHighImportance = false;
                 }
                 if (to.id().equals(currentDTO.id())) {
@@ -225,7 +225,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 }
             }
             if (isHighImportance) {
-                to.isHighImportance().setValue(true);
+                to.highImportance().setValue(true);
             }
             if (star) {
                 to.star().setValue(true);
@@ -264,7 +264,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
         messageDTO.thread().set(m.thread());
         messageDTO.attachments().set(m.attachments());
-        messageDTO.isHighImportance().set(m.isHighImportance());
+        messageDTO.highImportance().set(m.highImportance());
         messageDTO.sender().setAttachLevel(AttachLevel.Attached);
         messageDTO.sender().set(m.sender());
         messageDTO.isRead().setValue(isRead);
@@ -288,9 +288,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             m.date().setValue(SystemDateManager.getDate());
             m.sender().set(ResidentPortalContext.getCurrentUser());
             m.text().set(message.text());
-            m.isHighImportance().set(message.isHighImportance());
+            m.highImportance().set(message.highImportance());
             m.recipients().add(dh);
-
             Persistence.service().persist(m);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);

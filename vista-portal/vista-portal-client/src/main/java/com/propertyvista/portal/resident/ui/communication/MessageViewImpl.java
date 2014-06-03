@@ -89,14 +89,14 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             // No filtering work for it
             getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
             setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().isRead()).build(),
-                    new MemberColumnDescriptor.Builder(proto().isHighImportance()).build(), new MemberColumnDescriptor.Builder(proto().star()).build(),
+                    new MemberColumnDescriptor.Builder(proto().highImportance()).build(), new MemberColumnDescriptor.Builder(proto().star()).build(),
                     new MemberColumnDescriptor.Builder(proto().sender()).build(), new MemberColumnDescriptor.Builder(proto().subject()).build(),
                     new MemberColumnDescriptor.Builder(proto().date()).build());
         }
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().isHighImportance(), true));
+            return Arrays.asList(new Sort(proto().date(), true), new Sort(proto().isRead(), false), new Sort(proto().highImportance(), true));
         }
     }
 }

@@ -29,20 +29,19 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -56,19 +55,10 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
     private static final I18n i18n = I18n.get(MessagePage.class);
 
-    private final Button btnReplay;
-
     private final OpenMessageFolder messagesFolder;
 
     public MessagePage(MessagePageView view) {
         super(MessageDTO.class, view, "Message", ThemeColor.contrast5);
-        btnReplay = new Button(i18n.tr("Reply"), new Command() {
-
-            @Override
-            public void execute() {
-                messagesFolder.addItem();
-            }
-        });
 
         messagesFolder = new OpenMessageFolder();
         inheritEditable(false);
@@ -80,26 +70,27 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
     }
 
     @Override
-    protected FormDecorator<MessageDTO> createDecorator() {
-        FormDecorator<MessageDTO> decorator = super.createDecorator();
-
-        decorator.addFooterToolbarWidget(btnReplay);
-        decorator.getFooterPanel().setVisible(true);
-
-        return decorator;
-    }
-
-    @Override
     public IsWidget createContent() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
         inject(proto().thread());
         formPanel.append(Location.Left, proto().created(), new CLabel<String>()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().allowedReply(), new CLabel<String>()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().status(), new CLabel<String>()).decorate().componentWidth(250);
         formPanel.append(Location.Left, proto().content(), messagesFolder);
         formPanel.br();
 
         return formPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        if (getValue() == null || getValue().isPrototype()) {
+            get(proto().status()).setVisible(false);
+        } else {
+            get(proto().status()).setVisible(!ThreadStatus.Unassigned.equals(getValue().status().getValue()));
+        }
     }
 
     private class OpenMessageFolder extends VistaBoxFolder<MessageDTO> {
@@ -141,6 +132,10 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         private Anchor btnmarkAsUnread;
 
+        private Anchor btnForward;
+
+        private Anchor btnReply;
+
         CComboBoxBoolean cmbStar;
 
         Image starImage;
@@ -161,6 +156,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
             inject(proto().star());
             inject(proto().thread());
+            inject(proto().allowedReply());
             starImage = new Image(PortalImages.INSTANCE.noStar());
             starImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
             starImage.addClickHandler(new ClickHandler() {
@@ -190,7 +186,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
             cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
 
-            formPanel.append(Location.Left, proto().isHighImportance(), cmbBoolean).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().highImportance(), cmbBoolean).decorate().componentWidth(200);
             formPanel.append(Location.Left, proto().sender(), new SenderLabel()).decorate().componentWidth(200);
             formPanel.append(Location.Left, proto().text()).decorate().componentWidth(200);
             formPanel.br();
@@ -220,6 +216,33 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                     }
                 };
             });
+
+            btnReply = new Anchor(i18n.tr("Reply"), new Command() {
+                @Override
+                public void execute() {
+                    if (!isValid()) {
+                        setVisited(true);
+                        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
+                    } else {
+                        messagesFolder.addItem();
+                    }
+                };
+            });
+
+            btnForward = new Anchor(i18n.tr("Forward"), new Command() {
+                @Override
+                public void execute() {
+                    if (!isValid()) {
+                        setVisited(true);
+                        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
+                    } else {
+                        CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
+                        String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard(forwardText));
+                    }
+                };
+            });
+
             btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
                 @Override
                 public void execute() {
@@ -243,6 +266,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             });
 
             tb.addItem(btnSend);
+            tb.addItem(btnReply);
+            tb.addItem(btnForward);
             tb.addItem(btnCancel);
             tb.addItem(btnmarkAsUnread);
             btnSend.setVisible(false);
@@ -286,6 +311,8 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 setEnabled(true);
                 btnSend.setVisible(true);
                 btnCancel.setVisible(true);
+                btnReply.setVisible(false);
+                btnForward.setVisible(false);
                 starImage.setVisible(false);
                 btnmarkAsUnread.setVisible(false);
                 get(proto().date()).setVisible(false);
@@ -297,6 +324,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
+                btnReply.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey())
+                        && getValue().allowedReply().getValue(true));
+                btnForward.setVisible(true);
                 get(proto().date()).setVisible(true);
                 get(proto().sender()).setVisible(true);
                 get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));

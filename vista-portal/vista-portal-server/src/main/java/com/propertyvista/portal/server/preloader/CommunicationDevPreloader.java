@@ -19,6 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -73,6 +74,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // get a few existing CustomerUsers
         CustomerUser t001 = null;
         CustomerUser t002 = null;
+        CustomerUser t003 = null;
         if (listCustomerUser != null) {
             String email;
             for (CustomerUser customerUser : listCustomerUser) {
@@ -81,6 +83,8 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     t001 = customerUser;
                 } else if ("t002@pyx4j.com".equals(email)) {
                     t002 = customerUser;
+                } else if ("t003@pyx4j.com".equals(email)) {
+                    t003 = customerUser;
                 }
             }
         }
@@ -99,22 +103,28 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // t001-> t003  (read, important)
         // t003-> t001  (unread, important) - reply
 
-//        for (int i = 0; i < 100; i++) {
-        int i = 0;
-        CommunicationThread msg1 = createMessage(i, m001, t001, null, "No Water", "It will no water in the whole year! Please go to a Sea sand bring water!",
-                true, true, mg, m001);
-        createMessage(i, t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false, mg, m001);
-        createMessage(i, t002, e001, null, "How to use this?",
-                "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, m001);
-        createMessage(i, m001, e001, null, "We miss you", "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false,
-                false, mg, m001);
-        createMessage(i, m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, m001);
-        CommunicationThread msg6 = createMessage(i, m001, t001, null, "Late payment notification",
-                "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, m001);
-        createMessage(i, t001, m001, msg6, "Late payment notification",
-                "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
-                true, false, mg, m001);
-        //       }
+        for (int i = 0; i < 10; i++) {
+            CommunicationThread msg1 = createMessage(i, m001, t001, null, "No Water",
+                    "It will no water in the whole year! Please go to a Sea sand bring water!", true, true, mg, m001);
+            createMessage(i, t003, m001, msg1, "T03", "Hi,\n     Thanks for communication :)", true, false, mg, m001);
+            createMessage(i, t003, m001, null, "T03", "Hi,\n     Bye)", true, false, mg, m001);
+            createMessage(i, t001, m001, msg1, "No water", "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false, mg, m001);
+            createMessage(i, t002, e001, null, "How to use this?",
+                    "Hey,\n    I would like to know how to use this portal thing, stuff here, is there a quick tutorial?", true, false, mg, m001);
+            createMessage(i, m001, e001, null, "We miss you", "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.",
+                    false, false, mg, m001);
+            createMessage(i, m001, t002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false, mg, m001);
+            CommunicationThread msg6 = createMessage(i, m001, t001, null, "Late payment notification",
+                    "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, false, mg, m001);
+            createMessage(
+                    i,
+                    t001,
+                    m001,
+                    msg6,
+                    "Late payment notification",
+                    "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
+                    true, false, mg, m001);
+        }
         return "persons and messages created";
     }
 
@@ -139,6 +149,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             thread.owner().set(owner);
             thread.allowedReply().setValue(true);
             thread.topic().set(mg);
+            thread.created().setValue(SystemDateManager.getDate());
             PersistenceServicesFactory.getPersistenceService().persist(thread);
         } else
             thread = parent;
@@ -147,7 +158,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         c.sender().set(from);
         c.text().setValue(msgContent);
         c.date().setValue(new Date());
-        c.isHighImportance().setValue(false);
+        c.highImportance().setValue(false);
 
         DeliveryHandle m = EntityFactory.create(DeliveryHandle.class);
         m.recipient().set(to);

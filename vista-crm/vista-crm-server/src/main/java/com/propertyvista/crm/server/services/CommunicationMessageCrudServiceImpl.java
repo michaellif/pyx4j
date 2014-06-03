@@ -74,7 +74,7 @@ public class CommunicationMessageCrudServiceImpl extends AbstractCrudServiceDtoI
             return boProto.text().getPath();
         }
         if (path.equals(toProto.isHighImportance().getPath().toString())) {
-            return boProto.isHighImportance().getPath();
+            return boProto.highImportance().getPath();
         }
         if (path.equals(toProto.attachments().getPath().toString())) {
             return boProto.attachments().getPath();

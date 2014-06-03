@@ -60,7 +60,7 @@ public interface Message extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.combo)
-    IPrimitive<Boolean> isHighImportance();
+    IPrimitive<Boolean> highImportance();
 
     @Owned
     @Detached

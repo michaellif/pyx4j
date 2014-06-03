@@ -191,7 +191,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             writeActionImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard(null));
                 }
             });
             add(messagesAnchor);
