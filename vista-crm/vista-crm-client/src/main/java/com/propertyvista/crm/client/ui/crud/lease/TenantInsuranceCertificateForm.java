@@ -19,13 +19,13 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
@@ -48,7 +48,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
 
     private final TenantOwnerClickHandler tenantOwnerClickHandler;
 
-    private BasicFlexFormPanel contentPanel;
+    private FormPanel contentPanel;
 
     /**
      * @param displayTenantOwner
@@ -69,8 +69,8 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
 
     @Override
     protected IsWidget createContent() {
-        contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
-        int row = -1;
+        contentPanel = new FormPanel(this); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
+
         if (displayTenantOwner) {
             CEntityLabel<Customer> comp = new CEntityLabel<Customer>();
 
@@ -83,12 +83,12 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                     }
                 });
             }
-            contentPanel.setWidget(++row, 0, 2, inject(proto().insurancePolicy().tenant(), comp, new FieldDecoratorBuilder(15, true).build()));
+            contentPanel.append(Location.Dual, proto().insurancePolicy().tenant(), comp).decorate().componentWidth(150);
         }
 
-        contentPanel.setWidget(++row, 0, 2, inject(proto().insuranceProvider(), new FieldDecoratorBuilder(10, true).build()));
-        contentPanel.setWidget(++row, 0, 2, inject(proto().insuranceCertificateNumber(), new FieldDecoratorBuilder(20, true).build()));
-        contentPanel.setWidget(++row, 0, 2, inject(proto().liabilityCoverage(), new FieldDecoratorBuilder(20, true).build()));
+        contentPanel.append(Location.Dual, proto().insuranceProvider()).decorate().componentWidth(100);
+        contentPanel.append(Location.Dual, proto().insuranceCertificateNumber()).decorate().componentWidth(200);
+        contentPanel.append(Location.Dual, proto().liabilityCoverage()).decorate().componentWidth(200);
         get(proto().liabilityCoverage()).addComponentValidator(new AbstractComponentValidator<BigDecimal>() {
             @Override
             public BasicValidationError isValid() {
@@ -108,7 +108,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, inject(proto().inceptionDate(), new FieldDecoratorBuilder(10, true).build()));
+        contentPanel.append(Location.Dual, proto().inceptionDate()).decorate().componentWidth(100);
 
         get(proto().inceptionDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
@@ -119,7 +119,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, inject(proto().expiryDate(), new FieldDecoratorBuilder(10, true).build()));
+        contentPanel.append(Location.Dual, proto().expiryDate()).decorate().componentWidth(100);
         get(proto().expiryDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
@@ -130,7 +130,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate<?>> e
             }
         });
 
-        contentPanel.setWidget(++row, 0, 2, inject(proto().certificateDocs(), new InsuranceCertificateDocFolder()));
+        contentPanel.append(Location.Dual, proto().certificateDocs(), new InsuranceCertificateDocFolder());
         return contentPanel;
     }
 
