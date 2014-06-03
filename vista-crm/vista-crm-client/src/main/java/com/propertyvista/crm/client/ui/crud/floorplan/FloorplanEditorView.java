@@ -17,15 +17,15 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
 
 public interface FloorplanEditorView extends IEditor<FloorplanDTO> {
 
     interface Presenter extends IEditor.Presenter {
-        void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Floorplan floorplan);
+        void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Key buildingId);
     }
 }

@@ -31,8 +31,8 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -43,12 +43,12 @@ import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
@@ -168,7 +168,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
                 formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
                 formPanel.append(Location.Right, proto().title()).decorate();
-                formPanel.append(Location.Dual, proto().description()).decorate();
+                formPanel.append(Location.Right, proto().description()).decorate();
 
                 return formPanel;
             }
@@ -213,7 +213,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                         }
                     }.show();
                 }
-            }, EntityFactory.createIdentityStub(Floorplan.class, FloorplanForm.this.getValue().getPrimaryKey()));
+            }, ((FloorplanEditorActivity) getParentView().getPresenter()).getParentId());
         }
 
         private class ILSProfileFloorplanEditor extends CForm<ILSProfileFloorplan> {

@@ -19,6 +19,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -178,13 +179,11 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
     }
 
     @Override
-    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Floorplan floorplan) {
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Key buildingId) {
         // find configured vendors for the building
-        Persistence.ensureRetrieve(floorplan, AttachLevel.Attached);
-        Persistence.ensureRetrieve(floorplan.building(), AttachLevel.IdOnly);
         Vector<ILSVendor> vendors = new Vector<ILSVendor>();
         EntityQueryCriteria<ILSProfileBuilding> crit = EntityQueryCriteria.create(ILSProfileBuilding.class);
-        crit.eq(crit.proto().building(), floorplan.building());
+        crit.eq(crit.proto().building(), buildingId);
         for (ILSProfileBuilding config : Persistence.service().query(crit)) {
             vendors.add(config.vendor().getValue());
         }

@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -25,7 +26,6 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanEditorView;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
 
@@ -33,12 +33,12 @@ public class FloorplanEditorActivity extends CrmEditorActivity<FloorplanDTO> imp
 
     @SuppressWarnings("unchecked")
     public FloorplanEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT
-                .create(FloorplanCrudService.class), FloorplanDTO.class);
+        super(place, CrmSite.getViewFactory().getView(FloorplanEditorView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class),
+                FloorplanDTO.class);
     }
 
     @Override
-    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Floorplan floorplan) {
-        ((FloorplanCrudService) getService()).getILSVendors(callback, floorplan);
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Key buildingId) {
+        ((FloorplanCrudService) getService()).getILSVendors(callback, buildingId);
     }
 }
