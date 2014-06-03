@@ -371,16 +371,27 @@ public class PersistenceContext {
         }
         assertTransactionManangementCallOrigin();
         transactionContexts.peek().rollback(connection);
+        SQLException exception = null;
         if (isDirectTransactionControl() && connection != null) {
+            boolean ok = false;
             try {
                 log.warn("rollback transaction changes since {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(transactionStart)));
                 connection.rollback();
                 transactionStart = -1;
+                ok = true;
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                exception = e;
+            } finally {
+                if (!ok) {
+                    log.error("rollback failed");
+                }
+
             }
         }
         transactionContexts.peek().fireCompensationHandlers();
+        if (exception != null) {
+            throw new RuntimeException(exception);
+        }
     }
 
     void close() {
