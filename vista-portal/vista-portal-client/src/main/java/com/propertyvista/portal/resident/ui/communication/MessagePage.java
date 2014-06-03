@@ -224,9 +224,12 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
+                        String forwardText = buildForwardText();
                         messagesFolder.addItem();
+                        messagesFolder.getItem(messagesFolder.getItemCount() - 1).getValue().text().setValue(forwardText);
                     }
-                };
+                }
+
             });
 
             btnForward = new Anchor(i18n.tr("Forward"), new Command() {
@@ -236,9 +239,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
-                        CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
-                        String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
-                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard(forwardText));
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard(buildForwardText()));
                     }
                 };
             });
@@ -275,6 +276,12 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             btnmarkAsUnread.setVisible(false);
 
             return tb;
+        }
+
+        private String buildForwardText() {
+            CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
+            String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
+            return forwardText;
         }
 
         @Override
