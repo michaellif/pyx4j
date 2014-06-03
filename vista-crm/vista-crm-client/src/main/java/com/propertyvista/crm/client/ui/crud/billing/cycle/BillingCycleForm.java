@@ -43,29 +43,19 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         formPanel.append(Location.Left, proto().targetBillExecutionDate()).decorate();
 
         formPanel.h2(i18n.tr("Statistics"));
-        formPanel.append(Location.Left, proto().stats().failed()).decorate();
-        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Failed));
-
-        formPanel.append(Location.Left, proto().stats().rejected()).decorate();
-        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Rejected));
-
-        formPanel.append(Location.Left, proto().stats().notConfirmed()).decorate();
-        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Finished));
-
-        formPanel.append(Location.Left, proto().stats().confirmed()).decorate();
-        formPanel.append(Location.Left, new ViewBillsLink(Bill.BillStatus.Confirmed));
+        formPanel.append(Location.Left, proto().stats().failed()).decorate().assistantWidget(new ViewBillsLink(Bill.BillStatus.Failed));
+        formPanel.append(Location.Left, proto().stats().rejected()).decorate().assistantWidget(new ViewBillsLink(Bill.BillStatus.Rejected));
+        formPanel.append(Location.Left, proto().stats().notConfirmed()).decorate().assistantWidget(new ViewBillsLink(Bill.BillStatus.Finished));
+        formPanel.append(Location.Left, proto().stats().confirmed()).decorate().assistantWidget(new ViewBillsLink(Bill.BillStatus.Confirmed));
 
         formPanel.br();
-        formPanel.append(Location.Left, proto().total()).decorate();
-        formPanel.append(Location.Left, new ViewLeasesLink(false));
-        formPanel.append(Location.Left, proto().notRun()).decorate();
-        formPanel.append(Location.Left, new ViewLeasesLink(true));
+        formPanel.append(Location.Left, proto().total()).decorate().assistantWidget(new ViewLeasesLink(false));
+        formPanel.append(Location.Left, proto().notRun()).decorate().assistantWidget(new ViewLeasesLink(true));
 
         formPanel.h2(i18n.tr("AutoPay"));
         formPanel.append(Location.Left, proto().actualAutopayExecutionDate()).decorate();
         formPanel.append(Location.Left, proto().targetAutopayExecutionDate()).decorate();
-        formPanel.append(Location.Left, proto().pads()).decorate();
-        formPanel.append(Location.Left, new ViewPadLink());
+        formPanel.append(Location.Left, proto().pads()).decorate().assistantWidget(new ViewPadLink());
 
         setTabBarVisible(false);
         selectTab(addTab(formPanel, i18n.tr("Billing Cycle")));
