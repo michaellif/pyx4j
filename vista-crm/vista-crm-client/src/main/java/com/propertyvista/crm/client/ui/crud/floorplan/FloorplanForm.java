@@ -145,6 +145,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     private class ILSSummaryFolder extends VistaBoxFolder<ILSSummaryFloorplan> {
+
         public ILSSummaryFolder() {
             super(ILSSummaryFloorplan.class);
         }
@@ -164,9 +165,9 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 FormPanel formPanel = new FormPanel(this);
 
                 CImage frontImage = new CImage(GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder());
-                frontImage.setImageSize(240, 160);
+                frontImage.setImageSize(240, 180);
 
-                formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage).decorate().customLabel("").componentWidth(250);
                 formPanel.append(Location.Right, proto().title()).decorate();
                 formPanel.append(Location.Right, proto().description()).decorate();
 

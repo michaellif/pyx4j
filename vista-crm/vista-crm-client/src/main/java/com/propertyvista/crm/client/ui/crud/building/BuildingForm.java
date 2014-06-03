@@ -455,6 +455,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private class ILSSummaryFolder extends VistaBoxFolder<ILSSummaryBuilding> {
+
         public ILSSummaryFolder() {
             super(ILSSummaryBuilding.class);
         }
@@ -474,11 +475,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 FormPanel formPanel = new FormPanel(this);
 
                 CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
-                frontImage.setImageSize(240, 160);
+                frontImage.setImageSize(240, 180);
 
-                formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
-                formPanel.append(Location.Right, proto().title());
-                formPanel.append(Location.Dual, proto().description());
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage).decorate().customLabel("").componentWidth(250);
+                formPanel.append(Location.Right, proto().title()).decorate();
+                formPanel.append(Location.Right, proto().description()).decorate();
 
                 return formPanel;
             }
