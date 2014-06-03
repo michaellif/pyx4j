@@ -27,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
@@ -37,6 +39,8 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 class TransactionContext {
+
+    private static final Logger log = LoggerFactory.getLogger(TransactionContext.class);
 
     String savepointName;
 
@@ -165,7 +169,7 @@ class TransactionContext {
 
     void fireCompensationHandlers() {
         if (compensationHandlers != null) {
-
+            log.debug("fireCompensationHandlers {}", compensationHandlers.size());
             ListIterator<CompensationHandler> li = compensationHandlers.listIterator(compensationHandlers.size());
             while (li.hasPrevious()) {
                 CompensationHandler handler = li.previous();
