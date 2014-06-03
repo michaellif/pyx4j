@@ -87,10 +87,12 @@ public abstract class FormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
         style.addProperty("float", "right");
+        style.addProperty("clear", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right);
         style.addProperty("float", "left");
+        style.addProperty("clear", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual);
