@@ -161,7 +161,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
             }
         };
         imageSlider.setImageSize(250, 240);
-        imageSlider.setOrganizerWidth(600);
+        imageSlider.setOrganizerWidth(500);
         imagePanel.append(Location.Left, inject(proto().pictures(), imageSlider)).decorate().componentWidth(100);
         content.append(Location.Dual, imagePanel);
 
