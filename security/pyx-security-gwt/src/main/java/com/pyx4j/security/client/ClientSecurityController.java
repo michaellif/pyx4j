@@ -52,14 +52,22 @@ public class ClientSecurityController extends SecurityController {
 
         private Set<Behavior> behaviors = Collections.emptySet();
 
+        private Set<Permission> permissions = Collections.emptySet();
+
         @Override
         public boolean checkBehavior(Behavior behavior) {
             return behaviors.contains(behavior);
         }
 
+        //TODO Optimize by Permission.class
         @Override
         public boolean checkPermission(Permission permission) {
-            return true;
+            for (Permission p : permissions) {
+                if (p.implies(permission)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -74,7 +82,7 @@ public class ClientSecurityController extends SecurityController {
 
         @Override
         public <T extends AccessRule> List<T> getAccessRules(Class<T> accessRuleInterfaceClass, Object subject) {
-            return null;
+            throw new UnsupportedOperationException();
         }
 
         boolean isUnsecure() {
@@ -83,7 +91,7 @@ public class ClientSecurityController extends SecurityController {
 
         @Override
         public Collection<Permission> getPermissions() {
-            return null;
+            throw new UnsupportedOperationException();
         }
 
     }
@@ -92,6 +100,11 @@ public class ClientSecurityController extends SecurityController {
 
         @Override
         public boolean checkBehavior(Behavior behavior) {
+            return true;
+        }
+
+        @Override
+        public boolean checkPermission(Permission permission) {
             return true;
         }
 
@@ -124,8 +137,13 @@ public class ClientSecurityController extends SecurityController {
         }
     }
 
-    @Override
-    public Acl authorize(Set<Behavior> behaviors) {
+    public void authorize(Set<Behavior> behaviors, Set<Permission> permissions) {
+        if (permissions == null) {
+            permissions = Collections.emptySet();
+        } else {
+            permissions = Collections.unmodifiableSet(permissions);
+        }
+        acl.permissions = permissions;
         if (behaviors == null) {
             behaviors = Collections.emptySet();
         } else {
@@ -142,7 +160,11 @@ public class ClientSecurityController extends SecurityController {
             log.debug("Client security initialized");
             ClientEventBus.fireEvent(new ContextInitializeEvent());
         }
-        return acl;
+    }
+
+    @Override
+    public Acl authorize(Set<Behavior> behaviors) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

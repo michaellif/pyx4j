@@ -299,7 +299,7 @@ public class ClientContext {
             }
             log.info("Authenticated {}", userVisit);
             attributes.clear();
-            ClientSecurityController.instance().authorize(authenticationResponse.getBehaviors());
+            ClientSecurityController.instance().authorize(authenticationResponse.getBehaviors(), authenticationResponse.getPermissions());
             ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
             if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
                 RPCManager.enableAppEngineUsageStats();
