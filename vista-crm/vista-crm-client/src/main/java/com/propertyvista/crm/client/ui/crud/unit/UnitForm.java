@@ -157,9 +157,9 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     private IsWidget createLegalAddresslTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().info().legalAddressOverride()).decorate().labelWidth("360px");
+        formPanel.append(Location.Dual, proto().info().legalAddressOverride()).decorate().labelWidth("240px");
         unitLegalAddressLabel = formPanel.h1(proto().info().legalAddress().getMeta().getCaption());
-        formPanel.append(Location.Left, proto().info().legalAddress(), new InternationalAddressEditor());
+        formPanel.append(Location.Dual, proto().info().legalAddress(), new InternationalAddressEditor());
 
         buildingLegalAddressLabel = formPanel.h1(proto().buildingLegalAddress().getMeta().getCaption());
         formPanel.append(Location.Left, proto().buildingLegalAddress(), new InternationalAddressEditor());

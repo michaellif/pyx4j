@@ -71,7 +71,7 @@ public interface AptUnitInfo extends IEntity {
     @YardiImported
     IPrimitive<String> number();
 
-    @Caption(name = "Unit Legal Address is different from Building Address")
+    @Caption(name = "Is different from Building Address")
     IPrimitive<Boolean> legalAddressOverride();
 
     InternationalAddress legalAddress();
