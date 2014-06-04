@@ -23,6 +23,8 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceChangeRequestEvent;
@@ -97,7 +99,12 @@ public final class AppPlaceContorller {
 
     public void goTo(final AppPlace newPlace) {
         goTo(newPlace, true);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.hideSideMenu));
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.hideSideMenu));
+            }
+        });
     }
 
     /**
