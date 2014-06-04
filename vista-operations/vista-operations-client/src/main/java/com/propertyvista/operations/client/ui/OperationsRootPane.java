@@ -36,7 +36,6 @@ public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> implemen
     public OperationsRootPane() {
         super(new BackOfficeLayoutPanel());
 
-        asWidget().setMenuWidth(200);
         asWidget().setHeaderHeight(50);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
 

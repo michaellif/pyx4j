@@ -31,8 +31,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
 
-    public static final int MENU_WIDTH = 200;
-
     public static final int HEADER_HEIGHT = 50;
 
     public static final int NOTIFICATION_HEIGHT = 30;
@@ -40,7 +38,6 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
     public CrmRootPane() {
         super(new BackOfficeLayoutPanel());
 
-        asWidget().setMenuWidth(MENU_WIDTH);
         asWidget().setHeaderHeight(HEADER_HEIGHT);
 
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
