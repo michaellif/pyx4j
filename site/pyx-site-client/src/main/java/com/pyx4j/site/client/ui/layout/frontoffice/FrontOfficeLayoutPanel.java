@@ -329,6 +329,11 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
     @Override
     public void onLayoutChangeRequest(LayoutChangeRequestEvent event) {
         switch (event.getChangeType()) {
+        case hideSideMenu:
+            if (isSideMenuEnabled()) {
+                setSideMenuVisible(false);
+            }
+            break;
         case toggleSideMenu:
             if (isSideMenuEnabled()) {
                 setSideMenuVisible(!sideMenuVisible);

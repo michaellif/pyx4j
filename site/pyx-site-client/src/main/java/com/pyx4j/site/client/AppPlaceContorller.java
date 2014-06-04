@@ -97,7 +97,7 @@ public final class AppPlaceContorller {
 
     public void goTo(final AppPlace newPlace) {
         goTo(newPlace, true);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.hideSideMenu));
     }
 
     /**
