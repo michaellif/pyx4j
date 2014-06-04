@@ -229,7 +229,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                     executionMonitor.addInfoEvent(
                             "ILSPropertyMarketing",
-                            SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0<# [{1}]}", newBuildings.size(),
+                            SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newBuildings.size(),
                                     ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
                                         @Override
                                         public String toString(Building value) {
@@ -1058,7 +1058,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     it.remove();
                     return true;
                 }
-            }            
+            }
         }
         return false;
     }
