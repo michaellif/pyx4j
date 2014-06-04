@@ -23,7 +23,6 @@ import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.MessageWizardAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
@@ -31,6 +30,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.communication.MessageWizardView;
 import com.propertyvista.portal.resident.ui.communication.MessageWizardView.MessageWizardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Message.MessageWizard;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
@@ -39,12 +39,12 @@ public class CommunicationMessageWizardActivity extends AbstractWizardCrudActivi
 
     private static final I18n i18n = I18n.get(CommunicationMessageWizardActivity.class);
 
-    private MessageWizardAppPlace place;
+    private MessageWizard place;
 
     public CommunicationMessageWizardActivity(AppPlace place) {
         super(MessageWizardView.class, GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class), MessageDTO.class);
-        if (place instanceof MessageWizardAppPlace) {
-            this.place = (MessageWizardAppPlace) place;
+        if (place instanceof MessageWizard) {
+            this.place = (MessageWizard) place;
         } else {
             place = null;
         }

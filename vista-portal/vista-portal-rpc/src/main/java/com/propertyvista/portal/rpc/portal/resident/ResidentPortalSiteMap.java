@@ -16,7 +16,6 @@ package com.propertyvista.portal.rpc.portal.resident;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.MessageWizardAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
@@ -53,12 +52,18 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
 
     @PlaceProperties(navigLabel = "My Messages")
     public static class Message extends AppPlace {
-        public static class MessageWizard extends MessageWizardAppPlace {
+        public static class MessageWizard extends AppPlace {
+            private String forwardText;
+
             public MessageWizard(String forwardText) {
-                setForwardText(forwardText);
+                this.forwardText = forwardText;
             }
 
             public MessageWizard() {
+            }
+
+            public String getForwardText() {
+                return forwardText;
             }
         }
 
