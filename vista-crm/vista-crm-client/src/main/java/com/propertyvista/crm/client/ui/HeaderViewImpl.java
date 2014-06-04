@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -116,13 +117,12 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
         });
         leftToolbar.addItem(sideMenuButton);
-        leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        leftToolbar.getElement().getStyle().setProperty("left", "0");
         return leftToolbar;
     }
 
     private Widget createLogoContainer() {
         SimplePanel logoContainer = new SimplePanel();
+        logoContainer.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         HasClickHandlers logoElement;
 
         if (useLogoImage) {

@@ -20,6 +20,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class SiteViewTheme extends Theme {
 
@@ -51,6 +52,17 @@ public class SiteViewTheme extends Theme {
         style.addProperty("width", "100%");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("margin", "8px 10px 0 8px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "top");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("height", "30px");
+        style.addProperty("padding", "3px");
         addStyle(style);
 
         // NavigationContainer (Accordion menu):
