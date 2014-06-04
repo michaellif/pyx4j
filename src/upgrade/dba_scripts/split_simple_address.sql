@@ -12,7 +12,8 @@ CREATE OR REPLACE FUNCTION _dba_.split_simple_address(  v_schema_name   TEXT,
                                                         v_table_name    TEXT,
                                                         v_addr_col1     TEXT,
                                                         v_addr_col2     TEXT)
-RETURNS TABLE   (   address1            VARCHAR(500),
+RETURNS TABLE   (   id                  BIGINT,
+                    address1            VARCHAR(500),
                     address2            VARCHAR(500),
                     suite_num           VARCHAR(500),
                     street_num          TEXT,
@@ -21,8 +22,8 @@ AS
 $$
 BEGIN
     
-    FOR address1, address2 IN 
-    EXECUTE 'SELECT '||v_addr_col1||','||v_addr_col2||' '
+    FOR id, address1, address2 IN 
+    EXECUTE 'SELECT id,'||v_addr_col1||','||v_addr_col2||' '
             ||'FROM '||v_schema_name||'.'||v_table_name||' '
             ||'WHERE    ('||v_addr_col1||' IS NOT NULL '
             ||'         OR '||v_addr_col2||' IS NOT NULL) '
