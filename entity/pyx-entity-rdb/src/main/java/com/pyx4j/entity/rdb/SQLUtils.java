@@ -125,6 +125,12 @@ public class SQLUtils {
         }
     }
 
+    public static void executeQuietly(Connection connection, String sql) throws SQLException {
+        List<String> sqls = new Vector<String>();
+        sqls.add(sql);
+        executeQuietly(connection, sqls);
+    }
+
     public static void executeQuietly(Connection connection, List<String> sqls) throws SQLException {
         if (sqls.size() == 0) {
             return;
