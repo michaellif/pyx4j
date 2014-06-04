@@ -12,31 +12,36 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
-
-    public enum Theme {
-        Gainsboro, VillageGreen, BlueCold, BrownWarm
-    }
+public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     public static String BACK_TO_CRM = "vista_Back2CRM";
 
@@ -64,9 +69,15 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     private Anchor support;
 
+    private Button sideMenuButton;
+
     private static String brandedHeader;
 
     private static boolean useLogoImage;
+
+    private LayoutType layoutType;
+
+    private boolean loggedIn = false;
 
     //TODO Misha How can I do this properly ?
     @Deprecated
@@ -78,13 +89,36 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
     public HeaderViewImpl() {
         setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
 
-        Widget w;
+        add(createLeftToolbar());
 
-        add(w = createLogoContainer());
-        setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_LEFT);
+        add(createLogoContainer());
 
-        add(w = createActionsContainer());
-        setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_RIGHT);
+        add(createRightToolbar());
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+    }
+
+    private IsWidget createLeftToolbar() {
+        Toolbar leftToolbar = new Toolbar();
+        sideMenuButton = new Button(CrmImages.INSTANCE.menu(), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+            }
+        });
+        leftToolbar.addItem(sideMenuButton);
+        leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        leftToolbar.getElement().getStyle().setProperty("left", "0");
+        return leftToolbar;
     }
 
     private Widget createLogoContainer() {
@@ -120,7 +154,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         return logoContainer;
     }
 
-    private Widget createActionsContainer() {
+    private Widget createRightToolbar() {
         Toolbar toolbar = new Toolbar();
         toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
@@ -234,6 +268,7 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     @Override
     public void onLogedOut() {
+        this.loggedIn = false;
         home.setVisible(false);
         settings.setVisible(false);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
@@ -249,10 +284,13 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         thisIsDemo.getElement().getStyle().setProperty("marginRight", "auto");
         thisIsDemo.getElement().getStyle().setProperty("left", "0px");
         thisIsDemo.getElement().getStyle().setProperty("width", "100%");
+
+        calculateActionsState();
     }
 
     @Override
     public void onLogedIn(String userName) {
+        this.loggedIn = true;
         home.setVisible(true);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             messages.setVisible(true);
@@ -268,6 +306,8 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         thisIsDemo.getElement().getStyle().setProperty("marginRight", "1em");
         thisIsDemo.getElement().getStyle().setProperty("left", "0px");
         thisIsDemo.getElement().getStyle().setProperty("width", null);
+
+        calculateActionsState();
     }
 
     @Override
@@ -303,4 +343,23 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
             messages.setText("Messages");
         }
     }
+
+    private void doLayout(LayoutType layoutType) {
+        this.layoutType = layoutType;
+        calculateActionsState();
+    }
+
+    private void calculateActionsState() {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletPortrait:
+            sideMenuButton.setVisible(loggedIn);
+            break;
+        default:
+            sideMenuButton.setVisible(false);
+            break;
+        }
+    }
+
 }

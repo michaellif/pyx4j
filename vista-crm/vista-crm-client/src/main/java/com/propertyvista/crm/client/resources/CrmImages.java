@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
@@ -40,6 +41,10 @@ public interface CrmImages extends VistaImages {
 
     @Source("search.png")
     ImageResource search();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("menu.png")
+    ImageResource menu();
 
     @Source("DashboardLayout1-0.png")
     ImageResource dashboardLayout1_0();

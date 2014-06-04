@@ -274,7 +274,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            sideMenuButton.setVisible(loggedIn && true);
+            sideMenuButton.setVisible(loggedIn);
             tenantButton.setVisible(false);
             languageButton.setVisible(false);
             brandHolder.getElement().getStyle().setProperty("margin", "0 50%");
