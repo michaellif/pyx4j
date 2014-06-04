@@ -72,23 +72,23 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("margin-left", "1px");
         style.addProperty("margin-top", "3px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColor.object1, 1);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColor.object1, 1);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColor.object1, 1);
-        style.addProperty("background", ThemeColor.object1, 0.8);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
+        style.addProperty("background", ThemeColor.foreground, 0.1);
         style.addProperty("-webkit-touch-callout", "none");
         style.addProperty("-webkit-user-select", "none");
         style.addProperty("-khtml-user-select", "none");
         style.addProperty("-moz-user-select", "none");
         style.addProperty("-ms-user-select", "none");
         style.addProperty("user-select", "none");
-        style.addProperty("color", ThemeColor.foreground, 0);
+        style.addProperty("color", ThemeColor.foreground, 1);
         addStyle(style);
 
         style = new Style(StyleName.TabBarItem, StyleDependent.hover);
-        style.addProperty("background", ThemeColor.object1, 0.9);
+        style.addProperty("background", ThemeColor.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.selected);

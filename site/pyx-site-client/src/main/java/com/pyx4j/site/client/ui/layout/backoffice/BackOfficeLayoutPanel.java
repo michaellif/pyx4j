@@ -159,33 +159,33 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         Layer mainLayer = (Layer) pageHolder.getLayoutData();
 
         if (sideMenuVisible) {
-            menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
-            commLayer.setLeftWidth(175.0, Unit.PCT, 75.0, Unit.PCT);
-            mainLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
+            menuLayer.setLeftWidth(0.0, Unit.PCT, 60.0, Unit.PCT);
+            commLayer.setLeftWidth(160.0, Unit.PCT, 60.0, Unit.PCT);
+            mainLayer.setLeftWidth(60.0, Unit.PCT, 100.0, Unit.PCT);
         } else if (sideCommVisible) {
-            menuLayer.setLeftWidth(-150.0, Unit.PCT, 75.0, Unit.PCT);
-            commLayer.setLeftWidth(25.0, Unit.PCT, 75.0, Unit.PCT);
-            mainLayer.setLeftWidth(-75.0, Unit.PCT, 100.0, Unit.PCT);
+            menuLayer.setLeftWidth(-120.0, Unit.PCT, 60.0, Unit.PCT);
+            commLayer.setLeftWidth(40.0, Unit.PCT, 60.0, Unit.PCT);
+            mainLayer.setLeftWidth(-60.0, Unit.PCT, 100.0, Unit.PCT);
         } else {
-            menuLayer.setLeftWidth(-75.0, Unit.PCT, 75.0, Unit.PCT);
-            commLayer.setLeftWidth(100.0, Unit.PCT, 75.0, Unit.PCT);
+            menuLayer.setLeftWidth(-60.0, Unit.PCT, 60.0, Unit.PCT);
+            commLayer.setLeftWidth(100.0, Unit.PCT, 60.0, Unit.PCT);
             mainLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
         }
     }
 
     private boolean isSideMenuEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType || LayoutType.tabletPortrait == layoutType;
     }
 
     private boolean isSideCommEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType || LayoutType.tabletPortrait == layoutType;
     }
 
     private boolean isPopupCommEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
-        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType);
+        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType || LayoutType.tabletPortrait == layoutType);
     }
 
     private void setSideMenuVisible(boolean visible) {
