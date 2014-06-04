@@ -52,6 +52,8 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final SidePanelHolder sideCommHolder;
 
+    private final DockLayoutPanel leftPanelHolder;
+
     private boolean sideMenuVisible = false;
 
     private boolean sideCommVisible = false;
@@ -66,7 +68,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addEast(getDisplay(DisplayType.extra), 0);
 
-        DockLayoutPanel leftPanelHolder = new DockLayoutPanel(Unit.PX);
+        leftPanelHolder = new DockLayoutPanel(Unit.PX);
         leftPanelHolder.addSouth(getDisplay(DisplayType.footer), 40);
 
         inlineMenuHolder = new SimplePanel();
@@ -127,16 +129,17 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         switch (getLayoutType()) {
         case phonePortrait:
         case phoneLandscape:
+        case tabletPortrait:
             sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
             sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
-            getDisplay(DisplayType.header).setVisible(false);
+            pageHolder.setWidgetSize(leftPanelHolder, 0);
             break;
         default:
             setSideMenuVisible(false);
             setSideCommVisible(false);
             inlineMenuHolder.setWidget(getDisplay(DisplayType.menu));
             popupCommHolder.setWidget(getDisplay(DisplayType.communication));
-            getDisplay(DisplayType.header).setVisible(true);
+            pageHolder.setWidgetSize(leftPanelHolder, 200);
             break;
         }
 
