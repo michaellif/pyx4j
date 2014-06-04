@@ -101,26 +101,6 @@ public class SiteViewTheme extends Theme {
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
-        /*
-         * components within the class:
-         */
-        //stack header
-        style = new Style(".", StyleName.SiteViewShortCuts.name(), " .gwt-StackLayoutPanelHeader");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-left", "1em");
-        style.addProperty("color", ThemeColor.foreground, 0.9);
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        // NOTE: must correspond with the header size defined by stackpanel
-        style.addProperty("line-height", "2.2em");
-        addStyle(style);
-
-        // stack content
-        style = new Style(".", StyleName.SiteViewShortCuts.name(), " .gwt-StackLayoutPanelContent");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        addStyle(style);
-
         style = new Style(".", StyleName.SiteViewShortCuts.name(), " a:link, .", StyleName.SiteViewShortCuts.name(), " a:visited, .",
                 StyleName.SiteViewShortCuts.name(), " a:active");
         style.addProperty("text-decoration", "none");

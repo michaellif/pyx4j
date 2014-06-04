@@ -48,6 +48,12 @@ public class VistaTheme extends Theme {
         style.addProperty("font-size", "100%");
         addStyle(style);
 
+        style = new Style("div");
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
+        addStyle(style);
+
         style = new Style("table");
         style.addProperty("border-collapse", "collapse");
         addStyle(style);
