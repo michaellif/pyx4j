@@ -43,6 +43,8 @@ import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.FrontOfficeDevConsole;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
+import com.pyx4j.site.client.ui.layout.SidePanelHolder;
+import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
@@ -57,7 +59,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final SidePanelHolder sideMenuHolder;
 
-    private final PopupCommHolder popupCommHolder;
+    private final DropDownPanel popupCommHolder;
 
     private final SidePanelHolder sideCommHolder;
 
@@ -145,7 +147,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
             }
         });
 
-        popupCommHolder = new PopupCommHolder();
+        popupCommHolder = new DropDownPanel();
 
         footerHolder = new SimplePanel(getDisplay(DisplayType.footer));
         footerHolder.setStyleName(FrontOfficeLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
@@ -161,9 +163,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         {
             Layer layer = getLayout().attachChild(pageHolder.asWidget().getElement(), pageHolder);
             pageHolder.setLayoutData(layer);
-
             layer.setTopBottom(0, Unit.PX, 0, Unit.PX);
-
             getChildren().add(pageHolder);
             adopt(pageHolder);
         }
@@ -172,10 +172,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         {
 
             sideMenuHolder = new SidePanelHolder();
-
             Layer layer = getLayout().attachChild(sideMenuHolder.asWidget().getElement(), sideMenuHolder);
             sideMenuHolder.setLayoutData(layer);
-
             getChildren().add(sideMenuHolder);
             adopt(sideMenuHolder);
         }
@@ -184,10 +182,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         {
 
             sideCommHolder = new SidePanelHolder();
-
             Layer layer = getLayout().attachChild(sideCommHolder.asWidget().getElement(), sideCommHolder);
             sideCommHolder.setLayoutData(layer);
-
             getChildren().add(sideCommHolder);
             adopt(sideCommHolder);
         }

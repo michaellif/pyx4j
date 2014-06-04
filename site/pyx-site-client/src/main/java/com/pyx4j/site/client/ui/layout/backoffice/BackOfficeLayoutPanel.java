@@ -22,21 +22,39 @@ package com.pyx4j.site.client.ui.layout.backoffice;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout.Layer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
+import com.pyx4j.gwt.commons.layout.LayoutType;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.devconsole.BackOfficeDevConsole;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
+import com.pyx4j.site.client.ui.layout.SidePanelHolder;
+import com.pyx4j.widgets.client.DropDownPanel;
 
 public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private DevConsoleTab devConsoleTab;
 
     private final DockLayoutPanel pageHolder;
+
+    private final SimplePanel inlineMenuHolder;
+
+    private final SidePanelHolder sideMenuHolder;
+
+    private final DropDownPanel popupCommHolder;
+
+    private final SidePanelHolder sideCommHolder;
+
+    private boolean sideMenuVisible = false;
+
+    private boolean sideCommVisible = false;
 
     public BackOfficeLayoutPanel() {
 
@@ -46,24 +64,53 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addNorth(getDisplay(DisplayType.notification), 0);
 
-        pageHolder.addEast(getDisplay(DisplayType.extra), 200);
+        pageHolder.addEast(getDisplay(DisplayType.extra), 0);
 
-        DockLayoutPanel menuHolder = new DockLayoutPanel(Unit.PX);
-        menuHolder.addSouth(getDisplay(DisplayType.footer), 40);
-        menuHolder.add(getDisplay(DisplayType.menu));
+        DockLayoutPanel leftPanelHolder = new DockLayoutPanel(Unit.PX);
+        leftPanelHolder.addSouth(getDisplay(DisplayType.footer), 40);
 
-        pageHolder.addWest(menuHolder, 200);
+        inlineMenuHolder = new SimplePanel();
+        getDisplay(DisplayType.menu).setHeight("100%");
+
+        leftPanelHolder.add(inlineMenuHolder);
+
+        pageHolder.addWest(leftPanelHolder, 200);
 
         pageHolder.add(getDisplay(DisplayType.content));
+
+        popupCommHolder = new DropDownPanel();
 
         // ============ Content ============
         {
 
             Layer layer = getLayout().attachChild(pageHolder.getElement(), pageHolder);
             pageHolder.setLayoutData(layer);
+            layer.setTopBottom(0, Unit.PX, 0, Unit.PX);
             getChildren().add(pageHolder);
             adopt(pageHolder);
         }
+
+        // ============ Side Menu Layer ============
+        {
+
+            sideMenuHolder = new SidePanelHolder();
+            Layer layer = getLayout().attachChild(sideMenuHolder.asWidget().getElement(), sideMenuHolder);
+            sideMenuHolder.setLayoutData(layer);
+            getChildren().add(sideMenuHolder);
+            adopt(sideMenuHolder);
+        }
+
+        // ============ Side Communication Layer ============
+        {
+
+            sideCommHolder = new SidePanelHolder();
+            Layer layer = getLayout().attachChild(sideCommHolder.asWidget().getElement(), sideCommHolder);
+            sideCommHolder.setLayoutData(layer);
+            getChildren().add(sideCommHolder);
+            adopt(sideCommHolder);
+        }
+
+        AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
         // ============ Dev Console ============
         if (ApplicationMode.isDevelopment()) {
@@ -77,20 +124,87 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     @Override
     protected void doLayout() {
+        switch (getLayoutType()) {
+        case phonePortrait:
+        case phoneLandscape:
+            sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
+            sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
+            getDisplay(DisplayType.header).setVisible(false);
+            break;
+        default:
+            setSideMenuVisible(false);
+            setSideCommVisible(false);
+            inlineMenuHolder.setWidget(getDisplay(DisplayType.menu));
+            popupCommHolder.setWidget(getDisplay(DisplayType.communication));
+            getDisplay(DisplayType.header).setVisible(true);
+            break;
+        }
 
-        {
-            Layer layer = (Layer) pageHolder.getLayoutData();
-            layer.setTopBottom(0, Unit.PX, 0, Unit.PX);
-            layer.setLeftRight(0, Unit.PX, 0, Unit.PX);
+        switch (getLayoutType()) {
+        case huge:
+            pageHolder.setWidgetSize(getDisplay(DisplayType.extra), 200);
+            getDisplay(DisplayType.extra).setVisible(true);
+            break;
+        default:
+            getDisplay(DisplayType.extra).setVisible(false);
+            pageHolder.setWidgetSize(getDisplay(DisplayType.extra), 0);
+            break;
+        }
+
+        Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
+        Layer commLayer = (Layer) sideCommHolder.getLayoutData();
+        Layer mainLayer = (Layer) pageHolder.getLayoutData();
+
+        if (sideMenuVisible) {
+            menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
+            commLayer.setLeftWidth(175.0, Unit.PCT, 75.0, Unit.PCT);
+            mainLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
+        } else if (sideCommVisible) {
+            menuLayer.setLeftWidth(-150.0, Unit.PCT, 75.0, Unit.PCT);
+            commLayer.setLeftWidth(25.0, Unit.PCT, 75.0, Unit.PCT);
+            mainLayer.setLeftWidth(-75.0, Unit.PCT, 100.0, Unit.PCT);
+        } else {
+            menuLayer.setLeftWidth(-75.0, Unit.PCT, 75.0, Unit.PCT);
+            commLayer.setLeftWidth(100.0, Unit.PCT, 75.0, Unit.PCT);
+            mainLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
         }
     }
 
-    public void setMenuVisible(boolean visible) {
-
+    private boolean isSideMenuEnabled() {
+        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
-    public void setMenuWidth(int width) {
+    private boolean isSideCommEnabled() {
+        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
+    }
 
+    private boolean isPopupCommEnabled() {
+        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType);
+    }
+
+    private void setSideMenuVisible(boolean visible) {
+        if (this.sideMenuVisible != visible) {
+            this.sideMenuVisible = visible;
+            forceLayout(ResponsiveLayoutPanel.ANIMATION_TIME);
+        }
+    }
+
+    private void setSideCommVisible(boolean visible) {
+        if (this.sideCommVisible != visible) {
+            this.sideCommVisible = visible;
+            forceLayout(ResponsiveLayoutPanel.ANIMATION_TIME);
+        }
+    }
+
+    private void togglePopupCommVisible(Widget anchor) {
+        if (!popupCommHolder.isShowing()) {
+            popupCommHolder.showRelativeTo(anchor);
+        } else {
+            popupCommHolder.hide();
+        }
     }
 
     public void setHeaderHeight(int height) {
@@ -99,6 +213,10 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     public void setNotificationsHeight(int height) {
         pageHolder.setWidgetSize(getDisplay(DisplayType.notification), height);
+    }
+
+    public void setMenuVisible(boolean visible) {
+        //TODO
     }
 
     @Override
@@ -113,6 +231,28 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     @Override
     public void onLayoutChangeRequest(LayoutChangeRequestEvent event) {
+        switch (event.getChangeType()) {
+        case toggleSideMenu:
+            if (isSideMenuEnabled()) {
+                setSideMenuVisible(!sideMenuVisible);
+            }
+            break;
+        case toggleSideComm:
+            if (isSideCommEnabled()) {
+                setSideCommVisible(!sideCommVisible);
+            }
+            break;
+        case togglePopupComm:
+            if (isPopupCommEnabled()) {
+                togglePopupCommVisible(event.getPopupCommAnchor());
+            }
+            break;
+        case resizeComponents:
+            resizeComponents();
+            break;
+        default:
+            break;
+        }
     }
 
 }

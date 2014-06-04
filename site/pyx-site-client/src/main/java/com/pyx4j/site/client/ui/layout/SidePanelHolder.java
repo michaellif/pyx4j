@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout.frontoffice;
+package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.IsWidget;
