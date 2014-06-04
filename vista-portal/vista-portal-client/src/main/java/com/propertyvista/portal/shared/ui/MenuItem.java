@@ -119,10 +119,6 @@ public class MenuItem implements IsWidget {
                 @Override
                 public void onClick(ClickEvent event) {
                     AppSite.getPlaceController().goTo(appPlace);
-                    LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
-                    if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
-                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
-                    }
                 }
             }, ClickEvent.getType());
         }
