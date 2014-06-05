@@ -870,6 +870,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 break;
             }
 
+            Building building = MappingUtils.getBuilding(yc.getPrimaryKey(), propertyCode);
+            if (building != null && building.suspended().isBooleanTrue()) {
+                executionMonitor.addInfoEvent("ILSPropertyMarketing", "skipped suspended building: " + propertyCode);
+                continue;
+            }
+
             try {
                 PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, propertyCode);
                 if (propertyMarketing != null) {
