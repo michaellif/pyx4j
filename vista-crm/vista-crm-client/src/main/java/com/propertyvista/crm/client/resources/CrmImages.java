@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
@@ -226,12 +225,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_hover.png")
+        @Source("Dashboards_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_active.png")
+        @Source("Dashboards_hover.png")
         ImageResource active();
     }
 
@@ -245,12 +244,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Properties_hover.png")
+        @Source("Properties_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Properties_active.png")
+        @Source("Properties_hover.png")
         ImageResource active();
     }
 
@@ -264,12 +263,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Tenants_hover.png")
+        @Source("Tenants_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Tenants_active.png")
+        @Source("Tenants_hover.png")
         ImageResource active();
 
     }
@@ -284,12 +283,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Marketing_hover.png")
+        @Source("Marketing_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Marketing_active.png")
+        @Source("Marketing_hover.png")
         ImageResource active();
     }
 
@@ -303,12 +302,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Legal_hover.png")
+        @Source("Legal_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Legal_active.png")
+        @Source("Legal_hover.png")
         ImageResource active();
     }
 
@@ -322,12 +321,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Finance_hover.png")
+        @Source("Finance_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Finance_active.png")
+        @Source("Finance_hover.png")
         ImageResource active();
     }
 
@@ -341,12 +340,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Company_hover.png")
+        @Source("Company_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Company_active.png")
+        @Source("Company_hover.png")
         ImageResource active();
     }
 
@@ -360,12 +359,12 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Reports_hover.png")
+        @Source("Reports_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Reports_active.png")
+        @Source("Reports_hover.png")
         ImageResource active();
     }
 
