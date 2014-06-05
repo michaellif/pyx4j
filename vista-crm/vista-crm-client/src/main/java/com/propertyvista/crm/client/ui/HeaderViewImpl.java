@@ -33,6 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientNavigUtils;
@@ -50,15 +51,13 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private Presenter presenter;
 
-    private MenuBar customer;
-
-    private MenuItem customerName;
+    private Button userButton;
 
     private Anchor home;
 
     private Anchor messages;
 
-    private Anchor settings;
+    private Button adminButton;
 
     private HTML thisIsProduction;
 
@@ -174,26 +173,24 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         thisIsDemo.getElement().getStyle().setProperty("textAlign", "center");
         thisIsDemo.setVisible(false);
 
-        customer = new MenuBar();
-        customer.setAutoOpen(false);
-        customer.setAnimationEnabled(false);
-        customer.setFocusOnHoverEnabled(true);
+        userButton = new Button("");
 
-        MenuBar customerMenu = new MenuBar(true);
-        customer.addItem(customerName = new MenuItem("", customerMenu));
-        customerMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
+        ButtonMenuBar userButtonMenu = new ButtonMenuBar();
+        userButton.setMenu(userButtonMenu);
+
+        userButtonMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
             @Override
             public void execute() {
                 presenter.showAccount();
             }
         }));
-        customerMenu.addItem(new MenuItem(i18n.tr("Settings"), new Command() {
+        userButtonMenu.addItem(new MenuItem(i18n.tr("Settings"), new Command() {
             @Override
             public void execute() {
                 presenter.showProperties();
             }
         }));
-        customerMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
+        userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
             @Override
             public void execute() {
                 presenter.logout();
@@ -220,9 +217,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
         });
 
-        settings = new Anchor(i18n.tr("Administration"), true);
-        settings.ensureDebugId("administration");
-        settings.addClickHandler(new ClickHandler() {
+        adminButton = new Button(i18n.tr("Administration"));
+        adminButton.ensureDebugId("administration");
+        adminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.showSettings();
@@ -249,12 +246,12 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         toolbar.addItem(thisIsProduction);
         toolbar.addItem(thisIsDemo);
 
-        toolbar.addItem(customer);
+        toolbar.addItem(userButton);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             toolbar.addItem(messages);
         }
         toolbar.addItem(home);
-        toolbar.addItem(settings);
+        toolbar.addItem(adminButton);
         toolbar.addItem(language);
         toolbar.addItem(support);
 
@@ -270,14 +267,14 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     public void onLogedOut() {
         this.loggedIn = false;
         home.setVisible(false);
-        settings.setVisible(false);
+        adminButton.setVisible(false);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             messages.setVisible(false);
         }
         support.setVisible(false);
 
-        customer.setVisible(false);
-        customerName.setText("");
+        userButton.setVisible(false);
+        userButton.setTextLabel("");
 
         thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
@@ -295,11 +292,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             messages.setVisible(true);
         }
-        settings.setVisible(true);
+        adminButton.setVisible(true);
         support.setVisible(true);
 
-        customer.setVisible(true);
-        customerName.setText(userName);
+        userButton.setVisible(true);
+        userButton.setTextLabel(userName);
 
         thisIsDemo.getElement().getStyle().setPosition(Position.RELATIVE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "1em");

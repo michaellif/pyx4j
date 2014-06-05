@@ -63,6 +63,12 @@ public class SiteViewTheme extends Theme {
         style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("height", "30px");
         style.addProperty("padding", "3px");
+        style.addProperty("background", "none");
+        style.addProperty("border", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Button, ":hover");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
 
         // NavigationContainer (Accordion menu):
