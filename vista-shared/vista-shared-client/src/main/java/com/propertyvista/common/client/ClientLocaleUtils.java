@@ -29,7 +29,7 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class ClientNavigUtils {
+public class ClientLocaleUtils {
 
     /**
      * Used for inter-modules redirections.
@@ -106,7 +106,7 @@ public class ClientNavigUtils {
 
         if ((defaultLocale != currentLocale) && (currentLocale.getLanguage().equals(CompiledLocale.en.name()))) {
             if (isLocaleAvailable(defaultLocale)) {
-                ClientNavigUtils.changeApplicationLocale(defaultLocale);
+                ClientLocaleUtils.changeApplicationLocale(defaultLocale);
             } else if (ApplicationMode.isDevelopment() && (defaultLocale != CompiledLocale.en_CA)) {
                 MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
             }

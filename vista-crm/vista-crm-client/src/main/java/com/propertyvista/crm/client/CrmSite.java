@@ -46,7 +46,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -141,7 +141,7 @@ public class CrmSite extends VistaSite {
     }
 
     private void initSiteTheme() {
-        Cookies.setCookie("locale", ClientNavigUtils.getCurrentLocale().name());
+        Cookies.setCookie("locale", ClientLocaleUtils.getCurrentLocale().name());
         SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
             @Override
@@ -153,7 +153,7 @@ public class CrmSite extends VistaSite {
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
-                ClientNavigUtils.setCountryOfOperationLocale();
+                ClientLocaleUtils.setCountryOfOperationLocale();
                 obtainAuthenticationData();
             }
 
@@ -163,7 +163,7 @@ public class CrmSite extends VistaSite {
                 StyleManager.installTheme(new CrmTheme(), VistaPalette.getServerUnavailablePalette());
                 super.onFailure(caught);
             }
-        }, ClientNavigUtils.getCurrentLocale());
+        }, ClientLocaleUtils.getCurrentLocale());
 
     }
 

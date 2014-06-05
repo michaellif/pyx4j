@@ -34,11 +34,12 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.HeaderView;
+import com.propertyvista.crm.client.ui.HeaderView.HeaderPresenter;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
@@ -49,13 +50,16 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class HeaderActivity extends AbstractActivity implements HeaderView.Presenter {
+public class HeaderActivity extends AbstractActivity implements HeaderPresenter {
 
     private final HeaderView view;
+
+    private final Place place;
 
     private CommunicationMessageCrudService communicationService;
 
     public HeaderActivity(Place place) {
+        this.place = place;
         view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
@@ -133,12 +137,12 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     }
 
     private void obtainAvailableLocales() {
-        view.setAvailableLocales(ClientNavigUtils.obtainAvailableLocales());
+        view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
     }
 
     @Override
     public void setLocale(CompiledLocale locale) {
-        ClientNavigUtils.changeApplicationLocale(locale);
+        ClientLocaleUtils.changeApplicationLocale(locale);
     }
 
     @Override
@@ -204,4 +208,9 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     public void getSatisfaction() {
         GetSatisfaction.open();
     };
+
+    @Override
+    public boolean isAdminPlace() {
+        return place.getClass().getName().contains(CrmSiteMap.Administration.class.getName());
+    }
 }

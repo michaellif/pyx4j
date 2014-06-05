@@ -10,9 +10,9 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface HeaderView extends IsWidget, IsView {
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(HeaderPresenter presenter);
 
-    interface Presenter {
+    public interface HeaderPresenter {
 
         void navigToLanding();
 
@@ -39,6 +39,8 @@ public interface HeaderView extends IsWidget, IsView {
         void setLocale(CompiledLocale locale);
 
         void getSatisfaction();
+
+        boolean isAdminPlace();
     }
 
     void onLogedOut();

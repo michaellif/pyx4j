@@ -32,7 +32,7 @@ public class SiteImageResourceFileURLBuilder implements IFileURLBuilder {
     }
 
     private String getUrl(String id, String fileName) {
-        return ClientNavigUtils.getDeploymentBaseURL() + id + "/" + fileName + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientLocaleUtils.getDeploymentBaseURL() + id + "/" + fileName + DeploymentConsts.siteImageResourceServletMapping;
     }
 
 }

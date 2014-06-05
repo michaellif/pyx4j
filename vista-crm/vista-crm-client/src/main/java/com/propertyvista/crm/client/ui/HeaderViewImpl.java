@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -31,12 +30,11 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -49,13 +47,13 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private static final I18n i18n = I18n.get(HeaderViewImpl.class);
 
-    private Presenter presenter;
+    private HeaderPresenter presenter;
 
     private Button userButton;
 
-    private Anchor home;
+    private Button exitAdminButton;
 
-    private Anchor messages;
+    private Button communicationButton;
 
     private Button adminButton;
 
@@ -63,11 +61,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private HTML thisIsDemo;
 
-    private MenuBar language;
+    private MenuItem support;
 
-    private MenuBar languages;
+    private Button languageButton;
 
-    private Anchor support;
+    private ButtonMenuBar languageButtonMenu;
 
     private Button sideMenuButton;
 
@@ -108,15 +106,15 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     }
 
     private IsWidget createLeftToolbar() {
-        Toolbar leftToolbar = new Toolbar();
+        Toolbar toolbar = new Toolbar();
         sideMenuButton = new Button(CrmImages.INSTANCE.menu(), new Command() {
             @Override
             public void execute() {
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
             }
         });
-        leftToolbar.addItem(sideMenuButton);
-        return leftToolbar;
+        toolbar.addItem(sideMenuButton);
+        return toolbar;
     }
 
     private Widget createLogoContainer() {
@@ -153,8 +151,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         return logoContainer;
     }
 
-    private Widget createRightToolbar() {
+    private IsWidget createRightToolbar() {
         Toolbar toolbar = new Toolbar();
+        toolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        toolbar.getElement().getStyle().setProperty("right", "0");
+
         toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
         thisIsProduction = new HTML("PRODUCTION SUPPORT!");
@@ -196,21 +197,33 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                 presenter.logout();
             }
         }));
+        userButtonMenu.addItem(support = new MenuItem(i18n.tr("Support"), new Command() {
+            @Override
+            public void execute() {
+                presenter.getSatisfaction();
+            }
+        }));
 
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            messages = new Anchor(i18n.tr("Messages"), true);
-            messages.ensureDebugId("messages");
-            messages.addClickHandler(new ClickHandler() {
+            communicationButton = new Button(CrmImages.INSTANCE.alert(), new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
-                    presenter.showMessages(messages.getAbsoluteLeft(), messages.getAbsoluteTop());
+                public void execute() {
+                    switch (layoutType) {
+                    case phonePortrait:
+                    case phoneLandscape:
+                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
+                        break;
+                    default:
+                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
+                        break;
+                    }
                 }
             });
         }
 
-        home = new Anchor(i18n.tr("Home"), true);
-        home.ensureDebugId("home");
-        home.addClickHandler(new ClickHandler() {
+        exitAdminButton = new Button(i18n.tr("Exit Administration"));
+        exitAdminButton.ensureDebugId("home");
+        exitAdminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.showHome();
@@ -226,20 +239,10 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
         });
 
-        language = new MenuBar();
-        language.setAutoOpen(false);
-        language.setAnimationEnabled(false);
-        language.setFocusOnHoverEnabled(true);
-        language.addItem(new MenuItem(ClientNavigUtils.getCurrentLocale().toString(), languages = new MenuBar(true)));
+        languageButton = new Button("");
 
-        support = new Anchor(i18n.tr("Support"), true);
-        support.ensureDebugId("support");
-        support.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.getSatisfaction();
-            }
-        });
+        languageButtonMenu = new ButtonMenuBar();
+        languageButton.setMenu(languageButtonMenu);
 
         // from toolbar:
 
@@ -247,29 +250,28 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         toolbar.addItem(thisIsDemo);
 
         toolbar.addItem(userButton);
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            toolbar.addItem(messages);
-        }
-        toolbar.addItem(home);
+        toolbar.addItem(exitAdminButton);
         toolbar.addItem(adminButton);
-        toolbar.addItem(language);
-        toolbar.addItem(support);
-
-        return toolbar.asWidget();
+        toolbar.addItem(languageButton);
+        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+            toolbar.addItem(communicationButton);
+        }
+        return toolbar;
     }
 
     @Override
-    public void setPresenter(final Presenter presenter) {
+    public void setPresenter(final HeaderPresenter presenter) {
         this.presenter = presenter;
+        calculateActionsState();
     }
 
     @Override
     public void onLogedOut() {
         this.loggedIn = false;
-        home.setVisible(false);
+        exitAdminButton.setVisible(false);
         adminButton.setVisible(false);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            messages.setVisible(false);
+            communicationButton.setVisible(false);
         }
         support.setVisible(false);
 
@@ -288,9 +290,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     @Override
     public void onLogedIn(String userName) {
         this.loggedIn = true;
-        home.setVisible(true);
+        exitAdminButton.setVisible(true);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            messages.setVisible(true);
+            communicationButton.setVisible(true);
         }
         adminButton.setVisible(true);
         support.setVisible(true);
@@ -309,15 +311,16 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     @Override
     public void setAvailableLocales(List<CompiledLocale> localeList) {
-        languages.clearItems();
+        languageButtonMenu.clearItems();
         for (final CompiledLocale compiledLocale : localeList) {
-            languages.addItem(new MenuItem(compiledLocale.getNativeDisplayName(), new Command() {
+            languageButtonMenu.addItem(new MenuItem(compiledLocale.getNativeDisplayName(), new Command() {
                 @Override
                 public void execute() {
                     presenter.setLocale(compiledLocale);
                 }
             }));
         }
+        languageButton.setTextLabel(ClientLocaleUtils.getCurrentLocale().getNativeDisplayName());
     }
 
     @Override
@@ -335,9 +338,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         //messages.setVisible((ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController
         //        .checkBehavior(VistaBasicBehavior.CRM)));
         if (number > 0) {
-            messages.setText("Messages (" + String.valueOf(number) + ")");
+            //TODO   messages.setText("Messages (" + String.valueOf(number) + ")");
         } else {
-            messages.setText("Messages");
+            //TODO  messages.setText("Messages");
         }
     }
 
@@ -356,6 +359,16 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         default:
             sideMenuButton.setVisible(false);
             break;
+        }
+
+        if (presenter != null) {
+            if (presenter.isAdminPlace()) {
+                exitAdminButton.setVisible(true);
+                adminButton.setVisible(false);
+            } else {
+                exitAdminButton.setVisible(false);
+                adminButton.setVisible(true);
+            }
         }
     }
 

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.Key;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.SiteImageResourceFileURLBuilder;
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -34,10 +34,10 @@ public class MediaUtils {
 
     public static Image createPublicMediaImage(Key mediaId, ThumbnailSize size) {
         if (mediaId == null) {
-            return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + "."
+            return new Image(ClientLocaleUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + "."
                     + ImageConsts.THUMBNAIL_TYPE);
         } else {
-            return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name()
+            return new Image(ClientLocaleUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name()
                     + "." + ImageConsts.THUMBNAIL_TYPE);
         }
     }
@@ -51,15 +51,15 @@ public class MediaUtils {
     }
 
     public static String createSiteSmallLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogoSmall + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientLocaleUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogoSmall + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createSiteLargeLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientLocaleUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createCrmLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.crmLogo + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientLocaleUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.crmLogo + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createMediaImageUrl(MediaFile mediaFile) {

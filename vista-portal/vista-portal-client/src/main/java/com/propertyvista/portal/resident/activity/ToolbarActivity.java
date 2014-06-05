@@ -24,7 +24,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.ToolbarView;
@@ -82,12 +82,12 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
     }
 
     private void obtainAvailableLocales() {
-        view.setAvailableLocales(ClientNavigUtils.obtainAvailableLocales());
+        view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
     }
 
     @Override
     public void setLocale(CompiledLocale locale) {
-        ClientNavigUtils.changeApplicationLocale(locale);
+        ClientLocaleUtils.changeApplicationLocale(locale);
     }
 
     @Override

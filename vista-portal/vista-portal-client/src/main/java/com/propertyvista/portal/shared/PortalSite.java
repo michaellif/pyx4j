@@ -35,7 +35,7 @@ import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutPanel;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -165,7 +165,7 @@ public abstract class PortalSite extends VistaSite {
                 hideLoadingIndicator();
                 super.onFailure(caught);
             }
-        }, ClientNavigUtils.getCurrentLocale());
+        }, ClientLocaleUtils.getCurrentLocale());
 
     }
 

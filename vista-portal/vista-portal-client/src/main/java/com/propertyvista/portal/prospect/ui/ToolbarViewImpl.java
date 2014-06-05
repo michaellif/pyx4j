@@ -39,7 +39,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
-import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -119,7 +119,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         });
         loginButton.ensureDebugId("login");
 
-        languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
+        languageButton = new Button(ClientLocaleUtils.getCurrentLocale().toString());
 
         rightToolbar.addItem(loginButton);
         rightToolbar.addItem(residentButton);
