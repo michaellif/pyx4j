@@ -33,12 +33,15 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.ProgressBar;
 
 public class DeferredProgressPanel extends VerticalPanel {
 
-    private static final Logger log = LoggerFactory.getLogger(DeferredProcessDialog.class);
+    private static final Logger log = LoggerFactory.getLogger(DeferredProgressPanel.class);
+
+    private final static I18n i18n = I18n.get(DeferredProgressPanel.class);
 
     private final DeferredProcessService service;
 
@@ -65,17 +68,33 @@ public class DeferredProgressPanel extends VerticalPanel {
 
     private Label messageBar;
 
+    private String successMessage;
+
+    private String failureMessage;
+
     public DeferredProgressPanel(boolean executeByUserRequests, DeferredProgressListener listener) {
-        this("Connecting...", executeByUserRequests, listener);
+        this(i18n.tr("Connecting") + "...", executeByUserRequests, listener);
     }
 
     public DeferredProgressPanel(String initialMessage, boolean executeByUserRequests, DeferredProgressListener listener) {
         this.service = GWT.create(DeferredProcessService.class);
         this.executeByUserRequests = executeByUserRequests;
         this.listener = listener;
+        this.successMessage = i18n.tr("Complete");
+        this.failureMessage = i18n.tr("Failed");
 
         add(messageBar = new Label(initialMessage));
         add(progressBar = new ProgressBar());
+
+        messageBar.getElement().getStyle().setProperty("fontWeight", "bold");
+    }
+
+    public void setSuccessMessage(String message) {
+        this.successMessage = message;
+    }
+
+    public void setFailureMessage(String message) {
+        this.failureMessage = message;
     }
 
     public void startProgress(final String deferredCorrelationId) {
@@ -153,12 +172,13 @@ public class DeferredProgressPanel extends VerticalPanel {
                         listener.onDeferredError(result);
                         completed = true;
                     }
-                    messageBar.setHTML("Failed");
+                    messageBar.setHTML(failureMessage);
+                    progressBar.setVisible(false);
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else if (result.isCompleted()) {
                     progressBar.setProgress(progressBar.getMaxProgress());
-                    messageBar.setHTML("Complete");
+                    messageBar.setHTML(successMessage);
                     log.info("Deferred completed in " + TimeUtils.secSince(deferredProcessStartTime));
                     if (!completed) {
                         listener.onDeferredSuccess(result);

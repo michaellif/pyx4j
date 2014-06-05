@@ -59,6 +59,14 @@ public class DeferredProcessDialog extends MessageDialog implements CloseOption,
         getCloseButton().setVisible(false);
     }
 
+    public void setSuccessMessage(String message) {
+        deferredProgressPanel.setSuccessMessage(message);
+    }
+
+    public void setFailureMessage(String message) {
+        deferredProgressPanel.setFailureMessage(message);
+    }
+
     public void hide() {
         hide(false);
     }
