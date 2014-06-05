@@ -421,6 +421,10 @@ BEGIN
                 ||'FROM     _dba_.split_simple_address('||quote_literal(v_schema_name)||','
                 ||'         ''emergency_contact'',''address_street1'',''address_street2'') AS t '
                 ||'WHERE    e.id = t.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact '
+                ||'SET  address_street_number = ''INVALID'' '
+                ||'WHERE address_street_number IS NULL ';
         
         -- Phone numbers update
         
@@ -516,6 +520,13 @@ BEGIN
                                             DROP COLUMN previous_address_street_direction,
                                             DROP COLUMN previous_address_street_number_suffix,
                                             DROP COLUMN previous_address_street_type;
+       
+       -- emergency_contact
+       
+       ALTER TABLE emergency_contact    DROP COLUMN address_country_old,
+                                        DROP COLUMN address_province_old,
+                                        DROP COLUMN address_street1,
+                                        DROP COLUMN address_street2;
         
         -- province_policy_node
         
