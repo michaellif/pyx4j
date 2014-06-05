@@ -24,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
@@ -34,10 +33,16 @@ public class GuarantorsFolder extends PortalBoxFolder<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorsFolder.class);
 
-    public GuarantorsFolder(ApplicationWizardViewImpl view) {
-        super(GuarantorDTO.class, i18n.tr("Guarantor"));
-        setNoDataNotificationWidget(new Label(
-                i18n.tr("Guarantors are individuals who are financially responsible for your lease commitment but will not be living in your apartment")));
+    public GuarantorsFolder() {
+        this(true);
+    }
+
+    public GuarantorsFolder(boolean editable) {
+        super(GuarantorDTO.class, i18n.tr("Guarantor"), editable);
+        if (editable) {
+            setNoDataNotificationWidget(new Label(
+                    i18n.tr("Guarantors are individuals who are financially responsible for your lease commitment but will not be living in your apartment")));
+        }
     }
 
     @Override

@@ -31,7 +31,6 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizardViewImpl;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
@@ -58,7 +57,7 @@ public class FinancialStep extends ApplicationWizardStep {
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             guarantorsHeader = formPanel.h3(i18n.tr("Guarantors"));
-            formPanel.append(Location.Left, proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView()));
+            formPanel.append(Location.Left, proto().guarantors(), new GuarantorsFolder());
         }
 
         return formPanel;

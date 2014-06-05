@@ -19,6 +19,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalAssetFolder;
 import com.propertyvista.portal.prospect.ui.application.editors.PersonalIncomeFolder;
 import com.propertyvista.portal.prospect.ui.application.steps.FinancialStep;
+import com.propertyvista.portal.prospect.ui.application.steps.GuarantorsFolder;
 
 public class FinancialSectionPanel extends AbstractSectionPanel {
 
@@ -32,5 +33,8 @@ public class FinancialSectionPanel extends AbstractSectionPanel {
 
         addCaption(i18n.tr("Assets"));
         addComponent(proto().applicant().assets(), new PersonalAssetFolder(false));
+
+        addCaption(i18n.tr("Guarantors"));
+        addComponent(proto().guarantors(), new GuarantorsFolder(false));
     }
 }
