@@ -261,13 +261,14 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
                 // This is the same as in updateFromYardi
                 // --copy of the code -- start
-                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Processing Import"), i18n.tr("Processing Import..."), false) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Import Building Data"), i18n.tr("Processing Import..."), false) {
                     @Override
                     public void onDeferredSuccess(final DeferredProcessProgressResponse result) {
                         super.onDeferredSuccess(result);
                         populate();
                     }
                 };
+                d.setFailureMessage(i18n.tr("Import Failed. THE NEW BUILDING DATA HAS NOT BEEN LOADED. Please correct the issues below and try again."));
                 d.show();
                 d.startProgress(deferredCorrelationId);
                 // --copy of the code -- ends
