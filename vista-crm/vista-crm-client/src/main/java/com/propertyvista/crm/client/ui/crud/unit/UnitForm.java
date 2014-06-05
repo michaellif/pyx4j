@@ -118,7 +118,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         formPanel
                 .append(Location.Left, proto().building(),
                         isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)))
-                .decorate().componentWidth(250);
+                .decorate().componentWidth(200);
         formPanel.append(Location.Right, proto().info().floor()).decorate().componentWidth(60);
 
         formPanel.append(Location.Left, proto().floorplan(), new FloorplanSelectorHyperlink()).decorate().componentWidth(150);

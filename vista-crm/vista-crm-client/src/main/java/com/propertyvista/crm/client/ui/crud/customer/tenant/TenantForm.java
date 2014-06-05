@@ -221,7 +221,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                 }).decorate();
 
                 formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(180);
-                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
                 formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(180);
 
                 formPanel.br();

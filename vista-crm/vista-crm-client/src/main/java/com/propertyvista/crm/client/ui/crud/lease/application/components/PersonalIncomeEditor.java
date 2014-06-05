@@ -139,10 +139,10 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(80);
 
-                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(200);
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
@@ -189,9 +189,9 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
 
-                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(200);
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
@@ -219,14 +219,14 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Dual, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Dual, proto().name()).decorate().componentWidth(200);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
                 formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
 
                 formPanel.h3(i18n.tr("Program Info"));
                 formPanel.append(Location.Left, proto().program()).decorate().componentWidth(120);
-                formPanel.append(Location.Left, proto().fieldOfStudy()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().fieldOfStudy()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().fundingChoices()).decorate().componentWidth(120);
                 formPanel.append(Location.Left, proto().monthlyAmount()).decorate().componentWidth(120);
 
@@ -250,10 +250,10 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().employedForYears()).decorate().componentWidth(80);
 
-                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(200);
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
@@ -285,9 +285,9 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+                formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
 
-                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(240);
+                formPanel.append(Location.Right, proto().supervisorName()).decorate().componentWidth(200);
                 formPanel.append(Location.Right, proto().supervisorPhone()).decorate().componentWidth(180);
 
                 formPanel.h3(proto().address().getMeta().getCaption());
@@ -350,6 +350,6 @@ public class PersonalIncomeEditor extends CForm<CustomerScreeningIncome> {
     private static void injectIEmploymentInfo(FormPanel formPanel, CForm<? extends IEmploymentInfo> parent) {
         formPanel.h3(i18n.tr("Employment Info"));
         formPanel.append(Location.Left, parent.proto().monthlyAmount()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, parent.proto().position()).decorate().componentWidth(240);
+        formPanel.append(Location.Right, parent.proto().position()).decorate().componentWidth(200);
     }
 }

@@ -39,8 +39,8 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -193,7 +193,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     formPanel.append(Location.Left, proto().created()).decorate().componentWidth(120);
                     formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
 
-                    formPanel.append(Location.Left, proto().user(), new CEntityLabel<CrmUser>()).decorate().componentWidth(250);
+                    formPanel.append(Location.Left, proto().user(), new CEntityLabel<CrmUser>()).decorate().componentWidth(200);
 
                     formPanel.h3(i18n.tr("Attachments"));
                     formPanel.append(Location.Dual, proto().attachments(), attachmentsFolder = new AttachmentsEditorFolder());

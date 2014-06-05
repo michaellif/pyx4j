@@ -43,8 +43,8 @@ public class EcheckInfoEditor extends CForm<EcheckInfo> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().accountNo(), accountEditor).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().accountNo(), accountEditor).decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().branchTransitNumber()).decorate().componentWidth(80);
         formPanel.append(Location.Left, proto().bankId()).decorate().componentWidth(50);

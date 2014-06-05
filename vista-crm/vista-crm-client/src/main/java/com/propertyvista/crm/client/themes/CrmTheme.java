@@ -113,12 +113,12 @@ public class CrmTheme extends VistaTheme {
 
             @Override
             protected int getSingleColumnWidth() {
-                return 250;
+                return 220;
             }
 
             @Override
             protected int getDualColumnWidth() {
-                return 650;
+                return 590;
             }
         });
         addTheme(new DefaultFolderTheme() {

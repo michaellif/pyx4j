@@ -22,8 +22,8 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -80,8 +80,8 @@ public class NameEditor extends CForm<Name> {
         FormPanel formPanel = new FormPanel(this);
 
         if (!isViewable()) {
-            formPanel.append(Location.Left, proto().firstName()).decorate().componentWidth(220);
-            formPanel.append(Location.Left, proto().lastName()).decorate().componentWidth(220);
+            formPanel.append(Location.Left, proto().firstName()).decorate().componentWidth(200);
+            formPanel.append(Location.Left, proto().lastName()).decorate().componentWidth(200);
             formPanel.append(Location.Left, proto().middleName()).decorate().componentWidth(80);
 
             formPanel.append(Location.Right, proto().namePrefix()).decorate().componentWidth(80);

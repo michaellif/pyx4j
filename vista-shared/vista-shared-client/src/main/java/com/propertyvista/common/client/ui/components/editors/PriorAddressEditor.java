@@ -41,10 +41,10 @@ public class PriorAddressEditor extends InternationalAddressEditorBase<PriorAddr
         main.append(Location.Left, proto().moveOutDate()).decorate().componentWidth(120);
         main.append(Location.Left, proto().rented()).decorate().componentWidth(180);
         main.append(Location.Left, proto().payment()).decorate().componentWidth(120);
-        main.append(Location.Right, proto().propertyCompany()).decorate().componentWidth(250);
-        main.append(Location.Right, proto().managerName()).decorate().componentWidth(250);
-        main.append(Location.Right, proto().managerPhone()).decorate().componentWidth(250);
-        main.append(Location.Right, proto().managerEmail()).decorate().componentWidth(250);
+        main.append(Location.Right, proto().propertyCompany()).decorate().componentWidth(200);
+        main.append(Location.Right, proto().managerName()).decorate().componentWidth(200);
+        main.append(Location.Right, proto().managerPhone()).decorate().componentWidth(200);
+        main.append(Location.Right, proto().managerEmail()).decorate().componentWidth(200);
 
         CField<OwnedRented, ?> rentedComponent = (CField<OwnedRented, ?>) get(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {

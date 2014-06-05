@@ -85,9 +85,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CForm<
         formPanel.append(Location.Right, proto().creationDate()).decorate().componentWidth(120);
 
         formPanel.append(Location.Left, proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL)).decorate()
-                .componentWidth(250);
+                .componentWidth(200);
         if (proto() instanceof PaymentMethod) {
-            formPanel.append(Location.Right, ((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+            formPanel.append(Location.Right, ((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
         }
 
         paymentDetailsHeader = formPanel.h3(proto().details().getMeta().getCaption());

@@ -147,7 +147,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         formPanel.append(Location.Dual, proto().identity().name(), new NameEditor(i18n.tr("Name")));
 
-        formPanel.append(Location.Left, proto().identity().SIN()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().identity().SIN()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().identity().maritalStatus()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().identity().birthDate()).decorate().componentWidth(120);

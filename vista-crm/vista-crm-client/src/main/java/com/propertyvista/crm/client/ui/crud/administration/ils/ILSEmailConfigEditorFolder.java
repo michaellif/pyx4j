@@ -17,8 +17,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.settings.ILSEmailConfig;
@@ -45,7 +45,7 @@ public class ILSEmailConfigEditorFolder extends VistaBoxFolder<ILSEmailConfig> {
             FormPanel formPanel = new FormPanel(this);
 
             formPanel.append(Location.Left, proto().frequency()).decorate().componentWidth(120);
-            formPanel.append(Location.Left, proto().email()).decorate().componentWidth(220);
+            formPanel.append(Location.Left, proto().email()).decorate().componentWidth(200);
             formPanel.append(Location.Left, proto().maxDailyAds()).decorate().componentWidth(120);
 
             return formPanel;

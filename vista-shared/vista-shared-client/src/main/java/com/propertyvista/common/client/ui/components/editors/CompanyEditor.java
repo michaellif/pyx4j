@@ -38,7 +38,7 @@ public class CompanyEditor extends CForm<Company> {
 //      main.add(parent.inject(proto.addresses()), 15);
 
         formPanel.append(Location.Dual, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        formPanel.append(Location.Left, proto().website()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().website()).decorate().componentWidth(200);
 
         formPanel.append(Location.Dual, inject(proto().emails(), new EmailFolder(isEditable())));
 

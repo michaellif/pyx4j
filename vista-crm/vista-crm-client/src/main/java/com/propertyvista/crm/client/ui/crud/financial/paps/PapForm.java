@@ -52,13 +52,13 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
 
         formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Left, proto().tenant(), new CEntityLabel<Tenant>()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().tenant(), new CEntityLabel<Tenant>()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()).decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().effectiveFrom(), new CDateLabel()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().expiredFrom(), new CDateLabel()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Left, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
 
         formPanel.append(Location.Right, proto().updatedByTenant()).decorate().componentWidth(120);

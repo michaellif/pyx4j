@@ -25,8 +25,8 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
@@ -116,7 +116,7 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
 
                 formPanel.append(Location.Left, proto().id(), new CNumberLabel()).decorate().componentWidth(120);
                 formPanel.append(Location.Left, proto().creationDate()).decorate().componentWidth(180);
-                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(250);
+                formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(200);
                 formPanel.append(Location.Left, proto().updated()).decorate().componentWidth(180);
                 formPanel.append(Location.Left, proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override

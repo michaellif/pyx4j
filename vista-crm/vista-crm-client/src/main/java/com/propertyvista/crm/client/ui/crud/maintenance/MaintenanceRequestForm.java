@@ -213,8 +213,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         panel.h1(i18n.tr("Issue Details"));
         panel.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().summary())).decorate().componentWidth(240);
-        panel.append(Location.Left, inject(proto().description())).decorate().componentWidth(240);
+        panel.append(Location.Left, inject(proto().summary())).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().description())).decorate().componentWidth(200);
 
         // --------------------------------------------------------------------------------------------------------------------
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
@@ -235,7 +235,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         };
         imageSlider.setImageSize(240, 180);
         imageSlider.setOrganizerWidth(550);
-        panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(240);
+        panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(200);
 
         // --------------------------------------------------------------------------------------------------------------------
         unitAccessPanel = new FormPanel(this);
@@ -643,7 +643,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                                         main.append(Location.Left, inject(proto().workDescription(), new CLabel<String>())).decorate().componentWidth(400);
                                         main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
-                                        main.append(Location.Left, inject(proto().progressNote())).decorate().componentWidth(250);
+                                        main.append(Location.Left, inject(proto().progressNote())).decorate().componentWidth(200);
 
                                         return main;
                                     }
@@ -690,7 +690,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 content.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
                 content.append(Location.Dual, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
                 content.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(100);
-                content.append(Location.Dual, inject(proto().progressNote())).decorate().componentWidth(250);
+                content.append(Location.Dual, inject(proto().progressNote())).decorate().componentWidth(200);
 
                 content.append(Location.Dual, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
 

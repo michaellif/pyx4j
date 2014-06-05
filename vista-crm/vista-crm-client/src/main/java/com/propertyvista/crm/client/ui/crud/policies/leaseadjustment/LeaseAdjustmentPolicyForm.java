@@ -94,7 +94,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
             protected IsWidget createContent() {
                 FormPanel formPanel = new FormPanel(this);
 
-                formPanel.append(Location.Left, proto().code()).decorate().componentWidth(250);
+                formPanel.append(Location.Left, proto().code()).decorate().componentWidth(200);
                 get(proto().code()).setEditable(false);
 
                 formPanel.h3(proto().taxes().getMeta().getCaption());

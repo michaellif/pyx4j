@@ -34,7 +34,7 @@ public class LoginNotificationsConfigurationForm extends CForm<LoginNotification
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().isEmailNotificationEnabled()).decorate().componentWidth(80);
-        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(250);
+        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200);
 
         get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

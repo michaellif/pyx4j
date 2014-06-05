@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.dashboard;
 
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -33,7 +33,7 @@ public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
 
         formPanel.h1(i18n.tr("General"));
         formPanel.append(Location.Left, proto().type()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(240);
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
         formPanel.append(Location.Right, proto().isShared()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().ownerUser().name(), new CLabel<String>()).decorate().componentWidth(180).customLabel(i18n.tr("Owner"));
         formPanel.append(Location.Dual, proto().description()).decorate();

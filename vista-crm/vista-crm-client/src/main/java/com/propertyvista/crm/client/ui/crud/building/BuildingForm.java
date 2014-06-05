@@ -191,7 +191,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Left, proto().info().type()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().info().residentialStoreys()).decorate().componentWidth(50);
 
-        formPanel.append(Location.Left, proto().propertyManager()).decorate().componentWidth(160);
+        formPanel.append(Location.Left, proto().propertyManager()).decorate();
         formPanel.append(Location.Right, proto().externalId()).decorate().componentWidth(150);
 
         if (isEditable()) {
@@ -478,7 +478,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 180);
 
-                formPanel.append(Location.Left, proto().frontImage().file(), frontImage).decorate().customLabel("").componentWidth(250);
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage).decorate().customLabel("").componentWidth(200);
                 formPanel.append(Location.Right, proto().title()).decorate();
                 formPanel.append(Location.Right, proto().description()).decorate();
 

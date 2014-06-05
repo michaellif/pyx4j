@@ -35,8 +35,8 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -77,11 +77,11 @@ public class CreditCardInfoEditor extends CForm<CreditCardInfo> {
         FormPanel formPanel = new FormPanel(this);
 
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().nameOn()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().cardType(), typeSelector).decorate().componentWidth(200);
 
-        formPanel.append(Location.Left, proto().card(), cardEditor).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().expiryDate()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().card(), cardEditor).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().expiryDate()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().securityCode()).decorate().componentWidth(80);
 
         // tweak:

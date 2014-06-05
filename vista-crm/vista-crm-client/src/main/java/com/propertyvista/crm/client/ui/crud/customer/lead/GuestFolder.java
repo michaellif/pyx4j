@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -83,7 +83,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
             formPanel.append(Location.Left, proto().person().homePhone()).decorate().componentWidth(180);
             formPanel.append(Location.Left, proto().person().mobilePhone()).decorate().componentWidth(180);
             formPanel.append(Location.Left, proto().person().workPhone()).decorate().componentWidth(180);
-            formPanel.append(Location.Right, proto().person().email()).decorate().componentWidth(250);
+            formPanel.append(Location.Right, proto().person().email()).decorate().componentWidth(200);
 
             return formPanel;
         }

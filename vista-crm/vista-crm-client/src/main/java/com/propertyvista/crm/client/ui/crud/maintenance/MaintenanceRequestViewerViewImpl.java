@@ -26,8 +26,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -168,7 +168,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     main.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
                     main.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
                     main.append(Location.Dual, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
-                    main.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(250);
+                    main.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(200);
 
                     get(proto().scheduledDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
 
@@ -220,7 +220,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     FormPanel main = new FormPanel(this);
 
                     main.append(Location.Dual, inject(proto().resolvedDate())).decorate().componentWidth(100);
-                    main.append(Location.Dual, inject(proto().resolution())).decorate().componentWidth(250);
+                    main.append(Location.Dual, inject(proto().resolution())).decorate().componentWidth(200);
 
                     CComponent<?, LogicalDate, ?> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);

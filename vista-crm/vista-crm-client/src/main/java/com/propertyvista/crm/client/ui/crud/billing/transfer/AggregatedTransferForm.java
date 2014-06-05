@@ -35,8 +35,8 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
         formPanel.append(Location.Left, proto().paymentDate()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().status()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(240);
-        formPanel.append(Location.Left, proto().fundsTransferType()).decorate().componentWidth(240);
+        formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().fundsTransferType()).decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().netAmount()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().adjustments()).decorate().componentWidth(120);

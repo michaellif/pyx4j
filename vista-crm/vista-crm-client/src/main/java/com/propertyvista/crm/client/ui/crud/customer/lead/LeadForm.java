@@ -27,8 +27,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -112,16 +112,16 @@ public class LeadForm extends CrmEntityForm<Lead> {
     private IsWidget createDetailsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().leadId()).decorate().componentWidth(220);
-        formPanel.append(Location.Left, proto().leaseType()).decorate().componentWidth(220);
+        formPanel.append(Location.Left, proto().leadId()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().leaseType()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().moveInDate()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().leaseTerm()).decorate().componentWidth(120);
         if (isEditable()) {
-            formPanel.append(Location.Right, proto().floorplan().building(), new CEntityLabel<Building>()).decorate().componentWidth(220);
+            formPanel.append(Location.Right, proto().floorplan().building(), new CEntityLabel<Building>()).decorate().componentWidth(200);
         } else {
             formPanel
                     .append(Location.Right, proto().floorplan().building(),
-                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))).decorate().componentWidth(220);
+                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))).decorate().componentWidth(200);
         }
         formPanel.append(Location.Right, proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
             @Override
@@ -133,9 +133,9 @@ public class LeadForm extends CrmEntityForm<Lead> {
             protected IShowable getSelectorDialog() {
                 return new FloorplanSelectorDialogDialog(getParentView());
             }
-        }).decorate().componentWidth(220);
+        }).decorate().componentWidth(200);
 
-        formPanel.append(Location.Right, proto().agent()).decorate().componentWidth(220);
+        formPanel.append(Location.Right, proto().agent()).decorate().componentWidth(200);
         formPanel.append(Location.Right, proto().createDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().status()).decorate().componentWidth(120);
 

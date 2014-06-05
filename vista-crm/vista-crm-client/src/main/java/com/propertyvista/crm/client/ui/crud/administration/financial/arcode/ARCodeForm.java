@@ -38,8 +38,8 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(250);
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().type()).decorate().componentWidth(200);
         formPanel.append(Location.Left, proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
             @Override
             protected AppPlace getTargetPlace() {
@@ -57,7 +57,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
                     }
                 };
             }
-        }).decorate().componentWidth(250);
+        }).decorate().componentWidth(200);
 
         yardiIntegrationPanel = new FormPanel(this);
         yardiIntegrationPanel.h1(i18n.tr("Yardi Integration"));

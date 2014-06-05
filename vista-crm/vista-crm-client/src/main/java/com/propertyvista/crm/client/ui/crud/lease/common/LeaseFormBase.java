@@ -124,16 +124,16 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))).decorate()
-                .componentWidth(250);
+                .componentWidth(200);
 
         formPanel.append(Location.Left, proto().unit().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class)))
-                .decorate().componentWidth(250);
+                .decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class)))
-                .decorate().componentWidth(250);
+                .decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class)))
-                .decorate().componentWidth(250);
+                .decorate().componentWidth(200);
 
         formPanel.append(Location.Left, proto().isUnitReserved()).decorate().componentWidth(80);
         formPanel.append(Location.Left, proto().reservedUntil()).decorate().componentWidth(120);

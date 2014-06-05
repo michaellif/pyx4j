@@ -46,7 +46,7 @@ public class EmergencyContactEditor extends CForm<EmergencyContact> {
         formPanel.append(Location.Left, proto().homePhone()).decorate().componentWidth(180);
         formPanel.append(Location.Left, proto().mobilePhone()).decorate().componentWidth(180);
         formPanel.append(Location.Right, proto().workPhone()).decorate().componentWidth(180);
-        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(250);
+        formPanel.append(Location.Right, proto().email()).decorate().componentWidth(200);
 
         formPanel.h3(i18n.tr("Address"));
         formPanel.append(Location.Dual, proto().address(), new InternationalAddressEditor());
