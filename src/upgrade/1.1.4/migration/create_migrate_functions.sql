@@ -335,9 +335,13 @@ BEGIN
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE i.address_province_old = p.id ';
         
-        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info '
-                ||'SET  address_street_number = UNNEST(regexp_matches(address_street1, ''^[\d]+'')),'
-                ||'     address_street_name = TRIM(regexp_replace(address_street1, ''^[\d]+\s'','''')) ';
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info AS c '
+                ||'SET  address_street_number = t.street_num,'
+                ||'     address_suite_number = t.suite_num,'
+                ||'     address_street_name = t.street_name '
+                ||'FROM     _dba_.split_simple_address('||quote_literal(v_schema_name)||','
+                ||'         ''customer_screening_income_info'',''address_street1'',''address_street2'') AS t '
+                ||'WHERE    c.id = t.id ';
         
         
         -- customer_screening_v
@@ -396,6 +400,27 @@ BEGIN
                 ||' TRIM(previous_address_street_name)||'' ''||INITCAP(TRIM(previous_address_street_direction)) '
                 ||'WHERE    previous_address_street_direction IS NOT NULL';
         
+        
+        -- emergency_contact
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact AS e '
+                ||'SET    address_country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  e.address_country_old = c.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact AS e '
+                ||'SET  address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
+                ||'WHERE    e.address_province_old = p.id ';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact AS e '
+                ||'SET  address_suite_number = t.suite_num,'
+                ||'     address_street_number = t.street_num,'
+                ||'     address_street_name = t.street_name '
+                ||'FROM     _dba_.split_simple_address('||quote_literal(v_schema_name)||','
+                ||'         ''emergency_contact'',''address_street1'',''address_street2'') AS t '
+                ||'WHERE    e.id = t.id ';
         
         -- Phone numbers update
         
