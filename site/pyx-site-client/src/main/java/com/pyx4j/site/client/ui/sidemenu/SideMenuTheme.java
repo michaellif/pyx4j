@@ -112,8 +112,6 @@ public class SideMenuTheme extends Theme {
 
         style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, ">.", StyleName.SideMenuItemPanel, "-", StyleDependent.active);
         style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColor.object1, 0.1);
-        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
         addStyle(style);
 
         style = new Style(".", StyleName.SideMenuItem, "-", StyleDependent.l1, ">.", StyleName.SideMenuItemPanel, " .", StyleName.SideMenuExpantionHandler);
