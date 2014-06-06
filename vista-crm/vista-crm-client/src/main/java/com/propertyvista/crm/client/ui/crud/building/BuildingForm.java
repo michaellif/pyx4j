@@ -31,6 +31,7 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -65,6 +66,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.building.MarketingEditor.MarketingContactEditor;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -79,10 +81,13 @@ import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingFinancial;
+import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -90,7 +95,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingForm.class);
 
-    private final Tab financialTab, billingCyclesTab;
+    private final Tab floorplansTab, mechanicalsTab, financialTab, billingCyclesTab;
 
     private Tab catalogTab = null;
 
@@ -103,13 +108,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         addTab(createDetailsTab(), i18n.tr("Details"));
 
-        setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans")),
-                !isEditable());
+        setTabEnabled(
+                floorplansTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(),
+                        i18n.tr("Floorplans")), !isEditable());
 
         setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units")),
                 !isEditable());
 
-        setTabEnabled(addTab(createMachanicalsTab(), i18n.tr("Mechanicals")), !isEditable());
+        setTabEnabled(mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals")), !isEditable());
 
         setTabEnabled(addTab(createAddOnsTab(), i18n.tr("Add-Ons")), !isEditable());
 
@@ -153,8 +159,13 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     });
         }
 
-        financialTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial_OLD));
-        billingCyclesTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.Billing));
+        floorplansTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(FloorplanDTO.class)));
+
+        mechanicalsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingMechanical.class)));
+
+        financialTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingFinancial.class)));
+
+        billingCyclesTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BillingCycleDTO.class)));
 
         if (catalogTab != null) {
             catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog) && !getValue().defaultProductCatalog().getValue(false));

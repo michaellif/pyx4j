@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -29,7 +30,6 @@ import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LandlordDTO;
 
 public class LandlordViewerActivity extends CrmViewerActivity<LandlordDTO> implements LandlordViewerView.Presenter {
@@ -47,7 +47,7 @@ public class LandlordViewerActivity extends CrmViewerActivity<LandlordDTO> imple
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(LandlordDTO.class));
     }
 
     @Override

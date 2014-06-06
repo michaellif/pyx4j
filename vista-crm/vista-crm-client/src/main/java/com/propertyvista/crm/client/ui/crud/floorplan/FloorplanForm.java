@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
@@ -35,6 +36,7 @@ import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -47,6 +49,7 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActiv
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.marketing.ils.ILSSummaryFloorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -58,14 +61,21 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     private static final I18n i18n = I18n.get(FloorplanForm.class);
 
+    private final Tab marketingTab;
+
     public FloorplanForm(IForm<FloorplanDTO> view) {
         super(FloorplanDTO.class, view);
 
         Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
         selectTab(tab);
 
-        addTab(createMarketingTab(), i18n.tr("Marketing"));
+        marketingTab = addTab(createMarketingTab(), i18n.tr("Marketing"));
+    }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        marketingTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(Marketing.class)));
     }
 
     private CFolder<FloorplanAmenity> createAmenitiesListEditor() {
@@ -107,6 +117,11 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Marketing Summary"));
+
+        //TODO set ReadOnly add Acesibiliut adapter
+
+        SecurityController.checkPermission(DataModelPermission.permissionUpdate(Marketing.class));
+
         formPanel.append(Location.Left, proto().marketingName()).decorate();
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {

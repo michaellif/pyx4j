@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -164,7 +165,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(BuildingDTO.class));
     }
 
     @Override

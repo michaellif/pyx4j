@@ -26,6 +26,7 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
 import com.pyx4j.security.server.UIAclBuilder;
 
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
@@ -92,6 +93,11 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
         grant(BuildingFinancial, BuildingFinancial.class, READ);
         grant(BuildingAccounting, BuildingFinancial.class, READ);
         grant(BuildingAdministrator, BuildingFinancial.class, ALL);
+
+        //billing cycles
+        grant(BuildingFinancial, BillingCycleDTO.class, READ);
+        grant(BuildingAccounting, BillingCycleDTO.class, READ);
+        grant(BuildingAdministrator, BillingCycleDTO.class, ALL);
 
         //
         grant(BuildingProperty, CommunityEvents.class);

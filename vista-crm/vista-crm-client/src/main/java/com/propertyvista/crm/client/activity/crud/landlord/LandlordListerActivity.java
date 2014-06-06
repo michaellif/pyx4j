@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
@@ -24,7 +25,6 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.landlord.LandlordListerView;
 import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LandlordDTO;
 
 public class LandlordListerActivity extends AbstractListerActivity<LandlordDTO> {
@@ -37,6 +37,6 @@ public class LandlordListerActivity extends AbstractListerActivity<LandlordDTO> 
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkPermission(DataModelPermission.permissionCreate(LandlordDTO.class));
     }
 }
