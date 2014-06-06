@@ -37,7 +37,9 @@ import com.pyx4j.widgets.client.Toolbar;
 import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -51,11 +53,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private Button userButton;
 
+    private Button adminButton;
+
     private Button exitAdminButton;
 
     private Button communicationButton;
-
-    private Button adminButton;
 
     private HTML thisIsProduction;
 
@@ -93,8 +95,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
         add(createRightToolbar());
 
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 
             @Override
@@ -103,6 +103,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
 
         });
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
     }
 
     private IsWidget createLeftToolbar() {
@@ -191,53 +194,52 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                 presenter.showProperties();
             }
         }));
-        userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
-            @Override
-            public void execute() {
-                presenter.logout();
-            }
-        }));
+
         userButtonMenu.addItem(support = new MenuItem(i18n.tr("Support"), new Command() {
             @Override
             public void execute() {
                 presenter.getSatisfaction();
             }
         }));
+        userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
+            @Override
+            public void execute() {
+                presenter.logout();
+            }
+        }));
 
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            communicationButton = new Button(CrmImages.INSTANCE.alert(), new Command() {
-                @Override
-                public void execute() {
-                    switch (layoutType) {
-                    case phonePortrait:
-                    case phoneLandscape:
-                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
-                        break;
-                    default:
-                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
-                        break;
-                    }
+        communicationButton = new Button(CrmImages.INSTANCE.alert(), new Command() {
+            @Override
+            public void execute() {
+                switch (layoutType) {
+                case phonePortrait:
+                case phoneLandscape:
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
+                    break;
+                default:
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
+                    break;
                 }
-            });
-        }
+            }
+        });
 
-        exitAdminButton = new Button(i18n.tr("Exit Administration"));
+        exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+            }
+        });
         exitAdminButton.ensureDebugId("home");
-        exitAdminButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showHome();
-            }
-        });
 
-        adminButton = new Button(i18n.tr("Administration"));
-        adminButton.ensureDebugId("administration");
-        adminButton.addClickHandler(new ClickHandler() {
+        adminButton = new Button(i18n.tr("Administration"), new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
-                presenter.showSettings();
+            public void execute() {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
             }
         });
+        adminButton.ensureDebugId("administration");
 
         languageButton = new Button("");
 
@@ -249,9 +251,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         toolbar.addItem(thisIsProduction);
         toolbar.addItem(thisIsDemo);
 
-        toolbar.addItem(userButton);
         toolbar.addItem(exitAdminButton);
         toolbar.addItem(adminButton);
+        toolbar.addItem(userButton);
         toolbar.addItem(languageButton);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             toolbar.addItem(communicationButton);
@@ -268,8 +270,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     @Override
     public void onLogedOut() {
         this.loggedIn = false;
-        exitAdminButton.setVisible(false);
-        adminButton.setVisible(false);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             communicationButton.setVisible(false);
         }
@@ -290,11 +290,10 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     @Override
     public void onLogedIn(String userName) {
         this.loggedIn = true;
-        exitAdminButton.setVisible(true);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
             communicationButton.setVisible(true);
         }
-        adminButton.setVisible(true);
+
         support.setVisible(true);
 
         userButton.setVisible(true);
@@ -355,21 +354,37 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         case phoneLandscape:
         case tabletPortrait:
             sideMenuButton.setVisible(loggedIn);
+            userButton.setVisible(false);
+            if (presenter != null) {
+                if (presenter.isAdminPlace()) {
+                    communicationButton.setVisible(false);
+                    exitAdminButton.setVisible(true);
+                } else {
+                    exitAdminButton.setVisible(false);
+                    communicationButton.setVisible(true);
+                }
+            }
+            adminButton.setVisible(false);
+            languageButton.setVisible(false);
+
             break;
         default:
             sideMenuButton.setVisible(false);
+            userButton.setVisible(loggedIn);
+            if (presenter != null) {
+                if (presenter.isAdminPlace()) {
+                    exitAdminButton.setVisible(loggedIn);
+                    adminButton.setVisible(false);
+                } else {
+                    exitAdminButton.setVisible(false);
+                    adminButton.setVisible(loggedIn);
+                }
+            }
+            languageButton.setVisible(loggedIn);
+            communicationButton.setVisible(loggedIn);
             break;
         }
 
-        if (presenter != null) {
-            if (presenter.isAdminPlace()) {
-                exitAdminButton.setVisible(true);
-                adminButton.setVisible(false);
-            } else {
-                exitAdminButton.setVisible(false);
-                adminButton.setVisible(true);
-            }
-        }
     }
 
 }

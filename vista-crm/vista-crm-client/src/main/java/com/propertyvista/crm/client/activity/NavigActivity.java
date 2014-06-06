@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -24,13 +25,17 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
@@ -44,8 +49,11 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
     private static Key previousUserPk;
 
+    private Place place;
+
     public NavigActivity() {
         view = CrmSite.getViewFactory().getView(NavigView.class);
+        view.setPresenter(this);
     }
 
     @Override
@@ -55,6 +63,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
     }
 
     public void withPlace(Place place) {
+        this.place = place;
         Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
         isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
         previousUserPk = currentUserPk;
@@ -67,6 +76,26 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
         if (place instanceof AppPlace) {
             view.select((AppPlace) place);
         }
+    }
+
+    @Override
+    public void getSatisfaction() {
+        GetSatisfaction.open();
+    };
+
+    @Override
+    public void logout() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
+                    @Override
+                    public void onSuccess(AuthenticationResponse result) {
+                        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -88,5 +117,10 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
             }, EntityListCriteria.create(DashboardMetadata.class));
         }
 
+    }
+
+    @Override
+    public boolean isAdminPlace() {
+        return place.getClass().getName().contains(CrmSiteMap.Administration.class.getName());
     }
 }

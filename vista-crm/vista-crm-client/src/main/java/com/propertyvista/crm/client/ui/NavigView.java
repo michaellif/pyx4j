@@ -25,7 +25,16 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 public interface NavigView extends IsWidget, IsView {
 
     public interface NavigPresenter {
+
+        boolean isAdminPlace();
+
+        void getSatisfaction();
+
+        void logout();
+
     }
+
+    void setPresenter(NavigPresenter presenter);
 
     void select(AppPlace appPlace);
 

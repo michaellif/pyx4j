@@ -146,11 +146,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
     }
 
     @Override
-    public void showHome() {
-        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
-    }
-
-    @Override
     public void showAccount() {
         AppSite.getPlaceController().goTo(new CrmSiteMap.Account.AccountData());
     }
@@ -181,22 +176,8 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
     }
 
     @Override
-    public void showSettings() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
-    }
-
-    @Override
     public void back2CrmView() {
         AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
-    }
-
-    @Override
-    public void SwitchCrmAndSettings() {
-        if (isSettingsPlace()) {
-            back2CrmView();
-        } else {
-            showSettings();
-        }
     }
 
     @Override

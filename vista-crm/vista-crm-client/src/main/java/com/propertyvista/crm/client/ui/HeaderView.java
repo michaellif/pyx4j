@@ -10,8 +10,6 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface HeaderView extends IsWidget, IsView {
 
-    void setPresenter(HeaderPresenter presenter);
-
     public interface HeaderPresenter {
 
         void navigToLanding();
@@ -20,7 +18,7 @@ public interface HeaderView extends IsWidget, IsView {
 
         void login();
 
-        void showHome();
+        boolean isAdminPlace();
 
         void showAccount();
 
@@ -28,11 +26,7 @@ public interface HeaderView extends IsWidget, IsView {
 
         void showMessages(int x, int y);
 
-        void showSettings();
-
         void back2CrmView();
-
-        void SwitchCrmAndSettings();
 
         boolean isSettingsPlace();
 
@@ -40,8 +34,9 @@ public interface HeaderView extends IsWidget, IsView {
 
         void getSatisfaction();
 
-        boolean isAdminPlace();
     }
+
+    void setPresenter(HeaderPresenter presenter);
 
     void onLogedOut();
 

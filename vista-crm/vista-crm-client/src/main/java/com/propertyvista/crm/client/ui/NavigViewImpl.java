@@ -17,11 +17,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.sidemenu.SideMenu;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuAppPlaceItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
@@ -29,6 +35,7 @@ import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -46,13 +53,21 @@ public class NavigViewImpl extends Composite implements NavigView {
         }
     };
 
+    private NavigPresenter presenter;
+
     private final SideMenu menu;
 
     private final SideMenuItem userMenuItem;
 
+    private final SideMenuItem adminMenuItem;
+
+    private final SideMenuItem exitAdminMenuItem;
+
     private SideMenuAppPlaceItem systemDashboard;
 
     private SideMenuList customDashboards;
+
+    private LayoutType layoutType;
 
     public NavigViewImpl() {
 
@@ -69,6 +84,34 @@ public class NavigViewImpl extends Composite implements NavigView {
             //  root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.userIcon()));
             root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.tenantsIcon()));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountData()));
+
+            list.addMenuItem(adminMenuItem = new SideMenuItem(new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
+                }
+            }, i18n.tr("Administration"), null));
+
+            list.addMenuItem(exitAdminMenuItem = new SideMenuItem(new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+                }
+            }, i18n.tr("Exit Administration"), null));
+
+            list.addMenuItem(new SideMenuItem(new Command() {
+                @Override
+                public void execute() {
+                    presenter.getSatisfaction();
+                }
+            }, i18n.tr("Support"), null));
+
+            list.addMenuItem(new SideMenuItem(new Command() {
+                @Override
+                public void execute() {
+                    presenter.logout();
+                }
+            }, i18n.tr("LogOut"), null));
         }
 
         {//Dashboards
@@ -176,6 +219,22 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Reports.ResidentInsurance()));
         }
 
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+    }
+
+    @Override
+    public void setPresenter(final NavigPresenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -196,5 +255,37 @@ public class NavigViewImpl extends Composite implements NavigView {
     @Override
     public void updateUserName(String name) {
         userMenuItem.setCaption(name);
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        this.layoutType = layoutType;
+        calculateActionsState();
+    }
+
+    private void calculateActionsState() {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletPortrait:
+            userMenuItem.setVisible(true);
+            if (presenter != null) {
+                if (presenter.isAdminPlace()) {
+                    exitAdminMenuItem.setVisible(true);
+                    adminMenuItem.setVisible(false);
+                } else {
+                    exitAdminMenuItem.setVisible(false);
+                    adminMenuItem.setVisible(true);
+                }
+            }
+
+            break;
+        default:
+            userMenuItem.setVisible(false);
+            exitAdminMenuItem.setVisible(false);
+            adminMenuItem.setVisible(false);
+
+            break;
+        }
+
     }
 }
