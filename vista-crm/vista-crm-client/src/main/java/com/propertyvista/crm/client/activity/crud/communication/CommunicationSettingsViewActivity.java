@@ -35,7 +35,7 @@ public class CommunicationSettingsViewActivity extends CrmViewerActivity<Message
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance);
+        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance_OLD);
     }
 /*
  * public static CommunicationSettingsViewActivity create(CrudAppPlace crudPlace) {

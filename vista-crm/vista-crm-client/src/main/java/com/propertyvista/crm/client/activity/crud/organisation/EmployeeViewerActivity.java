@@ -59,12 +59,12 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 
     @Override
     protected void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), ClientContext
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD), ClientContext
                 .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
         super.onPopulateSuccess(result);
     }
@@ -81,7 +81,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public boolean canClearSecurityQuestion() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public boolean canSendPasswordResetEmail() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 
     @Override

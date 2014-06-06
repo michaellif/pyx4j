@@ -81,7 +81,7 @@ public class AptUnitOccupancyManagerTestBase {
     public void setUp() {
         VistaTestDBSetup.init();
 
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy_OLD, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         SystemDateManager.setDate(asDate("1900-01-01"));

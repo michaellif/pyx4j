@@ -79,7 +79,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         boolean hasEquifax = false;
 
         for (VistaCrmBehaviorDTO behaviour : getValue().permissions()) {
-            if (behaviour.behavior().getValue() == VistaCrmBehavior.Equifax) {
+            if (behaviour.behavior().getValue() == VistaCrmBehavior.Equifax_OLD) {
                 hasEquifax = true;
                 break;
             }

@@ -36,6 +36,6 @@ public class EmployeeListerActivity extends AbstractListerActivity<EmployeeDTO> 
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 }

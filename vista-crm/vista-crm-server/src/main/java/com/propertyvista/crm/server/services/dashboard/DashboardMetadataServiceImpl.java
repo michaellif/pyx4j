@@ -53,7 +53,7 @@ public class DashboardMetadataServiceImpl implements DashboardMetadataService {
     @Override
     public void takeOwnership(AsyncCallback<VoidSerializable> callback, DashboardMetadata dashboardMetadataStub) {
 
-        SecurityController.assertBehavior(VistaCrmBehavior.DashboardManager);
+        SecurityController.assertBehavior(VistaCrmBehavior.DashboardManager_OLD);
         DashboardMetadata dashboardMetadata = Persistence.service().retrieve(DashboardMetadata.class, dashboardMetadataStub.getPrimaryKey());
         if (dashboardMetadata == null) {
             throw new Error("dashboard metadata '" + dashboardMetadataStub.getPrimaryKey() + "' was not found");

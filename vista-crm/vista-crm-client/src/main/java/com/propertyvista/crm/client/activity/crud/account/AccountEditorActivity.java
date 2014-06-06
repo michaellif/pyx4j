@@ -35,7 +35,7 @@ public class AccountEditorActivity extends CrmEditorActivity<EmployeeDTO> implem
 
     @Override
     public void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), true);
+        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD), true);
         super.onPopulateSuccess(result);
     }
 }

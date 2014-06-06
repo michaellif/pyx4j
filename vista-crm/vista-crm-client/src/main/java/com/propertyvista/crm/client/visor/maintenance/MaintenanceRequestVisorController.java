@@ -51,7 +51,7 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
                 MaintenanceRequestDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return SecurityController.checkAnyBehavior(VistaCrmBehavior.Maintenance);
+                return SecurityController.checkAnyBehavior(VistaCrmBehavior.Maintenance_OLD);
             }
 
             @Override

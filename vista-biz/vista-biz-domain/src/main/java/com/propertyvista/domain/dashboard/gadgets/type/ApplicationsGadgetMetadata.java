@@ -30,14 +30,14 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         description = "Displays summary of applications",
         keywords = { "Applications" },
         allowedBehaviors = {                               
-                VistaCrmBehavior.Tenants,
-                VistaCrmBehavior.Equifax,
-                VistaCrmBehavior.Emergency,
-                VistaCrmBehavior.ScreeningData,                
-                VistaCrmBehavior.Contacts,
-                VistaCrmBehavior.ProductCatalog,                
-                VistaCrmBehavior.Reports,
-                VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.Tenants_OLD,
+                VistaCrmBehavior.Equifax_OLD,
+                VistaCrmBehavior.Emergency_OLD,
+                VistaCrmBehavior.ScreeningData_OLD,                
+                VistaCrmBehavior.Contacts_OLD,
+                VistaCrmBehavior.ProductCatalog_OLD,                
+                VistaCrmBehavior.Reports_OLD,
+                VistaCrmBehavior.PropertyVistaAccountOwner_OLD,
                 VistaCrmBehavior.PropertyVistaSupport
         }
 )//@formatter:on

@@ -44,7 +44,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance);
+        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance_OLD);
     }
 
     @Override

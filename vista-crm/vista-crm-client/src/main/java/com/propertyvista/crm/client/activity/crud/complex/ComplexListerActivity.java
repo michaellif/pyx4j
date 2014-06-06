@@ -37,6 +37,6 @@ public class ComplexListerActivity extends AbstractListerActivity<ComplexDTO> {
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement_OLD);
     }
 }

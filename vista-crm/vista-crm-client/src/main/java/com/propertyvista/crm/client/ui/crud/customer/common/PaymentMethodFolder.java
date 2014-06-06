@@ -105,7 +105,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
                 protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
-                    if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+                    if (SecurityController.checkBehavior(VistaCrmBehavior.Billing_OLD)) {
                         ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {

@@ -63,7 +63,7 @@ public class AvailabilityReportManagerTestBase {
     @Before
     public void setUp() {
         VistaTestDBSetup.init();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy_OLD, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         unit = EntityFactory.create(AptUnit.class);

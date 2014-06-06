@@ -55,7 +55,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo The Accountant"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo The Accountant"), VistaCrmBehavior.Occupancy_OLD, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         OrganizationPoliciesNode policyNode = EntityFactory.create(OrganizationPoliciesNode.class);

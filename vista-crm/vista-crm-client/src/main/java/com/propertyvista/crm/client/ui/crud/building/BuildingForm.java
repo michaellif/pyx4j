@@ -168,7 +168,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         billingCyclesTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BillingCycleDTO.class)));
 
         if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog) && !getValue().defaultProductCatalog().getValue(false));
+            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog_OLD) && !getValue().defaultProductCatalog().getValue(false));
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());

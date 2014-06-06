@@ -81,7 +81,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         //TODO proper Role
         CrmUserCredential crs = null;
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (bo.user().getPrimaryKey() != null)) {
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD) && (bo.user().getPrimaryKey() != null)) {
             crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
             to.enabled().set(crs.enabled());
             to.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
@@ -117,7 +117,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD)) {
             if (!in.restrictAccessToSelectedBuildingsAndPortfolios().getValue(false)) {
                 dbo.buildingAccess().clear();
                 dbo.portfolios().clear();
@@ -128,7 +128,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         boolean updated = super.persist(dbo, in);
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD)) {
             CrmUser user;
             boolean isNew = false;
 

@@ -36,6 +36,6 @@ public class PortfolioListerActivity extends AbstractListerActivity<Portfolio> {
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 }

@@ -264,7 +264,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     });
                     break;
                 case NotRequested:
-                    if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+                    if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
                         new CreditCheckSubscribeDialog().show();
                     } else {
                         reportCreditCheckServiceInactive();

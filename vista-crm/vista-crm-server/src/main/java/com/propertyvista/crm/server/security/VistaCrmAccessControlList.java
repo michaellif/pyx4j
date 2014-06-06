@@ -387,7 +387,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Building.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BuildingCrudService.class));
 
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectBuildingListService.class));
+        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(SelectBuildingListService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Elevator.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ElevatorCrudService.class));
@@ -417,13 +417,13 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunityEvent.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunityEventCrudService.class));
 
-        grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(UpdateUploadService.class));
+        grant(VistaCrmBehavior.PropertyManagement_OLD, new IServiceExecutePermission(UpdateUploadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
 
-        grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(ImportBuildingDataService.class));
+        grant(VistaCrmBehavior.PropertyManagement_OLD, new IServiceExecutePermission(ImportBuildingDataService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ImportBuildingDataService.class));
 
-        grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
+        grant(VistaCrmBehavior.PropertyManagement_OLD, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ExportBuildingDataDownloadService.class));
 
 // - Unit-related:
@@ -505,7 +505,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         // - Communication
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationGroupCrudService.class));
         grant(VistaBasicBehavior.CRM, new EntityPermission(MessageCategory.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.MessageGroup, new EntityPermission(MessageCategory.class, EntityPermission.ALL));
+        grant(VistaCrmBehavior.MessageGroup_OLD, new EntityPermission(MessageCategory.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(SystemEndpoint.class, EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationMessageCrudService.class));
         grant(VistaBasicBehavior.CRM, new CommunicationMessageAccessRule(), Message.class);
@@ -514,8 +514,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CommunicationMessageAttachmentUploadService.class));
 
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(MaintenanceCrudService.class));
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
+        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(MaintenanceCrudService.class));
+        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));
@@ -526,22 +526,22 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(InsuranceCertificateScanCrmUploadService.class));
 
 // - Billing
-        grant(VistaCrmBehavior.Billing, new EntityPermission(Bill.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillCrudService.class));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillPrintService.class));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingExecutionService.class));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingCycleCrudService.class));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingCycleBillListService.class));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingCycleLeaseListService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new EntityPermission(Bill.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillCrudService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillPrintService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingExecutionService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleCrudService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleBillListService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(BillingCycleLeaseListService.class));
 
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(BillPreviewService.class));
+        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(BillPreviewService.class));
 
-        grant(VistaCrmBehavior.OrganizationFinancial, VistaCrmBehavior.AggregatedTransfer);
-        grant(VistaCrmBehavior.AggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
-        grant(VistaCrmBehavior.AggregatedTransfer, new IServiceExecutePermission(PaymentRecordListService.class));
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(PaymentRecordListService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial_OLD, VistaCrmBehavior.AggregatedTransfer_OLD);
+        grant(VistaCrmBehavior.AggregatedTransfer_OLD, new IServiceExecutePermission(AggregatedTransferCrudService.class));
+        grant(VistaCrmBehavior.AggregatedTransfer_OLD, new IServiceExecutePermission(PaymentRecordListService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(PaymentRecordListService.class));
 
-        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(RevealAccountNumberService.class));
+        grant(VistaCrmBehavior.Billing_OLD, new IServiceExecutePermission(RevealAccountNumberService.class));
 
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));
@@ -562,19 +562,19 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Organization:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.Organization, new EntityPermission(Employee.class, EntityPermission.ALL));
+        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(Employee.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectEmployeeListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeSignatureUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Portfolio.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));
+        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(Portfolio.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
 
-        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectPortfolioListService.class));
-        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectCrmRoleListService.class));
+        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(SelectPortfolioListService.class));
+        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(SelectCrmRoleListService.class));
 
-        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
+        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(ManagedCrmUserService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
 
 // -- Crm Users, Self management
@@ -584,9 +584,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
 
 // - Marketing-related:
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(PageDescriptorCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadBuildingService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadFloorplanService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(PageDescriptorCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(MediaUploadBuildingService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(MediaUploadFloorplanService.class));
 
 // - Administration:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ARCodeCrudService.class));
@@ -596,55 +596,55 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
 
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteGeneralCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteBrandingCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteContentCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceUploadService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(CityIntroPageCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(HomePageGadgetCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteGeneralCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteBrandingCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteContentCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteImageResourceCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(SiteImageResourceUploadService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(CityIntroPageCrudService.class));
+        grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(HomePageGadgetCrudService.class));
 
-        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmRoleCrudService.class));
+        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(CrmRoleCrudService.class));
 
-        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(TaxCrudService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(TaxCrudService.class));
 
-        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
-        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
-        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(EmailTemplateManagerService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
+        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(EmailTemplateManagerService.class));
 
-        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectTaxListService.class));
-        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectGlCodeListService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(SelectTaxListService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy_OLD, new IServiceExecutePermission(SelectGlCodeListService.class));
 
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
-        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(MerchantAccountCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(MerchantAccountCrudService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(MerchantAccountCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerCreditCheckLongReportService.class));
 
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckWizardService.class));
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCardValidationService.class));
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(OnlinePaymentWizardService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(CreditCheckWizardService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(CreditCardValidationService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(OnlinePaymentWizardService.class));
 
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcPaymentMethodsCrudService.class));
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcCompanyInfoCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(PmcPaymentMethodsCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(PmcCompanyInfoCrudService.class));
 
-        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(ILSConfigCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(ILSConfigCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(ILSConfigCrudService.class));
 
-        grant(VistaCrmBehavior.Equifax, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
-        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
+        grant(VistaCrmBehavior.Equifax_OLD, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
 
-        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmAuditRecordsListerService.class));
-        grant(VistaCrmBehavior.Organization, new EntityPermission(AuditRecord.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(CrmAuditRecordsListerService.class));
+        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
 // - TenantInsurance:
         grant(VistaBasicBehavior.CRM, new EntityPermission(GeneralInsuranceCertificate.class, EntityPermission.ALL));
 
 // - Other:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NotesAndAttachmentsCrudService.class));
-        grant(VistaCrmBehavior.Organization, new EntityPermission(NoteAttachment.class, EntityPermission.READ));
+        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(NoteAttachment.class, EntityPermission.READ));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcDocumentFileUploadService.class));
 

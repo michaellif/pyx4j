@@ -22,57 +22,57 @@ public enum VistaCrmBehavior implements Behavior {
 
     /** This is preliminary list */
 
-    PropertyManagement,
+    PropertyManagement_OLD,
 
     OAPI,
 
-    ILS,
+    ILS_OLD,
 
-    Mechanicals,
+    Mechanicals_OLD,
 
     BuildingFinancial_OLD,
 
-    Marketing,
+    Marketing_OLD,
 
-    MarketingMedia,
+    MarketingMedia_OLD,
 
-    Tenants,
+    Tenants_OLD,
 
-    Equifax,
+    Equifax_OLD,
 
-    Emergency,
+    Emergency_OLD,
 
-    ScreeningData,
+    ScreeningData_OLD,
 
-    Occupancy,
+    Occupancy_OLD,
 
-    Maintenance,
+    Maintenance_OLD,
 
-    Organization,
+    Organization_OLD,
 
-    OrganizationFinancial,
+    OrganizationFinancial_OLD,
 
-    AggregatedTransfer,
+    AggregatedTransfer_OLD,
 
-    OrganizationPolicy,
+    OrganizationPolicy_OLD,
 
-    Contacts,
+    Contacts_OLD,
 
-    ProductCatalog,
+    ProductCatalog_OLD,
 
-    Billing,
+    Billing_OLD,
 
-    Reports,
+    Reports_OLD,
 
     /** this behaviour can take control of other's people dashboards */
-    DashboardManager,
+    DashboardManager_OLD,
 
     //Onboarding
-    PropertyVistaAccountOwner,
+    PropertyVistaAccountOwner_OLD,
 
-    Commandant,
+    Commandant_OLD,
 
-    MessageGroup,
+    MessageGroup_OLD,
 
     PropertyVistaSupport,
 
@@ -94,12 +94,27 @@ public enum VistaCrmBehavior implements Behavior {
 
     BuildingLeasing,
 
+    // --
+
+    MaintenanceBasic,
+
+    MaintenanceAdvanced,
+
+    MaintenanceFull,
+
+    // --
+
     LeasesBasic,
 
     LeasesAdvance,
 
     LeasesFull
 
+    // --
+
+    // --
+
+    // --
     ;
 
     @Override

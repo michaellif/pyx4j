@@ -35,6 +35,6 @@ public class UnitListerActivity extends AbstractListerActivity<AptUnitDTO> {
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement_OLD);
     }
 }

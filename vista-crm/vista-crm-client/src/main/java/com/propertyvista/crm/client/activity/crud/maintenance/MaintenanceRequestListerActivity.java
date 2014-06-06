@@ -36,6 +36,6 @@ public class MaintenanceRequestListerActivity extends AbstractListerActivity<Mai
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Maintenance);
+        return SecurityController.checkBehavior(VistaCrmBehavior.Maintenance_OLD);
     }
 }

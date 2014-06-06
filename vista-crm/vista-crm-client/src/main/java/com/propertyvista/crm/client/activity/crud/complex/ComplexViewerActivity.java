@@ -47,7 +47,7 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement_OLD);
     }
 
     @Override

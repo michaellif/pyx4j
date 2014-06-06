@@ -114,7 +114,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement_OLD);
     }
 
     @Override

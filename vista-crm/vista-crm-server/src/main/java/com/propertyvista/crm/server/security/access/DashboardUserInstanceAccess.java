@@ -26,6 +26,6 @@ public class DashboardUserInstanceAccess implements InstanceAccess {
 
     @Override
     public boolean allow(IEntity entity) {//@formatter:off       
-        return SecurityController.checkBehavior(VistaCrmBehavior.DashboardManager) | ((entity instanceof DashboardMetadata) && ((DashboardMetadata) entity).isShared().getValue(false)); 
+        return SecurityController.checkBehavior(VistaCrmBehavior.DashboardManager_OLD) | ((entity instanceof DashboardMetadata) && ((DashboardMetadata) entity).isShared().getValue(false)); 
     }//@formatter:on
 }

@@ -53,7 +53,7 @@ public class NavigSettingsViewImpl extends Composite implements NavigSettingsVie
         setHeight("100%");
 
         {//Profile
-            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
+            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport)) {
                 SideMenuList list = new SideMenuList();
                 root.addMenuItem(new SideMenuItem(list, i18n.tr("Profile"), null));
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Profile.CompanyInfo().formViewerPlace(new Key(-1))));
@@ -62,7 +62,7 @@ public class NavigSettingsViewImpl extends Composite implements NavigSettingsVie
         }
 
         {//Settings
-            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport)) {
+            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport)) {
                 if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
                     SideMenuList list = new SideMenuList();
                     root.addMenuItem(new SideMenuItem(list, i18n.tr("Settings"), null));
@@ -85,7 +85,7 @@ public class NavigSettingsViewImpl extends Composite implements NavigSettingsVie
         {//Security
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Security"), null));
-            if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Security.AuditRecords()));
             }
             list.addMenuItem(new SideMenuAppPlaceItem(new Security.UserRole()));
@@ -101,7 +101,7 @@ public class NavigSettingsViewImpl extends Composite implements NavigSettingsVie
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.GlCodeCategory()));
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.Tax()));
             }
-            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.OrganizationFinancial, VistaCrmBehavior.PropertyVistaAccountOwner)) {
+            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.OrganizationFinancial_OLD, VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Administration.Financial.MerchantAccount()));
             }
             list.addMenuItem(new SideMenuAppPlaceItem(new Financial.CustomerCreditCheck()));

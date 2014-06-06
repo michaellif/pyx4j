@@ -106,7 +106,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
 
     @Override
     protected void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), true);
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD), true);
         super.onPopulateSuccess(result);
     }
 

@@ -31,6 +31,6 @@ public @interface GadgetDescription {
     @I18n
     String[] keywords() default {};
 
-    VistaCrmBehavior[] allowedBehaviors() default { VistaCrmBehavior.PropertyVistaAccountOwner, VistaCrmBehavior.PropertyVistaSupport };
+    VistaCrmBehavior[] allowedBehaviors() default { VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport };
 
 }

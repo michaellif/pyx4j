@@ -49,7 +49,7 @@ public class UnitAvailabilityStatusListServiceTestBase extends VistaDBTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy_OLD, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);

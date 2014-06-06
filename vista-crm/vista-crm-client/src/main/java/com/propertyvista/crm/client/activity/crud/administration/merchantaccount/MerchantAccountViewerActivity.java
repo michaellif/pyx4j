@@ -41,7 +41,7 @@ public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAcc
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
 
         buildingLister = ListerControllerFactory.create(((MerchantAccountViewerView) getView()).getBuildingListerView(),
-                GWT.<AbstractListService<Building>> create(SelectBuildingListService.class), Building.class, VistaCrmBehavior.PropertyManagement);
+                GWT.<AbstractListService<Building>> create(SelectBuildingListService.class), Building.class, VistaCrmBehavior.PropertyManagement_OLD);
     }
 
     @Override

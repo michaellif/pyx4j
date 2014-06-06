@@ -69,6 +69,6 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Tenants);
+        return SecurityController.checkBehavior(VistaCrmBehavior.Tenants_OLD);
     }
 }

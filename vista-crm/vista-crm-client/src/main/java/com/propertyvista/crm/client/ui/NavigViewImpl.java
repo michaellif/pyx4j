@@ -192,19 +192,19 @@ public class NavigViewImpl extends Composite implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon()));
 
-            if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer)) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer()));
             }
             if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay()));
             }
-            if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.Billing_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview()));
             }
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn()));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch()));
 
-            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.AggregatedTransfer, VistaCrmBehavior.Billing)) {
+            if (SecurityController.checkAnyBehavior(VistaCrmBehavior.AggregatedTransfer_OLD, VistaCrmBehavior.Billing_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.Payment()));
             }
         }

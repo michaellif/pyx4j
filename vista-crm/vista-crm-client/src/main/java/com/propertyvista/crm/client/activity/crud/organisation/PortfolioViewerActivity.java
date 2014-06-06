@@ -35,6 +35,6 @@ public class PortfolioViewerActivity extends CrmViewerActivity<Portfolio> {
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 }

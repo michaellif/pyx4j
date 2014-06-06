@@ -362,7 +362,7 @@ class VistaBusinessStatsReport {
             userLoop: for (CrmUserCredential user : users) {
                 for (CrmRole role : user.roles()) {
                     for (VistaCrmBehavior behaviour : role.behaviors()) {
-                        if (behaviour.equals(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+                        if (behaviour.equals(VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
                             Persistence.service().retrieve(user.user());
                             crmUser = user;
                             break userLoop;
