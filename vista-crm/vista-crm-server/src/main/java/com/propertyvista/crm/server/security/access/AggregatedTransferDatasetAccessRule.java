@@ -11,27 +11,22 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class CustomerDatasetAccessRule implements DatasetAccessRule<Customer> {
-
-    private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class AggregatedTransferDatasetAccessRule implements DatasetAccessRule<AggregatedTransfer> {
 
     @Override
-    public void applyRule(EntityQueryCriteria<Customer> criteria) {
-
-        criteria.or()
-
-                .right(PropertyCriterion.eq(criteria.proto()._tenantInLease().$().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
-                        .getPrincipalPrimaryKey()))
-
-                .left(PropertyCriterion.notExists(criteria.proto()._tenantInLease()));
+    public void applyRule(EntityQueryCriteria<AggregatedTransfer> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount()._buildings().$().userAccess(), Context.getVisit().getUserVisit()
+                .getPrincipalPrimaryKey()));
     }
+
 }

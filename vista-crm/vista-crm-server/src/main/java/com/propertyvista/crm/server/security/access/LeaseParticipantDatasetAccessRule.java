@@ -11,20 +11,20 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public class LeaseTermParticipantDatasetAccessRule implements DatasetAccessRule<LeaseTermParticipant<?>> {
+public class LeaseParticipantDatasetAccessRule implements DatasetAccessRule<LeaseParticipant<?>> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<LeaseTermParticipant<?>> criteria) {
-        criteria.eq(criteria.proto().leaseParticipant().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+    public void applyRule(EntityQueryCriteria<LeaseParticipant<?>> criteria) {
+        criteria.eq(criteria.proto().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 }

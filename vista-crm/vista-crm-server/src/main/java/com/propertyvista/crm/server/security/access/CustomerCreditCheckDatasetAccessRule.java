@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-25
+ * Created on 2013-07-11
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
-public class LeadDatasetAccessRule implements DatasetAccessRule<Lead> {
+public class CustomerCreditCheckDatasetAccessRule implements DatasetAccessRule<CustomerCreditCheck> {
 
-    private static final long serialVersionUID = 0l;
+    private static final long serialVersionUID = 2969590756436304214L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<Lead> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+    public void applyRule(EntityQueryCriteria<CustomerCreditCheck> criteria) {
+        criteria.eq(criteria.proto().screening().screene()._tenantInLease().$().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
+                .getPrincipalPrimaryKey());
     }
 
 }

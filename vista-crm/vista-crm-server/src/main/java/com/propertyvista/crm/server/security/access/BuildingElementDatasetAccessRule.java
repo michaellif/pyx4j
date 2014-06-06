@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,25 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-16
- * @author ArtyomB
+ * Created on Jan 11, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.property.asset.BuildingElement;
 
-public class BillingCycleDatasetAccessRule implements DatasetAccessRule<BillingCycle> {
+public class BuildingElementDatasetAccessRule implements DatasetAccessRule<BuildingElement> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<BillingCycle> criteria) {
-        criteria.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+    public void applyRule(EntityQueryCriteria<BuildingElement> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

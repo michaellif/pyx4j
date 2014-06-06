@@ -7,25 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-11
+ * Created on 2013-07-26
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-public class UnitAvailabilityStatusDatasetAccessRule implements DatasetAccessRule<UnitAvailabilityStatus> {
+public class AptUnitOccupancySegmentDatasetAccessRule implements DatasetAccessRule<AptUnitOccupancySegment> {
 
-    private static final long serialVersionUID = 3730977998808761910L;
+    private static final long serialVersionUID = 4125084340753126939L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<UnitAvailabilityStatus> criteria) {
-        criteria.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+    public void applyRule(EntityQueryCriteria<AptUnitOccupancySegment> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

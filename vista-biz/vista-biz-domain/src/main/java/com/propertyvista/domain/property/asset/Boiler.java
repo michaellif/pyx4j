@@ -18,7 +18,9 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.core.IPrimitive;
 
-public interface Boiler extends Equipment {
+import com.propertyvista.domain.property.asset.building.BuildingMechanical;
+
+public interface Boiler extends Equipment, BuildingMechanical {
 
     @Timestamp
     IPrimitive<Date> updated();

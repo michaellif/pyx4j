@@ -30,7 +30,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     Mechanicals,
 
-    BuildingFinancial,
+    BuildingFinancial_OLD,
 
     Marketing,
 
@@ -74,7 +74,33 @@ public enum VistaCrmBehavior implements Behavior {
 
     MessageGroup,
 
-    PropertyVistaSupport;
+    PropertyVistaSupport,
+
+    /***************** this is new List **************** */
+
+    BuildingBasic,
+
+    BuildingFinancial,
+
+    BuildingAccounting,
+
+    BuildingProperty,
+
+    BuildingMarketing,
+
+    BuildingMechanicals,
+
+    BuildingAdministrator,
+
+    BuildingLeasing,
+
+    LeasesBasic,
+
+    LeasesAdvance,
+
+    LeasesFull
+
+    ;
 
     @Override
     public String toString() {

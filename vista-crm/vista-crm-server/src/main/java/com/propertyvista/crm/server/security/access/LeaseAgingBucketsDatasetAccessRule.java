@@ -11,21 +11,21 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 
-public class CustomerCreditCheckDatasetAccessRule implements DatasetAccessRule<CustomerCreditCheck> {
+public class LeaseAgingBucketsDatasetAccessRule implements DatasetAccessRule<LeaseAgingBuckets> {
 
-    private static final long serialVersionUID = 2969590756436304214L;
+    private static final long serialVersionUID = 8522053643504155987L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<CustomerCreditCheck> criteria) {
-        criteria.eq(criteria.proto().screening().screene()._tenantInLease().$().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
+    public void applyRule(EntityQueryCriteria<LeaseAgingBuckets> criteria) {
+        criteria.eq(criteria.proto().arrearsSnapshot().billingAccount().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
                 .getPrincipalPrimaryKey());
     }
 

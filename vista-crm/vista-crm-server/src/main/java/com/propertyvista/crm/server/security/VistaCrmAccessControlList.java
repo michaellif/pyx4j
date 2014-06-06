@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.security;
 
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+
 import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
@@ -21,6 +24,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
+import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.CRMImpliedPermission;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
@@ -134,6 +138,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentD
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.ProofOfAssetDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.ProofOfIncomeDocumentCrmUploadService;
+import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
@@ -192,9 +197,35 @@ import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
 import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
+import com.propertyvista.crm.server.security.access.AggregatedTransferDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.AppointmentDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.AptUnitDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.AptUnitOccupancySegmentDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.BillingAccountDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.BillingCycleDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.BuildingAgingBucketsDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.BuildingArrearsSnapshotDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.BuildingDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.BuildingElementDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.CommunicationMessageAccessRule;
+import com.propertyvista.crm.server.security.access.CommunityEventDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.CustomerCreditCheckDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.CustomerDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.DashboardDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.DashboardOwnerInstanceAccess;
+import com.propertyvista.crm.server.security.access.DashboardUserInstanceAccess;
+import com.propertyvista.crm.server.security.access.LeadDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.LeaseAgingBucketsDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.LeaseDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.LeaseParticipantDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.LeaseTermParticipantDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.MaintenanceRequestDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.N4LegalLetterDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.PaymentRecordDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.UnitAvailabilityStatusDatasetAccessRule;
+import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageAttachment;
-import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Company;
@@ -271,13 +302,13 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             // Debug
             grant(VistaBasicBehavior.CRM, new IServiceExecutePermission("*"));
             grant(VistaBasicBehavior.CRM, new ServiceExecutePermission("*"));
-            grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
-            grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
+            grant(VistaBasicBehavior.CRM, new EntityPermission("*", ALL));
+            grant(VistaBasicBehavior.CRM, new EntityPermission("*", READ));
         }
 
         if (allowAllEntityDuringDevelopment) {
-            grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
-            grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
+            grant(VistaBasicBehavior.CRM, new EntityPermission("*", ALL));
+            grant(VistaBasicBehavior.CRM, new EntityPermission("*", READ));
         }
 
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission("*"));
@@ -320,8 +351,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Dashboard:
         // we want owners (dashboard creator) to have full access to dashboards they own, and other users only read-only access and only for shared.
-        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, new DashboardOwnerInstanceAccess(), EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, new DashboardUserInstanceAccess(), EntityPermission.READ));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, new DashboardOwnerInstanceAccess(), ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(DashboardMetadata.class, new DashboardUserInstanceAccess(), READ));
         grant(VistaBasicBehavior.CRM, new DashboardDatasetAccessRule(), DashboardMetadata.class);
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DashboardMetadataService.class));
@@ -674,6 +705,12 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingAccountDatasetAccessRule(), BillingAccount.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new N4LegalLetterDatasetAccessRule(), N4LegalLetter.class);
+
+        /***************** this is new List **************** */
+
+        merge(new VistaCrmBuildingAccessControlList());
+
+        grant(VistaCrmBehavior.LeasesBasic, new ActionPermission(SendMail.class));
 
         freeze();
     }

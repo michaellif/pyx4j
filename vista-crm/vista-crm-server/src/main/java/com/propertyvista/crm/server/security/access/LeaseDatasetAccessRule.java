@@ -7,25 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 18, 2013
- * @author VLadL
+ * Created on Jan 11, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class MaintenanceRequestDatasetAccessRule implements DatasetAccessRule<MaintenanceRequest> {
+public class LeaseDatasetAccessRule implements DatasetAccessRule<Lease> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<MaintenanceRequest> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+    public void applyRule(EntityQueryCriteria<Lease> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
+
 }

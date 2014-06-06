@@ -30,11 +30,12 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
 
+import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @ToStringFormat("{0}, {1}")
 @DiscriminatorValue("Roof")
-public interface Roof extends LicensedWarrantedMaintained, BuildingElement {
+public interface Roof extends LicensedWarrantedMaintained, BuildingElement, BuildingMechanical {
 
     @ToString(index = 0)
     @MemberColumn(name = "roofType")

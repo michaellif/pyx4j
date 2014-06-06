@@ -7,25 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-15
+ * Created on 2013-07-11
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 
-public class BuildingArrearsSnapshotDatasetAccessRule implements DatasetAccessRule<BuildingArrearsSnapshot> {
+public class UnitAvailabilityStatusDatasetAccessRule implements DatasetAccessRule<UnitAvailabilityStatus> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3730977998808761910L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<BuildingArrearsSnapshot> criteria) {
-        criteria.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+    public void applyRule(EntityQueryCriteria<UnitAvailabilityStatus> criteria) {
+        criteria.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

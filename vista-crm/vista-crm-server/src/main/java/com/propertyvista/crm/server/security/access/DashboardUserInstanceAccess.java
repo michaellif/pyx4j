@@ -11,22 +11,21 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.InstanceAccess;
+import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
-public class DashboardOwnerInstanceAccess implements InstanceAccess {
+public class DashboardUserInstanceAccess implements InstanceAccess {
 
     private static final long serialVersionUID = 7082392064409139166L;
 
     @Override
     public boolean allow(IEntity entity) {//@formatter:off       
-        return (entity instanceof DashboardMetadata)
-                && !((DashboardMetadata) entity).ownerUser().isNull()
-                && ((DashboardMetadata) entity).ownerUser().getPrimaryKey().equals(VistaContext.getCurrentUserPrimaryKey()); 
+        return SecurityController.checkBehavior(VistaCrmBehavior.DashboardManager) | ((entity instanceof DashboardMetadata) && ((DashboardMetadata) entity).isShared().getValue(false)); 
     }//@formatter:on
 }

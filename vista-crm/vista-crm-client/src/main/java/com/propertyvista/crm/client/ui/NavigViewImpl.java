@@ -190,7 +190,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer()));
             }
-            if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial)) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay()));
             }
             if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {

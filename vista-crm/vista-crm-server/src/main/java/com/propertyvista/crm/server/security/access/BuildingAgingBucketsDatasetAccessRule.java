@@ -7,26 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-26
+ * Created on 2013-07-11
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 
-public class AptUnitDatasetAccessRule implements DatasetAccessRule<AptUnit> {
+public class BuildingAgingBucketsDatasetAccessRule implements DatasetAccessRule<BuildingAgingBuckets> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -6666653658888401905L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<AptUnit> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+    public void applyRule(EntityQueryCriteria<BuildingAgingBuckets> criteria) {
+        criteria.eq(criteria.proto().arrearsSnapshot().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

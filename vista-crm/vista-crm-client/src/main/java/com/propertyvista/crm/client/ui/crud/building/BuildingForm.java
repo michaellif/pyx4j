@@ -153,7 +153,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     });
         }
 
-        financialTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial));
+        financialTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial_OLD));
         billingCyclesTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.Billing));
 
         if (catalogTab != null) {

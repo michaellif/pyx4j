@@ -41,7 +41,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         allowedBehaviors = {
                 VistaCrmBehavior.PropertyManagement,
                 VistaCrmBehavior.Mechanicals,
-                VistaCrmBehavior.BuildingFinancial,
+                VistaCrmBehavior.BuildingFinancial_OLD,
                 VistaCrmBehavior.Marketing,
                 VistaCrmBehavior.MarketingMedia,
                 VistaCrmBehavior.Tenants,

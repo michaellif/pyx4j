@@ -20,9 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
@@ -49,6 +51,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     /**
      * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
      */
+    @AccessControl(SendMail.class)
     void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseTermParticipant<?>> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);

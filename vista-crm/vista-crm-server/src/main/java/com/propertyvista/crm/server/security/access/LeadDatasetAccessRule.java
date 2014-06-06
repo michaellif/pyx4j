@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-11
+ * Created on 2013-07-25
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
+import com.propertyvista.domain.tenant.lead.Lead;
 
-public class LeaseAgingBucketsDatasetAccessRule implements DatasetAccessRule<LeaseAgingBuckets> {
+public class LeadDatasetAccessRule implements DatasetAccessRule<Lead> {
 
-    private static final long serialVersionUID = 8522053643504155987L;
+    private static final long serialVersionUID = 0l;
 
     @Override
-    public void applyRule(EntityQueryCriteria<LeaseAgingBuckets> criteria) {
-        criteria.eq(criteria.proto().arrearsSnapshot().billingAccount().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
-                .getPrincipalPrimaryKey());
+    public void applyRule(EntityQueryCriteria<Lead> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

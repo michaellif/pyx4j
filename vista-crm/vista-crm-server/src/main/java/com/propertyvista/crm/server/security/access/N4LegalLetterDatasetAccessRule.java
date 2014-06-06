@@ -7,27 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-26
- * @author stanp
+ * Created on 2013-10-31
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.company.EmployeeSignature;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
-// TODO artemb - complete/validate proper access rule
-public class EmployeeSignatureDatasetAccessRule implements DatasetAccessRule<EmployeeSignature> {
-
-    private static final long serialVersionUID = 1L;
+public class N4LegalLetterDatasetAccessRule implements DatasetAccessRule<N4LegalLetter> {
 
     @Override
-    public void applyRule(EntityQueryCriteria<EmployeeSignature> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().employee().user(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+    public void applyRule(EntityQueryCriteria<N4LegalLetter> criteria) {
+        criteria.eq(criteria.proto().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

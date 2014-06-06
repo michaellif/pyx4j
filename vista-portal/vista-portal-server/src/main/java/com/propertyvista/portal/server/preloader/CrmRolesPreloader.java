@@ -111,7 +111,7 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole("Accounting", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
         createRole("Admin", true, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
         createRole("AM", VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
-        createRole("Asset Manager", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
+        createRole("Asset Manager", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.BuildingFinancial_OLD, VistaCrmBehavior.Reports);
         createRole("BR", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Maintenance, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
         createRole(DEFAULT_COMMANDANT_ROLE_NAME, VistaCrmBehavior.Tenants, VistaCrmBehavior.Commandant, VistaCrmBehavior.Emergency,
@@ -123,7 +123,7 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole("Maintenance", VistaCrmBehavior.Mechanicals, VistaCrmBehavior.Occupancy, VistaCrmBehavior.Maintenance, VistaCrmBehavior.Reports);
         createRole("Marketing and Leasing Specialist", VistaCrmBehavior.Marketing, VistaCrmBehavior.MarketingMedia, VistaCrmBehavior.Reports);
         createRole("Mechanical Engineer", VistaCrmBehavior.Mechanicals, VistaCrmBehavior.Reports);
-        createRole("Owner", true, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
+        createRole("Owner", true, VistaCrmBehavior.BuildingFinancial_OLD, VistaCrmBehavior.Reports);
         createRole("PM", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
 

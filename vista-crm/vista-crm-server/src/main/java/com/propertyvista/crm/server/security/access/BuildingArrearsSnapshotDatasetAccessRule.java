@@ -7,23 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-31
+ * Created on 2013-07-15
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.security;
+package com.propertyvista.crm.server.security.access;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.legal.n4.N4LegalLetter;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 
-public class N4LegalLetterDatasetAccessRule implements DatasetAccessRule<N4LegalLetter> {
+public class BuildingArrearsSnapshotDatasetAccessRule implements DatasetAccessRule<BuildingArrearsSnapshot> {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<N4LegalLetter> criteria) {
-        criteria.eq(criteria.proto().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
+    public void applyRule(EntityQueryCriteria<BuildingArrearsSnapshot> criteria) {
+        criteria.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
     }
 
 }
