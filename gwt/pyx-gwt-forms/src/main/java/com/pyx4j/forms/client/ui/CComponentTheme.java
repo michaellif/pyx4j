@@ -128,6 +128,8 @@ public class CComponentTheme extends Theme {
     protected void initTabbedFormStyle() {
         Style style = new Style(".", StyleName.TabbedFormTab);
         style.addProperty("margin", "6px");
+        //Keep empty space on a bottom of page for bottom tab 
+        style.addProperty("padding-bottom", "40px");
         addStyle(style);
     }
 
