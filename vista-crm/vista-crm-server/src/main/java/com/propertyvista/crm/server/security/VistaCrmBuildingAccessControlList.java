@@ -32,7 +32,9 @@ import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.ComplexDTO;
 import com.propertyvista.dto.FloorplanDTO;
+import com.propertyvista.dto.LandlordDTO;
 
 class VistaCrmBuildingAccessControlList extends UIAclBuilder {
 
@@ -46,6 +48,15 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
         grant(BuildingMechanicals, BuildingDTO.class, AptUnitDTO.class, READ);
         grant(BuildingAdministrator, BuildingDTO.class, AptUnitDTO.class, ALL);
         grant(BuildingLeasing, BuildingDTO.class, AptUnitDTO.class, READ);
+
+        grant(BuildingBasic, ComplexDTO.class, AptUnitDTO.class, READ);
+        grant(BuildingFinancial, ComplexDTO.class, AptUnitDTO.class, READ);
+        grant(BuildingAccounting, ComplexDTO.class, AptUnitDTO.class, READ);
+        grant(BuildingProperty, ComplexDTO.class, AptUnitDTO.class, ALL);
+        grant(BuildingMarketing, ComplexDTO.class, AptUnitDTO.class, ALL);
+        grant(BuildingMechanicals, ComplexDTO.class, AptUnitDTO.class, READ);
+        grant(BuildingAdministrator, ComplexDTO.class, AptUnitDTO.class, ALL);
+        grant(BuildingLeasing, ComplexDTO.class, AptUnitDTO.class, READ);
 
         //G floorplans/general
         grant(BuildingBasic, FloorplanDTO.class, READ);
@@ -87,6 +98,16 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
         grant(BuildingMarketing, CommunityEvents.class);
         grant(BuildingMechanicals, CommunityEvents.class);
         grant(BuildingAdministrator, CommunityEvents.class);
+
+        //landlords
+        grant(BuildingBasic, LandlordDTO.class, READ);
+        grant(BuildingFinancial, LandlordDTO.class, READ);
+        grant(BuildingAccounting, LandlordDTO.class, READ);
+        grant(BuildingProperty, LandlordDTO.class, READ);
+        grant(BuildingMarketing, LandlordDTO.class, ALL);
+        grant(BuildingMechanicals, LandlordDTO.class, READ);
+        grant(BuildingAdministrator, LandlordDTO.class, ALL);
+        grant(BuildingLeasing, LandlordDTO.class, READ);
 
     }
 }

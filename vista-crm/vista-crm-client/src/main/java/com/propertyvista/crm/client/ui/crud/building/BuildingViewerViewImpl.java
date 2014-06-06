@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -43,6 +44,8 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
+import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -130,7 +133,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                     ((BuildingViewerPresenter) getPresenter()).getCommunityEventVisorController().show();
                 }
             }
-        }));
+        }), new ActionPermission(CommunityEvents.class));
 
         if (VistaFeatures.instance().yardiIntegration() && ApplicationMode.isDevelopment()) {
             addAction(new MenuItem(i18n.tr("Update From Yardi"), new Command() {
@@ -146,14 +149,14 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             public void execute() {
                 ((BuildingViewerPresenter) getPresenter()).importBuildingData();
             }
-        }));
+        }), new ActionPermission(ImportExport.class));
 
         addAction(new MenuItem(i18n.tr("Export Building Data"), new Command() {
             @Override
             public void execute() {
                 ((BuildingViewerPresenter) getPresenter()).exportBuildingData();
             }
-        }));
+        }), new ActionPermission(ImportExport.class));
 
     }
 

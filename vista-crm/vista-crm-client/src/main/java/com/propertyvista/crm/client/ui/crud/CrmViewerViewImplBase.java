@@ -27,6 +27,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.Permission;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
@@ -135,6 +137,15 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     public void addAction(MenuItem action) {
         actionsMenu.addItem(action);
+    }
+
+    //TODO this will not work!!!!
+    @Deprecated
+    public void addAction(MenuItem action, Permission permission) {
+        actionsMenu.addItem(action);
+        if (!SecurityController.checkPermission(permission)) {
+            action.setVisible(false);
+        }
     }
 
     public void removeAction(MenuItem action) {

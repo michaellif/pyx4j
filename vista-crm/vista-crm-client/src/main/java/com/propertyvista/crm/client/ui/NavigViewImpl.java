@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -42,6 +43,10 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.dto.ComplexDTO;
+import com.propertyvista.dto.LandlordDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -140,11 +145,11 @@ public class NavigViewImpl extends Composite implements NavigView {
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Properties"), CrmImages.INSTANCE.propertiesIcon()));
 
             if (!VistaFeatures.instance().yardiIntegration()) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex()));
+                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Complex(), DataModelPermission.permissionRead(ComplexDTO.class)));
             }
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Building()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Unit()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Landlord()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Building(), DataModelPermission.permissionRead(BuildingDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Unit(), DataModelPermission.permissionRead(AptUnitDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Properties.Landlord(), DataModelPermission.permissionRead(LandlordDTO.class)));
 
         }
 
