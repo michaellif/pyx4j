@@ -36,14 +36,14 @@ import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
-import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
@@ -128,10 +128,10 @@ public abstract class AuthenticationServiceImpl implements AuthenticationService
     }
 
     protected boolean isClientPermissions(Permission permission) {
-        if ((permission instanceof ServiceExecutePermission) || (permission instanceof IServiceExecutePermission)) {
-            return false;
-        } else {
+        if ((permission instanceof DataModelPermission) || (permission instanceof ActionPermission)) {
             return true;
+        } else {
+            return false;
         }
     }
 

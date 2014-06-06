@@ -14,12 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 26, 2014
+ * Created on Jun 5, 2014
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.security;
+package com.pyx4j.security.annotations;
 
-public class EntityMemberPermission {
+import java.io.Serializable;
+
+/**
+ * Security marker. without using string literals
+ */
+public interface ActionId extends Serializable {
 
 }
