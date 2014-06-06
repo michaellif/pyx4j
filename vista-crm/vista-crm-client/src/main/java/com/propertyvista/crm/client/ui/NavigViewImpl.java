@@ -48,6 +48,8 @@ public class NavigViewImpl extends Composite implements NavigView {
 
     private final SideMenu menu;
 
+    private final SideMenuItem userMenuItem;
+
     private SideMenuAppPlaceItem systemDashboard;
 
     private SideMenuList customDashboards;
@@ -61,6 +63,13 @@ public class NavigViewImpl extends Composite implements NavigView {
         setStyleName(SiteViewTheme.StyleName.SiteViewSideMenu.name());
 
         setHeight("100%");
+
+        {//User
+            SideMenuList list = new SideMenuList();
+            //  root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.userIcon()));
+            root.addMenuItem(userMenuItem = new SideMenuItem(list, "User", CrmImages.INSTANCE.tenantsIcon()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Account.AccountData()));
+        }
 
         {//Dashboards
             SideMenuList list = new SideMenuList();
@@ -182,5 +191,10 @@ public class NavigViewImpl extends Composite implements NavigView {
             customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), metadata.name()
                     .getStringView(), null));
         }
+    }
+
+    @Override
+    public void updateUserName(String name) {
+        userMenuItem.setCaption(name);
     }
 }

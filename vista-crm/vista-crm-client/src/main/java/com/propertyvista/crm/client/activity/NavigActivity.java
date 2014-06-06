@@ -61,7 +61,9 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
         dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
 
+        view.updateUserName(ClientContext.getUserVisit().getName());
         updateDashboardItems();
+
         if (place instanceof AppPlace) {
             view.select((AppPlace) place);
         }

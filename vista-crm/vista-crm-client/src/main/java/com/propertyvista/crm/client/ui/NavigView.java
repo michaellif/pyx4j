@@ -30,4 +30,6 @@ public interface NavigView extends IsWidget, IsView {
     void select(AppPlace appPlace);
 
     void updateDashboards(Vector<DashboardMetadata> metadataList);
+
+    void updateUserName(String name);
 }

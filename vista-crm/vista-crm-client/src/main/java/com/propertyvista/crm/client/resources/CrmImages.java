@@ -215,6 +215,25 @@ public interface CrmImages extends VistaImages {
     @Source("Nav_Icon_Profile-Inactive.png")
     ImageResource avatar();
 
+    UserIconImages userIcon();
+
+    public interface UserIconImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Profile-Inactive.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Profile-Active.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Profile-Active.png")
+        ImageResource active();
+    }
+
     DashboardsIconImages dashboardsIcon();
 
     public interface DashboardsIconImages extends ButtonImages {
