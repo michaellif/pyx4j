@@ -17,10 +17,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
@@ -79,6 +78,10 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private boolean loggedIn = false;
 
+    private SimplePanel logoContainer;
+
+    private Image logoImage;
+
     //TODO Misha How can I do this properly ?
     @Deprecated
     public static void temporaryWayToSetTitle(String title, boolean logoImageAvalable) {
@@ -89,11 +92,164 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     public HeaderViewImpl() {
         setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
 
-        add(createLeftToolbar());
+        {//Left Toolbar
+            Toolbar toolbar = new Toolbar();
+            sideMenuButton = new Button(CrmImages.INSTANCE.menu(), new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+                }
+            });
+            toolbar.addItem(sideMenuButton);
+            add(toolbar);
+        }
 
-        add(createLogoContainer());
+        {//Logo
+            logoContainer = new SimplePanel();
+            logoContainer.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            HasClickHandlers logoElement;
 
-        add(createRightToolbar());
+            if (useLogoImage) {
+                logoImage = new Image(MediaUtils.createCrmLogoUrl());
+
+                logoImage.getElement().getStyle().setProperty("maxHeight", "50px");
+                logoImage.getElement().getStyle().setMarginLeft(-30, Unit.PX);
+                logoImage.getElement().getStyle().setFloat(Style.Float.LEFT);
+                logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
+                logoImage.setTitle(i18n.tr("Home"));
+
+                RootPanel.get().add(logoImage);
+                int logoImageWidth = logoImage.getOffsetWidth();
+
+                logoContainer.setWidget(logoImage);
+
+                logoImage.getElement().getStyle().setMarginLeft(-logoImageWidth / 2, Unit.PX);
+
+                logoElement = logoImage;
+            } else {
+                HTML logoHtml = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "")
+                        + "</h1>");
+                logoHtml.getElement().getStyle().setCursor(Cursor.POINTER);
+
+                logoContainer.setWidget(logoHtml);
+                logoElement = logoHtml;
+            }
+
+            logoElement.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.navigToLanding();
+                }
+            });
+
+            add(logoContainer);
+        }
+
+        {//Right Toolbar
+            Toolbar toolbar = new Toolbar();
+            toolbar.getElement().getStyle().setProperty("right", "0");
+
+            toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
+
+            thisIsProduction = new HTML("PRODUCTION SUPPORT!");
+            thisIsProduction.getElement().getStyle().setColor("red");
+            thisIsProduction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            thisIsProduction.getElement().getStyle().setFontSize(30, Unit.PX);
+            thisIsProduction.getElement().getStyle().setMarginLeft(1, Unit.EM);
+            thisIsProduction.getElement().getStyle().setMarginRight(1, Unit.EM);
+            thisIsProduction.getElement().getStyle().setProperty("textAlign", "center");
+            thisIsProduction.setVisible(false);
+
+            thisIsDemo = new HTML(i18n.tr("Demo Environment"));
+            thisIsDemo.getElement().getStyle().setColor("green");
+            thisIsDemo.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            thisIsDemo.getElement().getStyle().setFontSize(30, Unit.PX);
+            thisIsDemo.getElement().getStyle().setProperty("textAlign", "center");
+            thisIsDemo.setVisible(false);
+
+            userButton = new Button("");
+
+            ButtonMenuBar userButtonMenu = new ButtonMenuBar();
+            userButton.setMenu(userButtonMenu);
+
+            userButtonMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.showAccount();
+                }
+            }));
+            userButtonMenu.addItem(new MenuItem(i18n.tr("Settings"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.showProperties();
+                }
+            }));
+
+            userButtonMenu.addItem(support = new MenuItem(i18n.tr("Support"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.getSatisfaction();
+                }
+            }));
+            userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.logout();
+                }
+            }));
+
+            communicationButton = new Button(CrmImages.INSTANCE.alert(), new Command() {
+                @Override
+                public void execute() {
+                    switch (layoutType) {
+                    case phonePortrait:
+                    case phoneLandscape:
+                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
+                        break;
+                    default:
+                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
+                        break;
+                    }
+                }
+            });
+
+            exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
+
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+                }
+            });
+            exitAdminButton.ensureDebugId("home");
+
+            adminButton = new Button(i18n.tr("Administration"), new Command() {
+
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
+                }
+            });
+            adminButton.ensureDebugId("administration");
+
+            languageButton = new Button("");
+
+            languageButtonMenu = new ButtonMenuBar();
+            languageButton.setMenu(languageButtonMenu);
+
+            // from toolbar:
+
+            toolbar.addItem(thisIsProduction);
+            toolbar.addItem(thisIsDemo);
+
+            toolbar.addItem(exitAdminButton);
+            toolbar.addItem(adminButton);
+            toolbar.addItem(userButton);
+            toolbar.addItem(languageButton);
+            if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
+                toolbar.addItem(communicationButton);
+            }
+            add(toolbar);
+        }
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 
@@ -106,159 +262,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
-    }
-
-    private IsWidget createLeftToolbar() {
-        Toolbar toolbar = new Toolbar();
-        sideMenuButton = new Button(CrmImages.INSTANCE.menu(), new Command() {
-            @Override
-            public void execute() {
-                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
-            }
-        });
-        toolbar.addItem(sideMenuButton);
-        return toolbar;
-    }
-
-    private Widget createLogoContainer() {
-        SimplePanel logoContainer = new SimplePanel();
-        logoContainer.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        HasClickHandlers logoElement;
-
-        if (useLogoImage) {
-            Image logoImage = new Image(MediaUtils.createCrmLogoUrl());
-            logoImage.getElement().getStyle().setProperty("maxHeight", "50px");
-            logoImage.getElement().getStyle().setMarginLeft(20, Unit.PX);
-            logoImage.getElement().getStyle().setFloat(Style.Float.LEFT);
-            logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            logoImage.setTitle(i18n.tr("Home"));
-
-            logoContainer.setWidget(logoImage);
-            logoElement = logoImage;
-        } else {
-            HTML logoHtml = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "")
-                    + "</h1>");
-            logoHtml.getElement().getStyle().setCursor(Cursor.POINTER);
-
-            logoContainer.setWidget(logoHtml);
-            logoElement = logoHtml;
-        }
-
-        logoElement.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.navigToLanding();
-            }
-        });
-
-        return logoContainer;
-    }
-
-    private IsWidget createRightToolbar() {
-        Toolbar toolbar = new Toolbar();
-        toolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        toolbar.getElement().getStyle().setProperty("right", "0");
-
-        toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
-
-        thisIsProduction = new HTML("PRODUCTION SUPPORT!");
-        thisIsProduction.getElement().getStyle().setColor("red");
-        thisIsProduction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        thisIsProduction.getElement().getStyle().setFontSize(30, Unit.PX);
-        thisIsProduction.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        thisIsProduction.getElement().getStyle().setMarginRight(1, Unit.EM);
-        thisIsProduction.getElement().getStyle().setProperty("textAlign", "center");
-        thisIsProduction.setVisible(false);
-
-        thisIsDemo = new HTML(i18n.tr("Demo Environment"));
-        thisIsDemo.getElement().getStyle().setColor("green");
-        thisIsDemo.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        thisIsDemo.getElement().getStyle().setFontSize(30, Unit.PX);
-        thisIsDemo.getElement().getStyle().setProperty("textAlign", "center");
-        thisIsDemo.setVisible(false);
-
-        userButton = new Button("");
-
-        ButtonMenuBar userButtonMenu = new ButtonMenuBar();
-        userButton.setMenu(userButtonMenu);
-
-        userButtonMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
-            @Override
-            public void execute() {
-                presenter.showAccount();
-            }
-        }));
-        userButtonMenu.addItem(new MenuItem(i18n.tr("Settings"), new Command() {
-            @Override
-            public void execute() {
-                presenter.showProperties();
-            }
-        }));
-
-        userButtonMenu.addItem(support = new MenuItem(i18n.tr("Support"), new Command() {
-            @Override
-            public void execute() {
-                presenter.getSatisfaction();
-            }
-        }));
-        userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
-            @Override
-            public void execute() {
-                presenter.logout();
-            }
-        }));
-
-        communicationButton = new Button(CrmImages.INSTANCE.alert(), new Command() {
-            @Override
-            public void execute() {
-                switch (layoutType) {
-                case phonePortrait:
-                case phoneLandscape:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
-                    break;
-                default:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
-                    break;
-                }
-            }
-        });
-
-        exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
-
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
-            }
-        });
-        exitAdminButton.ensureDebugId("home");
-
-        adminButton = new Button(i18n.tr("Administration"), new Command() {
-
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Administration.Financial.ARCode());
-            }
-        });
-        adminButton.ensureDebugId("administration");
-
-        languageButton = new Button("");
-
-        languageButtonMenu = new ButtonMenuBar();
-        languageButton.setMenu(languageButtonMenu);
-
-        // from toolbar:
-
-        toolbar.addItem(thisIsProduction);
-        toolbar.addItem(thisIsDemo);
-
-        toolbar.addItem(exitAdminButton);
-        toolbar.addItem(adminButton);
-        toolbar.addItem(userButton);
-        toolbar.addItem(languageButton);
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            toolbar.addItem(communicationButton);
-        }
-        return toolbar;
     }
 
     @Override
@@ -366,7 +369,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
             adminButton.setVisible(false);
             languageButton.setVisible(false);
-
+            logoContainer.getElement().getStyle().setProperty("margin", "0 50%");
             break;
         default:
             sideMenuButton.setVisible(false);
@@ -382,6 +385,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
             languageButton.setVisible(loggedIn);
             communicationButton.setVisible(loggedIn);
+            if (logoImage != null) {
+                logoContainer.getElement().getStyle().setProperty("margin", "0 " + (logoImage.getOffsetWidth() / 2 + 20) + "px");
+            }
             break;
         }
 

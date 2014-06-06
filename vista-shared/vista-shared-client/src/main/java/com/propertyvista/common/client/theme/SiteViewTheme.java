@@ -51,12 +51,11 @@ public class SiteViewTheme extends Theme {
         style.addProperty("height", "100%");
         style.addProperty("width", "100%");
         style.addProperty("font-size", "1.1em");
-        style.addProperty("padding-left", "0.3em");
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("margin", "8px 10px 0 8px");
-        style.addProperty("display", "inline-block");
+        style.addProperty("position", "absolute");
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
