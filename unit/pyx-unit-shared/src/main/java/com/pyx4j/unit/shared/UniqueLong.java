@@ -71,4 +71,9 @@ public class UniqueLong {
         return String.valueOf(next());
     }
 
+    @Override
+    public String toString() {
+        return nextAsString();
+    }
+
 }

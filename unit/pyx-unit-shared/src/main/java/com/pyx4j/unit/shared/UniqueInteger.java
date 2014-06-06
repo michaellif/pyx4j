@@ -71,4 +71,9 @@ public class UniqueInteger {
         return String.valueOf(next());
     }
 
+    @Override
+    public String toString() {
+        return nextAsString();
+    }
+
 }

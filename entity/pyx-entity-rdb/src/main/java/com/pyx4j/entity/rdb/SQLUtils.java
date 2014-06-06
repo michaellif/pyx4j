@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -90,6 +91,27 @@ public class SQLUtils {
             connection.clearWarnings();
         }
 
+    }
+
+    public static void execute(Connection connection, String sql, Object... params) throws SQLException {
+        PreparedStatement stmt = null;
+        boolean success = false;
+        try {
+            stmt = connection.prepareStatement(sql);
+            log.debug("exec: {}", sql);
+            int parameterIndex = 1;
+            for (Object param : params) {
+                stmt.setObject(parameterIndex, param);
+                parameterIndex++;
+            }
+            stmt.executeUpdate();
+            success = true;
+        } finally {
+            if (!success) {
+                log.error("Error executing SQL '{}'", sql);
+            }
+            SQLUtils.closeQuietly(stmt);
+        }
     }
 
     public static void execute(Connection connection, String sql) throws SQLException {
