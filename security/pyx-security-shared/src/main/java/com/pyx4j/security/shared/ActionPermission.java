@@ -27,6 +27,8 @@ public class ActionPermission extends BasicPermission {
 
     private static final long serialVersionUID = 1L;
 
+    //TODO Make serializable using  ActionId class
+
     @GWTSerializable
     protected ActionPermission() {
         super("");
