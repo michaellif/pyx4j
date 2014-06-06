@@ -29,6 +29,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
@@ -38,6 +39,7 @@ import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class NavigActivity extends AbstractActivity implements NavigPresenter, BoardUpdateHandler {
 
@@ -60,6 +62,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         eventBus.addHandler(BoardUpdateEvent.getType(), this);
         panel.setWidget(view);
+        obtainAvailableLocales();
     }
 
     public void withPlace(Place place) {
@@ -123,4 +126,14 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
     public boolean isAdminPlace() {
         return place.getClass().getName().contains(CrmSiteMap.Administration.class.getName());
     }
+
+    private void obtainAvailableLocales() {
+        view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
+    }
+
+    @Override
+    public void setLocale(CompiledLocale locale) {
+        ClientLocaleUtils.changeApplicationLocale(locale);
+    }
+
 }

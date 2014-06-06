@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.Command;
@@ -34,6 +35,7 @@ import com.pyx4j.site.client.ui.sidemenu.SideMenuItem;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuList;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
@@ -41,6 +43,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class NavigViewImpl extends Composite implements NavigView {
 
@@ -62,6 +65,8 @@ public class NavigViewImpl extends Composite implements NavigView {
     private final SideMenuItem adminMenuItem;
 
     private final SideMenuItem exitAdminMenuItem;
+
+    private SideMenuList languagesMenuList;
 
     private SideMenuAppPlaceItem systemDashboard;
 
@@ -105,6 +110,9 @@ public class NavigViewImpl extends Composite implements NavigView {
                     presenter.getSatisfaction();
                 }
             }, i18n.tr("Support"), null));
+
+            languagesMenuList = new SideMenuList();
+            list.addMenuItem(new SideMenuItem(languagesMenuList, i18n.tr("Languages"), null));
 
             list.addMenuItem(new SideMenuItem(new Command() {
                 @Override
@@ -249,6 +257,20 @@ public class NavigViewImpl extends Composite implements NavigView {
         for (DashboardMetadata metadata : metadataList) {
             customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), metadata.name()
                     .getStringView(), null));
+        }
+    }
+
+    @Override
+    public void setAvailableLocales(List<CompiledLocale> localeList) {
+        languagesMenuList.clear();
+        CompiledLocale currentLocale = ClientLocaleUtils.getCurrentLocale();
+        for (final CompiledLocale compiledLocale : localeList) {
+            languagesMenuList.addMenuItem(new SideMenuItem(new Command() {
+                @Override
+                public void execute() {
+                    presenter.setLocale(compiledLocale);
+                }
+            }, compiledLocale.getNativeDisplayName() + (currentLocale.equals(compiledLocale) ? " V" : ""), null));
         }
     }
 
