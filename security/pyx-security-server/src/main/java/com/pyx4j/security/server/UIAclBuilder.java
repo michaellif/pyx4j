@@ -20,6 +20,9 @@
  */
 package com.pyx4j.security.server;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.annotations.ActionId;
@@ -39,5 +42,16 @@ public class UIAclBuilder extends ServletContainerAclBuilder {
     protected void grant(Behavior behavior, Class<? extends IEntity> entityClass1, Class<? extends IEntity> entityClass2, int actions) {
         grant(behavior, DataModelPermission.create(entityClass1, actions));
         grant(behavior, DataModelPermission.create(entityClass2, actions));
+    }
+
+    protected void grant(Behavior behavior, List<Class<? extends IEntity>> entities, int actions) {
+        for (Class<? extends IEntity> entityClass : entities) {
+            grant(behavior, DataModelPermission.create(entityClass, actions));
+        }
+    }
+
+    @SafeVarargs
+    protected final List<Class<? extends IEntity>> entities(Class<? extends IEntity>... classes) {
+        return Arrays.asList(classes);
     }
 }
