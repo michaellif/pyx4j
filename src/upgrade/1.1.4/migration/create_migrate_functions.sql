@@ -194,6 +194,14 @@ BEGIN
                                         ADD COLUMN address_street_name VARCHAR(500),
                                         ADD COLUMN address_street_number VARCHAR(500),
                                         ADD COLUMN address_suite_number VARCHAR(500);
+                                        
+        -- landlord
+        
+        ALTER TABLE landlord RENAME COLUMN  address_country TO  address_country_old;
+        ALTER TABLE landlord RENAME COLUMN  address_province TO  address_province_old;
+        
+        ALTER TABLE landlord    ADD COLUMN address_country VARCHAR(50),
+                                ADD COLUMN address_province VARCHAR(500);
         
         
         -- legal_status
@@ -425,6 +433,33 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact '
                 ||'SET  address_street_number = ''INVALID'' '
                 ||'WHERE address_street_number IS NULL ';
+                
+        -- landlord
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.landlord AS l '
+                ||'SET    address_country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  l.address_country_old = c.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.landlord AS l '
+                ||'SET  address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
+                ||'WHERE    l.address_province_old = p.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.landlord '
+                ||'SET  address_street_number = '
+                ||' address_street_number||address_street_number_suffix '
+                ||'WHERE    address_street_number_suffix IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.landlord '
+                ||'SET  address_street_name = '
+                ||' TRIM(address_street_name)||'' ''||INITCAP(TRIM(address_street_type)) '
+                ||'WHERE    address_street_type IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.landlord '
+                ||'SET  address_street_name = '
+                ||' TRIM(address_street_name)||'' ''||INITCAP(TRIM(address_street_direction)) '
+                ||'WHERE    address_street_direction IS NOT NULL';
         
         -- Phone numbers update
         
@@ -527,6 +562,16 @@ BEGIN
                                         DROP COLUMN address_province_old,
                                         DROP COLUMN address_street1,
                                         DROP COLUMN address_street2;
+                                        
+        -- landlord
+        
+        ALTER TABLE landlord    DROP COLUMN address_country_old,
+                                DROP COLUMN address_county,
+                                DROP COLUMN address_province_old,
+                                DROP COLUMN address_street_direction,
+                                DROP COLUMN address_street_number_suffix,
+                                DROP COLUMN address_street_type;
+                                
         
         -- province_policy_node
         
