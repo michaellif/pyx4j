@@ -24,7 +24,6 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerViewerView;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
-import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
@@ -36,6 +35,6 @@ public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(BuildingMechanical.class));
+        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(BoilerDTO.class));
     }
 }

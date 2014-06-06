@@ -24,6 +24,9 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.BuildingPropert
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
+import java.util.List;
+
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.security.server.UIAclBuilder;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -32,42 +35,43 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
+import com.propertyvista.dto.ElevatorDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LandlordDTO;
+import com.propertyvista.dto.RoofDTO;
 
 class VistaCrmBuildingAccessControlList extends UIAclBuilder {
 
     VistaCrmBuildingAccessControlList() {
         //F general, details, units, add-ons, PC, contacts
-        grant(BuildingBasic, BuildingDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingFinancial, BuildingDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingAccounting, BuildingDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingProperty, BuildingDTO.class, AptUnitDTO.class, ALL);
-        grant(BuildingMarketing, BuildingDTO.class, AptUnitDTO.class, ALL);
-        grant(BuildingMechanicals, BuildingDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingAdministrator, BuildingDTO.class, AptUnitDTO.class, ALL);
-        grant(BuildingLeasing, BuildingDTO.class, AptUnitDTO.class, READ);
+        {
+            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class, ComplexDTO.class);
 
-        grant(BuildingBasic, ComplexDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingFinancial, ComplexDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingAccounting, ComplexDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingProperty, ComplexDTO.class, AptUnitDTO.class, ALL);
-        grant(BuildingMarketing, ComplexDTO.class, AptUnitDTO.class, ALL);
-        grant(BuildingMechanicals, ComplexDTO.class, AptUnitDTO.class, READ);
-        grant(BuildingAdministrator, ComplexDTO.class, AptUnitDTO.class, ALL);
-        grant(BuildingLeasing, ComplexDTO.class, AptUnitDTO.class, READ);
+            grant(BuildingBasic, entities, READ);
+            grant(BuildingFinancial, entities, READ);
+            grant(BuildingAccounting, entities, READ);
+            grant(BuildingProperty, entities, ALL);
+            grant(BuildingMarketing, entities, ALL);
+            grant(BuildingMechanicals, entities, READ);
+            grant(BuildingAdministrator, entities, ALL);
+            grant(BuildingLeasing, entities, READ);
+        }
 
         //G floorplans/general
-        grant(BuildingBasic, FloorplanDTO.class, READ);
-        grant(BuildingFinancial, FloorplanDTO.class, READ);
-        grant(BuildingAccounting, FloorplanDTO.class, READ);
-        grant(BuildingProperty, FloorplanDTO.class, ALL);
-        grant(BuildingMarketing, FloorplanDTO.class, ALL);
-        grant(BuildingMechanicals, FloorplanDTO.class, READ);
-        grant(BuildingAdministrator, FloorplanDTO.class, ALL);
-        grant(BuildingLeasing, FloorplanDTO.class, READ);
+        {
+            List<Class<? extends IEntity>> entities = entities(FloorplanDTO.class);
+            grant(BuildingBasic, entities, READ);
+            grant(BuildingFinancial, entities, READ);
+            grant(BuildingAccounting, entities, READ);
+            grant(BuildingProperty, entities, ALL);
+            grant(BuildingMarketing, entities, ALL);
+            grant(BuildingMechanicals, entities, READ);
+            grant(BuildingAdministrator, entities, ALL);
+            grant(BuildingLeasing, entities, READ);
+        }
 
         //H  "floorplans/marketing, marketing"
         grant(BuildingBasic, Marketing.class, READ);
@@ -80,14 +84,17 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
         grant(BuildingLeasing, Marketing.class, READ);
 
         // mechanical
-        grant(BuildingBasic, BuildingMechanical.class, READ);
-        grant(BuildingFinancial, BuildingMechanical.class, READ);
-        grant(BuildingAccounting, BuildingMechanical.class, READ);
-        grant(BuildingProperty, BuildingMechanical.class, READ);
-        //grant(BuildingMarketing, BuildingMechanical.class, 0);
-        grant(BuildingMechanicals, BuildingMechanical.class, ALL);
-        grant(BuildingAdministrator, BuildingMechanical.class, ALL);
-        //grant(BuildingLeasing, BuildingMechanical.class, 0);
+        {
+            List<Class<? extends IEntity>> entities = entities(BuildingMechanical.class, BoilerDTO.class, ElevatorDTO.class, RoofDTO.class);
+            grant(BuildingBasic, entities, READ);
+            grant(BuildingFinancial, entities, READ);
+            grant(BuildingAccounting, entities, READ);
+            grant(BuildingProperty, entities, READ);
+            //grant(BuildingMarketing, entities, 0);
+            grant(BuildingMechanicals, entities, ALL);
+            grant(BuildingAdministrator, entities, ALL);
+            //grant(BuildingLeasing, BuildingMechanical.class, 0);
+        }
 
         //financial
         grant(BuildingFinancial, BuildingFinancial.class, READ);
