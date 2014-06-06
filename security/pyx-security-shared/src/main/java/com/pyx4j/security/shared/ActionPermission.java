@@ -23,8 +23,9 @@ package com.pyx4j.security.shared;
 import com.pyx4j.commons.GWTSerializable;
 import com.pyx4j.security.annotations.ActionId;
 
-@SuppressWarnings("serial")
 public class ActionPermission extends BasicPermission {
+
+    private static final long serialVersionUID = 1L;
 
     @GWTSerializable
     protected ActionPermission() {
