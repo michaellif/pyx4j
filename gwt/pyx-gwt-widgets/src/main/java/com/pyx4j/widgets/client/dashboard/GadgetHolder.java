@@ -27,6 +27,7 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -135,6 +136,7 @@ final class GadgetHolder extends SimplePanel {
         content.add(caption);
 
         holder.setWidget(holdedGadget.asWidget());
+        holder.getElement().getStyle().setOverflow(Overflow.AUTO);
         content.add(holder);
 
         this.getElement().getStyle().setProperty("WebkitBoxSizing", "border-box");
