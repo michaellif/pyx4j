@@ -162,7 +162,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         formPanel.append(Location.Dual, proto().info().legalAddress(), new InternationalAddressEditor());
 
         buildingLegalAddressLabel = formPanel.h1(proto().buildingLegalAddress().getMeta().getCaption());
-        formPanel.append(Location.Left, proto().buildingLegalAddress(), new InternationalAddressEditor());
+        formPanel.append(Location.Dual, proto().buildingLegalAddress(), new InternationalAddressEditor());
         get(proto().buildingLegalAddress()).setViewable(true);
 
         get(proto().info().legalAddressOverride()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
