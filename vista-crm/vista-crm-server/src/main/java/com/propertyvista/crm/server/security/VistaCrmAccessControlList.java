@@ -24,7 +24,6 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.CRMImpliedPermission;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
@@ -138,7 +137,6 @@ import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentD
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.ProofOfAssetDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.ProofOfIncomeDocumentCrmUploadService;
-import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
@@ -709,8 +707,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         /***************** this is new List **************** */
 
         merge(new VistaCrmBuildingAccessControlList());
-
-        grant(VistaCrmBehavior.LeasesBasic, new ActionPermission(SendMail.class));
+        merge(new VistaCrmLeasesAccessControlList());
 
         freeze();
     }
