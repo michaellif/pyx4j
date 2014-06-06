@@ -179,6 +179,7 @@ public class Dialog implements ProvidesResize, IsWidget {
     }
 
     public void setCaption(String caption) {
+        popupPanel.setTitle(caption);
         captionPanel.setHTML(caption);
     }
 
@@ -649,7 +650,7 @@ public class Dialog implements ProvidesResize, IsWidget {
         popupPanel.addCloseHandler(handler);
     }
 
-    public String getTitle() {
+    public String getCaption() {
         return popupPanel.getTitle();
     }
 }

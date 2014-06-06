@@ -53,6 +53,8 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     protected final HTML message2;
 
+    private String failureMessage;
+
     private final DeferredProgressPanel deferredProgressPanel;
 
     public DeferredProcessDialog(String title, String initialMessage, boolean executeByUserRequests) {
@@ -69,6 +71,12 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
         dialog = new Dialog(title, this, this);
         dialog.getCloseButton().setVisible(false);
+
+        this.failureMessage = i18n.tr("Operation Failed");
+    }
+
+    public void setFailureMessage(String message) {
+        failureMessage = message;
     }
 
     public void show() {
@@ -116,7 +124,7 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         onDeferredCompleate();
         hide();
         if (!canceled) {
-            MessageDialog.error(dialog.getTitle(), result.getMessage());
+            MessageDialog.error(dialog.getCaption(), failureMessage + "\n\n\n" + result.getMessage());
         }
     }
 
@@ -130,6 +138,6 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         deferredProgressPanel.setVisible(false);
         dialog.getCancelButton().setVisible(false);
         dialog.getCloseButton().setVisible(true);
-        log.info("Deferred " + dialog.getTitle() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
+        log.info("Deferred " + dialog.getCaption() + " completed in " + TimeUtils.secSince(deferredProcessStartTime));
     }
 }
