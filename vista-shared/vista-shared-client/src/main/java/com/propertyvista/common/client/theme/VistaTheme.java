@@ -42,6 +42,7 @@ public class VistaTheme extends Theme {
 
     protected void initGeneralStyles() {
         Style style = new Style("html");
+        style.addProperty("-webkit-tap-highlight-color", "rgba(255, 255, 255, 0)");
         addStyle(style);
 
         style = new Style("input, select, textarea");
