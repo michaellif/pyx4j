@@ -55,7 +55,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
                 save();
             }
         });
-        addFooterToolbarItem(btnSave);
+        addHeaderToolbarItem(btnSave);
 
         btnApply = new Button(i18n.tr("Apply"), new Command() {
             @Override
@@ -63,7 +63,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
                 apply();
             }
         });
-        addFooterToolbarItem(btnApply);
+        addHeaderToolbarItem(btnApply);
 
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
@@ -71,7 +71,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
                 getPresenter().cancel();
             }
         });
-        addFooterToolbarItem(btnCancel);
+        addHeaderToolbarItem(btnCancel);
 
         enableButtons(false);
     }
