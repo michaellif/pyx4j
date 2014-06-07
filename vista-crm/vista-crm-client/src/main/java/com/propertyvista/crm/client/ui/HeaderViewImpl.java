@@ -148,6 +148,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         {//Right Toolbar
             Toolbar toolbar = new Toolbar();
             toolbar.getElement().getStyle().setProperty("right", "0");
+            toolbar.getElement().getStyle().setProperty("top", "0");
 
             toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
