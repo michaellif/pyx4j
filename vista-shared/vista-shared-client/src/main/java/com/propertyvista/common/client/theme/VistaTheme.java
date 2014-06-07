@@ -187,9 +187,10 @@ public class VistaTheme extends Theme {
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
+        style.addProperty("font-size", "1.2em");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.2);
-        style.addProperty("background", "#FFFFFF");
+        style.addProperty("border-color", ThemeColor.object1, 0.8);
+        style.addProperty("background", ThemeColor.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
