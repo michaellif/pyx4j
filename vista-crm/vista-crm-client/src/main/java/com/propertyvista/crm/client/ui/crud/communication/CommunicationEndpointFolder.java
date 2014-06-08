@@ -84,7 +84,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
 
     @Override
     protected void addItem() {
-        new SelectEnumDialog<ContactType>(i18n.tr("Select contact type"), EnumSet.allOf(ContactType.class)) {
+        new SelectEnumDialog<ContactType>(i18n.tr("Select contact type"), EnumSet.of(ContactType.Employee, ContactType.Tenants)) {
             @Override
             public boolean onClickOk() {
                 final ContactType type = getSelectedType();
@@ -105,17 +105,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
                                 return GWT.<AbstractListService<CustomerUser>> create(SelectCustomerUserListService.class);
                             }
                         }.show();
-                    } /*-else if (type.equals(ContactType.System)) {
-
-                        new CommunicationGroupSelectorDialog(parent.getParentView()) {
-
-                            @Override
-                            protected AbstractListService<SystemEndpoint> getSelectService() {
-                                return GWT.<AbstractListService<SystemEndpoint>> create(SelectSystemEndpointListService.class);
-                            }
-                        }.show();
-
-                      }-*/
+                    }
                 }
                 return true;
             }
@@ -163,36 +153,4 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
             }
         }
     }
-/*
- * private abstract class CommunicationGroupSelectorDialog extends EntitySelectorTableVisorController<MessageGroup> {
- * 
- * public CommunicationGroupSelectorDialog(IPane parentView) {
- * super(parentView, MessageGroup.class, true, i18n.tr("Select Communication Group"));
- * }
- * 
- * @Override
- * protected List<ColumnDescriptor> defineColumnDescriptors() {
- * return Arrays.asList(new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build(), new MemberColumnDescriptor.Builder(proto()
- * .isPredefined()).searchable(true).build());
- * }
- * 
- * @Override
- * public List<Sort> getDefaultSorting() {
- * return Arrays.asList(new Sort(proto().name(), false));
- * }
- * 
- * @Override
- * public void onClickOk() {
- * if (!getSelectedItems().isEmpty()) {
- * for (MessageGroup selected : getSelectedItems()) {
- * CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
- * proto.name().set(selected.name());
- * proto.type().setValue(ContactType.Group);
- * proto.endpoint().set(selected);
- * addItem(proto);
- * }
- * }
- * }
- * }
- */
 }

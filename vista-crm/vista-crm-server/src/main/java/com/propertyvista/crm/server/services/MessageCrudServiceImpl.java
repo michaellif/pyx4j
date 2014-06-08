@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -151,12 +152,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
     @Override
     protected void enhanceRetrieved(Message bo, MessageDTO to, RetrieveTarget retrieveTarget) {
-        enhanceDbo(bo, to);
+        enhanceDbo(bo, to, false);
     }
 
     @Override
     protected void enhanceListRetrieved(Message entity, MessageDTO dto) {
-        enhanceDbo(entity, dto);
+        enhanceDbo(entity, dto, true);
     }
 
     private CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
@@ -182,10 +183,13 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         return rec;
     }
 
-    protected void enhanceDbo(Message bo, MessageDTO to) {
+    protected void enhanceDbo(Message bo, MessageDTO to, boolean isForList) {
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().content(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
+        if (!isForList) {
+            Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
+        }
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
         IList<Message> ms = bo.thread().content();
         if (ms != null && !ms.isNull()) {
@@ -194,9 +198,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             boolean isHighImportance = false;
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
-                Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
-                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class));
+                if (!isForList) {
+                    Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
+                    Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
+                }
+                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), isForList);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
@@ -208,7 +214,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                     isHighImportance = false;
                 }
                 if (to.id().equals(currentDTO.id())) {
-                    copyChildDTO(m, to);
+                    copyChildDTO(m, to, isForList);
                 }
             }
             if (isHighImportance) {
@@ -223,14 +229,17 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
     }
 
-    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO) {
+    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, boolean isForList) {
         Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
         boolean star = false;
         boolean isRead = true;
 
+        messageDTO.isInRecipients().setValue(false);
         for (DeliveryHandle dh : m.recipients()) {
-            Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
-            messageDTO.to().add(generateEndpointDTO(dh.recipient()));
+            if (!isForList) {
+                Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
+                messageDTO.to().add(generateEndpointDTO(dh.recipient()));
+            }
             if (!CrmAppContext.getCurrentUser().equals(dh.recipient())) {
                 continue;
             }
@@ -240,6 +249,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             if (!dh.isRead().getValue(false)) {
                 isRead = false;
             }
+            messageDTO.isInRecipients().setValue(true);
         }
 
         messageDTO.id().set(m.id());
@@ -248,7 +258,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.status().set(m.thread().status());
         messageDTO.created().set(m.thread().created());
         Persistence.ensureRetrieve(m.thread().owner(), AttachLevel.Attached);
-        messageDTO.owner().set(generateEndpointDTO(m.thread().owner()));
+        if (!isForList) {
+            messageDTO.owner().set(generateEndpointDTO(m.thread().owner()));
+        }
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
@@ -265,24 +277,39 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
-    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source) {
-        /*-      if (source.created().isNull() || source.created().isPrototype()) {
-                  Persistence.service().persist(source.thread());
-              }
+    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message) {
+        if (message.date().isNull()) {
+            CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
 
-              if (source.date().isNull()) {
-                  source.date().setValue(SystemDateManager.getDate());
-              }
-              //if (source.to().isNull() || source.to().isEmpty()) {
-              //    source.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
-              // }
-              if (source.sender().isNull()) {
-                  source.sender().set(CrmAppContext.getCurrentUser());
-              }
+            Message m = EntityFactory.create(Message.class);
+            for (CommunicationEndpointDTO d : message.to()) {
+                DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
+                dh.isRead().setValue(false);
+                dh.star().setValue(false);
+                dh.recipient().set(d.endpoint());
+                m.recipients().add(dh);
+            }
 
-              Persistence.service().persist(source);
-              Persistence.service().commit();-*/
-        callback.onSuccess(source);
+            m.thread().set(thread);
+            m.attachments().set(message.attachments());
+            m.date().setValue(SystemDateManager.getDate());
+            m.sender().set(CrmAppContext.getCurrentUser());
+            m.text().set(message.text());
+            m.highImportance().set(message.highImportance());
+            Persistence.service().persist(m);
+        } else {
+            EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
+            dhCriteria.eq(dhCriteria.proto().recipient(), CrmAppContext.getCurrentUser());
+            dhCriteria.eq(dhCriteria.proto().message(), message);
+            DeliveryHandle dh = Persistence.retrieveUnique(dhCriteria, AttachLevel.Attached);
+            dh.isRead().set(message.isRead());
+            dh.star().set(message.star());
+            Persistence.service().persist(dh);
+        }
+
+        Persistence.service().commit();
+        callback.onSuccess(message);
+
     }
 
     @Override
@@ -292,14 +319,5 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         Persistence.service().persist(source.thread());
         Persistence.service().commit();
         callback.onSuccess(source);
-    }
-
-    private static boolean belongsToUser(CommunicationEndpoint user, CommunicationEndpoint recipient) {
-        //if (user.equals(recipient)
-        //         || ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant).equals(recipient)) {
-        //     return true;
-        // }
-
-        return false;
     }
 }

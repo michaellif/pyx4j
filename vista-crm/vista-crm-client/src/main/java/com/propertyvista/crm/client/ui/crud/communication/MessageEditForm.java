@@ -62,7 +62,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         formPanel.append(Location.Left, proto().allowedReply(), cmbBoolean2).decorate();
         formPanel.append(Location.Right, proto().status()).decorate();
 
-        formPanel.append(Location.Left, proto().text()).decorate();
+        formPanel.append(Location.Dual, proto().text()).decorate();
         formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
         formPanel.br();
 

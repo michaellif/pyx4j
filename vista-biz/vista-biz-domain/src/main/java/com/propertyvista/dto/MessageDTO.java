@@ -49,6 +49,10 @@ public interface MessageDTO extends Message {
     IPrimitive<Boolean> allowedReply();
 
     @NotNull
+    @ReadOnly
+    IPrimitive<Boolean> isInRecipients();
+
+    @NotNull
     IPrimitive<ThreadStatus> status();
 
     @NotNull

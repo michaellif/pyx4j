@@ -185,7 +185,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     }
 
     private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO) {
-        Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
         boolean star = false;
         boolean isRead = true;
 

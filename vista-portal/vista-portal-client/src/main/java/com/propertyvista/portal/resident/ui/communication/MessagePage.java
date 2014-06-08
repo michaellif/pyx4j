@@ -130,13 +130,11 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         private Anchor btnCancel;
 
-        private Anchor btnmarkAsUnread;
+        private Anchor btnMarkAsUnread;
 
         private Anchor btnForward;
 
         private Anchor btnReply;
-
-        CComboBoxBoolean cmbStar;
 
         Image starImage;
 
@@ -252,7 +250,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 }
             });
 
-            btnmarkAsUnread = new Anchor("Mark as unread", new Command() {
+            btnMarkAsUnread = new Anchor("Mark as unread", new Command() {
                 @Override
                 public void execute() {
                     MessageDTO m = getValue();
@@ -271,10 +269,10 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             tb.addItem(btnReply);
             tb.addItem(btnForward);
             tb.addItem(btnCancel);
-            tb.addItem(btnmarkAsUnread);
+            tb.addItem(btnMarkAsUnread);
             btnSend.setVisible(false);
             btnCancel.setVisible(false);
-            btnmarkAsUnread.setVisible(false);
+            btnMarkAsUnread.setVisible(false);
 
             return tb;
         }
@@ -312,7 +310,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             if (getValue().isPrototype() || getValue().date() == null || getValue().date().isNull()) {
-                BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
+                BoxFolderItemDecorator<MessageDTO> d = (BoxFolderItemDecorator<MessageDTO>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
                 setEditable(true);
@@ -322,7 +320,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnReply.setVisible(false);
                 btnForward.setVisible(false);
                 starImage.setVisible(false);
-                btnmarkAsUnread.setVisible(false);
+                btnMarkAsUnread.setVisible(false);
                 get(proto().date()).setVisible(false);
                 get(proto().star()).setVisible(false);
                 get(proto().sender()).setVisible(false);
@@ -338,7 +336,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 get(proto().date()).setVisible(true);
                 get(proto().sender()).setVisible(true);
                 get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
-                btnmarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
+                btnMarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 if (get(proto().star()).getValue()) {
                     starImage.setResource(PortalImages.INSTANCE.fullStar());

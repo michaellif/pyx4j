@@ -36,7 +36,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
     public static ColumnDescriptor[] createColumnDescriptors() {
         MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
 
-        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.isRead()).build(),
+        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.isRead()).build(), new MemberColumnDescriptor.Builder(proto.star()).build(),
                 new MemberColumnDescriptor.Builder(proto.highImportance()).build(),
                 new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).build(),
                 new MemberColumnDescriptor.Builder(proto.date()).build(), new MemberColumnDescriptor.Builder(proto.subject()).build() };

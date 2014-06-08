@@ -33,15 +33,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         setForm(new MessageForm(this));
 
         final MessageForm form = (MessageForm) getForm();
-        MenuItem replayAction = new MenuItem(i18n.tr("Reply"), new Command() {
-            @Override
-            public void execute() {
-                form.reply();
-            }
-        });
-        addAction(replayAction);
 
-        takeOwnershipAction = new MenuItem(i18n.tr("Take Ownership"), new Command() {
+        takeOwnershipAction = new MenuItem(i18n.tr("Assign Ownership"), new Command() {
             @Override
             public void execute() {
                 form.takeOwnership();
