@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
- * @author stanp
+ * Created on Mar 26, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.services;
+package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
-import com.propertyvista.server.common.upload.AbstractMessageAttachmentUploadServiceImpl;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.domain.communication.MessageCategory;
 
-public class MessageAttachmentUploadPortalServiceImpl extends AbstractMessageAttachmentUploadServiceImpl implements
-        MessageAttachmentUploadPortalService {
+public class MessageCategoryViewerViewImpl extends CrmViewerViewImplBase<MessageCategory> implements MessageCategoryViewerView {
+
+    public MessageCategoryViewerViewImpl() {
+        setForm(new MessageCategoryForm(this));
+    }
 
 }

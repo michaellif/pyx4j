@@ -110,12 +110,12 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.CommunicationMessageViewerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.CommunicationSettingsEditorActivity;
-import com.propertyvista.crm.client.activity.crud.communication.CommunicationSettingsListerActivity;
-import com.propertyvista.crm.client.activity.crud.communication.CommunicationSettingsViewActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryEditorActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryListerActivity;
+import com.propertyvista.crm.client.activity.crud.communication.MessageCategoryViewActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
@@ -1425,16 +1425,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
                     }
                     // Communication
-                    else if (crudPlace instanceof Communication.CommunicationMessage) {
+                    else if (crudPlace instanceof Communication.Message) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new CommunicationMessageListerActivity(crudPlace);
+                            activity = new MessageListerActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new CommunicationMessageViewerActivity(crudPlace);
+                            activity = new MessageViewerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new CommunicationMessageEditorActivity(crudPlace);
+                            activity = new MessageEditorActivity(crudPlace);
                             break;
                         }
 
@@ -1447,13 +1447,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                     else if ((crudPlace instanceof CrmSiteMap.Administration.Settings.CommunicationSettings)) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new CommunicationSettingsEditorActivity(crudPlace);
+                            activity = new MessageCategoryEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new CommunicationSettingsViewActivity(crudPlace);
+                            activity = new MessageCategoryViewActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new CommunicationSettingsListerActivity(crudPlace);
+                            activity = new MessageCategoryListerActivity(crudPlace);
                             break;
                         }
                         // Dashboard related stuff again

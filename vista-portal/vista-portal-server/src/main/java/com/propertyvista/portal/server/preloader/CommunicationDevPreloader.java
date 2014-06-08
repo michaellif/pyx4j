@@ -103,7 +103,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // t001-> t003  (read, important)
         // t003-> t001  (unread, important) - reply
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             CommunicationThread msg1 = createMessage(i, m001, t001, null, "No Water",
                     "It will no water in the whole year! Please go to a Sea sand bring water!", true, true, mg, m001);
             createMessage(i, t003, m001, msg1, "T03", "Hi,\n     Thanks for communication :)", true, false, mg, m001);

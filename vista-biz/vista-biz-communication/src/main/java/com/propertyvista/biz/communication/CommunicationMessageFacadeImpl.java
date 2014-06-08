@@ -16,7 +16,10 @@ package com.propertyvista.biz.communication;
 import java.util.List;
 
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
@@ -26,8 +29,8 @@ import com.propertyvista.domain.company.Employee;
 public class CommunicationMessageFacadeImpl implements CommunicationMessageFacade {
 
     @Override
-    public MessageCategory getCommunicationGroupFromCache(MessageGroupCategory mgCategory) {
-        return MessageGroupManager.instance().getCommunicationGroupFromCache(mgCategory);
+    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory) {
+        return MessageCategoryManager.instance().getMessageCategoryFromCache(mgCategory);
     }
 
     @Override
@@ -36,7 +39,12 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     }
 
     @Override
-    public List<MessageCategory> getDispatchedGroups(Employee employee, AttachLevel attachLevel) {
-        return MessageGroupManager.instance().getDispatchedGroups(employee, attachLevel);
+    public List<MessageCategory> getDispatchedMessageCategories(Employee employee, AttachLevel attachLevel) {
+        return MessageCategoryManager.instance().getDispatchedMessageCategegories(employee, attachLevel);
+    }
+
+    @Override
+    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
+        return CommunicationManager.instance().query(criteria);
     }
 }

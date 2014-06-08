@@ -101,7 +101,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantScreeningTO;
@@ -208,7 +208,7 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(MoneyInBatchDTO.class, Finance.MoneyIn.Batch.class, defaultImage);
 
-        AppPlaceEntityMapper.register(CommunicationMessageDTO.class, Communication.CommunicationMessage.class, defaultImage);
+        AppPlaceEntityMapper.register(MessageDTO.class, Communication.Message.class, defaultImage);
         AppPlaceEntityMapper.register(MessageCategory.class, CrmSiteMap.Administration.Settings.CommunicationSettings.class, defaultImage);
     }
 }

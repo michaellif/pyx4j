@@ -215,6 +215,14 @@ public interface CrmImages extends VistaImages {
     @Source("Nav_Icon_Profile-Inactive.png")
     ImageResource avatar();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("full-star.png")
+    ImageResource fullStar();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("no-star.png")
+    ImageResource noStar();
+
     UserIconImages userIcon();
 
     public interface UserIconImages extends ButtonImages {

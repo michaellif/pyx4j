@@ -36,15 +36,15 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
 
     private final static I18n i18n = I18n.get(MessageViewImpl.class);
 
-    private final CommunicationMessageLister lister;
+    private final MessageLister lister;
 
     private Presenter presenter;
 
     public MessageViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        lister = new CommunicationMessageLister();
-        CommunicationMessageGadget gadget = new CommunicationMessageGadget(lister);
+        lister = new MessageLister();
+        MessageGadget gadget = new MessageGadget(lister);
 
         setWidget(gadget);
     }
@@ -60,9 +60,9 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
         lister.obtain(0);
     }
 
-    class CommunicationMessageGadget extends AbstractGadget<MessageViewImpl> {
+    class MessageGadget extends AbstractGadget<MessageViewImpl> {
 
-        CommunicationMessageGadget(CommunicationMessageLister lister) {
+        MessageGadget(MessageLister lister) {
             super(MessageViewImpl.this, null, i18n.tr("Tenant Communication"), ThemeColor.foreground, 0.3);
             lister.setWidth("100%");
             lister.setSelectable(true);
@@ -81,9 +81,9 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
 
     }
 
-    private static class CommunicationMessageLister extends EntityDataTablePanel<MessageDTO> {
+    private static class MessageLister extends EntityDataTablePanel<MessageDTO> {
 
-        public CommunicationMessageLister() {
+        public MessageLister() {
             super(MessageDTO.class, false, false);
             getDataTablePanel().setFilteringEnabled(false);
             // No filtering work for it

@@ -11,7 +11,7 @@
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.communication;
+package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -19,16 +19,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
 import com.propertyvista.domain.communication.MessageAttachment;
-import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
-import com.propertyvista.portal.shared.ui.PortalFormPanel;
-import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
 
-public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> {
+public class MessageAttachmentFolder extends VistaBoxFolder<MessageAttachment> {
     private final static I18n i18n = I18n.get(MessageAttachmentFolder.class);
 
     public MessageAttachmentFolder() {
@@ -49,13 +49,16 @@ public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> 
 
         @Override
         protected IsWidget createContent() {
-            PortalFormPanel formPanel = new PortalFormPanel(this);
-            formPanel
-                    .append(Location.Left,
-                            proto().file(),
-                            new CFile(GWT.<MessageAttachmentUploadPortalService> create(MessageAttachmentUploadPortalService.class),
-                                    new VistaFileURLBuilder(MessageAttachment.class))).decorate().componentWidth(250);
-            formPanel.append(Location.Left, proto().description()).decorate().componentWidth(200);
+            FormPanel formPanel = new FormPanel(this);
+
+            formPanel.append(
+                    Location.Left,
+                    proto().file(),
+                    new CFile(GWT.<MessageAttachmentUploadService> create(MessageAttachmentUploadService.class),
+                            new VistaFileURLBuilder(MessageAttachment.class))).decorate();
+
+            formPanel.append(Location.Left, proto().description()).decorate();
+
             return formPanel;
         }
 

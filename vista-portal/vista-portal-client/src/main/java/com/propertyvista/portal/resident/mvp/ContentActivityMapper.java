@@ -26,9 +26,9 @@ import com.propertyvista.portal.resident.activity.LandingActivity;
 import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
 import com.propertyvista.portal.resident.activity.PortalTermsActivity;
 import com.propertyvista.portal.resident.activity.SignUpActivity;
-import com.propertyvista.portal.resident.activity.communication.CommunicationMessagePageActivity;
-import com.propertyvista.portal.resident.activity.communication.CommunicationMessageViewActivity;
-import com.propertyvista.portal.resident.activity.communication.CommunicationMessageWizardActivity;
+import com.propertyvista.portal.resident.activity.communication.MessagePageActivity;
+import com.propertyvista.portal.resident.activity.communication.MessageViewActivity;
+import com.propertyvista.portal.resident.activity.communication.MessageWizardActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayConfirmationActivity;
@@ -175,11 +175,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new LeaseSigningConfirmationActivity(appPlace);
 // Communication
                     } else if (place instanceof ResidentPortalSiteMap.Message.MessageWizard) {
-                        activity = new CommunicationMessageWizardActivity(appPlace);
+                        activity = new MessageWizardActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.Message.MessagePage) {
-                        activity = new CommunicationMessagePageActivity(appPlace);
+                        activity = new MessagePageActivity(appPlace);
                     } else if (place instanceof ResidentPortalSiteMap.Message.MessageView) {
-                        activity = new CommunicationMessageViewActivity();
+                        activity = new MessageViewActivity();
 // Internals
                     } else if (place instanceof Login) {
                         activity = new LandingActivity(place);

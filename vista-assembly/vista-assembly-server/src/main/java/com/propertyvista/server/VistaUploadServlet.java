@@ -15,7 +15,7 @@ package com.propertyvista.server;
 
 import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
-import com.propertyvista.crm.server.services.CommunicationMessageAttachmentUploadServiceImpl;
+import com.propertyvista.crm.server.services.MessageAttachmentUploadServiceImpl;
 import com.propertyvista.crm.server.services.MaintenanceRequestPictureUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadBuildingServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
@@ -62,7 +62,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(CustomerPicturePortalUploadServiceImpl.class);
         register(MaintenanceRequestPictureUploadPortalServiceImpl.class);
         register(MessageAttachmentUploadPortalServiceImpl.class);
-        register(CommunicationMessageAttachmentUploadServiceImpl.class);
+        register(MessageAttachmentUploadServiceImpl.class);
         register(InsuranceCertificateScanCrmUploadServiceImpl.class);
         register(InsuranceCertificateScanResidentUploadServiceImpl.class);
         register(PmcDocumentFileUploadServiceImpl.class);

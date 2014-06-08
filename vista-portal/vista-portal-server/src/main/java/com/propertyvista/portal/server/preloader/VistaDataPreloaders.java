@@ -45,7 +45,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new PreloadPolicies(production));
         add(new DashboardPreloader());
         add(new ReferenceDataPreloader());
-        add(new CommunicationGroupPreloader());
+        add(new MessageCategoryPreloader());
         add(new SystemEndpointPreloader());
 
         //DEMO Different data for different PMC

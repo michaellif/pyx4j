@@ -11,7 +11,7 @@
  * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.services;
+package com.propertyvista.crm.server.services;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
-import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -32,19 +31,22 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
+import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
-import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
-import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
-import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
-import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.dto.CommunicationEndpointDTO;
+import com.propertyvista.dto.MessageDTO;
 
-public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessagePortalCrudService {
-
-    public MessagePortalCrudServiceImpl() {
+public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, MessageDTO> implements MessageCrudService {
+    public MessageCrudServiceImpl() {
         super(Message.class, MessageDTO.class);
     }
 
@@ -86,47 +88,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         PropertyCriterion recipientCiteria = toCriteria.getCriterion(toCriteria.proto().thread().content().$().recipients().$().recipient());
         if (recipientCiteria != null) {
             toCriteria.getFilters().remove(recipientCiteria);
-            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), ResidentPortalContext.getCurrentUser());
+            boCriteria.eq(boCriteria.proto().recipients().$().recipient(), CrmAppContext.getCurrentUser());
         }
         super.enhanceListCriteria(boCriteria, toCriteria);
-    }
-
-    @Override
-    protected MessageDTO init(InitializationData initializationData) {
-        MessageDTO dto = super.init(initializationData);
-        dto.isRead().setValue(false);
-        dto.sender().set(ResidentPortalContext.getCurrentUser());
-        return dto;
-    }
-
-    @Override
-    protected boolean persist(Message bo, MessageDTO to) {
-        if (bo.isPrototype()) {
-            bo.date().setValue(SystemDateManager.getDate());
-        }
-
-        DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-        dh.isRead().setValue(false);
-        dh.star().setValue(false);
-        dh.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
-
-        bo.attachments().set(to.attachments());
-        bo.date().setValue(SystemDateManager.getDate());
-        bo.sender().set(ResidentPortalContext.getCurrentUser());
-        bo.text().set(to.text());
-        bo.highImportance().set(to.highImportance());
-        bo.recipients().add(dh);
-
-        CommunicationThread t = EntityFactory.create(CommunicationThread.class);
-        t.subject().set(to.subject());
-        t.created().setValue(SystemDateManager.getDate());
-        t.allowedReply().setValue(true);
-        t.status().setValue(ThreadStatus.New);
-        t.topic().set(ServerSideFactory.create(CommunicationMessageFacade.class).getMessageCategoryFromCache(MessageGroupCategory.TenantOriginated));
-        t.content().add(bo);
-        t.owner().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
-
-        return Persistence.secureSave(t);
     }
 
     @Override
@@ -135,18 +99,93 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     }
 
     @Override
+    public void copyTOtoBO(MessageDTO to, Message bo) {
+        super.copyTOtoBO(to, bo);
+    }
+
+    @Override
+    protected MessageDTO init(InitializationData initializationData) {
+        MessageDTO dto = EntityFactory.create(MessageDTO.class);
+        dto.date().setValue(SystemDateManager.getDate());
+        dto.isRead().setValue(false);
+        dto.sender().set(generateEndpointDTO(CrmAppContext.getCurrentUser()));
+
+        return dto;
+
+    }
+
+    @Override
+    protected boolean persist(Message bo, MessageDTO to) {
+
+        if (bo.isPrototype()) {
+            bo.date().setValue(SystemDateManager.getDate());
+        }
+
+        for (CommunicationEndpointDTO todep : to.to()) {
+            DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
+            dh.isRead().setValue(false);
+            dh.star().setValue(false);
+            dh.recipient().set(todep.endpoint());
+            bo.recipients().add(dh);
+        }
+
+        bo.attachments().set(to.attachments());
+        bo.date().setValue(SystemDateManager.getDate());
+        bo.sender().set(CrmAppContext.getCurrentUser());
+        bo.text().set(to.text());
+        bo.highImportance().set(to.highImportance());
+
+        CommunicationThread t = EntityFactory.create(CommunicationThread.class);
+        t.subject().set(to.subject());
+        t.created().setValue(SystemDateManager.getDate());
+        t.allowedReply().set(to.allowedReply());
+        t.status().set(to.status());
+        t.topic().set(to.topic());
+        t.content().add(bo);
+        t.owner().set(
+                to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? ServerSideFactory.create(
+                        CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned) : to.owner());
+
+        return Persistence.secureSave(t);
+    }
+
+    @Override
     protected void enhanceRetrieved(Message bo, MessageDTO to, RetrieveTarget retrieveTarget) {
         enhanceDbo(bo, to);
     }
 
     @Override
-    protected void enhanceListRetrieved(Message bo, MessageDTO dto) {
-        enhanceDbo(bo, dto);
+    protected void enhanceListRetrieved(Message entity, MessageDTO dto) {
+        enhanceDbo(entity, dto);
+    }
+
+    private CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
+        if (entity == null) {
+            return null;
+        }
+        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
+        rec.endpoint().set(entity);
+
+        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
+            SystemEndpoint e = entity.cast();
+            rec.name().setValue(e.name().getValue().name());
+            rec.type().setValue(ContactType.System);
+        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
+            CrmUser e = entity.cast();
+            rec.name().set(e.name());
+            rec.type().setValue(ContactType.Employee);
+        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
+            CustomerUser e = entity.cast();
+            rec.name().set(e.name());
+            rec.type().setValue(ContactType.Tenants);
+        }
+        return rec;
     }
 
     protected void enhanceDbo(Message bo, MessageDTO to) {
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().content(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
         IList<Message> ms = bo.thread().content();
         if (ms != null && !ms.isNull()) {
@@ -190,7 +229,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         boolean isRead = true;
 
         for (DeliveryHandle dh : m.recipients()) {
-            if (!ResidentPortalContext.getCurrentUser().equals(dh.recipient())) {
+            Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
+            messageDTO.to().add(generateEndpointDTO(dh.recipient()));
+            if (!CrmAppContext.getCurrentUser().equals(dh.recipient())) {
                 continue;
             }
             if (dh.star().getValue(false)) {
@@ -206,6 +247,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.allowedReply().set(m.thread().allowedReply());
         messageDTO.status().set(m.thread().status());
         messageDTO.created().set(m.thread().created());
+        Persistence.ensureRetrieve(m.thread().owner(), AttachLevel.Attached);
+        messageDTO.owner().set(generateEndpointDTO(m.thread().owner()));
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
@@ -213,43 +256,50 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.attachments().set(m.attachments());
         messageDTO.highImportance().set(m.highImportance());
         messageDTO.sender().setAttachLevel(AttachLevel.Attached);
-        messageDTO.sender().set(m.sender());
+        messageDTO.sender().set(generateEndpointDTO(m.sender()));
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
+        messageDTO.topic().set(m.thread().topic());
 
         return messageDTO;
     }
 
     @Override
-    public void saveChildMessage(AsyncCallback<MessageDTO> callback, MessageDTO message) {
-        if (message.date().isNull()) {
-            CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
+    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source) {
+        /*-      if (source.created().isNull() || source.created().isPrototype()) {
+                  Persistence.service().persist(source.thread());
+              }
 
-            DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-            dh.isRead().setValue(false);
-            dh.star().setValue(false);
-            dh.recipient().set(thread.getOwner());
+              if (source.date().isNull()) {
+                  source.date().setValue(SystemDateManager.getDate());
+              }
+              //if (source.to().isNull() || source.to().isEmpty()) {
+              //    source.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant));
+              // }
+              if (source.sender().isNull()) {
+                  source.sender().set(CrmAppContext.getCurrentUser());
+              }
 
-            Message m = EntityFactory.create(Message.class);
-            m.thread().set(thread);
-            m.attachments().set(message.attachments());
-            m.date().setValue(SystemDateManager.getDate());
-            m.sender().set(ResidentPortalContext.getCurrentUser());
-            m.text().set(message.text());
-            m.highImportance().set(message.highImportance());
-            m.recipients().add(dh);
-            Persistence.service().persist(m);
-        } else {
-            EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
-            dhCriteria.eq(dhCriteria.proto().recipient(), ResidentPortalContext.getCurrentUser());
-            dhCriteria.eq(dhCriteria.proto().message(), message);
-            DeliveryHandle dh = Persistence.retrieveUnique(dhCriteria, AttachLevel.Attached);
-            dh.isRead().set(message.isRead());
-            dh.star().set(message.star());
-            Persistence.service().persist(dh);
-        }
+              Persistence.service().persist(source);
+              Persistence.service().commit();-*/
+        callback.onSuccess(source);
+    }
 
+    @Override
+    public void takeOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source) {
+        source.owner().set(CrmAppContext.getCurrentUser());
+
+        Persistence.service().persist(source.thread());
         Persistence.service().commit();
-        callback.onSuccess(message);
+        callback.onSuccess(source);
+    }
+
+    private static boolean belongsToUser(CommunicationEndpoint user, CommunicationEndpoint recipient) {
+        //if (user.equals(recipient)
+        //         || ServerSideFactory.create(CommunicationMessageFacade.class).getCommunicationGroupFromCache(EndpointGroup.Commandant).equals(recipient)) {
+        //     return true;
+        // }
+
+        return false;
     }
 }

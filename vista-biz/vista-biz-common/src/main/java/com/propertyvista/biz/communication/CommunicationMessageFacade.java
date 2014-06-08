@@ -16,7 +16,10 @@ package com.propertyvista.biz.communication;
 import java.util.List;
 
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
@@ -25,9 +28,11 @@ import com.propertyvista.domain.company.Employee;
 
 public interface CommunicationMessageFacade {
 
-    public MessageCategory getCommunicationGroupFromCache(MessageGroupCategory mgCategory);
+    public MessageCategory getMessageCategoryFromCache(MessageGroupCategory mgCategory);
 
     public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sep);
 
-    public List<MessageCategory> getDispatchedGroups(Employee employee, AttachLevel attachLevel);
+    public List<MessageCategory> getDispatchedMessageCategories(Employee employee, AttachLevel attachLevel);
+
+    public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
 }

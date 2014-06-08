@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
- * @author stanp
+ * Created on Oct 10, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.services;
+package com.propertyvista.crm.server.services;
 
-import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
+import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
 import com.propertyvista.server.common.upload.AbstractMessageAttachmentUploadServiceImpl;
 
-public class MessageAttachmentUploadPortalServiceImpl extends AbstractMessageAttachmentUploadServiceImpl implements
-        MessageAttachmentUploadPortalService {
+public class MessageAttachmentUploadServiceImpl extends AbstractMessageAttachmentUploadServiceImpl implements
+        MessageAttachmentUploadService {
 
 }

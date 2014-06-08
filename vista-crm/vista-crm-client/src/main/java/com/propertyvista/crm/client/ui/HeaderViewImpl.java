@@ -211,6 +211,9 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
                         break;
                     }
+
+                    presenter.showMessages(communicationButton);
+
                 }
             });
 
@@ -334,17 +337,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     @Override
     public void setDisplayThisIsDemoWarning(boolean displayThisIsDemoWarning) {
         thisIsDemo.setVisible(displayThisIsDemoWarning);
-    }
-
-    @Override
-    public void setNumberOfMessages(int number) {
-        //messages.setVisible((ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController
-        //        .checkBehavior(VistaBasicBehavior.CRM)));
-        if (number > 0) {
-            //TODO   messages.setText("Messages (" + String.valueOf(number) + ")");
-        } else {
-            //TODO  messages.setText("Messages");
-        }
     }
 
     private void doLayout(LayoutType layoutType) {

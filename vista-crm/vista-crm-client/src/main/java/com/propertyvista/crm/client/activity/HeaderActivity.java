@@ -18,11 +18,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
@@ -42,10 +46,11 @@ import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.client.ui.HeaderView.HeaderPresenter;
 import com.propertyvista.crm.client.ui.crud.communication.CommunicationView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.CommunicationMessageCrudService;
+import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.dto.MessagesDTO;
+import com.propertyvista.dto.MessageDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -54,16 +59,16 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     private final HeaderView view;
 
-    private final Place place;
+    private MessageCrudService communicationService;
 
-    private CommunicationMessageCrudService communicationService;
+    private final Place place;
 
     public HeaderActivity(Place place) {
         this.place = place;
         view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            communicationService = (CommunicationMessageCrudService) GWT.create(CommunicationMessageCrudService.class);
+            communicationService = (MessageCrudService) GWT.create(MessageCrudService.class);
         }
     }
 
@@ -97,14 +102,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
                 view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
             }
             if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
-                communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
-                    @Override
-                    public void onSuccess(MessagesDTO result) {
-                        int messagesNum = result == null || result.messages() == null || result.messages().isEmpty() ? 0 : result.messages().size();
-                        view.setNumberOfMessages(messagesNum);
-
-                    }
-                }, true);
+                fetchUnreadMessages(null);
             }
         } else {
             view.onLogedOut();
@@ -156,23 +154,37 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
     }
 
     @Override
-    public void showMessages(int x, int y) {
+    public void showMessages(UIObject relativePosition) {
         if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
             final CommunicationView cview = CrmSite.getViewFactory().getView(CommunicationView.class);
             PopupPanel popupPanel = new PopupPanel(true, true);
             popupPanel.setWidget(cview);
-            popupPanel.setPopupPosition(x - popupPanel.getOffsetHeight() / 2, y);
-            popupPanel.show();
-            communicationService.retreiveCommunicationMessages(new DefaultAsyncCallback<MessagesDTO>() {
-                @Override
-                public void onSuccess(MessagesDTO result) {
-                    cview.populate(result == null ? null : result.messages());
-                    int messagesNum = result == null || result.messages() == null || result.messages().isEmpty() ? 0 : result.messages().size();
-                    view.setNumberOfMessages(messagesNum);
+            popupPanel.showRelativeTo(relativePosition);
 
-                }
-            }, true);
+            fetchUnreadMessages(cview);
         }
+    }
+
+    private void fetchUnreadMessages(final CommunicationView cview) {
+        final EntityListCriteria<MessageDTO> criteria = EntityListCriteria.create(MessageDTO.class);
+        criteria.eq(criteria.proto().thread().content().$().recipients().$().isRead(), false);
+        criteria.eq(criteria.proto().thread().content().$().recipients().$().recipient(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
+        criteria.eq(criteria.proto().thread().topic().category(), MessageGroupCategory.Custom);
+        criteria.setPageSize(50);
+        criteria.setPageNumber(0);
+
+        communicationService.list(new AsyncCallback<EntitySearchResult<MessageDTO>>() {
+            @Override
+            public void onSuccess(EntitySearchResult<MessageDTO> result) {
+                if (cview != null) {
+                    cview.populate(result == null || result.getData() == null ? null : result.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+            }
+        }, criteria);
     }
 
     @Override

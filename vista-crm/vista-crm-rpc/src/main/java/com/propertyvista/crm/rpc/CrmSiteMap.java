@@ -604,48 +604,9 @@ public class CrmSiteMap implements SiteMap {
     // Communication Started --------------
     @PlaceProperties(navigLabel = "Communication")
     public static class Communication extends AppPlace {
-        public static class CommunicationMessage extends CrmCrudAppPlace {
+        public static class Message extends CrmCrudAppPlace {
         }
     }
-
-/*
- * @PlaceProperties(navigLabel = "Communication Settings")
- * public static class CommunicationSettings extends AppPlace {
- * 
- * @PlaceProperties(navigLabel = "Commandant Communication")
- * public static class Commandant extends CrmCrudAppPlace {
- * public Commandant() {
- * super(Type.viewer);
- * }
- * 
- * public Commandant(Type type) {
- * super(type);
- * }
- * }
- * 
- * @PlaceProperties(navigLabel = "Corporate Communication")
- * public static class Corporate extends CrmCrudAppPlace {
- * public Corporate() {
- * super(Type.viewer);
- * }
- * 
- * public Corporate(Type type) {
- * super(type);
- * }
- * }
- * 
- * @PlaceProperties(navigLabel = "Broadcasting Communication")
- * public static class Broadcasting extends CrmCrudAppPlace {
- * public Broadcasting() {
- * super(Type.viewer);
- * }
- * 
- * public Broadcasting(Type type) {
- * super(type);
- * }
- * }
- * }
- */
 
     // Communication Ended --------------
 

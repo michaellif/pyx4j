@@ -105,17 +105,17 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
                                 return GWT.<AbstractListService<CustomerUser>> create(SelectCustomerUserListService.class);
                             }
                         }.show();
-                    } else if (type.equals(ContactType.System)) {
-                        /*
-                         * new CommunicationGroupSelectorDialog(parent.getParentView()) {
-                         * 
-                         * @Override
-                         * protected AbstractListService<MessageGroup> getSelectService() {
-                         * return GWT.<AbstractListService<MessageGroup>> create(SelectCommunicationGroupListService.class);
-                         * }
-                         * }.show();
-                         */
-                    }
+                    } /*-else if (type.equals(ContactType.System)) {
+
+                        new CommunicationGroupSelectorDialog(parent.getParentView()) {
+
+                            @Override
+                            protected AbstractListService<SystemEndpoint> getSelectService() {
+                                return GWT.<AbstractListService<SystemEndpoint>> create(SelectSystemEndpointListService.class);
+                            }
+                        }.show();
+
+                      }-*/
                 }
                 return true;
             }

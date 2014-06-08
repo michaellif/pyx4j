@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
- * @author stanp
+ * Created on Jan 31, 2014
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.services;
+package com.propertyvista.crm.rpc.services;
 
-import com.propertyvista.portal.rpc.portal.resident.services.MessageAttachmentUploadPortalService;
-import com.propertyvista.server.common.upload.AbstractMessageAttachmentUploadServiceImpl;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public class MessageAttachmentUploadPortalServiceImpl extends AbstractMessageAttachmentUploadServiceImpl implements
-        MessageAttachmentUploadPortalService {
+import com.propertyvista.domain.communication.MessageCategory;
+
+public interface MessageCategoryCrudService extends AbstractCrudService<MessageCategory> {
 
 }

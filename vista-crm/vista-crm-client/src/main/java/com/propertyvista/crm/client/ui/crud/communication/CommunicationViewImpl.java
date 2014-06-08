@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -44,7 +44,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.CommunicationMessageDTO;
+import com.propertyvista.dto.MessageDTO;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
 
@@ -109,12 +109,12 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
     }
 
     @Override
-    public void populate(List<CommunicationMessageDTO> messages) {
+    public void populate(Vector<MessageDTO> messages) {
         mainHolder.clear();
         int messagesNum = messages == null || messages.isEmpty() ? 0 : messages.size();
         headerHolder.setNumberOfMessages(messagesNum);
         if (messagesNum > 0) {
-            for (final CommunicationMessageDTO message : messages) {
+            for (final MessageDTO message : messages) {
                 mainHolder.add(new MessagePanel(message));
             }
         }
@@ -132,7 +132,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         private final Label senderField;
 
-        public MessagePanel(final CommunicationMessageDTO message) {
+        public MessagePanel(final MessageDTO message) {
             setStyleName(CommunicationCrmTheme.StyleName.CommMessage.name());
 
             photoImage = new Image(CrmImages.INSTANCE.avatar());
@@ -141,7 +141,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    CrudAppPlace place = new CrmSiteMap.Communication.CommunicationMessage();
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.viewer);
                     AppSite.getPlaceController().goTo(place.formViewerPlace(message.getPrimaryKey()));
                     ((PopupPanel) CommunicationViewImpl.this.getParent()).hide();
@@ -186,7 +186,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
                 @Override
                 public void execute() {
-                    CrudAppPlace place = new CrmSiteMap.Communication.CommunicationMessage();
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
 
@@ -203,7 +203,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
             writeActionImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    CrudAppPlace place = new CrmSiteMap.Communication.CommunicationMessage();
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.editor);
                     AppSite.getPlaceController().goTo(place);
 
