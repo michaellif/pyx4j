@@ -20,75 +20,87 @@
  */
 package com.pyx4j.site.client.ui.layout;
 
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.resources.SiteImages;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Toolbar;
 
 public class OverlayActionsPanel implements IsWidget {
 
-    private final TabPanel tabPanel;
+    private final FlowPanel mainPanel;
 
-    private final SimplePanel closeLabel;
+    private final DeckPanel tabPanel;
+
+    private final Toolbar tabBar;
+
+    private final Button closeButton;
 
     public OverlayActionsPanel() {
 
-        tabPanel = new TabPanel();
-        tabPanel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActions.name());
+        mainPanel = new FlowPanel();
+        mainPanel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActions.name());
 
-        closeLabel = new SimplePanel(new Image(SiteImages.INSTANCE.closeDevConsoleButton()));
-        closeLabel.setVisible(false);
-        closeLabel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsCloseButton.name());
-        final HTML closeLabelPanel = new HTML();
-        tabPanel.add(closeLabelPanel, closeLabel);
+        tabBar = new Toolbar();
+        tabBar.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabbar.name());
+        mainPanel.add(tabBar);
 
-        ((Composite) tabPanel.getTabBar().getTab(0)).getElement().getParentElement().getStyle().setProperty("width", "100%");
-
-        tabPanel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+        closeButton = new Button(SiteImages.INSTANCE.closeDevConsoleButton(), new Command() {
 
             @Override
-            public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-                if (event.getItem() == tabPanel.getTabBar().getSelectedTab()) {
-                    event.cancel();
-                    tabPanel.selectTab(tabPanel.getWidgetIndex(closeLabelPanel));
-                }
+            public void execute() {
+                setTabSelected(-1);
             }
         });
+        closeButton.addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsCloseButton.name());
+        closeButton.setVisible(false);
+        mainPanel.add(closeButton);
 
-        tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
-
-            @Override
-            public void onSelection(SelectionEvent<Integer> event) {
-                if (event.getSelectedItem() == tabPanel.getWidgetIndex(closeLabelPanel)) {
-                    closeLabel.setVisible(false);
-                } else {
-                    closeLabel.setVisible(true);
-                }
-            }
-        });
+        tabPanel = new DeckPanel();
+        tabPanel.setVisible(false);
+        mainPanel.add(tabPanel);
 
     }
 
     @Override
     public Widget asWidget() {
-        return tabPanel;
+        return mainPanel;
     }
 
-    public void addTab(IsWidget widget, String tabText) {
-        HTML tabLabel = new HTML(tabText);
-        tabLabel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTab.name());
-        tabPanel.insert(widget, tabLabel, tabPanel.getWidgetCount() - 1);
+    public void addTab(final IsWidget widget, String tabText) {
+        Button tabLabel = new Button(tabText, new Command() {
+
+            @Override
+            public void execute() {
+                int selectedTab = tabPanel.getWidgetIndex(widget);
+                int visibleTab = tabPanel.isVisible() ? tabPanel.getVisibleWidget() : -1;
+                setTabSelected(selectedTab == visibleTab ? -1 : selectedTab);
+            }
+        });
+        tabLabel.addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabItem.name());
+
+        tabPanel.add(widget);
+        tabBar.addItem(tabLabel);
 
         widget.asWidget().addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabPanel.name());
+    }
+
+    public void setTabSelected(int index) {
+        if (index == -1) {
+            tabPanel.setVisible(false);
+            closeButton.setVisible(false);
+        } else {
+            tabPanel.showWidget(index);
+            tabPanel.setVisible(true);
+            closeButton.setVisible(true);
+        }
     }
 
 }

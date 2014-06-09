@@ -26,11 +26,12 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class ResponsiveLayoutTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutOverlayActions, ResponsiveLayoutOverlayActionsTab, ResponsiveLayoutOverlayActionsTabPanel, ResponsiveLayoutOverlayActionsCloseButton
+        ResponsiveLayoutOverlayActions, ResponsiveLayoutOverlayActionsTabbar, ResponsiveLayoutOverlayActionsTabItem, ResponsiveLayoutOverlayActionsTabPanel, ResponsiveLayoutOverlayActionsCloseButton
     }
 
     public ResponsiveLayoutTheme() {
@@ -50,32 +51,36 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .gwt-TabPanelBottom");
-        style.addProperty("background-color", ThemeColor.foreground, 1.0);
-        style.addProperty("width", "100%");
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabbar);
+        style.addProperty("float", "left");
+        style.addProperty("margin-top", "-34px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .gwt-TabBarItem");
-        style.addProperty("outline", "none");
-        addStyle(style);
-
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTab);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("margin", "0 10px");
         style.addProperty("line-height", "34px");
         style.addProperty("padding", "0 10px");
         style.addProperty("height", "34px");
         style.addProperty("color", ThemeColor.background, 1.0);
         style.addProperty("cursor", "pointer");
+        style.addProperty("background", "transparent");
         style.addProperty("background-color", ThemeColor.foreground, 1.0);
         style.addProperty("white-space", "nowrap");
+        style.addProperty("outline", "none");
+        style.addProperty("border", "0px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, ".", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("float", "right");
-        style.addProperty("margin", "0 10px");
+        style.addProperty("margin", "7px 10px 0 0");
         style.addProperty("padding", "5px");
+        style.addProperty("height", "28px");
         style.addProperty("cursor", "pointer");
+        style.addProperty("background", "transparent");
         style.addProperty("background-color", ThemeColor.foreground, 1.0);
+        style.addProperty("outline", "none");
+        style.addProperty("margin-top", "-28px");
+        style.addProperty("border", "0px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, " img");
