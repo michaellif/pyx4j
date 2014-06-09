@@ -61,6 +61,22 @@ BEGIN
         
         ALTER TABLE province DROP CONSTRAINT province_pk;
         
+        -- check constraints
+        
+        ALTER TABLE billable_item_adjustment DROP CONSTRAINT billable_item_adjustment_adjustment_type_e_ck;
+        -- ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_discriminator_d_ck;
+        -- ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
+        ALTER TABLE lease_adjustment DROP CONSTRAINT lease_adjustment_tax_type_e_ck;
+        -- ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_discriminator_d_ck;
+        -- ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
+        -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_direction_e_ck;
+        -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_type_e_ck;
+        -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_direction_e_ck;
+        -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_type_e_ck;
+        -- ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
+        -- ALTER TABLE system_endpoint DROP CONSTRAINT system_endpoint_type_e_ck;
+
+        
         /**
         ***     ======================================================================================================
         ***
@@ -204,11 +220,32 @@ BEGIN
                                 ADD COLUMN address_province VARCHAR(500);
         
         
+        -- late_fee_item
+        
+        ALTER TABLE late_fee_item   ADD COLUMN base_fee_amount NUMERIC(18,2),
+                                    ADD COLUMN base_fee_percent NUMERIC(18,2),
+                                    ADD COLUMN max_total_fee_amount NUMERIC(18,2),
+                                    ADD COLUMN max_total_fee_percent NUMERIC(18,2);
+                                    
+        -- lease_adjustment
+        
+        ALTER TABLE lease_adjustment    ADD COLUMN tax_amount NUMERIC(18,2),
+                                        ADD COLUMN tax_percent NUMERIC(18,2);
+        
         -- legal_status
         
         ALTER TABLE legal_status    ADD COLUMN cancellation_threshold NUMERIC(18,2),
                                     ADD COLUMN expiry TIMESTAMP,
                                     ADD COLUMN termination_date DATE;
+        
+        -- marketing
+        
+        ALTER TABLE marketing RENAME COLUMN marketing_address_country TO marketing_address_country_old;
+        ALTER TABLE marketing RENAME COLUMN marketing_address_province TO marketing_address_province_old;
+        
+        ALTER TABLE marketing   ADD COLUMN marketing_address_country VARCHAR(50),
+                                ADD COLUMN marketing_address_province VARCHAR(500);
+    
         
         -- master_online_application
         
@@ -218,19 +255,52 @@ BEGIN
         
         -- n4_policy
         
+        ALTER TABLE n4_policy RENAME COLUMN mailing_address_country TO mailing_address_country_old;
+        ALTER TABLE n4_policy RENAME COLUMN mailing_address_province TO mailing_address_province_old;
+        
         ALTER TABLE n4_policy   ADD COLUMN cancellation_threshold NUMERIC(18,2),
-                                ADD COLUMN expiry_days INT;
+                                ADD COLUMN expiry_days INT,
+                                ADD COLUMN mailing_address_country VARCHAR(50),
+                                ADD COLUMN mailing_address_province VARCHAR(500);
+                                
+        -- payment_method
+        
+        ALTER TABLE payment_method RENAME COLUMN billing_address_country TO billing_address_country_old;
+        ALTER TABLE payment_method RENAME COLUMN billing_address_province TO billing_address_province_old;
+        
+        ALTER TABLE payment_method  ADD COLUMN billing_address_country VARCHAR(50),
+                                    ADD COLUMN billing_address_province VARCHAR(500),
+                                    ADD COLUMN billing_address_street_name VARCHAR(500),
+                                    ADD COLUMN billing_address_street_number VARCHAR(500),
+                                    ADD COLUMN billing_address_suite_number VARCHAR(500);
         
         
         -- online_application
         
         ALTER TABLE online_application ADD COLUMN create_date DATE;
         
+        -- product_v
+        
+        ALTER TABLE product_v   ADD COLUMN deposit_lmr_deposit_value_amount NUMERIC(18,2),
+                                ADD COLUMN deposit_lmr_deposit_value_percent NUMERIC(18,2),
+                                ADD COLUMN deposit_move_in_deposit_value_amount NUMERIC(18,2),
+                                ADD COLUMN deposit_move_in_deposit_value_percent NUMERIC(18,2),
+                                ADD COLUMN deposit_security_deposit_value_amount NUMERIC(18,2),
+                                ADD COLUMN deposit_security_deposit_value_percent NUMERIC(18,2);
+        
         -- province 
         
         ALTER TABLE province RENAME TO province_policy_node;
         
         ALTER TABLE province_policy_node ADD COLUMN province VARCHAR(50);
+        
+        -- pt_vehicle
+        
+        ALTER TABLE pt_vehicle RENAME COLUMN country TO country_old;
+        ALTER TABLE pt_vehicle RENAME COLUMN province TO province_old;
+        
+        ALTER TABLE pt_vehicle  ADD COLUMN country VARCHAR(50),
+                                ADD COLUMN province VARCHAR(50);
         
         -- restrictions_policy
         
@@ -285,6 +355,9 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.billable_item_adjustment '
                 ||'SET adjustment_value_percent = adjustment_value  '
                 ||'WHERE    adjustment_type = ''percentage'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.billable_item_adjustment '
+                ||'SET adjustment_type = INITCAP(adjustment_type)';
         
         -- building
         
@@ -460,6 +533,154 @@ BEGIN
                 ||'SET  address_street_name = '
                 ||' TRIM(address_street_name)||'' ''||INITCAP(TRIM(address_street_direction)) '
                 ||'WHERE    address_street_direction IS NOT NULL';
+                
+        -- late_fee_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.late_fee_item '
+                ||'SET  base_fee_amount = base_fee '
+                ||'WHERE    base_fee_type = ''FlatAmount'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.late_fee_item '
+                ||'SET  base_fee_percent = base_fee '
+                ||'WHERE    base_fee_type != ''FlatAmount'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.late_fee_item '
+                ||'SET  max_total_fee_amount = max_total_fee  '
+                ||'WHERE    max_total_fee_type = ''FlatAmount'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.late_fee_item '
+                ||'SET  max_total_fee_percent = max_total_fee  '
+                ||'WHERE    max_total_fee_type != ''FlatAmount'' ';
+                
+        -- lease_adjustment
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment '
+                ||'SET tax_amount = tax '
+                ||'WHERE    tax_type = ''value'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment '
+                ||'SET tax_percent = tax '
+                ||'WHERE    tax_type = ''percent'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment '
+                ||'SET tax_type = ''Monetary'' '
+                ||'WHERE    tax_type = ''value'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment '
+                ||'SET tax_type = ''Percentage'' '
+                ||'WHERE    tax_type = ''percent'' ';
+                
+        -- marketing
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.marketing AS m '
+                ||'SET  marketing_address_country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  m.marketing_address_country_old = c.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.marketing AS m '
+                ||'SET  marketing_address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
+                ||'WHERE    m.marketing_address_province_old = p.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.marketing '
+                ||'SET  marketing_address_street_number = '
+                ||' marketing_address_street_number||marketing_address_street_number_suffix '
+                ||'WHERE    marketing_address_street_number_suffix IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.marketing '
+                ||'SET  marketing_address_street_name = '
+                ||' TRIM(marketing_address_street_name)||'' ''||INITCAP(TRIM(marketing_address_street_type)) '
+                ||'WHERE    marketing_address_street_type IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.marketing '
+                ||'SET  marketing_address_street_name = '
+                ||' TRIM(marketing_address_street_name)||'' ''||INITCAP(TRIM(marketing_address_street_direction)) '
+                ||'WHERE    marketing_address_street_direction IS NOT NULL';
+        
+        -- n4_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.n4_policy AS n '
+                ||'SET  mailing_address_country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  n.mailing_address_country_old = c.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.n4_policy AS n '
+                ||'SET  mailing_address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
+                ||'WHERE    n.mailing_address_province_old = p.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.n4_policy '
+                ||'SET  mailing_address_street_number = '
+                ||' mailing_address_street_number||mailing_address_street_number_suffix '
+                ||'WHERE    mailing_address_street_number_suffix IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.n4_policy '
+                ||'SET  mailing_address_street_name = '
+                ||' TRIM(mailing_address_street_name)||'' ''||INITCAP(TRIM(mailing_address_street_type)) '
+                ||'WHERE    mailing_address_street_type IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.n4_policy '
+                ||'SET  mailing_address_street_name = '
+                ||' TRIM(mailing_address_street_name)||'' ''||INITCAP(TRIM(mailing_address_street_direction)) '
+                ||'WHERE    mailing_address_street_direction IS NOT NULL';
+        
+         -- online_application
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.online_application AS a '
+                ||'SET  create_date = m.create_date '
+                ||'FROM '||v_schema_name||'.master_online_application AS m '
+                ||'WHERE    m.id = a.master_online_application ';
+        
+        -- payment_method
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method AS p '
+                ||'SET    billing_address_country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  p.billing_address_country_old = c.id ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method AS pm '
+                ||'SET  billing_address_province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
+                ||'WHERE    pm.billing_address_province_old = p.id ';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method AS p '
+                ||'SET  billing_address_suite_number = t.suite_num,'
+                ||'     billing_address_street_number = t.street_num,'
+                ||'     billing_address_street_name = t.street_name '
+                ||'FROM     _dba_.split_simple_address('||quote_literal(v_schema_name)||','
+                ||'         ''payment_method'',''billing_address_street1'',''billing_address_street2'') AS t '
+                ||'WHERE    p.id = t.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method '
+                ||'SET  billing_address_street_number = ''INVALID'' '
+                ||'WHERE billing_address_street_number IS NULL ';
+        
+        -- product_v
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  deposit_lmr_deposit_value_amount = deposit_lmr_deposit_value '
+                ||'WHERE deposit_lmr_value_type = ''Monetary'' '; 
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  deposit_lmr_deposit_value_percent = deposit_lmr_deposit_value '
+                ||'WHERE deposit_lmr_value_type = ''Percentage'' '; 
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  deposit_move_in_deposit_value_amount = deposit_move_in_deposit_value '
+                ||'WHERE deposit_move_in_value_type = ''Monetary'' '; 
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  deposit_move_in_deposit_value_percent = deposit_move_in_deposit_value '
+                ||'WHERE deposit_move_in_value_type = ''Percentage'' '; 
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  deposit_security_deposit_value_amount = deposit_security_deposit_value '
+                ||'WHERE deposit_security_value_type = ''Monetary'' '; 
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.product_v '
+                ||'SET  deposit_security_deposit_value_percent = deposit_security_deposit_value '
+                ||'WHERE deposit_security_value_type = ''Percentage'' '; 
         
         -- Phone numbers update
         
@@ -470,13 +691,18 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
                 ||'SET  province = replace(name,'' '','''') ';
+                
+        -- pt_vehicle
         
-        -- online_application
-        
-        EXECUTE 'UPDATE '||v_schema_name||'.online_application AS a '
-                ||'SET  create_date = m.create_date '
-                ||'FROM '||v_schema_name||'.master_online_application AS m '
-                ||'WHERE    m.id = a.master_online_application ';
+        EXECUTE 'UPDATE '||v_schema_name||'.pt_vehicle AS pt '
+                ||'SET  country = replace(c.name,'' '','''') '
+                ||'FROM   '||v_schema_name||'.country AS c '
+                ||'WHERE  pt.country_old = c.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.pt_vehicle AS pt '
+                ||'SET  province = replace(p.name,'' '','''') '
+                ||'FROM '||v_schema_name||'.province_policy_node p '
+                ||'WHERE    pt.province_old = p.id ';
                 
         -- restrictions_policy
         
@@ -572,12 +798,60 @@ BEGIN
                                 DROP COLUMN address_street_number_suffix,
                                 DROP COLUMN address_street_type;
                                 
+        -- late_fee_item
+        
+        ALTER TABLE late_fee_item   DROP COLUMN base_fee,
+                                    DROP COLUMN max_total_fee;
+                                    
+        -- lease_adjustment
+        
+        ALTER TABLE lease_adjustment DROP COLUMN tax;
+                                
+        -- legal_letter
+        
+        ALTER TABLE legal_letter    DROP COLUMN cancellation_threshold,
+                                    DROP COLUMN is_active;
+                                    
+        -- marketing
+        
+        ALTER TABLE marketing       DROP COLUMN marketing_address_country_old,
+                                    DROP COLUMN marketing_address_county,
+                                    DROP COLUMN marketing_address_province_old,
+                                    DROP COLUMN marketing_address_street_direction,
+                                    DROP COLUMN marketing_address_street_number_suffix,
+                                    DROP COLUMN marketing_address_street_type;
+        
+        -- n4_policy
+        
+        ALTER TABLE n4_policy       DROP COLUMN mailing_address_country_old,
+                                    DROP COLUMN mailing_address_county,
+                                    DROP COLUMN mailing_address_province_old,
+                                    DROP COLUMN mailing_address_street_direction,
+                                    DROP COLUMN mailing_address_street_number_suffix,
+                                    DROP COLUMN mailing_address_street_type;
+                                    
+        -- payment_method
+       
+       ALTER TABLE payment_method       DROP COLUMN billing_address_country_old,
+                                        DROP COLUMN billing_address_province_old,
+                                        DROP COLUMN billing_address_street1,
+                                        DROP COLUMN billing_address_street2;
+        -- product_v
+        
+        ALTER TABLE product_v   DROP COLUMN deposit_lmr_deposit_value,
+                                DROP COLUMN deposit_move_in_deposit_value,
+                                DROP COLUMN deposit_security_deposit_value;
         
         -- province_policy_node
         
         ALTER TABLE province_policy_node    DROP COLUMN code,
                                             DROP COLUMN country,
                                             DROP COLUMN name;
+                                            
+        -- pt_vehicle
+        
+        ALTER TABLE pt_vehicle  DROP COLUMN country_old,
+                                DROP COLUMN province_old;
                  
         /**
         ***     ======================================================================================================
@@ -621,7 +895,9 @@ BEGIN
                 'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 
                 'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
                 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
-
+        ALTER TABLE billable_item_adjustment ADD CONSTRAINT billable_item_adjustment_adjustment_type_e_ck 
+            CHECK ((adjustment_type) IN ('Monetary', 'Percentage'));
+        ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_tax_type_e_ck CHECK ((tax_type) IN ('Monetary', 'Percentage'));
         
         /**
         ***     ====================================================================================================
