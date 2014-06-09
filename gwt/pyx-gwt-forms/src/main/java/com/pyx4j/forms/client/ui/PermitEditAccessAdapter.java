@@ -23,11 +23,11 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
-public class PermissionAccessAdapter implements IAccessAdapter {
+public class PermitEditAccessAdapter implements IAccessAdapter {
 
     private final Permission permission;
 
-    public PermissionAccessAdapter(Permission permission) {
+    public PermitEditAccessAdapter(Permission permission) {
         this.permission = permission;
     }
 
@@ -38,12 +38,12 @@ public class PermissionAccessAdapter implements IAccessAdapter {
 
     @Override
     public Boolean isEditable() {
-        return null;
+        return SecurityController.checkPermission(permission);
     }
 
     @Override
     public Boolean isVisible() {
-        return SecurityController.checkPermission(permission);
+        return null;
     }
 
     @Override
