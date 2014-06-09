@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services;
+package com.propertyvista.crm.server.services.maintenance;
 
 import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
 import com.propertyvista.server.common.upload.AbstractMaintenanceRequestPictureUploadServiceImpl;
