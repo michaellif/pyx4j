@@ -149,4 +149,14 @@ public abstract class InternationalAddressEditorBase<A extends InternationalAddr
         get(proto().postalCode()).setVisible(true);
         get(proto().postalCode()).setTitle(proto().postalCode().getMeta().getCaption());
     }
+
+    @Override
+    public void generateMockData() {
+        get(proto().streetNumber()).setMockValue("100");
+        get(proto().streetName()).setMockValue("King St W");
+        get(proto().city()).setMockValue("Toronto");
+        get(proto().province()).setMockValue("Ontario");
+        get(proto().country()).setMockValue(ISOCountry.Canada);
+        get(proto().postalCode()).setMockValue("M5H 1A1");
+    }
 }
