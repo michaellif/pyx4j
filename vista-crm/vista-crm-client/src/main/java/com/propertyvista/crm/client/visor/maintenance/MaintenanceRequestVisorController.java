@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractVisorController;
@@ -26,9 +27,8 @@ import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -51,7 +51,7 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
                 MaintenanceRequestDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return SecurityController.checkAnyBehavior(VistaCrmBehavior.Maintenance_OLD);
+                return SecurityController.checkPermission(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
             }
 
             @Override

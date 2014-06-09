@@ -49,6 +49,7 @@ import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ComplexDTO;
 import com.propertyvista.dto.LandlordDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -162,7 +163,8 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Lease()));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Tenant()));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.Guarantor()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.MaintenanceRequest(), DataModelPermission
+                    .permissionRead(MaintenanceRequestDTO.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerTenant()));
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Tenants.FormerGuarantor()));

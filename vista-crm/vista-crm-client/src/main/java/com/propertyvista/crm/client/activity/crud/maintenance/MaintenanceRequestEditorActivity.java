@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
-import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.crm.rpc.services.maintenance.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;

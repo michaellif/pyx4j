@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services;
+package com.propertyvista.crm.rpc.services.maintenance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,7 +20,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.annotations.AccessControl;
 
+import com.propertyvista.crm.rpc.services.maintenance.ac.Resolve;
+import com.propertyvista.crm.rpc.services.maintenance.ac.Schedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -41,14 +44,17 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
         Tenant tenant();
     }
 
+    @AccessControl(Schedule.class)
     void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO schedule, Key entityId);
 
     void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId);
 
+    @AccessControl(Resolve.class)
     void resolveAction(AsyncCallback<VoidSerializable> callback, LogicalDate resolvedOn, String resolution, Key entityId);
 
     void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId);
 
+    @AccessControl(Resolve.class)
     void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean labelsOnly, Key buildingId);

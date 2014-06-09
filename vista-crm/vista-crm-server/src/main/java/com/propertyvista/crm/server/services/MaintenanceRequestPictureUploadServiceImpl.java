@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
+import com.propertyvista.crm.rpc.services.maintenance.MaintenanceRequestPictureUploadService;
 import com.propertyvista.server.common.upload.AbstractMaintenanceRequestPictureUploadServiceImpl;
 
 public class MaintenanceRequestPictureUploadServiceImpl extends AbstractMaintenanceRequestPictureUploadServiceImpl implements

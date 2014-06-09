@@ -29,8 +29,6 @@ import com.propertyvista.crm.rpc.CRMImpliedPermission;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
-import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
-import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
@@ -512,7 +510,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageAttachmentUploadService.class));
 
-        grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(MaintenanceCrudService.class));
         grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileDownloadService.class));
@@ -642,8 +639,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(NoteAttachment.class, EntityPermission.READ));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcDocumentFileUploadService.class));
-
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MaintenanceRequestPictureUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(VendorCrudService.class));

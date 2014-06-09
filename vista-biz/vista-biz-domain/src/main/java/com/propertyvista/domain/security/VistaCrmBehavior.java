@@ -47,6 +47,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     Occupancy_OLD,
 
+    @Deprecated
     Maintenance_OLD,
 
     Organization_OLD,

@@ -25,6 +25,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
@@ -58,6 +59,7 @@ import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.ElevatorDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -124,7 +126,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                     ((BuildingViewerPresenter) getPresenter()).getMaintenanceRequestVisorController().show();
                 }
             }
-        }));
+        }), DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
 
         addAction(new MenuItem(i18n.tr("Community Events"), new Command() {
             @Override

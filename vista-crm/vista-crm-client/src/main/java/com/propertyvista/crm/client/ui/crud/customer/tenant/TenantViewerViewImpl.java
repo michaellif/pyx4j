@@ -17,15 +17,18 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -78,7 +81,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                 ((TenantViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
         });
-        addAction(maintenanceAction);
+        addAction(maintenanceAction, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
 
         viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPayments"), new Command() {
             @Override
@@ -90,14 +93,17 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         // ------------------------------------------------------------------------------------------------------------
 
-        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
-            @Override
-            public void execute() {
-                if (!isVisorShown()) {
-                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
+        //TODO Button or addHeaderToolbarItem constructor
+        if (!SecurityController.checkPermission(DataModelPermission.permissionRead(MaintenanceRequestDTO.class))) {
+            addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
+                @Override
+                public void execute() {
+                    if (!isVisorShown()) {
+                        ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
+                    }
                 }
-            }
-        }));
+            }));
+        }
     }
 
     @Override

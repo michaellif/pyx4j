@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -222,7 +223,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
-        }));
+        }), DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
 
         noticeAction = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override
