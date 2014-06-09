@@ -43,6 +43,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
+import com.pyx4j.widgets.client.dashboard.EmptyBoard;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
@@ -205,16 +206,20 @@ public abstract class AbstractDashboard extends ResizeComposite {
     }
 
     private void arrangeGadgets(List<IGadgetInstance> gadgets) {
-        board = activeLayoutManger.arrange(dashboardMetadata.encodedLayout().getValue(), gadgets);
-        board.setReadOnly(isReadOnly);
-        board.addEventHandler(new BoardEvent() {
-            @Override
-            public void onEvent(Reason reason) {
-                if (reason == Reason.removeGadget | reason == Reason.repositionGadget) {
-                    propagateLayoutToMetadata();
+        if (gadgets.size() > 0) {
+            board = activeLayoutManger.arrange(dashboardMetadata.encodedLayout().getValue(), gadgets);
+            board.setReadOnly(isReadOnly);
+            board.addEventHandler(new BoardEvent() {
+                @Override
+                public void onEvent(Reason reason) {
+                    if (reason == Reason.removeGadget | reason == Reason.repositionGadget) {
+                        propagateLayoutToMetadata();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            board = new EmptyBoard(i18n.tr("No Gadgets to show. To add gadgets use '+' action button."));
+        }
         scrollPanel.setWidget(board);
     }
 
