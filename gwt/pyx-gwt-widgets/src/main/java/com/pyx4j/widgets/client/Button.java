@@ -45,6 +45,8 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 public class Button extends FocusPanel implements IFocusWidget {
@@ -417,5 +419,22 @@ public class Button extends FocusPanel implements IFocusWidget {
         public DropDownPanel getMenuPopup() {
             return popup;
         }
+    }
+
+    public static class SecureMenuItem extends MenuItem {
+
+        private final ActionPermission permission;
+
+        public SecureMenuItem(String text, ScheduledCommand cmd, ActionPermission permission) {
+            super(text, cmd);
+            this.permission = permission;
+            super.setVisible(SecurityController.checkPermission(permission));
+        }
+
+        @Override
+        public void setVisible(boolean visible) {
+            super.setVisible(visible && SecurityController.checkPermission(permission));
+        }
+
     }
 }
