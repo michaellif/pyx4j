@@ -20,8 +20,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -39,10 +41,12 @@ public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServic
      */
     void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseTermParticipant<?>> users);
 
+    @AccessControl(CreditCheckRun.class)
     void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseTermParticipant<?>> users);
 
     void applicationAction(AsyncCallback<String> callback, LeaseApplicationActionDTO actionDTO);
 
+    @AccessControl(CreditCheckRun.class)
     void getCreditCheckServiceStatus(AsyncCallback<PmcEquifaxStatus> callback);
 
     void isCreditCheckViewAllowed(AsyncCallback<VoidSerializable> callback);

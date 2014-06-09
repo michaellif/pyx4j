@@ -194,9 +194,6 @@ public class CrmSiteMap implements SiteMap {
         public static class LeaseTerm extends CrmCrudAppPlace {
         }
 
-        public static class EquifaxResult extends CrmCrudAppPlace {
-        }
-
         @PlaceProperties(navigLabel = "Maintenance Requests")
         public static class MaintenanceRequest extends CrmCrudAppPlace {
         }

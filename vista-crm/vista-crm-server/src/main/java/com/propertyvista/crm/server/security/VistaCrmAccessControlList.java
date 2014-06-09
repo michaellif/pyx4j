@@ -27,15 +27,15 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.rpc.CRMImpliedPermission;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
-import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
-import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
-import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.MaintenanceRequestPictureUploadService;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
+import com.propertyvista.crm.rpc.services.MessageAttachmentUploadService;
+import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
+import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
@@ -82,7 +82,6 @@ import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.EmailToTenantsService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
@@ -191,7 +190,6 @@ import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
-import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
 import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
@@ -205,7 +203,6 @@ import com.propertyvista.crm.server.security.access.BuildingAgingBucketsDatasetA
 import com.propertyvista.crm.server.security.access.BuildingArrearsSnapshotDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.BuildingDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.BuildingElementDatasetAccessRule;
-import com.propertyvista.crm.server.security.access.CommunicationMessageAccessRule;
 import com.propertyvista.crm.server.security.access.CommunityEventDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.CustomerCreditCheckDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.CustomerDatasetAccessRule;
@@ -218,6 +215,7 @@ import com.propertyvista.crm.server.security.access.LeaseDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.LeaseParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.LeaseTermParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.MaintenanceRequestDatasetAccessRule;
+import com.propertyvista.crm.server.security.access.MessageAccessRule;
 import com.propertyvista.crm.server.security.access.N4LegalLetterDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.PaymentRecordDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.UnitAvailabilityStatusDatasetAccessRule;
@@ -618,9 +616,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(MerchantAccountCrudService.class));
         grant(VistaCrmBehavior.OrganizationFinancial_OLD, new IServiceExecutePermission(MerchantAccountCrudService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerCreditCheckLongReportService.class));
-
         grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, new IServiceExecutePermission(CreditCheckWizardService.class));
@@ -707,7 +702,13 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         /***************** this is new List **************** */
 
         merge(new VistaCrmBuildingAccessControlList());
+        merge(new VistaCrmCreditCheckAccessControlList());
+        merge(new VistaCrmEmployeeAccessControlList());
+        merge(new VistaCrmFinancialAccessControlList());
+        merge(new VistaCrmLeaseApllicationAccessControlList());
         merge(new VistaCrmLeasesAccessControlList());
+        merge(new VistaCrmMaintenanceAccessControlList());
+        merge(new VistaCrmYardiAccessControlList());
 
         freeze();
     }

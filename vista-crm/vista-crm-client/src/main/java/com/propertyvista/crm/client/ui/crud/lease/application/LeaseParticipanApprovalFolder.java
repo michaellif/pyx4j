@@ -28,10 +28,12 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.PermissionAccessAdapter;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
@@ -40,6 +42,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckViewReport;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -155,6 +158,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
 
             });
+            creditCheckReport.addAccessAdapter(new PermissionAccessAdapter(new ActionPermission(CreditCheckViewReport.class)));
             creditCheckReport.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {

@@ -25,8 +25,8 @@ import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -79,7 +79,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         boolean hasEquifax = false;
 
         for (VistaCrmBehaviorDTO behaviour : getValue().permissions()) {
-            if (behaviour.behavior().getValue() == VistaCrmBehavior.Equifax_OLD) {
+            if (behaviour.behavior().getValue() == VistaCrmBehavior.CreditCheckFull) {
                 hasEquifax = true;
                 break;
             }

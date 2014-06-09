@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
@@ -51,6 +52,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
+import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -79,7 +81,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private final MenuItem inviteAction;
 
-    private final MenuItem checkAction;
+    private final MenuItem creditCheckAction;
 
     private final MenuItem approveAction;
 
@@ -182,14 +184,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             addAction(inviteAction);
         }
 
-        checkAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
+        creditCheckAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
                 checkActionExecuter();
             }
         });
         if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            addAction(checkAction);
+            addAction(creditCheckAction, new ActionPermission(CreditCheckRun.class));
         }
 
         // TODO Move Lease Action
@@ -334,7 +336,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(createOnlineApplication, false);
         setActionVisible(cancelOnlineApplication, false);
         setActionVisible(inviteAction, false);
-        setActionVisible(checkAction, false);
+        setActionVisible(creditCheckAction, false);
         setActionVisible(approveAction, false);
         setActionVisible(moreInfoAction, false);
         setActionVisible(declineAction, false);
@@ -358,7 +360,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setActionVisible(createOnlineApplication, status == Status.Created);
         setActionVisible(cancelOnlineApplication, status == Status.OnlineApplication);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
-        setActionVisible(checkAction, status.isDraft());
+        setActionVisible(creditCheckAction, status.isDraft());
         setActionVisible(approveAction, status.isDraft());
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());
