@@ -53,6 +53,7 @@ import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -200,13 +201,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         }));
 
         // Actions:
-
-        addAction(sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
+        addAction(sendMailAction = new SecureMenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
             public void execute() {
                 sendMailActionExecuter();
             }
-        }), new ActionPermission(SendMail.class));
+        }, new ActionPermission(SendMail.class)));
 
         runBillAction = new MenuItem(i18n.tr("Run Bill"), new Command() {
             @Override
@@ -218,12 +218,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             addAction(runBillAction);
         }
 
-        addAction(maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+        addAction(maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
-        }), DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
+        }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)));
 
         noticeAction = new MenuItem(i18n.tr("Notice..."), new Command() {
             @Override

@@ -32,6 +32,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
@@ -119,23 +120,23 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         dashboardButton.setMenu(dashboardsMenu);
         addHeaderToolbarItem(dashboardButton);
 
-        addAction(new MenuItem(i18n.tr("Maintenance Requests"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Maintenance Requests"), new Command() {
             @Override
             public void execute() {
                 if (!isVisorShown()) {
                     ((BuildingViewerPresenter) getPresenter()).getMaintenanceRequestVisorController().show();
                 }
             }
-        }), DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
+        }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
 
-        addAction(new MenuItem(i18n.tr("Community Events"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Community Events"), new Command() {
             @Override
             public void execute() {
                 if (!isVisorShown()) {
                     ((BuildingViewerPresenter) getPresenter()).getCommunityEventVisorController().show();
                 }
             }
-        }), new ActionPermission(CommunityEvents.class));
+        }, new ActionPermission(CommunityEvents.class)));
 
         if (VistaFeatures.instance().yardiIntegration() && ApplicationMode.isDevelopment()) {
             addAction(new MenuItem(i18n.tr("Update From Yardi"), new Command() {
@@ -146,19 +147,19 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             }));
         }
 
-        addAction(new MenuItem(i18n.tr("Import Building Data"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Import Building Data"), new Command() {
             @Override
             public void execute() {
                 ((BuildingViewerPresenter) getPresenter()).importBuildingData();
             }
-        }), new ActionPermission(ImportExport.class));
+        }, new ActionPermission(ImportExport.class)));
 
-        addAction(new MenuItem(i18n.tr("Export Building Data"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Export Building Data"), new Command() {
             @Override
             public void execute() {
                 ((BuildingViewerPresenter) getPresenter()).exportBuildingData();
             }
-        }), new ActionPermission(ImportExport.class));
+        }, new ActionPermission(ImportExport.class)));
 
     }
 

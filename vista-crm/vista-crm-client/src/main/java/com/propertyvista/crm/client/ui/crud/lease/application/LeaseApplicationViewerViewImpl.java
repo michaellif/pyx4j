@@ -41,6 +41,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -160,14 +161,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         // Actions:
 
-        createOnlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
+        createOnlineApplication = new SecureMenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).startOnlineApplication();
             }
-        });
+        }, new ActionPermission(ApplicationStartOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {
-            addAction(createOnlineApplication, new ActionPermission(ApplicationStartOnlineApplication.class));
+            addAction(createOnlineApplication);
         }
 
         cancelOnlineApplication = new MenuItem(i18n.tr("Cancel Online Application"), new Command() {
@@ -190,43 +191,43 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             addAction(inviteAction);
         }
 
-        creditCheckAction = new MenuItem(i18n.tr("Credit Check"), new Command() {
+        creditCheckAction = new SecureMenuItem(i18n.tr("Credit Check"), new Command() {
             @Override
             public void execute() {
                 checkActionExecuter();
             }
-        });
+        }, new ActionPermission(CreditCheckRun.class));
         if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            addAction(creditCheckAction, new ActionPermission(CreditCheckRun.class));
+            addAction(creditCheckAction);
         }
 
         // TODO Move Lease Action
 
-        approveAction = new MenuItem(APPROVE, new Command() {
+        approveAction = new SecureMenuItem(APPROVE, new Command() {
             @Override
             public void execute() {
                 approveActionExecuter();
             }
-        });
-        addAction(approveAction, new ActionPermission(ApplicationDecisionApprove.class));
+        }, new ActionPermission(ApplicationDecisionApprove.class));
+        addAction(approveAction);
 
-        moreInfoAction = new MenuItem(MORE_INFO, new Command() {
+        moreInfoAction = new SecureMenuItem(MORE_INFO, new Command() {
             @Override
             public void execute() {
                 moreInfoActionExecuter();
             }
-        });
+        }, new ActionPermission(ApplicationDecisionMoreInfo.class));
         if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
-            addAction(moreInfoAction, new ActionPermission(ApplicationDecisionMoreInfo.class));
+            addAction(moreInfoAction);
         }
 
-        declineAction = new MenuItem(DECLINE, new Command() {
+        declineAction = new SecureMenuItem(DECLINE, new Command() {
             @Override
             public void execute() {
                 declineActionExecuter();
             }
-        });
-        addAction(declineAction, new ActionPermission(ApplicationDecisionDecline.class));
+        }, new ActionPermission(ApplicationDecisionDecline.class));
+        addAction(declineAction);
 
         cancelAction = new MenuItem(CANCEL, new Command() {
             @Override

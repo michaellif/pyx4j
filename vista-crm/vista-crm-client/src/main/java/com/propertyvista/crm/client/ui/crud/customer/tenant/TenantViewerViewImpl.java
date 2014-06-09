@@ -24,6 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -75,13 +76,13 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         });
         addAction(screeningAction);
 
-        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+        maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
-        });
-        addAction(maintenanceAction, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
+        }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
+        addAction(maintenanceAction);
 
         viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPayments"), new Command() {
             @Override
