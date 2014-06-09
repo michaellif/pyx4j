@@ -28,6 +28,6 @@ public class CompanyPhoneFolder extends VistaTableFolder<CompanyPhone> {
 
     @Override
     public List<FolderColumnDescriptor> columns() {
-        return Arrays.asList(new FolderColumnDescriptor(proto().phone(), "15em"));
+        return Arrays.asList(new FolderColumnDescriptor(proto().phone(), "25em"));
     }
 }

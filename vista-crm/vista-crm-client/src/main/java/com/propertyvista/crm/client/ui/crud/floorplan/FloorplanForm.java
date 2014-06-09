@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -98,16 +99,18 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
         formPanel.append(Location.Right, proto().floorCount()).decorate().componentWidth(50);
+        formPanel.append(Location.Dual, new HTML());
 
         formPanel.append(Location.Left, proto().bedrooms()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().bathrooms()).decorate().componentWidth(50);
+        formPanel.append(Location.Dual, new HTML());
 
         formPanel.append(Location.Left, proto().dens()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().halfBath()).decorate().componentWidth(50);
+        formPanel.append(Location.Dual, new HTML());
 
         formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().areaUnits()).decorate().componentWidth(120);
-
         formPanel.append(Location.Dual, proto().description()).decorate();
 
         formPanel.h1(proto().amenities().getMeta().getCaption());
