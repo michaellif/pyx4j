@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
@@ -85,13 +86,24 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         NetworkSimulationServiceFilter.setNetworkSimulationConfig(entity.networkSimulation());
 
-        DevSession.setSessionDuration(TimeUtils.durationParseSeconds(entity.devSessionDuration().getValue()));
+        {
+            int sessionDuration = TimeUtils.durationParseSeconds(entity.devSessionDuration().getValue());
+            if (sessionDuration < 10) {
+                throw new UserRuntimeException("Can't set session duration to less then 10 seconds");
+            }
+            DevSession.setSessionDuration(sessionDuration);
+        }
 
-        int sessionDuration = TimeUtils.durationParseSeconds(entity.applicationSessionDuration().getValue());
-        if (sessionDuration == Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()) {
-            ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(null);
-        } else {
-            ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(sessionDuration);
+        {
+            int sessionDuration = TimeUtils.durationParseSeconds(entity.applicationSessionDuration().getValue());
+            if (sessionDuration < 10) {
+                throw new UserRuntimeException("Can't set session duration to less then 10 seconds");
+            }
+            if (sessionDuration == Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()) {
+                ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(null);
+            } else {
+                ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(sessionDuration);
+            }
         }
 
         VistaSystemsSimulationConfig.setConfiguration(entity.systems());
