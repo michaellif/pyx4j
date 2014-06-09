@@ -29,6 +29,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -38,6 +40,8 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
@@ -302,6 +306,18 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
     @Override
     public void applicationAction(AsyncCallback<String> callback, final LeaseApplicationActionDTO actionDTO) {
+
+        switch (actionDTO.action().getValue()) {
+        case Approve:
+            SecurityController.assertPermission(new ActionPermission(ApplicationDecisionApprove.class));
+            break;
+        case Decline:
+            SecurityController.assertPermission(new ActionPermission(ApplicationDecisionDecline.class));
+            break;
+        default:
+            break;
+        }
+
         long maxExpectedTimeMs = VistaFeatures.instance().yardiIntegration() ? 15000 : 1000;
         callback.onSuccess(DeferredProcessRegistry.fork(new LeaseApplicationActionDeferredProcess(actionDTO, maxExpectedTimeMs), ThreadPoolNames.IMPORTS));
     }

@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.PermissionAccessAdapter;
+import com.pyx4j.forms.client.ui.PermitViewAccessAdapter;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -158,7 +158,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
 
             });
-            creditCheckReport.addAccessAdapter(new PermissionAccessAdapter(new ActionPermission(CreditCheckViewReport.class)));
+            creditCheckReport.addAccessAdapter(new PermitViewAccessAdapter(new ActionPermission(CreditCheckViewReport.class)));
             creditCheckReport.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {

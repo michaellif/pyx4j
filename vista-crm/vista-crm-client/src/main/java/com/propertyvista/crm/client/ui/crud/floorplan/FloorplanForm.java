@@ -31,6 +31,8 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImageSlider;
+import com.pyx4j.forms.client.ui.IAccessAdapter;
+import com.pyx4j.forms.client.ui.PermitEditAccessAdapter;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -124,10 +126,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         formPanel.h1(i18n.tr("Marketing Summary"));
 
-        //TODO set ReadOnly add Accessibility adapter
-
-        SecurityController.checkPermission(DataModelPermission.permissionUpdate(Marketing.class));
-
         formPanel.append(Location.Left, proto().marketingName()).decorate();
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
@@ -158,9 +156,18 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         imageSlider.setOrganizerWidth(550);
         formPanel.append(Location.Dual, proto().media(), imageSlider);
 
+        // set ReadOnly
+
+        IAccessAdapter editAccessAdapter = new PermitEditAccessAdapter(DataModelPermission.permissionUpdate(Marketing.class));
+        get(proto().marketingName()).addAccessAdapter(editAccessAdapter);
+        get(proto().ilsSummary()).addAccessAdapter(editAccessAdapter);
+        get(proto().media()).addAccessAdapter(editAccessAdapter);
+        get(proto().media()).addAccessAdapter(editAccessAdapter);
+
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
             formPanel.h1(i18n.tr("ILS Profile"));
             formPanel.append(Location.Dual, proto().ilsProfile(), new ILSProfileFloorplanFolder());
+            get(proto().ilsProfile()).addAccessAdapter(editAccessAdapter);
         }
 
         return formPanel;

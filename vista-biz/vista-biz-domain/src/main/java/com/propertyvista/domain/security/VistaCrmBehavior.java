@@ -109,7 +109,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    ApllicationBasic, ApllicationAdvance, ApplicationVerifyDoc, ApllicationFull,
+    ApplicationBasic, ApplicationAdvance, ApplicationVerifyDoc, ApplicationFull,
 
     // --
 

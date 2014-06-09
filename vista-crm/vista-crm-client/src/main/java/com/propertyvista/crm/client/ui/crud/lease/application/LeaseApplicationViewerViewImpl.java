@@ -27,6 +27,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
@@ -55,6 +56,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadSe
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -134,6 +136,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }));
 
         documentsButton.setMenu(applicationDocumentMenu);
+        documentsButton.setVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
         addHeaderToolbarItem(documentsButton.asWidget());
 
         // ------------------------------------------------------------------------------------------------------------
@@ -164,7 +167,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
-            addAction(createOnlineApplication);
+            addAction(createOnlineApplication, new ActionPermission(ApplicationStartOnlineApplication.class));
         }
 
         cancelOnlineApplication = new MenuItem(i18n.tr("Cancel Online Application"), new Command() {

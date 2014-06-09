@@ -16,14 +16,17 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.ApplicationStatusFolder;
@@ -33,6 +36,7 @@ import com.propertyvista.crm.client.ui.crud.lease.application.components.LeaseAp
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -41,6 +45,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private FormPanel onlineStatusPanel;
+
+    private final Tab paymentsTab, financialTab, applicationDocumentsTab;
 
     public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
@@ -51,10 +57,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         if (!VistaFeatures.instance().yardiIntegration()) {
             chargesTab = addTab(createChargesTab(), i18n.tr("Potential Charges"));
         }
-        addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-        addTab(createFinancialTab(), i18n.tr("Financial"));
+        paymentsTab = addTab(((LeaseApplicationViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
         addTab(createApprovalTab(), i18n.tr("Approval"));
-        addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"));
+        applicationDocumentsTab = addTab(createApplicationDocumentsTab(), i18n.tr("Application Documents"));
     }
 
     @Override
@@ -74,6 +80,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().decidedBy()).setVisible(status.isProcessed());
         get(proto().leaseApplication().decisionDate()).setVisible(status.isProcessed());
         get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
+
+        paymentsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
+        financialTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
+        applicationDocumentsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
     }
 
     private IsWidget createInfoTab() {
