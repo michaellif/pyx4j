@@ -424,7 +424,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             dto.enforceAgeOfMajority().setValue(false);
             dto.maturedOccupantsAreApplicants().setValue(false);
         } else {
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit().building(),
+                    RestrictionsPolicy.class);
             dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
             dto.enforceAgeOfMajority().setValue(restrictionsPolicy.enforceAgeOfMajority().getValue());
             dto.maturedOccupantsAreApplicants().setValue(restrictionsPolicy.maturedOccupantsAreApplicants().getValue());
