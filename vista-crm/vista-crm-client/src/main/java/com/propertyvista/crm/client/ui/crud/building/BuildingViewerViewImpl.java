@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -48,6 +47,7 @@ import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
+import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -139,12 +139,12 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         }, new ActionPermission(CommunityEvents.class)));
 
         if (VistaFeatures.instance().yardiIntegration() && ApplicationMode.isDevelopment()) {
-            addAction(new MenuItem(i18n.tr("Update From Yardi"), new Command() {
+            addAction(new SecureMenuItem(i18n.tr("Update From Yardi"), new Command() {
                 @Override
                 public void execute() {
                     ((BuildingViewerPresenter) getPresenter()).updateFromYardi();
                 }
-            }));
+            }, new ActionPermission(UpdateFromYardi.class)));
         }
 
         addAction(new SecureMenuItem(i18n.tr("Import Building Data"), new Command() {

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
@@ -23,6 +24,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class ListerControllerFactory {
 
+    @Deprecated
     public static <E extends IEntity> ListerController<E> create(ILister<E> view, AbstractListService<E> service, Class<E> entityClass,
             final VistaCrmBehavior... whoCanAdd) {
         return new ListerController<E>(view, service, entityClass) {
@@ -33,4 +35,12 @@ public class ListerControllerFactory {
         };
     }
 
+    public static <E extends IEntity> ListerController<E> create(ILister<E> view, AbstractListService<E> service, final Class<E> entityClass) {
+        return new ListerController<E>(view, service, entityClass) {
+            @Override
+            public boolean canCreateNewItem() {
+                return SecurityController.checkPermission(DataModelPermission.permissionCreate(entityClass));
+            }
+        };
+    }
 }

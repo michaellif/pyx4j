@@ -41,6 +41,8 @@ import com.propertyvista.dto.ComplexDTO;
 import com.propertyvista.dto.ElevatorDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LandlordDTO;
+import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
 class VistaCrmBuildingAccessControlList extends UIAclBuilder {
@@ -48,7 +50,8 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
     VistaCrmBuildingAccessControlList() {
         //F general, details, units, add-ons, PC, contacts
         {
-            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class, ComplexDTO.class);
+            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class, ComplexDTO.class, //
+                    ParkingDTO.class, LockerAreaDTO.class);
 
             grant(BuildingBasic, entities, READ);
             grant(BuildingFinancial, entities, READ);
