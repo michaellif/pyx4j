@@ -81,7 +81,8 @@ $$
         (SELECT 'ALTER TABLE '||table_name||' DROP CONSTRAINT '||constraint_name||';'
         FROM    t1
         WHERE   schema_version = $1
-        AND     constraint_type = $3)
+        AND     constraint_type = $3
+        ORDER BY 1)
         UNION ALL
         (SELECT '-- Constraint to create')
         UNION ALL
@@ -96,7 +97,8 @@ $$
                 WHEN constraint_type = 'c' THEN ' CHECK '||constraint_text||';' END
         FROM    t1
         WHERE   schema_version = $2
-        AND     constraint_type = $3);                
+        AND     constraint_type = $3
+        ORDER BY 1);                
 $$
 LANGUAGE SQL VOLATILE;
 
