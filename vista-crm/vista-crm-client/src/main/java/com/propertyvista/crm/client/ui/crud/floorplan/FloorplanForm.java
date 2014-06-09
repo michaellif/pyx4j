@@ -162,7 +162,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         get(proto().marketingName()).addAccessAdapter(editAccessAdapter);
         get(proto().ilsSummary()).addAccessAdapter(editAccessAdapter);
         get(proto().media()).addAccessAdapter(editAccessAdapter);
-        get(proto().media()).addAccessAdapter(editAccessAdapter);
 
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
             formPanel.h1(i18n.tr("ILS Profile"));

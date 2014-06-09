@@ -21,7 +21,6 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
@@ -94,17 +93,14 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         // ------------------------------------------------------------------------------------------------------------
 
-        //TODO Button or addHeaderToolbarItem constructor
-        if (!SecurityController.checkPermission(DataModelPermission.permissionRead(MaintenanceRequestDTO.class))) {
-            addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
-                @Override
-                public void execute() {
-                    if (!isVisorShown()) {
-                        ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
-                    }
+        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
+            @Override
+            public void execute() {
+                if (!isVisorShown()) {
+                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
                 }
-            }));
-        }
+            }
+        }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
     }
 
     @Override

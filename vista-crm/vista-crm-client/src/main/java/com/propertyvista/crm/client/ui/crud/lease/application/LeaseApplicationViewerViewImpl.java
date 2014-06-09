@@ -137,7 +137,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }));
 
         documentsButton.setMenu(applicationDocumentMenu);
-        documentsButton.setVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
+        documentsButton.setPermission(DataModelPermission.permissionRead(LeaseApplicationDocument.class));
         addHeaderToolbarItem(documentsButton.asWidget());
 
         // ------------------------------------------------------------------------------------------------------------
