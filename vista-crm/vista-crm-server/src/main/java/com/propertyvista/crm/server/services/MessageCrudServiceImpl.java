@@ -37,10 +37,12 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -145,7 +147,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         t.content().add(bo);
         t.owner().set(
                 to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? ServerSideFactory.create(
-                        CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned) : to.owner());
+                        CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned) : to.owner().endpoint());
 
         return Persistence.secureSave(t);
     }
@@ -277,10 +279,14 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
-    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message) {
+    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus) {
         if (message.date().isNull()) {
             CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
 
+            if (threadStatus != null) {
+                message.status().setValue(threadStatus);
+                thread.status().setValue(threadStatus);
+            }
             Message m = EntityFactory.create(Message.class);
             for (CommunicationEndpointDTO d : message.to()) {
                 DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
@@ -313,11 +319,15 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
-    public void takeOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source) {
-        source.owner().set(CrmAppContext.getCurrentUser());
+    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, Employee employee) {
+        CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
 
-        Persistence.service().persist(source.thread());
+        thread.owner().set(employee.user());
+
+        Persistence.service().persist(thread);
         Persistence.service().commit();
-        callback.onSuccess(source);
+        Persistence.ensureRetrieve(employee.user(), AttachLevel.Attached);
+        message.owner().set(generateEndpointDTO(employee.user()));
+        callback.onSuccess(message);
     }
 }

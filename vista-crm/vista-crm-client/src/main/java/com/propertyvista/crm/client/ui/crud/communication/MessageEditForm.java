@@ -47,19 +47,19 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().topic()).decorate();
-        formPanel.append(Location.Left, proto().subject()).decorate();
+        CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
+        cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+        formPanel.append(Location.Right, proto().allowedReply(), cmbBoolean).decorate();
+        formPanel.append(Location.Dual, proto().subject()).decorate();
 
         formPanel.h1("To");
         formPanel.append(Location.Left, proto().to(), receiverSelector);
 
         formPanel.h1("Message");
-        CComboBoxBoolean cmbBoolean1 = new CComboBoxBoolean();
-        cmbBoolean1.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        formPanel.append(Location.Left, proto().highImportance(), cmbBoolean1).decorate();
-
         CComboBoxBoolean cmbBoolean2 = new CComboBoxBoolean();
         cmbBoolean2.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        formPanel.append(Location.Left, proto().allowedReply(), cmbBoolean2).decorate();
+        formPanel.append(Location.Left, proto().highImportance(), cmbBoolean2).decorate();
+
         formPanel.append(Location.Right, proto().status()).decorate();
 
         formPanel.append(Location.Dual, proto().text()).decorate();

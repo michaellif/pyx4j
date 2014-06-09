@@ -24,6 +24,8 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.communication.MessageViewerView;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MessageDTO;
 
@@ -35,8 +37,8 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
     }
 
     @Override
-    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message) {
-        ((MessageCrudService) getService()).saveMessage(callback, message);
+    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus) {
+        ((MessageCrudService) getService()).saveMessage(callback, message, threadStatus);
 
     }
 
@@ -46,7 +48,7 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
     }
 
     @Override
-    public void takeOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message) {
-        ((MessageCrudService) getService()).takeOwnership(callback, message);
+    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, Employee empoyee) {
+        ((MessageCrudService) getService()).assignOwnership(callback, message, empoyee);
     }
 }

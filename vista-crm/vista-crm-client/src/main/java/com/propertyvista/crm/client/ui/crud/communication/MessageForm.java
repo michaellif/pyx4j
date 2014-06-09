@@ -61,6 +61,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerUserListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -85,14 +86,15 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         setEnabled(true);
     }
 
-    public void takeOwnership() {
-        ((MessageViewerView.Presenter) getParentView().getPresenter()).takeOwnership(new DefaultAsyncCallback<MessageDTO>() {
+    public void assignOwnership(Employee employee) {
+        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(new DefaultAsyncCallback<MessageDTO>() {
             @Override
             public void onSuccess(MessageDTO result) {
                 getValue().setPrimaryKey(result.getPrimaryKey());
+                getValue().owner().set(result.owner());
                 refresh(false);
             }
-        }, getValue());
+        }, getValue(), employee);
     }
 
     public IsWidget createGeneralForm() {
@@ -255,7 +257,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         @Override
                         public void onSuccess(MessageDTO result) {
                         }
-                    }, m);
+                    }, m, null);
                 }
 
             });
@@ -378,7 +380,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             return tb;
         }
 
-        private void saveMessage(MessageDTO m, final boolean redirectToList) {
+        public void saveMessage(MessageDTO m, final boolean redirectToList) {
             com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getParentView().getPresenter();
             if (p instanceof MessageEditorView.Presenter) {
 
@@ -401,7 +403,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                             refresh(false);
                         }
                     }
-                }, m);
+                }, m, null);
                 if (redirectToList) {
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.lister);

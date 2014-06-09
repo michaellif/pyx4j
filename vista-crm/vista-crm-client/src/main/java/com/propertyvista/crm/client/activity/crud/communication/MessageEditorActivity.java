@@ -27,13 +27,12 @@ import com.propertyvista.dto.MessageDTO;
 public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> implements MessageEditorView.Presenter {
 
     public MessageEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT
-                .<MessageCrudService> create(MessageCrudService.class), MessageDTO.class);
+        super(place, CrmSite.getViewFactory().getView(MessageEditorView.class), GWT.<MessageCrudService> create(MessageCrudService.class), MessageDTO.class);
     }
 
     @Override
     public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message) {
-        ((MessageCrudService) getService()).saveMessage(callback, message);
+        ((MessageCrudService) getService()).saveMessage(callback, message, null);
 
     }
 }

@@ -18,6 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -25,9 +27,9 @@ import com.propertyvista.dto.MessageDTO;
 
 public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
 
-    void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source);
+    void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO source, ThreadStatus threadStatus);
 
-    void takeOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source);
+    void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, Employee employee);
 
     @Transient
     interface MessageInitializationData extends InitializationData {
