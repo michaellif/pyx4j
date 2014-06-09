@@ -95,14 +95,17 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Floorplan Information"));
-        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().bedrooms()).decorate().componentWidth(50);
-        formPanel.append(Location.Left, proto().dens()).decorate().componentWidth(50);
-        formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
 
+        formPanel.append(Location.Left, proto().name()).decorate().componentWidth(180);
         formPanel.append(Location.Right, proto().floorCount()).decorate().componentWidth(50);
+
+        formPanel.append(Location.Left, proto().bedrooms()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().bathrooms()).decorate().componentWidth(50);
+
+        formPanel.append(Location.Left, proto().dens()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().halfBath()).decorate().componentWidth(50);
+
+        formPanel.append(Location.Left, proto().area()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().areaUnits()).decorate().componentWidth(120);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
@@ -118,7 +121,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         formPanel.h1(i18n.tr("Marketing Summary"));
 
-        //TODO set ReadOnly add Acesibiliut adapter
+        //TODO set ReadOnly add Accessibility adapter
 
         SecurityController.checkPermission(DataModelPermission.permissionUpdate(Marketing.class));
 
