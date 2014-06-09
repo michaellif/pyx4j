@@ -71,6 +71,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
+import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -285,12 +286,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             addAction(cancelTerminateAction);
         }
 
-        yardiImportAction = new MenuItem(i18n.tr("Update From Yardi"), new Command() {
+        yardiImportAction = new SecureMenuItem(i18n.tr("Update From Yardi"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).updateFromYardi();
             }
-        });
+        }, new ActionPermission(UpdateFromYardi.class));
+
         if (VistaFeatures.instance().yardiIntegration()) {
             addAction(yardiImportAction);
         }

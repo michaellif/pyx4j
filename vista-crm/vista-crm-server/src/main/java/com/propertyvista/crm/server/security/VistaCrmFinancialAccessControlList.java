@@ -14,16 +14,12 @@
 package com.propertyvista.crm.server.security;
 
 import com.pyx4j.security.server.UIAclBuilder;
-import com.pyx4j.security.shared.ActionPermission;
-
-import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
     VistaCrmFinancialAccessControlList() {
 
-        grant(VistaCrmBehavior.FinancialMoneyIN, new ActionPermission(UpdateFromYardi.class));
+        // grant(VistaCrmBehavior.FinancialMoneyIN, new ActionPermission(UpdateFromYardi.class));
 
     }
 
