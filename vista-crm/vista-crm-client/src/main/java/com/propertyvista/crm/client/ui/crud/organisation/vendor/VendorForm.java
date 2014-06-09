@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -39,7 +39,7 @@ public class VendorForm extends CrmEntityForm<Vendor> {
         formPanel.append(Location.Left, proto().type()).decorate();
         formPanel.append(Location.Left, proto().website()).decorate();
         formPanel.h1(i18n.tr("Phone Numbers"));
-        formPanel.append(Location.Left, proto().phones(), new CompanyPhoneFolder(isEditable()) {
+        formPanel.append(Location.Dual, proto().phones(), new CompanyPhoneFolder(isEditable()) {
             @Override
             protected IFolderDecorator<CompanyPhone> createFolderDecorator() {
                 TableFolderDecorator<CompanyPhone> decor = (TableFolderDecorator<CompanyPhone>) super.createFolderDecorator();
@@ -48,7 +48,7 @@ public class VendorForm extends CrmEntityForm<Vendor> {
             }
         });
         formPanel.h1(i18n.tr("Emails"));
-        formPanel.append(Location.Left, proto().emails(), new EmailFolder(isEditable()) {
+        formPanel.append(Location.Dual, proto().emails(), new EmailFolder(isEditable()) {
             @Override
             protected IFolderDecorator<CompanyEmail> createFolderDecorator() {
                 TableFolderDecorator<CompanyEmail> decor = (TableFolderDecorator<CompanyEmail>) super.createFolderDecorator();
