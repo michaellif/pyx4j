@@ -53,6 +53,8 @@ public abstract class AbstractDevConsole extends FlowPanel {
     abstract void setMockValues();
 
     public AbstractDevConsole() {
+        getElement().getStyle().setProperty("minHeight", "100px");
+
         deviceImage = new Image();
         SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
         deviceImageHolder.getElement().getStyle().setFloat(Float.RIGHT);

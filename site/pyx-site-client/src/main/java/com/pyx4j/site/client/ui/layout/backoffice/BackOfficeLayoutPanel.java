@@ -28,12 +28,12 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.devconsole.BackOfficeDevConsole;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
+import com.pyx4j.site.client.ui.layout.OverlayActionsPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
 import com.pyx4j.widgets.client.DropDownPanel;
@@ -78,7 +78,12 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addWest(leftPanelHolder, 200);
 
-        pageHolder.add(getDisplay(DisplayType.content));
+        OverlayActionsPanel overlayActions = new OverlayActionsPanel();
+        overlayActions.addTab(new BackOfficeDevConsole(this), "Dev. Console");
+
+        ContentHolder contentHolder = new ContentHolder(this, overlayActions);
+
+        pageHolder.add(contentHolder);
 
         popupCommHolder = new DropDownPanel();
 
@@ -113,12 +118,6 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
 
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
-
-        // ============ Dev Console ============
-        if (ApplicationMode.isDevelopment()) {
-            devConsoleTab = new DevConsoleTab(new BackOfficeDevConsole(this));
-            add(devConsoleTab.asWidget(), getElement());
-        }
 
         forceLayout(0);
 

@@ -20,14 +20,12 @@
  */
 package com.pyx4j.site.client.ui.layout.frontoffice;
 
-import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.site.client.ui.layout.ResponsiveLayoutTheme;
 
-public class FrontOfficeLayoutTheme extends Theme {
+public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
 
     public static enum StyleName implements IStyleName {
         ResponsiveLayoutMainHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
@@ -36,8 +34,7 @@ public class FrontOfficeLayoutTheme extends Theme {
     }
 
     public FrontOfficeLayoutTheme() {
-        initStyles();
-        initScrollStyles();
+        super();
     }
 
     private void initScrollStyles() {
@@ -65,11 +62,12 @@ public class FrontOfficeLayoutTheme extends Theme {
     }
 
     @Override
-    public final ThemeId getId() {
-        return new ClassBasedThemeId(getClass());
-    }
-
     protected void initStyles() {
+
+        super.initStyles();
+
+        initScrollStyles();
+
         Style style = new Style(".", StyleName.ResponsiveLayoutMainHolder);
         style.addProperty("min-width", "320px");
         addStyle(style);
