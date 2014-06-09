@@ -130,7 +130,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().componentWidth(150);
         formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().componentWidth(60);
 
-        formPanel.br();
         formPanel
                 .append(Location.Left, proto().lease(),
                         isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))).decorate()
