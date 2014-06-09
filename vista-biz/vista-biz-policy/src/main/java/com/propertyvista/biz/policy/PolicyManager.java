@@ -142,8 +142,7 @@ class PolicyManager {
                     EntityQueryCriteria<ProvincePolicyNode> criteria = new EntityQueryCriteria<>(ProvincePolicyNode.class);
                     criteria.eq(criteria.proto().province(),
                             ISOProvince.forName(building.info().address().province().getValue(), building.info().address().country().getValue()));
-                    ProvincePolicyNode pn = Persistence.service().retrieve(criteria);
-                    policyNode = pn.province().equals(building.info().address().country()) ? pn : null;
+                    policyNode = Persistence.service().retrieve(criteria);
                 }
                 break;
             }
@@ -159,8 +158,7 @@ class PolicyManager {
                     EntityQueryCriteria<ProvincePolicyNode> criteria = new EntityQueryCriteria<>(ProvincePolicyNode.class);
                     criteria.eq(criteria.proto().province(),
                             ISOProvince.forName(primaryBuilding.info().address().province().getValue(), primaryBuilding.info().address().country().getValue()));
-                    ProvincePolicyNode pn = Persistence.service().retrieve(criteria);
-                    policyNode = pn.province().equals(primaryBuilding.info().address().country()) ? pn : null;
+                    policyNode = Persistence.service().retrieve(criteria);
                 }
                 break;
             }
