@@ -69,7 +69,9 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         } else {
             sessionDuration = Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge();
         }
-        result.applicationSessionDuration().setValue(TimeUtils.durationFormatSeconds(sessionDuration));
+        if (sessionDuration > 0) {
+            result.applicationSessionDuration().setValue(TimeUtils.durationFormatSeconds(sessionDuration));
+        }
         result.containerSessionTimeout().setValue(
                 TimeUtils.durationFormatSeconds(Context.getRequest().getServletContext().getSessionCookieConfig().getMaxAge()));
 
@@ -94,7 +96,9 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
             DevSession.setSessionDuration(sessionDuration);
         }
 
-        {
+        if (entity.applicationSessionDuration().isNull()) {
+            ServerSideConfiguration.instance().setOverrideSessionMaxInactiveInterval(null);
+        } else {
             int sessionDuration = TimeUtils.durationParseSeconds(entity.applicationSessionDuration().getValue());
             if (sessionDuration < 10) {
                 throw new UserRuntimeException("Can't set session duration to less then 10 seconds");
