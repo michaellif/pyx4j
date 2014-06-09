@@ -25,6 +25,7 @@ import com.pyx4j.security.annotations.AccessControl;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
+import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.legal.LegalStatus;
@@ -63,6 +64,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     /**
      * Yardi Integration stuff
      */
+    @AccessControl(UpdateFromYardi.class)
     void updateFromYardiDeferred(AsyncCallback<String> callback, Key entityId);
 
     /**
