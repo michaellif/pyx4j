@@ -84,7 +84,7 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
     public void setDashboardMetadata(DashboardMetadata dashboardMetadata) {
         dashboard.setVisible(dashboardMetadata != null);
         // this is awkward way to hide buildings bar because setVisible will not work properly in DockLayoutPanel
-        panel.setWidgetSize(buildingsFilterProvider, (dashboardMetadata != null) && (dashboardMetadata.type().getValue() == DashboardType.building) ? 2.5 : 0.1);
+        panel.setWidgetSize(buildingsFilterProvider, (dashboardMetadata != null) && (dashboardMetadata.type().getValue() == DashboardType.building) ? 3 : 0.1);
         if (dashboardMetadata != null) {
             dashboard.setDashboardMetatdata(dashboardMetadata);
         }
