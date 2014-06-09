@@ -87,6 +87,11 @@ public class Button extends FocusPanel implements IFocusWidget {
         this.command = command;
     }
 
+    public Button(String text, Command command, Permission permission) {
+        this(text, command);
+        this.setPermission(permission);
+    }
+
     public Button(ImageResource imageResource, String text, Command command) {
         this(imageResource, text);
         this.command = command;
@@ -225,6 +230,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     public void setPermission(Permission permission) {
         this.permission = permission;
+        super.setVisible(SecurityController.checkPermission(permission));
     }
 
     @Override
