@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.panels.FormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTheme;
+import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutTheme;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.site.client.ui.sidemenu.SideMenuTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -158,6 +159,8 @@ public class CrmTheme extends VistaTheme {
         addTheme(new DashboardTheme());
 
         addTheme(new SideMenuTheme());
+
+        addTheme(new BackOfficeLayoutTheme());
 
         initGeneralStyles();
         initBodyStyles();
