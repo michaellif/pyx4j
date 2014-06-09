@@ -67,6 +67,8 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private boolean active = false;
 
+    private Permission permission;
+
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
     }
@@ -219,6 +221,15 @@ public class Button extends FocusPanel implements IFocusWidget {
             imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
             imageHolder.getElement().getStyle().setProperty("background", "none");
         }
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible && ((permission == null) || SecurityController.checkPermission(permission)));
     }
 
     public boolean isActive() {
