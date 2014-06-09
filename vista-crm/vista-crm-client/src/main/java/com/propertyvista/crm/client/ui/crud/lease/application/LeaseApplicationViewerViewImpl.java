@@ -52,6 +52,9 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.CreditCheckRun;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -202,7 +205,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 approveActionExecuter();
             }
         });
-        addAction(approveAction);
+        addAction(approveAction, new ActionPermission(ApplicationDecisionApprove.class));
 
         moreInfoAction = new MenuItem(MORE_INFO, new Command() {
             @Override
@@ -211,7 +214,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         if (!VistaTODO.VISTA_4484_Action_More_Info_should_be_hidden_as_not_fully_implemented) {
-            addAction(moreInfoAction);
+            addAction(moreInfoAction, new ActionPermission(ApplicationDecisionMoreInfo.class));
         }
 
         declineAction = new MenuItem(DECLINE, new Command() {
@@ -220,7 +223,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 declineActionExecuter();
             }
         });
-        addAction(declineAction);
+        addAction(declineAction, new ActionPermission(ApplicationDecisionDecline.class));
 
         cancelAction = new MenuItem(CANCEL, new Command() {
             @Override
