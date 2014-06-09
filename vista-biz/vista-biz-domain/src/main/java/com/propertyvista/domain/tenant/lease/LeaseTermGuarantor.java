@@ -34,6 +34,7 @@ public interface LeaseTermGuarantor extends LeaseTermParticipant<Guarantor> {
     /**
      * Who invited this Guarantor to lease
      */
+    @NotNull
     @Caption(name = "Referred by Tenant")
     Tenant tenant();
 }
