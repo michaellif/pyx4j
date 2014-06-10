@@ -140,6 +140,10 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         calculateActionsState();
     }
 
+    public void setNoDataLabel(String text) {
+        noDataNotificationHolder.setWidget(new Label(text));
+    }
+
     private void calculateActionsState() {
         boolean addable = isAddable() && isEnabled() && isEditable() && !isViewable();
         if (getDecorator() instanceof IFolderDecorator) {
