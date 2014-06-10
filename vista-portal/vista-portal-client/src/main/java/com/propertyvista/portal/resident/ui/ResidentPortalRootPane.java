@@ -36,7 +36,7 @@ public class ResidentPortalRootPane extends PortalRootPane {
         bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
-        bind(new ExtraActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new ExtraActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
 
     }

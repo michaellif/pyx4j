@@ -36,10 +36,10 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
 
     public ShortCutsViewImpl() {
         super();
-        setStyleName(SiteViewTheme.StyleName.SiteViewShortCuts.name());
+        setStyleName(SiteViewTheme.StyleName.SiteViewExtra.name());
 
         HTML shortcutsTitle = new HTML("Shortcuts");
-        shortcutsTitle.setStyleName(SiteViewTheme.StyleName.SiteViewShortCutsTitle.name());
+        shortcutsTitle.setStyleName(SiteViewTheme.StyleName.SiteViewExtraTitle.name());
         add(shortcutsTitle);
 
         shortcutsList = new FlowPanel();
@@ -78,7 +78,7 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
             });
             anchor.setTitle(typeLabel + (value != null ? " - " + value.getStringView() : ""));
 
-            setStyleName(SiteViewTheme.StyleName.SiteViewShortCutsItem.name());
+            setStyleName(SiteViewTheme.StyleName.SiteViewExtraItem.name());
 
             setWidget(anchor);
         }

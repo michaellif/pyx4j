@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
@@ -24,6 +25,7 @@ import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.mvp.ContentActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.HeaderActivityMapper;
+import com.propertyvista.crm.client.mvp.HelpActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 import com.propertyvista.crm.client.mvp.NotificationsActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
@@ -31,12 +33,14 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
 
+    private static final I18n i18n = I18n.get(CrmRootPane.class);
+
     public static final int HEADER_HEIGHT = 50;
 
     public static final int NOTIFICATION_HEIGHT = 30;
 
     public CrmRootPane() {
-        super(new BackOfficeLayoutPanel());
+        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), i18n.tr("Help")));
 
         asWidget().setHeaderHeight(HEADER_HEIGHT);
 
@@ -45,7 +49,8 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
         bind(new NavigActivityMapper(), asWidget().getDisplay(DisplayType.menu));
-        bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
+        bind(new HelpActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new NotificationsActivityMapper(), asWidget().getDisplay(DisplayType.notification));
     }

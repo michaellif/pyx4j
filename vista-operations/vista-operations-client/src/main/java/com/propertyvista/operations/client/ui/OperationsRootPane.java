@@ -34,7 +34,7 @@ public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> implemen
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public OperationsRootPane() {
-        super(new BackOfficeLayoutPanel());
+        super(new BackOfficeLayoutPanel(null, null));
 
         asWidget().setHeaderHeight(50);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
@@ -42,7 +42,7 @@ public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> implemen
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
         bind(new NavigActivityMapper(), asWidget().getDisplay(DisplayType.menu));
-        bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
 
     }

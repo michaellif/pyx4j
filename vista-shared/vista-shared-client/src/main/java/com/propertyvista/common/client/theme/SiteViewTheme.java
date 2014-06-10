@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class SiteViewTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewShortCuts, SiteViewShortCutsItem, SiteViewShortCutsTitle;
+        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewSideMenu, SiteViewFooter, SiteViewExtra, SiteViewExtraItem, SiteViewExtraTitle;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -112,24 +112,16 @@ public class SiteViewTheme extends Theme {
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewShortCuts.name());
-        style.addProperty("border-top", "4px solid");
-        style.addProperty("border-bottom", "4px solid");
-        style.addProperty("border-left", "4px solid");
-        style.addProperty("border-color", ThemeColor.object1);
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        addStyle(style);
-
-        style = new Style(".", StyleName.SiteViewShortCuts.name(), " a:link, .", StyleName.SiteViewShortCuts.name(), " a:visited, .",
-                StyleName.SiteViewShortCuts.name(), " a:active");
+        style = new Style(".", StyleName.SiteViewExtra.name(), " a:link, .", StyleName.SiteViewExtra.name(), " a:visited, .", StyleName.SiteViewExtra.name(),
+                " a:active");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewShortCutsItem.name());
+        style = new Style(".", StyleName.SiteViewExtraItem.name());
         style.addProperty("padding", "3px 6px");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewShortCutsItem.name(), " a");
+        style = new Style(".", StyleName.SiteViewExtraItem.name(), " a");
         style.addProperty("text-overflow", "ellipsis");
         style.addProperty("overflow", "hidden");
         style.addProperty("white-space", "nowrap");
@@ -137,7 +129,7 @@ public class SiteViewTheme extends Theme {
         style.addProperty("display", "inline-block");
         addStyle(style);
 
-        style = new Style(".", StyleName.SiteViewShortCutsTitle.name());
+        style = new Style(".", StyleName.SiteViewExtraTitle.name());
         style.addProperty("line-height", "2.2em");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");

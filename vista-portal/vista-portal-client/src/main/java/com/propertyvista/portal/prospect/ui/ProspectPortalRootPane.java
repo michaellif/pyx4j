@@ -34,7 +34,7 @@ public class ProspectPortalRootPane extends PortalRootPane {
         bind(new MenuActivityMapper(), asWidget().getDisplay(DisplayType.menu));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
-        bind(new RentalSummaryActivityMapper(), asWidget().getDisplay(DisplayType.extra));
+        bind(new RentalSummaryActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
     }
 
