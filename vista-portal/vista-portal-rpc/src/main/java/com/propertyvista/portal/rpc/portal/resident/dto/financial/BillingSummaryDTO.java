@@ -38,4 +38,10 @@ public interface BillingSummaryDTO extends IEntity {
     IPrimitive<Status> leaseStatus();
 
     IPrimitive<Boolean> isAutoPaySet();
+
+    @Editor(type = EditorType.label)
+    IPrimitive<LogicalDate> autoPayDate();
+
+    @Editor(type = EditorType.moneylabel)
+    IPrimitive<BigDecimal> autoPayAmount();
 }

@@ -67,6 +67,11 @@ public class BillingServiceImpl implements BillingService {
         }
         summary.leaseStatus().setValue(lease.status().getValue());
         summary.isAutoPaySet().setValue(!ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(lease).isEmpty());
+        summary.autoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
+        summary.autoPayAmount().setValue(BigDecimal.ZERO);
+        for (PaymentInfoDTO autoPay : retrieveCurrentAutoPayments(lease)) {
+            summary.autoPayAmount().setValue(summary.autoPayAmount().getValue().add(autoPay.amount().getValue()));
+        }
 
         callback.onSuccess(summary);
     }

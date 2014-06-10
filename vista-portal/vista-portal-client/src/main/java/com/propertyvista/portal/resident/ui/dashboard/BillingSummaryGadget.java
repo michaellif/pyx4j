@@ -20,10 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.decorators.FieldDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
-import com.pyx4j.gwt.commons.css.CssVariable;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -94,9 +91,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
     class NavigationBar extends FlowPanel {
         public NavigationBar() {
             if (!VistaFeatures.instance().yardiIntegration()) {
-
                 Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
-
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.BillingHistory.BillView());
@@ -116,13 +111,25 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
         @Override
         protected IsWidget createContent() {
             PortalFormPanel formPanel = new PortalFormPanel(this);
+
             formPanel.append(Location.Dual, proto().currentBalance()).decorate().labelWidth(150);
             if (!VistaFeatures.instance().yardiIntegration()) {
                 formPanel.append(Location.Dual, proto().dueDate()).decorate().labelWidth(150);
             }
+            formPanel.append(Location.Dual, proto().autoPayDate()).decorate().labelWidth(150);
+            formPanel.append(Location.Dual, proto().autoPayAmount()).decorate().labelWidth(150);
 
             return formPanel;
         }
-    }
 
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            boolean isAutoPayVisible = !getValue().leaseStatus().getValue().isNoAutoPay() && getValue().isAutoPaySet().getValue(false);
+
+            get(proto().autoPayDate()).setVisible(isAutoPayVisible);
+            get(proto().autoPayAmount()).setVisible(isAutoPayVisible);
+        }
+    }
 }
