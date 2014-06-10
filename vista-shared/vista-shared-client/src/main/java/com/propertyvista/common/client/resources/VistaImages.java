@@ -65,31 +65,28 @@ public interface VistaImages extends FormsImageBundle, FolderImages, WidgetsImag
 
     // -----------------------------------------------
 
-    @Source("PaymentOptionIcons/Banks/bfg.png")
+    @Source("PaymentOptionIcons/Banks/TD.jpg")
     ImageResource linkTD();
 
-    @Source("PaymentOptionIcons/Banks/bmo.png")
+    @Source("PaymentOptionIcons/Banks/BMO.jpg")
     ImageResource linkBMO();
 
-    @Source("PaymentOptionIcons/Banks/cibc.png")
+    @Source("PaymentOptionIcons/Banks/CIBC.jpg")
     ImageResource linkCIBC();
 
-    @Source("PaymentOptionIcons/Banks/laurentian.png")
+    @Source("PaymentOptionIcons/Banks/Laurentian.jpg")
     ImageResource linkLaurentian();
 
-    @Source("PaymentOptionIcons/Banks/manulife.png")
-    ImageResource linkManulife();
-
-    @Source("PaymentOptionIcons/Banks/nbc.png")
+    @Source("PaymentOptionIcons/Banks/NBC.jpg")
     ImageResource linkNBC();
 
-    @Source("PaymentOptionIcons/Banks/pcf.png")
+    @Source("PaymentOptionIcons/Banks/PC.jpg")
     ImageResource linkPCF();
 
-    @Source("PaymentOptionIcons/Banks/rbc.png")
+    @Source("PaymentOptionIcons/Banks/RBC.jpg")
     ImageResource linkRBC();
 
-    @Source("PaymentOptionIcons/Banks/scotia.png")
+    @Source("PaymentOptionIcons/Banks/Scotiabank.jpg")
     ImageResource linkScotia();
 
     // -----------------------------------------------

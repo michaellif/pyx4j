@@ -436,22 +436,20 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.add(new HTML("<br/>"));
 
         FlexTable links = new FlexTable();
-        links.setCellSpacing(10);
-//        links.setBorderWidth(1);
+        links.getElement().getStyle().setProperty("borderCollapse", "separate");
+        links.setBorderWidth(1);
 
         links.setWidget(0, 0, createLink(VistaImages.INSTANCE.linkTD(), "http://www.td.com/about-tdbfg/our-business"));
         links.setWidget(0, 1, createLink(VistaImages.INSTANCE.linkBMO(), "http://www.bmo.com/home/personal"));
 
         links.setWidget(1, 0, createLink(VistaImages.INSTANCE.linkCIBC(), "https://www.cibc.com/ca/personal.html"));
-        links.setWidget(1, 1, createLink(VistaImages.INSTANCE.linkLaurentian(), "https://www.laurentianbank.ca/en/personal_banking_services/index.html"));
-
-//        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkManulife(), "http://www.manulifebank.ca/wps/portal/bankca/Bank.caHome/Personal/"));
+        links.setWidget(1, 1, createLink(VistaImages.INSTANCE.linkRBC(), "http://www.rbcroyalbank.com/personal.html"));
 
         links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkNBC(), "http://www.nbc.ca/bnc/cda/index/0,4229,divId-2_langId-1_navCode-1000,00.html"));
-        links.setWidget(2, 1, createLink(VistaImages.INSTANCE.linkPCF(), "http://www.pcfinancial.ca/"));
+        links.setWidget(2, 1, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
 
-        links.setWidget(3, 0, createLink(VistaImages.INSTANCE.linkRBC(), "http://www.rbcroyalbank.com/personal.html"));
-        links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
+        links.setWidget(3, 0, createLink(VistaImages.INSTANCE.linkLaurentian(), "https://www.laurentianbank.ca/en/personal_banking_services/index.html"));
+        links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkPCF(), "http://www.pcfinancial.ca/"));
 
         panel.add(links);
 
