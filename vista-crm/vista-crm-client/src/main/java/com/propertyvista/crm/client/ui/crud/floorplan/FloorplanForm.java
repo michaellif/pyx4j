@@ -154,7 +154,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         };
         imageSlider.setImageSize(240, 180);
         imageSlider.setOrganizerWidth(550);
-        formPanel.append(Location.Dual, proto().media(), imageSlider);
+        formPanel.append(Location.Left, proto().media(), imageSlider);
 
         // set ReadOnly
 
@@ -195,7 +195,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 CImage frontImage = new CImage(GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 180);
 
-                formPanel.append(Location.Left, proto().frontImage().file(), frontImage).decorate().customLabel("").componentWidth(200);
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
                 formPanel.append(Location.Right, proto().title()).decorate();
                 formPanel.append(Location.Right, proto().description()).decorate();
 

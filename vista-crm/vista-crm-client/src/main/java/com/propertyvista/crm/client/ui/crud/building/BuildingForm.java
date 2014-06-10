@@ -168,7 +168,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         billingCyclesTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BillingCycleDTO.class)));
 
         if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog_OLD) && !getValue().defaultProductCatalog().getValue(false));
+            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog_OLD)
+                    && !getValue().defaultProductCatalog().getValue(false));
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
@@ -373,7 +374,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         };
         imageSlider.setImageSize(240, 180);
         imageSlider.setOrganizerWidth(550);
-        formPanel.append(Location.Dual, inject(proto().media(), imageSlider));
+        formPanel.append(Location.Left, inject(proto().media(), imageSlider));
 
         ilsEmailProfilePanel = createILSEmailProfilePanel();
         if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
@@ -489,7 +490,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 CImage frontImage = new CImage(GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder());
                 frontImage.setImageSize(240, 180);
 
-                formPanel.append(Location.Left, proto().frontImage().file(), frontImage).decorate().customLabel("").componentWidth(200);
+                formPanel.append(Location.Left, proto().frontImage().file(), frontImage);
                 formPanel.append(Location.Right, proto().title()).decorate();
                 formPanel.append(Location.Right, proto().description()).decorate();
 
