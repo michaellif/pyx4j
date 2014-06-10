@@ -53,14 +53,14 @@ public class ResponsiveLayoutTheme extends Theme {
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabbar);
         style.addProperty("float", "left");
-        style.addProperty("margin-top", "-34px");
+        style.addProperty("margin", "-30px 0 0 10px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", DefaultWidgetsTheme.StyleName.Button);
-        style.addProperty("margin", "0 10px");
-        style.addProperty("line-height", "34px");
+        style.addProperty("margin", "0 4px 0 0");
+        style.addProperty("line-height", "30px");
         style.addProperty("padding", "0 10px");
-        style.addProperty("height", "34px");
+        style.addProperty("height", "30px");
         style.addProperty("color", ThemeColor.background, 1.0);
         style.addProperty("cursor", "pointer");
         style.addProperty("background", "transparent");
@@ -73,7 +73,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, ".", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("float", "right");
         style.addProperty("margin", "7px 10px 0 0");
-        style.addProperty("padding", "5px");
+        style.addProperty("padding", "3px 6px");
         style.addProperty("height", "28px");
         style.addProperty("cursor", "pointer");
         style.addProperty("background", "transparent");
@@ -90,7 +90,8 @@ public class ResponsiveLayoutTheme extends Theme {
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabPanel);
         style.addProperty("border", "4px solid");
         style.addProperty("padding", "10px");
-        style.addProperty("background-color", ThemeColor.foreground, 0.9);
+        style.addProperty("min-height", "200px");
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
     }

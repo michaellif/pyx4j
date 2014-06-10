@@ -24,23 +24,22 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.devconsole.BackOfficeDevConsole;
-import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.layout.OverlayActionsPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
 import com.pyx4j.widgets.client.DropDownPanel;
 
 public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
-
-    private DevConsoleTab devConsoleTab;
 
     private final DockLayoutPanel pageHolder;
 
@@ -58,7 +57,15 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private boolean sideCommVisible = false;
 
-    public BackOfficeLayoutPanel() {
+    private final InlineExtraHolder inlineExtraHolder;
+
+    private final OverlayActionsPanel overlayPanel;
+
+    private final SimplePanel overlayExtra1Holder;
+
+    private final SimplePanel overlayExtra2Holder;
+
+    public BackOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
 
         pageHolder = new DockLayoutPanel(Unit.PX);
 
@@ -66,7 +73,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addNorth(getDisplay(DisplayType.notification), 0);
 
-        pageHolder.addEast(getDisplay(DisplayType.extra), 0);
+        pageHolder.addEast(inlineExtraHolder = new InlineExtraHolder(this, extra1Caption, extra2Caption), 0);
 
         leftPanelHolder = new DockLayoutPanel(Unit.PX);
         leftPanelHolder.addSouth(getDisplay(DisplayType.footer), 40);
@@ -78,10 +85,20 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addWest(leftPanelHolder, 200);
 
-        OverlayActionsPanel overlayActions = new OverlayActionsPanel();
-        overlayActions.addTab(new BackOfficeDevConsole(this), "Dev. Console");
+        overlayPanel = new OverlayActionsPanel();
+        if (ApplicationMode.isDevelopment()) {
+            overlayPanel.addTab(new BackOfficeDevConsole(this), "Dev. Console");
+        }
 
-        ContentHolder contentHolder = new ContentHolder(this, overlayActions);
+        overlayExtra1Holder = new SimplePanel();
+        overlayPanel.addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
+        overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
+
+        overlayExtra2Holder = new SimplePanel();
+        overlayPanel.addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
+        overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
+
+        ContentHolder contentHolder = new ContentHolder(this, overlayPanel);
 
         pageHolder.add(contentHolder);
 
@@ -143,13 +160,26 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         }
 
         switch (getLayoutType()) {
+
         case huge:
-            pageHolder.setWidgetSize(getDisplay(DisplayType.extra), 200);
-            getDisplay(DisplayType.extra).setVisible(true);
+            overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
+            overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
+
+            inlineExtraHolder.layout();
+            pageHolder.setWidgetSize(inlineExtraHolder, inlineExtraHolder.isEmpty() ? 0 : 200);
+
             break;
         default:
-            getDisplay(DisplayType.extra).setVisible(false);
-            pageHolder.setWidgetSize(getDisplay(DisplayType.extra), 0);
+            inlineExtraHolder.clear();
+            pageHolder.setWidgetSize(inlineExtraHolder, 0);
+            if (getDisplay(DisplayType.extra1).getWidget() != null) {
+                overlayExtra1Holder.setWidget(getDisplay(DisplayType.extra1));
+                overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), true);
+            }
+            if (getDisplay(DisplayType.extra2).getWidget() != null) {
+                overlayExtra2Holder.setWidget(getDisplay(DisplayType.extra2));
+                overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), true);
+            }
             break;
         }
 

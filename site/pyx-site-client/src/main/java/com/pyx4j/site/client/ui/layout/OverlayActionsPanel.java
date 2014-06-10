@@ -23,10 +23,7 @@ package com.pyx4j.site.client.ui.layout;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.resources.SiteImages;
@@ -101,6 +98,17 @@ public class OverlayActionsPanel implements IsWidget {
             tabPanel.setVisible(true);
             closeButton.setVisible(true);
         }
+    }
+
+    public void setTabVisible(int index, boolean visible) {
+        if (!visible && (tabPanel.getVisibleWidget() == index)) {
+            setTabSelected(-1);
+        }
+        tabBar.getItemIndex(index).asWidget().setVisible(visible);
+    }
+
+    public int getTabIndex(IsWidget widget) {
+        return tabPanel.getWidgetIndex(widget);
     }
 
 }

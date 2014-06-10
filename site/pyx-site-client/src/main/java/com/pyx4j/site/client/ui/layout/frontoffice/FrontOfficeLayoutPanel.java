@@ -222,10 +222,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         switch (getLayoutType()) {
         case huge:
-            getDisplay(DisplayType.extra).setVisible(true);
+            getDisplay(DisplayType.extra1).setVisible(true);
             break;
         default:
-            getDisplay(DisplayType.extra).setVisible(false);
+            getDisplay(DisplayType.extra1).setVisible(false);
             break;
         }
 
@@ -276,7 +276,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
 
-        if (getDisplay(DisplayType.extra).isVisible()) {
+        if (getDisplay(DisplayType.extra1).isVisible()) {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - extraHolder.getOffsetWidth()) + "px");
         } else {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");

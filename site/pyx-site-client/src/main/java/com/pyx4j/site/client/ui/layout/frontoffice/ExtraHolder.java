@@ -34,7 +34,7 @@ public class ExtraHolder extends SimplePanel {
 
     public ExtraHolder(FrontOfficeLayoutPanel parent) {
         this.parent = parent;
-        setWidget(parent.getDisplay(DisplayType.extra));
+        setWidget(parent.getDisplay(DisplayType.extra1));
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
     }
