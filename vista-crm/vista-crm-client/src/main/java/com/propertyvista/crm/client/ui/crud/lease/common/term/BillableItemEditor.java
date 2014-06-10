@@ -227,6 +227,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
+            depositPanel.setVisible(false);
 
             if (isEditable()) {
                 get(proto().item()).setEditable(!leaseTerm.getValue().selectedServiceItems().isEmpty());
@@ -250,11 +251,11 @@ public class BillableItemEditor extends CForm<BillableItem> {
             get(proto().effectiveDate()).setVisible(false);
             get(proto().expirationDate()).setVisible(false);
 
-//            adjustmentPanel.setVisible((isEditable() || !getValue().adjustments().isEmpty()));
-            adjustmentPanel.setVisible(false);
+//            adjustmentPanel.setVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().adjustments().isEmpty()));
+            adjustmentPanel.setVisible(false); // always invisible in Yardi mode!
 
             if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
-                depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
+                depositPanel.setVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().deposits().isEmpty()));
             } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
                 depositPanel.setVisible(false);
             }
@@ -468,7 +469,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
                     }
                     for (BillableItemAdjustment a : getValue().adjustments()) {
                         if (a.expirationDate().getValue() != null && a.expirationDate().getValue().after(getComponent().getValue())) {
-                            return new BasicValidationError(getComponent(), "One or more adjustments for this item expire after the specificed date");
+                            return new BasicValidationError(getComponent(), "One or more adjustments for this item expire after the specified date");
                         }
                     }
                 }
