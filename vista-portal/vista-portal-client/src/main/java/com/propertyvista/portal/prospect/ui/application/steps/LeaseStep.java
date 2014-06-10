@@ -15,6 +15,7 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComponent.NoteStyle;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -31,6 +32,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseStep extends ApplicationWizardStep {
 
@@ -103,5 +105,12 @@ public class LeaseStep extends ApplicationWizardStep {
 
         get(proto().utilities()).setVisible(!getValue().utilities().isNull());
         get(proto().leaseChargesData().selectedService().description()).setVisible(!getValue().leaseChargesData().selectedService().description().isNull());
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            if (getValue().leaseFrom().getValue().getDate() != 1) {
+                get(proto().leaseTo()).setNote(i18n.tr("Additional Rent May be payable if the lease commences prior to the 1st of the given month"),
+                        NoteStyle.Warn);
+            }
+        }
     }
 }
