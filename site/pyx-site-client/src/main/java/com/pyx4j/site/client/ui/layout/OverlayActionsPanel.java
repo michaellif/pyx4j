@@ -46,7 +46,7 @@ public class OverlayActionsPanel implements IsWidget {
         mainPanel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActions.name());
 
         tabBar = new Toolbar();
-        tabBar.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabbar.name());
+        tabBar.addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabbar.name());
         mainPanel.add(tabBar);
 
         closeButton = new Button(SiteImages.INSTANCE.closeDevConsoleButton(), new Command() {
