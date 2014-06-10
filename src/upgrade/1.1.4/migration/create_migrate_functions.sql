@@ -319,6 +319,17 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        
+         -- province_policy_node
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
+                ||'SET  name = ''Newfoundland'' '
+                ||'WHERE name = ''Newfoundland and Labrador'' ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
+                ||'SET  province = replace(INITCAP(name),'' '','''') ';
+        
+        
         -- apt_unit
         
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
@@ -327,7 +338,7 @@ BEGIN
                 ||'WHERE  a.info_legal_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
-                ||'SET    info_legal_address_province = replace(p.name,'' '','''') '
+                ||'SET    info_legal_address_province = p.name '
                 ||'FROM   '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE  a.info_legal_address_province_old = p.id ';
                 
@@ -367,7 +378,7 @@ BEGIN
                 ||'WHERE b.info_address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
-                ||'SET  info_address_province = replace(p.name,'' '','''') '
+                ||'SET  info_address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE b.info_address_province_old = p.id ';
                 
@@ -390,7 +401,7 @@ BEGIN
         -- city
         
         EXECUTE 'UPDATE '||v_schema_name||'.city AS c '
-                ||'SET  province = replace(p.name,'' '','''') '
+                ||'SET  province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
                 
@@ -398,7 +409,7 @@ BEGIN
         -- city_intro_page
         
         EXECUTE 'UPDATE '||v_schema_name||'.city_intro_page AS c '
-                ||'SET  province = replace(p.name,'' '','''') '
+                ||'SET  province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
                 
@@ -412,7 +423,7 @@ BEGIN
                 
                 
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info AS i '
-                ||'SET  address_province = replace(p.name,'' '','''') '
+                ||'SET  address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE i.address_province_old = p.id ';
         
@@ -440,12 +451,12 @@ BEGIN
         
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
-                ||'SET current_address_province = replace(p.name,'' '','''') '
+                ||'SET current_address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE   current_address_province_old = p.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
-                ||'SET previous_address_province = replace(p.name,'' '','''') '
+                ||'SET previous_address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE   previous_address_province_old = p.id ';
         
@@ -490,7 +501,7 @@ BEGIN
                 ||'WHERE  e.address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact AS e '
-                ||'SET  address_province = replace(p.name,'' '','''') '
+                ||'SET  address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    e.address_province_old = p.id ';
         
@@ -515,7 +526,7 @@ BEGIN
                 ||'WHERE  l.address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.landlord AS l '
-                ||'SET  address_province = replace(p.name,'' '','''') '
+                ||'SET  address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    l.address_province_old = p.id ';
                 
@@ -578,7 +589,7 @@ BEGIN
                 ||'WHERE  m.marketing_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.marketing AS m '
-                ||'SET  marketing_address_province = replace(p.name,'' '','''') '
+                ||'SET  marketing_address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    m.marketing_address_province_old = p.id ';
         
@@ -605,7 +616,7 @@ BEGIN
                 ||'WHERE  n.mailing_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.n4_policy AS n '
-                ||'SET  mailing_address_province = replace(p.name,'' '','''') '
+                ||'SET  mailing_address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    n.mailing_address_province_old = p.id ';
         
@@ -639,7 +650,7 @@ BEGIN
                 ||'WHERE  p.billing_address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.payment_method AS pm '
-                ||'SET  billing_address_province = replace(p.name,'' '','''') '
+                ||'SET  billing_address_province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    pm.billing_address_province_old = p.id ';
         
@@ -687,10 +698,6 @@ BEGIN
         PERFORM * FROM _dba_.update_phone_numbers(v_schema_name);
        
         
-        -- province_policy_node
-        
-        EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
-                ||'SET  province = replace(name,'' '','''') ';
                 
         -- pt_vehicle
         
@@ -700,7 +707,7 @@ BEGIN
                 ||'WHERE  pt.country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.pt_vehicle AS pt '
-                ||'SET  province = replace(p.name,'' '','''') '
+                ||'SET  province = p.name '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    pt.province_old = p.id ';
                 
