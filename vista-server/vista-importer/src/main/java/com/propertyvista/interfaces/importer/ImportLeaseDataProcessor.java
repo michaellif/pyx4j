@@ -61,7 +61,8 @@ public class ImportLeaseDataProcessor {
         } else {
             lease = retrive(unit, leaseIO);
             if (lease == null) {
-                context.monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found");
+                context.monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found for unit "
+                        + unit.info().number().getStringView());
                 return;
             }
         }
@@ -76,6 +77,6 @@ public class ImportLeaseDataProcessor {
             new ImportTenantDataProcessor().importModel(context, lease, tenantIO);
         }
 
-        context.monitor.addProcessedEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " imported");
+        context.monitor.addProcessedEvent("Lease", "Lease " + lease.leaseId().getStringView() + " imported");
     }
 }

@@ -81,9 +81,10 @@ public class ImportTenantDataProcessor {
         if (leaseTermTenant == null) {
             if (context.ignoreEntityId) {
                 context.monitor.addErredEvent("Tenant", "Tenant " + tenantIO.firstName().getStringView() + " " + tenantIO.lastName().getStringView()
-                        + " not found");
+                        + " not found in lease " + lease.leaseId().getStringView());
             } else {
-                context.monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found");
+                context.monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found in lease "
+                        + lease.leaseId().getStringView());
             }
             return;
         }
