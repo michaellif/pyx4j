@@ -72,6 +72,8 @@ import com.propertyvista.yardi.services.ARCodeAdapter;
 
 public class YardiLeaseProcessor {
 
+    private final static boolean useDatesToCalculateLeaseStatus = false;
+
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
     private final ExecutionMonitor executionMonitor;
@@ -248,22 +250,35 @@ public class YardiLeaseProcessor {
         return rtCustomer.getCustomerID().toLowerCase();
     }
 
-    public static boolean isCurrentLease(RTCustomer rtCustomer) {
+    public static boolean isCurrentLease(RTCustomer rtCustomer, YardiLease yardiLease) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return Customerinfo.CURRENT_RESIDENT.equals(info);
+        if (useDatesToCalculateLeaseStatus) {
+            return (Customerinfo.CURRENT_RESIDENT.equals(info) && !getLogicalDateNotNull(yardiLease.getLeaseToDate())
+                    .before(SystemDateManager.getLogicalDate()));
+        } else {
+            return Customerinfo.CURRENT_RESIDENT.equals(info);
+        }
     }
 
-    public static boolean isFormerLease(RTCustomer rtCustomer) {
+    public static boolean isFormerLease(RTCustomer rtCustomer, YardiLease yardiLease) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return Customerinfo.FORMER_RESIDENT.equals(info);
+        if (useDatesToCalculateLeaseStatus) {
+            return (Customerinfo.FORMER_RESIDENT.equals(info) || getLogicalDateNotNull(yardiLease.getLeaseToDate()).before(SystemDateManager.getLogicalDate()));
+        } else {
+            return Customerinfo.FORMER_RESIDENT.equals(info);
+        }
     }
 
-    public static boolean isFutureLease(RTCustomer rtCustomer) {
+    public static boolean isFutureLease(RTCustomer rtCustomer, YardiLease yardiLease) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return Customerinfo.FUTURE_RESIDENT.equals(info);
+        if (useDatesToCalculateLeaseStatus) {
+            return (Customerinfo.FUTURE_RESIDENT.equals(info) && guessFromDate(yardiLease).after(SystemDateManager.getLogicalDate()));
+        } else {
+            return Customerinfo.FUTURE_RESIDENT.equals(info);
+        }
     }
 
-    public static boolean isOnNotice(RTCustomer rtCustomer) {
+    public static boolean isOnNotice(RTCustomer rtCustomer, YardiLease yardiLease) {
         Unitleasestatusinfo info = rtCustomer.getRTUnit().getUnit().getInformation().get(0).getUnitLeasedStatus();
         return (Unitleasestatusinfo.ON_NOTICE.equals(info) || Unitleasestatusinfo.LEASED_ON_NOTICE.equals(info));
     }
@@ -301,9 +316,11 @@ public class YardiLeaseProcessor {
         Collections.sort(rtCustomers, new Comparator<RTCustomer>() {
             @Override
             public int compare(RTCustomer c1, RTCustomer c2) {
+                YardiLease l1 = c1.getCustomers().getCustomer().get(0).getLease();
+                YardiLease l2 = c2.getCustomers().getCustomer().get(0).getLease();
 
-                int s1 = (isFormerLease(c1) ? -1 : (isFutureLease(c1) ? 1 : 0));
-                int s2 = (isFormerLease(c2) ? -1 : (isFutureLease(c2) ? 1 : 0));
+                int s1 = (isFormerLease(c1, l1) ? -1 : (isFutureLease(c1, l1) ? 1 : 0));
+                int s2 = (isFormerLease(c2, l2) ? -1 : (isFutureLease(c2, l2) ? 1 : 0));
 
                 return (s1 < s2 ? -1 : (s1 > s2 ? 1 : 0));
             }
@@ -471,7 +488,11 @@ public class YardiLeaseProcessor {
     }
 
     private static LogicalDate getLogicalDate(Date date) {
-        return date == null ? null : new LogicalDate(date);
+        return (date == null ? null : new LogicalDate(date));
+    }
+
+    private static LogicalDate getLogicalDateNotNull(Date date) {
+        return (date == null ? new LogicalDate() : new LogicalDate(date));
     }
 
     private static String getLeaseChargeDescription(ChargeDetail detail) {
@@ -510,14 +531,14 @@ public class YardiLeaseProcessor {
     private Lease manageLeaseState(Lease lease, RTCustomer rtCustomer, YardiLease yardiLease) {
         if (lease.status().getValue().isActive()) {
 
-            if (isCurrentLease(rtCustomer)) {
+            if (isCurrentLease(rtCustomer, yardiLease)) {
                 // approved -> active transition:
                 if (lease.status().getValue() == Status.Approved) {
                     activateLease(lease);
                 }
 
                 // notice On/Off mechanics: 
-                if (isOnNotice(rtCustomer)) {
+                if (isOnNotice(rtCustomer, yardiLease)) {
                     if (lease.completion().getValue() != CompletionType.Notice) {
                         lease = markLeaseOnNotice(lease, yardiLease);
                     }
@@ -525,13 +546,13 @@ public class YardiLeaseProcessor {
                     lease = cancelMarkLeaseOnNotice(lease, yardiLease);
                 }
 
-            } else if (isFormerLease(rtCustomer)) {
+            } else if (isFormerLease(rtCustomer, yardiLease)) {
                 // active -> past transition:
                 lease = completeLease(lease, yardiLease);
             }
 
         } else { // past -> active transition (cancel Move Out in Yardi!):
-            if (isCurrentLease(rtCustomer) || isFutureLease(rtCustomer)) {
+            if (isCurrentLease(rtCustomer, yardiLease) || isFutureLease(rtCustomer, yardiLease)) {
                 lease = cancelLeaseCompletion(lease, yardiLease);
             }
         }

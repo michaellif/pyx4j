@@ -80,6 +80,21 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
             eventDate = SystemDateManager.getLogicalDate();
         }
 
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+
+        if (expectedMoveOut == null) {
+            expectedMoveOut = lease.expectedMoveOut().getValue();
+            if (expectedMoveOut == null) {
+                expectedMoveOut = SystemDateManager.getLogicalDate();
+            }
+        }
+        if (leaseEndDate == null) {
+            leaseEndDate = lease.leaseTo().getValue();
+            if (leaseEndDate == null) {
+                leaseEndDate = SystemDateManager.getLogicalDate();
+            }
+        }
+
         super.createCompletionEvent(leaseId, completionType, eventDate, expectedMoveOut, leaseEndDate);
     }
 
