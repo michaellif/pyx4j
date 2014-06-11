@@ -31,7 +31,9 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class ResponsiveLayoutTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutOverlayActions, ResponsiveLayoutOverlayActionsTabbar, ResponsiveLayoutOverlayActionsTabItem, ResponsiveLayoutOverlayActionsTabPanel, ResponsiveLayoutOverlayActionsCloseButton
+        ResponsiveLayoutOverlayActions, ResponsiveLayoutOverlayActionsTabbar, ResponsiveLayoutOverlayActionsTabItem, ResponsiveLayoutOverlayActionsTabDeck,
+
+        ResponsiveLayoutOverlayActionsTabPanel, ResponsiveLayoutOverlayActionsCloseButton
     }
 
     public ResponsiveLayoutTheme() {
@@ -87,11 +89,12 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabPanel);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabDeck);
         style.addProperty("border", "4px solid");
-        style.addProperty("padding", "10px");
-        style.addProperty("min-height", "200px");
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabPanel);
         addStyle(style);
 
     }

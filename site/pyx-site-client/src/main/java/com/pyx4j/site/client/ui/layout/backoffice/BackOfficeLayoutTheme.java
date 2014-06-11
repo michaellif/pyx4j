@@ -46,7 +46,7 @@ public class BackOfficeLayoutTheme extends ResponsiveLayoutTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.BackOfficeLayoutInlineExtraPanelCaption);
-        style.addProperty("line-height", "2.2em");
+        style.addProperty("line-height", "41px");
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "5px");

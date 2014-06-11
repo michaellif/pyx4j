@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -34,7 +35,7 @@ public class OverlayActionsPanel implements IsWidget {
 
     private final FlowPanel mainPanel;
 
-    private final DeckPanel tabPanel;
+    private final DeckLayoutPanel tabPanel;
 
     private final Toolbar tabBar;
 
@@ -60,7 +61,9 @@ public class OverlayActionsPanel implements IsWidget {
         closeButton.setVisible(false);
         mainPanel.add(closeButton);
 
-        tabPanel = new DeckPanel();
+        tabPanel = new DeckLayoutPanel();
+        tabPanel.setHeight("200px");
+        tabPanel.addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabDeck.name());
         tabPanel.setVisible(false);
         mainPanel.add(tabPanel);
 
@@ -77,13 +80,14 @@ public class OverlayActionsPanel implements IsWidget {
             @Override
             public void execute() {
                 int selectedTab = tabPanel.getWidgetIndex(widget);
-                int visibleTab = tabPanel.isVisible() ? tabPanel.getVisibleWidget() : -1;
+                int visibleTab = tabPanel.isVisible() ? tabPanel.getVisibleWidgetIndex() : -1;
                 setTabSelected(selectedTab == visibleTab ? -1 : selectedTab);
             }
         });
         tabLabel.addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabItem.name());
 
         tabPanel.add(widget);
+
         tabBar.addItem(tabLabel);
 
         widget.asWidget().addStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActionsTabPanel.name());
@@ -101,7 +105,7 @@ public class OverlayActionsPanel implements IsWidget {
     }
 
     public void setTabVisible(int index, boolean visible) {
-        if (!visible && (tabPanel.getVisibleWidget() == index)) {
+        if (!visible && (tabPanel.getVisibleWidgetIndex() == index)) {
             setTabSelected(-1);
         }
         tabBar.getItemIndex(index).asWidget().setVisible(visible);

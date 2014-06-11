@@ -24,7 +24,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -61,9 +61,9 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final OverlayActionsPanel overlayPanel;
 
-    private final SimplePanel overlayExtra1Holder;
+    private final LayoutPanel overlayExtra1Holder;
 
-    private final SimplePanel overlayExtra2Holder;
+    private final LayoutPanel overlayExtra2Holder;
 
     public BackOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
 
@@ -90,11 +90,11 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
             overlayPanel.addTab(new BackOfficeDevConsole(this), "Dev. Console");
         }
 
-        overlayExtra1Holder = new SimplePanel();
+        overlayExtra1Holder = new LayoutPanel();
         overlayPanel.addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
         overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
 
-        overlayExtra2Holder = new SimplePanel();
+        overlayExtra2Holder = new LayoutPanel();
         overlayPanel.addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
         overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
 
@@ -173,11 +173,13 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
             inlineExtraHolder.clear();
             pageHolder.setWidgetSize(inlineExtraHolder, 0);
             if (getDisplay(DisplayType.extra1).getWidget() != null) {
-                overlayExtra1Holder.setWidget(getDisplay(DisplayType.extra1));
+                overlayExtra1Holder.clear();
+                overlayExtra1Holder.add(getDisplay(DisplayType.extra1));
                 overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), true);
             }
             if (getDisplay(DisplayType.extra2).getWidget() != null) {
-                overlayExtra2Holder.setWidget(getDisplay(DisplayType.extra2));
+                overlayExtra2Holder.clear();
+                overlayExtra2Holder.add(getDisplay(DisplayType.extra2));
                 overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), true);
             }
             break;

@@ -32,8 +32,6 @@ public class AppPlaceInfo {
 
     private final String caption;
 
-    private final String staticContent;
-
     public String getNavigLabel() {
         return navigLabel;
     }
@@ -42,14 +40,9 @@ public class AppPlaceInfo {
         return caption;
     }
 
-    public String getResource() {
-        return staticContent;
-    }
-
-    public AppPlaceInfo(String navigLabel, String caption, String staticContent) {
+    public AppPlaceInfo(String navigLabel, String caption) {
         this.navigLabel = navigLabel != null && !navigLabel.equals("") ? navigLabel : null;
         this.caption = caption != null && !caption.equals("") ? caption : null;
-        this.staticContent = staticContent != null && !staticContent.equals("") ? staticContent : null;
     }
 
     public static String getPlaceId(Class<? extends Place> clazz) {

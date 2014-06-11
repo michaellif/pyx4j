@@ -22,7 +22,6 @@ package com.pyx4j.site.client.ui.layout.backoffice;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -83,13 +82,14 @@ public class InlineExtraHolder extends DockLayoutPanel {
         empty = true;
     }
 
-    class ExtraPanel extends FlowPanel {
+    class ExtraPanel extends DockLayoutPanel {
 
         ExtraPanel(String caption, IsWidget widget) {
+            super(Unit.PX);
             if (caption != null && !caption.trim().equals("")) {
                 HTML captionLabel = new HTML(caption);
                 captionLabel.setStylePrimaryName(BackOfficeLayoutTheme.StyleName.BackOfficeLayoutInlineExtraPanelCaption.name());
-                add(captionLabel);
+                addNorth(captionLabel, 41);
             }
             add(widget);
         }

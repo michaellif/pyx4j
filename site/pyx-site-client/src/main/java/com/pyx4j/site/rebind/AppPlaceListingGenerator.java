@@ -173,13 +173,11 @@ public class AppPlaceListingGenerator extends Generator {
 
                 String caption = null;
                 String navigLabel = null;
-                String staticContent = null;
 
                 PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
                 if (placeProperties != null) {
                     caption = placeProperties.caption();
                     navigLabel = placeProperties.navigLabel();
-                    staticContent = placeProperties.staticContent();
                 }
 
                 // set names to class name if empty/default:
@@ -191,8 +189,7 @@ public class AppPlaceListingGenerator extends Generator {
                 }
                 writer.print("new ");
                 writer.print(AppPlaceInfo.class.getSimpleName());
-                writer.print("(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", " + i18nEscapeSourceString(staticContent)
-                        + ")");
+                writer.print("(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ")");
 
                 writer.println(");");
             }
