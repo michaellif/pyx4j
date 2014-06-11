@@ -13,11 +13,14 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import java.util.Iterator;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -29,6 +32,8 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 
 public class ShortCutsViewImpl extends ScrollPanel implements ShortCutsView {
+
+    public static int MAX_ITEMS = 20;
 
     private ShortCutsPresenter presenter;
 
@@ -51,6 +56,15 @@ public class ShortCutsViewImpl extends ScrollPanel implements ShortCutsView {
 
     @Override
     public void updateShortcutFolder(CrudAppPlace place, IEntity value) {
+        for (Iterator<Widget> it = shortcutsListPanel.iterator(); it.hasNext();) {
+            ShortcutItem item = (ShortcutItem) it.next();
+            if (item.getPlace().equals(place)) {
+                it.remove();
+            }
+        }
+        while (shortcutsListPanel.getWidgetCount() >= MAX_ITEMS) {
+            shortcutsListPanel.remove(shortcutsListPanel.getWidgetCount() - 1);
+        }
         shortcutsListPanel.insert(new ShortcutItem(place, value), 0);
     }
 
@@ -61,25 +75,18 @@ public class ShortCutsViewImpl extends ScrollPanel implements ShortCutsView {
         public NavigItem(AppPlace placeIn, IEntity value) {
             adoptPlace(placeIn);
 
-            StringBuilder viewLabel = new StringBuilder();
-
-            viewLabel.append(value != null ? value.getStringView() : "");
-            viewLabel.append(" (");
-            viewLabel.append(AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption());
-            viewLabel.append(")");
-
-            Anchor anchor = new Anchor(viewLabel.toString(), true);
+            String viewLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption() + (value != null ? " - " + value.getStringView() : "");
+            Anchor anchor = new Anchor(viewLabel, true);
+            anchor.setTitle(viewLabel);
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     AppSite.getPlaceController().goTo(NavigItem.this.place);
                 }
             });
-            anchor.setTitle(viewLabel.toString());
+            setWidget(anchor);
 
             setStyleName(SiteViewTheme.StyleName.SiteViewExtraItem.name());
-
-            setWidget(anchor);
         }
 
         public AppPlace getPlace() {
