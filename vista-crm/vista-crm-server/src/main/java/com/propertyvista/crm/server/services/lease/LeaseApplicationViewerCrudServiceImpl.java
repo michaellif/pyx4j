@@ -303,15 +303,16 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
             } catch (UserRuntimeException e) {
                 errors.append(e.getMessage());
+                errors.append('\n');
             }
         }
 
-        String successMessage = i18n.tr("Credit check has been proceeded successfully.");
+        String retMessage = i18n.tr("Credit check has been proceeded successfully.");
         if (errors.length() > 0) {
-            successMessage = errors.toString();
+            retMessage = i18n.tr("Credit check error:") + '\n' + errors.toString();
         }
 
-        callback.onSuccess(successMessage);
+        callback.onSuccess(retMessage);
     }
 
     @Override
