@@ -35,7 +35,7 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
 
     private final ExecutionMonitor monitor;
 
-    //TODO this should identify what to import and what building
+    //This should identify what to import and to witch building
     private final ImportBuildingDataParametersDTO uploadInitiationData;
 
     private final UploadedData uploadedData;
@@ -83,7 +83,7 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
                 public Void execute() {
 
                     for (BuildingIO buildingIO : importIO.buildings()) {
-                        new ImportBuildingDataProcessor().importModel(buildingIO, progress, monitor);
+                        new ImportBuildingDataProcessor(uploadInitiationData).importModel(buildingIO, progress, monitor);
                         if (status().isCanceled()) {
                             break;
                         }

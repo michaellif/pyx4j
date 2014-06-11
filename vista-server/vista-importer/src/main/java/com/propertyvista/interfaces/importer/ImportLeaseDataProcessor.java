@@ -27,6 +27,9 @@ import com.propertyvista.interfaces.importer.model.TenantIO;
 
 public class ImportLeaseDataProcessor {
 
+    public ImportLeaseDataProcessor() {
+    }
+
     private Lease retrive(AptUnit unit, LeaseIO leaseIO) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().unit(), unit);
@@ -37,11 +40,27 @@ public class ImportLeaseDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public void importModel(Building buildingId, AptUnit unit, LeaseIO leaseIO, ExecutionMonitor monitor) {
-        Lease lease = retrive(unit, leaseIO);
-        if (lease == null) {
-            monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found");
-            return;
+    private Lease retriveLeaseByUnit(AptUnit unit) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().unit(), unit);
+        criteria.in(criteria.proto().status(), Lease.Status.present());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public void importModel(Building buildingId, AptUnit renamedUnit, AptUnit unit, LeaseIO leaseIO, ExecutionMonitor monitor) {
+        Lease lease;
+        if (renamedUnit == null) {
+            lease = retrive(unit, leaseIO);
+            if (lease == null) {
+                monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found");
+                return;
+            }
+        } else {
+            lease = retriveLeaseByUnit(unit);
+            if (lease == null) {
+                monitor.addErredEvent("Lease", "Lease for unit " + unit.info().number().getStringView() + " not found");
+                return;
+            }
         }
 
         // If Importing AutoPay, suspend existing. TODO make it configurable
@@ -49,7 +68,7 @@ public class ImportLeaseDataProcessor {
 
         // For now process only tenants
         for (TenantIO tenantIO : leaseIO.tenants()) {
-            new ImportTenantDataProcessor().importModel(buildingId, lease, tenantIO, monitor);
+            new ImportTenantDataProcessor().importModel(buildingId, renamedUnit, lease, tenantIO, monitor);
         }
 
         monitor.addProcessedEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " imported");

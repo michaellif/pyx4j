@@ -23,6 +23,9 @@ import com.propertyvista.interfaces.importer.model.AptUnitIO;
 
 public class ImportUnitDataProcessor {
 
+    public ImportUnitDataProcessor() {
+    }
+
     private AptUnit retrive(Building building, AptUnitIO aptUnitIO) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.eq(criteria.proto().building(), building);
@@ -30,7 +33,7 @@ public class ImportUnitDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public void importModel(Building building, AptUnitIO aptUnitIO, ExecutionMonitor monitor) {
+    public void importModel(Building renamedBuilding, Building building, AptUnitIO aptUnitIO, ExecutionMonitor monitor) {
         AptUnit unit = retrive(building, aptUnitIO);
         if (unit == null) {
             if (!aptUnitIO.lease().isNull()) {
@@ -40,9 +43,17 @@ public class ImportUnitDataProcessor {
             }
             return;
         }
+        AptUnit renamedUnit = null;
+        if (renamedBuilding != null) {
+            renamedUnit = retrive(renamedBuilding, aptUnitIO);
+            if (renamedUnit == null) {
+                monitor.addErredEvent("Unit", "Old Unit " + aptUnitIO.number().getStringView() + " not found");
+                return;
+            }
+        }
 
         if (!aptUnitIO.lease().isNull()) {
-            new ImportLeaseDataProcessor().importModel(building, unit, aptUnitIO.lease(), monitor);
+            new ImportLeaseDataProcessor().importModel(building, renamedUnit, unit, aptUnitIO.lease(), monitor);
         }
 
         monitor.addProcessedEvent("Unit");
