@@ -73,8 +73,13 @@ public class ImportTenantDataProcessor {
         } else {
             leaseTermTenant = retriveByName(lease, tenantIO);
         }
+
         if (leaseTermTenant == null) {
-            monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found");
+            if ((renamedUnit == null) && (!tenantIO.participantId().isNull())) {
+                monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found");
+            } else {
+                monitor.addErredEvent("Tenant", "Tenant " + tenantIO.firstName().getStringView() + " " + tenantIO.lastName().getStringView() + " not found");
+            }
             return;
         }
 
