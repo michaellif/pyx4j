@@ -14,7 +14,8 @@
     <inherits name='com.pyx4j.SVG' />
     
     <inherits name='com.propertyvista.common.VistaCommon' />
-
+    <inherits name='com.propertyvista.crm.Client'/>
+ 
     <source path="client"/>
 
     <entry-point class='com.propertyvista.operations.client.OperationsSite'/>
