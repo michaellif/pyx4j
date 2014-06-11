@@ -135,11 +135,11 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                 (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class), LockerAreaDTO.class);
 
         serviceLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getServiceListerView(),
-                (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class, VistaCrmBehavior.ProductCatalog_OLD);
+                (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class), Service.class);
         featureLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getFeatureListerView(),
-                (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class, VistaCrmBehavior.ProductCatalog_OLD);
+                (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
         concessionLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getConcessionListerView(),
-                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog_OLD);
+                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class);
 
         billingCycleLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getBillingCycleListerView(),
                 (AbstractCrudService<BillingCycleDTO>) GWT.create(BillingCycleCrudService.class), BillingCycleDTO.class);

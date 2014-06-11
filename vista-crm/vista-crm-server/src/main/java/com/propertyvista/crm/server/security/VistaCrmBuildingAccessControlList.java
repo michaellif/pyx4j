@@ -32,7 +32,12 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
+import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Product;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.property.asset.building.BuildingAddOns;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.dto.AptUnitDTO;
@@ -51,8 +56,8 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
     VistaCrmBuildingAccessControlList() {
         //F general, details, units, add-ons, PC, contacts
         {
-            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class, ComplexDTO.class, //
-                    ParkingDTO.class, LockerAreaDTO.class);
+            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class, ComplexDTO.class,//
+                    Product.class, Service.class, Feature.class, Concession.class);
 
             grant(BuildingBasic, entities, READ);
             grant(BuildingFinancial, entities, READ);
@@ -97,7 +102,20 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             //grant(BuildingMarketing, entities, 0);
             grant(BuildingMechanicals, entities, ALL);
             grant(BuildingAdministrator, entities, ALL);
-            //grant(BuildingLeasing, BuildingMechanical.class, 0);
+            //grant(BuildingLeasing, entities, 0);
+        }
+
+        // add-ons
+        {
+            List<Class<? extends IEntity>> entities = entities(BuildingAddOns.class, ParkingDTO.class, LockerAreaDTO.class);
+            //grant(BuildingBasic, entities, 0);
+            //grant(BuildingFinancial, entities, 0);
+            grant(BuildingAccounting, entities, READ);
+            grant(BuildingProperty, entities, ALL);
+            grant(BuildingMarketing, entities, ALL);
+            grant(BuildingMechanicals, entities, READ);
+            grant(BuildingAdministrator, entities, ALL);
+            grant(BuildingLeasing, entities, READ);
         }
 
         //financial

@@ -28,8 +28,10 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
 
+import com.propertyvista.domain.property.asset.building.BuildingAddOns;
+
 @DiscriminatorValue("LockerArea")
-public interface LockerArea extends BuildingElement {
+public interface LockerArea extends BuildingElement, BuildingAddOns {
 
     @NotNull
     @ToString(index = 0)

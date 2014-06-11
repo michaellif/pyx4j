@@ -70,6 +70,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.marketing.MarketingContactEmail;
 import com.propertyvista.domain.marketing.MarketingContactPhone;
 import com.propertyvista.domain.marketing.MarketingContactUrl;
@@ -80,6 +81,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.Landlord;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.building.BuildingAddOns;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
@@ -95,7 +97,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingForm.class);
 
-    private final Tab floorplansTab, mechanicalsTab, financialTab, billingCyclesTab;
+    private final Tab floorplansTab, mechanicalsTab, addOnsTab, financialTab, billingCyclesTab;
 
     private Tab catalogTab = null;
 
@@ -117,7 +119,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         setTabEnabled(mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals")), !isEditable());
 
-        setTabEnabled(addTab(createAddOnsTab(), i18n.tr("Add-Ons")), !isEditable());
+        setTabEnabled(addOnsTab = addTab(createAddOnsTab(), i18n.tr("Add-Ons")), !isEditable());
 
         financialTab = addTab(createFinancialTab(), i18n.tr("Financial"));
 
@@ -163,12 +165,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         mechanicalsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingMechanical.class)));
 
+        addOnsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingAddOns.class)));
+
         financialTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingFinancial.class)));
 
         billingCyclesTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BillingCycleDTO.class)));
 
         if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog_OLD)
+            catalogTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(Product.class))
                     && !getValue().defaultProductCatalog().getValue(false));
         }
 
