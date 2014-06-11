@@ -23,6 +23,7 @@ package com.pyx4j.site.client.ui.devconsole;
 import java.util.Iterator;
 
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
@@ -53,7 +54,8 @@ public abstract class AbstractDevConsole extends FlowPanel {
     abstract void setMockValues();
 
     public AbstractDevConsole() {
-        getElement().getStyle().setProperty("minHeight", "100px");
+
+        getElement().getStyle().setPadding(10, Unit.PX);
 
         deviceImage = new Image();
         SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
