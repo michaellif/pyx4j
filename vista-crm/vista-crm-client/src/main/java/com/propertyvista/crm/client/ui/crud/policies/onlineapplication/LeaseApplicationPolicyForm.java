@@ -39,7 +39,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
         {
             legalTermsFormPanel.h1(proto().legalTerms().getMeta().getCaption());
-            legalTermsFormPanel.append(Location.Left, proto().legalTerms(), new LegalTermFolder(isEditable()));
+            legalTermsFormPanel.append(Location.Dual, proto().legalTerms(), new LegalTermFolder(isEditable()));
         }
         addTab(legalTermsFormPanel, i18n.tr("Legal Step"));
 
@@ -47,7 +47,7 @@ public class LeaseApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
         {
             confirmationTermsFormPanel.h1(proto().confirmationTerms().getMeta().getCaption());
-            confirmationTermsFormPanel.append(Location.Left, proto().confirmationTerms(), new ConfirmationTermFolder(isEditable()));
+            confirmationTermsFormPanel.append(Location.Dual, proto().confirmationTerms(), new ConfirmationTermFolder(isEditable()));
         }
         addTab(confirmationTermsFormPanel, i18n.tr("Confirmation Step"));
 
