@@ -13,15 +13,19 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 
 public class ImportUnitDataProcessor {
+
+    private final static Logger log = LoggerFactory.getLogger(ImportUnitDataProcessor.class);
 
     public ImportUnitDataProcessor() {
     }
@@ -33,30 +37,23 @@ public class ImportUnitDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public void importModel(Building renamedBuilding, Building building, AptUnitIO aptUnitIO, ExecutionMonitor monitor) {
-        AptUnit unit = retrive(building, aptUnitIO);
+    public void importModel(ImportProcessorContext context, AptUnitIO aptUnitIO) {
+        AptUnit unit = retrive(context.building, aptUnitIO);
         if (unit == null) {
             if (!aptUnitIO.lease().isNull()) {
-                monitor.addErredEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
+                context.monitor.addErredEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
             } else {
-                monitor.addFailedEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
+                context.monitor.addFailedEvent("Unit", "Unit " + aptUnitIO.number().getStringView() + " not found");
             }
             return;
         }
-        AptUnit renamedUnit = null;
-        if (renamedBuilding != null) {
-            renamedUnit = retrive(renamedBuilding, aptUnitIO);
-            if (renamedUnit == null) {
-                monitor.addErredEvent("Unit", "Old Unit " + aptUnitIO.number().getStringView() + " not found");
-                return;
-            }
-        }
+        log.debug("importing unit {} {}", unit.id(), unit.info().number());
 
         if (!aptUnitIO.lease().isNull()) {
-            new ImportLeaseDataProcessor().importModel(building, renamedUnit, unit, aptUnitIO.lease(), monitor);
+            new ImportLeaseDataProcessor().importModel(context, unit, aptUnitIO.lease());
         }
 
-        monitor.addProcessedEvent("Unit");
+        context.monitor.addProcessedEvent("Unit", aptUnitIO.number().getStringView());
     }
 
 }

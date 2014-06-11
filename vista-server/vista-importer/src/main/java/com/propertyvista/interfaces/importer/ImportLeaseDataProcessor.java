@@ -13,19 +13,22 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.interfaces.importer.model.LeaseIO;
 import com.propertyvista.interfaces.importer.model.TenantIO;
 
 public class ImportLeaseDataProcessor {
+
+    private final static Logger log = LoggerFactory.getLogger(ImportLeaseDataProcessor.class);
 
     public ImportLeaseDataProcessor() {
     }
@@ -47,30 +50,32 @@ public class ImportLeaseDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public void importModel(Building buildingId, AptUnit renamedUnit, AptUnit unit, LeaseIO leaseIO, ExecutionMonitor monitor) {
+    public void importModel(ImportProcessorContext context, AptUnit unit, LeaseIO leaseIO) {
         Lease lease;
-        if (renamedUnit == null) {
-            lease = retrive(unit, leaseIO);
+        if (context.ignoreEntityId) {
+            lease = retriveLeaseByUnit(unit);
             if (lease == null) {
-                monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found");
+                context.monitor.addErredEvent("Lease", "Lease for unit " + unit.info().number().getStringView() + " not found");
                 return;
             }
         } else {
-            lease = retriveLeaseByUnit(unit);
+            lease = retrive(unit, leaseIO);
             if (lease == null) {
-                monitor.addErredEvent("Lease", "Lease for unit " + unit.info().number().getStringView() + " not found");
+                context.monitor.addErredEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " not found");
                 return;
             }
         }
+
+        log.debug("importing lease {} {}", lease.id(), lease);
 
         // If Importing AutoPay, suspend existing. TODO make it configurable
         ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreements(lease, false);
 
         // For now process only tenants
         for (TenantIO tenantIO : leaseIO.tenants()) {
-            new ImportTenantDataProcessor().importModel(buildingId, renamedUnit, lease, tenantIO, monitor);
+            new ImportTenantDataProcessor().importModel(context, lease, tenantIO);
         }
 
-        monitor.addProcessedEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " imported");
+        context.monitor.addProcessedEvent("Lease", "Lease " + leaseIO.leaseId().getStringView() + " imported");
     }
 }

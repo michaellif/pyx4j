@@ -13,14 +13,15 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -29,6 +30,8 @@ import com.propertyvista.interfaces.importer.model.AutoPayAgreementIO;
 import com.propertyvista.interfaces.importer.model.TenantIO;
 
 public class ImportTenantDataProcessor {
+
+    private final static Logger log = LoggerFactory.getLogger(ImportTenantDataProcessor.class);
 
     private LeaseTermTenant retriveByIdOrName(Lease lease, TenantIO tenantIO) {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
@@ -55,9 +58,10 @@ public class ImportTenantDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    private LeaseTermTenant retriveByUnitAndName(AptUnit unit, TenantIO tenantIO) {
+    private LeaseTermTenant retriveByUnitAndName(Building building, String unitNumber, TenantIO tenantIO) {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-        criteria.eq(criteria.proto().leaseTermV().holder().lease().unit(), unit);
+        criteria.eq(criteria.proto().leaseTermV().holder().lease().unit().building(), building);
+        criteria.eq(criteria.proto().leaseTermV().holder().lease().unit().info().number(), unitNumber);
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
 
         criteria.eq(criteria.proto().leaseParticipant().customer().person().name().firstName(), tenantIO.firstName());
@@ -66,25 +70,26 @@ public class ImportTenantDataProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    public void importModel(Building buildingId, AptUnit renamedUnit, Lease lease, TenantIO tenantIO, ExecutionMonitor monitor) {
-        LeaseTermTenant leaseTermTenant = retriveByIdOrName(lease, tenantIO);
-        if (renamedUnit == null) {
-            leaseTermTenant = retriveByIdOrName(lease, tenantIO);
-        } else {
+    public void importModel(ImportProcessorContext context, Lease lease, TenantIO tenantIO) {
+        LeaseTermTenant leaseTermTenant;
+        if (context.ignoreEntityId) {
             leaseTermTenant = retriveByName(lease, tenantIO);
+        } else {
+            leaseTermTenant = retriveByIdOrName(lease, tenantIO);
         }
 
         if (leaseTermTenant == null) {
-            if ((renamedUnit == null) && (!tenantIO.participantId().isNull())) {
-                monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found");
+            if (context.ignoreEntityId) {
+                context.monitor.addErredEvent("Tenant", "Tenant " + tenantIO.firstName().getStringView() + " " + tenantIO.lastName().getStringView()
+                        + " not found");
             } else {
-                monitor.addErredEvent("Tenant", "Tenant " + tenantIO.firstName().getStringView() + " " + tenantIO.lastName().getStringView() + " not found");
+                context.monitor.addErredEvent("Tenant", "Tenant " + tenantIO.participantId().getStringView() + " not found");
             }
             return;
         }
 
-        if (renamedUnit != null) {
-            LeaseTermTenant oldLeaseTermTenant = retriveByUnitAndName(renamedUnit, tenantIO);
+        if (context.renamedBuilding != null) {
+            LeaseTermTenant oldLeaseTermTenant = retriveByUnitAndName(context.renamedBuilding, lease.unit().info().number().getValue(), tenantIO);
             if (oldLeaseTermTenant != null) {
                 // change customer and remove unused
                 Customer currentCutomer = leaseTermTenant.leaseParticipant().customer();
@@ -93,6 +98,7 @@ public class ImportTenantDataProcessor {
                     leaseTermTenant.leaseParticipant().customer().set(oldLeaseTermTenant.leaseParticipant().customer());
                     Persistence.service().persist(leaseTermTenant.leaseParticipant());
                     Persistence.service().delete(deprecatedCutomer);
+                    log.debug("customer merged {}", leaseTermTenant.leaseParticipant().customer());
                 }
             }
         }
@@ -107,7 +113,7 @@ public class ImportTenantDataProcessor {
         }
 
         for (AutoPayAgreementIO autoPayIO : tenantIO.autoPayAgreements()) {
-            new ImportAutoPayAgreementsDataProcessor().importModel(buildingId, lease, leaseTermTenant, autoPayIO, monitor);
+            new ImportAutoPayAgreementsDataProcessor().importModel(context, lease, leaseTermTenant, autoPayIO);
         }
 
     }

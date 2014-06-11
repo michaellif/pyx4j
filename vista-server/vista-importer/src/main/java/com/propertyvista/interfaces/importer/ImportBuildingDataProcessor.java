@@ -13,6 +13,9 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
@@ -27,6 +30,8 @@ import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 
 public class ImportBuildingDataProcessor {
+
+    private final static Logger log = LoggerFactory.getLogger(ImportBuildingDataProcessor.class);
 
     private final ImportBuildingDataParametersDTO uploadInitiationData;
 
@@ -45,42 +50,49 @@ public class ImportBuildingDataProcessor {
     }
 
     public void importModel(BuildingIO buildingIO, RunningProcess progress, ExecutionMonitor monitor) {
-        Building building = retrive(buildingIO);
-
-        Building renamedBuilding = null;
-
-        if (!uploadInitiationData.buildingId().isNull()) {
-            // Building ID in XML can be ignored if Building is suspended
-            Building overBuilding = Persistence.secureRetrieve(EntityCriteriaByPK.create(uploadInitiationData.buildingId()));
-            if (overBuilding == null) {
-                monitor.addErredEvent("Building", "Building not found");
-                return;
-            } else if (!overBuilding.equals(building) && (building != null)) {
-                if (!building.suspended().getValue()) {
-                    monitor.addErredEvent("Building", "Old Building " + buildingIO.propertyCode().getStringView() + " Should be suspended");
-                    return;
-                }
-            }
-            renamedBuilding = building;
-            building = overBuilding;
-        } else {
-            if (building == null) {
+        ImportProcessorContext context = new ImportProcessorContext(monitor, buildingIO);
+        if (uploadInitiationData.buildingId().isNull()) {
+            context.building = retrive(buildingIO);
+            if (context.building == null) {
                 monitor.addErredEvent("Building", "Building " + buildingIO.propertyCode().getStringView() + " not found");
                 return;
             }
+            log.info("importing building {} {}", context.building.id(), context.building.propertyCode());
+        } else {
+            context.building = Persistence.secureRetrieve(EntityCriteriaByPK.create(uploadInitiationData.buildingId()));
+            if (context.building == null) {
+                monitor.addErredEvent("Building", "Building not found");
+                return;
+            }
+            Building renamedBuilding = retrive(buildingIO);
+            if (renamedBuilding == null) {
+                context.ignoreEntityId = true;
+                log.info("importing building {} {} without IDs", context.building.id(), context.building.propertyCode());
+            } else if (!context.building.equals(renamedBuilding)) {
+                if (!renamedBuilding.suspended().getValue()) {
+                    monitor.addErredEvent("Building", "Old Building " + buildingIO.propertyCode().getStringView() + " Should be suspended");
+                    return;
+                }
+                // Building propertyCode and other Id in XML can be ignored if Building id renaming building
+                context.ignoreEntityId = true;
+                context.renamedBuilding = renamedBuilding;
+                log.info("importing building {} to building {} {}", context.building.id(), renamedBuilding.propertyCode(), context.building.propertyCode());
+            } else {
+                log.info("importing building {} with IDs", context.building.propertyCode());
+            }
         }
 
-        ServerSideFactory.create(AuditFacade.class).updated(building, "xml data import");
+        ServerSideFactory.create(AuditFacade.class).updated(context.building, "xml data import building " + context.building.propertyCode().getStringView());
 
         // TODO Update building
 
         // For now process only units
         for (AptUnitIO aptUnitIO : buildingIO.units()) {
-            new ImportUnitDataProcessor().importModel(renamedBuilding, building, aptUnitIO, monitor);
+            new ImportUnitDataProcessor().importModel(context, aptUnitIO);
             progress.progress.addAndGet(1);
         }
 
-        monitor.addProcessedEvent("Building", "Building " + buildingIO.propertyCode().getStringView() + " imported");
+        monitor.addProcessedEvent("Building", "Building " + context.building.propertyCode().getStringView() + " imported");
 
     }
 }

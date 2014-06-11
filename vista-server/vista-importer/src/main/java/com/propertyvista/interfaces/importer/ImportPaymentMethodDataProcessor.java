@@ -30,11 +30,11 @@ import com.propertyvista.interfaces.importer.model.PaymentMethodIO;
 
 public class ImportPaymentMethodDataProcessor {
 
-    public LeasePaymentMethod importModel(Building buildingId, LeaseTermTenant leaseTermTenant, PaymentMethodIO model) {
+    public LeasePaymentMethod importModel(ImportProcessorContext context, LeaseTermTenant leaseTermTenant, PaymentMethodIO model) {
         Persistence.ensureRetrieve(leaseTermTenant.leaseParticipant().customer().paymentMethods(), AttachLevel.Attached);
         LeasePaymentMethod paymentMethod = retrievePaymentMethod(leaseTermTenant.leaseParticipant().customer(), model);
         if (paymentMethod == null) {
-            paymentMethod = createPaymentMethod(buildingId, leaseTermTenant.leaseParticipant().customer(), model);
+            paymentMethod = createPaymentMethod(context.building, leaseTermTenant.leaseParticipant().customer(), model);
         }
         return paymentMethod;
     }

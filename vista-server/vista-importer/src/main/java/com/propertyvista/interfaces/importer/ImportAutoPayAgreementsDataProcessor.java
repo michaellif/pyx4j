@@ -19,13 +19,11 @@ import java.util.Map;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentBillableUtils;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -34,9 +32,9 @@ import com.propertyvista.interfaces.importer.model.AutoPayAgreementIO;
 
 public class ImportAutoPayAgreementsDataProcessor {
 
-    public void importModel(Building buildingId, Lease lease, LeaseTermTenant leaseTermTenant, AutoPayAgreementIO model, ExecutionMonitor monitor) {
+    public void importModel(ImportProcessorContext context, Lease lease, LeaseTermTenant leaseTermTenant, AutoPayAgreementIO model) {
 
-        LeasePaymentMethod paymentMethod = new ImportPaymentMethodDataProcessor().importModel(buildingId, leaseTermTenant, model.paymentMethod());
+        LeasePaymentMethod paymentMethod = new ImportPaymentMethodDataProcessor().importModel(context, leaseTermTenant, model.paymentMethod());
 
         AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
         pap.paymentMethod().set(paymentMethod);
@@ -48,7 +46,8 @@ public class ImportAutoPayAgreementsDataProcessor {
         for (AutoPayAgreementCoveredItemIO itemModel : model.items()) {
             BillableItem matchingBillableItem = findMatchingBillableItem(billableItems, itemModel);
             if (matchingBillableItem == null) {
-                monitor.addErredEvent("AutoPayAgreement", "BillableItem " + lease.leaseId().getStringView() + " " + itemModel.getStringView() + " not found");
+                context.monitor.addErredEvent("AutoPayAgreement", "BillableItem " + lease.leaseId().getStringView() + " " + itemModel.getStringView()
+                        + " not found");
                 return;
             }
             billableItems.remove(matchingBillableItem.uid().getValue());
@@ -62,7 +61,7 @@ public class ImportAutoPayAgreementsDataProcessor {
         }
 
         ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(pap, pap.tenant());
-        monitor.addProcessedEvent("AutoPayAgreement", total, "AutoPayAgreement " + lease.leaseId().getStringView() + " imported");
+        context.monitor.addProcessedEvent("AutoPayAgreement", total, "AutoPayAgreement " + lease.leaseId().getStringView() + " imported");
     }
 
     private BillableItem findMatchingBillableItem(Map<String, BillableItem> billableItems, AutoPayAgreementCoveredItemIO itemModel) {
