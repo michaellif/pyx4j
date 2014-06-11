@@ -7,17 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 15, 2014
+ * Created on Jun 10, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.importer;
+package com.propertyvista.crm.rpc.dto;
 
-import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
-import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
+import com.propertyvista.domain.property.asset.building.Building;
 
-public interface ImportBuildingDataService extends UploadService<ImportBuildingDataParametersDTO, DeferredProcessingStarted> {
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface ImportBuildingDataParametersDTO extends IEntity {
+
+    Building buildingId();
 
 }

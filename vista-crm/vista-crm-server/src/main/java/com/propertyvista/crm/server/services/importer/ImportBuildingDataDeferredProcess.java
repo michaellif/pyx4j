@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.importer;
 
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -24,6 +23,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
 import com.propertyvista.interfaces.importer.ImportBuildingDataProcessor;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
@@ -36,11 +36,11 @@ public class ImportBuildingDataDeferredProcess extends AbstractDeferredProcess {
     private final ExecutionMonitor monitor;
 
     //TODO this should identify what to import and what building
-    private final IEntity uploadInitiationData;
+    private final ImportBuildingDataParametersDTO uploadInitiationData;
 
     private final UploadedData uploadedData;
 
-    public ImportBuildingDataDeferredProcess(IEntity uploadInitiationData, UploadedData uploadedData) {
+    public ImportBuildingDataDeferredProcess(ImportBuildingDataParametersDTO uploadInitiationData, UploadedData uploadedData) {
         super();
         this.uploadInitiationData = uploadInitiationData;
         this.uploadedData = uploadedData;

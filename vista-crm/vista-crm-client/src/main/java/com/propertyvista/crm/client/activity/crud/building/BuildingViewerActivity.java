@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -48,6 +47,7 @@ import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
+import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -251,8 +251,17 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public void importBuildingData() {
-        UploadDialogBase<IEntity> dialog = new UploadDialogBase<IEntity>(i18n.tr("Import Building Data"),
-                GWT.<UploadService<IEntity, AbstractIFileBlob>> create(ImportBuildingDataService.class));
+        UploadDialogBase<ImportBuildingDataParametersDTO> dialog = new UploadDialogBase<ImportBuildingDataParametersDTO>(i18n.tr("Import Building Data"),
+                GWT.<UploadService<ImportBuildingDataParametersDTO, AbstractIFileBlob>> create(ImportBuildingDataService.class)) {
+
+            @Override
+            protected ImportBuildingDataParametersDTO getUploadData() {
+                ImportBuildingDataParametersDTO params = EntityFactory.create(ImportBuildingDataParametersDTO.class);
+                params.buildingId().set(EntityFactory.createIdentityStub(Building.class, getEntityId()));
+                return params;
+            }
+
+        };
 
         dialog.setUploadReciver(new UploadReceiver() {
             @Override

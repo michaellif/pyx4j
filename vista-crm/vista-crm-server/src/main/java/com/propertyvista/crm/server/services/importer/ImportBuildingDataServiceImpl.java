@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
@@ -28,9 +27,11 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.DeferredProcessingStarted;
+import com.propertyvista.crm.rpc.dto.ImportBuildingDataParametersDTO;
 import com.propertyvista.crm.rpc.services.importer.ImportBuildingDataService;
 
-public class ImportBuildingDataServiceImpl extends AbstractUploadServiceImpl<IEntity, DeferredProcessingStarted> implements ImportBuildingDataService {
+public class ImportBuildingDataServiceImpl extends AbstractUploadServiceImpl<ImportBuildingDataParametersDTO, DeferredProcessingStarted> implements
+        ImportBuildingDataService {
 
     private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML);
 
@@ -54,7 +55,8 @@ public class ImportBuildingDataServiceImpl extends AbstractUploadServiceImpl<IEn
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, IFile<DeferredProcessingStarted> response) {
+    protected void processUploadedData(ImportBuildingDataParametersDTO uploadInitiationData, UploadedData uploadedData,
+            IFile<DeferredProcessingStarted> response) {
 
         boolean mock = false;
 
