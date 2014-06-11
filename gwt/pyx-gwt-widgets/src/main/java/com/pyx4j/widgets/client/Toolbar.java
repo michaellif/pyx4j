@@ -51,8 +51,12 @@ public class Toolbar implements IsWidget {
         panel.insert(itemHolder, beforeIndex);
     }
 
-    public IsWidget getItemIndex(int index) {
+    public IsWidget getItem(int index) {
         return panel.getWidget(index);
+    }
+
+    public int getItemCount() {
+        return panel.getWidgetCount();
     }
 
     public void clear() {

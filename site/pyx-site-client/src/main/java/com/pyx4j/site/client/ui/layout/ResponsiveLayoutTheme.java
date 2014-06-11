@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.layout;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
+import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
@@ -34,6 +35,10 @@ public class ResponsiveLayoutTheme extends Theme {
         ResponsiveLayoutOverlayActions, ResponsiveLayoutOverlayActionsTabbar, ResponsiveLayoutOverlayActionsTabItem, ResponsiveLayoutOverlayActionsTabDeck,
 
         ResponsiveLayoutOverlayActionsTabPanel, ResponsiveLayoutOverlayActionsCloseButton
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected
     }
 
     public ResponsiveLayoutTheme() {
@@ -90,11 +95,14 @@ public class ResponsiveLayoutTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabDeck);
-        style.addProperty("border", "4px solid");
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-color", ThemeColor.object1, 1.0);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsTabPanel);
+        style = new Style(".", StyleName.ResponsiveLayoutOverlayActions, " .", DefaultWidgetsTheme.StyleName.ToolbarItem, "-", StyleDependent.selected, " .",
+                StyleName.ResponsiveLayoutOverlayActionsTabItem, ".", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("background-color", ThemeColor.object1, 1.0);
         addStyle(style);
 
     }

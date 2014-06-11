@@ -102,13 +102,21 @@ public class OverlayActionsPanel implements IsWidget {
             tabPanel.setVisible(true);
             closeButton.setVisible(true);
         }
+
+        for (int i = 0; i < tabBar.getItemCount(); i++) {
+            if (i == index) {
+                tabBar.getItem(i).asWidget().addStyleDependentName(ResponsiveLayoutTheme.StyleDependent.selected.name());
+            } else {
+                tabBar.getItem(i).asWidget().removeStyleDependentName(ResponsiveLayoutTheme.StyleDependent.selected.name());
+            }
+        }
     }
 
     public void setTabVisible(int index, boolean visible) {
         if (!visible && (tabPanel.getVisibleWidgetIndex() == index)) {
             setTabSelected(-1);
         }
-        tabBar.getItemIndex(index).asWidget().setVisible(visible);
+        tabBar.getItem(index).asWidget().setVisible(visible);
     }
 
     public int getTabIndex(IsWidget widget) {
