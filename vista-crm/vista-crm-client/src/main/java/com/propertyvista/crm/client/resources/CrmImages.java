@@ -29,7 +29,7 @@ public interface CrmImages extends VistaImages {
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
 
-    @Source("bell.png")
+    @Source("alerts.png")
     ImageResource alert();
 
     @Source("envelop.png")
@@ -228,17 +228,17 @@ public interface CrmImages extends VistaImages {
     public interface UserIconImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_Icon_Profile-Inactive.png")
+        @Source("User_normal.png")
         ImageResource regular();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_Icon_Profile-Active.png")
+        @Source("User_active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_Icon_Profile-Active.png")
+        @Source("User_hover.png")
         ImageResource active();
     }
 
