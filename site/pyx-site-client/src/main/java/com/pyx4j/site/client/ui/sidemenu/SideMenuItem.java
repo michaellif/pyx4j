@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -71,6 +72,8 @@ public class SideMenuItem implements ISideMenuNode {
 
     private SideMenuList parent;
 
+    private final HandlerRegistration toggleHandler;
+
     public SideMenuItem(final Command command, String caption, final ButtonImages images) {
         super();
         this.command = command;
@@ -89,6 +92,12 @@ public class SideMenuItem implements ISideMenuNode {
                 if (SideMenuItem.this.command != null) {
                     SideMenuItem.this.command.execute();
                 }
+            }
+        }, ClickEvent.getType());
+
+        toggleHandler = itemPanel.addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
                 LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
                 if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
                     AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
@@ -138,6 +147,9 @@ public class SideMenuItem implements ISideMenuNode {
             expantionHandler.setStyleName(SideMenuTheme.StyleName.SideMenuExpantionHandler.name());
             itemPanel.add(expantionHandler);
 
+            if (toggleHandler != null) {
+                toggleHandler.removeHandler();
+            }
             this.command = new Command() {
                 @Override
                 public void execute() {
