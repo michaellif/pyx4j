@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
@@ -27,16 +28,20 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 
-public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
+public class ShortCutsViewImpl extends ScrollPanel implements ShortCutsView {
 
     private ShortCutsPresenter presenter;
+
+    private final FlowPanel shortcutsListPanel;
 
     public ShortCutsViewImpl() {
         super();
         setStyleName(SiteViewTheme.StyleName.SiteViewExtra.name());
 
-        setHeight("100%");
+        shortcutsListPanel = new FlowPanel();
+        setWidget(shortcutsListPanel);
 
+        setHeight("100%");
     }
 
     @Override
@@ -46,7 +51,7 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
 
     @Override
     public void updateShortcutFolder(CrudAppPlace place, IEntity value) {
-        insert(new ShortcutItem(place, value), 0);
+        shortcutsListPanel.insert(new ShortcutItem(place, value), 0);
     }
 
     private class NavigItem extends SimplePanel {
@@ -56,17 +61,21 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
         public NavigItem(AppPlace placeIn, IEntity value) {
             adoptPlace(placeIn);
 
-            String typeLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption();
-            String viewLabel = value != null ? value.getStringView() : "";
+            StringBuilder viewLabel = new StringBuilder();
 
-            Anchor anchor = new Anchor(viewLabel, true);
+            viewLabel.append(value != null ? value.getStringView() : "");
+            viewLabel.append(" (");
+            viewLabel.append(AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption());
+            viewLabel.append(")");
+
+            Anchor anchor = new Anchor(viewLabel.toString(), true);
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     AppSite.getPlaceController().goTo(NavigItem.this.place);
                 }
             });
-            anchor.setTitle(typeLabel + (value != null ? " - " + value.getStringView() : ""));
+            anchor.setTitle(viewLabel.toString());
 
             setStyleName(SiteViewTheme.StyleName.SiteViewExtraItem.name());
 
