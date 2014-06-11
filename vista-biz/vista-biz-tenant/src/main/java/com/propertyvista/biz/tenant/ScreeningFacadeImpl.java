@@ -219,10 +219,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
                     ScreeningPayments.compleateTransaction(pcc.transactionId().getValue());
                 } else {
                     ScreeningPayments.preAuthorizationReversal(pcc.transactionId().getValue());
+                    throw new UserRuntimeException(i18n.tr("CreditCheck error: {} - riskCode:{}, reason:{}", pcc.screening().screene().person().name(),
+                            pcc.riskCode(), pcc.reason()));
                 }
             }
         }
-
     }
 
     private CustomerScreening retrivePersonScreening(Customer customer) {

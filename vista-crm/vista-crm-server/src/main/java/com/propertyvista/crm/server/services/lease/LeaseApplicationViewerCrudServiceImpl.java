@@ -296,11 +296,21 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     @Override
     public void creditCheck(AsyncCallback<String> callback, Key entityId, BigDecimal creditCheckAmount, Vector<LeaseTermParticipant<?>> users) {
         Employee currentUserEmployee = CrmAppContext.getCurrentUserEmployee();
+
+        StringBuffer errors = new StringBuffer();
         for (LeaseTermParticipant<?> leaseParticipant : users) {
-            ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
+            try {
+                ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
+            } catch (UserRuntimeException e) {
+                errors.append(e.getMessage());
+            }
         }
 
         String successMessage = i18n.tr("Credit check has been proceeded successfully.");
+        if (errors.length() > 0) {
+            successMessage = errors.toString();
+        }
+
         callback.onSuccess(successMessage);
     }
 
