@@ -126,6 +126,15 @@ public abstract class AbstractCRUDPermission extends BasicPermission {
         return sb.toString();
     }
 
+    public String getActionsTextShort() {
+        StringBuffer sb = new StringBuffer();
+        addAction(sb, READ, "R");
+        addAction(sb, UPDATE, "W");
+        addAction(sb, CREATE, "C");
+        addAction(sb, DELETE, "D");
+        return sb.toString();
+    }
+
     @GWTSerializable
     @Deprecated
     private void setMask(int mask) {

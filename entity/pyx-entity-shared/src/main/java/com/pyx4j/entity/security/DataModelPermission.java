@@ -62,7 +62,7 @@ public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermissi
     }
 
     public E proto() {
-        assert (entityPrototype != null) : "not avalable after serialization";
+        assert (entityPrototype != null) : "not available after serialization";
         return entityPrototype;
     }
 
