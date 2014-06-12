@@ -67,7 +67,6 @@
     </dependencies>
 
     <properties>
-        <project.jar-source-4gwt>true</project.jar-source-4gwt>
         <gwtModule>crm</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
         <gwtDestinationWarFolder>${basedir}/../../vista-assembly/vista-assembly-server/src/main/webapp</gwtDestinationWarFolder>
