@@ -22,7 +22,6 @@ package com.pyx4j.site.client.ui.layout;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
-import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -31,7 +30,7 @@ import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 
-public class OverlayActionsPanel implements IsWidget {
+public class OverlayExtraHolder implements IsWidget {
 
     private final FlowPanel mainPanel;
 
@@ -41,7 +40,7 @@ public class OverlayActionsPanel implements IsWidget {
 
     private final Button closeButton;
 
-    public OverlayActionsPanel() {
+    public OverlayExtraHolder() {
 
         mainPanel = new FlowPanel();
         mainPanel.setStylePrimaryName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutOverlayActions.name());

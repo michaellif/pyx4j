@@ -27,14 +27,14 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 
 import com.pyx4j.site.client.DisplayPanel;
-import com.pyx4j.site.client.ui.layout.OverlayActionsPanel;
+import com.pyx4j.site.client.ui.layout.OverlayExtraHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 public class ContentHolder extends FlowPanel implements RequiresResize, ProvidesResize {
 
     private final DisplayPanel contentPanel;
 
-    public ContentHolder(BackOfficeLayoutPanel parent, OverlayActionsPanel overlayActionsPanel) {
+    public ContentHolder(BackOfficeLayoutPanel parent, OverlayExtraHolder overlayActionsPanel) {
 
         contentPanel = parent.getDisplay(DisplayType.content);
         contentPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);

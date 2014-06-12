@@ -34,7 +34,7 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.devconsole.BackOfficeDevConsole;
-import com.pyx4j.site.client.ui.layout.OverlayActionsPanel;
+import com.pyx4j.site.client.ui.layout.OverlayExtraHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
 import com.pyx4j.widgets.client.DropDownPanel;
@@ -59,7 +59,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final InlineExtraHolder inlineExtraHolder;
 
-    private final OverlayActionsPanel overlayPanel;
+    private final OverlayExtraHolder overlayPanel;
 
     private final LayoutPanel overlayExtra1Holder;
 
@@ -85,7 +85,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addWest(leftPanelHolder, 200);
 
-        overlayPanel = new OverlayActionsPanel();
+        overlayPanel = new OverlayExtraHolder();
         if (ApplicationMode.isDevelopment()) {
             overlayPanel.addTab(new BackOfficeDevConsole(this), "Dev. Console");
         }
