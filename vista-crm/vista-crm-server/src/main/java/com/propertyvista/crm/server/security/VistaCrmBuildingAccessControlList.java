@@ -23,6 +23,7 @@ import static com.propertyvista.domain.security.VistaCrmBehavior.BuildingMechani
 import static com.propertyvista.domain.security.VistaCrmBehavior.BuildingProperty;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
 import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.UPDATE;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
     VistaCrmBuildingAccessControlList() {
         //F general, details, units, add-ons, PC, contacts
         {
-            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class, ComplexDTO.class,//
+            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class,//
                     Product.class, Service.class, Feature.class, Concession.class);
 
             grant(BuildingBasic, entities, READ);
@@ -67,6 +68,19 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingMechanicals, entities, READ);
             grant(BuildingAdministrator, entities, ALL);
             grant(BuildingLeasing, entities, READ);
+        }
+
+        {
+            List<Class<? extends IEntity>> entities = entities(ComplexDTO.class);
+
+            grant(BuildingBasic, entities, READ);
+            grant(BuildingFinancial, entities, READ);
+            grant(BuildingAccounting, entities, READ);
+            grant(BuildingProperty, entities, READ);
+            grant(BuildingMarketing, entities, READ | UPDATE);
+            grant(BuildingMechanicals, entities, READ);
+            grant(BuildingAdministrator, entities, ALL);
+            grant(BuildingLeasing, entities, READ | UPDATE);
         }
 
         //G floorplans/general

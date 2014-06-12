@@ -135,7 +135,11 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    EmployeeDefault, EmployeeAdvance, EmployeeFull,
+    AccountSelf,
+
+    // --
+
+    EmployeeAdvance, EmployeeFull,
 
     // --
 
