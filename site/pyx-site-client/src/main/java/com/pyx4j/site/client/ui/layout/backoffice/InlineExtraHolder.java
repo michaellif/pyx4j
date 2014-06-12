@@ -53,20 +53,20 @@ public class InlineExtraHolder extends DockLayoutPanel {
         empty = false;
         if (extra1Widget != null) {
             if (extra2Widget != null) {
-                addSouth(new ExtraPanel(extra2Caption, parent.getDisplay(DisplayType.extra2)), 40);
+                addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption), 40);
             }
             if (extra3Widget != null) {
-                addSouth(new ExtraPanel(null, parent.getDisplay(DisplayType.extra3)), 30);
+                addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null), 30);
             }
-            add(new ExtraPanel(extra1Caption, parent.getDisplay(DisplayType.extra1)));
+            add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption));
 
         } else if (extra2Widget != null) {
             if (extra3Widget != null) {
-                addSouth(new ExtraPanel(null, parent.getDisplay(DisplayType.extra3)), 40);
+                addSouth(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null), 40);
             }
-            add(new ExtraPanel(extra2Caption, parent.getDisplay(DisplayType.extra2)));
+            add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption));
         } else if (extra3Widget != null) {
-            add(new ExtraPanel(null, parent.getDisplay(DisplayType.extra3)));
+            add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null));
         } else {
             empty = true;
         }
@@ -84,7 +84,7 @@ public class InlineExtraHolder extends DockLayoutPanel {
 
     class ExtraPanel extends DockLayoutPanel {
 
-        ExtraPanel(String caption, IsWidget widget) {
+        ExtraPanel(IsWidget widget, String caption) {
             super(Unit.PX);
             if (caption != null && !caption.trim().equals("")) {
                 HTML captionLabel = new HTML(caption);

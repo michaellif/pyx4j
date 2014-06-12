@@ -30,6 +30,7 @@ import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,6 +43,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.FrontOfficeDevConsole;
+import com.pyx4j.site.client.ui.layout.OverlayActionsPanel;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
 import com.pyx4j.site.client.ui.layout.SidePanelHolder;
 import com.pyx4j.widgets.client.DropDownPanel;
@@ -63,7 +65,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final SidePanelHolder sideCommHolder;
 
-    private final ExtraHolder extraHolder;
+    private final InlineExtraHolder inlineExtraHolder;
 
     private final ContentHolder contentHolder;
 
@@ -83,8 +85,13 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private DevConsoleTab devConsoleTab;
 
-    @SuppressWarnings("deprecation")
-    public FrontOfficeLayoutPanel() {
+    private final OverlayActionsPanel overlayPanel;
+
+    private final LayoutPanel overlayExtra1Holder;
+
+    private final LayoutPanel overlayExtra2Holder;
+
+    public FrontOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
 
         pageHolder = new FlowPanel();
 
@@ -113,7 +120,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         stickyToolbarHolder = new StickyToolbarHolder(this);
         pageHolder.add(stickyToolbarHolder);
 
-        extraHolder = new ExtraHolder(this);
+        inlineExtraHolder = new InlineExtraHolder(this, extra1Caption, extra2Caption);
+        inlineExtraHolder.setVisible(false);
 
         getDisplay(DisplayType.notification).getElement().getStyle().setTextAlign(TextAlign.CENTER);
         getDisplay(DisplayType.content).getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -134,7 +142,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 
         contentPanel.add(contentHolder);
-        contentPanel.add(extraHolder);
+        contentPanel.add(inlineExtraHolder);
 
         inlineMenuHolder = new InlineMenuHolder(this);
 
@@ -158,6 +166,21 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pagePanel.add(inlineToolbarHolder);
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
+
+        overlayPanel = new OverlayActionsPanel();
+        if (ApplicationMode.isDevelopment()) {
+            overlayPanel.addTab(new FrontOfficeDevConsole(this), "Dev. Console");
+        }
+
+        overlayExtra1Holder = new LayoutPanel();
+        overlayPanel.addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
+        overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
+
+        overlayExtra2Holder = new LayoutPanel();
+        overlayPanel.addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
+        overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
+
+        pageHolder.add(overlayPanel);
 
         // ============ Content Layer ============
         {
@@ -190,11 +213,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
-        if (ApplicationMode.isDevelopment()) {
-            devConsoleTab = new DevConsoleTab(new FrontOfficeDevConsole(this));
-            add(devConsoleTab.asWidget(), getElement());
-        }
-
     }
 
     SimplePanel getFooterHolder() {
@@ -222,10 +240,26 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         switch (getLayoutType()) {
         case huge:
-            getDisplay(DisplayType.extra1).setVisible(true);
+            overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
+            overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
+
+            inlineExtraHolder.layout();
+            inlineExtraHolder.setVisible(true);
             break;
         default:
-            getDisplay(DisplayType.extra1).setVisible(false);
+            inlineExtraHolder.setVisible(false);
+
+            if (getDisplay(DisplayType.extra1).getWidget() != null) {
+                overlayExtra1Holder.clear();
+                overlayExtra1Holder.add(getDisplay(DisplayType.extra1));
+                overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), true);
+            }
+            if (getDisplay(DisplayType.extra2).getWidget() != null) {
+                overlayExtra2Holder.clear();
+                overlayExtra2Holder.add(getDisplay(DisplayType.extra2));
+                overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), true);
+            }
+
             break;
         }
 
@@ -257,7 +291,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private void onScroll() {
         inlineMenuHolder.onPositionChange();
-        extraHolder.onPositionChange();
+        inlineExtraHolder.onPositionChange();
 
         if (inlineToolbarHolder.getAbsoluteTop() > 0) {
             if (inlineToolbarHolder.getWidget() == null) {
@@ -276,8 +310,8 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
 
-        if (getDisplay(DisplayType.extra1).isVisible()) {
-            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - extraHolder.getOffsetWidth()) + "px");
+        if (inlineExtraHolder.isVisible()) {
+            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - inlineExtraHolder.getOffsetWidth()) + "px");
         } else {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");
         }

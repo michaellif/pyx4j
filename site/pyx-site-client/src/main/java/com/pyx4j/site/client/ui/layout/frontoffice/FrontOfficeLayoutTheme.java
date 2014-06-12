@@ -30,7 +30,9 @@ public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
     public static enum StyleName implements IStyleName {
         ResponsiveLayoutMainHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
 
-        ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder, ResponsiveLayoutContentBackground;
+        ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder, ResponsiveLayoutContentBackground,
+
+        FrontOfficeLayoutInlineExtraPanel, FrontOfficeLayoutInlineExtraPanelCaption;
     }
 
     public FrontOfficeLayoutTheme() {
@@ -91,6 +93,19 @@ public class FrontOfficeLayoutTheme extends ResponsiveLayoutTheme {
         style.addProperty("min-height", "500px");
         addStyle(style);
 
+        style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel);
+        style.addProperty("margin", "0 10px 10px 0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel, ":first-child");
+        style.addProperty("margin-top", "10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanelCaption);
+        style.addProperty("margin", "0 10px 10px 0");
+        style.addProperty("font-weight", "bold");
+        style.addProperty(" text-align", "center");
+        addStyle(style);
     }
 
 }

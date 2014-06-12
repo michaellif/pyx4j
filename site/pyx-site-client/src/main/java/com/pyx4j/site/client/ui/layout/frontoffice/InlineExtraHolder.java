@@ -25,27 +25,54 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
-public class ExtraHolder extends SimplePanel {
+public class InlineExtraHolder extends SimplePanel {
 
     private final FrontOfficeLayoutPanel parent;
 
+    private final String extra1Caption;
+
+    private final String extra2Caption;
+
     private FlowPanel contentPanel;
 
-    public ExtraHolder(FrontOfficeLayoutPanel parent) {
+    public InlineExtraHolder(FrontOfficeLayoutPanel parent, String extra1Caption, String extra2Caption) {
         this.parent = parent;
+        this.extra1Caption = extra1Caption;
+        this.extra2Caption = extra2Caption;
+
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         setWidget(contentPanel = new FlowPanel());
         contentPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        contentPanel.add(parent.getDisplay(DisplayType.extra1));
-        contentPanel.add(parent.getDisplay(DisplayType.extra2));
-        contentPanel.add(parent.getDisplay(DisplayType.extra3));
+        layout();
+    }
 
+    public void layout() {
+        contentPanel.clear();
+
+        if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
+            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption));
+        }
+
+        if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
+            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra2), extra2Caption));
+        }
+
+        if (parent.getDisplay(DisplayType.extra3).getWidget() != null) {
+            contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra3), null));
+        }
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        contentPanel.setVisible(visible);
     }
 
     public void onPositionChange() {
@@ -81,5 +108,20 @@ public class ExtraHolder extends SimplePanel {
     protected void onLoad() {
         super.onLoad();
         onPositionChange();
+    }
+
+    class ExtraPanel extends FlowPanel {
+
+        ExtraPanel(IsWidget widget, String caption) {
+            super();
+            setStylePrimaryName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineExtraPanel.name());
+
+            if (caption != null && !caption.trim().equals("")) {
+                HTML captionLabel = new HTML(caption);
+                captionLabel.setStylePrimaryName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineExtraPanelCaption.name());
+                add(captionLabel);
+            }
+            add(widget);
+        }
     }
 }

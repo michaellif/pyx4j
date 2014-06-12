@@ -75,12 +75,12 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         style.addProperty("outline", "none");
         style.addProperty("border", "0px");
+        style.addProperty("border-radius", "0px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, ".", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("float", "right");
         style.addProperty("margin", "7px 10px 0 0");
-        style.addProperty("padding", "3px 6px");
         style.addProperty("height", "28px");
         style.addProperty("cursor", "pointer");
         style.addProperty("background", "transparent");
@@ -88,6 +88,7 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("outline", "none");
         style.addProperty("margin-top", "-28px");
         style.addProperty("border", "0px");
+        style.addProperty("border-radius", "0px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutOverlayActionsCloseButton, " img");
