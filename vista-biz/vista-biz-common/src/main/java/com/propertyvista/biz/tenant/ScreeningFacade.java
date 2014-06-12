@@ -37,7 +37,7 @@ public interface ScreeningFacade {
 
     void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval);
 
-    void runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee);
+    CustomerCreditCheck runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee);
 
     /**
      * Retrieve draft if there are no final version

@@ -168,7 +168,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
-    public void runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
+    public CustomerCreditCheck runCreditCheck(BigDecimal rentAmount, LeaseTermParticipant<?> leaseParticipantId, Employee currentUserEmployee) {
         PmcEquifaxInfo equifaxInfo = getCurrentPmcEquifaxInfo();
         if (!isCreditCheckActivated(equifaxInfo)) {
             throw new UserRuntimeException(i18n.tr("Credit Check interface was not activated"));
@@ -223,10 +223,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             }
         }
 
-        if (pcc.creditCheckResult().getValue() == CreditCheckResult.Error) {
-            Persistence.ensureRetrieve(pcc.screening().screene().person().name(), AttachLevel.ToStringMembers);
-            throw new UserRuntimeException(i18n.tr("{0}, reason: {1}", pcc.screening().screene().person().name().getStringView(), pcc.reason()));
-        }
+        return pcc;
     }
 
     private CustomerScreening retrivePersonScreening(Customer customer) {
@@ -251,7 +248,6 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         } else {
             return screening;
         }
-
     }
 
     private void initializeRequiredDocuments(CustomerScreening screening, ApplicationDocumentationPolicy docPolicy) {

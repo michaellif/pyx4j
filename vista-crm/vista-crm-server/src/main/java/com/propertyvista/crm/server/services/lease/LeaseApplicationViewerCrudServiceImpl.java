@@ -46,6 +46,8 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
@@ -299,10 +301,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         StringBuffer errors = new StringBuffer();
         for (LeaseTermParticipant<?> leaseParticipant : users) {
-            try {
-                ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
-            } catch (UserRuntimeException e) {
-                errors.append(e.getMessage());
+            CustomerCreditCheck pcc = ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
+
+            if (pcc.creditCheckResult().getValue() == CreditCheckResult.Error) {
+                Persistence.ensureRetrieve(pcc.screening().screene().person().name(), AttachLevel.ToStringMembers);
+                errors.append(i18n.tr("{0}, reason: {1}", pcc.screening().screene().person().name().getStringView(), pcc.reason()));
                 errors.append('\n');
             }
         }
