@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rpc;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Vector;
 
 import com.pyx4j.entity.core.IEntity;
@@ -53,6 +54,10 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     public void add(E entity) {
         this.data.add(entity);
+    }
+
+    public void addAll(Collection<E> entities) {
+        this.data.addAll(entities);
     }
 
     public boolean hasMoreData() {
