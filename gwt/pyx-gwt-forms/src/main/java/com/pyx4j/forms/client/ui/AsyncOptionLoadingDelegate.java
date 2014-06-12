@@ -89,7 +89,7 @@ public class AsyncOptionLoadingDelegate<E extends IEntity> {
     }
 
     public boolean isOptStatus(AsyncLoadingHandler.Status status) {
-        return optionLoadingHandler == null ? (status == Status.Loading) : optionLoadingHandler.isStatus(status);
+        return optionLoadingHandler == null ? (status == Status.LoadNotRequested) : optionLoadingHandler.isStatus(status);
     }
 
     public void setOptionsLoaded(boolean loaded) {

@@ -32,7 +32,7 @@ public class AsyncLoadingHandler implements AsyncCallback<List<?>> {
     private static final Logger log = LoggerFactory.getLogger(AsyncLoadingHandler.class);
 
     public enum Status {
-        Loading, Complete, Cancelled, Failed
+        LoadNotRequested, Loading, Complete, Cancelled, Failed
     }
 
     private Status status;
@@ -41,7 +41,7 @@ public class AsyncLoadingHandler implements AsyncCallback<List<?>> {
 
     public AsyncLoadingHandler(AsyncCallback<List<?>> callback) {
         handlingCallback = callback;
-        status = Status.Loading;
+        status = Status.LoadNotRequested;
     }
 
     public AsyncCallback<List<?>> getHandlingCallback() {
