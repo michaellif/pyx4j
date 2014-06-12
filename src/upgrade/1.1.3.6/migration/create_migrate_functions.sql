@@ -74,7 +74,9 @@ BEGIN
         **/
         
         EXECUTE 'UPDATE '||v_schema_name||'.product_v AS pv '
-                ||'SET  deposit_security_enabled = TRUE '
+                ||'SET  deposit_security_enabled = TRUE, '
+                ||'     deposit_lmr_enabled = TRUE, '
+                ||'     deposit_move_in_enabled = TRUE '
                 ||'FROM '||v_schema_name||'.product p '
                 ||'WHERE pv.holder = p.id '
                 ||'AND  p.default_catalog_item';
