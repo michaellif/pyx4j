@@ -16,20 +16,16 @@ package com.propertyvista.portal.resident.ui.extra;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.portal.resident.ui.extra.events.CommunityEventsGadget;
-import com.propertyvista.portal.resident.ui.extra.weather.WeatherGadget;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
-public class ExtraViewImpl extends FlowPanel implements ExtraView {
-
-    private WeatherGadget weatherGadget = null;
+public class CommunityEventsViewImpl extends FlowPanel implements CommunityEventsView {
 
     private CommunityEventsGadget communityEventsGadget = null;
 
     private final FlowPanel contentPanel;
 
-    public ExtraViewImpl() {
+    public CommunityEventsViewImpl() {
 
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
 
@@ -39,29 +35,14 @@ public class ExtraViewImpl extends FlowPanel implements ExtraView {
 
     public void populate() {
         contentPanel.clear();
-        if (weatherGadget == null && communityEventsGadget == null) {
+        if (communityEventsGadget == null) {
             setVisible(false);
         } else {
             setVisible(true);
-            if (weatherGadget != null) {
-                contentPanel.add(weatherGadget);
-            }
             if (communityEventsGadget != null) {
                 contentPanel.add(communityEventsGadget);
-
             }
-
         }
-    }
-
-    @Override
-    public void populateWeather(WeatherGadgetDTO notification) {
-        if (notification != null) {
-            weatherGadget = new WeatherGadget(notification);
-        } else {
-            weatherGadget = null;
-        }
-        populate();
     }
 
     @Override

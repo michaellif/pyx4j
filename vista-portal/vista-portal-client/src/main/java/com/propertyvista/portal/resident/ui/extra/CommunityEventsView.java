@@ -16,15 +16,12 @@ package com.propertyvista.portal.resident.ui.extra;
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 
-public interface ExtraView extends IsView {
+public interface CommunityEventsView extends IsView {
 
     public interface ExtraPresenter {
 
     }
-
-    void populateWeather(WeatherGadgetDTO notification);
 
     void populateCommunityEvents(CommunityEventsGadgetDTO notification);
 }

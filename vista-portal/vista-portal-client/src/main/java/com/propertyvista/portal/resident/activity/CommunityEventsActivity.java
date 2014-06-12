@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
@@ -26,39 +25,26 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.extra.ExtraView;
-import com.propertyvista.portal.resident.ui.extra.ExtraView.ExtraPresenter;
+import com.propertyvista.portal.resident.ui.extra.CommunityEventsView;
+import com.propertyvista.portal.resident.ui.extra.WeatherView.ExtraPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
-import com.propertyvista.portal.rpc.portal.resident.services.ExtraActivityPortalService;
 
-public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
+public class CommunityEventsActivity extends AbstractActivity implements ExtraPresenter {
 
-    private final ExtraView view;
-
-    private final ExtraActivityPortalService extraActivityService = (ExtraActivityPortalService) GWT.create(ExtraActivityPortalService.class);
+    private final CommunityEventsView view;
 
     private final CommunityEventPortalCrudService communityEventService = (CommunityEventPortalCrudService) GWT.create(CommunityEventPortalCrudService.class);
 
-    public ExtraActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().getView(ExtraView.class);
+    public CommunityEventsActivity(Place place) {
+        view = ResidentPortalSite.getViewFactory().getView(CommunityEventsView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-
-        retreiveWheather(new DefaultAsyncCallback<WeatherGadgetDTO>() {
-
-            @Override
-            public void onSuccess(WeatherGadgetDTO result) {
-                view.populateWeather(result);
-
-            }
-        });
-        retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
+        communityEventService.retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
 
             @Override
             public void onSuccess(CommunityEventsGadgetDTO result) {
@@ -66,24 +52,6 @@ public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
 
             }
         });
-
     }
 
-    public void retreiveWheather(final AsyncCallback<WeatherGadgetDTO> callback) {
-        extraActivityService.retreiveWheather(new DefaultAsyncCallback<WeatherGadgetDTO>() {
-            @Override
-            public void onSuccess(WeatherGadgetDTO result) {
-                callback.onSuccess(result);
-            }
-        });
-    }
-
-    public void retreiveCommunityEvents(final AsyncCallback<CommunityEventsGadgetDTO> callback) {
-        communityEventService.retreiveCommunityEvents(new DefaultAsyncCallback<CommunityEventsGadgetDTO>() {
-            @Override
-            public void onSuccess(CommunityEventsGadgetDTO result) {
-                callback.onSuccess(result);
-            }
-        });
-    }
 }

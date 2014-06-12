@@ -16,10 +16,11 @@ package com.propertyvista.portal.resident.ui;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
+import com.propertyvista.portal.resident.mvp.CommunityEventsMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
-import com.propertyvista.portal.resident.mvp.ExtraActivityMapper;
 import com.propertyvista.portal.resident.mvp.MenuActivityMapper;
 import com.propertyvista.portal.resident.mvp.ToolbarActivityMapper;
+import com.propertyvista.portal.resident.mvp.WeatherActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
@@ -36,7 +37,8 @@ public class ResidentPortalRootPane extends PortalRootPane {
         bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
-        bind(new ExtraActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
+        bind(new CommunityEventsMapper(), asWidget().getDisplay(DisplayType.extra1));
+        bind(new WeatherActivityMapper(), asWidget().getDisplay(DisplayType.extra3));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
 
     }

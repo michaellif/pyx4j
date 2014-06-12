@@ -19,19 +19,19 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.portal.resident.activity.ExtraActivity;
+import com.propertyvista.portal.resident.activity.WeatherActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
-public class ExtraActivityMapper implements ActivityMapper {
+public class WeatherActivityMapper implements ActivityMapper {
 
-    public ExtraActivityMapper() {
+    public WeatherActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated() && !(place instanceof Logout) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection)) {
-            return new ExtraActivity(place);
+            return new WeatherActivity(place);
         } else {
             return null;
         }
