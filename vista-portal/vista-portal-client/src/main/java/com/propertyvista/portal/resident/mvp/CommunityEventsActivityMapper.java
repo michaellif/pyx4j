@@ -23,9 +23,9 @@ import com.propertyvista.portal.resident.activity.CommunityEventsActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
-public class CommunityEventsMapper implements ActivityMapper {
+public class CommunityEventsActivityMapper implements ActivityMapper {
 
-    public CommunityEventsMapper() {
+    public CommunityEventsActivityMapper() {
     }
 
     @Override
