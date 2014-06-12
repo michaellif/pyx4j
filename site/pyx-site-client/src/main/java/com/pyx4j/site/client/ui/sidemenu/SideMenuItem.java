@@ -99,7 +99,7 @@ public class SideMenuItem implements ISideMenuNode {
             @Override
             public void onClick(ClickEvent event) {
                 LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
-                if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
+                if (LayoutType.phonePortrait.equals(layout) || LayoutType.phoneLandscape.equals(layout) || LayoutType.tabletPortrait.equals(layout)) {
                     AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
                 }
             }
