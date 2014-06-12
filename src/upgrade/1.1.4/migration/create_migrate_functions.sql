@@ -67,13 +67,13 @@ BEGIN
         -- ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_discriminator_d_ck;
         -- ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
         ALTER TABLE lease_adjustment DROP CONSTRAINT lease_adjustment_tax_type_e_ck;
-        -- ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_discriminator_d_ck;
-        -- ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
+        ALTER TABLE legal_letter DROP CONSTRAINT legal_letter_status_discriminator_d_ck;
+        ALTER TABLE legal_status DROP CONSTRAINT legal_status_id_discriminator_ck;
         -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_direction_e_ck;
         -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_type_e_ck;
         -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_direction_e_ck;
         -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_type_e_ck;
-        -- ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
+        ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
         -- ALTER TABLE system_endpoint DROP CONSTRAINT system_endpoint_type_e_ck;
 
         
@@ -176,6 +176,9 @@ BEGIN
         
         ALTER TABLE country_policy_node OWNER TO vista;
         
+        -- crm_role
+        
+        ALTER TABLE crm_role ALTER COLUMN name TYPE VARCHAR(55);
         
         -- customer_screening_income_info
         
@@ -338,7 +341,7 @@ BEGIN
                 ||'WHERE  a.info_legal_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.apt_unit AS a '
-                ||'SET    info_legal_address_province = p.name '
+                ||'SET    info_legal_address_province = p.province '
                 ||'FROM   '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE  a.info_legal_address_province_old = p.id ';
                 
@@ -378,7 +381,7 @@ BEGIN
                 ||'WHERE b.info_address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
-                ||'SET  info_address_province = p.name '
+                ||'SET  info_address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE b.info_address_province_old = p.id ';
                 
@@ -401,7 +404,7 @@ BEGIN
         -- city
         
         EXECUTE 'UPDATE '||v_schema_name||'.city AS c '
-                ||'SET  province = p.name '
+                ||'SET  province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
                 
@@ -409,7 +412,7 @@ BEGIN
         -- city_intro_page
         
         EXECUTE 'UPDATE '||v_schema_name||'.city_intro_page AS c '
-                ||'SET  province = p.name '
+                ||'SET  province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    c.province_old = p.id ';
                 
@@ -423,7 +426,7 @@ BEGIN
                 
                 
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_income_info AS i '
-                ||'SET  address_province = p.name '
+                ||'SET  address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE i.address_province_old = p.id ';
         
@@ -451,12 +454,12 @@ BEGIN
         
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
-                ||'SET current_address_province = p.name '
+                ||'SET current_address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE   current_address_province_old = p.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.customer_screening_v AS s '
-                ||'SET previous_address_province = p.name '
+                ||'SET previous_address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node AS p '
                 ||'WHERE   previous_address_province_old = p.id ';
         
@@ -501,7 +504,7 @@ BEGIN
                 ||'WHERE  e.address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact AS e '
-                ||'SET  address_province = p.name '
+                ||'SET  address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    e.address_province_old = p.id ';
         
@@ -526,7 +529,7 @@ BEGIN
                 ||'WHERE  l.address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.landlord AS l '
-                ||'SET  address_province = p.name '
+                ||'SET  address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    l.address_province_old = p.id ';
                 
@@ -589,7 +592,7 @@ BEGIN
                 ||'WHERE  m.marketing_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.marketing AS m '
-                ||'SET  marketing_address_province = p.name '
+                ||'SET  marketing_address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    m.marketing_address_province_old = p.id ';
         
@@ -616,7 +619,7 @@ BEGIN
                 ||'WHERE  n.mailing_address_country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.n4_policy AS n '
-                ||'SET  mailing_address_province = p.name '
+                ||'SET  mailing_address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    n.mailing_address_province_old = p.id ';
         
@@ -650,7 +653,7 @@ BEGIN
                 ||'WHERE  p.billing_address_country_old = c.id ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.payment_method AS pm '
-                ||'SET  billing_address_province = p.name '
+                ||'SET  billing_address_province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    pm.billing_address_province_old = p.id ';
         
@@ -707,7 +710,7 @@ BEGIN
                 ||'WHERE  pt.country_old = c.id ';
                 
         EXECUTE 'UPDATE '||v_schema_name||'.pt_vehicle AS pt '
-                ||'SET  province = p.name '
+                ||'SET  province = p.province '
                 ||'FROM '||v_schema_name||'.province_policy_node p '
                 ||'WHERE    pt.province_old = p.id ';
                 
@@ -868,6 +871,10 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- primary keys 
+        
+        ALTER TABLE province_policy_node ADD CONSTRAINT province_policy_node_pk PRIMARY KEY(id);
+        
         -- foreign keys
         
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_building_fk FOREIGN KEY(ils_building) 
@@ -904,7 +911,54 @@ BEGIN
                 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
         ALTER TABLE billable_item_adjustment ADD CONSTRAINT billable_item_adjustment_adjustment_type_e_ck 
             CHECK ((adjustment_type) IN ('Monetary', 'Percentage'));
+        ALTER TABLE billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_legal_status_e_ck
+            CHECK ((legal_status) IN ('HearingDate', 'L1', 'N4', 'None', 'Order', 'RequestToReviewOrder', 
+                'SetAside', 'Sheriff', 'StayOrder'));
+        ALTER TABLE building ADD CONSTRAINT building_info_address_country_e_ck 
+            CHECK ((info_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla',
+                'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 
+                'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bonaire', 'BosniaHerzegovina', 'Botswana', 
+                'BouvetIsland', 'Brazil', 'BruneiDarussalam', 'Bulgaria', 'BurkinaFaso', 'Burundi', 'CaboVerde', 'Cambodia', 'Cameroon', 'Canada', 
+                'CaymanIslands', 'CentralAfricanRepublic', 'Chad', 'Chile', 'China', 'ChristmasIsland', 'CocosIslands', 'Colombia', 'Comoros', 'Congo', 
+                'CookIslands', 'CostaRica', 'Croatia', 'Cuba', 'Curacao', 'Cyprus', 'CzechRepublic', 'Denmark', 'Djibouti', 'Dominica', 
+                'DominicanRepublic', 'Ecuador', 'Egypt', 'ElSalvador', 'EquatorialGuinea', 'Eritrea', 'Estonia', 'Ethiopia', 'FalklandIslands', 
+                'FaroeIslands', 'Fiji', 'Finland', 'France', 'FrenchGuiana', 'FrenchPolynesia', 'FrenchTerritories', 'Gabon', 'Gambia', 
+                'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 
+                'Guinea', 'GuineaBissau', 'Guyana', 'Haiti', 'HeardIslands', 'Honduras', 'HongKong', 'Hungary', 'Iceland', 'India', 'Indonesia', 
+                'Iran', 'Iraq', 'Ireland', 'IsleOfMan', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 
+                'Kuwait', 'Kyrgyzstan', 'LaoRepublic', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 
+                'Macao', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'MarshallIslands', 'Martinique', 'Mauritania', 
+                'Mauritius', 'Mayotte', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 
+                'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'NewCaledonia', 'NewZealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'NorfolkIsland', 
+                'NorthKorea', 'NorthernMarianaIslands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'PapuaNewGuinea', 'Paraguay', 
+                'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'PuertoRico', 'Qatar', 'Reunion', 'Romania', 'RussianFederation', 'Rwanda', 
+                'SaintBarthelemy', 'SaintHelena', 'SaintKitts', 'SaintLucia', 'SaintMartin', 'SaintPierre', 'SaintVincent', 'Samoa', 'SanMarino', 
+                'SaoTome', 'SaudiArabia', 'Senegal', 'Serbia', 'Seychelles', 'SierraLeone', 'Singapore', 'SintMaartenDutch', 'Slovakia', 'Slovenia', 
+                'SolomonIslands', 'Somalia', 'SouthAfrica', 'SouthKorea', 'SouthSudan', 'Spain', 'SriLanka', 'Sudan', 'Suriname', 'Svalbard', 'Swaziland', 
+                'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 
+                'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 
+                'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 
+                'Yemen', 'Zambia', 'Zimbabwe'));
+        ALTER TABLE city ADD CONSTRAINT city_province_e_ck 
+            CHECK ((province) IN ('Alabama', 'Alaska', 'Alberta', 'AmericanSamoa', 'Arizona', 'Arkansas', 'BritishColumbia', 'California', 'Colorado', 
+                'Connecticut', 'Delaware', 'DistrictOfColumbia', 'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 
+                'Kentucky', 'Louisiana', 'Maine', 'Manitoba', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'MinorOutlyingIslands', 'Mississippi', 
+                'Missouri', 'Montana', 'Nebraska', 'Nevada', 'NewBrunswick', 'NewHampshire', 'NewJersey', 'NewMexico', 'NewYork', 'Newfoundland', 
+                'NorthCarolina', 'NorthDakota', 'NorthernMarianaIslands', 'NorthwestTerritories', 'NovaScotia', 'Nunavut', 'Ohio', 'Oklahoma', 'Ontario', 
+                'Oregon', 'Pennsylvania', 'PrinceEdwardIsland', 'PuertoRico', 'Quebec', 'RhodeIsland', 'Saskatchewan', 'SouthCarolina', 'SouthDakota', 
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'VirginIslands', 'Virginia', 'Washington', 'WestVirginia', 'Wisconsin', 'Wyoming', 'YukonTerritory'));
+        ALTER TABLE city_intro_page ADD CONSTRAINT city_intro_page_province_e_ck 
+            CHECK ((province) IN ('Alabama', 'Alaska', 'Alberta', 'AmericanSamoa', 'Arizona', 'Arkansas', 'BritishColumbia', 'California', 'Colorado', 
+            'Connecticut', 'Delaware', 'DistrictOfColumbia', 'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 
+            'Kentucky', 'Louisiana', 'Maine', 'Manitoba', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'MinorOutlyingIslands', 'Mississippi', 
+            'Missouri', 'Montana', 'Nebraska', 'Nevada', 'NewBrunswick', 'NewHampshire', 'NewJersey', 'NewMexico', 'NewYork', 'Newfoundland',
+            'NorthCarolina', 'NorthDakota', 'NorthernMarianaIslands', 'NorthwestTerritories', 'NovaScotia', 'Nunavut', 'Ohio', 'Oklahoma', 'Ontario', 
+            'Oregon', 'Pennsylvania', 'PrinceEdwardIsland', 'PuertoRico', 'Quebec', 'RhodeIsland', 'Saskatchewan', 'SouthCarolina', 'SouthDakota', 
+            'Tennessee', 'Texas', 'Utah', 'Vermont', 'VirginIslands', 'Virginia', 'Washington', 'WestVirginia', 'Wisconsin', 'Wyoming', 'YukonTerritory'));
         ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_tax_type_e_ck CHECK ((tax_type) IN ('Monetary', 'Percentage'));
+        ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_discriminator_d_ck CHECK ((status_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
+        ALTER TABLE legal_status ADD CONSTRAINT legal_status_id_discriminator_ck CHECK ((id_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
+
         
         /**
         ***     ====================================================================================================
