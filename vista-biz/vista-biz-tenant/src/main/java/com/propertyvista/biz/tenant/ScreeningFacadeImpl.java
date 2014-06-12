@@ -237,7 +237,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
                 Persistence.service().persist(screening);
                 return screening;
             } else {
-                throw new UserRuntimeException(i18n.tr("Unfinalized Screening exists"));
+                throw new UserRuntimeException(i18n.tr("Non-finalized Screening exists"));
             }
         }
         criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);

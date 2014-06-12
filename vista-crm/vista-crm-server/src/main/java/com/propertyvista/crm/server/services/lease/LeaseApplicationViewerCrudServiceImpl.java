@@ -305,14 +305,14 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             if (pcc.creditCheckResult().getValue() == CreditCheckResult.Error) {
                 Persistence.ensureRetrieve(pcc.screening().screene().person().name(), AttachLevel.ToStringMembers);
-                errors.append(i18n.tr("{0}, reason: {1}", pcc.screening().screene().person().name().getStringView(), pcc.reason()));
+                errors.append(i18n.tr("{0} - {1}", pcc.screening().screene().person().name().getStringView(), pcc.reason()));
                 errors.append('\n');
             }
         }
 
         String retMessage = i18n.tr("Credit check has been proceeded successfully.");
         if (errors.length() > 0) {
-            retMessage = i18n.tr("Credit check error:") + '\n' + errors.toString();
+            retMessage = i18n.tr("Credit check error(s):") + '\n' + errors.toString();
         }
 
         callback.onSuccess(retMessage);
