@@ -21,6 +21,8 @@
 package com.pyx4j.entity.server;
 
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -31,10 +33,16 @@ import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEntity<?>, TO extends IVersionedEntity<?>> extends
         AbstractCrudServiceDtoImpl<E, TO> implements AbstractVersionedCrudService<TO> {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractVersionedCrudServiceDtoImpl.class);
+
+    private static final I18n i18n = I18n.get(AbstractVersionedCrudServiceDtoImpl.class);
 
     protected AbstractVersionedCrudServiceDtoImpl(Class<E> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
@@ -43,11 +51,17 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     @Override
     protected E retrieve(Key entityId, RetrieveTarget retrieveTarget) {
         // Force draft for edit
+        E bo;
         if ((retrieveTarget == RetrieveTarget.Edit) || (entityId.isDraft())) {
-            return Persistence.secureRetrieveDraftForEdit(boClass, entityId);
+            bo = Persistence.secureRetrieveDraftForEdit(boClass, entityId);
         } else {
-            return Persistence.secureRetrieve(boClass, entityId);
+            bo = Persistence.secureRetrieve(boClass, entityId);
         }
+        if (bo == null) {
+            log.error("Entity {} {} not found", boClass, entityId);
+            throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(boClass).getCaption()));
+        }
+        return bo;
     }
 
     @Override
