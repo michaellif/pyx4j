@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
@@ -32,33 +33,41 @@ public class ExtraHolder extends SimplePanel {
 
     private final FrontOfficeLayoutPanel parent;
 
+    private FlowPanel contentPanel;
+
     public ExtraHolder(FrontOfficeLayoutPanel parent) {
         this.parent = parent;
-        setWidget(parent.getDisplay(DisplayType.extra1));
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        getWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        setWidget(contentPanel = new FlowPanel());
+        contentPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        contentPanel.add(parent.getDisplay(DisplayType.extra1));
+        contentPanel.add(parent.getDisplay(DisplayType.extra2));
+        contentPanel.add(parent.getDisplay(DisplayType.extra3));
+
     }
 
     public void onPositionChange() {
-        if (getWidget() != null && isAttached()) {
+        if (contentPanel != null && isAttached()) {
             int offsetTop = parent.getDisplay(DisplayType.toolbar).getOffsetHeight();
             int offsetBottom = parent.getDisplay(DisplayType.footer).getAbsoluteTop();
-            getWidget().setHeight("auto");
+            contentPanel.setHeight("auto");
 
             //TODO investigate why container's getAbsoluteTop() changes when child's position changes from STATIC to FIXED
             //Workaround - use 10px threshold 
             if (getAbsoluteTop() > offsetTop + 10) {
-                getWidget().getElement().getStyle().setPosition(Position.STATIC);
+                contentPanel.getElement().getStyle().setPosition(Position.STATIC);
                 getElement().getStyle().setProperty("width", "auto");
             } else if (getAbsoluteTop() < offsetTop - 10) {
-                getWidget().getElement().getStyle().setPosition(Position.FIXED);
-                getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);
-                if ((offsetTop + getWidget().getOffsetHeight()) <= offsetBottom) {
-                    getWidget().getElement().getStyle().setProperty("top", offsetTop + "px");
-                    getWidget().getElement().getStyle().setProperty("bottom", "auto");
+                contentPanel.getElement().getStyle().setPosition(Position.FIXED);
+                getElement().getStyle().setWidth(contentPanel.getOffsetWidth(), Unit.PX);
+                if ((offsetTop + contentPanel.getOffsetHeight()) <= offsetBottom) {
+                    contentPanel.getElement().getStyle().setProperty("top", offsetTop + "px");
+                    contentPanel.getElement().getStyle().setProperty("bottom", "auto");
                 } else {
-                    getWidget().getElement().getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
-                    getWidget().getElement().getStyle().setProperty("top", "auto");
+                    contentPanel.getElement().getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
+                    contentPanel.getElement().getStyle().setProperty("top", "auto");
                 }
             }
 
