@@ -42,19 +42,23 @@ public class ClientLocaleUtils {
     public static List<CompiledLocale> obtainAvailableLocales() {
         List<CompiledLocale> locales = new ArrayList<CompiledLocale>();
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.UK) {
+            // TODO this is Temporary solution for money
             locales.add(CompiledLocale.en_GB);
         } else {
-            EnumSet<CompiledLocale> SupportedLocales = CompiledLocale.getSupportedLocales();
+            EnumSet<CompiledLocale> supportedLocales = CompiledLocale.getSupportedLocales();
             for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
                 if (localeName.equals("default")) {
                     localeName = "en";
                 }
                 CompiledLocale cl = CompiledLocale.valueOf(localeName);
-                if (SupportedLocales.contains(cl)) {
+                if (supportedLocales.contains(cl)) {
                     if (!locales.contains(cl)) {
                         locales.add(cl);
                     }
-                } else if (cl == CompiledLocale.en) {
+                }
+
+                if (cl == CompiledLocale.en) {
+                    locales.remove(CompiledLocale.en);
                     locales.add(getDefaultLocaleByCountryOfOperation());
                 }
             }
