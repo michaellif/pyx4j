@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
@@ -28,8 +29,10 @@ import com.propertyvista.portal.shared.ui.PortalRootPane;
 
 public class ResidentPortalRootPane extends PortalRootPane {
 
+    private static final I18n i18n = I18n.get(ResidentPortalRootPane.class);
+
     public ResidentPortalRootPane() {
-        super();
+        super(i18n.tr("Community Events"), null);
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));

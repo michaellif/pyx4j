@@ -21,8 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.themes.RentalSummaryTheme;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
-import com.propertyvista.portal.shared.themes.BlockMixin;
-import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class RentalSummaryGadget extends FlowPanel {
 
@@ -39,11 +37,7 @@ public class RentalSummaryGadget extends FlowPanel {
     public RentalSummaryGadget() {
         super();
 
-        setStyleName(PortalRootPaneTheme.StyleName.ExtraGadgetItem.name());
-        addStyleName(BlockMixin.StyleName.PortalBlock.name());
-
         HTML titleHTML = new HTML(i18n.tr("Rental Summary"));
-        titleHTML.setStyleName(PortalRootPaneTheme.StyleName.ExtraGadgetItemTitle.name());
         add(titleHTML);
 
         FlowPanel panel = new FlowPanel();

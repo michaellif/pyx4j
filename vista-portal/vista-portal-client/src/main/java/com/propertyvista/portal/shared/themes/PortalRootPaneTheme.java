@@ -35,7 +35,7 @@ public class PortalRootPaneTheme extends Theme {
 
         Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage,
 
-        ExtraGadget, ExtraGadgetItem, ExtraGadgetItemTitle,
+        ExtraGadget,
 
         NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton,
 
@@ -218,6 +218,7 @@ public class PortalRootPaneTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.01);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
+        style.addProperty("padding-bottom", "30px");
         addStyle(style);
 
         style = new Style(".", StyleName.PageFooter, " .", DefaultWidgetsTheme.StyleName.Anchor);
@@ -254,19 +255,8 @@ public class PortalRootPaneTheme extends Theme {
     private void initExtraGadgetStyles() {
         Style style = new Style(".", StyleName.ExtraGadget);
         style.addProperty("width", "220px");
-        style.addProperty("margin-top", "10px");
-
         style.addProperty("text-align", "center");
         style.addProperty("display", "inline-block");
-        addStyle(style);
-
-        style = new Style(".", StyleName.ExtraGadgetItem);
-        style.addProperty("margin", "0 10px 10px 0");
-        addStyle(style);
-
-        style = new Style(".", StyleName.ExtraGadgetItemTitle);
-        style.addProperty("margin", "0 10px 10px 0");
-        style.addProperty("font-weight", "bold");
         addStyle(style);
 
     }

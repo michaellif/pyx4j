@@ -18,8 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.ExtraGadgetDTO;
-import com.propertyvista.portal.shared.themes.BlockMixin;
-import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public abstract class ExtraGadget<E extends ExtraGadgetDTO> extends FlowPanel {
 
@@ -27,11 +25,8 @@ public abstract class ExtraGadget<E extends ExtraGadgetDTO> extends FlowPanel {
 
     public ExtraGadget(E gadgetDTO, String title) {
         this.gadgetDTO = gadgetDTO;
-        setStyleName(PortalRootPaneTheme.StyleName.ExtraGadgetItem.name());
-        addStyleName(BlockMixin.StyleName.PortalBlock.name());
 
         HTML titleHTML = new HTML(title);
-        titleHTML.setStyleName(PortalRootPaneTheme.StyleName.ExtraGadgetItemTitle.name());
 
         add(titleHTML);
         add(createBody());

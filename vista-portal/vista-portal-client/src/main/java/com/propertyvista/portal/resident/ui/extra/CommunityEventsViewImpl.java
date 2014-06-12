@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui.extra;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.propertyvista.portal.resident.ui.extra.events.CommunityEventsGadget;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 

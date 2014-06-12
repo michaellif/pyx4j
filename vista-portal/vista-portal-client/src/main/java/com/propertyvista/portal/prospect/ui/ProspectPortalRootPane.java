@@ -27,7 +27,7 @@ import com.propertyvista.portal.shared.ui.PortalRootPane;
 public class ProspectPortalRootPane extends PortalRootPane {
 
     public ProspectPortalRootPane() {
-        super();
+        super(null, null);
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));

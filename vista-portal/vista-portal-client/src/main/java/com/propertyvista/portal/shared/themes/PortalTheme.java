@@ -50,7 +50,22 @@ public class PortalTheme extends Theme {
         initMessageStyles();
         initCellListStyle();
 
-        addTheme(new FrontOfficeLayoutTheme());
+        addTheme(new FrontOfficeLayoutTheme() {
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+
+                Style style = new Style(".", StyleName.FrontOfficeLayoutInlineExtraPanel);
+                style.addProperty("background", ThemeColor.foreground, 0.01);
+                style.addProperty("border-color", ThemeColor.foreground, 0.3);
+                style.addProperty("border-style", "solid");
+                style.addProperty("border-width", "1px");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("padding", "10px ");
+                addStyle(style);
+
+            }
+        });
 
         addTheme(new HorizontalAlignCenterMixin());
 

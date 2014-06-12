@@ -11,33 +11,32 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.extra.weather;
+package com.propertyvista.portal.resident.ui.extra;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
 
 import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
-import com.propertyvista.portal.resident.ui.extra.ExtraGadget;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 
-public class WeatherGadget extends ExtraGadget<WeatherGadgetDTO> {
+public class WeatherGadget extends FlowPanel {
 
     private static final I18n i18n = I18n.get(WeatherGadget.class);
 
     public WeatherGadget(WeatherGadgetDTO gadgetDTO) {
-        super(gadgetDTO, i18n.tr("Today's Weather"));
-    }
+        super();
 
-    @Override
-    protected Widget createBody() {
-        FlowPanel panel = new FlowPanel();
+        HTML captionLabel = new HTML(i18n.tr("Today's Weather"));
+        captionLabel.setStylePrimaryName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineExtraPanelCaption.name());
+        add(captionLabel);
+
         Image image = new Image();
 
-        switch (getGadgetDTO().weatherType().getValue()) {
+        switch (gadgetDTO.weatherType().getValue()) {
         case sunny:
             image.setResource(WeatherIcons.INSTANCE.sunny());
             break;
@@ -78,20 +77,19 @@ public class WeatherGadget extends ExtraGadget<WeatherGadgetDTO> {
             break;
         }
         image.setStyleName(ExtraGadgetsTheme.StyleName.WeatherIcon.name());
-        panel.add(image);
+        add(image);
 
         FlowPanel weatherTextPanel = new FlowPanel();
         weatherTextPanel.setStyleName(ExtraGadgetsTheme.StyleName.WeatherText.name());
-        panel.add(weatherTextPanel);
+        add(weatherTextPanel);
 
-        HTML temperatureHTML = new HTML(getGadgetDTO().temperature().getValue() + "&#176;");
+        HTML temperatureHTML = new HTML(gadgetDTO.temperature().getValue() + "&#176;");
         temperatureHTML.setStyleName(ExtraGadgetsTheme.StyleName.WeatherTemperature.name());
         weatherTextPanel.add(temperatureHTML);
 
-        HTML weatherTypeHTML = new HTML(getGadgetDTO().weatherType().getStringView());
+        HTML weatherTypeHTML = new HTML(gadgetDTO.weatherType().getStringView());
         weatherTypeHTML.setStyleName(ExtraGadgetsTheme.StyleName.WeatherType.name());
         weatherTextPanel.add(weatherTypeHTML);
 
-        return panel;
     }
 }
