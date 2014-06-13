@@ -40,6 +40,12 @@ public class CredentialsFileStorage {
 
     private static final Logger log = LoggerFactory.getLogger(Credentials.class);
 
+    public static final String PROPERTY_USER = "user";
+
+    public static final String PROPERTY_PASSWORD = "password";
+
+    public static final String PROPERTY_ENCRYPT = "encrypt";
+
     public static Credentials getCredentials(File fileName) {
         Properties p = new Properties();
         FileReader reader = null;
@@ -52,12 +58,12 @@ public class CredentialsFileStorage {
             IOUtils.closeQuietly(reader);
         }
         Credentials c = new Credentials();
-        c.userName = p.getProperty("user");
+        c.userName = p.getProperty(PROPERTY_USER);
         if (CommonsStringUtils.isEmpty(c.userName)) {
             c.userName = p.getProperty("email");
         }
-        c.password = p.getProperty("password");
-        String encrypt = p.getProperty("encrypt");
+        c.password = p.getProperty(PROPERTY_PASSWORD);
+        String encrypt = p.getProperty(PROPERTY_ENCRYPT);
         if ("false".equalsIgnoreCase(encrypt)) {
             return c;
         }
