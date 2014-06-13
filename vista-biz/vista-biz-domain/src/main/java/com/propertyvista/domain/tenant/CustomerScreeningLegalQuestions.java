@@ -43,12 +43,12 @@ public interface CustomerScreeningLegalQuestions extends IEntity {
     IPrimitive<Boolean> defaultedOnLease();
 
     @Editor(type = EditorType.radiogroup)
-    @Caption(name = "Have you ever been convicted of a felony that involved an offence against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?")
+    @Caption(name = "Have you ever been convicted of a crime/felony that involved an offense against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?")
     @NotNull
     IPrimitive<Boolean> convictedOfFelony();
 
     @Editor(type = EditorType.radiogroup)
-    @Caption(name = "Have you ever had any public record suits, liens, judgments or reposessions?")
+    @Caption(name = "Have you ever had any liens, court judgments or repossessions?")
     @NotNull
     IPrimitive<Boolean> legalTroubles();
 
