@@ -328,6 +328,10 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
                 ||'SET  name = ''Newfoundland'' '
                 ||'WHERE name = ''Newfoundland and Labrador'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
+                ||'SET  name = ''Yukon Territory'' '
+                ||'WHERE name = ''Yukon'' ';
         
         EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
                 ||'SET  province = replace(INITCAP(name),'' '','''') ';
@@ -939,7 +943,7 @@ BEGIN
                 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 
                 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 
                 'Yemen', 'Zambia', 'Zimbabwe'));
-        ALTER TABLE city ADD CONSTRAINT city_province_e_ck 
+       ALTER TABLE city ADD CONSTRAINT city_province_e_ck 
             CHECK ((province) IN ('Alabama', 'Alaska', 'Alberta', 'AmericanSamoa', 'Arizona', 'Arkansas', 'BritishColumbia', 'California', 'Colorado', 
                 'Connecticut', 'Delaware', 'DistrictOfColumbia', 'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 
                 'Kentucky', 'Louisiana', 'Maine', 'Manitoba', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'MinorOutlyingIslands', 'Mississippi', 
