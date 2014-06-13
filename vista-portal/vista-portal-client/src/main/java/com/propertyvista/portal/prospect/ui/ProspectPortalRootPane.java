@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.prospect.ui;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
 import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;
-import com.propertyvista.portal.prospect.mvp.RentalSummaryActivityMapper;
+import com.propertyvista.portal.prospect.mvp.RentChargesActivityMapper;
+import com.propertyvista.portal.prospect.mvp.RentDetailsActivityMapper;
 import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
@@ -26,15 +28,18 @@ import com.propertyvista.portal.shared.ui.PortalRootPane;
 
 public class ProspectPortalRootPane extends PortalRootPane {
 
+    private static final I18n i18n = I18n.get(ProspectPortalRootPane.class);
+
     public ProspectPortalRootPane() {
-        super(null, null);
+        super(i18n.tr("Rental Summary"), i18n.tr("Rent Charges"));
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new ToolbarActivityMapper(), asWidget().getDisplay(DisplayType.toolbar));
         bind(new MenuActivityMapper(), asWidget().getDisplay(DisplayType.menu));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
-        bind(new RentalSummaryActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
+        bind(new RentDetailsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
+        bind(new RentChargesActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
         bind(new NotificationActivityMapper(), asWidget().getDisplay(DisplayType.notification));
     }
 

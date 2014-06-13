@@ -37,9 +37,6 @@ public class RentalSummaryGadget extends FlowPanel {
     public RentalSummaryGadget() {
         super();
 
-        HTML titleHTML = new HTML(i18n.tr("Rental Summary"));
-        add(titleHTML);
-
         FlowPanel panel = new FlowPanel();
 
         Label caption = new Label(i18n.tr("Apartment"));

@@ -25,7 +25,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.portal.prospect.themes.RentalSummaryTheme;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
-import com.propertyvista.portal.shared.themes.BlockMixin;
 
 public class ChargesSummaryGadget extends FlowPanel {
 
@@ -39,11 +38,6 @@ public class ChargesSummaryGadget extends FlowPanel {
 
     public ChargesSummaryGadget() {
         super();
-
-        addStyleName(BlockMixin.StyleName.PortalBlock.name());
-
-        HTML titleHTML = new HTML(i18n.tr("Charges"));
-        add(titleHTML);
 
         FlowPanel panel = new FlowPanel();
 

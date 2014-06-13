@@ -32,8 +32,8 @@ public class RentalSummaryActivity extends AbstractActivity implements RentalSum
 
     private final RentalSummaryView view;
 
-    public RentalSummaryActivity(Place place) {
-        view = ProspectPortalSite.getViewFactory().getView(RentalSummaryView.class);
+    public RentalSummaryActivity(Place place, RentalSummaryView view) {
+        this.view = view;
     }
 
     @Override
