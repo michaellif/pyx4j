@@ -6,9 +6,8 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -18,7 +17,7 @@ import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
 
-public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
+public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     public enum Theme {
         Gainsboro, VillageGreen, BlueCold, BrownWarm
@@ -37,14 +36,15 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
     private Anchor account;
 
     public HeaderViewImpl() {
+        // layout designed after Crm.HeaderViewImpl to reuse SiteViewTheme
         setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
 
         Widget w;
         add(w = createLogoContainer());
-        setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_LEFT);
 
         add(w = createActionsContainer());
-        setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_RIGHT);
+        w.getElement().getStyle().setProperty("right", "0");
+        w.getElement().getStyle().setProperty("top", "0");
     }
 
     private Widget createLogoContainer() {

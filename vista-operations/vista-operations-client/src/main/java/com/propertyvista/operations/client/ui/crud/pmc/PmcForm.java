@@ -84,8 +84,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().status()).setViewable(true);
-
         boolean isVisible = get(proto().status()).getValue() != PmcStatus.Created;
         get(proto().vistaCrmUrl()).setVisible(isVisible);
         get(proto().residentPortalUrl()).setVisible(isVisible);
@@ -111,14 +109,14 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
 
-        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().created(), new FieldDecoratorBuilder(10).build()));
+        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().status(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(row, 1, inject(proto().namespace(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().status(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().namespace(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(row, 1, inject(proto().dnsName(), new FieldDecoratorBuilder(15).build()));
+        content.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().dnsName(), new FieldDecoratorBuilder().build()));
 
         content.setWidget(++row, 0, 2, inject(proto().vistaCrmUrl(), new CLabel<String>(), new FieldDecoratorBuilder(true).build()));
         ((CField) get(proto().vistaCrmUrl())).setNavigationCommand(new Command() {
@@ -172,14 +170,14 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().features().countryOfOperation(), new FieldDecoratorBuilder(25).build()));
+        content.setWidget(++row, 0, inject(proto().features().countryOfOperation(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().features().onlineApplication(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().features().onlineApplication(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().features().yardiIntegration(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().features().yardiMaintenance(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().features().yardiIntegration(), new FieldDecoratorBuilder().build()));
+        content.setWidget(row, 1, inject(proto().features().yardiMaintenance(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().features().tenantSureIntegration(), new FieldDecoratorBuilder(5).build()));
+        content.setWidget(++row, 0, inject(proto().features().tenantSureIntegration(), new FieldDecoratorBuilder().build()));
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));

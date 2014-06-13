@@ -13,11 +13,14 @@
  */
 package com.propertyvista.operations.client.ui;
 
+import java.util.Iterator;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.IEntity;
@@ -29,6 +32,8 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.theme.SiteViewTheme;
 
 public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
+
+    public static int MAX_ITEMS = 20;
 
     private ShortCutsPresenter presenter;
 
@@ -56,6 +61,15 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
 
     @Override
     public void updateShortcutFolder(CrudAppPlace place, IEntity value) {
+        for (Iterator<Widget> it = shortcutsList.iterator(); it.hasNext();) {
+            ShortcutItem item = (ShortcutItem) it.next();
+            if (item.getPlace().equals(place)) {
+                it.remove();
+            }
+        }
+        while (shortcutsList.getWidgetCount() >= MAX_ITEMS) {
+            remove(shortcutsList.getWidgetCount() - 1);
+        }
         shortcutsList.insert(new ShortcutItem(place, value), 0);
     }
 
@@ -66,21 +80,18 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
         public NavigItem(AppPlace placeIn, IEntity value) {
             adoptPlace(placeIn);
 
-            String typeLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption();
-            String viewLabel = value != null ? value.getStringView() : "";
-
+            String viewLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption() + (value != null ? " - " + value.getStringView() : "");
             Anchor anchor = new Anchor(viewLabel, true);
+            anchor.setTitle(viewLabel);
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     AppSite.getPlaceController().goTo(NavigItem.this.place);
                 }
             });
-            anchor.setTitle(typeLabel + (value != null ? " - " + value.getStringView() : ""));
+            setWidget(anchor);
 
             setStyleName(SiteViewTheme.StyleName.SiteViewExtraItem.name());
-
-            setWidget(anchor);
         }
 
         public AppPlace getPlace() {
