@@ -45,8 +45,4 @@ public interface HeaderView extends IsWidget, IsView {
 
     void setAvailableLocales(List<CompiledLocale> locales);
 
-    void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning);
-
-    void setDisplayThisIsDemoWarning(boolean displayThisIsDemoWarning);
-
 }

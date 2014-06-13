@@ -6,7 +6,6 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -57,10 +56,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private Button exitAdminButton;
 
     private Button communicationButton;
-
-    private HTML thisIsProduction;
-
-    private HTML thisIsDemo;
 
     private MenuItem support;
 
@@ -152,22 +147,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
             toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
-            thisIsProduction = new HTML("PRODUCTION SUPPORT!");
-            thisIsProduction.getElement().getStyle().setColor("red");
-            thisIsProduction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            thisIsProduction.getElement().getStyle().setFontSize(30, Unit.PX);
-            thisIsProduction.getElement().getStyle().setMarginLeft(1, Unit.EM);
-            thisIsProduction.getElement().getStyle().setMarginRight(1, Unit.EM);
-            thisIsProduction.getElement().getStyle().setProperty("textAlign", "center");
-            thisIsProduction.setVisible(false);
-
-            thisIsDemo = new HTML(i18n.tr("Demo Environment"));
-            thisIsDemo.getElement().getStyle().setColor("green");
-            thisIsDemo.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            thisIsDemo.getElement().getStyle().setFontSize(30, Unit.PX);
-            thisIsDemo.getElement().getStyle().setProperty("textAlign", "center");
-            thisIsDemo.setVisible(false);
-
             userButton = new Button("");
 
             ButtonMenuBar userButtonMenu = new ButtonMenuBar();
@@ -242,9 +221,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
             // from toolbar:
 
-            toolbar.addItem(thisIsProduction);
-            toolbar.addItem(thisIsDemo);
-
             toolbar.addItem(exitAdminButton);
             toolbar.addItem(adminButton);
             toolbar.addItem(userButton);
@@ -285,12 +261,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         userButton.setVisible(false);
         userButton.setTextLabel("");
 
-        thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
-        thisIsDemo.getElement().getStyle().setProperty("marginRight", "auto");
-        thisIsDemo.getElement().getStyle().setProperty("left", "0px");
-        thisIsDemo.getElement().getStyle().setProperty("width", "100%");
-
         calculateActionsState();
     }
 
@@ -305,12 +275,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
         userButton.setVisible(true);
         userButton.setTextLabel(userName);
-
-        thisIsDemo.getElement().getStyle().setPosition(Position.RELATIVE);
-        thisIsDemo.getElement().getStyle().setProperty("marginLeft", "1em");
-        thisIsDemo.getElement().getStyle().setProperty("marginRight", "1em");
-        thisIsDemo.getElement().getStyle().setProperty("left", "0px");
-        thisIsDemo.getElement().getStyle().setProperty("width", null);
 
         calculateActionsState();
     }
@@ -327,16 +291,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }));
         }
         languageButton.setTextLabel(ClientLocaleUtils.getCurrentLocale().getNativeDisplayName());
-    }
-
-    @Override
-    public void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning) {
-        thisIsProduction.setVisible(displayThisIsProductionWarning);
-    }
-
-    @Override
-    public void setDisplayThisIsDemoWarning(boolean displayThisIsDemoWarning) {
-        thisIsDemo.setVisible(displayThisIsDemoWarning);
     }
 
     private void doLayout(LayoutType layoutType) {

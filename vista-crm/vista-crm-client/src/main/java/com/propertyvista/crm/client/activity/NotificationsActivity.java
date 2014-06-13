@@ -21,13 +21,25 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.ContextChangeEvent;
+import com.pyx4j.security.client.ContextChangeHandler;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.NotificationsView;
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class NotificationsActivity extends AbstractActivity implements NotificationsView.Presenter {
+
+    private static final I18n i18n = I18n.get(NotificationsActivity.class);
 
     private final NotificationsView view;
 
@@ -41,16 +53,47 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
         container.setWidget(view);
 
         List<String> notifList = new ArrayList<String>();
-//        notifList.add("Message 1");
-//        notifList.add("Message 2");
 
-        view.showNotifications(notifList);
-        CrmRootPane rootPane = (CrmRootPane) AppSite.instance().getRootPane();
-        rootPane.allocateNotificationsSpace(notifList.size());
+        if (VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo()) {
+            notifList.add(i18n.tr("Demo Environment"));
+        }
+        showNotifications(notifList);
+
+        updateAuthenticatedView();
+        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
+            @Override
+            public void onBehaviorChange(BehaviorChangeEvent event) {
+                updateAuthenticatedView();
+            }
+        });
+
+        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
+
+            @Override
+            public void onContextChange(ContextChangeEvent event) {
+                updateAuthenticatedView();
+            }
+        });
     }
 
     public NotificationsActivity withPlace(Place place) {
         return this;
+    }
+
+    private void updateAuthenticatedView() {
+        if (ClientContext.isAuthenticated()) {
+            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+                List<String> notifList = new ArrayList<String>();
+                notifList.add(i18n.tr("PRODUCTION SUPPORT!"));
+                showNotifications(notifList);
+            }
+        }
+    }
+
+    private void showNotifications(List<String> notifList) {
+        view.showNotifications(notifList);
+        CrmRootPane rootPane = (CrmRootPane) AppSite.instance().getRootPane();
+        rootPane.allocateNotificationsSpace(notifList.size());
     }
 
 }

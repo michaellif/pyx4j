@@ -75,7 +75,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setDisplayThisIsDemoWarning(VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo());
         updateAuthenticatedView();
         eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
@@ -98,9 +97,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
     private void updateAuthenticatedView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
-            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-                view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
-            }
             if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
                 fetchUnreadMessages(null);
             }
