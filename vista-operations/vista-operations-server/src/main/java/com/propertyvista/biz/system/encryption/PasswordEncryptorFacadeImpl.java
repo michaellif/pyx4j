@@ -109,7 +109,10 @@ public class PasswordEncryptorFacadeImpl implements PasswordEncryptorFacade {
         Properties props = new Properties();
         FileOutputStream out = null;
         try {
-            props.setProperty("password", masterPassword);
+            props.setProperty(CredentialsFileStorage.PROPERTY_PASSWORD, masterPassword);
+            if (ApplicationMode.isDevelopment()) {
+                props.setProperty(CredentialsFileStorage.PROPERTY_ENCRYPT, Boolean.FALSE.toString());
+            }
             props.store(out = new FileOutputStream(credentialsFile), null);
         } catch (IOException e) {
             throw new Error(e);
