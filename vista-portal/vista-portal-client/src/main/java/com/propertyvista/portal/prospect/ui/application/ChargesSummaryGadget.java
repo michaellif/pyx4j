@@ -66,10 +66,10 @@ public class ChargesSummaryGadget extends FlowPanel {
 
         if (onlineApplication != null && !onlineApplication.leaseChargesData().selectedService().isNull()) {
             contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().selectedService().agreedPrice().getValue(), onlineApplication
-                    .leaseChargesData().selectedService().item().name().getValue()));
+                    .leaseChargesData().selectedService().item().name().getStringView()));
 
             for (BillableItem billableItem : onlineApplication.leaseChargesData().selectedFeatures()) {
-                contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getValue()));
+                contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getStringView()));
             }
 
             contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
@@ -85,7 +85,8 @@ public class ChargesSummaryGadget extends FlowPanel {
 
         if (onlineApplication != null && !onlineApplication.payment().isNull()) {
             for (Deposit d : onlineApplication.payment().deposits()) {
-                contentBuilder.append(formatCharge(d.amount().getValue(), d.description().getValue()));
+                contentBuilder.append(formatCharge(d.amount().getValue(), (d.description().isNull() ? d.type().getStringView() : d.description()
+                        .getStringView())));
             }
 
             if (!onlineApplication.payment().deposits().isEmpty()) {

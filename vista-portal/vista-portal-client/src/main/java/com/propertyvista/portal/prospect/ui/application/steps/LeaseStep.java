@@ -20,7 +20,6 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -28,7 +27,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
@@ -72,14 +70,7 @@ public class LeaseStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, depositPanel);
 
         depositPanel.h4(i18n.tr("Unit Deposits"));
-        depositPanel.append(Location.Left, proto().leaseChargesData().selectedService().deposits(), new DepositFolder() {
-            @Override
-            public BoxFolderItemDecorator<Deposit> createItemDecorator() {
-                BoxFolderItemDecorator<Deposit> decor = super.createItemDecorator();
-                decor.setExpended(false);
-                return decor;
-            }
-        });
+        depositPanel.append(Location.Left, proto().leaseChargesData().selectedService().deposits(), new DepositFolder());
 
         featurePanel = new PortalFormPanel(getWizard());
         formPanel.append(Location.Left, featurePanel);
