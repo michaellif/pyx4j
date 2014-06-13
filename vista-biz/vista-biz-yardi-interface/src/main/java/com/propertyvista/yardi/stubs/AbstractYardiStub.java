@@ -152,6 +152,8 @@ public abstract class AbstractYardiStub implements YardiInterface, ExternalInter
                 }
 
                 if (VistaSystemsSimulationConfig.getConfiguration().yardiInterfaceNetworkSimulation().enabled().getValue(false)) {
+                    log.warn("YardiInterfaceNetworkSimulation start delay {} milliseconds", VistaSystemsSimulationConfig.getConfiguration()
+                            .yardiInterfaceNetworkSimulation().delay().getValue(1000));
                     try {
                         Thread.sleep(VistaSystemsSimulationConfig.getConfiguration().yardiInterfaceNetworkSimulation().delay().getValue(1000));
                     } catch (InterruptedException e) {
