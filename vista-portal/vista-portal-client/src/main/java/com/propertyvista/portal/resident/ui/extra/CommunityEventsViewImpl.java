@@ -14,43 +14,61 @@
 package com.propertyvista.portal.resident.ui.extra;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.domain.property.asset.CommunityEvent;
+import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class CommunityEventsViewImpl extends FlowPanel implements CommunityEventsView {
 
-    private CommunityEventsGadget communityEventsGadget = null;
+    private static final I18n i18n = I18n.get(CommunityEventsViewImpl.class);
 
-    private final FlowPanel contentPanel;
+    private static final int MAX_EVENT_TO_SHOW = 3;
 
     public CommunityEventsViewImpl() {
-
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
-
-        contentPanel = new FlowPanel();
-        add(contentPanel);
-    }
-
-    public void populate() {
-        contentPanel.clear();
-        if (communityEventsGadget == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-            if (communityEventsGadget != null) {
-                contentPanel.add(communityEventsGadget);
-            }
-        }
     }
 
     @Override
     public void populateCommunityEvents(CommunityEventsGadgetDTO notification) {
+        clear();
         if (notification != null && notification.events() != null && notification.events().size() > 0) {
-            communityEventsGadget = new CommunityEventsGadget(notification);
+            int i = 1;
+            for (CommunityEvent event : notification.events()) {
+                HTML captionHTML = new HTML(event.caption().getValue());
+                captionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
+                captionHTML.setTitle(event.caption().getValue());
+                add(captionHTML);
+
+                String dateLocation = createDateAndLocation(event);
+                HTML timeAndLocationHTML = new HTML(dateLocation);
+                timeAndLocationHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventTimeAndLocation.name());
+                timeAndLocationHTML.setTitle(dateLocation);
+                add(timeAndLocationHTML);
+
+                HTML descriptionHTML = new HTML(event.description().getValue());
+                descriptionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventDescription.name());
+                descriptionHTML.setTitle(event.description().getValue());
+                add(descriptionHTML);
+
+                if (++i > MAX_EVENT_TO_SHOW) {
+                    break;
+                }
+            }
         } else {
-            communityEventsGadget = null;
+            add(new HTML(i18n.tr("No events")));
         }
-        populate();
+
+    }
+
+    private static String createDateAndLocation(CommunityEvent event) {
+        String date = event.date().getStringView();
+        String time = event.time() == null || event.time().isNull() ? "" : " " + event.time().getStringView();
+
+        return date + time + ((event.location() == null || event.location().isNull()) ? "" : " " + event.location());
     }
 }

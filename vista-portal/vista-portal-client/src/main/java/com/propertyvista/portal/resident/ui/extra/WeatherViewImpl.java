@@ -14,45 +14,96 @@
 package com.propertyvista.portal.resident.ui.extra;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.layout.frontoffice.FrontOfficeLayoutTheme;
+
+import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class WeatherViewImpl extends FlowPanel implements WeatherView {
 
-    private WeatherGadget weatherGadget = null;
-
-    private final FlowPanel contentPanel;
+    private static final I18n i18n = I18n.get(WeatherViewImpl.class);
 
     public WeatherViewImpl() {
-
         setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
 
-        contentPanel = new FlowPanel();
-        add(contentPanel);
-    }
-
-    public void populate() {
-        contentPanel.clear();
-        if (weatherGadget == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-            if (weatherGadget != null) {
-                contentPanel.add(weatherGadget);
-            }
-
-        }
     }
 
     @Override
-    public void populateWeather(WeatherGadgetDTO notification) {
-        if (notification != null) {
-            weatherGadget = new WeatherGadget(notification);
+    public void populateWeather(WeatherGadgetDTO gadgetDTO) {
+        clear();
+        if (gadgetDTO != null) {
+            HTML captionLabel = new HTML(i18n.tr("Today's Weather"));
+            captionLabel.setStylePrimaryName(FrontOfficeLayoutTheme.StyleName.FrontOfficeLayoutInlineExtraPanelCaption.name());
+            add(captionLabel);
+
+            Image image = new Image();
+
+            switch (gadgetDTO.weatherType().getValue()) {
+            case sunny:
+                image.setResource(WeatherIcons.INSTANCE.sunny());
+                break;
+            case fair:
+                image.setResource(WeatherIcons.INSTANCE.fair());
+                break;
+            case partlyCloudy:
+                image.setResource(WeatherIcons.INSTANCE.partlyCloudy());
+                break;
+            case mostlyCloudy:
+                image.setResource(WeatherIcons.INSTANCE.mostlyCloudy());
+                break;
+            case cloudy:
+                image.setResource(WeatherIcons.INSTANCE.cloudy());
+                break;
+            case fog:
+                image.setResource(WeatherIcons.INSTANCE.fog());
+                break;
+            case lightShowers:
+                image.setResource(WeatherIcons.INSTANCE.lightShowers());
+                break;
+            case showers:
+                image.setResource(WeatherIcons.INSTANCE.showers());
+                break;
+            case thunderShowers:
+                image.setResource(WeatherIcons.INSTANCE.thunderShowers());
+                break;
+            case rainAndSnow:
+                image.setResource(WeatherIcons.INSTANCE.rainAndSnow());
+                break;
+            case flurries:
+                image.setResource(WeatherIcons.INSTANCE.flurries());
+                break;
+            case snow:
+                image.setResource(WeatherIcons.INSTANCE.snow());
+                break;
+            default:
+                break;
+            }
+            image.setStyleName(ExtraGadgetsTheme.StyleName.WeatherIcon.name());
+            add(image);
+
+            FlowPanel weatherTextPanel = new FlowPanel();
+            weatherTextPanel.setStyleName(ExtraGadgetsTheme.StyleName.WeatherText.name());
+            add(weatherTextPanel);
+
+            HTML temperatureHTML = new HTML(gadgetDTO.temperature().getValue() + "&#176;");
+            temperatureHTML.setStyleName(ExtraGadgetsTheme.StyleName.WeatherTemperature.name());
+            weatherTextPanel.add(temperatureHTML);
+
+            HTML weatherTypeHTML = new HTML(gadgetDTO.weatherType().getStringView());
+            weatherTypeHTML.setStyleName(ExtraGadgetsTheme.StyleName.WeatherType.name());
+            weatherTextPanel.add(weatherTypeHTML);
         } else {
-            weatherGadget = null;
+            Image image = new Image(WeatherIcons.INSTANCE.fair());
+            image.setStyleName(ExtraGadgetsTheme.StyleName.WeatherIcon.name());
+            add(image);
+            add(new HTML(i18n.tr("Sorry, service is currently not available.")));
         }
-        populate();
+
     }
 
 }
