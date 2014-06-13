@@ -102,7 +102,7 @@ public class OptionsStep extends ApplicationWizardStep {
         protected IsWidget createContent() {
             PortalFormPanel formPanel = new PortalFormPanel(this);
 
-            formPanel.append(Location.Left, proto().selectedService().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Unit Price"));
+            formPanel.append(Location.Left, proto().selectedService().agreedPrice(), new CMoneyLabel()).decorate().customLabel(i18n.tr("Monthly Unit Price"));
 
             depositPanel = new PortalFormPanel(this);
             depositPanel.h3(i18n.tr("Unit Deposits"));

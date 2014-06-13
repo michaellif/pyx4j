@@ -63,7 +63,7 @@ public class LeaseStep extends ApplicationWizardStep {
 
         formPanel.h3(i18n.tr("Lease Options"));
         formPanel.append(Location.Left, proto().leaseChargesData().selectedService().agreedPrice(), new CMoneyLabel()).decorate()
-                .customLabel(i18n.tr("Unit Rent"));
+                .customLabel(i18n.tr("Monthly Unit Rent"));
         formPanel.append(Location.Left, proto().leaseChargesData().selectedService().description(), new CLabel<String>()).decorate();
 
         depositPanel = new PortalFormPanel(getWizard());
