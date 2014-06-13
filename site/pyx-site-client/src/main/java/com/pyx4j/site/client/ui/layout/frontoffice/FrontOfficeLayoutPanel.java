@@ -29,7 +29,6 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -41,7 +40,6 @@ import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
-import com.pyx4j.site.client.ui.devconsole.DevConsoleTab;
 import com.pyx4j.site.client.ui.devconsole.FrontOfficeDevConsole;
 import com.pyx4j.site.client.ui.layout.OverlayExtraHolder;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel;
@@ -85,12 +83,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private boolean sideCommVisible = false;
 
-    private DevConsoleTab devConsoleTab;
-
-    private final LayoutPanel overlayExtra1Holder;
-
-    private final LayoutPanel overlayExtra2Holder;
-
     public FrontOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
 
         pageHolder = new FlowPanel();
@@ -121,7 +113,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pageHolder.add(stickyToolbarHolder);
 
         inlineExtraHolder = new InlineExtraHolder(this, extra1Caption, extra2Caption);
-        inlineExtraHolder.setVisible(false);
 
         getDisplay(DisplayType.notification).getElement().getStyle().setTextAlign(TextAlign.CENTER);
         getDisplay(DisplayType.content).getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -167,18 +158,7 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
-        overlayExtraHolder = new OverlayExtraHolder();
-        if (ApplicationMode.isDevelopment()) {
-            overlayExtraHolder.addTab(new FrontOfficeDevConsole(this), "Dev. Console");
-        }
-
-        overlayExtra1Holder = new LayoutPanel();
-        overlayExtraHolder.addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
-        overlayExtraHolder.setTabVisible(overlayExtraHolder.getTabIndex(overlayExtra1Holder), false);
-
-        overlayExtra2Holder = new LayoutPanel();
-        overlayExtraHolder.addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
-        overlayExtraHolder.setTabVisible(overlayExtraHolder.getTabIndex(overlayExtra2Holder), false);
+        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, new FrontOfficeDevConsole(this));
 
         pageHolder.add(overlayExtraHolder);
 
@@ -241,26 +221,12 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         switch (getLayoutType()) {
         case huge:
-            overlayExtraHolder.setTabVisible(overlayExtraHolder.getTabIndex(overlayExtra1Holder), false);
-            overlayExtraHolder.setTabVisible(overlayExtraHolder.getTabIndex(overlayExtra2Holder), false);
-
+            overlayExtraHolder.hide();
             inlineExtraHolder.layout();
-            inlineExtraHolder.setVisible(true);
             break;
         default:
-            inlineExtraHolder.setVisible(false);
-
-            if (getDisplay(DisplayType.extra1).getWidget() != null) {
-                overlayExtra1Holder.clear();
-                overlayExtra1Holder.add(getDisplay(DisplayType.extra1));
-                overlayExtraHolder.setTabVisible(overlayExtraHolder.getTabIndex(overlayExtra1Holder), true);
-            }
-            if (getDisplay(DisplayType.extra2).getWidget() != null) {
-                overlayExtra2Holder.clear();
-                overlayExtra2Holder.add(getDisplay(DisplayType.extra2));
-                overlayExtraHolder.setTabVisible(overlayExtraHolder.getTabIndex(overlayExtra2Holder), true);
-            }
-
+            inlineExtraHolder.hide();
+            overlayExtraHolder.layout();
             break;
         }
 
@@ -311,11 +277,15 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getMenuWidth(), Unit.PX);
 
-        if (inlineExtraHolder.isVisible()) {
+        switch (getLayoutType()) {
+        case huge:
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth() - inlineExtraHolder.getOffsetWidth()) + "px");
             inlineExtraHolder.layout();
-        } else {
+            break;
+        default:
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getMenuWidth()) + "px");
+            overlayExtraHolder.layout();
+            break;
         }
 
         for (DisplayType displayType : DisplayType.values()) {
@@ -413,12 +383,6 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     public void scrollToBottom() {
         pageScroll.setVerticalScrollPosition(pagePanel.getOffsetHeight());
-    }
-
-    public void setDevConsole(IsWidget widget) {
-        if (devConsoleTab != null) {
-            devConsoleTab.setDevConsole(widget);
-        }
     }
 
 }

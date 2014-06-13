@@ -59,11 +59,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final InlineExtraHolder inlineExtraHolder;
 
-    private final OverlayExtraHolder overlayPanel;
-
-    private final LayoutPanel overlayExtra1Holder;
-
-    private final LayoutPanel overlayExtra2Holder;
+    private final OverlayExtraHolder overlayExtraHolder;
 
     public BackOfficeLayoutPanel(String extra1Caption, String extra2Caption) {
 
@@ -85,20 +81,9 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addWest(leftPanelHolder, 200);
 
-        overlayPanel = new OverlayExtraHolder();
-        if (ApplicationMode.isDevelopment()) {
-            overlayPanel.addTab(new BackOfficeDevConsole(this), "Dev. Console");
-        }
+        overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, new BackOfficeDevConsole(this));
 
-        overlayExtra1Holder = new LayoutPanel();
-        overlayPanel.addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
-        overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
-
-        overlayExtra2Holder = new LayoutPanel();
-        overlayPanel.addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
-        overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
-
-        ContentHolder contentHolder = new ContentHolder(this, overlayPanel);
+        ContentHolder contentHolder = new ContentHolder(this, overlayExtraHolder);
 
         pageHolder.add(contentHolder);
 
@@ -162,8 +147,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         switch (getLayoutType()) {
 
         case huge:
-            overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), false);
-            overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), false);
+            overlayExtraHolder.hide();
 
             inlineExtraHolder.layout();
             pageHolder.setWidgetSize(inlineExtraHolder, inlineExtraHolder.isEmpty() ? 0 : 200);
@@ -172,16 +156,7 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         default:
             inlineExtraHolder.clear();
             pageHolder.setWidgetSize(inlineExtraHolder, 0);
-            if (getDisplay(DisplayType.extra1).getWidget() != null) {
-                overlayExtra1Holder.clear();
-                overlayExtra1Holder.add(getDisplay(DisplayType.extra1));
-                overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra1Holder), true);
-            }
-            if (getDisplay(DisplayType.extra2).getWidget() != null) {
-                overlayExtra2Holder.clear();
-                overlayExtra2Holder.add(getDisplay(DisplayType.extra2));
-                overlayPanel.setTabVisible(overlayPanel.getTabIndex(overlayExtra2Holder), true);
-            }
+            overlayExtraHolder.layout();
             break;
         }
 

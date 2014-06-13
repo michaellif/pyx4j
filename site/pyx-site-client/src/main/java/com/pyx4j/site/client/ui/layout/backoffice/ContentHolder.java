@@ -34,7 +34,7 @@ public class ContentHolder extends FlowPanel implements RequiresResize, Provides
 
     private final DisplayPanel contentPanel;
 
-    public ContentHolder(BackOfficeLayoutPanel parent, OverlayExtraHolder overlayActionsPanel) {
+    public ContentHolder(BackOfficeLayoutPanel parent, OverlayExtraHolder overlayExtraHolder) {
 
         contentPanel = parent.getDisplay(DisplayType.content);
         contentPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -44,7 +44,7 @@ public class ContentHolder extends FlowPanel implements RequiresResize, Provides
         contentPanel.getElement().getStyle().setRight(0, Unit.PX);
         add(contentPanel);
 
-        add(overlayActionsPanel);
+        add(overlayExtraHolder);
     }
 
     @Override

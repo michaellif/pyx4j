@@ -56,6 +56,7 @@ public class InlineExtraHolder extends SimplePanel {
 
     public void layout() {
         contentPanel.clear();
+        contentPanel.setVisible(true);
 
         if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
             contentPanel.add(new ExtraPanel(parent.getDisplay(DisplayType.extra1), extra1Caption));
@@ -70,9 +71,8 @@ public class InlineExtraHolder extends SimplePanel {
         }
     }
 
-    @Override
-    public void setVisible(boolean visible) {
-        contentPanel.setVisible(visible);
+    public void hide() {
+        contentPanel.setVisible(false);
     }
 
     public void onPositionChange() {
