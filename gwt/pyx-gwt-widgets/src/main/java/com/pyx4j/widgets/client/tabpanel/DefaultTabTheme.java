@@ -101,7 +101,7 @@ public class DefaultTabTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.disabled);
-        style.addProperty("background", ThemeColor.object1, 0.6);
+        style.addProperty("background", ThemeColor.foreground, 0.6);
         style.addProperty("color", ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);

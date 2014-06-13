@@ -50,6 +50,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
         super();
         setFormatter(new DateFormatter(defaultDateFormat));
         setParser(new DateParser(defaultDateFormat));
+        setWatermark("MM/DD/YYYY");
         addComponentValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeComponent(new NDatePicker(this));
     }
