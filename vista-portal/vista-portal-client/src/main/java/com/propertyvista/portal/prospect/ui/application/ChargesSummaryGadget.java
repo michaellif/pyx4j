@@ -74,7 +74,7 @@ public class ChargesSummaryGadget extends FlowPanel {
 
             if (!onlineApplication.leaseChargesData().totalMonthlyCharge().isNull()) {
                 contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
-                        .totalMonthlyCharge().getMeta().getCaption()));
+                        .totalMonthlyCharge().getMeta().getCaption(), true));
             }
         }
 
@@ -93,7 +93,7 @@ public class ChargesSummaryGadget extends FlowPanel {
 
             if (!onlineApplication.leaseChargesData().totalDeposits().isNull()) {
                 contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalDeposits().getValue(), onlineApplication.leaseChargesData()
-                        .totalDeposits().getMeta().getCaption()));
+                        .totalDeposits().getMeta().getCaption(), true));
             }
         }
 
@@ -112,7 +112,11 @@ public class ChargesSummaryGadget extends FlowPanel {
     }
 
     private String formatCharge(BigDecimal amount, String title) {
-        return title + "&nbsp;-&nbsp;$" + (amount != null ? amount : BigDecimal.ZERO) + "</br>";
+        return formatCharge(amount, title, false);
+    }
+
+    private String formatCharge(BigDecimal amount, String title, boolean bold) {
+        return (bold ? "<u>" : "") + title + "&nbsp;-&nbsp;$" + (amount != null ? amount : BigDecimal.ZERO) + (bold ? "</u>" : "") + "</br>";
     }
 
     class InfoSection extends FlowPanel {
