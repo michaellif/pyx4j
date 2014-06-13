@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -35,6 +36,7 @@ public interface LeaseChargesDataDTO extends IEntity {
     IList<BillableItem> selectedFeatures();
 
     @Editor(type = EditorType.moneylabel)
+    @Caption(name = "Total Charges")
     IPrimitive<BigDecimal> totalMonthlyCharge();
 
     IList<Deposit> deposits();
@@ -42,5 +44,6 @@ public interface LeaseChargesDataDTO extends IEntity {
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.moneylabel)
+    @Caption(name = "Total Deposits")
     IPrimitive<BigDecimal> totalDeposits();
 }
