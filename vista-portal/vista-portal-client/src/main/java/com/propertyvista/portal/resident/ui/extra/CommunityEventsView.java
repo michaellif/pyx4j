@@ -19,7 +19,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO
 
 public interface CommunityEventsView extends IsView {
 
-    public interface ExtraPresenter {
+    public interface CommunityEventsPresenter {
 
     }
 

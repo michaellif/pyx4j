@@ -26,11 +26,11 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.extra.CommunityEventsView;
-import com.propertyvista.portal.resident.ui.extra.WeatherView.ExtraPresenter;
+import com.propertyvista.portal.resident.ui.extra.CommunityEventsView.CommunityEventsPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.CommunityEventPortalCrudService;
 
-public class CommunityEventsActivity extends AbstractActivity implements ExtraPresenter {
+public class CommunityEventsActivity extends AbstractActivity implements CommunityEventsPresenter {
 
     private final CommunityEventsView view;
 
