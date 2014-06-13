@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.ui.layout;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -37,14 +38,16 @@ public class OverlayExtraHolder extends OverlayHolder {
     public OverlayExtraHolder(ResponsiveLayoutPanel parent, String extra1Caption, String extra2Caption, AbstractDevConsole devConsole) {
         this.parent = parent;
         if (ApplicationMode.isDevelopment()) {
-            addTab(devConsole, "Dev. Console");
+            addTab(devConsole, "Dev.");
         }
 
         overlayExtra1Holder = new LayoutPanel();
+        overlayExtra1Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         addTab(overlayExtra1Holder, extra1Caption == null ? "" : extra1Caption);
         setTabVisible(getTabIndex(overlayExtra1Holder), false);
 
         overlayExtra2Holder = new LayoutPanel();
+        overlayExtra2Holder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         addTab(overlayExtra2Holder, extra2Caption == null ? "" : extra2Caption);
         setTabVisible(getTabIndex(overlayExtra2Holder), false);
     }
