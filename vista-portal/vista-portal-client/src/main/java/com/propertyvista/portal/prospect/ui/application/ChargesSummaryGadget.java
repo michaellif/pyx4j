@@ -72,8 +72,10 @@ public class ChargesSummaryGadget extends FlowPanel {
                 contentBuilder.append(formatCharge(billableItem.agreedPrice().getValue(), billableItem.item().name().getStringView()));
             }
 
-            contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
-                    .totalMonthlyCharge().getMeta().getCaption()));
+            if (!onlineApplication.leaseChargesData().totalMonthlyCharge().isNull()) {
+                contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalMonthlyCharge().getValue(), onlineApplication.leaseChargesData()
+                        .totalMonthlyCharge().getMeta().getCaption()));
+            }
         }
 
         monthlySection.setContentHTML(contentBuilder.length() > 0 ? contentBuilder.toString() : "&nbsp;");
@@ -83,15 +85,15 @@ public class ChargesSummaryGadget extends FlowPanel {
     private void updateDeposits(OnlineApplicationDTO onlineApplication) {
         StringBuilder contentBuilder = new StringBuilder();
 
-        if (onlineApplication != null && !onlineApplication.payment().isNull()) {
-            for (Deposit d : onlineApplication.payment().deposits()) {
+        if (onlineApplication != null && !onlineApplication.leaseChargesData().selectedService().isNull()) {
+            for (Deposit d : onlineApplication.leaseChargesData().deposits()) {
                 contentBuilder.append(formatCharge(d.amount().getValue(), (d.description().isNull() ? d.type().getStringView() : d.description()
                         .getStringView())));
             }
 
-            if (!onlineApplication.payment().deposits().isEmpty()) {
-                contentBuilder.append(formatCharge(onlineApplication.payment().totalDeposits().getValue(), onlineApplication.payment().totalDeposits()
-                        .getMeta().getCaption()));
+            if (!onlineApplication.leaseChargesData().totalDeposits().isNull()) {
+                contentBuilder.append(formatCharge(onlineApplication.leaseChargesData().totalDeposits().getValue(), onlineApplication.leaseChargesData()
+                        .totalDeposits().getMeta().getCaption()));
             }
         }
 

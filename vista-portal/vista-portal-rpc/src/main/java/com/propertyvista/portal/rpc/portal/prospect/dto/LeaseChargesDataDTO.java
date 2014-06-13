@@ -17,13 +17,15 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 
 @Transient
 public interface LeaseChargesDataDTO extends IEntity {
@@ -34,4 +36,11 @@ public interface LeaseChargesDataDTO extends IEntity {
 
     @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> totalMonthlyCharge();
+
+    IList<Deposit> deposits();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.moneylabel)
+    IPrimitive<BigDecimal> totalDeposits();
 }

@@ -217,6 +217,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             result.totalMonthlyCharge().setValue(result.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
         }
 
+        fillDeposits(result);
+
         callback.onSuccess(result);
     }
 
@@ -277,6 +279,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         for (BillableItem feature : result.selectedFeatures()) {
             result.totalMonthlyCharge().setValue(result.totalMonthlyCharge().getValue().add(feature.agreedPrice().getValue()));
         }
+
+        fillDeposits(result);
 
         return result;
     }
@@ -821,10 +825,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
         // current balance: -------------------------------------------------------------------------------------------------------
 
-        // calculate deposits/fee:
-        dto.deposits().addAll(fillDeposits(lease));
-        dto.totalDeposits().setValue(calculateTotalDeposits(dto.deposits()));
-
+        // calculate fee:
         ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ProspectPortalPolicy.class);
         if (policy.feePayment().getValue() == FeePayment.perApplicant) {
             if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
@@ -843,17 +844,15 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.payment().set(dto);
     }
 
-    private List<Deposit> fillDeposits(Lease lease) {
-        List<Deposit> deposits = new ArrayList<>();
+    private void fillDeposits(LeaseChargesDataDTO selection) {
+        selection.deposits().clear();
 
-        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
-
-        deposits.addAll(CollectionUtils.select(leaseTerm.version().leaseProducts().serviceItem().deposits(), new NonZeroDepositPredicate()));
-        for (BillableItem feature : leaseTerm.version().leaseProducts().featureItems()) {
-            deposits.addAll(CollectionUtils.select(feature.deposits(), new NonZeroDepositPredicate()));
+        selection.deposits().addAll(CollectionUtils.select(selection.selectedService().deposits(), new NonZeroDepositPredicate()));
+        for (BillableItem feature : selection.selectedFeatures()) {
+            selection.deposits().addAll(CollectionUtils.select(feature.deposits(), new NonZeroDepositPredicate()));
         }
 
-        return deposits;
+        selection.totalDeposits().setValue(calculateTotalDeposits(selection.deposits()));
     }
 
     private BigDecimal calculateTotalDeposits(List<Deposit> deposits) {

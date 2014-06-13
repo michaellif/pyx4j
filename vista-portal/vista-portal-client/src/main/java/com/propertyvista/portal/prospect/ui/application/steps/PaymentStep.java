@@ -99,8 +99,8 @@ public class PaymentStep extends ApplicationWizardStep {
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             depositHeader = formPanel.h3(i18n.tr("Deposits"));
-            formPanel.append(Location.Left, proto().payment().deposits(), new DepositFolder());
-            formPanel.append(Location.Left, proto().payment().totalDeposits()).decorate();
+            formPanel.append(Location.Left, proto().leaseChargesData().deposits(), new DepositFolder());
+            formPanel.append(Location.Left, proto().leaseChargesData().totalDeposits()).decorate();
         }
 
         feesHeader = formPanel.h3(i18n.tr("Fees"));
@@ -193,12 +193,12 @@ public class PaymentStep extends ApplicationWizardStep {
     public void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        boolean isDepositsPresent = !getValue().payment().deposits().isEmpty();
+        boolean isDepositsPresent = !getValue().leaseChargesData().deposits().isEmpty();
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             depositHeader.setVisible(isDepositsPresent);
-            get(proto().payment().deposits()).setVisible(isDepositsPresent);
-            get(proto().payment().totalDeposits()).setVisible(isDepositsPresent);
+            get(proto().leaseChargesData().deposits()).setVisible(isDepositsPresent);
+            get(proto().leaseChargesData().totalDeposits()).setVisible(isDepositsPresent);
         }
 
         boolean isFeesPresent = !getValue().payment().applicationFee().isNull();
