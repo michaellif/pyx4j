@@ -25,7 +25,6 @@ import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
