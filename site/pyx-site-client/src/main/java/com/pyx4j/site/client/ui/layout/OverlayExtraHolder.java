@@ -53,15 +53,18 @@ public class OverlayExtraHolder extends OverlayHolder {
     }
 
     public void layout() {
+        hide();
         if (parent.getDisplay(DisplayType.extra1).getWidget() != null) {
-            overlayExtra1Holder.clear();
-            overlayExtra1Holder.add(parent.getDisplay(DisplayType.extra1));
             setTabVisible(getTabIndex(overlayExtra1Holder), true);
+            if (overlayExtra1Holder.getWidgetCount() == 0) {
+                overlayExtra1Holder.add(parent.getDisplay(DisplayType.extra1));
+            }
         }
         if (parent.getDisplay(DisplayType.extra2).getWidget() != null) {
-            overlayExtra2Holder.clear();
-            overlayExtra2Holder.add(parent.getDisplay(DisplayType.extra2));
             setTabVisible(getTabIndex(overlayExtra2Holder), true);
+            if (overlayExtra2Holder.getWidgetCount() == 0) {
+                overlayExtra2Holder.add(parent.getDisplay(DisplayType.extra2));
+            }
         }
     }
 
