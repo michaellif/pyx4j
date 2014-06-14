@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -337,7 +336,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             }
             break;
         }
-
+        communicationButton.setVisible(loggedIn);
     }
 
 }
