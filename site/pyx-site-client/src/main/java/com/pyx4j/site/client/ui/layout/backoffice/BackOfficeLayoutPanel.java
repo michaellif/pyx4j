@@ -24,12 +24,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.site.client.AppSite;
@@ -43,15 +41,13 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     private final DockLayoutPanel pageHolder;
 
-    private final SimplePanel inlineMenuHolder;
-
     private final SidePanelHolder sideMenuHolder;
 
     private final DropDownPanel popupCommHolder;
 
     private final SidePanelHolder sideCommHolder;
 
-    private final DockLayoutPanel leftPanelHolder;
+    private final InlineNavigationHolder inlineNavigationHolder;
 
     private boolean sideMenuVisible = false;
 
@@ -71,15 +67,9 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
         pageHolder.addEast(inlineExtraHolder = new InlineExtraHolder(this, extra1Caption, extra2Caption), 0);
 
-        leftPanelHolder = new DockLayoutPanel(Unit.PX);
-        leftPanelHolder.addSouth(getDisplay(DisplayType.footer), 40);
+        inlineNavigationHolder = new InlineNavigationHolder(this);
 
-        inlineMenuHolder = new SimplePanel();
-        getDisplay(DisplayType.menu).setHeight("100%");
-
-        leftPanelHolder.add(inlineMenuHolder);
-
-        pageHolder.addWest(leftPanelHolder, 200);
+        pageHolder.addWest(inlineNavigationHolder, 200);
 
         overlayExtraHolder = new OverlayExtraHolder(this, extra1Caption, extra2Caption, new BackOfficeDevConsole(this));
 
@@ -133,14 +123,18 @@ public class BackOfficeLayoutPanel extends ResponsiveLayoutPanel {
         case tabletPortrait:
             sideMenuHolder.setDisplay(getDisplay(DisplayType.menu));
             sideCommHolder.setDisplay(getDisplay(DisplayType.communication));
-            pageHolder.setWidgetSize(leftPanelHolder, 0);
+            pageHolder.setWidgetSize(inlineNavigationHolder, 0);
             break;
         default:
             setSideMenuVisible(false);
             setSideCommVisible(false);
-            inlineMenuHolder.setWidget(getDisplay(DisplayType.menu));
             popupCommHolder.setWidget(getDisplay(DisplayType.communication));
-            pageHolder.setWidgetSize(leftPanelHolder, 200);
+            inlineNavigationHolder.layout();
+            if (inlineNavigationHolder.isEmpty()) {
+                pageHolder.setWidgetSize(inlineNavigationHolder, 0);
+            } else {
+                pageHolder.setWidgetSize(inlineNavigationHolder, 200);
+            }
             break;
         }
 
