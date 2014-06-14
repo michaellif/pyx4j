@@ -17,6 +17,8 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.security.client.ClientContext;
+
 import com.propertyvista.operations.client.activity.FooterActivity;
 
 public class FooterActivityMapper implements ActivityMapper {
@@ -27,6 +29,10 @@ public class FooterActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new FooterActivity(place);
+        if (ClientContext.isAuthenticated()) {
+            return new FooterActivity(place);
+        } else {
+            return null;
+        }
     }
 }
