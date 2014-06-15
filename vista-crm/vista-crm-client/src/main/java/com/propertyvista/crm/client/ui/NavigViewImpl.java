@@ -278,7 +278,7 @@ public class NavigViewImpl extends Composite implements NavigView {
                 public void execute() {
                     presenter.setLocale(compiledLocale);
                 }
-            }, compiledLocale.getNativeDisplayName() + (currentLocale.equals(compiledLocale) ? " V" : ""), null));
+            }, compiledLocale.getNativeDisplayName() + (currentLocale.equals(compiledLocale) ? " \u2713" : ""), null));
         }
     }
 
