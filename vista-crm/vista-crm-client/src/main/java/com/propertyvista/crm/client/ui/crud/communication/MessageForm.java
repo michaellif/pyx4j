@@ -23,13 +23,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -48,6 +49,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -91,6 +93,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             @Override
             public void onSuccess(MessageDTO result) {
                 getValue().setPrimaryKey(result.getPrimaryKey());
+                getValue().status().set(result.status());
                 getValue().owner().set(result.owner());
                 refresh(false);
             }
@@ -100,12 +103,11 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().created()).decorate();
-        formPanel.append(Location.Right, proto().subject()).decorate();
-        formPanel.append(Location.Right, proto().allowedReply()).decorate();
-        formPanel.append(Location.Left, proto().topic()).decorate();
-        formPanel.append(Location.Right, proto().owner().name()).decorate().customLabel(i18n.tr("Owner"));
-        formPanel.append(Location.Left, proto().thread().status()).decorate();
+        formPanel.append(Location.Dual, proto().subject()).decorate();
+        formPanel.append(Location.Left, proto().allowedReply()).decorate();
+        formPanel.append(Location.Right, proto().topic()).decorate();
+        formPanel.append(Location.Left, proto().owner().name()).decorate().customLabel(i18n.tr("Owner"));
+        formPanel.append(Location.Right, proto().status()).decorate();
         formPanel.append(Location.Dual, proto().content(), messagesFolder);
         formPanel.br();
 
@@ -218,6 +220,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private Anchor btnReply;
 
+        private Widget attachmentsWidget;
+
         private final CommunicationEndpointFolder receiverSelector;
 
         Image starImage;
@@ -229,6 +233,10 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             inheritEditable(false);
             inheritViewable(false);
             inheritEnabled(false);
+        }
+
+        public void setFocusForEditingText() {
+            get(proto().text()).asWidget().getElement().focus();
         }
 
         @Override
@@ -263,20 +271,16 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             });
 
             formPanel.append(Location.Left, starImage);
-            formPanel.h1("Details");
             formPanel.append(Location.Left, proto().date()).decorate();
-            CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
-            cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-            formPanel.append(Location.Left, proto().highImportance(), cmbBoolean).decorate();
+            formPanel.append(Location.Left, proto().highImportance(), new CRadioGroupBoolean(RadioGroup.Layout.HORISONTAL)).decorate();
             formPanel.append(Location.Dual, proto().text()).decorate();
 
-            formPanel.h1("From");
-            formPanel.append(Location.Left, proto().sender().name()).decorate().customLabel("Sender");
-            formPanel.h1("To");
+            formPanel.append(Location.Left, proto().sender().name()).decorate().customLabel("From");
+            formPanel.h3("To");
             formPanel.append(Location.Left, proto().to(), receiverSelector);
 
             formPanel.br();
-            formPanel.h1("Attachments");
+            attachmentsWidget = formPanel.h3("Attachments");
             formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
             formPanel.append(Location.Dual, createLowerToolbar());
             return formPanel;
@@ -333,8 +337,14 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     } else {
                         String forwardText = buildForwardText();
                         messagesFolder.addItem();
-                        messagesFolder.getItem(messagesFolder.getItemCount() - 1).getValue().text().setValue(forwardText);
-                        messagesFolder.getItem(messagesFolder.getItemCount() - 1).refresh(false);
+                        CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
+                        newItem.getValue().text().setValue(forwardText);
+                        newItem.refresh(false);
+                        newItem.asWidget().getElement().scrollIntoView();
+                        CForm<MessageDTO> form = newItem.getEntityForm();
+                        if (form != null && form instanceof MessageFolderItem) {
+                            ((MessageFolderItem) form).setFocusForEditingText();
+                        }
                     }
                 }
 
@@ -430,6 +440,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 get(proto().date()).setVisible(false);
                 get(proto().star()).setVisible(false);
                 get(proto().sender().name()).setVisible(false);
+                attachmentsWidget.setVisible(false);
             } else {
                 setViewable(true);
                 setEditable(false);
@@ -449,6 +460,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 } else {
                     starImage.setResource(CrmImages.INSTANCE.noStar());
                 }
+                attachmentsWidget.setVisible(getValue().attachments().size() > 0);
             }
         }
     }

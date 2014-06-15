@@ -171,6 +171,10 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
     @Source("Messages_Icon_Warning.png")
     ImageResource messageWarning();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("MessageImportance.png")
+    ImageResource messageImportance();
+
     //=============== Forms ====================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

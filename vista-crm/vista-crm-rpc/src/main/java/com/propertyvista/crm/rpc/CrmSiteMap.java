@@ -601,6 +601,7 @@ public class CrmSiteMap implements SiteMap {
     // Communication Started --------------
     @PlaceProperties(navigLabel = "Communication")
     public static class Communication extends AppPlace {
+        @PlaceProperties(navigLabel = "Communication")
         public static class Message extends CrmCrudAppPlace {
             private String forwardText;
 

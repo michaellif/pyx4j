@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -34,6 +34,7 @@ public class MessageAttachmentFolder extends VistaBoxFolder<MessageAttachment> {
     public MessageAttachmentFolder() {
         super(MessageAttachment.class, i18n.tr("Attachment"));
         setOrderable(false);
+        setNoDataLabel(null);
     }
 
     @Override
@@ -54,8 +55,8 @@ public class MessageAttachmentFolder extends VistaBoxFolder<MessageAttachment> {
             formPanel.append(
                     Location.Left,
                     proto().file(),
-                    new CFile(GWT.<MessageAttachmentUploadService> create(MessageAttachmentUploadService.class),
-                            new VistaFileURLBuilder(MessageAttachment.class))).decorate();
+                    new CFile(GWT.<MessageAttachmentUploadService> create(MessageAttachmentUploadService.class), new VistaFileURLBuilder(
+                            MessageAttachment.class))).decorate();
 
             formPanel.append(Location.Left, proto().description()).decorate();
 

@@ -13,18 +13,17 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import java.util.Arrays;
-
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComboBoxBoolean;
-import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -36,18 +35,17 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
+import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.portal.resident.ui.communication.MessagePageView.MessagePagePresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
-import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 
@@ -73,10 +71,9 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
     public IsWidget createContent() {
         PortalFormPanel formPanel = new PortalFormPanel(this);
         inject(proto().thread());
-        formPanel.append(Location.Left, proto().created(), new CLabel<String>()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().allowedReply(), new CLabel<String>()).decorate().componentWidth(250);
-        formPanel.append(Location.Left, proto().status(), new CLabel<String>()).decorate().componentWidth(250);
+        inject(proto().allowedReply());
+        formPanel.append(Location.Left, proto().subject(), new CLabel<String>()).decorate();
+        formPanel.append(Location.Left, proto().status(), new CLabel<String>()).decorate();
         formPanel.append(Location.Left, proto().content(), messagesFolder);
         formPanel.br();
 
@@ -138,6 +135,16 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         Image starImage;
 
+        Image highImportnaceImage;
+
+        Toolbar statusToolBar;
+
+        Widget attachmentCaption;
+
+        Widget attachmentBr;
+
+        MessageAttachmentFolder attachemnts;
+
         private final OpenMessageFolder parent;
 
         public MessageFolderItem(OpenMessageFolder parent) {
@@ -153,10 +160,13 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             PortalFormPanel formPanel = new PortalFormPanel(this);
 
             inject(proto().star());
+            inject(proto().isRead());
             inject(proto().thread());
             inject(proto().allowedReply());
+
+            statusToolBar = new Toolbar();
+            statusToolBar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
             starImage = new Image(PortalImages.INSTANCE.noStar());
-            starImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
             starImage.addClickHandler(new ClickHandler() {
 
                 @Override
@@ -178,20 +188,31 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
             });
 
-            formPanel.append(Location.Left, starImage);
-            formPanel.h1("Details");
-            formPanel.append(Location.Left, proto().date(), new CLabel<String>()).decorate().componentWidth(200);
-            CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
-            cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+            highImportnaceImage = new Image(PortalImages.INSTANCE.messageImportance());
 
-            formPanel.append(Location.Left, proto().highImportance(), cmbBoolean).decorate().componentWidth(200);
-            formPanel.append(Location.Left, proto().sender(), new SenderLabel()).decorate().componentWidth(200);
-            formPanel.append(Location.Left, proto().text()).decorate().componentWidth(200);
-            formPanel.br();
-            formPanel.h1("Attachments");
-            formPanel.append(Location.Left, proto().attachments(), new MessageAttachmentFolder());
+            statusToolBar.addItem(highImportnaceImage);
+            statusToolBar.addItem(starImage);
+            formPanel.append(Location.Dual, statusToolBar);
+
+            formPanel.append(Location.Left, proto().header());
+            formPanel.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
+            formPanel.hr();
+
+            formPanel.append(Location.Left, proto().text());
+
+            attachmentCaption = formPanel.h3("Attachments");
+            formPanel.append(Location.Left, proto().attachments(), attachemnts = new MessageAttachmentFolder());
+            attachmentBr = formPanel.br();
             formPanel.append(Location.Left, createLowerToolbar());
+
+            get(proto().text()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
+            get(proto().header()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
+
             return formPanel;
+        }
+
+        public void setFocusForEditingText() {
+            get(proto().text()).asWidget().getElement().focus();
         }
 
         protected Toolbar createLowerToolbar() {
@@ -224,8 +245,14 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                     } else {
                         String forwardText = buildForwardText();
                         messagesFolder.addItem();
-                        messagesFolder.getItem(messagesFolder.getItemCount() - 1).getValue().text().setValue(forwardText);
-                        messagesFolder.getItem(messagesFolder.getItemCount() - 1).refresh(false);
+                        CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
+                        newItem.getValue().text().setValue(forwardText);
+                        newItem.refresh(false);
+                        newItem.asWidget().getElement().scrollIntoView();
+                        CForm<MessageDTO> form = newItem.getEntityForm();
+                        if (form != null && form instanceof MessageFolderItem) {
+                            ((MessageFolderItem) form).setFocusForEditingText();
+                        }
                     }
                 }
 
@@ -321,9 +348,13 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnForward.setVisible(false);
                 starImage.setVisible(false);
                 btnMarkAsUnread.setVisible(false);
-                get(proto().date()).setVisible(false);
                 get(proto().star()).setVisible(false);
-                get(proto().sender()).setVisible(false);
+                attachmentCaption.setVisible(false);
+                attachmentBr.setVisible(false);
+                attachemnts.setVisible(false);
+                highImportnaceImage.setVisible(false);
+                get(proto().highImportance()).setVisible(true);
+                statusToolBar.asWidget().setVisible(false);
             } else {
                 setViewable(true);
                 setEditable(false);
@@ -331,30 +362,19 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey())
-                        && getValue().allowedReply().getValue(true));
+                        && getValue().allowedReply().getValue(true) && !ThreadStatus.Closed.equals(getValue().status().getValue()));
                 btnForward.setVisible(true);
-                get(proto().date()).setVisible(true);
-                get(proto().sender()).setVisible(true);
                 get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 btnMarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
-                if (get(proto().star()).getValue()) {
-                    starImage.setResource(PortalImages.INSTANCE.fullStar());
-                } else {
-                    starImage.setResource(PortalImages.INSTANCE.noStar());
-                }
-            }
-        }
+                starImage.setResource(get(proto().star()).getValue() ? PortalImages.INSTANCE.fullStar() : (PortalImages.INSTANCE.noStar()));
 
-        public class SenderLabel extends CEntityLabel<CommunicationEndpoint> {
-
-            @Override
-            public String format(CommunicationEndpoint value) {
-                if (value == null) {
-                    return "";
-                } else {
-                    return value.getStringView();
-                }
+                attachmentCaption.setVisible(getValue().attachments().size() > 0);
+                attachmentBr.setVisible(getValue().attachments().size() > 0);
+                attachemnts.setVisible(getValue().attachments().size() > 0);
+                highImportnaceImage.setVisible(getValue().highImportance().getValue(false));
+                get(proto().highImportance()).setVisible(false);
+                statusToolBar.asWidget().setVisible(starImage.isVisible() || highImportnaceImage.isVisible());
             }
         }
     }

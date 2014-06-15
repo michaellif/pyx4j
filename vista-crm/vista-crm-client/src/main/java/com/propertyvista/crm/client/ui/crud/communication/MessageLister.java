@@ -28,7 +28,8 @@ public class MessageLister extends AbstractLister<MessageDTO> {
         super(MessageDTO.class, true);
 
         setColumnDescriptors(createColumnDescriptors());
-        getDataTablePanel().setFilteringEnabled(false);
+        getDataTablePanel().setFilteringEnabled(true);
+        getDataTablePanel().getFilterButton().setTextLabel(i18n.tr("Select Communication Topic"));
         // No filtering work for it
         getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
     }
@@ -36,10 +37,14 @@ public class MessageLister extends AbstractLister<MessageDTO> {
     public static ColumnDescriptor[] createColumnDescriptors() {
         MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
 
-        return new ColumnDescriptor[] { new MemberColumnDescriptor.Builder(proto.isRead()).build(), new MemberColumnDescriptor.Builder(proto.star()).build(),
-                new MemberColumnDescriptor.Builder(proto.highImportance()).build(),
-                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).build(),
-                new MemberColumnDescriptor.Builder(proto.date()).build(), new MemberColumnDescriptor.Builder(proto.subject()).build() };
+        return new ColumnDescriptor[] { //
+        new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).build(),//
+                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).build(),//
+                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).build(),//
+                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(), //
+                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),//
+                new MemberColumnDescriptor.Builder(proto.topic()).searchableOnly().build() };//
     }
 
 }

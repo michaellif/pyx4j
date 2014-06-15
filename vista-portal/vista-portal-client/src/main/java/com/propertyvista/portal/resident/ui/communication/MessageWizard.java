@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CComboBoxBoolean;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,12 +45,9 @@ public class MessageWizard extends CPortalEntityWizard<MessageDTO> {
         FormPanel content = new FormPanel(this);
 
         content.h1(i18n.tr("Details"));
-        content.append(Location.Left, proto().subject()).decorate().componentWidth(250);
-        CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
-        cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-
-        content.append(Location.Left, proto().highImportance(), cmbBoolean).decorate().componentWidth(250);
-        content.append(Location.Left, proto().text()).decorate().componentWidth(250);
+        content.append(Location.Left, proto().subject()).decorate();
+        content.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
+        content.append(Location.Left, proto().text()).decorate();
         content.br();
         content.h1(i18n.tr("Attachments"));
         content.append(Location.Left, proto().attachments(), new MessageAttachmentFolder());

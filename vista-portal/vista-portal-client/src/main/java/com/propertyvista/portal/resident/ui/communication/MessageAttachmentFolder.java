@@ -34,6 +34,7 @@ public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> 
     public MessageAttachmentFolder() {
         super(MessageAttachment.class, i18n.tr("Attachment"));
         setOrderable(false);
+        setNoDataLabel(null);
     }
 
     @Override
@@ -50,12 +51,12 @@ public class MessageAttachmentFolder extends PortalBoxFolder<MessageAttachment> 
         @Override
         protected IsWidget createContent() {
             PortalFormPanel formPanel = new PortalFormPanel(this);
-            formPanel
-                    .append(Location.Left,
-                            proto().file(),
-                            new CFile(GWT.<MessageAttachmentUploadPortalService> create(MessageAttachmentUploadPortalService.class),
-                                    new VistaFileURLBuilder(MessageAttachment.class))).decorate().componentWidth(250);
-            formPanel.append(Location.Left, proto().description()).decorate().componentWidth(200);
+            formPanel.append(
+                    Location.Left,
+                    proto().file(),
+                    new CFile(GWT.<MessageAttachmentUploadPortalService> create(MessageAttachmentUploadPortalService.class), new VistaFileURLBuilder(
+                            MessageAttachment.class))).decorate();
+            formPanel.append(Location.Left, proto().description()).decorate();
             return formPanel;
         }
 

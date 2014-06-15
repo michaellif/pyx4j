@@ -40,6 +40,7 @@ import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
@@ -60,23 +61,22 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
     @Override
     protected Path convertPropertyDTOPathToDBOPath(String path, Message boProto, MessageDTO toProto) {
-
-        if (path.equals(toProto.thread().content().$().recipients().$().isRead().getPath().toString()) || path.equals(toProto.isRead().getPath().toString())) {
+        if (path.equals(toProto.topic().getPath().toString())) {
+            return boProto.thread().topic().getPath();
+        }
+        if (path.equals(toProto.content().$().recipients().$().isRead().getPath().toString()) || path.equals(toProto.isRead().getPath().toString())) {
             return boProto.recipients().$().isRead().getPath();
         }
-        if (path.equals(toProto.thread().content().$().recipients().$().star().getPath().toString()) || path.equals(toProto.star().getPath().toString())) {
+        if (path.equals(toProto.content().$().recipients().$().star().getPath().toString()) || path.equals(toProto.star().getPath().toString())) {
             return boProto.recipients().$().star().getPath();
         }
-        if (path.equals(toProto.thread().content().$().recipients().$().recipient().getPath().toString())) {
+        if (path.equals(toProto.content().$().recipients().$().recipient().getPath().toString())) {
             return boProto.recipients().$().recipient().getPath();
         }
-        if (path.equals(toProto.thread().content().$().date().getPath().toString())) {
+        if (path.equals(toProto.content().$().date().getPath().toString())) {
             return boProto.date().getPath();
         }
-        if (path.equals(toProto.thread().created().getPath().toString())) {
-            return boProto.thread().created().getPath();
-        }
-        if (path.equals(toProto.thread().subject().getPath().toString())) {
+        if (path.equals(toProto.subject().getPath().toString())) {
             return boProto.thread().subject().getPath();
         }
         return super.convertPropertyDTOPathToDBOPath(path, boProto, toProto);
@@ -111,6 +111,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         MessageDTO dto = EntityFactory.create(MessageDTO.class);
         dto.date().setValue(SystemDateManager.getDate());
         dto.isRead().setValue(false);
+        dto.highImportance().setValue(false);
+        dto.allowedReply().setValue(true);
+        dto.status().setValue(ThreadStatus.Unassigned);
         dto.sender().set(generateEndpointDTO(CrmAppContext.getCurrentUser()));
 
         return dto;
@@ -120,7 +123,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     @Override
     protected boolean persist(Message bo, MessageDTO to) {
 
-        if (bo.isPrototype()) {
+        boolean isNew = to.thread() == null || to.thread().isNull() || to.thread().isEmpty();
+        if (isNew) {
             bo.date().setValue(SystemDateManager.getDate());
         }
 
@@ -140,9 +144,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
-        t.created().setValue(SystemDateManager.getDate());
         t.allowedReply().set(to.allowedReply());
-        t.status().set(to.status());
+        t.status().setValue(isNew && !MessageGroupCategory.Custom.equals(to.topic().category()) ? ThreadStatus.New : ThreadStatus.Unassigned);
         t.topic().set(to.topic());
         t.content().add(bo);
         t.owner().set(
@@ -188,8 +191,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     protected void enhanceDbo(Message bo, MessageDTO to, boolean isForList) {
         Persistence.ensureRetrieve(bo.thread(), AttachLevel.Attached);
         Persistence.ensureRetrieve(bo.thread().content(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
         if (!isForList) {
-            Persistence.ensureRetrieve(bo.thread().topic(), AttachLevel.Attached);
             Persistence.ensureRetrieve(bo.thread().owner(), AttachLevel.Attached);
         }
         Persistence.ensureRetrieve(bo.recipients(), AttachLevel.Attached);
@@ -258,7 +261,6 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.subject().set(m.thread().subject());
         messageDTO.allowedReply().set(m.thread().allowedReply());
         messageDTO.status().set(m.thread().status());
-        messageDTO.created().set(m.thread().created());
         Persistence.ensureRetrieve(m.thread().owner(), AttachLevel.Attached);
         if (!isForList) {
             messageDTO.owner().set(generateEndpointDTO(m.thread().owner()));
@@ -322,12 +324,16 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, Employee employee) {
         CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
 
+        if (ThreadStatus.New.equals(thread.status().getValue())) {
+            thread.status().setValue(ThreadStatus.Open);
+        }
         thread.owner().set(employee.user());
 
         Persistence.service().persist(thread);
         Persistence.service().commit();
         Persistence.ensureRetrieve(employee.user(), AttachLevel.Attached);
         message.owner().set(generateEndpointDTO(employee.user()));
+        message.status().set(thread.status());
         callback.onSuccess(message);
     }
 }

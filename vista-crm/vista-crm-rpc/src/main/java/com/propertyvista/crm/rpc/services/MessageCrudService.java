@@ -32,7 +32,7 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
     void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, Employee employee);
 
     @Transient
-    interface MessageInitializationData extends InitializationData {
+    public interface MessageInitializationData extends InitializationData {
 
         Building building();
 

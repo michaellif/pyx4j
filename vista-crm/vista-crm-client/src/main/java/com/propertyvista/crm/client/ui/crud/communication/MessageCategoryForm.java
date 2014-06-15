@@ -68,6 +68,5 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
         if (se == null) {
             return;
         }
-        //setEditable(!se.isPredefined().getValue(false));
     }
 }

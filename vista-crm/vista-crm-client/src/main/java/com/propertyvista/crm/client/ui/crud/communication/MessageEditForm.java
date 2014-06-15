@@ -13,11 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import java.util.Arrays;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,26 +43,25 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().topic()).decorate();
-        CComboBoxBoolean cmbBoolean = new CComboBoxBoolean();
-        cmbBoolean.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        formPanel.append(Location.Right, proto().allowedReply(), cmbBoolean).decorate();
         formPanel.append(Location.Dual, proto().subject()).decorate();
-
-        formPanel.h1("To");
-        formPanel.append(Location.Left, proto().to(), receiverSelector);
-
-        formPanel.h1("Message");
-        CComboBoxBoolean cmbBoolean2 = new CComboBoxBoolean();
-        cmbBoolean2.setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
-        formPanel.append(Location.Left, proto().highImportance(), cmbBoolean2).decorate();
-
-        formPanel.append(Location.Right, proto().status()).decorate();
-
+        formPanel.append(Location.Dual, proto().topic()).decorate();
+        formPanel.append(Location.Left, proto().allowedReply()).decorate();
+        formPanel.append(Location.Right, proto().highImportance()).decorate();
+        formPanel.h3("To");
+        formPanel.append(Location.Dual, proto().to(), receiverSelector);
+        formPanel.br();
         formPanel.append(Location.Dual, proto().text()).decorate();
         formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
         formPanel.br();
 
         return formPanel;
+    }
+
+    @Override
+    public boolean isValid() {
+        if (getValue() != null && getValue().to() != null && getValue().to().size() < 1) {
+            return false;
+        }
+        return super.isValid();
     }
 }

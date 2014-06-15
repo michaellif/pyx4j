@@ -19,7 +19,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
@@ -149,7 +148,6 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
             thread.owner().set(owner);
             thread.allowedReply().setValue(true);
             thread.topic().set(mg);
-            thread.created().setValue(SystemDateManager.getDate());
             PersistenceServicesFactory.getPersistenceService().persist(thread);
         } else
             thread = parent;

@@ -56,7 +56,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
         setAddable(true);
         setRemovable(true);
         setOrderable(true);
-
+        setNoDataLabel(null);
         this.parent = parent;
     }
 

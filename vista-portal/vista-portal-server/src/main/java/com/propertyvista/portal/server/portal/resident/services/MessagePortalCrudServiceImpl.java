@@ -32,12 +32,17 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
+import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -68,9 +73,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         if (path.equals(toProto.thread().content().$().date().getPath().toString())) {
             return boProto.date().getPath();
         }
-        if (path.equals(toProto.thread().created().getPath().toString())) {
-            return boProto.thread().created().getPath();
-        }
         if (path.equals(toProto.thread().subject().getPath().toString())) {
             return boProto.thread().subject().getPath();
         }
@@ -95,7 +97,14 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
     protected MessageDTO init(InitializationData initializationData) {
         MessageDTO dto = super.init(initializationData);
         dto.isRead().setValue(false);
+        dto.highImportance().setValue(false);
+        dto.allowedReply().setValue(true);
         dto.sender().set(ResidentPortalContext.getCurrentUser());
+
+        if (initializationData instanceof MessageInitializationData) {
+            dto.text().set(((MessageInitializationData) initializationData).initalizedText());
+        }
+
         return dto;
     }
 
@@ -119,7 +128,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
-        t.created().setValue(SystemDateManager.getDate());
         t.allowedReply().setValue(true);
         t.status().setValue(ThreadStatus.New);
         t.topic().set(ServerSideFactory.create(CommunicationMessageFacade.class).getMessageCategoryFromCache(MessageGroupCategory.TenantOriginated));
@@ -157,6 +165,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
+                if (!ResidentPortalContext.getCurrentUser().equals(m.sender()) && !isRecipientOf(m)) {
+                    continue;
+                }
                 MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class));
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
@@ -204,7 +215,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.subject().set(m.thread().subject());
         messageDTO.allowedReply().set(m.thread().allowedReply());
         messageDTO.status().set(m.thread().status());
-        messageDTO.created().set(m.thread().created());
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
@@ -215,8 +225,30 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.sender().set(m.sender());
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
+        messageDTO.header().sender().setValue(generateEndpointName(m.sender()));
+        messageDTO.header().date().set(m.date());
 
         return messageDTO;
+    }
+
+    private String generateEndpointName(CommunicationEndpoint entity) {
+        if (entity == null) {
+            return null;
+        }
+        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
+        rec.endpoint().set(entity);
+
+        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
+            SystemEndpoint e = entity.cast();
+            return e.name().getValue().name();
+        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
+            CrmUser e = entity.cast();
+            return e.name().getValue();
+        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
+            CustomerUser e = entity.cast();
+            return e.name().getValue();
+        }
+        return null;
     }
 
     @Override
@@ -227,7 +259,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
             dh.isRead().setValue(false);
             dh.star().setValue(false);
-            dh.recipient().set(thread.getOwner());
+            dh.recipient().set(thread.owner());
 
             Message m = EntityFactory.create(Message.class);
             m.thread().set(thread);
@@ -251,4 +283,15 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         Persistence.service().commit();
         callback.onSuccess(message);
     }
+
+    private boolean isRecipientOf(Message m) {
+        for (DeliveryHandle dh : m.recipients()) {
+            if (ResidentPortalContext.getCurrentUser().equals(dh.recipient())) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
 }

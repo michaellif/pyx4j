@@ -76,6 +76,9 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         threadStatusActions = new HashMap<ThreadStatus, MenuItem>();
 
         for (final ThreadStatus ts : ThreadStatus.values()) {
+            if (ts.equals(ThreadStatus.New) || ts.equals(ThreadStatus.Open) || ts.equals(ThreadStatus.Unassigned)) {
+                continue;
+            }
             threadStatusActions.put(ts, new MenuItem(i18n.tr("Mark as ") + ts.toString(), new Command() {
                 @Override
                 public void execute() {
@@ -187,7 +190,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         private CForm<MessageDTO> content;
 
         public UpdateThreadStatusBox(final MessageForm form) {
-            super(i18n.tr("Rate"));
+            super(i18n.tr("Update Status"));
             setBody(createBody(form));
         }
 
@@ -199,8 +202,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
 
-                    main.append(Location.Dual, inject(proto().allowedReply())).decorate().componentWidth(30);
-                    main.append(Location.Dual, inject(proto().text())).decorate().componentWidth(200);
+                    main.append(Location.Dual, inject(proto().allowedReply())).decorate();
+                    main.append(Location.Dual, inject(proto().text())).decorate();
                     main.h1("To");
                     main.append(Location.Left, proto().to(), new CommunicationEndpointFolder(form));
                     return main;

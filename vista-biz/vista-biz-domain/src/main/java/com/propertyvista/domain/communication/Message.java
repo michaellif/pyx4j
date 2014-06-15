@@ -17,7 +17,6 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -58,8 +57,6 @@ public interface Message extends IEntity {
     @ReadOnly
     IPrimitive<Date> date();
 
-    @NotNull
-    @Editor(type = EditorType.combo)
     IPrimitive<Boolean> highImportance();
 
     @Owned

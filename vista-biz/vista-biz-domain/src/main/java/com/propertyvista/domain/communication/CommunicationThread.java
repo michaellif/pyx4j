@@ -13,11 +13,10 @@
  */
 package com.propertyvista.domain.communication;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -29,7 +28,10 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-public interface CommunicationThread extends IEntity {
+import com.propertyvista.domain.note.HasNotesAndAttachments;
+
+@DiscriminatorValue("CommunicationThread")
+public interface CommunicationThread extends IEntity, HasNotesAndAttachments {
 
     @I18n(context = "CommunicationThread")
     @XmlType(name = "ThreadStatus")
@@ -47,7 +49,6 @@ public interface CommunicationThread extends IEntity {
     @ReadOnly
     IPrimitive<String> subject();
 
-    @NotNull
     @ReadOnly
     IPrimitive<Boolean> allowedReply();
 
@@ -64,10 +65,6 @@ public interface CommunicationThread extends IEntity {
     @Detached
     @OrderBy(PrimaryKey.class)
     IList<Message> content();
-
-    @NotNull
-    @ReadOnly
-    IPrimitive<Date> created();
 
     @Detached
     @NotNull

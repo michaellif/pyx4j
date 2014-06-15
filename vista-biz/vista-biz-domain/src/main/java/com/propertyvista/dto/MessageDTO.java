@@ -13,8 +13,6 @@
  */
 package com.propertyvista.dto;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -44,7 +42,6 @@ public interface MessageDTO extends Message {
     @Detached
     CommunicationEndpointDTO owner();
 
-    @NotNull
     @ReadOnly
     IPrimitive<Boolean> allowedReply();
 
@@ -59,10 +56,6 @@ public interface MessageDTO extends Message {
     @Detached
     @MemberColumn(notNull = true)
     MessageCategory topic();
-
-    @NotNull
-    @ReadOnly
-    IPrimitive<Date> created();
 
     @NotNull
     @ReadOnly
