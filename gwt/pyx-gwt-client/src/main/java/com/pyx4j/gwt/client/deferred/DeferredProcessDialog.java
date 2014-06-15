@@ -94,7 +94,7 @@ public class DeferredProcessDialog extends MessageDialog implements CloseOption,
     @Override
     public void onDeferredSuccess(DeferredProcessProgressResponse result) {
         onDeferredCompleate();
-        setStatusMessage(result.getMessage(), Type.Warning);
+        setStatusMessage(result.getMessage(), Type.Info);
     }
 
     @Override

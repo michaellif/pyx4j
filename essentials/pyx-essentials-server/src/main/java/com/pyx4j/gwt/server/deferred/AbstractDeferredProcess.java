@@ -21,6 +21,7 @@
 package com.pyx4j.gwt.server.deferred;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
@@ -33,6 +34,12 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
         public final AtomicInteger progress = new AtomicInteger();
 
         public final AtomicInteger progressMaximum = new AtomicInteger();
+
+        public final AtomicReference<String> progressStatusMessage = new AtomicReference<>();
+
+        public final void setStatusMessage(String message) {
+            progressStatusMessage.set(message);
+        }
 
     }
 
@@ -58,6 +65,8 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
             r.setCompleted();
         } else if (canceled) {
             r.setCanceled();
+        } else {
+            r.setMessage(progress.progressStatusMessage.get());
         }
         return r;
 
