@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-05-04
  * @author Vlad
  * @version $Id$
@@ -38,11 +38,11 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
 
     private static final I18n i18n = I18n.get(AbstractEditor.class);
 
-    protected final Button btnApply;
+    private final Button btnApply;
 
-    protected final Button btnSave;
+    private final Button btnSave;
 
-    protected final Button btnCancel;
+    private final Button btnCancel;
 
     protected EditMode mode;
 
@@ -155,9 +155,9 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     protected void enableButtons(boolean enable) {
-//        
+//
 // TODO Currently buttons are enabled always - more precise form dirty-state mechanics should be implemented!..
-//        
+//
 //        btnApply.setEnabled(enable);
 //        btnSave.setEnabled(enable);
     }
@@ -193,5 +193,32 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
 
     protected void showValidationDialog() {
         MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
+    }
+
+    protected void setBtnCancelEnabled(boolean enabled) {
+        btnCancel.setEnabled(enabled);
+        btnCancel.setVisible(enabled);
+    }
+
+    protected void setBtnApplyEnabled(boolean enabled) {
+        btnApply.setEnabled(enabled);
+        btnApply.setVisible(enabled);
+    }
+
+    protected void setBtnSaveEnabled(boolean enabled) {
+        btnSave.setEnabled(enabled);
+        btnSave.setVisible(enabled);
+    }
+
+    protected void setBtnCancelCaption(String caption) {
+        btnCancel.setCaption(caption);
+    }
+
+    protected void setBtnApplyCaption(String caption) {
+        btnApply.setCaption(caption);
+    }
+
+    protected void setBtnSaveCaption(String caption) {
+        btnSave.setCaption(caption);
     }
 }
