@@ -29,12 +29,10 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
 import com.pyx4j.gwt.commons.layout.LayoutType;
@@ -365,6 +363,10 @@ public class FrontOfficeLayoutPanel extends ResponsiveLayoutPanel {
 
     public int getPageWidth() {
         return pagePanel.getOffsetWidth();
+    }
+
+    public int getPageHeight() {
+        return pagePanel.getOffsetHeight();
     }
 
     public void scrollToTop() {
