@@ -326,7 +326,7 @@ public class ClientContext {
             Cookies.removeCookie(serverSession.getSessionCookieName());
         }
         serverSession = null;
-        ClientSecurityController.instance().authorize(null);
+        ClientSecurityController.instance().authorize(null, null);
         ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, null));
     }
 
