@@ -13,13 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageEditorViewImpl extends CrmEditorViewImplBase<MessageDTO> implements MessageEditorView {
+    private static final I18n i18n = I18n.get(MessageEditorViewImpl.class);
 
     public MessageEditorViewImpl() {
         setForm(new MessageEditForm(this));
+        setBtnSaveCaption(i18n.tr("Send"));
+        setBtnApplyEnabled(false);
 
     }
 

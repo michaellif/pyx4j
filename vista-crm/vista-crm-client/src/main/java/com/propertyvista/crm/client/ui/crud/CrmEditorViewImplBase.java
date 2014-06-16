@@ -14,17 +14,13 @@
 package com.propertyvista.crm.client.ui.crud;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.form.AbstractEditor;
 
 public class CrmEditorViewImplBase<E extends IEntity> extends AbstractEditor<E> {
-    private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
 
     public CrmEditorViewImplBase() {
         super();
-        setBtnSaveCaption(i18n.tr("Send"));
-        setBtnApplyEnabled(false);
     }
 
     @Override
