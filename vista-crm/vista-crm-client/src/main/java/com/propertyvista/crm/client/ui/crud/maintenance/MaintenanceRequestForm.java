@@ -212,9 +212,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         bind(mrCategory = new MaintenanceRequestCategoryChoice(), proto().category());
 
         panel.h1(i18n.tr("Issue Details"));
-        panel.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().summary())).decorate().componentWidth(200);
-        panel.append(Location.Left, inject(proto().description())).decorate().componentWidth(200);
+        panel.append(Location.Left, inject(proto().priority(), prioritySelector)).decorate();
+        panel.append(Location.Dual, inject(proto().summary())).decorate();
+        panel.append(Location.Dual, inject(proto().description())).decorate();
 
         // --------------------------------------------------------------------------------------------------------------------
         CImageSlider<MaintenanceRequestPicture> imageSlider = new CImageSlider<MaintenanceRequestPicture>(MaintenanceRequestPicture.class,
@@ -235,14 +235,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         };
         imageSlider.setImageSize(240, 180);
         imageSlider.setOrganizerWidth(550);
-        panel.append(Location.Right, inject(proto().pictures(), imageSlider)).decorate().componentWidth(200);
+        panel.append(Location.Dual, inject(proto().pictures(), imageSlider)).decorate();
 
         // --------------------------------------------------------------------------------------------------------------------
         unitAccessPanel = new FormPanel(this);
 
         unitAccessPanel.h1(i18n.tr("Unit Access"));
 
-        unitAccessPanel.append(Location.Dual, inject(proto().permissionToEnter())).decorate().componentWidth(200);
+        unitAccessPanel.append(Location.Dual, inject(proto().permissionToEnter())).decorate();
         unitAccessPanel.append(Location.Dual, accessPanel = new FormPanel(this));
 
         get(proto().permissionToEnter()).setNote(i18n.tr("Indicate whether Permission to Enter has been granted by Tenant."));
@@ -254,7 +254,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         });
 
         // --------------------------------------------------------------------------------------------------------------------
-        accessPanel.append(Location.Dual, inject(proto().petInstructions())).decorate().componentWidth(500).customLabel(i18n.tr("Entry Instructions"));
+        accessPanel.append(Location.Dual, inject(proto().petInstructions())).decorate().customLabel(i18n.tr("Entry Instructions"));
         get(proto().petInstructions()).setNote(i18n.tr("Entry instructions, including Pet Warnings, etc"));
 
         accessPanel.append(Location.Left, inject(proto().preferredDate1())).decorate().componentWidth(100);
@@ -290,7 +290,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         resolvedPanel = new FormPanel(this);
 
         resolvedPanel.append(Location.Left, inject(proto().resolvedDate(), new CDateLabel())).decorate().componentWidth(100);
-        resolvedPanel.append(Location.Left, inject(proto().resolution(), new CLabel<String>())).decorate().componentWidth(400);
+        resolvedPanel.append(Location.Dual, inject(proto().resolution(), new CLabel<String>())).decorate();
 
         detailHolder.add(scheduledPanel);
         detailHolder.add(resolvedPanel);
@@ -436,7 +436,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
         Collections.reverse(list);
         for (MaintenanceRequestCategoryChoice c : list) {
-            categoryPanel.append(Location.Left, c).decorate().componentWidth(200);
+            categoryPanel.append(Location.Left, c).decorate();
         }
     }
 
@@ -641,9 +641,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                                     protected IsWidget createContent() {
                                         FormPanel main = new FormPanel(this);
 
-                                        main.append(Location.Left, inject(proto().workDescription(), new CLabel<String>())).decorate().componentWidth(400);
                                         main.append(Location.Left, inject(proto().scheduledDate(), new CDateLabel())).decorate().componentWidth(100);
-                                        main.append(Location.Left, inject(proto().progressNote())).decorate().componentWidth(200);
+                                        main.append(Location.Dual, inject(proto().workDescription(), new CLabel<String>())).decorate();
+                                        main.append(Location.Dual, inject(proto().progressNote())).decorate();
 
                                         return main;
                                     }
@@ -686,11 +686,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             protected IsWidget createContent() {
                 FormPanel content = new FormPanel(this);
                 content.h1(i18n.tr("Work Order"));
-                content.append(Location.Dual, inject(proto().scheduledDate())).decorate().componentWidth(100);
-                content.append(Location.Dual, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
-                content.append(Location.Dual, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
-                content.append(Location.Dual, inject(proto().workDescription())).decorate().componentWidth(100);
-                content.append(Location.Dual, inject(proto().progressNote())).decorate().componentWidth(200);
+                content.append(Location.Left, inject(proto().scheduledDate())).decorate().componentWidth(100);
+                content.append(Location.Left, inject(proto().scheduledTimeFrom())).decorate().componentWidth(100);
+                content.append(Location.Left, inject(proto().scheduledTimeTo())).decorate().componentWidth(100);
+                content.append(Location.Left, inject(proto().workDescription())).decorate().componentWidth(100);
+                content.append(Location.Dual, inject(proto().progressNote())).decorate();
 
                 content.append(Location.Dual, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
 
@@ -719,8 +719,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 FormPanel content = new FormPanel(this);
 
                 content.h1(i18n.tr("Notice Of Entry"));
-                content.append(Location.Dual, inject(proto().messageDate())).decorate().componentWidth(350);
-                content.append(Location.Dual, inject(proto().messageId())).decorate().componentWidth(350);
+                content.append(Location.Dual, inject(proto().messageDate())).decorate();
+                content.append(Location.Dual, inject(proto().messageId())).decorate();
                 content.append(Location.Dual, inject(proto().text()));
 
                 return content;
