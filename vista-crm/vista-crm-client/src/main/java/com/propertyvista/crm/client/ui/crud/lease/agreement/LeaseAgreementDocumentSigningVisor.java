@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.agreement;
 import java.util.List;
 
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
@@ -25,10 +26,15 @@ import com.propertyvista.dto.LeaseAgreementDocumentsDTO;
 
 public class LeaseAgreementDocumentSigningVisor extends AbstractVisorViewer<LeaseAgreementDocumentsDTO> {
 
+    private static final I18n i18n = I18n.get(LeaseAgreementDocumentSigningVisor.class);
+
     private LeaseAgreementDocumentSigningForm form;
 
     public LeaseAgreementDocumentSigningVisor(IVisorEditor.Controller controller) {
         super(controller);
+
+        setCaption(i18n.tr("Signing Progress / Upload"));
+
         setForm(form = new LeaseAgreementDocumentSigningForm() {
             @Override
             public void onSignDigitally() {
