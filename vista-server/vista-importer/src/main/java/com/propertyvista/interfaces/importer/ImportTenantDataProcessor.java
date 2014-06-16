@@ -27,6 +27,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.converter.TenantConverter;
 import com.propertyvista.interfaces.importer.model.AutoPayAgreementIO;
+import com.propertyvista.interfaces.importer.model.InsuranceCertificateIO;
 import com.propertyvista.interfaces.importer.model.TenantIO;
 
 public class ImportTenantDataProcessor {
@@ -117,5 +118,8 @@ public class ImportTenantDataProcessor {
             new ImportAutoPayAgreementsDataProcessor().importModel(context, lease, leaseTermTenant, autoPayIO);
         }
 
+        for (InsuranceCertificateIO certificateIO : tenantIO.insurance()) {
+            new ImportInsuranceCertificateDataProcessor().importModel(context, lease, leaseTermTenant.leaseParticipant(), certificateIO);
+        }
     }
 }

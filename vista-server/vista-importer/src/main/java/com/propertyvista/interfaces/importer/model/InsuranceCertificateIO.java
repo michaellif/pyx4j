@@ -7,13 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2014
+ * Created on Jun 16, 2014
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.interfaces.importer.model;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
@@ -21,25 +25,27 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface TenantIO extends IEntity {
+public interface InsuranceCertificateIO extends IEntity {
 
-    IPrimitive<String> email();
+    IPrimitive<Boolean> propertyVistaIntegrated();
 
-    IPrimitive<String> participantId();
+    IPrimitive<Boolean> managedByTenant();
 
-    IPrimitive<String> vistaPasswordHash();
+    @NotNull
+    IPrimitive<String> insuranceProvider();
 
-    IPrimitive<String> firstName();
+    @NotNull
+    IPrimitive<String> insuranceCertificateNumber();
 
-    IPrimitive<String> middleName();
+    @NotNull
+    IPrimitive<BigDecimal> liabilityCoverage();
 
-    IPrimitive<String> lastName();
+    @NotNull
+    IPrimitive<LogicalDate> inceptionDate();
 
-    IPrimitive<String> maidenName();
+    @NotNull
+    IPrimitive<LogicalDate> expiryDate();
 
-    IPrimitive<String> nameSuffix();
+    IList<InsuranceCertificateScanIO> certificateScans();
 
-    IList<AutoPayAgreementIO> autoPayAgreements();
-
-    IList<InsuranceCertificateIO> insurance();
 }

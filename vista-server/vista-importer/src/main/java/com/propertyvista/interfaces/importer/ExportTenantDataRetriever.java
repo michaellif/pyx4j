@@ -36,6 +36,8 @@ public class ExportTenantDataRetriever {
 
         tenantIO.autoPayAgreements().addAll(new ExportAutoPayAgreementDataRetriever().getModel(leaseTermTenant));
 
+        tenantIO.insurance().addAll(new ExportInsuranceDataRetriever().getModel(leaseTermTenant.leaseParticipant()));
+
         return tenantIO;
     }
 

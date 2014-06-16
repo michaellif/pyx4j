@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2014
+ * Created on Jun 16, 2014
  * @author vlads
  * @version $Id$
  */
@@ -15,31 +15,15 @@ package com.propertyvista.interfaces.importer.model;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface TenantIO extends IEntity {
+public interface InsuranceCertificateScanIO extends IEntity {
 
-    IPrimitive<String> email();
+    IPrimitive<String> description();
 
-    IPrimitive<String> participantId();
+    IPrimitive<String> uri();
 
-    IPrimitive<String> vistaPasswordHash();
-
-    IPrimitive<String> firstName();
-
-    IPrimitive<String> middleName();
-
-    IPrimitive<String> lastName();
-
-    IPrimitive<String> maidenName();
-
-    IPrimitive<String> nameSuffix();
-
-    IList<AutoPayAgreementIO> autoPayAgreements();
-
-    IList<InsuranceCertificateIO> insurance();
 }

@@ -32,6 +32,8 @@ import com.propertyvista.interfaces.importer.model.ContactIO;
 import com.propertyvista.interfaces.importer.model.FloorplanAmenityIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.model.InsuranceCertificateIO;
+import com.propertyvista.interfaces.importer.model.InsuranceCertificateScanIO;
 import com.propertyvista.interfaces.importer.model.LeaseIO;
 import com.propertyvista.interfaces.importer.model.MarketingIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
@@ -70,6 +72,8 @@ public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(PaymentMethodIO.class);
         bind(AutoPayAgreementIO.class);
         bind(AutoPayAgreementCoveredItemIO.class);
+        bind(InsuranceCertificateIO.class);
+        bind(InsuranceCertificateScanIO.class);
 
         // Taken from domain directly
         bind(Elevator.class);
