@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -156,15 +156,16 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                     TenantPortalAccessInformationDTO.class) {
                 @Override
                 protected IsWidget createContent() {
-                    BasicFlexFormPanel panel = new BasicFlexFormPanel();
-                    int row = -1;
-                    panel.setWidget(++row, 0, inject(proto().address(), new FieldDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().postalCode(), new FieldDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().unit(), new FieldDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().firstName(), new FieldDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().middleName(), new FieldDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().lastName(), new FieldDecoratorBuilder().build()));
-                    panel.setWidget(++row, 0, inject(proto().portalRegistrationToken(), new FieldDecoratorBuilder().build()));
+                    FormPanel panel = new FormPanel(this);
+
+                    panel.append(Location.Left, proto().address()).decorate();
+                    panel.append(Location.Left, proto().postalCode()).decorate();
+                    panel.append(Location.Left, proto().unit()).decorate();
+                    panel.append(Location.Left, proto().firstName()).decorate();
+                    panel.append(Location.Left, proto().middleName()).decorate();
+                    panel.append(Location.Left, proto().lastName()).decorate();
+                    panel.append(Location.Left, proto().portalRegistrationToken()).decorate();
+
                     return panel;
                 }
             };
