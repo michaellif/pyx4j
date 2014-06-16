@@ -59,12 +59,12 @@ BEGIN
                 street_num := regexp_replace(regexp_replace(address1,'^[\d]+\s?-\s?',''),'\s?[A-Za-z\s\.]+$','');
                 street_name := INITCAP(TRIM(regexp_replace(address1,'^[\d]+\s?-\s?[\d]+\s?','')));
             -- '178  Jarvis street Unit 1001'
-            ELSIF (address1 ~* '^[\d]+\s[A-Za-z\s\.]+(\s)?(,\s)?(AP(AR)?T(MENT)?|S(UI)?TE|UNIT)\.?\s?(#|NO)?\s?[\d]+\s?[A-Za-z]?$')
+            ELSIF (address1 ~* '^[\d]+\s[A-Za-z\s\.]+(\s)?(,\s)?(AP(AR)?T(MENT)?|S(UI)?TE|UNIT)\.?\s?(#|NO)?\s?(A|B|C|D|PH|NRP)?[\d]+\s?[A-Za-z]?$')
             THEN
-                suite_num := UNNEST(regexp_matches(address1,'[\d]+\s?[A-Za-z]?$'));
+                suite_num := UNNEST(regexp_matches(address1,'(A|B|C|D|PH|NRP)?[\d]+\s?[A-Za-z]?$'));
                 street_num := UNNEST(regexp_matches(address1,'^[\d]+'));
                 street_name := INITCAP(TRIM(regexp_replace(regexp_replace(address1,'^[\d]+\s?',''),
-                        '(,\s)?(AP(AR)?T(MENT)?|S(UI)?TE|UNIT)\.?\s?(#|NO)?\s?[\d]+\s?[A-Za-z]?$','','i')));
+                        '(,\s)?(AP(AR)?T(MENT)?|S(UI)?TE|UNIT)\.?\s?(#|NO)?\s?(A|B|C|D|PH|NRP)?[\d]+\s?[A-Za-z]?$','','i')));
             -- '430 Regional Road 24' or such
             ELSIF (address1 ~* '^[\d]+\s(RR|Regional Road)(\s+|-|#)\s?[\d]+$')
             THEN
