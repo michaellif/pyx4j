@@ -59,6 +59,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
@@ -87,7 +88,6 @@ import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.DependentDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.GuarantorDTO;
@@ -304,7 +304,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     }
 
     private void fillApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
-        to.applicant().set(EntityFactory.create(ApplicantDTO.class));
+//        to.applicantData().set(EntityFactory.create(ApplicantDTO.class));
 
         switch (bo.role().getValue()) {
         case Applicant:
@@ -320,18 +320,20 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
             throw new IllegalArgumentException();
         }
 
+        to.<Name> set(to.applicant(), to.applicantData().person().name());
+
         // TO optimizations
-        to.applicant().picture().customer().setAttachLevel(AttachLevel.IdOnly);
-        for (IdentificationDocumentFolder i : to.applicant().documents()) {
+        to.applicantData().picture().customer().setAttachLevel(AttachLevel.IdOnly);
+        for (IdentificationDocumentFolder i : to.applicantData().documents()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
-        for (EmergencyContact i : to.applicant().emergencyContacts()) {
+        for (EmergencyContact i : to.applicantData().emergencyContacts()) {
             i.customer().setAttachLevel(AttachLevel.IdOnly);
         }
-        for (CustomerScreeningIncome i : to.applicant().incomes()) {
+        for (CustomerScreeningIncome i : to.applicantData().incomes()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
-        for (CustomerScreeningPersonalAsset i : to.applicant().assets()) {
+        for (CustomerScreeningPersonalAsset i : to.applicantData().assets()) {
             i.owner().setAttachLevel(AttachLevel.IdOnly);
         }
     }
@@ -342,9 +344,9 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.service().retrieve(customer.picture());
         Persistence.service().retrieve(customer.emergencyContacts());
         //
-        to.applicant().set(to.applicant().person(), customer.person());
-        to.applicant().set(to.applicant().picture(), customer.picture());
-        to.applicant().set(to.applicant().emergencyContacts(), customer.emergencyContacts());
+        to.applicantData().set(to.applicantData().person(), customer.person());
+        to.applicantData().set(to.applicantData().picture(), customer.picture());
+        to.applicantData().set(to.applicantData().emergencyContacts(), customer.emergencyContacts());
 
         // screening:
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer, to.policyNode());
@@ -353,17 +355,17 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(screening.version().documents(), AttachLevel.Attached);
         ServerSideFactory.create(ScreeningFacade.class).registerUploadedDocuments(screening);
         //
-        to.applicant().set(to.applicant().currentAddress(), screening.version().currentAddress());
-        to.applicant().set(to.applicant().previousAddress(), screening.version().previousAddress());
+        to.applicantData().set(to.applicantData().currentAddress(), screening.version().currentAddress());
+        to.applicantData().set(to.applicantData().previousAddress(), screening.version().previousAddress());
 
-        to.applicant().set(to.applicant().documents(), screening.version().documents());
-        to.applicant().set(to.applicant().documentsPolicy(),
+        to.applicantData().set(to.applicantData().documents(), screening.version().documents());
+        to.applicantData().set(to.applicantData().documentsPolicy(),
                 ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ApplicationDocumentationPolicy.class));
 
-        to.applicant().set(to.applicant().legalQuestions(), screening.version().legalQuestions());
+        to.applicantData().set(to.applicantData().legalQuestions(), screening.version().legalQuestions());
 
-        to.applicant().set(to.applicant().incomes(), screening.version().incomes());
-        to.applicant().set(to.applicant().assets(), screening.version().assets());
+        to.applicantData().set(to.applicantData().incomes(), screening.version().incomes());
+        to.applicantData().set(to.applicantData().assets(), screening.version().assets());
     }
 
     private void saveApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
@@ -402,22 +404,22 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.service().retrieve(customer.picture());
         Persistence.service().retrieve(customer.emergencyContacts());
         //
-        customer.set(customer.person(), to.applicant().person());
-        customer.set(customer.picture(), to.applicant().picture());
-        customer.emergencyContacts().set(to.applicant().emergencyContacts());
+        customer.set(customer.person(), to.applicantData().person());
+        customer.set(customer.picture(), to.applicantData().picture());
+        customer.emergencyContacts().set(to.applicantData().emergencyContacts());
         //DataDump.dump("customer", customer);
 
         // screening:
         CustomerScreening screening = ServerSideFactory.create(ScreeningFacade.class).retrivePersonScreeningDraftForEdit(customer, to.policyNode());
         //DataDump.dump("dbScreening", screening);
         //
-        screening.version().set(screening.version().currentAddress(), to.applicant().currentAddress());
-        screening.version().set(screening.version().previousAddress(), to.applicant().previousAddress());
-        screening.version().set(screening.version().legalQuestions(), to.applicant().legalQuestions());
+        screening.version().set(screening.version().currentAddress(), to.applicantData().currentAddress());
+        screening.version().set(screening.version().previousAddress(), to.applicantData().previousAddress());
+        screening.version().set(screening.version().legalQuestions(), to.applicantData().legalQuestions());
 
-        screening.version().documents().set(to.applicant().documents());
-        screening.version().incomes().set(to.applicant().incomes());
-        screening.version().assets().set(to.applicant().assets());
+        screening.version().documents().set(to.applicantData().documents());
+        screening.version().incomes().set(to.applicantData().incomes());
+        screening.version().assets().set(to.applicantData().assets());
 
         //DataDump.dump("saveScreening", screening);
 

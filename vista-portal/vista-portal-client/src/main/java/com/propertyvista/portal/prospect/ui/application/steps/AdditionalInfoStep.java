@@ -56,17 +56,17 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
         formPanel.h3(i18n.tr("Current Address"));
-        formPanel.append(Location.Left, proto().applicant().currentAddress(), new PriorAddressEditor());
+        formPanel.append(Location.Left, proto().applicantData().currentAddress(), new PriorAddressEditor());
 
         previousAddress = new PortalFormPanel(getWizard()) {
             @Override
             public void setVisible(boolean visible) {
-                get(proto().applicant().previousAddress()).setVisible(visible);
+                get(proto().applicantData().previousAddress()).setVisible(visible);
                 super.setVisible(visible);
             }
         };
         previousAddress.h3(i18n.tr("Previous Address"));
-        previousAddress.append(Location.Left, proto().applicant().previousAddress(), new PriorAddressEditor());
+        previousAddress.append(Location.Left, proto().applicantData().previousAddress(), new PriorAddressEditor());
         formPanel.append(Location.Left, previousAddress);
 
         formPanel.h3(i18n.tr("General Questions"));
@@ -74,28 +74,28 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         PortalFormPanel questionsPanel = new PortalFormPanel(getWizard());
         questionsPanel.addStyleName(AdditionalInfoStepTheme.StyleName.GeneralQuestionsSection.name());
 
-        questionsPanel.append(Location.Left, inject(proto().applicant().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().suedForRent(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicant().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().suedForDamages(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicant().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().everEvicted(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         questionsPanel
-                .append(Location.Left, inject(proto().applicant().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
+                .append(Location.Left, inject(proto().applicantData().legalQuestions().defaultedOnLease(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         questionsPanel.append(Location.Left,
-                inject(proto().applicant().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
+                inject(proto().applicantData().legalQuestions().convictedOfFelony(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicant().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().legalTroubles(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
-        questionsPanel.append(Location.Left, inject(proto().applicant().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
+        questionsPanel.append(Location.Left, inject(proto().applicantData().legalQuestions().filedBankruptcy(), new LegalQuestionWidgetDecoratorBuilder().build()));
 
         formPanel.append(Location.Left, questionsPanel);
 
         // TODO currently removed, then rethink: 
         if (false && !SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             formPanel.h3(i18n.tr("How Did You Hear About Us?"));
-            formPanel.append(Location.Left, inject(proto().applicant().refSource(), new FieldDecoratorBuilder(180).build()));
+            formPanel.append(Location.Left, inject(proto().applicantData().refSource(), new FieldDecoratorBuilder(180).build()));
         }
 
         return formPanel;
@@ -113,7 +113,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         super.addValidations();
 
         // ------------------------------------------------------------------------------------------------
-        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().applicant().currentAddress()));
+        CForm<PriorAddress> currentAF = ((CForm<PriorAddress>) get(proto().applicantData().currentAddress()));
 
         currentAF.get(currentAF.proto().moveInDate()).addComponentValidator(new PastDateIncludeTodayValidator());
         currentAF.get(currentAF.proto().moveOutDate()).addComponentValidator(new FutureDateIncludeTodayValidator());
@@ -128,7 +128,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
         });
 
         // ------------------------------------------------------------------------------------------------
-        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().applicant().previousAddress()));
+        CForm<PriorAddress> previousAF = ((CForm<PriorAddress>) get(proto().applicantData().previousAddress()));
 
         previousAF.get(previousAF.proto().moveInDate()).addComponentValidator(new PastDateValidator());
         previousAF.get(previousAF.proto().moveOutDate()).addComponentValidator(new PastDateValidator());
@@ -141,7 +141,7 @@ public class AdditionalInfoStep extends ApplicationWizardStep {
     }
 
     private void enablePreviousAddress() {
-        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().applicant().currentAddress().moveInDate().getValue()));
+        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().applicantData().currentAddress().moveInDate().getValue()));
     }
 
     class LegalQuestionWidgetDecoratorBuilder extends RadioButtonGroupDecoratorBuilder {

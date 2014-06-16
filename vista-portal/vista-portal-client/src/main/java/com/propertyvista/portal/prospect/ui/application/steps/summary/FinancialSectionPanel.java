@@ -29,10 +29,10 @@ public class FinancialSectionPanel extends AbstractSectionPanel {
         super(index, OnlineApplicationWizardStepMeta.Financial.toString(), form, step);
 
         addCaption(i18n.tr("Income"));
-        addComponent(proto().applicant().incomes(), new PersonalIncomeFolder(false));
+        addComponent(proto().applicantData().incomes(), new PersonalIncomeFolder(false));
 
         addCaption(i18n.tr("Assets"));
-        addComponent(proto().applicant().assets(), new PersonalAssetFolder(false));
+        addComponent(proto().applicantData().assets(), new PersonalAssetFolder(false));
 
         addCaption(i18n.tr("Guarantors"));
         addComponent(proto().guarantors(), new GuarantorsFolder(false));

@@ -126,6 +126,25 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     @Override
+    protected void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
+        ((ApplicationWizardStep) selectedStep).onStepSelected();
+    }
+
+    @Override
+    protected boolean allowLeavingCurrentStep() {
+        int currentStepIndex = getSelectedIndex();
+        WizardStep currentStep = getSelectedStep();
+
+        if (currentStepIndex > -1) {
+            currentStep.showErrors(true);
+            ((ApplicationWizardStep) currentStep).onStepLeaving();
+        }
+
+        return true;
+    }
+
+    @Override
     public void addValidations() {
         super.addValidations();
 
@@ -157,9 +176,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             }
 
             private boolean hasDuplicateEmails0(OnlineApplicationDTO value) {
-                if (!value.applicant().person().email().isNull()) {
+                if (!value.applicantData().person().email().isNull()) {
                     for (CoapplicantDTO coap : value.coapplicants()) {
-                        if (value.applicant().person().email().getValue().equals(coap.email().getValue())) {
+                        if (value.applicantData().person().email().getValue().equals(coap.email().getValue())) {
                             return true;
                         }
                     }
@@ -173,8 +192,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 if (!value.guarantors().isEmpty()) {
                     Collection<String> emails = new ArrayList<>();
 
-                    if (!value.applicant().person().email().isNull()) {
-                        emails.add(value.applicant().person().email().getValue());
+                    if (!value.applicantData().person().email().isNull()) {
+                        emails.add(value.applicantData().person().email().getValue());
                     }
                     for (CoapplicantDTO coap : value.coapplicants()) {
                         if (!coap.email().isNull()) {
@@ -237,27 +256,14 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     @Override
-    protected boolean allowLeavingCurrentStep() {
-        int currentStepIndex = getSelectedIndex();
-        WizardStep currentStep = getSelectedStep();
-
-        if (currentStepIndex > -1) {
-            currentStep.showErrors(true);
-            ((ApplicationWizardStep) currentStep).onStepLeaving();
-        }
-
-        return true;
-    }
-
-    @Override
     public void generateMockData() {
-        get(proto().applicant().legalQuestions().suedForRent()).setMockValue(true);
-        get(proto().applicant().legalQuestions().suedForDamages()).setMockValue(true);
-        get(proto().applicant().legalQuestions().everEvicted()).setMockValue(true);
-        get(proto().applicant().legalQuestions().defaultedOnLease()).setMockValue(true);
-        get(proto().applicant().legalQuestions().convictedOfFelony()).setMockValue(true);
-        get(proto().applicant().legalQuestions().legalTroubles()).setMockValue(true);
-        get(proto().applicant().legalQuestions().filedBankruptcy()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().suedForRent()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().suedForDamages()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().everEvicted()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().defaultedOnLease()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().convictedOfFelony()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().legalTroubles()).setMockValue(true);
+        get(proto().applicantData().legalQuestions().filedBankruptcy()).setMockValue(true);
     }
 
     static class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {

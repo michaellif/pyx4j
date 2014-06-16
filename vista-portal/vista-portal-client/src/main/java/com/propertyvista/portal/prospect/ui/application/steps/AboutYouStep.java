@@ -14,6 +14,8 @@
 package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -29,6 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardStep;
@@ -56,22 +59,30 @@ public class AboutYouStep extends ApplicationWizardStep {
                 CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
-        formPanel.append(Location.Left, proto().applicant().picture().file(), imageHolder).decorate().customLabel("");
+        formPanel.append(Location.Left, proto().applicantData().picture().file(), imageHolder).decorate().customLabel("");
 
         formPanel.h3(i18n.tr("Personal Information"));
-        formPanel.append(Location.Left, proto().applicant().person().name(), new NameEditor(i18n.tr("Full Name")));
-        formPanel.append(Location.Left, proto().applicant().person().sex()).decorate().componentWidth(100);
-        formPanel.append(Location.Left, proto().applicant().person().birthDate()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().applicantData().person().name(), new NameEditor(i18n.tr("Full Name")));
+        formPanel.append(Location.Left, proto().applicantData().person().sex()).decorate().componentWidth(100);
+        formPanel.append(Location.Left, proto().applicantData().person().birthDate()).decorate().componentWidth(150);
 
         formPanel.h3(i18n.tr("Contact Information"));
-        formPanel.append(Location.Left, proto().applicant().person().homePhone()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().applicant().person().mobilePhone()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().applicant().person().workPhone()).decorate().componentWidth(180);
-        formPanel.append(Location.Left, proto().applicant().person().email()).decorate().componentWidth(230);
-        get(proto().applicant().person().email()).setMandatory(true);
+        formPanel.append(Location.Left, proto().applicantData().person().homePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().applicantData().person().mobilePhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().applicantData().person().workPhone()).decorate().componentWidth(180);
+        formPanel.append(Location.Left, proto().applicantData().person().email()).decorate().componentWidth(230);
+        get(proto().applicantData().person().email()).setMandatory(true);
 
         formPanel.h3(i18n.tr("Identification Documents"));
-        formPanel.append(Location.Left, proto().applicant().documents(), fileUpload);
+        formPanel.append(Location.Left, proto().applicantData().documents(), fileUpload);
+
+        // tune:
+        get(proto().applicantData().person().name()).addValueChangeHandler(new ValueChangeHandler<Name>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Name> event) {
+                getValue().applicant().set(event.getValue());
+            }
+        });
 
         return formPanel;
     }
@@ -81,18 +92,18 @@ public class AboutYouStep extends ApplicationWizardStep {
         super.onValueSet(populate);
 
         if (getWizard().isEditable()) {
-            fileUpload.setDocumentsPolicy(getValue().applicant().documentsPolicy());
+            fileUpload.setDocumentsPolicy(getValue().applicantData().documentsPolicy());
         }
 
-        get(proto().applicant().person().birthDate()).setMandatory(getWizard().getValue().enforceAgeOfMajority().getValue(false));
+        get(proto().applicantData().person().birthDate()).setMandatory(getWizard().getValue().enforceAgeOfMajority().getValue(false));
     }
 
     @Override
     public void addValidations() {
         super.addValidations();
 
-        get(proto().applicant().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
-        get(proto().applicant().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
+        get(proto().applicantData().person().birthDate()).addComponentValidator(new BirthdayDateValidator());
+        get(proto().applicantData().person().birthDate()).addComponentValidator(new AbstractComponentValidator<LogicalDate>() {
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null && getValue() != null) {
@@ -106,9 +117,11 @@ public class AboutYouStep extends ApplicationWizardStep {
             }
         });
 
-        get(proto().applicant().person().homePhone()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().applicant().person().workPhone())));
-        get(proto().applicant().person().mobilePhone()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().applicant().person().workPhone())));
-        get(proto().applicant().person().workPhone()).addComponentValidator(new AbstractComponentValidator<String>() {
+        get(proto().applicantData().person().homePhone()).addValueChangeHandler(
+                new RevalidationTrigger<String>(get(proto().applicantData().person().workPhone())));
+        get(proto().applicantData().person().mobilePhone()).addValueChangeHandler(
+                new RevalidationTrigger<String>(get(proto().applicantData().person().workPhone())));
+        get(proto().applicantData().person().workPhone()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() == null && hasNoOtherPhone(getWizard().getValue())) {
@@ -119,7 +132,7 @@ public class AboutYouStep extends ApplicationWizardStep {
             }
 
             private boolean hasNoOtherPhone(OnlineApplicationDTO value) {
-                return (value.applicant().person().homePhone().isNull() && value.applicant().person().mobilePhone().isNull());
+                return (value.applicantData().person().homePhone().isNull() && value.applicantData().person().mobilePhone().isNull());
             }
         });
     }

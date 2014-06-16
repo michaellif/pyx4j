@@ -27,16 +27,16 @@ public class AboutYouSectionPanel extends AbstractSectionPanel {
 
         addCaption(i18n.tr("Personal Information"));
 
-        addField(proto().applicant().person().name());
-        addField(proto().applicant().person().sex());
-        addField(proto().applicant().person().birthDate());
+        addField(proto().applicantData().person().name());
+        addField(proto().applicantData().person().sex());
+        addField(proto().applicantData().person().birthDate());
 
         addCaption(i18n.tr("Contact Information"));
 
-        addField(proto().applicant().person().homePhone());
-        addField(proto().applicant().person().mobilePhone());
-        addField(proto().applicant().person().workPhone());
-        addField(proto().applicant().person().email());
+        addField(proto().applicantData().person().homePhone());
+        addField(proto().applicantData().person().mobilePhone());
+        addField(proto().applicantData().person().workPhone());
+        addField(proto().applicantData().person().email());
 
     }
 

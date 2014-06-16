@@ -14,6 +14,8 @@
 package com.propertyvista.portal.shared.ui.util.editors;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -25,6 +27,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.portal.shared.ui.AccessoryEntityForm;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
@@ -66,6 +69,37 @@ public class NameEditor extends AccessoryEntityForm<Name> {
         formPanel.append(Location.Left, proto().nameSuffix()).decorate().componentWidth(60);
 
         calculateFieldsStatus();
+
+        get(proto().firstName()).addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                ValueChangeEvent.fire(NameEditor.this, NameEditor.this.getValue());
+            }
+        });
+        get(proto().lastName()).addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                ValueChangeEvent.fire(NameEditor.this, NameEditor.this.getValue());
+            }
+        });
+        get(proto().middleName()).addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                ValueChangeEvent.fire(NameEditor.this, NameEditor.this.getValue());
+            }
+        });
+        get(proto().namePrefix()).addValueChangeHandler(new ValueChangeHandler<Prefix>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Prefix> event) {
+                ValueChangeEvent.fire(NameEditor.this, NameEditor.this.getValue());
+            }
+        });
+        get(proto().nameSuffix()).addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                ValueChangeEvent.fire(NameEditor.this, NameEditor.this.getValue());
+            }
+        });
 
         addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

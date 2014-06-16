@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -26,6 +27,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -36,6 +38,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationWizardStepMeta;
@@ -51,6 +54,8 @@ public class PeopleStep extends ApplicationWizardStep {
 
     private static final I18n i18n = I18n.get(PeopleStep.class);
 
+    private final CEntityLabel<Name> applicant = new CEntityLabel<Name>();
+
     public PeopleStep() {
         super(OnlineApplicationWizardStepMeta.People);
     }
@@ -63,6 +68,10 @@ public class PeopleStep extends ApplicationWizardStep {
         message.setStyleName(StyleName.WarningMessage.name());
         formPanel.append(Location.Left, message);
 
+        formPanel.h3(i18n.tr("Applicant"));
+        formPanel.append(Location.Left, proto().applicant(), applicant);
+        applicant.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
         formPanel.h3(i18n.tr("Co-Applicants"));
         formPanel.append(Location.Left, proto().coapplicants(), new CoapplicantsFolder(getWizard()));
 
@@ -70,6 +79,12 @@ public class PeopleStep extends ApplicationWizardStep {
         formPanel.append(Location.Left, proto().dependents(), new DependentsFolder(getWizard()));
 
         return formPanel;
+    }
+
+    @Override
+    public void onStepSelected() {
+        super.onStepSelected();
+        applicant.setValue(getValue().applicant());
     }
 
     private class CoapplicantsFolder extends PortalBoxFolder<CoapplicantDTO> {

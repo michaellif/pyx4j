@@ -24,9 +24,9 @@ public class AdditionalInfoSectionPanel extends AbstractSectionPanel {
     public AdditionalInfoSectionPanel(int index, SummaryForm form, AdditionalInfoStep step) {
         super(index, OnlineApplicationWizardStepMeta.AdditionalInfo.toString(), form, step);
 
-        addField(proto().applicant().currentAddress(), new CEntityLabel<PriorAddress>());
+        addField(proto().applicantData().currentAddress(), new CEntityLabel<PriorAddress>());
 
-        addField(proto().applicant().previousAddress(), new CEntityLabel<PriorAddress>());
+        addField(proto().applicantData().previousAddress(), new CEntityLabel<PriorAddress>());
 
     }
 

@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.policy.policies.ProspectPortalPolicy.FeePayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -72,7 +73,9 @@ public interface OnlineApplicationDTO extends IEntity {
 
     UnitOptionsSelectionDTO unitOptionsSelection();
 
-    ApplicantDTO applicant();
+    ApplicantDTO applicantData();
+
+    Name applicant();
 
     IList<CoapplicantDTO> coapplicants();
 

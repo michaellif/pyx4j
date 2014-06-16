@@ -31,7 +31,7 @@ public class EmergencyContactsStep extends ApplicationWizardStep {
     @Override
     public IsWidget createStepContent() {
         PortalFormPanel formPanel = new PortalFormPanel(getWizard());
-        formPanel.append(Location.Left, proto().applicant().emergencyContacts(), new EmergencyContactFolder());
+        formPanel.append(Location.Left, proto().applicantData().emergencyContacts(), new EmergencyContactFolder());
         return formPanel;
     }
 }

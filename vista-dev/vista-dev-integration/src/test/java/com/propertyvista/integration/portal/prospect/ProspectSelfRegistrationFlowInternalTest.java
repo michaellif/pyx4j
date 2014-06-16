@@ -74,11 +74,11 @@ public class ProspectSelfRegistrationFlowInternalTest extends ProspectInternalTe
             }
         });
 
-        assertEquals("firstName", signUp.firstName(), applicationDTOInitial.applicant().person().name().firstName());
+        assertEquals("firstName", signUp.firstName(), applicationDTOInitial.applicantData().person().name().firstName());
 
         String newfirstName = "Per. " + DataGenerator.randomFirstName();
 
-        applicationDTOInitial.applicant().person().name().firstName().setValue(newfirstName);
+        applicationDTOInitial.applicantData().person().name().firstName().setValue(newfirstName);
 
         TestServiceFactory.create(ApplicationWizardService.class).save(new EmptyAsyncCallbackAssertion<Key>(), applicationDTOInitial);
 
@@ -93,6 +93,6 @@ public class ProspectSelfRegistrationFlowInternalTest extends ProspectInternalTe
             }
         });
 
-        assertEquals("firstName updated", newfirstName, applicationDTOupdated.applicant().person().name().firstName().getValue());
+        assertEquals("firstName updated", newfirstName, applicationDTOupdated.applicantData().person().name().firstName().getValue());
     }
 }

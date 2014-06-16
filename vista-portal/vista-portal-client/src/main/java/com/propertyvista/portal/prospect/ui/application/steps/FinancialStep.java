@@ -50,10 +50,10 @@ public class FinancialStep extends ApplicationWizardStep {
         PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
         formPanel.h3(i18n.tr("Income"));
-        formPanel.append(Location.Left, proto().applicant().incomes(), new PersonalIncomeFolder());
+        formPanel.append(Location.Left, proto().applicantData().incomes(), new PersonalIncomeFolder());
 
         formPanel.h3(i18n.tr("Assets"));
-        formPanel.append(Location.Left, proto().applicant().assets(), new PersonalAssetFolder());
+        formPanel.append(Location.Left, proto().applicantData().assets(), new PersonalAssetFolder());
 
         if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
             guarantorsHeader = formPanel.h3(i18n.tr("Guarantors"));
@@ -73,7 +73,7 @@ public class FinancialStep extends ApplicationWizardStep {
         }
 
         if (getWizard().isEditable()) {
-            ((PersonalIncomeFolder) (CComponent<?, ?, ?>) get(proto().applicant().incomes())).setDocumentsPolicy(getValue().applicant().documentsPolicy());
+            ((PersonalIncomeFolder) (CComponent<?, ?, ?>) get(proto().applicantData().incomes())).setDocumentsPolicy(getValue().applicantData().documentsPolicy());
         }
     }
 
@@ -81,17 +81,17 @@ public class FinancialStep extends ApplicationWizardStep {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().applicant().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
+        get(proto().applicantData().incomes()).addComponentValidator(new AbstractComponentValidator<List<CustomerScreeningIncome>>() {
             @Override
             public BasicValidationError isValid() {
                 if (getComponent().getValue() != null) {
-                    return (getValue().applicant().assets().size() > 0) || (getValue().applicant().incomes().size() > 0) ? null : new BasicValidationError(
+                    return (getValue().applicantData().assets().size() > 0) || (getValue().applicantData().incomes().size() > 0) ? null : new BasicValidationError(
                             getComponent(), i18n.tr("At least one source of income or one asset is required"));
                 }
                 return null;
             }
         });
-        get(proto().applicant().assets()).addValueChangeHandler(
-                new RevalidationTrigger<List<CustomerScreeningPersonalAsset>>(get(proto().applicant().incomes())));
+        get(proto().applicantData().assets()).addValueChangeHandler(
+                new RevalidationTrigger<List<CustomerScreeningPersonalAsset>>(get(proto().applicantData().incomes())));
     }
 }
