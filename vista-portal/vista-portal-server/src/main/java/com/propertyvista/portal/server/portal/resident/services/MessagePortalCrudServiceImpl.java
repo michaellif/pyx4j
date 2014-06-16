@@ -32,17 +32,12 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
-import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -225,30 +220,10 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.sender().set(m.sender());
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
-        messageDTO.header().sender().setValue(generateEndpointName(m.sender()));
+        messageDTO.header().sender().setValue(ServerSideFactory.create(CommunicationMessageFacade.class).extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
 
         return messageDTO;
-    }
-
-    private String generateEndpointName(CommunicationEndpoint entity) {
-        if (entity == null) {
-            return null;
-        }
-        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
-        rec.endpoint().set(entity);
-
-        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
-            SystemEndpoint e = entity.cast();
-            return e.name().getValue().name();
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            return e.name().getValue();
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            return e.name().getValue();
-        }
-        return null;
     }
 
     @Override

@@ -29,8 +29,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -49,8 +49,8 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.Toolbar;
+import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -63,6 +63,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerUserListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.DeliveryHandle;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
@@ -112,6 +113,19 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         formPanel.br();
 
         return formPanel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        if (getValue() == null || getValue().isPrototype()) {
+            get(proto().owner().name()).setVisible(false);
+            get(proto().status()).setVisible(false);
+
+        } else {
+            get(proto().owner().name()).setVisible(!MessageGroupCategory.Custom.equals(getValue().topic().category().getValue()));
+            get(proto().status()).setVisible(!MessageGroupCategory.Custom.equals(getValue().topic().category().getValue()));
+        }
     }
 
     protected void addItem(CommunicationEndpointDTO proto) {
@@ -220,11 +234,19 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private Anchor btnReply;
 
-        private Widget attachmentsWidget;
-
         private final CommunicationEndpointFolder receiverSelector;
 
         Image starImage;
+
+        Image highImportnaceImage;
+
+        Toolbar statusToolBar;
+
+        Widget attachmentCaption;
+
+        Widget attachmentBr;
+
+        MessageAttachmentFolder attachemnts;
 
         public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
@@ -243,10 +265,13 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         public IsWidget createContent() {
             FormPanel formPanel = new FormPanel(this);
             inject(proto().thread());
-            //inject(proto().sender());
             inject(proto().star());
+            inject(proto().date());
             inject(proto().allowedReply());
             inject(proto().isInRecipients());
+
+            statusToolBar = new Toolbar();
+            statusToolBar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
 
             starImage = new Image(CrmImages.INSTANCE.noStar());
             starImage.addClickHandler(new ClickHandler() {
@@ -270,19 +295,29 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             });
 
-            formPanel.append(Location.Left, starImage);
-            formPanel.append(Location.Left, proto().date()).decorate();
-            formPanel.append(Location.Left, proto().highImportance(), new CRadioGroupBoolean(RadioGroup.Layout.HORISONTAL)).decorate();
-            formPanel.append(Location.Dual, proto().text()).decorate();
+            highImportnaceImage = new Image(CrmImages.INSTANCE.noticeWarning());
 
-            formPanel.append(Location.Left, proto().sender().name()).decorate().customLabel("From");
-            formPanel.h3("To");
-            formPanel.append(Location.Left, proto().to(), receiverSelector);
-
+            statusToolBar.addItem(highImportnaceImage);
+            statusToolBar.addItem(starImage);
+            formPanel.append(Location.Dual, statusToolBar);
             formPanel.br();
-            attachmentsWidget = formPanel.h3("Attachments");
-            formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
+            formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
+            formPanel.br();
+            formPanel.h4("To");
+            formPanel.append(Location.Dual, proto().to(), receiverSelector);
+            formPanel.br();
+            formPanel.br();
+            formPanel.br();
+
+            formPanel.append(Location.Dual, proto().highImportance(), new CCheckBox()).decorate();
+            formPanel.append(Location.Dual, proto().text()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false);
+
+            attachmentCaption = formPanel.h3("Attachments");
+            formPanel.append(Location.Dual, proto().attachments(), attachemnts = new MessageAttachmentFolder());
+            attachmentBr = formPanel.br();
+
             formPanel.append(Location.Dual, createLowerToolbar());
+
             return formPanel;
         }
 
@@ -437,30 +472,39 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 btnForward.setVisible(false);
                 starImage.setVisible(false);
                 btnMarkAsUnread.setVisible(false);
-                get(proto().date()).setVisible(false);
                 get(proto().star()).setVisible(false);
-                get(proto().sender().name()).setVisible(false);
-                attachmentsWidget.setVisible(false);
+                get(proto().header()).setVisible(false);
+
+                attachmentCaption.setVisible(false);
+                attachmentBr.setVisible(false);
+                attachemnts.setVisible(false);
+                highImportnaceImage.setVisible(false);
+                get(proto().highImportance()).setVisible(true);
+                statusToolBar.asWidget().setVisible(false);
+
             } else {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
-                btnReply.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey())
+                btnReply.setVisible(!ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())
                         && getValue().allowedReply().getValue(true));
                 btnForward.setVisible(true);
-                get(proto().date()).setVisible(true);
-                get(proto().sender().name()).setVisible(true);
+                get(proto().header()).setVisible(true);
                 get(proto().star()).setVisible(getValue().isInRecipients().getValue(false));
                 btnMarkAsUnread.setVisible(getValue().isInRecipients().getValue(false));
+
                 starImage.setVisible(getValue().isInRecipients().getValue(false));
-                if (get(proto().star()).getValue()) {
-                    starImage.setResource(CrmImages.INSTANCE.fullStar());
-                } else {
-                    starImage.setResource(CrmImages.INSTANCE.noStar());
-                }
-                attachmentsWidget.setVisible(getValue().attachments().size() > 0);
+                starImage.setResource(get(proto().star()).getValue() ? CrmImages.INSTANCE.fullStar() : (CrmImages.INSTANCE.noStar()));
+
+                attachmentCaption.setVisible(getValue().attachments().size() > 0);
+                attachmentBr.setVisible(true);
+                attachemnts.setVisible(getValue().attachments().size() > 0);
+                highImportnaceImage.setVisible(getValue().highImportance().getValue(false));
+                get(proto().highImportance()).setVisible(false);
+                statusToolBar.asWidget().setVisible(starImage.isVisible() || highImportnaceImage.isVisible());
+
             }
         }
     }

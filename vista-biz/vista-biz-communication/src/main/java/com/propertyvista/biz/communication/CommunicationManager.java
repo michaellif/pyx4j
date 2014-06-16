@@ -24,8 +24,12 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CustomerUser;
 
 public class CommunicationManager {
     private static class SingletonHolder {
@@ -85,4 +89,23 @@ public class CommunicationManager {
 
         r.setTotalRows(Persistence.service().count(threadCriteria));
     }
+
+    public String extractEndpointName(CommunicationEndpoint entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
+            SystemEndpoint e = entity.cast();
+            return e.name().getValue().name();
+        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
+            CrmUser e = entity.cast();
+            return e.name().getValue();
+        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
+            CustomerUser e = entity.cast();
+            return e.name().getValue();
+        }
+        return null;
+    }
+
 }

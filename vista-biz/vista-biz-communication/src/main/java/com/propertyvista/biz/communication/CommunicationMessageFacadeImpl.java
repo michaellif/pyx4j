@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
@@ -46,5 +47,10 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     @Override
     public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
         return CommunicationManager.instance().query(criteria);
+    }
+
+    @Override
+    public String extractEndpointName(CommunicationEndpoint entity) {
+        return CommunicationManager.instance().extractEndpointName(entity);
     }
 }

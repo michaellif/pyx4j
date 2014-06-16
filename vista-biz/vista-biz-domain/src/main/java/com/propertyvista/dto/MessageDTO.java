@@ -13,13 +13,19 @@
  */
 package com.propertyvista.dto;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsBO;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 
@@ -29,7 +35,6 @@ import com.propertyvista.domain.communication.MessageCategory;
 
 @Transient
 @ExtendsBO
-@ToStringFormat("{0} {1}")
 public interface MessageDTO extends Message {
 
     @NotNull
@@ -73,4 +78,23 @@ public interface MessageDTO extends Message {
     @Detached
     IList<MessageDTO> content();
 
+    @NotNull
+    @ReadOnly
+    @Editor(type = Editor.EditorType.label)
+    MessageHeader header();
+
+    @Transient
+    @ToStringFormat("{0}; {1}")
+    public interface MessageHeader extends IEntity {
+        @NotNull
+        @ToString(index = 1)
+        @ReadOnly
+        IPrimitive<String> sender();
+
+        @MemberColumn(name = "messageDate")
+        @ToString(index = 0)
+        @Format("MM/dd/yyyy, HH:mm:ss")
+        @ReadOnly
+        IPrimitive<Date> date();
+    }
 }

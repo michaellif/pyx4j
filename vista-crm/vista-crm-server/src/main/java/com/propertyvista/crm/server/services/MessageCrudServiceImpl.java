@@ -116,6 +116,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         dto.status().setValue(ThreadStatus.Unassigned);
         dto.sender().set(generateEndpointDTO(CrmAppContext.getCurrentUser()));
 
+        if (initializationData instanceof MessageInitializationData) {
+            dto.text().set(((MessageInitializationData) initializationData).initalizedText());
+        }
+
         return dto;
 
     }
@@ -203,9 +207,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             boolean isHighImportance = false;
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
+                Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
                 if (!isForList) {
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
-                    Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
                 }
                 MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), isForList);
                 to.content().add(currentDTO);
@@ -235,7 +239,6 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, boolean isForList) {
-        Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
         boolean star = false;
         boolean isRead = true;
 
@@ -276,6 +279,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
         messageDTO.topic().set(m.thread().topic());
+        messageDTO.header().sender().setValue(ServerSideFactory.create(CommunicationMessageFacade.class).extractEndpointName(m.sender()));
+        messageDTO.header().date().set(m.date());
 
         return messageDTO;
     }

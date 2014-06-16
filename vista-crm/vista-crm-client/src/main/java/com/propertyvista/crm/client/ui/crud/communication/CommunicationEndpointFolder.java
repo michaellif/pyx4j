@@ -52,7 +52,7 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
     private static final I18n i18n = I18n.get(CommunicationEndpointFolder.class);
 
     public CommunicationEndpointFolder(CrmEntityForm<?> parent) {
-        super(CommunicationEndpointDTO.class, i18n.tr("To"), false);
+        super(CommunicationEndpointDTO.class, i18n.tr("Message Recipients"), false);
         setAddable(true);
         setRemovable(true);
         setOrderable(true);

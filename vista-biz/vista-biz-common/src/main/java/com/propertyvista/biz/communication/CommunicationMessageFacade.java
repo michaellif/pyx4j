@@ -19,6 +19,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
@@ -35,4 +36,6 @@ public interface CommunicationMessageFacade {
     public List<MessageCategory> getDispatchedMessageCategories(Employee employee, AttachLevel attachLevel);
 
     public EntitySearchResult<Message> query(EntityListCriteria<Message> criteria);
+
+    public String extractEndpointName(CommunicationEndpoint entity);
 }

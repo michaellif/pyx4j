@@ -78,7 +78,7 @@ public interface MessageDTO extends Message {
     @ToStringFormat("{0}; {1}")
     public interface MessageHeader extends IEntity {
         @NotNull
-        @ToString(index = 0)
+        @ToString(index = 1)
         @ReadOnly
         IPrimitive<String> sender();
 

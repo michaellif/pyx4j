@@ -43,12 +43,14 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
 
+        formPanel.h4("To");
+        formPanel.append(Location.Dual, proto().to(), receiverSelector);
+        formPanel.h3("");
+        formPanel.br();
         formPanel.append(Location.Dual, proto().subject()).decorate();
         formPanel.append(Location.Dual, proto().topic()).decorate();
         formPanel.append(Location.Left, proto().allowedReply()).decorate();
         formPanel.append(Location.Right, proto().highImportance()).decorate();
-        formPanel.h3("To");
-        formPanel.append(Location.Dual, proto().to(), receiverSelector);
         formPanel.br();
         formPanel.append(Location.Dual, proto().text()).decorate();
         formPanel.append(Location.Dual, proto().attachments(), new MessageAttachmentFolder());
