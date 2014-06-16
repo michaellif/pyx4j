@@ -16,7 +16,6 @@ package com.propertyvista.domain.tenant.insurance;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -31,7 +30,6 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
-@DiscriminatorValue("InsurancePolicy")
 public interface InsurancePolicy<INSURANCE_CERTIFICATE extends InsuranceCertificate<?>> extends IEntity {
 
     @Caption(name = "Owned By")

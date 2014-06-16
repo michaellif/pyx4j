@@ -38,7 +38,7 @@ public class TenantSureTenantAdapter {
         InternationalAddress address = tenant.lease().unit().building().info().address();
 
         parameters.setAddress1(address.streetNumber().getStringView() + " " + address.streetName().getStringView());
-        parameters.setAddress2(address.suiteNumber().getValue());
+        parameters.setAddress2("unit " + tenant.lease().unit().info().number().getStringView());
 
         parameters.setCity(tenant.lease().unit().building().info().address().city().getValue());
         parameters.setState(ISOProvince.forName(tenant.lease().unit().building().info().address().province().getValue(), tenant.lease().unit().building()
