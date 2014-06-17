@@ -28,6 +28,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerViewImpl;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
@@ -56,7 +57,12 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     @Override
     public MaintenanceRequestVisorController getMaintenanceRequestVisorController() {
         if (maintenanceRequestVisorController == null) {
-            maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentBuildingId, currentTenantId);
+            maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentBuildingId, currentTenantId) {
+                @Override
+                public boolean canCreateNewItem() {
+                    return ((TenantViewerViewImpl) getView()).canCreateMaintenance(currentValue);
+                }
+            };
         }
         return maintenanceRequestVisorController;
     }

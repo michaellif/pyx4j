@@ -116,14 +116,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         documentsButton = new Button(i18n.tr("Documents"));
         ButtonMenuBar applicationDocumentMenu = new ButtonMenuBar();
 
-        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Manually Sign Application..."), new Command() {
+        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Manually Sign Application"), new Command() {
             @Override
             public void execute() {
                 downloadApplicationDocument();
             }
         }));
 
-        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Upload Signed Application..."), new Command() {
+        applicationDocumentMenu.addItem(new MenuItem(i18n.tr("Upload Signed Application"), new Command() {
             @Override
             public void execute() {
                 uploadApplicationDocument();

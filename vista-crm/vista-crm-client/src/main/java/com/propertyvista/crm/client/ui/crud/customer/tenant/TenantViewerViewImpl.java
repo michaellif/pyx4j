@@ -144,11 +144,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setViewVisible(screeningView, value.screening().getPrimaryKey() != null);
         setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            setActionVisible(maintenanceAction, leaseIsActive && !value.isPotentialTenant().getValue(false));
-        } else {
-            setActionVisible(maintenanceAction, leaseIsActive);
-        }
+        setActionVisible(maintenanceView, !value.lease().status().getValue().isDraft());
+        setActionVisible(maintenanceAction, canCreateMaintenance(value));
 
         boolean hasPortalAccess = LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue());
 
@@ -157,6 +154,14 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setActionVisible(registrationView, hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
 
         setViewVisible(deletedPapsView, leaseIsActive);
+    }
+
+    public boolean canCreateMaintenance(TenantDTO value) {
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return (value.lease().status().getValue().isActive() && !value.isPotentialTenant().getValue(false));
+        } else {
+            return value.lease().status().getValue().isActive();
+        }
     }
 
     @Override

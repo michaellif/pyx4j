@@ -51,7 +51,8 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
                 MaintenanceRequestDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return SecurityController.checkPermission(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
+                return (SecurityController.checkPermission(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)) && MaintenanceRequestVisorController.this
+                        .canCreateNewItem());
             }
 
             @Override
@@ -73,6 +74,14 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
         if (tenantId != null) {
             lister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).reporter().id(), tenantId));
         }
+
+    }
+
+    /*
+     * Overwrite in order to customize new item creation rule
+     */
+    public boolean canCreateNewItem() {
+        return true;
     }
 
     @Override
