@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
@@ -26,6 +27,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
+import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.security.CrmUser;
@@ -108,4 +110,11 @@ public class CommunicationManager {
         return null;
     }
 
+    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint) {
+        DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
+        dh.isRead().setValue(false);
+        dh.star().setValue(false);
+        dh.recipient().set(endpoint);
+        return dh;
+    }
 }

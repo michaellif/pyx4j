@@ -200,9 +200,10 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
             formPanel.append(Location.Left, proto().text());
 
+            attachmentBr = formPanel.br();
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Left, proto().attachments(), attachemnts = new MessageAttachmentFolder());
-            attachmentBr = formPanel.br();
+            formPanel.br();
             formPanel.append(Location.Left, createLowerToolbar());
 
             get(proto().text()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);

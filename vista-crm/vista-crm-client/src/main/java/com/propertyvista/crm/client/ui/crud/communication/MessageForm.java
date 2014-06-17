@@ -356,6 +356,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     if (!isValid()) {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
+                    } else if (getValue().to().size() < 1) {
+                        setVisited(true);
+                        MessageDialog.error(i18n.tr("Error"), i18n.tr("No message recipient has been provided."));
                     } else {
                         saveMessage(getValue(), true);
                     }

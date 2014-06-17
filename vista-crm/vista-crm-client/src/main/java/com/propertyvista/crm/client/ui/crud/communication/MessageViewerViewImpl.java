@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -40,7 +41,6 @@ import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
@@ -82,10 +82,11 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             threadStatusActions.put(ts, new MenuItem(i18n.tr("Mark as ") + ts.toString(), new Command() {
                 @Override
                 public void execute() {
-                    new UpdateThreadStatusBox(form) {
+                    new UpdateThreadStatusBox(form, ts.toString()) {
                         @Override
                         public boolean onClickOk() {
                             if (validate()) {
+                                getValue().thread().set(form.getValue().thread());
                                 ((MessageViewerView.Presenter) form.getParentView().getPresenter()).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
 
                                     @Override
@@ -189,8 +190,8 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         private CForm<MessageDTO> content;
 
-        public UpdateThreadStatusBox(final MessageForm form) {
-            super(i18n.tr("Update Status"));
+        public UpdateThreadStatusBox(final MessageForm form, String status) {
+            super(i18n.tr("Update Status to: ") + status);
             setBody(createBody(form));
         }
 
@@ -202,10 +203,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
 
-                    main.append(Location.Dual, inject(proto().allowedReply())).decorate();
                     main.append(Location.Dual, inject(proto().text())).decorate();
-                    main.h1("To");
-                    main.append(Location.Left, proto().to(), new CommunicationEndpointFolder(form));
                     return main;
                 }
 
@@ -216,7 +214,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
             };
 
             content.init();
-            content.populate(form.getValue());
+            content.populate(EntityFactory.create(MessageDTO.class));
             return content.asWidget();
         }
 
@@ -226,12 +224,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
 
         public boolean validate() {
             content.setVisitedRecursive();
-            if (content.isValid()) {
-                return true;
-            } else {
-                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true));
-                return false;
-            }
+            return getValue().text() != null && !getValue().text().isNull();
         }
     }
 }

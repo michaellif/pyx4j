@@ -109,17 +109,14 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             bo.date().setValue(SystemDateManager.getDate());
         }
 
-        DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-        dh.isRead().setValue(false);
-        dh.star().setValue(false);
-        dh.recipient().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
-
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
         bo.sender().set(ResidentPortalContext.getCurrentUser());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
-        bo.recipients().add(dh);
+        bo.recipients().add(
+                ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(
+                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)));
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
@@ -231,11 +228,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         if (message.date().isNull()) {
             CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
 
-            DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-            dh.isRead().setValue(false);
-            dh.star().setValue(false);
-            dh.recipient().set(thread.owner());
-
             Message m = EntityFactory.create(Message.class);
             m.thread().set(thread);
             m.attachments().set(message.attachments());
@@ -243,7 +235,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             m.sender().set(ResidentPortalContext.getCurrentUser());
             m.text().set(message.text());
             m.highImportance().set(message.highImportance());
-            m.recipients().add(dh);
+            m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(thread.owner()));
             Persistence.service().persist(m);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
@@ -264,7 +256,6 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             if (ResidentPortalContext.getCurrentUser().equals(dh.recipient())) {
                 return true;
             }
-
         }
         return false;
     }

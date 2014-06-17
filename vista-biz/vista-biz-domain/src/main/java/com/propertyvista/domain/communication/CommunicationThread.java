@@ -28,10 +28,8 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.note.HasNotesAndAttachments;
-
 @DiscriminatorValue("CommunicationThread")
-public interface CommunicationThread extends IEntity, HasNotesAndAttachments {
+public interface CommunicationThread extends IEntity {
 
     @I18n(context = "CommunicationThread")
     @XmlType(name = "ThreadStatus")

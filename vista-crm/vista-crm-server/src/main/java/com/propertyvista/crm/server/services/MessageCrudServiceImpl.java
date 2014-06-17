@@ -133,11 +133,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
 
         for (CommunicationEndpointDTO todep : to.to()) {
-            DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-            dh.isRead().setValue(false);
-            dh.star().setValue(false);
-            dh.recipient().set(todep.endpoint());
-            bo.recipients().add(dh);
+            bo.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(todep.endpoint()));
         }
 
         bo.attachments().set(to.attachments());
@@ -290,17 +286,19 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (message.date().isNull()) {
             CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
 
+            Message m = EntityFactory.create(Message.class);
             if (threadStatus != null) {
                 message.status().setValue(threadStatus);
                 thread.status().setValue(threadStatus);
+
+                Persistence.service().persist(thread);
+                m.recipients().add(
+                        ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(
+                                ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)));
+
             }
-            Message m = EntityFactory.create(Message.class);
             for (CommunicationEndpointDTO d : message.to()) {
-                DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
-                dh.isRead().setValue(false);
-                dh.star().setValue(false);
-                dh.recipient().set(d.endpoint());
-                m.recipients().add(dh);
+                m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(d.endpoint()));
             }
 
             m.thread().set(thread);
@@ -308,7 +306,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             m.date().setValue(SystemDateManager.getDate());
             m.sender().set(CrmAppContext.getCurrentUser());
             m.text().set(message.text());
-            m.highImportance().set(message.highImportance());
+            m.highImportance().setValue(false);
             Persistence.service().persist(m);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
