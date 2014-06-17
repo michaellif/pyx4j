@@ -29,7 +29,7 @@ public class EntityPermission extends AbstractCRUDPermission {
 
     private static final long serialVersionUID = 7095635694477738182L;
 
-    private final InstanceAccess instanceAccess;
+    private final transient InstanceAccess instanceAccess;
 
     private final transient IEntity entityInstance;
 

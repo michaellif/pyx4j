@@ -29,7 +29,7 @@ public class DataModelPermission<E extends IEntity> extends AbstractCRUDPermissi
 
     private static final long serialVersionUID = 1L;
 
-    private final E entityPrototype;
+    private final transient E entityPrototype;
 
     public static <T extends IEntity> DataModelPermission<T> permissionCreate(Class<T> entityClass) {
         return new DataModelPermission<T>(entityClass, CREATE);
