@@ -39,6 +39,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
         void cancelOnlineApplication();
 
+        void navigateUser(List<LeaseTermParticipant<?>> users);
+
         void inviteUsers(List<LeaseTermParticipant<?>> users);
 
         void creditCheck(List<LeaseTermParticipant<?>> users);
@@ -57,6 +59,7 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
     }
 
+    @Override
     ILister<PaymentRecordDTO> getPaymentListerView();
 
     void reportStartOnlineApplicationSuccess();

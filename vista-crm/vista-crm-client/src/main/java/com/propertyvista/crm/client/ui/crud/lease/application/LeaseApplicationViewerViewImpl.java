@@ -81,6 +81,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     private final MenuItem viewLease;
 
+    private final MenuItem viewParticipants;
+
     private final MenuItem createOnlineApplication;
 
     private final MenuItem cancelOnlineApplication;
@@ -111,7 +113,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         setForm(new LeaseApplicationForm(this));
 
         // Buttons:
-
         documentsButton = new Button(i18n.tr("Documents"));
         ButtonMenuBar applicationDocumentMenu = new ButtonMenuBar();
 
@@ -158,6 +159,14 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         addView(viewLease);
+
+        viewParticipants = new MenuItem(i18n.tr("Tenants/Guarantors"), new Command() {
+            @Override
+            public void execute() {
+                tenantsActionExecuter();
+            }
+        });
+        addView(viewParticipants);
 
         // Actions:
 
@@ -236,6 +245,21 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         addAction(cancelAction);
+    }
+
+    private void tenantsActionExecuter() {
+        ((LeaseViewerViewBase.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseTermParticipant<?>>>() {
+            @Override
+            public void onSuccess(List<LeaseTermParticipant<?>> result) {
+                new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenants/Guarantors To Navigate"), false, result) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((LeaseApplicationViewerView.Presenter) getPresenter()).navigateUser(getSelectedItems());
+                        return true;
+                    }
+                }.show();
+            }
+        });
     }
 
     private void inviteActionExecuter() {

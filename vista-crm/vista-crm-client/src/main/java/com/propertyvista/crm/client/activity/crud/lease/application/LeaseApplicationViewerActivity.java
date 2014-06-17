@@ -46,7 +46,9 @@ import com.propertyvista.crm.rpc.services.lease.BlankApplicationDocumentDownload
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermBlankAgreementDocumentDownloadService;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -110,6 +112,18 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
             }
         }, getEntityId());
+    }
+
+    @Override
+    public void navigateUser(List<LeaseTermParticipant<?>> users) {
+        assert (!users.isEmpty());
+        if (users.get(0) instanceof LeaseTermTenant) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Tenant().formViewerPlace(users.get(0).leaseParticipant().getPrimaryKey()));
+        } else if (users.get(0) instanceof LeaseTermGuarantor) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Guarantor().formViewerPlace(users.get(0).leaseParticipant().getPrimaryKey()));
+        } else {
+            throw new IllegalArgumentException("Unsupported Participant type");
+        }
     }
 
     @Override

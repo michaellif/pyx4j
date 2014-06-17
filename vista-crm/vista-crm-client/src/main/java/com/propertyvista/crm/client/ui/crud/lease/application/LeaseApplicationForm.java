@@ -99,8 +99,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     private CFolder<TenantInfoDTO> createTenantView() {
-        return new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
-
+        VistaBoxFolder<TenantInfoDTO> folder = new VistaBoxFolder<TenantInfoDTO>(TenantInfoDTO.class, false) {
             @Override
             protected CForm<TenantInfoDTO> createItemForm(IObject<?> member) {
                 return new InfoViewForm(true);
@@ -113,11 +112,12 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 return decor;
             }
         };
+        folder.setNoDataLabel(i18n.tr("No tenants data has been entered yet. Navigate Views->Tenants/Guarantors to view/edit"));
+        return folder;
     }
 
     private CFolder<TenantFinancialDTO> createFinancialView() {
-        return new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
-
+        VistaBoxFolder<TenantFinancialDTO> folder = new VistaBoxFolder<TenantFinancialDTO>(TenantFinancialDTO.class, false) {
             @Override
             protected CForm<TenantFinancialDTO> createItemForm(IObject<?> member) {
                 return new FinancialViewForm(true);
@@ -130,6 +130,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 return decor;
             }
         };
+        folder.setNoDataLabel(i18n.tr("No financial data has been entered yet. Navigate Views->Tenants/Guarantors to view/edit"));
+        return folder;
     }
 
     private IsWidget createApprovalTab() {
