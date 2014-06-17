@@ -50,11 +50,11 @@ public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
     @Caption(name = "Employed for (years)")
     IPrimitive<Double> employedForYears();
 
-    @Caption(name = "Supervisor/Manager Name")
+    @Caption(name = "Supervisor Name")
     @NotNull
     IPrimitive<String> supervisorName();
 
-    @Caption(name = "Supervisor/Manager Phone")
+    @Caption(name = "Supervisor Phone")
     @Editor(type = EditorType.phone)
     @NotNull
     IPrimitive<String> supervisorPhone();

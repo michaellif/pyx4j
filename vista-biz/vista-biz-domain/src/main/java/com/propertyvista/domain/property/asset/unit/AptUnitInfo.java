@@ -59,6 +59,7 @@ public interface AptUnitInfo extends IEntity {
     @Length(250)
     @Editor(type = Editor.EditorType.textarea)
     @YardiImported
+    @Caption(name = "Economic Status Descr.")
     IPrimitive<String> economicStatusDescription();
 
     IPrimitive<Integer> floor();

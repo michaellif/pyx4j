@@ -127,7 +127,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         formPanel.append(Location.Left, proto().info().economicStatus()).decorate().componentWidth(150);
         formPanel.append(Location.Right, proto().info()._bedrooms()).decorate().componentWidth(60);
 
-        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().labelWidth(170).componentWidth(150);
+        formPanel.append(Location.Left, proto().info().economicStatusDescription()).decorate().componentWidth(150);
         formPanel.append(Location.Right, proto().info()._bathrooms()).decorate().componentWidth(60);
 
         formPanel
@@ -147,7 +147,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         if (!VistaFeatures.instance().yardiIntegration()) {
             catalogMarketPricesPanel.h1(proto().marketPrices().getMeta().getCaption());
             catalogMarketPricesPanel.append(Location.Left, proto().marketPrices(), new UnitServicePriceFolder());
-            formPanel.append(Location.Left, catalogMarketPricesPanel);
+            formPanel.append(Location.Dual, catalogMarketPricesPanel);
         }
 
         return formPanel;
