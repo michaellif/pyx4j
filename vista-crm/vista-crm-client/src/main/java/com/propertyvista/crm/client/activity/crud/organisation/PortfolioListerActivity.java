@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
@@ -24,18 +25,17 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioListerView;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class PortfolioListerActivity extends AbstractListerActivity<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().getView(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(PortfolioListerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class),
                 Portfolio.class);
     }
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
+        return SecurityController.checkPermission(DataModelPermission.permissionCreate(Portfolio.class));
     }
 }

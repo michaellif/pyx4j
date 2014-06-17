@@ -62,10 +62,10 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         Persistence.service().retrieve(to.employees());
 
         CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
-        to.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
-        to.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
-        to.roles().addAll(crs.roles());
-        to.credentialUpdated().setValue(crs.credentialUpdated().getValue());
+        to.privileges().restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
+        to.privileges().requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+        to.privileges().roles().addAll(crs.roles());
+        to.privileges().credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
         // TODO put auditing configuration here
         to.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));

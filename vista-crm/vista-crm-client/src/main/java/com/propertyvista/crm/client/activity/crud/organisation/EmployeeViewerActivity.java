@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
@@ -59,7 +60,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
+        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeeDTO.class));
     }
 
     @Override

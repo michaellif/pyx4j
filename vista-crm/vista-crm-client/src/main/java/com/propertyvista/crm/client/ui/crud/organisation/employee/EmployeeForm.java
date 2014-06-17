@@ -26,13 +26,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,6 +55,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.company.Notification;
@@ -86,17 +88,17 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
+        get(proto().privileges().passwordConfirm()).addComponentValidator(new AbstractComponentValidator<String>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().password()).getValue())) {
+                if (getComponent().getValue() != null && !getComponent().getValue().equals(get(proto().privileges().password()).getValue())) {
                     return new BasicValidationError(getComponent(), i18n.tr("The passwords don't match. Please retype the passwords."));
                 }
                 return null;
             }
         });
 
-        get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
+        get(proto().privileges().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().privileges().passwordConfirm())));
 
         get(proto().birthDate()).addComponentValidator(new BirthdayDateValidator());
     }
@@ -109,22 +111,22 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.employee, get(proto().employeeId()), getValue().getPrimaryKey());
         }
 
-        get(proto().password()).setVisible(isNewEmployee());
-        get(proto().passwordConfirm()).setVisible(isNewEmployee());
+        get(proto().privileges().password()).setVisible(isNewEmployee());
+        get(proto().privileges().passwordConfirm()).setVisible(isNewEmployee());
 
-        buildingsAccessPanel.setVisible(getValue().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
+        buildingsAccessPanel.setVisible(getValue().privileges().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
-        get(proto().enabled()).setVisible(isManager);
-        get(proto().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
+        get(proto().privileges().enabled()).setVisible(isManager);
+        get(proto().privileges().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
-        get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
+        get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
         get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
         get(proto().portfolios()).setEditable(permitPortfoliosEditing);
 
-        get(proto().roles()).setEditable(!isSelfEditor);
+        get(proto().privileges().roles()).setEditable(!isSelfEditor);
         get(proto().employees()).setEditable(isManager);
 
         get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
@@ -134,7 +136,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
         get(proto().signature().file()).setVisible(isManager || isSelfEditor);
 
-        privilegesTab.setTabVisible(isSelfEditor || isManager);
+        privilegesTab.setTabVisible(isManager && SecurityController.checkPermission(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)));
         auditingTab.setTabVisible(VistaTODO.VISTA_4066_EmployeeAuditingEmailNotificationsImplemented && (isSelfEditor || isManager));
         alertsTab.setTabVisible(isSelfEditor || isManager);
     }
@@ -172,20 +174,20 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Information"));
-        formPanel.append(Location.Left, proto().password()).decorate();
-        formPanel.append(Location.Left, proto().passwordConfirm()).decorate();
+        formPanel.append(Location.Left, proto().privileges().password()).decorate();
+        formPanel.append(Location.Left, proto().privileges().passwordConfirm()).decorate();
         formPanel.br();
-        formPanel.append(Location.Left, proto().enabled()).decorate().componentWidth(50);
-        formPanel.append(Location.Right, proto().requiredPasswordChangeOnNextLogIn()).decorate().componentWidth(50);
-        formPanel.append(Location.Left, proto().isSecurityQuestionSet(), new CBooleanLabel()).decorate().componentWidth(50);
-        formPanel.append(Location.Right, proto().credentialUpdated()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().privileges().enabled()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().privileges().requiredPasswordChangeOnNextLogIn()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().privileges().isSecurityQuestionSet(), new CBooleanLabel()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().privileges().credentialUpdated()).decorate().componentWidth(150);
 
         formPanel.h1(i18n.tr("Roles"));
-        formPanel.append(Location.Left, proto().roles(), new CrmRoleFolder(this));
+        formPanel.append(Location.Left, proto().privileges().roles(), new CrmRoleFolder(this));
 
         formPanel.h1(i18n.tr("Buildings Access"));
-        formPanel.append(Location.Left, proto().restrictAccessToSelectedBuildingsAndPortfolios()).decorate().componentWidth(200);
-        get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        formPanel.append(Location.Left, proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).decorate().componentWidth(200);
+        get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 buildingsAccessPanel.setVisible(event.getValue());
@@ -284,7 +286,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public boolean isRestrictAccessSet() {
-        return get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).getValue();
+        return get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).getValue();
     }
 
     public List<Building> getBuildingAccess() {

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.organisation;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -24,17 +25,16 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerView;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class PortfolioViewerActivity extends CrmViewerActivity<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
     }
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
+        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(Portfolio.class));
     }
 }

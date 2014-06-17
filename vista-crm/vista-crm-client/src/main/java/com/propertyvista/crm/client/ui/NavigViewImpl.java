@@ -42,6 +42,8 @@ import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -219,8 +221,8 @@ public class NavigViewImpl extends Composite implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Organization"), CrmImages.INSTANCE.organizationIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee()));
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio()));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Employee(), DataModelPermission.permissionRead(EmployeeDTO.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Portfolio(), DataModelPermission.permissionRead(Portfolio.class)));
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
             }

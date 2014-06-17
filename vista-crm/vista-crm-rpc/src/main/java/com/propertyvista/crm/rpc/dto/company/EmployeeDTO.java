@@ -13,33 +13,19 @@
  */
 package com.propertyvista.crm.rpc.dto.company;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IList;
-import com.pyx4j.entity.core.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
-import com.propertyvista.domain.security.UserCredentialEditDTO;
 
 @Transient
 @ExtendsBO(Employee.class)
-public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
+public interface EmployeeDTO extends Employee {
 
-    @Override
-    @Caption(name = "Active Employee")
-    IPrimitive<Boolean> enabled();
-
-    IPrimitive<Boolean> restrictAccessToSelectedBuildingsAndPortfolios();
-
-    IList<CrmRole> roles();
+    EmployeePrivilegesDTO privileges();
 
     // TODO put auditing configuration here
     UserAuditingConfigurationDTO userAuditingConfiguration();
-
-    @Caption(name = "Has security question")
-    IPrimitive<Boolean> isSecurityQuestionSet();
 
 }

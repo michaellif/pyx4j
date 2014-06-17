@@ -144,11 +144,7 @@ import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
-import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
-import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
-import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
-import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
@@ -174,7 +170,6 @@ import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
-import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
@@ -223,8 +218,6 @@ import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Company;
-import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -556,20 +549,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLeaseAdjustmentReasonListService.class));
 
 // - Organization:
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(Employee.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectEmployeeListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeSignatureUploadService.class));
-
-        grant(VistaBasicBehavior.CRM, new EntityPermission(Portfolio.class, EntityPermission.READ));
-        grant(VistaCrmBehavior.Organization_OLD, new EntityPermission(Portfolio.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
-
-        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(SelectPortfolioListService.class));
-        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(SelectCrmRoleListService.class));
-
-        grant(VistaCrmBehavior.Organization_OLD, new IServiceExecutePermission(ManagedCrmUserService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
 
 // -- Crm Users, Self management

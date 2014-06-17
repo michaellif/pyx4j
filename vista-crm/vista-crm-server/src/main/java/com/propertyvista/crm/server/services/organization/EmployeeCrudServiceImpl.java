@@ -19,6 +19,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDiff;
@@ -33,13 +34,13 @@ import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.domain.security.BehaviorHolder;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -59,9 +60,9 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     protected EmployeeDTO init(InitializationData initializationData) {
         EmployeeDTO newEmployee = EntityFactory.create(EmployeeDTO.class);
 
-        newEmployee.enabled().setValue(true);
-        newEmployee.restrictAccessToSelectedBuildingsAndPortfolios().setValue(false);
-        newEmployee.requiredPasswordChangeOnNextLogIn().setValue(true);
+        newEmployee.privileges().enabled().setValue(true);
+        newEmployee.privileges().restrictAccessToSelectedBuildingsAndPortfolios().setValue(false);
+        newEmployee.privileges().requiredPasswordChangeOnNextLogIn().setValue(true);
 
         return newEmployee;
 
@@ -81,13 +82,13 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         //TODO proper Role
         CrmUserCredential crs = null;
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD) && (bo.user().getPrimaryKey() != null)) {
+        if (SecurityController.checkPermission(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)) && (bo.user().getPrimaryKey() != null)) {
             crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
-            to.enabled().set(crs.enabled());
-            to.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
-            to.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
-            to.roles().addAll(crs.roles());
-            to.credentialUpdated().setValue(crs.credentialUpdated().getValue());
+            to.privileges().enabled().set(crs.enabled());
+            to.privileges().restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
+            to.privileges().requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+            to.privileges().roles().addAll(crs.roles());
+            to.privileges().credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
             to.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
         }
@@ -96,7 +97,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
             }
             if (crs != null) {
-                to.isSecurityQuestionSet().setValue(!CommonsStringUtils.isEmpty(crs.securityQuestion().getValue()));
+                to.privileges().isSecurityQuestionSet().setValue(!CommonsStringUtils.isEmpty(crs.securityQuestion().getValue()));
             }
         }
 
@@ -117,8 +118,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD)) {
-            if (!in.restrictAccessToSelectedBuildingsAndPortfolios().getValue(false)) {
+        if (SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class))) {
+            if (!in.privileges().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false)) {
                 dbo.buildingAccess().clear();
                 dbo.portfolios().clear();
             }
@@ -128,7 +129,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         boolean updated = super.persist(dbo, in);
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD)) {
+        if (SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class))) {
             CrmUser user;
             boolean isNew = false;
 
@@ -164,13 +165,14 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 credential = EntityFactory.create(CrmUserCredential.class);
                 credential.setPrimaryKey(user.getPrimaryKey());
                 credential.user().set(user);
-                credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(in.password().getValue()));
+                credential.credential().setValue(
+                        ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(in.privileges().password().getValue()));
             }
-            credential.enabled().set(in.enabled());
+            credential.enabled().set(in.privileges().enabled());
             credential.roles().clear();
-            credential.roles().addAll(in.roles());
-            credential.accessAllBuildings().setValue(!in.restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
-            credential.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
+            credential.roles().addAll(in.privileges().roles());
+            credential.accessAllBuildings().setValue(!in.privileges().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
+            credential.requiredPasswordChangeOnNextLogIn().setValue(in.privileges().requiredPasswordChangeOnNextLogIn().getValue());
 
             Persistence.service().persist(credential);
 

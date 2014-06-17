@@ -165,9 +165,9 @@ public class GadgetServiceImplTestBase extends IntegrationTestBase {
             dto.email().setValue(email);
             dto.name().firstName().setValue(firstName);
             dto.name().lastName().setValue(lastName);
-            dto.password().setValue(password);
-            dto.passwordConfirm().setValue(password);
-            dto.passwordConfirm().setValue(password);
+            dto.privileges().password().setValue(password);
+            dto.privileges().passwordConfirm().setValue(password);
+            dto.privileges().passwordConfirm().setValue(password);
             ServerSideFactory.create(EmployeeCrudService.class).create(new AsyncCallback<Key>() {
                 @Override
                 public void onSuccess(Key result) {
