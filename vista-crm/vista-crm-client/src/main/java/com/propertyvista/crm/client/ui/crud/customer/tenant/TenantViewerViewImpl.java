@@ -22,7 +22,6 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
@@ -37,19 +36,59 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     private final static I18n i18n = I18n.get(TenantViewerViewImpl.class);
 
+    private final MenuItem screeningView;
+
+    private final MenuItem maintenanceView;
+
+    private final MenuItem deletedPapsView;
+
     private final MenuItem passwordAction;
 
     private final MenuItem screeningAction;
 
+    private final MenuItem registrationView;
+
     private final MenuItem maintenanceAction;
-
-    private final MenuItem registrationAction;
-
-    private final MenuItem viewDeletedPapsAction;
 
     public TenantViewerViewImpl() {
         setForm(new TenantForm(this));
 
+        // Views:
+        screeningView = new MenuItem(i18n.tr("Screening"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).viewScreening();
+            }
+        });
+        addView(screeningView);
+
+        maintenanceView = new SecureMenuItem(i18n.tr("Maintenance Requests"), new Command() {
+            @Override
+            public void execute() {
+                if (!isVisorShown()) {
+                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
+                }
+            }
+        }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
+        addView(maintenanceView);
+
+        deletedPapsView = new MenuItem(i18n.tr("Deleted AutoPayments"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).viewDeletedPaps();
+            }
+        });
+        addView(deletedPapsView);
+
+        registrationView = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).retrievePortalRegistrationInformation();
+            }
+        });
+        addView(registrationView);
+
+        // Actions:
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
@@ -58,14 +97,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         });
         addAction(passwordAction);
-
-        registrationAction = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
-            @Override
-            public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).retrievePortalRegistrationInformation();
-            }
-        });
-        addAction(registrationAction);
 
         screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
             @Override
@@ -82,34 +113,17 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
         addAction(maintenanceAction);
-
-        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted AutoPayments"), new Command() {
-            @Override
-            public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).viewDeletedPaps();
-            }
-        });
-        addAction(viewDeletedPapsAction);
-
-        // ------------------------------------------------------------------------------------------------------------
-
-        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
-            @Override
-            public void execute() {
-                if (!isVisorShown()) {
-                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
-                }
-            }
-        }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
     }
 
     @Override
     public void reset() {
+        setActionVisible(screeningView, false);
+        setActionVisible(deletedPapsView, false);
+        setActionVisible(registrationView, false);
+
         setActionVisible(passwordAction, false);
         setActionVisible(screeningAction, false);
         setActionVisible(maintenanceAction, false);
-        setActionVisible(registrationAction, false);
-        setActionVisible(viewDeletedPapsAction, false);
 
         super.reset();
     }
@@ -127,7 +141,9 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         boolean leaseIsActive = value.lease().status().getValue().isActive();
 
+        setViewVisible(screeningView, value.screening().getPrimaryKey() != null);
         setActionVisible(screeningAction, value.screening().getPrimaryKey() == null);
+
         if (VistaFeatures.instance().yardiIntegration()) {
             setActionVisible(maintenanceAction, leaseIsActive && !value.isPotentialTenant().getValue(false));
         } else {
@@ -138,9 +154,9 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         // Disable password change button for tenants with no associated user principal (+ regular portal access rule):
         setActionVisible(passwordAction, hasPortalAccess && !value.customer().user().isNull());
-        setActionVisible(registrationAction, hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
+        setActionVisible(registrationView, hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
 
-        setActionVisible(viewDeletedPapsAction, leaseIsActive);
+        setViewVisible(deletedPapsView, leaseIsActive);
     }
 
     @Override

@@ -125,4 +125,9 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
         AppSite.getPlaceController().goTo(place);
     }
+
+    @Override
+    public void viewScreening() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formViewerPlace(currentValue.screening().getPrimaryKey()));
+    }
 }

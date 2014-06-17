@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -167,7 +167,6 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 new CEntityCrudHyperlink<LeaseParticipantScreeningTO>(AppPlaceEntityMapper.resolvePlace(LeaseParticipantScreeningTO.class))).decorate();
 
         if (rootClass.equals(TenantDTO.class)) {
-
             formPanel.append(Location.Right, ((TenantDTO) proto()).role(), new CEnumLabel()).decorate().componentWidth(150);
             formPanel.append(Location.Right, ((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()).decorate().componentWidth(50);
         }

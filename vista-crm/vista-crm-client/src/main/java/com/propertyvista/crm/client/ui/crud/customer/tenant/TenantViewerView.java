@@ -35,6 +35,8 @@ public interface TenantViewerView extends IViewer<TenantDTO> {
         void retrievePortalRegistrationInformation();
 
         void viewDeletedPaps();
+
+        void viewScreening();
     }
 
     public void displayPortalRegistrationInformation(TenantPortalAccessInformationDTO info);
