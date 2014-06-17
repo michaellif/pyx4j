@@ -230,6 +230,7 @@ public class DefaultPaneTheme extends Theme {
 
         style = new Style(".", StyleName.ListerListPanel);
         style.addProperty("padding", "6px");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
     }

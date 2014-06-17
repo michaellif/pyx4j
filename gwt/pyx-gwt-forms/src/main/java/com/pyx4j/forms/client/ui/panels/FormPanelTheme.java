@@ -60,6 +60,7 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("max-width", "1200px");
+        style.addProperty("line-height", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanelBlock);
@@ -83,6 +84,7 @@ public abstract class FormPanelTheme extends Theme {
 
         style = new Style(".", StyleName.FormPanelCell);
         style.addProperty("margin", "0 auto");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
@@ -128,6 +130,7 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("background-color", getBackgroundColor(), 0.1);
         style.addProperty("margin", "6px 0 4px 0");
         style.addProperty("text-align", "left");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH1Image);
@@ -145,6 +148,7 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("border-bottom-color", getBackgroundColor(), 1);
         style.addProperty("margin", "6px 0 4px 0");
         style.addProperty("text-align", "left");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH2Label);
@@ -158,6 +162,7 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("border-bottom-color", getBackgroundColor(), 0.6);
         style.addProperty("margin", "6px 0 4px 0");
         style.addProperty("text-align", "left");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH3Label);
@@ -171,6 +176,7 @@ public abstract class FormPanelTheme extends Theme {
         style.addProperty("background-color", getBackgroundColor(), 0);
         style.addProperty("margin", "6px 0 4px 0");
         style.addProperty("text-align", "left");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelH4Label);

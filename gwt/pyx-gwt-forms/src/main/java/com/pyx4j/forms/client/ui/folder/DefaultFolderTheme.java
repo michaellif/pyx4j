@@ -61,6 +61,7 @@ public abstract class DefaultFolderTheme extends Theme {
     protected void initStyles() {
         Style style = new Style(".", StyleName.CFolder);
         style.addProperty("width", "100%");
+        style.addProperty("min-height", "40px");
         addStyle(style);
 
         style = new Style(".", StyleName.CFolder, "-", StyleDependent.readOnly);
@@ -116,6 +117,9 @@ public abstract class DefaultFolderTheme extends Theme {
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
         style.addProperty("cursor", "pointer");
+        style.addProperty("line-height", "1em");
+        style.addProperty("border", "none");
+        style.addProperty("background", "transparent");
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderAddButton, " .", DefaultWidgetsTheme.StyleName.ButtonText);
@@ -134,6 +138,10 @@ public abstract class DefaultFolderTheme extends Theme {
         style.addProperty("float", "right");
         addStyle(style);
 
+        style = new Style(".", StyleName.CFolderRowItemDecorator);
+        style.addProperty("line-height", "1em");
+        addStyle(style);
+
         style = new Style(".", StyleName.CFolderRowItemDecorator, " .", StyleName.CFolderRemoveButton);
         style.addProperty("float", "left");
         addStyle(style);
@@ -150,6 +158,7 @@ public abstract class DefaultFolderTheme extends Theme {
         style.addProperty("margin-top", "6px");
         style.addProperty("border-bottom", "1px dotted");
         style.addProperty("border-bottom-color", getBackgroundColor());
+        style.addProperty("line-height", "1.5em");
         addStyle(style);
 
         style = new Style(".", StyleName.CFolderTableHeaderLabel);
@@ -167,6 +176,7 @@ public abstract class DefaultFolderTheme extends Theme {
         style = new Style(".", StyleName.CFolderNoDataMessage);
         style.addProperty("font-style", "italic");
         style.addProperty("color", ThemeColor.foreground, 0.7);
+        style.addProperty("padding", "10px");
         addStyle(style);
 
     }
