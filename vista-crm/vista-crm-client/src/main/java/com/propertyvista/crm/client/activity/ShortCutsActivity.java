@@ -18,10 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.site.client.AppSite;
-
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.event.CrudNavigateHandler;

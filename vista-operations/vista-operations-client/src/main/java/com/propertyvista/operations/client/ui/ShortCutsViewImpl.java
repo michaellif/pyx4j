@@ -80,9 +80,15 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
         public NavigItem(AppPlace placeIn, IEntity value) {
             adoptPlace(placeIn);
 
-            String viewLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption() + (value != null ? " - " + value.getStringView() : "");
-            Anchor anchor = new Anchor(viewLabel, true);
-            anchor.setTitle(viewLabel);
+            StringBuilder viewLabel = new StringBuilder();
+
+            viewLabel.append(value != null ? value.getStringView() : "");
+            viewLabel.append(" (");
+            viewLabel.append(AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption());
+            viewLabel.append(")");
+
+            Anchor anchor = new Anchor(viewLabel.toString(), true);
+            anchor.setTitle(viewLabel.toString());
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

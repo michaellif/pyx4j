@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui;
 
 import java.util.Iterator;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -75,9 +76,16 @@ public class ShortCutsViewImpl extends ScrollPanel implements ShortCutsView {
         public NavigItem(AppPlace placeIn, IEntity value) {
             adoptPlace(placeIn);
 
-            String viewLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption() + (value != null ? " - " + value.getStringView() : "");
-            Anchor anchor = new Anchor(viewLabel, true);
-            anchor.setTitle(viewLabel);
+            StringBuilder viewLabel = new StringBuilder();
+
+            viewLabel.append(value != null ? value.getStringView() : "");
+            viewLabel.append(" (");
+            viewLabel.append(AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption());
+            viewLabel.append(")");
+
+            Anchor anchor = new Anchor(viewLabel.toString(), true);
+            anchor.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+            anchor.setTitle(viewLabel.toString());
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
