@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -40,22 +40,20 @@ public class PetDataEditor extends CForm<Pet> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        panel.setH3(++row, 0, 2, i18n.tr("Pet Data"));
+        formPanel.h3(i18n.tr("Pet Data"));
 
-        panel.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
-        panel.setWidget(++row, 0, inject(proto().color(), new FieldDecoratorBuilder(15).build()));
-        panel.setWidget(++row, 0, inject(proto().breed(), new FieldDecoratorBuilder(15).build()));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().color()).decorate().componentWidth(150);
+        formPanel.append(Location.Left, proto().breed()).decorate().componentWidth(150);
 
-        row = 0; // skip header
-        panel.setWidget(++row, 1, inject(proto().weight(), new FieldDecoratorBuilder(4).build()));
-        panel.setWidget(++row, 1, inject(proto().weightUnit(), new FieldDecoratorBuilder(4).build()));
-        panel.setWidget(++row, 1, inject(proto().birthDate(), new FieldDecoratorBuilder(9).build()));
+        formPanel.append(Location.Right, proto().weight()).decorate().componentWidth(60);
+        formPanel.append(Location.Right, proto().weightUnit()).decorate().componentWidth(60);
+        formPanel.append(Location.Right, proto().birthDate()).decorate().componentWidth(120);
 
         removeMandatory();
-        return panel;
+        return formPanel;
     }
 
     public void removeMandatory() {

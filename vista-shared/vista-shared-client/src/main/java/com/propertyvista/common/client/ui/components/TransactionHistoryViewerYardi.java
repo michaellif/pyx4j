@@ -31,7 +31,8 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -50,8 +51,6 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
 
     private final NumberFormat paymentFormat;
 
-    private final int COLUMNS_NUMBER = 4;
-
     public TransactionHistoryViewerYardi(String chargeFormat, String paymentFormat) {
         this.chargeFormat = NumberFormat.getFormat(chargeFormat);
         this.paymentFormat = NumberFormat.getFormat(paymentFormat);
@@ -63,7 +62,7 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
 
             @Override
             public IsWidget format(TransactionHistoryDTO value) {
-                TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
+                FormPanel formPanel = new FormPanel(null);
                 if (value != null) {
                     List<YardiPayment> unappliedPayments = new ArrayList<YardiPayment>();
                     List<YardiDebit> outstangingCharges = new ArrayList<YardiDebit>();
@@ -79,17 +78,16 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
                         }
                     }
 
-                    int row = -1;
-                    contentPanel.setH1(++row, 0, 2, i18n.tr("Outstanding Charges"));
-                    contentPanel.setWidget(++row, 0, 2, renderLineItems(outstangingCharges, chargeFormat, i18n.tr("Due Date")));
+                    formPanel.h1(i18n.tr("Outstanding Charges"));
+                    formPanel.append(Location.Dual, renderLineItems(outstangingCharges, chargeFormat, i18n.tr("Due Date")));
 
-                    contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Account Credits"));
-                    contentPanel.setWidget(++row, 0, 2, renderLineItems(accountCredits, paymentFormat, null));
+                    formPanel.h1(i18n.tr("Account Credits"));
+                    formPanel.append(Location.Dual, renderLineItems(accountCredits, paymentFormat, null));
 
-                    contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Unapplied Payments"));
-                    contentPanel.setWidget(++row, 0, 2, renderLineItems(unappliedPayments, paymentFormat, null));
+                    formPanel.h1(i18n.tr("Unapplied Payments"));
+                    formPanel.append(Location.Dual, renderLineItems(unappliedPayments, paymentFormat, null));
                 }
-                return contentPanel;
+                return formPanel;
             }
         });
     }

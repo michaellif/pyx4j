@@ -22,9 +22,9 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.property.vendor.Warranty;
@@ -40,22 +40,19 @@ public class WarrantyEditor extends CForm<Warranty> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, inject(proto().title(), new FieldDecoratorBuilder(20).build()));
-        main.setWidget(row, 1, inject(proto().type(), new FieldDecoratorBuilder(11).build()));
+        formPanel.h1(i18n.tr("Information"));
+        formPanel.append(Location.Left, proto().title()).decorate();
+        formPanel.append(Location.Right, proto().type()).decorate().componentWidth(140);
 
-        main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().contract(), new ContractEditor()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.h1(proto().contract().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().contract(), new ContractEditor());
 
-        main.setH1(++row, 0, 2, proto().items().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().items(), new WarrantyItemFolder()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.h1(proto().items().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().items(), new WarrantyItemFolder());
 
-        return main;
+        return formPanel;
     }
 
     private class WarrantyItemFolder extends VistaTableFolder<WarrantyItem> {

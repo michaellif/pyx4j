@@ -16,9 +16,9 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -34,20 +34,18 @@ public class MaintenanceEditor extends CForm<Maintenance> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().contract(), new ContractEditor()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.h1(proto().contract().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().contract(), new ContractEditor());
 
-        main.setH1(++row, 0, 2, i18n.tr("Schedule"));
-        ++row;
-        main.setWidget(row, 0, inject(proto().lastService(), new FieldDecoratorBuilder(9).build()));
-        main.setWidget(row, 1, inject(proto().nextService(), new FieldDecoratorBuilder(9).build()));
+        formPanel.h1(i18n.tr("Schedule"));
+
+        formPanel.append(Location.Left, proto().lastService()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().nextService()).decorate().componentWidth(120);
 
         validateMaintenanceDates();
-        return main;
+        return formPanel;
     }
 
     private void validateMaintenanceDates() {

@@ -18,7 +18,6 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
