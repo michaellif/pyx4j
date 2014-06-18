@@ -80,7 +80,7 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
 
     @Override
     protected Widget initContentPanel() {
-        lister = new EntityDataTablePanel<BuildingDTO>(BuildingDTO.class, true, false);
+        lister = new EntityDataTablePanel<BuildingDTO>(BuildingDTO.class, false, false);
         lister.setSize("100%", "100%");
         lister.setDataSource(new ListerDataSource<BuildingDTO>(BuildingDTO.class, GWT.<BuildingCrudService> create(BuildingCrudService.class)));
         ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
