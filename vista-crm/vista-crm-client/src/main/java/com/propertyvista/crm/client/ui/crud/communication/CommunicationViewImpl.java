@@ -142,8 +142,6 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.viewer);
                     AppSite.getPlaceController().goTo(place.formViewerPlace(message.getPrimaryKey()));
-                    ((PopupPanel) CommunicationViewImpl.this.getParent()).hide();
-
                 }
             });
             messageField = new Label(message.text().getStringView());
