@@ -110,7 +110,7 @@ public abstract class DefaultFolderTheme extends Theme {
         style.addProperty("opacity", "1");
         addStyle(style);
 
-        style = new Style(".", StyleName.CFolderAddButton);
+        style = new Style(".", StyleName.CFolderAddButton, ".", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("display", "inline-block");
         style.addProperty("margin", "6px");
         style.addProperty("color", ThemeColor.object1, 0.8);

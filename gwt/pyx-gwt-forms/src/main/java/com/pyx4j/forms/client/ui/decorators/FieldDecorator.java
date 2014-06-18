@@ -157,6 +157,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         contentHolder.setStyleName(WidgetDecoratorContentHolder.name());
         contentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        contentHolder.setWidth(builder.componentWidth);
 
         validationLabel = new HTML();
         validationLabel.setVisible(false);
@@ -178,7 +179,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         contentPanel.add(contentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
-        contentPanel.setWidth(builder.componentWidth);
 
         containerPanel = new FlowPanel();
         containerPanel.setStyleName(WidgetDecoratorContainerPanel.name());
