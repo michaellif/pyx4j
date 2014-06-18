@@ -48,7 +48,11 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(EmployeeDTO.class));
+        if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(entity.user().getPrimaryKey())) {
+            return SecurityController.check(VistaCrmBehavior.AccountSelf);
+        } else {
+            return SecurityController.check(DataModelPermission.permissionUpdate(EmployeeDTO.class));
+        }
     }
 
     @Override

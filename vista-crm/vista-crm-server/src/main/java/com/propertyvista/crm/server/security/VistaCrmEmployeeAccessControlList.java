@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.security;
 
-import static com.propertyvista.domain.security.VistaCrmBehavior.AccountSelf;
 import static com.propertyvista.domain.security.VistaCrmBehavior.EmployeeBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.EmployeeFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.PortfolioBasic;
@@ -74,7 +73,6 @@ public class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
             grant(EmployeeFull, new IServiceExecutePermission(ManagedCrmUserService.class));
 
         }
-        grant(EmployeeBasic, AccountSelf);
         grant(EmployeeFull, EmployeeBasic);
 
         // grant(VistaCrmBehavior.EmployeeDefault, new ActionPermission(UpdateFromYardi.class));
