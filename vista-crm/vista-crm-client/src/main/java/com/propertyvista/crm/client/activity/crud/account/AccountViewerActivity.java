@@ -51,8 +51,18 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     private final AbstractAccountRecoveryOptionsService accountRecoveryOptionsService;
 
     public AccountViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
+        super(place, CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
         accountRecoveryOptionsService = GWT.<AbstractAccountRecoveryOptionsService> create(CrmAccountRecoveryOptionsUserService.class);
+    }
+
+    @Override
+    public boolean canEdit() {
+        return SecurityController.checkBehavior(VistaCrmBehavior.AccountSelf);
+    }
+
+    @Override
+    public boolean canChangePassword() {
+        return true;
     }
 
     @Override
@@ -61,6 +71,11 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
         passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
         passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.EMPLOYEE.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
+    }
+
+    @Override
+    public boolean canViewLoginLog() {
+        return true;
     }
 
     @Override
@@ -106,23 +121,13 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
 
     @Override
     protected void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD), true);
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.EmployeeFull), true);
         super.onPopulateSuccess(result);
-    }
-
-    @Override
-    public boolean canClearSecurityQuestion() {
-        return false;
     }
 
     @Override
     public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
         // this is never possible since canClearSecurityQuestion always will return false        
-    }
-
-    @Override
-    public boolean canSendPasswordResetEmail() {
-        return false;
     }
 
     @Override

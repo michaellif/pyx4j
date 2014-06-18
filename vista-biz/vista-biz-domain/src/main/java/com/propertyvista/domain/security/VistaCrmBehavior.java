@@ -50,6 +50,7 @@ public enum VistaCrmBehavior implements Behavior {
     @Deprecated
     Maintenance_OLD,
 
+    @Deprecated
     Organization_OLD,
 
     OrganizationFinancial_OLD,
@@ -139,7 +140,7 @@ public enum VistaCrmBehavior implements Behavior {
 
     // --
 
-    EmployeeAdvance, EmployeeFull,
+    EmployeeBasic, EmployeeFull,
 
     // --
 

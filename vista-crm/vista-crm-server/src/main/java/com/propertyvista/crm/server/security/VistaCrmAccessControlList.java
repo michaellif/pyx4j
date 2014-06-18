@@ -143,7 +143,6 @@ import com.propertyvista.crm.rpc.services.legal.LegalLetterUploadService;
 import com.propertyvista.crm.rpc.services.legal.N4CreateBatchService;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
-import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
@@ -153,10 +152,8 @@ import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCr
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
-import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
-import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingUtilityListService;
@@ -552,12 +549,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectEmployeeListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeSignatureUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
-
-// -- Crm Users, Self management
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
-        grant(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
 
 // - Marketing-related:
         grant(VistaCrmBehavior.Marketing_OLD, new IServiceExecutePermission(PageDescriptorCrudService.class));

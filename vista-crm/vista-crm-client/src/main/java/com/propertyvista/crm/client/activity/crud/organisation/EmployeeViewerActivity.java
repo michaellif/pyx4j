@@ -21,6 +21,7 @@ import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -32,14 +33,28 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
+    private EmployeeDTO entity;
+
     public EmployeeViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
+    }
+
+    @Override
+    public boolean canEdit() {
+        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeeDTO.class));
+    }
+
+    @Override
+    public boolean canChangePassword() {
+        return SecurityController.checkPermission(new ActionPermission(CRMUserSecurityActions.class)) //
+                || ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(entity.user().getPrimaryKey());
     }
 
     @Override
@@ -52,6 +67,11 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     }
 
     @Override
+    public boolean canViewLoginLog() {
+        return true;
+    }
+
+    @Override
     public void goToLoginHistory(CrmUser userStub) {
         AppPlace loginHistoryPlace = new CrmSiteMap.Account.LoginAttemptsLog();
         loginHistoryPlace.formPlace(userStub.getPrimaryKey());
@@ -59,13 +79,9 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     }
 
     @Override
-    public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeeDTO.class));
-    }
-
-    @Override
     protected void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD), ClientContext
+        this.entity = result;
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.EmployeeFull), ClientContext
                 .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
         super.onPopulateSuccess(result);
     }
@@ -81,18 +97,8 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     }
 
     @Override
-    public boolean canClearSecurityQuestion() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
-    }
-
-    @Override
     public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
         ((EmployeeCrudService) getService()).clearSecurityQuestion(asyncCallback, employeeId);
-    }
-
-    @Override
-    public boolean canSendPasswordResetEmail() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD);
     }
 
     @Override

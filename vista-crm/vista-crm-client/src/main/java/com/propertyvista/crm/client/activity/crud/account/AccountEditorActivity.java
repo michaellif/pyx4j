@@ -29,13 +29,13 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public class AccountEditorActivity extends CrmEditorActivity<EmployeeDTO> implements EmployeeEditorView.Presenter {
 
     public AccountEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(EmployeeEditorView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class),
+        super(place, CrmSite.getViewFactory().getView(EmployeeEditorView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class),
                 EmployeeDTO.class);
     }
 
     @Override
     public void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD), true);
+        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.EmployeeFull), true);
         super.onPopulateSuccess(result);
     }
 }

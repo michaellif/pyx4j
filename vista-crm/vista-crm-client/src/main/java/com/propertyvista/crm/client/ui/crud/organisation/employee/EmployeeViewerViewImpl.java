@@ -20,12 +20,15 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.ActionPermission;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.PasswordTextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
 
 public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
 
@@ -36,10 +39,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     private final MenuItem viewLoginLogAction;
 
     private final MenuItem accountRecoveryOptionsAction;
-
-    private final MenuItem clearSecurityQuestionAction;
-
-    private final MenuItem sendPasswordResetEmailAction;
 
     public EmployeeViewerViewImpl() {
         setForm(new EmployeeForm(this));
@@ -54,13 +53,12 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         });
         addAction(passwordAction);
 
-        viewLoginLogAction = new MenuItem(i18n.tr("View Login History"), new Command() {
+        addAction(viewLoginLogAction = new MenuItem(i18n.tr("View Login History"), new Command() {
             @Override
             public void execute() {
                 ((EmployeeViewerView.Presenter) getPresenter()).goToLoginHistory(getForm().getValue().user());
             }
-        });
-        addAction(viewLoginLogAction);
+        }));
 
         accountRecoveryOptionsAction = new MenuItem(i18n.tr("Account Recovery Options"), new Command() {
             @Override
@@ -70,7 +68,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         });
         addAction(accountRecoveryOptionsAction);
 
-        clearSecurityQuestionAction = new MenuItem(i18n.tr("Clear Security Question"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Clear Security Question"), new Command() {
 
             @Override
             public void execute() {
@@ -94,10 +92,9 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
             }
 
-        });
-        addAction(clearSecurityQuestionAction);
+        }, new ActionPermission(CRMUserSecurityActions.class)));
 
-        sendPasswordResetEmailAction = new MenuItem(i18n.tr("Send Password Reset Email"), new Command() {
+        addAction(new SecureMenuItem(i18n.tr("Send Password Reset Email"), new Command() {
 
             @Override
             public void execute() {
@@ -120,8 +117,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                 }, getForm().getValue().<EmployeeDTO> createIdentityStub());
             }
 
-        });
-        addAction(sendPasswordResetEmailAction);
+        }, new ActionPermission(CRMUserSecurityActions.class)));
 
     }
 
@@ -130,8 +126,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         setActionVisible(passwordAction, false);
         setActionVisible(viewLoginLogAction, false);
         setActionVisible(accountRecoveryOptionsAction, false);
-        setActionVisible(clearSecurityQuestionAction, false);
-        setActionVisible(sendPasswordResetEmailAction, false);
         super.reset();
     }
 
@@ -139,11 +133,9 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     public void populate(EmployeeDTO value) {
         super.populate(value);
 
-        setActionVisible(passwordAction, getPresenter().canEdit());
-        setActionVisible(viewLoginLogAction, getPresenter().canEdit());
+        setActionVisible(passwordAction, ((EmployeeViewerView.Presenter) getPresenter()).canChangePassword());
+        setActionVisible(viewLoginLogAction, ((EmployeeViewerView.Presenter) getPresenter()).canViewLoginLog());
         setActionVisible(accountRecoveryOptionsAction, ((EmployeeViewerView.Presenter) getPresenter()).canGoToAccountRecoveryOptions());
-        setActionVisible(clearSecurityQuestionAction, ((EmployeeViewerView.Presenter) getPresenter()).canClearSecurityQuestion());
-        setActionVisible(sendPasswordResetEmailAction, ((EmployeeViewerView.Presenter) getPresenter()).canSendPasswordResetEmail());
     }
 
     private class GetPasswordDialog extends OkCancelDialog {

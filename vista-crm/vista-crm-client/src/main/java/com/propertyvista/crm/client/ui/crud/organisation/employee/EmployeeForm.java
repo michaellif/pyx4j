@@ -37,6 +37,7 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -56,6 +57,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
+import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
 import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.company.Notification;
@@ -118,8 +120,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
-        get(proto().privileges().enabled()).setVisible(isManager);
-        get(proto().privileges().changePassword()).setVisible(isManager);
+        get(proto().privileges().enabled()).setVisible(SecurityController.checkPermission(new ActionPermission(CRMUserSecurityActions.class)));
+        get(proto().privileges().changePassword()).setVisible(SecurityController.checkPermission(new ActionPermission(CRMUserSecurityActions.class)));
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
         get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);

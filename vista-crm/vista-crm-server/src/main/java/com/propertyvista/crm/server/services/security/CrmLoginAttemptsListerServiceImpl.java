@@ -65,7 +65,7 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    public void retrieve(AsyncCallback<LoginAttemptDTO> callback, Key entityId, RetrieveTarget retrieveTarget ) {
+    public void retrieve(AsyncCallback<LoginAttemptDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
         throw new Error("retrieve is not implemented");
     }
 
@@ -79,7 +79,7 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // security measures 
-        if (!SecurityController.checkBehavior(VistaCrmBehavior.Organization_OLD)) {
+        if (!SecurityController.checkBehavior(VistaCrmBehavior.EmployeeBasic)) {
             dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().user(), VistaContext.getCurrentUserPrimaryKey()));
         }
 

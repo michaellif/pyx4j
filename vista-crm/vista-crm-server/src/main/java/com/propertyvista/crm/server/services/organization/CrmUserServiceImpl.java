@@ -25,6 +25,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
 
@@ -36,6 +37,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, EmployeeDTO> implements CrmUserService {
@@ -88,6 +90,8 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
     @Override
     protected boolean persist(Employee bo, EmployeeDTO to) {
+        SecurityController.assertBehavior(VistaCrmBehavior.AccountSelf);
+
         assertSamePortfolios(to);
         // Enforce access only to current user
         to.setPrimaryKey(CrmAppContext.getCurrentUserEmployee().getPrimaryKey());

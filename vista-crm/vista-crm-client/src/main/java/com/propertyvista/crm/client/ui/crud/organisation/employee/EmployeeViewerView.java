@@ -25,7 +25,11 @@ public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
 
     interface Presenter extends IViewer.Presenter {
 
+        boolean canChangePassword();
+
         void goToChangePassword(Key userId, String userName);
+
+        boolean canViewLoginLog();
 
         void goToLoginHistory(CrmUser userStub);
 
@@ -33,11 +37,7 @@ public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
 
         void goToAccountRecoveryOptions(String password);
 
-        boolean canClearSecurityQuestion();
-
         void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);
-
-        boolean canSendPasswordResetEmail();
 
         void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId);
 

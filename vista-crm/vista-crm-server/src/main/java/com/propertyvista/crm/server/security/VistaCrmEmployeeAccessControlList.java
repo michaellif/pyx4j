@@ -14,7 +14,7 @@
 package com.propertyvista.crm.server.security;
 
 import static com.propertyvista.domain.security.VistaCrmBehavior.AccountSelf;
-import static com.propertyvista.domain.security.VistaCrmBehavior.EmployeeAdvance;
+import static com.propertyvista.domain.security.VistaCrmBehavior.EmployeeBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.EmployeeFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.PortfolioBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.PortfolioFull;
@@ -24,14 +24,18 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
+import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.company.EmployeePrivilegesDTO;
+import com.propertyvista.crm.rpc.dto.company.ac.CRMUserSecurityActions;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
+import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
+import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -40,30 +44,38 @@ public class VistaCrmEmployeeAccessControlList extends UIAclBuilder {
 
     VistaCrmEmployeeAccessControlList() {
 
+        // -- Crm Users, Self management ==  All Users 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
+        grant(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired, new IServiceExecutePermission(CrmAccountRecoveryOptionsUserService.class));
+
         // ------ Account Self management
+        // There are no UI Permissions, UI bound to  VistaCrmBehavior.AccountSelf
         //-- back-end
         {
-            grant(AccountSelf, new IServiceExecutePermission(CrmUserService.class));
-            grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmUserService.class));
+            // There are special  service for this, CrmUserService
         }
 
         // ------ Employee View and Management
-        grant(EmployeeAdvance, EmployeeDTO.class, READ);
+        grant(EmployeeBasic, EmployeeDTO.class, READ);
         grant(EmployeeFull, EmployeeDTO.class, ALL);
         grant(EmployeeFull, EmployeePrivilegesDTO.class, ALL);
 
+        grant(EmployeeFull, new ActionPermission(CRMUserSecurityActions.class));
+
         //-- back-end
         {
-            grant(EmployeeAdvance, new IServiceExecutePermission(EmployeeCrudService.class));
-            grant(EmployeeAdvance, new EntityPermission(Employee.class, READ));
+            grant(EmployeeBasic, new IServiceExecutePermission(EmployeeCrudService.class));
+            grant(EmployeeBasic, new EntityPermission(Employee.class, READ));
 
             grant(EmployeeFull, new EntityPermission(Employee.class, ALL));
             grant(EmployeeFull, new IServiceExecutePermission(SelectCrmRoleListService.class));
             grant(EmployeeFull, new IServiceExecutePermission(ManagedCrmUserService.class));
 
         }
-        grant(EmployeeAdvance, AccountSelf);
-        grant(EmployeeFull, EmployeeAdvance);
+        grant(EmployeeBasic, AccountSelf);
+        grant(EmployeeFull, EmployeeBasic);
 
         // grant(VistaCrmBehavior.EmployeeDefault, new ActionPermission(UpdateFromYardi.class));
 
