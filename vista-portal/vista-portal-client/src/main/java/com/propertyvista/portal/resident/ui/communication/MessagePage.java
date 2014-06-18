@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.resident.ui.communication;
 
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -164,8 +167,14 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             inject(proto().thread());
             inject(proto().allowedReply());
 
+            FlowPanel detailsPanel = new FlowPanel();
+            detailsPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+
             statusToolBar = new Toolbar();
-            statusToolBar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
+            statusToolBar.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            statusToolBar.getElement().getStyle().setRight(0, Unit.PX);
+            statusToolBar.getElement().getStyle().setTop(0, Unit.PX);
+
             starImage = new Image(PortalImages.INSTANCE.noStar());
             starImage.addClickHandler(new ClickHandler() {
 
@@ -192,9 +201,12 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
             statusToolBar.addItem(highImportnaceImage);
             statusToolBar.addItem(starImage);
-            formPanel.append(Location.Dual, statusToolBar);
+            detailsPanel.add(statusToolBar);
 
-            formPanel.append(Location.Left, proto().header());
+            CField<?, ?> headerPanel = inject(proto().header());
+            detailsPanel.add(headerPanel);
+
+            formPanel.append(Location.Left, detailsPanel);
             formPanel.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
             formPanel.hr();
 
