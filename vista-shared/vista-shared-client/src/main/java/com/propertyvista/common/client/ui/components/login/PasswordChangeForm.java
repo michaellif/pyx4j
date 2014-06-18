@@ -99,7 +99,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         mainPanel.setWidget(++row, 0, 2, inject(proto().newPasswordConfirm(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
 
         mainPanel.setWidget(++row, 0, 2,
-                inject(proto().requireChangePasswordOnNextSignIn(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
+                inject(proto().passwordChangeRequired(), new FieldDecoratorBuilder().componentWidth(15).labelWidth(15).build()));
 
         return mainPanel;
     }
@@ -126,12 +126,12 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
                 if (event.getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
                     PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(event.getValue());
                     if (verdict != null && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
-                        requireChangePasswordOnNextSignInUserDefinedValue = get(proto().requireChangePasswordOnNextSignIn()).getValue();
-                        get(proto().requireChangePasswordOnNextSignIn()).setValue(true);
-                        get(proto().requireChangePasswordOnNextSignIn()).setEnabled(false);
+                        requireChangePasswordOnNextSignInUserDefinedValue = get(proto().passwordChangeRequired()).getValue();
+                        get(proto().passwordChangeRequired()).setValue(true);
+                        get(proto().passwordChangeRequired()).setEnabled(false);
                     } else {
-                        get(proto().requireChangePasswordOnNextSignIn()).setValue(requireChangePasswordOnNextSignInUserDefinedValue);
-                        get(proto().requireChangePasswordOnNextSignIn()).setEnabled(true);
+                        get(proto().passwordChangeRequired()).setValue(requireChangePasswordOnNextSignInUserDefinedValue);
+                        get(proto().passwordChangeRequired()).setEnabled(true);
                     }
                 }
             }
@@ -151,11 +151,11 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         this.enforceRequireChangePasswordThreshold = enforceRequireChangePasswordThreshold;
 
         if (requirePasswordChangeOnNextSignIn != null && isRequireChangePasswordOnNextSignInRequired) {
-            get(proto().requireChangePasswordOnNextSignIn()).setValue(requirePasswordChangeOnNextSignIn);
+            get(proto().passwordChangeRequired()).setValue(requirePasswordChangeOnNextSignIn);
             this.requireChangePasswordOnNextSignInUserDefinedValue = requirePasswordChangeOnNextSignIn;
         }
-        get(proto().requireChangePasswordOnNextSignIn()).setVisible(this.isRequireChangePasswordOnNextSignInRequired);
-        get(proto().requireChangePasswordOnNextSignIn()).setEnabled(this.isRequireChangePasswordOnNextSignInRequired);
+        get(proto().passwordChangeRequired()).setVisible(this.isRequireChangePasswordOnNextSignInRequired);
+        get(proto().passwordChangeRequired()).setEnabled(this.isRequireChangePasswordOnNextSignInRequired);
 
     }
 
@@ -164,7 +164,7 @@ public class PasswordChangeForm extends CForm<PasswordChangeRequest> {
         super.onValueSet(populate);
 
         get(proto().currentPassword()).setVisible(isCurrentPasswordRequired);
-        get(proto().requireChangePasswordOnNextSignIn()).setVisible(isRequireChangePasswordOnNextSignInRequired);
+        get(proto().passwordChangeRequired()).setVisible(isRequireChangePasswordOnNextSignInRequired);
 
     }
 

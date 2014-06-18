@@ -35,7 +35,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
         bind(toProto.updated(), boProto.user().updated());
 
         bind(toProto.enabled(), boProto.enabled());
-        bind(toProto.requiredPasswordChangeOnNextLogIn(), boProto.requiredPasswordChangeOnNextLogIn());
+        bind(toProto.passwordChangeRequired(), boProto.requiredPasswordChangeOnNextLogIn());
         bind(toProto.credentialUpdated(), boProto.credentialUpdated());
 
     }

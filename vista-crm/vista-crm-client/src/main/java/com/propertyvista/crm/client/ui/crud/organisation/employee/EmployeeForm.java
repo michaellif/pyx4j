@@ -119,7 +119,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
         get(proto().privileges().enabled()).setVisible(isManager);
-        get(proto().privileges().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
+        get(proto().privileges().passwordChangeRequired()).setVisible(isManager);
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
         get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
@@ -178,7 +178,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         formPanel.append(Location.Left, proto().privileges().passwordConfirm()).decorate();
         formPanel.br();
         formPanel.append(Location.Left, proto().privileges().enabled()).decorate().componentWidth(50);
-        formPanel.append(Location.Right, proto().privileges().requiredPasswordChangeOnNextLogIn()).decorate().componentWidth(50);
+        formPanel.append(Location.Right, proto().privileges().passwordChangeRequired()).decorate().componentWidth(50);
         formPanel.append(Location.Left, proto().privileges().isSecurityQuestionSet(), new CBooleanLabel()).decorate().componentWidth(50);
         formPanel.append(Location.Right, proto().privileges().credentialUpdated()).decorate().componentWidth(150);
 

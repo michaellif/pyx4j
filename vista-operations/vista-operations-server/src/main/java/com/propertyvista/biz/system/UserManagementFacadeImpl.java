@@ -72,7 +72,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
     public <E extends AbstractUserCredential<? extends AbstractUser>> void managedSetPassword(Class<E> credentialClass, PasswordChangeRequest request) {
         E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
-        if (request.requireChangePasswordOnNextSignIn().getValue(false)) {
+        if (request.passwordChangeRequired().getValue(false)) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
         }
         Persistence.service().persist(credential);

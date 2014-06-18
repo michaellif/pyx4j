@@ -45,8 +45,8 @@ public interface UserCredentialEditDTO extends IEntity {
     @LogTransient
     IPrimitive<String> passwordConfirm();
 
-    @Caption(name = "Require to change password on next sign in")
-    IPrimitive<Boolean> requiredPasswordChangeOnNextLogIn();
+    @Caption(description = "Require to change password on next sign in")
+    IPrimitive<Boolean> passwordChangeRequired();
 
     @ReadOnly
     @Editor(type = Editor.EditorType.label)
