@@ -88,16 +88,15 @@ public abstract class FormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left);
-        style.addProperty("float", "right");
-        style.addProperty("clear", "right");
+        style.addProperty("text-align", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.right);
-        style.addProperty("float", "left");
-        style.addProperty("clear", "left");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.dual);
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.FormPanelCell, "-", StyleDependent.left, ">.", CComponentTheme.StyleName.FieldPanel, " .",
@@ -206,8 +205,7 @@ public abstract class FormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell);
-        style.addProperty("display", "block");
-        style.addProperty("float", "none");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.FluidPanel, "-", StyleDependent.collapsed, " .", StyleName.FormPanelCell, "-", StyleDependent.dual, ">.",
