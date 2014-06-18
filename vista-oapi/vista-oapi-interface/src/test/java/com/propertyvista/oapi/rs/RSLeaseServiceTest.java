@@ -16,18 +16,17 @@ package com.propertyvista.oapi.rs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
 
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
@@ -37,8 +36,9 @@ import com.propertyvista.oapi.model.TenantIO;
 
 public class RSLeaseServiceTest extends RSOapiTestBase {
 
-    public RSLeaseServiceTest() throws Exception {
-        super("com.propertyvista.oapi.rs");
+    @Override
+    protected Class<?> getServiceClass() {
+        return RSLeaseService.class;
     }
 
     @Before
@@ -59,62 +59,53 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
 
     // @Test
     public void testGetTenants_NonExistingLeaseId() {
-        WebResource webResource = resource();
         GenericType<List<TenantIO>> gt = new GenericType<List<TenantIO>>() {
         };
-        List<TenantIO> tenants = webResource.path("leases/mockId/tenants").get(gt);
+        List<TenantIO> tenants = target().path("leases/mockId/tenants").request().get(gt);
         Assert.assertEquals(0, tenants.size());
     }
 
     // @Test
     public void testUpdateTenants() {
-        WebResource webResource = resource();
-
         List<TenantIO> tenants = new ArrayList<TenantIO>();
         TenantIO tenant1 = new TenantIO("John", "Smith");
         TenantIO tenant2 = new TenantIO("James", "Smith");
         tenants.add(tenant1);
         tenants.add(tenant2);
 
-        ClientResponse response = webResource.path("leases/testLeaseId/updateTenants").accept(MediaType.APPLICATION_XML)
-                .post(ClientResponse.class, new GenericEntity<List<TenantIO>>(tenants) {
-                });
-        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
+        Response response = target().path("leases/testLeaseId/updateTenants").request(MediaType.APPLICATION_XML)
+                .post(Entity.xml(new GenericEntity<List<TenantIO>>(tenants) {
+                }));
+        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     // @Test
     public void testUpdateLease() {
-        WebResource webResource = resource();
-
         LeaseIO lease = new LeaseIO("testId");
 
-        ClientResponse response = webResource.path("leases/updateLease").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, lease);
-        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
+        Response response = target().path("leases/updateLease").request(MediaType.APPLICATION_XML).post(Entity.xml(lease));
+        Assert.assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     // @Test
     public void testGetLeases() {
-        WebResource webResource = resource();
         GenericType<List<LeaseIO>> gt = new GenericType<List<LeaseIO>>() {
         };
-        List<LeaseIO> leases = webResource.path("leases").get(gt);
+        List<LeaseIO> leases = target().path("leases").request().get(gt);
         Assert.assertEquals(0, leases.size());
     }
 
     // @Test
     public void testGetLeases_NonExistingPropertyCode() {
-        WebResource webResource = resource();
         GenericType<List<LeaseIO>> gt = new GenericType<List<LeaseIO>>() {
         };
-        List<LeaseIO> leases = webResource.path("leases?propertyCode=MockCode").get(gt);
+        List<LeaseIO> leases = target().path("leases?propertyCode=MockCode").request().get(gt);
         Assert.assertEquals(0, leases.size());
     }
 
     @Test
     public void testGetLeaseById_NonExistingId() {
-        WebResource webResource = resource();
-
-        ClientResponse response = webResource.path("leases/mockId").get(ClientResponse.class);
-        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
+        Response response = target().path("leases/mockId").request().get();
+        Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 }

@@ -24,8 +24,8 @@ import javax.servlet.ServletRegistration;
 
 import org.apache.wicket.protocol.http.ContextParamWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.glassfish.jersey.servlet.ServletContainer;
 
-import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.sun.xml.ws.transport.http.servlet.WSServlet;
 
 import com.pyx4j.config.server.ApplicationVersionServlet;

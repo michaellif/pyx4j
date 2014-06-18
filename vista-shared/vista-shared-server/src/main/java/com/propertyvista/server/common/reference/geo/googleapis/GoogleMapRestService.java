@@ -13,9 +13,11 @@
  */
 package com.propertyvista.server.common.reference.geo.googleapis;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * See https://developers.google.com/maps/documentation/geocoding/
@@ -24,26 +26,26 @@ public class GoogleMapRestService {
 
     protected Client client;
 
-    protected WebResource webResource;
+    protected WebTarget webResource;
 
     private GoogleMapRestService() {
-        client = Client.create();
-        webResource = client.resource("http://maps.googleapis.com/maps/api/geocode/");
+        client = ClientBuilder.newClient();
+        webResource = client.target("http://maps.googleapis.com/maps/api/geocode/");
     }
 
     private void destroy() {
-        client.destroy();
+        client.close();
     }
 
     public static GeocodeResponse getGeocode(String address) {
         GoogleMapRestService srv = new GoogleMapRestService();
         try {
-            ClientResponse response = srv.webResource.path("xml").queryParam("address", address).queryParam("sensor", "false").type("application/xml")
-                    .get(ClientResponse.class);
-            if (response.getClientResponseStatus() != ClientResponse.Status.OK) {
+            Response response = srv.webResource.path("xml").queryParam("address", address).queryParam("sensor", "false").request(MediaType.APPLICATION_XML)
+                    .get();
+            if (response.getStatus() != Response.Status.OK.getStatusCode()) {
                 throw new Error("HTTP Error " + response.getStatus());
             }
-            return response.getEntity(GeocodeResponse.class);
+            return response.readEntity(GeocodeResponse.class);
         } finally {
             srv.destroy();
         }

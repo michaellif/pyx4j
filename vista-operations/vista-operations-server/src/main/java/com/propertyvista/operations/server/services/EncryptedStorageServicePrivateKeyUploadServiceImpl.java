@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.server.services;
 
-import com.sun.jersey.core.util.Base64;
+import org.apache.commons.net.util.Base64;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.AbstractIFileBlob;
@@ -43,7 +43,7 @@ public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends Abstract
 
     @Override
     protected void processUploadedData(PrivateKeyDTO uploadInitiationData, UploadedData uploadedData, IFile<AbstractIFileBlob> response) {
-        byte[] keyData = Base64.decode(uploadedData.binaryContent);
+        byte[] keyData = Base64.decodeBase64(uploadedData.binaryContent);
         ServerSideFactory.create(EncryptedStorageFacade.class).uploadPrivateKey(uploadInitiationData.publicKeyKey().getValue(), keyData,
                 uploadInitiationData.password().getValue().getValue());
     }

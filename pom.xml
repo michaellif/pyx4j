@@ -186,7 +186,8 @@
         <gwtEnableAssertions>false</gwtEnableAssertions>
 
         <scm.revision></scm.revision>
-        <axis2Version>1.6.2</axis2Version>
+	<axis2Version>1.6.2</axis2Version>
+	<jerseyVersion>2.9.1</jerseyVersion>
         <wicket.version>1.5.0</wicket.version>
 
         <google.translate.apiKey>AIzaSyB4epMBre3NeR-_1fgKFz3-V6iA1qpfh-M</google.translate.apiKey>
@@ -398,21 +399,27 @@
             </dependency>
 
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-servlet</artifactId>
-                <version>1.17.1</version>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${jerseyVersion}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.sun.jersey</groupId>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-servlet-core</artifactId>
+                <version>${jerseyVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-client</artifactId>
-                <version>1.17.1</version>
+                <version>${jerseyVersion}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-json</artifactId>
-                <version>1.17.1</version>
+                <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+                <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+                <version>${jerseyVersion}</version>
             </dependency>
 
             <dependency>
@@ -425,18 +432,6 @@
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>2.2.7</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.jersey.jersey-test-framework</groupId>
-                <artifactId>jersey-test-framework-core</artifactId>
-                <version>1.17.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.jersey.jersey-test-framework</groupId>
-                <artifactId>jersey-test-framework-http</artifactId>
-                <version>1.17.1</version>
             </dependency>
 
         </dependencies>

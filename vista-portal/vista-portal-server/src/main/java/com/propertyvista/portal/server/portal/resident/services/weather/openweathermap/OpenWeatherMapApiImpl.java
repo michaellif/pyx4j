@@ -13,21 +13,21 @@
  */
 package com.propertyvista.portal.server.portal.resident.services.weather.openweathermap;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import org.glassfish.jersey.client.ClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.filter.ClientFilter;
-import com.sun.jersey.core.util.ReaderWriter;
 
 import com.propertyvista.domain.ref.ISOCountry;
 
@@ -55,12 +55,13 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
             return null;
         }
         try {
-            Client c = new Client();
+            ClientConfig clientConfig = new ClientConfig();
             if (enableLogging) {
-                c.addFilter(new LoggingFilter());
+                clientConfig.register(new LoggerFilter(100000));
             }
+            Client c = ClientBuilder.newClient(clientConfig);
             //@formatter:off
-            WebResource r = c.resource("http://api.openweathermap.org/data/2.5/forecast")
+            WebTarget r = c.target("http://api.openweathermap.org/data/2.5/forecast")
                              .queryParam("q", cityName + "," + country.name)
                              .queryParam("mode", "xml")
                              .queryParam("units", "metric");
@@ -69,7 +70,7 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
             if (apiKey != null) {
                 r = r.queryParam("APPID", apiKey);
             }
-            weatherData = r.get(Weatherdata.class);
+            weatherData = r.request(MediaType.APPLICATION_XML).get(Weatherdata.class);
         } catch (Throwable e) {
             log.error("Failed to get weather from OpenWeatherMap", e);
         }
@@ -77,31 +78,32 @@ public class OpenWeatherMapApiImpl implements OpenWeatherMapApi {
         return weatherData;
     }
 
-    private static class LoggingFilter extends ClientFilter {
+    static class LoggerFilter implements ClientResponseFilter {
+        final int maxEntitySize;
+
+        public LoggerFilter(int maxEntitySize) {
+            this.maxEntitySize = maxEntitySize;
+        }
+
         @Override
-        public ClientResponse handle(ClientRequest clientRequest) throws ClientHandlerException {
-            ClientResponse response = getNext().handle(clientRequest);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            InputStream in = response.getEntityInputStream();
-            try {
-                ReaderWriter.writeTo(in, out);
-
-                byte[] requestEntity = out.toByteArray();
-                StringBuilder logBuilder = new StringBuilder();
-                if (requestEntity.length != 0) {
-                    logBuilder.append(new String(requestEntity)).append("\n");
-                }
-
-                log.debug(logBuilder.toString());
-
-                response.setEntityInputStream(new ByteArrayInputStream(requestEntity));
-            } catch (IOException ex) {
-                throw new ClientHandlerException(ex);
+        public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
+            InputStream stream = responseContext.getEntityStream();
+            if (!stream.markSupported()) {
+                stream = new BufferedInputStream(stream);
             }
-
-            return response;
+            stream.mark(maxEntitySize + 1);
+            final byte[] entity = new byte[maxEntitySize + 1];
+            final int entitySize = stream.read(entity);
+            StringBuilder logBuilder = new StringBuilder();
+            logBuilder.append(new String(entity, 0, Math.min(entitySize, maxEntitySize)));
+            if (entitySize > maxEntitySize) {
+                logBuilder.append("...[trimmed to " + maxEntitySize + " bytes]");
+            }
+            logBuilder.append('\n');
+            log.debug(logBuilder.toString());
+            // reset stream position to the initial point
+            stream.reset();
+            responseContext.setEntityStream(stream);
         }
     }
-
 }

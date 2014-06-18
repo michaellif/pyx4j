@@ -16,11 +16,11 @@ package com.propertyvista.operations.server.services;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.net.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.sun.jersey.core.util.Base64;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -65,7 +65,7 @@ public class EncryptedStorageServiceImpl implements EncryptedStorageService {
         try {
             log.info("Creating new KeyPair");
             byte[] keyData = ServerSideFactory.create(EncryptedStorageFacade.class).createNewKeyPair(password.getValue());
-            byte[] binaryDataAsText = Base64.encode(keyData);
+            byte[] binaryDataAsText = Base64.encodeBase64(keyData);
             Downloadable d = new Downloadable(binaryDataAsText, MimeMap.getContentType(DownloadFormat.TXT));
             String fileName = "key-" + new SimpleDateFormat("YYYY-MM-dd").format(new Date()) + ".key";
             d.save(fileName);

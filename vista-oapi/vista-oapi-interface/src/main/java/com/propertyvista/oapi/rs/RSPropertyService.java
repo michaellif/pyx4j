@@ -69,7 +69,7 @@ public class RSPropertyService {
         BuildingsIO filteredBuildings = new BuildingsIO();
 
         for (BuildingIO building : allBuildings.buildings) {
-            if (building.info.address.province.equals(province)) {
+            if (building.info.address.province.getValue().equals(province)) {
                 filteredBuildings.buildings.add(building);
             }
         }

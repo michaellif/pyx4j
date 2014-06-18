@@ -77,14 +77,14 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-        </dependency>
+        </dependency -->
 
         <dependency>
             <groupId>com.mortennobel</groupId>

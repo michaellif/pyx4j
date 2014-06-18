@@ -15,67 +15,73 @@ package com.propertyvista.oapi.rs;
 
 import java.util.List;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
-
+import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
+import com.propertyvista.test.mock.models.BuildingDataModel;
 
 public class RSPropertyServiceTest extends RSOapiTestBase {
 
-    public RSPropertyServiceTest() throws Exception {
-        super("com.propertyvista.oapi.rs");
+    @Override
+    protected Class<?> getServiceClass() {
+        return RSPropertyService.class;
+    }
+
+    @Override
+    protected void preloadData() {
+        super.preloadData();
+        if (false) {
+            // TODO make it work - DefaultProductCatalogFactory.class is not visible
+            mockManager.getDataModel(BuildingDataModel.class).addBuilding();
+        }
     }
 
     @Test
     public void testGetBuildings() {
-        WebResource webResource = resource();
-        BuildingsIO buildings = webResource.path("buildings").get(BuildingsIO.class);
+        System.out.println("Created Buildings: " + PropertyService.getBuildings().buildings.size());
+        BuildingsIO buildings = target().path("buildings").queryParam("province", "Ontario").request().get(BuildingsIO.class);
+        System.out.println("Got Buildings: " + buildings.buildings.size());
     }
 
     @Test
     public void testGetBuildingsByProvince_NonExistingProvince() {
-        WebResource webResource = resource();
-        BuildingsIO buildings = webResource.path("buildings;province=MockProvince").get(BuildingsIO.class);
+        BuildingsIO buildings = target().path("buildings;province=MockProvince").request().get(BuildingsIO.class);
         Assert.assertTrue(buildings.buildings.isEmpty());
     }
 
     @Test
     public void testGetBuildingByPropertyCode_NonExistingPropertyCode() {
-        WebResource webResource = resource();
-        ClientResponse response = webResource.path("buildings/MockCode").get(ClientResponse.class);
-        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
+        Response response = target().path("buildings/MockCode").request().get();
+        Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void testGetAllUnitsByPropertyCode_NonExistingPropertyCode() {
-        WebResource webResource = resource();
         GenericType<List<UnitIO>> gt = new GenericType<List<UnitIO>>() {
         };
-        List<UnitIO> units = webResource.path("buildings/MockCode/units").get(gt);
+        List<UnitIO> units = target().path("buildings/MockCode/units").request().get(gt);
         Assert.assertTrue(units.isEmpty());
     }
 
     @Test
     public void testGetUnitByNumber_NonExistingPropertyCodeAndUnitNumber() {
-        WebResource webResource = resource();
-        ClientResponse response = webResource.path("buildings/MockCode/units/MockNumber").get(ClientResponse.class);
-        Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
+        Response response = target().path("buildings/MockCode/units/MockNumber").request().get(Response.class);
+        Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void testUpdateUnits() {
-        WebResource webResource = resource();
-
         UnitIO unit = new UnitIO();
         unit.number = "1";
         unit.propertyCode = "testCode";
@@ -83,7 +89,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
         unit.beds = new IntegerIO(2);
         unit.floorplanName = new StringIO("2bdrm");
 
-        ClientResponse response = webResource.path("buildings/MockCode/units/updateUnit").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, unit);
+        Response response = target("buildings/MockCode/units/updateUnit").request(MediaType.APPLICATION_XML).post(Entity.xml(unit));
         // requires preloaded building
         //        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
     }
