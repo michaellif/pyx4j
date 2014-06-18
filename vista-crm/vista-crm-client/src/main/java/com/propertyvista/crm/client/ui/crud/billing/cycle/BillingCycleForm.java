@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -24,6 +25,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.crm.client.themes.ViewLinkTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -65,6 +67,8 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         public ViewBillsLink(final Bill.BillStatus billStatusValue) {
             super(i18n.tr("View"));
 
+            addStyleName(ViewLinkTheme.StyleName.ViewLink.name());
+
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -80,6 +84,8 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
     private class ViewLeasesLink extends Anchor {
         public ViewLeasesLink(final Boolean notRun) {
             super(i18n.tr("View"));
+
+            addStyleName(ViewLinkTheme.StyleName.ViewLink.name());
 
             addClickHandler(new ClickHandler() {
                 @Override
@@ -98,6 +104,8 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
     private class ViewPadLink extends Anchor {
         public ViewPadLink() {
             super(i18n.tr("View"));
+
+            addStyleName(ViewLinkTheme.StyleName.ViewLink.name());
 
             addClickHandler(new ClickHandler() {
                 @Override

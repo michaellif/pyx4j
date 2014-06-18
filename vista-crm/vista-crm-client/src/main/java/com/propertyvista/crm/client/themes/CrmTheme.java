@@ -162,6 +162,8 @@ public class CrmTheme extends VistaTheme {
 
         addTheme(new BackOfficeLayoutTheme());
 
+        addTheme(new ViewLinkTheme());
+
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();

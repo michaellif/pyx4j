@@ -36,7 +36,6 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("width", "400px");
         style.addBoxShadow(ThemeColor.foreground, "5px 5px 5px");
         style.addProperty("background", ThemeColor.foreground, 0.01);
-        style.addProperty("border-radius", "5px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-color", ThemeColor.foreground, 0.8);
         style.addProperty("border-style", "solid");
@@ -54,7 +53,7 @@ public class CommunicationCrmTheme extends Theme {
 
         style = new Style(".", StyleName.CommHeader);
         style.addProperty("line-height", "60px");
-        style.addProperty("background", ThemeColor.object1, 0.8);
+        style.addProperty("background", ThemeColor.foreground, 0.8);
         addStyle(style);
 
         style = new Style(".", StyleName.CommHeaderTitle);
