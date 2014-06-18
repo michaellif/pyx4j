@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
@@ -25,8 +23,8 @@ public interface MessageViewerView extends IViewer<MessageDTO> {
 
     interface Presenter extends IViewer.Presenter {
 
-        void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus);
+        void saveMessage(MessageDTO message, ThreadStatus threadStatus, boolean rePopulate);
 
-        void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO source, Employee empoyee);
+        void assignOwnership(MessageDTO source, Employee empoyee);
     }
 }

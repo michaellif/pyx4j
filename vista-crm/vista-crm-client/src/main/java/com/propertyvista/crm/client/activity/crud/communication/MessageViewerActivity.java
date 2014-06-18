@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.communication;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -37,8 +37,15 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
     }
 
     @Override
-    public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus) {
-        ((MessageCrudService) getService()).saveMessage(callback, message, threadStatus);
+    public void saveMessage(MessageDTO message, final ThreadStatus threadStatus, final boolean rePopulate) {
+        ((MessageCrudService) getService()).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
+            @Override
+            public void onSuccess(MessageDTO result) {
+                if (rePopulate) {
+                    getView().populate(result);
+                }
+            }
+        }, message, threadStatus);
 
     }
 
@@ -48,7 +55,13 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
     }
 
     @Override
-    public void assignOwnership(AsyncCallback<MessageDTO> callback, MessageDTO message, Employee empoyee) {
-        ((MessageCrudService) getService()).assignOwnership(callback, message, empoyee);
+    public void assignOwnership(MessageDTO message, Employee empoyee) {
+        ((MessageCrudService) getService()).assignOwnership(new DefaultAsyncCallback<MessageDTO>() {
+            @Override
+            public void onSuccess(MessageDTO result) {
+
+                getView().populate(result);
+            }
+        }, message, empoyee);
     }
 }

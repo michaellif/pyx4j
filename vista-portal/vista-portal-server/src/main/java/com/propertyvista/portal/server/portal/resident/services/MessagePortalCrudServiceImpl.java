@@ -235,7 +235,11 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             m.sender().set(ResidentPortalContext.getCurrentUser());
             m.text().set(message.text());
             m.highImportance().set(message.highImportance());
-            m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(thread.owner()));
+            if (message.recipients() != null && message.recipients().size() > 0) {
+                m.recipients().add(message.recipients().get(0));
+            } else {
+                m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(thread.owner()));
+            }
             Persistence.service().persist(m);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);

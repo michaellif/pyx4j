@@ -15,6 +15,8 @@ package com.propertyvista.portal.resident.ui.communication;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
+
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
@@ -44,14 +46,17 @@ public class MessageWizard extends CPortalEntityWizard<MessageDTO> {
     public FormPanel createDetailsStep() {
         FormPanel content = new FormPanel(this);
 
-        content.h1(i18n.tr("Details"));
         content.append(Location.Left, proto().subject()).decorate();
         content.append(Location.Left, proto().highImportance(), new CCheckBox()).decorate();
-        content.append(Location.Left, proto().text()).decorate();
-        content.br();
-        content.h1(i18n.tr("Attachments"));
-        content.append(Location.Left, proto().attachments(), new MessageAttachmentFolder());
+        content.hr();
 
+        content.append(Location.Left, proto().text());
+
+        content.br();
+        content.h3("Attachments");
+        content.append(Location.Left, proto().attachments(), new MessageAttachmentFolder());
+        content.br();
+        get(proto().text()).asWidget().getElement().getStyle().setWidth(100, Unit.PCT);
         return content;
     }
 }

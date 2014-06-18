@@ -89,15 +89,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
     }
 
     public void assignOwnership(Employee employee) {
-        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(new DefaultAsyncCallback<MessageDTO>() {
-            @Override
-            public void onSuccess(MessageDTO result) {
-                getValue().setPrimaryKey(result.getPrimaryKey());
-                getValue().status().set(result.status());
-                getValue().owner().set(result.owner());
-                refresh(false);
-            }
-        }, getValue(), employee);
+        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(
+        /getValue(), employee);
     }
 
     public IsWidget createGeneralForm() {
@@ -283,12 +276,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     } else {
                         starImage.setResource(CrmImages.INSTANCE.noStar());
                     }
-                    ((MessageViewerActivity) MessageForm.this.getParentView().getPresenter()).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
-
-                        @Override
-                        public void onSuccess(MessageDTO result) {
-                        }
-                    }, m, null);
+                    ((MessageViewerActivity) MessageForm.this.getParentView().getPresenter()).saveMessage(m, null, false);
                 }
 
             });
@@ -322,6 +310,11 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
             String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
             return forwardText;
+        }
+
+        private MessageDTO getCurrent() {
+            CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
+            return current.getValue();
         }
 
         @Override
@@ -370,16 +363,27 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
+                        MessageDTO currentMessage = getCurrent();
                         String forwardText = buildForwardText();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
                         newItem.getValue().text().setValue(forwardText);
+
+                        if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
+                            newItem.getValue().to().add(currentMessage.sender());
+                        }
+                        for (CommunicationEndpointDTO to : currentMessage.to()) {
+                            if (!ContactType.System.equals(to.type().getValue()) && !ClientContext.getUserVisit().getName().equals(to.name().getValue())) {
+                                newItem.getValue().to().add(to);
+                            }
+                        }
+
                         newItem.refresh(false);
-                        newItem.asWidget().getElement().scrollIntoView();
                         CForm<MessageDTO> form = newItem.getEntityForm();
                         if (form != null && form instanceof MessageFolderItem) {
                             ((MessageFolderItem) form).setFocusForEditingText();
                         }
+                        newItem.asWidget().getElement().scrollIntoView();
                     }
                 }
 
@@ -412,8 +416,10 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                     MessageDTO m = getValue();
 
                     m.isRead().setValue(false);
-                    saveMessage(m, true);
-
+                    saveMessage(m, false);
+                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
+                    place.setType(Type.lister);
+                    AppSite.getPlaceController().goTo(place);
                 }
             });
 
@@ -425,35 +431,19 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             return tb;
         }
 
-        public void saveMessage(MessageDTO m, final boolean redirectToList) {
+        public void saveMessage(MessageDTO m, boolean refresh) {
             com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getParentView().getPresenter();
             if (p instanceof MessageEditorView.Presenter) {
 
                 ((MessageEditorView.Presenter) p).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
                     @Override
                     public void onSuccess(MessageDTO result) {
-                        if (!redirectToList) {
-                            getValue().setPrimaryKey(result.getPrimaryKey());
-                            refresh(false);
-                        }
+                        getValue().setPrimaryKey(result.getPrimaryKey());
+                        refresh(false);
                     }
                 }, getValue());
             } else {
-
-                ((MessageViewerView.Presenter) p).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
-                    @Override
-                    public void onSuccess(MessageDTO result) {
-                        if (!redirectToList) {
-                            getValue().setPrimaryKey(result.getPrimaryKey());
-                            refresh(false);
-                        }
-                    }
-                }, m, null);
-                if (redirectToList) {
-                    CrudAppPlace place = new CrmSiteMap.Communication.Message();
-                    place.setType(Type.lister);
-                    AppSite.getPlaceController().goTo(place);
-                }
+                ((MessageViewerView.Presenter) p).saveMessage(m, null, refresh);
             }
         };
 

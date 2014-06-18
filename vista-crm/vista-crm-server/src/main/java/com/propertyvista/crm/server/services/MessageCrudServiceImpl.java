@@ -145,8 +145,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
         t.allowedReply().set(to.allowedReply());
-        t.status().setValue(isNew && !MessageGroupCategory.Custom.equals(to.topic().category()) ? ThreadStatus.New : ThreadStatus.Unassigned);
+
         t.topic().set(to.topic());
+        Persistence.service().retrieveMember(to.topic());
+        t.status().setValue(isNew && !MessageGroupCategory.Custom.equals(to.topic().category().getValue()) ? ThreadStatus.New : ThreadStatus.Unassigned);
         t.content().add(bo);
         t.owner().set(
                 to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? ServerSideFactory.create(
@@ -296,11 +298,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                         ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(
                                 ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)));
 
+            } else {
+                for (CommunicationEndpointDTO d : message.to()) {
+                    m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(d.endpoint()));
+                }
             }
-            for (CommunicationEndpointDTO d : message.to()) {
-                m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(d.endpoint()));
-            }
-
             m.thread().set(thread);
             m.attachments().set(message.attachments());
             m.date().setValue(SystemDateManager.getDate());
@@ -308,6 +310,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             m.text().set(message.text());
             m.highImportance().setValue(false);
             Persistence.service().persist(m);
+            Persistence.service().commit();
+            retrieve(callback, m.getPrimaryKey(), RetrieveTarget.View);
         } else {
             EntityQueryCriteria<DeliveryHandle> dhCriteria = EntityQueryCriteria.create(DeliveryHandle.class);
             dhCriteria.eq(dhCriteria.proto().recipient(), CrmAppContext.getCurrentUser());
@@ -316,10 +320,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             dh.isRead().set(message.isRead());
             dh.star().set(message.star());
             Persistence.service().persist(dh);
+            Persistence.service().commit();
+            callback.onSuccess(message);
         }
-
-        Persistence.service().commit();
-        callback.onSuccess(message);
 
     }
 

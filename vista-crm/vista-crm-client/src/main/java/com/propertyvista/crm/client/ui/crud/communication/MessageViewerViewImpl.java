@@ -34,18 +34,13 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.PrintUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.SelectEmployeeListService;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
@@ -76,7 +71,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         threadStatusActions = new HashMap<ThreadStatus, MenuItem>();
 
         for (final ThreadStatus ts : ThreadStatus.values()) {
-            if (ts.equals(ThreadStatus.New) || ts.equals(ThreadStatus.Open) || ts.equals(ThreadStatus.Unassigned)) {
+            if (ts.equals(ThreadStatus.New) || ts.equals(ThreadStatus.Unassigned)) {
                 continue;
             }
             threadStatusActions.put(ts, new MenuItem(i18n.tr("Mark as ") + ts.toString(), new Command() {
@@ -87,16 +82,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                         public boolean onClickOk() {
                             if (validate()) {
                                 getValue().thread().set(form.getValue().thread());
-                                ((MessageViewerView.Presenter) form.getParentView().getPresenter()).saveMessage(new DefaultAsyncCallback<MessageDTO>() {
-
-                                    @Override
-                                    public void onSuccess(MessageDTO result) {
-                                    }
-                                }, getValue(), ts);
-                                CrudAppPlace place = new CrmSiteMap.Communication.Message();
-                                place.setType(Type.lister);
-                                AppSite.getPlaceController().goTo(place);
-
+                                ((MessageViewerView.Presenter) form.getParentView().getPresenter()).saveMessage(getValue(), ts, true);
                                 return true;
                             } else {
                                 return false;
@@ -136,8 +122,15 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
         boolean invisible = MessageGroupCategory.Custom.equals(value.topic().category().getValue()) || ThreadStatus.Closed.equals(value.status().getValue())
                 || ThreadStatus.Cancelled.equals(value.status().getValue());
         setActionVisible(assignOwnershipAction, !invisible);
-        for (MenuItem action : threadStatusActions.values()) {
-            setActionVisible(action, !invisible);
+        for (ThreadStatus status : threadStatusActions.keySet()) {
+            MenuItem action = threadStatusActions.get(status);
+            if (status.equals(value.status().getValue())) {
+                setActionVisible(action, false);
+            } else if (status.equals(ThreadStatus.Open)) {
+                setActionVisible(action, ThreadStatus.Resolved.equals(value.status().getValue()));
+            } else {
+                setActionVisible(action, !invisible && !ThreadStatus.New.equals(value.status().getValue()));
+            }
         }
 
     }
@@ -203,7 +196,7 @@ public class MessageViewerViewImpl extends CrmViewerViewImplBase<MessageDTO> imp
                 protected IsWidget createContent() {
                     FormPanel main = new FormPanel(this);
 
-                    main.append(Location.Dual, inject(proto().text())).decorate();
+                    main.append(Location.Dual, inject(proto().text())).decorate().customLabel(i18n.tr("Comment"));
                     return main;
                 }
 

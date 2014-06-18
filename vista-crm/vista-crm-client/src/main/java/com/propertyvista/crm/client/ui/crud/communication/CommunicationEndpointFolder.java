@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -144,11 +145,13 @@ public class CommunicationEndpointFolder extends VistaTableFolder<CommunicationE
         public void onClickOk() {
             if (!getSelectedItems().isEmpty()) {
                 for (AbstractPmcUser selected : getSelectedItems()) {
-                    CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
-                    proto.name().set(selected.name());
-                    proto.type().setValue(selected.getInstanceValueClass().equals(CustomerUser.class) ? ContactType.Tenants : ContactType.Employee);
-                    proto.endpoint().set(selected);
-                    addItem(proto);
+                    if (!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(selected.getPrimaryKey())) {
+                        CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+                        proto.name().set(selected.name());
+                        proto.type().setValue(selected.getInstanceValueClass().equals(CustomerUser.class) ? ContactType.Tenants : ContactType.Employee);
+                        proto.endpoint().set(selected);
+                        addItem(proto);
+                    }
                 }
             }
         }

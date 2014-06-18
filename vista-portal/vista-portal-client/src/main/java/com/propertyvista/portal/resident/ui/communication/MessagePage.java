@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CField;
@@ -38,7 +39,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Toolbar;
-import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -257,9 +257,20 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
                         String forwardText = buildForwardText();
+                        MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
                         newItem.getValue().text().setValue(forwardText);
+                        if (ThreadStatus.Unassigned.equals(currentMessage.status().getValue())) {
+                            if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
+                                DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
+                                dh.isRead().setValue(false);
+                                dh.star().setValue(false);
+                                dh.recipient().set(currentMessage.sender());
+
+                                newItem.getValue().recipients().add(dh);
+                            }
+                        }
                         newItem.refresh(false);
                         newItem.asWidget().getElement().scrollIntoView();
                         CForm<MessageDTO> form = newItem.getEntityForm();
@@ -321,6 +332,11 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
             String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
             return forwardText;
+        }
+
+        private MessageDTO getCurrent() {
+            CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
+            return current.getValue();
         }
 
         @Override
