@@ -95,13 +95,11 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
+        case tabletPortrait:
             calloutHandler.setVisible(false);
             addStyleDependentName(CommunicationCrmTheme.StyleDependent.sideComm.name());
             break;
-        case tabletPortrait:
-        case tabletLandscape:
-        case monitor:
-        case huge:
+        default:
             calloutHandler.setVisible(true);
             removeStyleDependentName(CommunicationCrmTheme.StyleDependent.sideComm.name());
             break;

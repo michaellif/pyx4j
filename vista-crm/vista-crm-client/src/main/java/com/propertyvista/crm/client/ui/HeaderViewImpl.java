@@ -181,6 +181,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                     switch (layoutType) {
                     case phonePortrait:
                     case phoneLandscape:
+                    case tabletPortrait:
                         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
                         break;
                     default:
