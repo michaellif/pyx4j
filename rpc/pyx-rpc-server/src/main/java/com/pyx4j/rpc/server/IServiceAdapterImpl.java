@@ -47,6 +47,8 @@ import com.pyx4j.rpc.shared.IServiceRequest;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.security.annotations.AccessControl;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
@@ -106,10 +108,18 @@ public class IServiceAdapterImpl implements IServiceAdapter {
         for (Method method : serviceInterfaceClass.getMethods()) {
             if ((method.getName().equals(serviceMethodName)) && (request.getServiceMethodSignature() == getMethodSignature(method))) {
                 assertToken(serviceImplClass, method);
+                assertMethodPermission(method);
                 return runMethod(serviceInstance, method, request.getArgs());
             }
         }
         throw new UnRecoverableRuntimeException("Fatal system error, Method [" + serviceMethodName + "] not found");
+    }
+
+    private void assertMethodPermission(Method method) {
+        AccessControl accessControl = method.getAnnotation(AccessControl.class);
+        if (accessControl != null) {
+            SecurityController.assertPermission(new ActionPermission(accessControl.value()));
+        }
     }
 
     private void assertToken(Class<? extends IService> serviceImplClass, Method method) {
