@@ -78,7 +78,7 @@ public class LeaseStep extends ApplicationWizardStep {
         featurePanel.append(Location.Left, proto().leaseChargesData().selectedFeatures(), new FeatureFolder());
         get(proto().leaseChargesData().selectedFeatures()).setEditable(false);
 
-        if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+        if (!SecurityController.check(PortalProspectBehavior.Applicant)) {
             formPanel.h3(i18n.tr("People"));
             formPanel.append(Location.Left, proto().tenants(), new TenantsReadonlyFolder());
         }

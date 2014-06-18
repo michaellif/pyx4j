@@ -123,12 +123,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     protected boolean isSessionValid() {
-        boolean sessionValid = SecurityController.checkBehavior(getVistaApplication())
-                && (SecurityController.checkBehavior(getApplicationBehavior()) || SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors()));
+        boolean sessionValid = SecurityController.check(getVistaApplication())
+                && (SecurityController.check(getApplicationBehavior()) || SecurityController.check(getAccountSetupRequiredBehaviors()));
         if ((!sessionValid) && (Context.getSession() != null)) {
-            log.warn("sessionInvalid: {} {}", getVistaApplication(), SecurityController.checkBehavior(getVistaApplication()));
-            log.warn("sessionInvalid: {} {}", getApplicationBehavior(), SecurityController.checkBehavior(getApplicationBehavior()));
-            log.warn("sessionInvalid: {} {}", getAccountSetupRequiredBehaviors(), SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors()));
+            log.warn("sessionInvalid: {} {}", getVistaApplication(), SecurityController.check(getVistaApplication()));
+            log.warn("sessionInvalid: {} {}", getApplicationBehavior(), SecurityController.check(getApplicationBehavior()));
+            log.warn("sessionInvalid: {} {}", getAccountSetupRequiredBehaviors(), SecurityController.check(getAccountSetupRequiredBehaviors()));
         }
         return sessionValid;
     }
@@ -483,7 +483,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
         ar.setSystemWallMessage(systemWallMessage);
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)
+        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)
                 && ((systemId == VistaSystemIdentification.production) || (systemId == VistaSystemIdentification.demo))) {
             setVistaEmployeeCookie();
         }

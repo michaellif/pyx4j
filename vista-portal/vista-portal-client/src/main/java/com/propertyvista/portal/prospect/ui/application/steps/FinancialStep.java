@@ -55,7 +55,7 @@ public class FinancialStep extends ApplicationWizardStep {
         formPanel.h3(i18n.tr("Assets"));
         formPanel.append(Location.Left, proto().applicantData().assets(), new PersonalAssetFolder());
 
-        if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+        if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
             guarantorsHeader = formPanel.h3(i18n.tr("Guarantors"));
             formPanel.append(Location.Left, proto().guarantors(), new GuarantorsFolder());
         }
@@ -67,7 +67,7 @@ public class FinancialStep extends ApplicationWizardStep {
     public void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+        if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
             guarantorsHeader.setVisible(!getValue().noNeedGuarantors().getValue(false));
             get(proto().guarantors()).setVisible(!getValue().noNeedGuarantors().getValue(false));
         }

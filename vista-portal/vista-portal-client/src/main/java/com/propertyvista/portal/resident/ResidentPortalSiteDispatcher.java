@@ -42,7 +42,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected boolean isPlaceNavigable(AppPlace targetPlace) {
         if (targetPlace instanceof ResidentPortalSiteMap.LeaseContextSelection) {
-            return SecurityController.checkAnyBehavior(PortalResidentBehavior.LeaseSelectionRequired, PortalResidentBehavior.HasMultipleLeases);
+            return SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired, PortalResidentBehavior.HasMultipleLeases);
         } else {
             return true;
         }
@@ -56,11 +56,11 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
         if (newPlace instanceof PortalSiteMap.Logout) {
             return newPlace;
         }
-        if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
+        if (SecurityController.check(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
-        } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSelectionRequired)) {
+        } else if (SecurityController.check(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
-        } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
+        } else if (SecurityController.check(PortalResidentBehavior.LeaseAgreementSigningRequired)) {
             if ((newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard) || (newPlace instanceof ResidentPortalSiteMap.MoveIn.MoveInWizardConfirmation)) {
                 return newPlace;
             }
@@ -68,9 +68,9 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
                     || newPlace instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage || newPlace == AppPlace.NOWHERE)) {
                 MessageDialog.info(i18n.tr("Sorry"), i18n.tr("In order to access that functionality you have to complete Move-In Wizard first."));
             }
-            if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+            if (SecurityController.check(PortalResidentBehavior.Resident)) {
                 return new ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage();
-            } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+            } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
                 return new ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage();
             }
         }

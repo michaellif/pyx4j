@@ -61,7 +61,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         panel.setWidget(view);
         view.setPresenter(this);
 
-        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+        if (SecurityController.check(PortalResidentBehavior.Resident)) {
             populateBillingSummary();
             populateLatestActivities();
             populateAutoPaySummary();

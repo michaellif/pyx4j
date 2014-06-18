@@ -30,7 +30,7 @@ public class ListerControllerFactory {
         return new ListerController<E>(view, service, entityClass) {
             @Override
             public boolean canCreateNewItem() {
-                return SecurityController.checkAnyBehavior(whoCanAdd);
+                return SecurityController.check(whoCanAdd);
             }
         };
     }
@@ -39,7 +39,7 @@ public class ListerControllerFactory {
         return new ListerController<E>(view, service, entityClass) {
             @Override
             public boolean canCreateNewItem() {
-                return SecurityController.checkPermission(DataModelPermission.permissionCreate(entityClass));
+                return SecurityController.check(DataModelPermission.permissionCreate(entityClass));
             }
         };
     }

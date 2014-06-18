@@ -65,7 +65,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
     protected void populate(PaymentMethodSummaryDTO value) {
         view.populate(value);
 
-        paymentMethodButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forPaymentMethodSetup()));
+        paymentMethodButton.setVisible(SecurityController.check(VistaCustomerPaymentTypeBehavior.forPaymentMethodSetup()));
     }
 
     class PaymentMethodsToolbar extends GadgetToolbar {

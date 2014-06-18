@@ -151,7 +151,7 @@ public class ConfirmationStep extends ApplicationWizardStep {
     private BigDecimal calculatePaymentAmount() {
         BigDecimal amount = BigDecimal.ZERO;
 
-        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+        if (SecurityController.check(PortalProspectBehavior.Applicant)) {
             for (Deposit deposit : getValue().leaseChargesData().deposits()) {
                 amount = amount.add(deposit.amount().getValue());
             }

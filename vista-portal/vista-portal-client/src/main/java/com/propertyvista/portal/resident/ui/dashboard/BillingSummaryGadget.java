@@ -62,8 +62,8 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
         billingViewer.populate(value);
 
         autoPayButton.setVisible(!value.leaseStatus().getValue().isNoAutoPay() && !value.isAutoPaySet().getValue(false)
-                && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
-        paymentButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
+                && SecurityController.check(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+        paymentButton.setVisible(SecurityController.check(VistaCustomerPaymentTypeBehavior.values()));
     }
 
     class BillingToolbar extends GadgetToolbar {

@@ -82,7 +82,7 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 
     private void updateAuthenticatedView() {
         if (ClientContext.isAuthenticated()) {
-            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+            if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
                 List<String> notifList = new ArrayList<String>();
                 notifList.add(i18n.tr("PRODUCTION SUPPORT!"));
                 showNotifications(notifList);

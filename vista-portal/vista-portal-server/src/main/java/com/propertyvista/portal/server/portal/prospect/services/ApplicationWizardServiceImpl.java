@@ -830,11 +830,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         // calculate fee:
         ProspectPortalPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.policyNode(), ProspectPortalPolicy.class);
         if (policy.feePayment().getValue() == FeePayment.perApplicant) {
-            if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+            if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
                 dto.applicationFee().setValue(policy.feeAmount().getValue());
             }
         } else if (policy.feePayment().getValue() == FeePayment.perLease) {
-            if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+            if (SecurityController.check(PortalProspectBehavior.Applicant)) {
                 dto.applicationFee().setValue(policy.feeAmount().getValue());
             }
         }

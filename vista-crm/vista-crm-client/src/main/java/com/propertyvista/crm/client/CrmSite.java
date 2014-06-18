@@ -127,7 +127,7 @@ public class CrmSite extends VistaSite {
 
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
-                if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
+                if (SecurityController.check(VistaBasicBehavior.CRM)) {
                     if (VistaFeaturesCustomizationClient.isGoogleAnalyticDisableForEmployee() && hasVistaSupportCookie()) {
                         // Do not track Vista Support Employee
                     } else {

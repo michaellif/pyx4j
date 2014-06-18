@@ -137,7 +137,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         void setValue(ResidentSummaryDTO value) {
             nameLabel.setHTML(value.tenantName().getValue() + "</br><div style=font-size:0.9em>"
-                    + (SecurityController.checkBehavior(PortalResidentBehavior.Resident) ? "" : i18n.tr("(Guarantor)")) + "</div>");
+                    + (SecurityController.check(PortalResidentBehavior.Resident) ? "" : i18n.tr("(Guarantor)")) + "</div>");
             String picUrl = MediaUtils.createCustomerPictureUrl(value.picture());
             picture.setImage(picUrl == null ? new Image(VistaImages.INSTANCE.profilePicture()) : new Image(picUrl));
         }

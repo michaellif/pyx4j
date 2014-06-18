@@ -68,7 +68,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         view.populate(value);
 
         autoPayButton.setVisible(!value.leaseStatus().getValue().isNoAutoPay()
-                && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+                && SecurityController.check(VistaCustomerPaymentTypeBehavior.forAutoPay()));
     }
 
     class AutoPayAgreementsToolbar extends GadgetToolbar {

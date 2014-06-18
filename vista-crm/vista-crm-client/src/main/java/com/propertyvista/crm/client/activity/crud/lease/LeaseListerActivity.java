@@ -40,7 +40,7 @@ public class LeaseListerActivity extends LeaseListerActivityBase<LeaseDTO> imple
 
     public LeaseListerActivity(Place place) {
         super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
-        ((LeaseListerView) getView()).setPadFileControlsEnabled(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
+        ((LeaseListerView) getView()).setPadFileControlsEnabled(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
     }
 
     @Override

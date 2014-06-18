@@ -238,7 +238,7 @@ public class DBResetServlet extends HttpServlet {
                 try {
                     AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
                     if (!conf.openDBReset()) {
-                        if (!SecurityController.checkBehavior(VistaBasicBehavior.Operations)) {
+                        if (!SecurityController.check(VistaBasicBehavior.Operations)) {
                             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                             return;
                         }

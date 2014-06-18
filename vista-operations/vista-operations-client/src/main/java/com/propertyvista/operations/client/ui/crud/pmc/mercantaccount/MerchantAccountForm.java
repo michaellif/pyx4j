@@ -125,9 +125,9 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         get(proto().merchantAccount().paymentsStatus()).setVisible(!getValue().id().isNull());
         updateConvenienceFeeValability();
 
-        get(proto().merchantAccount().bankId()).setEditable(SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin));
-        get(proto().merchantAccount().branchTransitNumber()).setEditable(SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin));
-        get(proto().merchantAccount().accountNumber()).setEditable(SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin));
+        get(proto().merchantAccount().bankId()).setEditable(SecurityController.check(VistaOperationsBehavior.SystemAdmin));
+        get(proto().merchantAccount().branchTransitNumber()).setEditable(SecurityController.check(VistaOperationsBehavior.SystemAdmin));
+        get(proto().merchantAccount().accountNumber()).setEditable(SecurityController.check(VistaOperationsBehavior.SystemAdmin));
     }
 
     @Override

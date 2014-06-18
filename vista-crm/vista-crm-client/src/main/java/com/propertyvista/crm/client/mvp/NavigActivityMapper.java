@@ -45,7 +45,7 @@ public class NavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
+        if (SecurityController.check(VistaBasicBehavior.CRM)) {
             if (place.getClass().getName().contains(CrmSiteMap.Administration.class.getName())) {
                 if (navigSettingsActivity == null) {
                     navigSettingsActivity = new NavigSettingsActivity();

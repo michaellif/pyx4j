@@ -37,6 +37,6 @@ public class LandlordListerActivity extends AbstractListerActivity<LandlordDTO> 
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkPermission(DataModelPermission.permissionCreate(LandlordDTO.class));
+        return SecurityController.check(DataModelPermission.permissionCreate(LandlordDTO.class));
     }
 }

@@ -59,6 +59,6 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().strategyNumber()).setVisible(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
+        get(proto().strategyNumber()).setVisible(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
     }
 }

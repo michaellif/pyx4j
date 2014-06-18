@@ -33,7 +33,7 @@ public class PortalPasswordResetServiceImpl extends VistaPasswordResetServiceImp
     @Override
     protected AuthenticationResponse authorize(CustomerUserCredential credentials) {
         // Actually do logout to return user to login page
-        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
+        if (SecurityController.check(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
             Lifecycle.endSession();
             return new ProspectAuthenticationServiceImpl().createAuthenticationResponse(null);
         } else {

@@ -38,9 +38,9 @@ public class LeaseTermBlankAgreementDocumentDownloadServiceImpl extends ReportSe
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
         Lease leaseIdStub = null;
-        if (SecurityController.checkAnyBehavior(PortalResidentBehavior.values())) {
+        if (SecurityController.check(PortalResidentBehavior.values())) {
             leaseIdStub = ResidentPortalContext.getLeaseIdStub();
-        } else if (SecurityController.checkAnyBehavior(PortalProspectBehavior.values())) {
+        } else if (SecurityController.check(PortalProspectBehavior.values())) {
             LeaseApplication masterApplication = ProspectPortalContext.getMasterOnlineApplication().leaseApplication();
             Persistence.ensureRetrieve(masterApplication.lease(), AttachLevel.IdOnly);
             leaseIdStub = masterApplication.lease().createIdentityStub();

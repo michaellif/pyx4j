@@ -47,7 +47,7 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(ComplexDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(ComplexDTO.class));
     }
 
     @Override

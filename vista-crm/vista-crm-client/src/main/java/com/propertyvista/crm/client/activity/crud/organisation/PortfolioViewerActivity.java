@@ -35,6 +35,6 @@ public class PortfolioViewerActivity extends CrmViewerActivity<Portfolio> {
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(Portfolio.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(Portfolio.class));
     }
 }

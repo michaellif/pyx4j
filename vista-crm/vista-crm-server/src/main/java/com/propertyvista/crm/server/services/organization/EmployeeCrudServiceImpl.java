@@ -82,7 +82,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         //TODO proper Role
         CrmUserCredential crs = null;
-        if (SecurityController.checkPermission(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)) && (bo.user().getPrimaryKey() != null)) {
+        if (SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)) && (bo.user().getPrimaryKey() != null)) {
             crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
             to.privileges().enabled().set(crs.enabled());
             to.privileges().restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
@@ -118,7 +118,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
-        if (SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class))) {
+        if (SecurityController.check(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class))) {
             if (!in.privileges().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false)) {
                 dbo.buildingAccess().clear();
                 dbo.portfolios().clear();
@@ -129,7 +129,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         boolean updated = super.persist(dbo, in);
 
-        if (SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class))) {
+        if (SecurityController.check(DataModelPermission.permissionUpdate(EmployeePrivilegesDTO.class))) {
             CrmUser user;
             boolean isNew = false;
 

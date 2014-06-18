@@ -59,7 +59,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
     protected void populate(BillingSummaryDTO value) {
         view.populate(value);
 
-        paymentButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
+        paymentButton.setVisible(SecurityController.check(VistaCustomerPaymentTypeBehavior.values()));
     }
 
     class BillingToolbar extends GadgetToolbar {

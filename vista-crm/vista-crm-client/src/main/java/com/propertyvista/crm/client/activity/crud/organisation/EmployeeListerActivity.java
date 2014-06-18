@@ -36,6 +36,6 @@ public class EmployeeListerActivity extends AbstractListerActivity<EmployeeDTO> 
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkPermission(DataModelPermission.permissionCreate(EmployeeDTO.class));
+        return SecurityController.check(DataModelPermission.permissionCreate(EmployeeDTO.class));
     }
 }

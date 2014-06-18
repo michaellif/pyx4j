@@ -94,7 +94,7 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         if (getDecorator() instanceof EditableFormDecorator) {
             ((EditableFormDecorator) getDecorator()).getBtnEdit().setVisible(
                     !getValue().paymentMethod().isNull() && !getValue().isDeleted().getValue(false) && !getValue().leaseStatus().getValue().isNoAutoPay()
-                            && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+                            && SecurityController.check(VistaCustomerPaymentTypeBehavior.forAutoPay()));
         }
     }
 }

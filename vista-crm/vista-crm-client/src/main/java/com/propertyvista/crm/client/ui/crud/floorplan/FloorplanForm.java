@@ -78,7 +78,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        marketingTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(Marketing.class)));
+        marketingTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Marketing.class)));
     }
 
     private CFolder<FloorplanAmenity> createAmenitiesListEditor() {

@@ -73,7 +73,7 @@ public class MandatoryAccountRecoveryOptionsSetupActivity extends AbstractActivi
         new AccountRecoveryOptionsDialog(//@formatter:off
                 null,
                 accountRecoveryOptions,
-                SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
+                SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
                 true,
                 accountRecoveryOptionsService
         ) {                    

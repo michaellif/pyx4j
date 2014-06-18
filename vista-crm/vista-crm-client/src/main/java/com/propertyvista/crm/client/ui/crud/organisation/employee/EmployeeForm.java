@@ -120,8 +120,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
-        get(proto().privileges().enabled()).setVisible(SecurityController.checkPermission(new ActionPermission(CRMUserSecurityActions.class)));
-        get(proto().privileges().changePassword()).setVisible(SecurityController.checkPermission(new ActionPermission(CRMUserSecurityActions.class)));
+        get(proto().privileges().enabled()).setVisible(SecurityController.check(new ActionPermission(CRMUserSecurityActions.class)));
+        get(proto().privileges().changePassword()).setVisible(SecurityController.check(new ActionPermission(CRMUserSecurityActions.class)));
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
         get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
@@ -138,7 +138,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
         get(proto().signature().file()).setVisible(isManager || isSelfEditor);
 
-        privilegesTab.setTabVisible(isManager && SecurityController.checkPermission(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)));
+        privilegesTab.setTabVisible(isManager && SecurityController.check(DataModelPermission.permissionRead(EmployeePrivilegesDTO.class)));
         auditingTab.setTabVisible(VistaTODO.VISTA_4066_EmployeeAuditingEmailNotificationsImplemented && (isSelfEditor || isManager));
         alertsTab.setTabVisible(isSelfEditor || isManager);
     }
@@ -245,7 +245,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         protected void addItem() {
 
             Collection<NotificationType> types = EnumSet.allOf(NotificationType.class);
-            if (!VistaFeatures.instance().yardiIntegration() || !SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
+            if (!VistaFeatures.instance().yardiIntegration() || !SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD)) {
                 types.remove(NotificationType.YardiSynchronization);
             }
 

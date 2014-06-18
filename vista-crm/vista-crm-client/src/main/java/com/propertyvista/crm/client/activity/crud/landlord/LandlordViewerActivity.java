@@ -47,7 +47,7 @@ public class LandlordViewerActivity extends CrmViewerActivity<LandlordDTO> imple
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(LandlordDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(LandlordDTO.class));
     }
 
     @Override

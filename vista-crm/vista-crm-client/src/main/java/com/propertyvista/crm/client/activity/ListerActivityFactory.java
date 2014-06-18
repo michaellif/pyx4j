@@ -30,7 +30,7 @@ public class ListerActivityFactory {
         return new AbstractListerActivity<E>(place, view, service, entityClass) {
             @Override
             public boolean canCreateNewItem() {
-                return SecurityController.checkAnyBehavior(whoCanAdd);
+                return SecurityController.check(whoCanAdd);
             }
         };
     }

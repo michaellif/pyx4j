@@ -36,6 +36,6 @@ public class PortfolioListerActivity extends AbstractListerActivity<Portfolio> {
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkPermission(DataModelPermission.permissionCreate(Portfolio.class));
+        return SecurityController.check(DataModelPermission.permissionCreate(Portfolio.class));
     }
 }

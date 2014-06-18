@@ -87,7 +87,7 @@ public class PapForm extends CrmEntityForm<AutoPayDTO> {
 
         get(proto().updated()).setVisible(!getValue().updated().isNull());
 
-        boolean support = SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport);
+        boolean support = SecurityController.check(VistaCrmBehavior.PropertyVistaSupport);
         get(proto().updatedByTenant()).setVisible(support);
         get(proto().updatedBySystem()).setVisible(support);
 

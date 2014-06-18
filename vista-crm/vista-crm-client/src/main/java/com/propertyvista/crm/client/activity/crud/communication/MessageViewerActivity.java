@@ -44,7 +44,7 @@ public class MessageViewerActivity extends CrmViewerActivity<MessageDTO> impleme
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance_OLD);
+        return super.canEdit() & SecurityController.check(VistaCrmBehavior.Maintenance_OLD);
     }
 
     @Override

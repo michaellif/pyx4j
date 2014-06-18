@@ -47,7 +47,7 @@ public class LeaseSectionPanel extends AbstractSectionPanel {
         addComponent(proto().leaseChargesData().selectedFeatures(), new FeatureReadOnlyFolder());
         addField(proto().leaseChargesData().totalMonthlyCharge());
 
-        if (!SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+        if (!SecurityController.check(PortalProspectBehavior.Applicant)) {
             addCaption(i18n.tr("Peoples"));
             addComponent(proto().tenants(), new TenantsReadonlyFolder());
         }

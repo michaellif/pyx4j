@@ -90,7 +90,7 @@ public class OAPIFilter implements Filter {
 
                                 @Override
                                 public void onSuccess(AuthenticationResponse result) {
-                                    rc.set(SecurityController.checkBehavior(VistaCrmBehavior.OAPI));
+                                    rc.set(SecurityController.check(VistaCrmBehavior.OAPI));
                                 }
                             }, new ClientSystemInfo(), authenticationRequest);
                         }

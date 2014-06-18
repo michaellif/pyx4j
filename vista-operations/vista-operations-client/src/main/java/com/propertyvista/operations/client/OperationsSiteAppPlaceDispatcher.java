@@ -34,11 +34,11 @@ public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher
     @Override
     protected AppPlace obtainDefaultPlace() {
         if (ClientContext.isAuthenticated()) {
-            if (SecurityController.checkAnyBehavior(VistaOperationsBehavior.SystemAdmin)) {
+            if (SecurityController.check(VistaOperationsBehavior.SystemAdmin)) {
                 return new OperationsSiteMap.Management.PMC();
-            } else if (SecurityController.checkAnyBehavior(VistaOperationsBehavior.ProcessAdmin)) {
+            } else if (SecurityController.check(VistaOperationsBehavior.ProcessAdmin)) {
                 return new OperationsSiteMap.Management.Trigger();
-            } else if (SecurityController.checkAnyBehavior(VistaOperationsBehavior.Caledon)) {
+            } else if (SecurityController.check(VistaOperationsBehavior.Caledon)) {
                 return new OperationsSiteMap.Management.PmcMerchantAccount();
             } else {
                 return new OperationsSiteMap.Account();
@@ -53,7 +53,7 @@ public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher
         if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
             return new OperationsSiteMap.Login();
         }
-        if (SecurityController.checkBehavior(VistaBasicBehavior.OperationsPasswordChangeRequired)) {
+        if (SecurityController.check(VistaBasicBehavior.OperationsPasswordChangeRequired)) {
             return new OperationsSiteMap.PasswordReset();
         } else {
             return newPlace;

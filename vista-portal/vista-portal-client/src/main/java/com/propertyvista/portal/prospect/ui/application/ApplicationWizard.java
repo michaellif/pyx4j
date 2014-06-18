@@ -64,8 +64,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     public ApplicationWizard(ApplicationWizardViewImpl view, FeePayment feePaymentPolicy) {
         super(OnlineApplicationDTO.class, view, new ApplicationWizardDecorator());
 
-        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
-            if (SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
+        if (SecurityController.check(PortalProspectBehavior.Applicant)) {
+            if (SecurityController.check(PortalProspectBehavior.CanEditLeaseTerms)) {
                 addStep(new UnitStep());
                 addStep(new OptionsStep());
             } else {
@@ -90,7 +90,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             addStep(new AboutYouStep());
             addStep(new AdditionalInfoStep());
             addStep(new FinancialStep());
-            if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+            if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
                 addStep(new EmergencyContactsStep());
             }
             addStep(new LegalStep() {
@@ -100,7 +100,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 }
             });
             addStep(new SummaryStep());
-            if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor) && feePaymentPolicy == FeePayment.perApplicant) {
+            if (!SecurityController.check(PortalProspectBehavior.Guarantor) && feePaymentPolicy == FeePayment.perApplicant) {
                 addStep(new PaymentStep());
             }
             addStep(new ConfirmationStep());

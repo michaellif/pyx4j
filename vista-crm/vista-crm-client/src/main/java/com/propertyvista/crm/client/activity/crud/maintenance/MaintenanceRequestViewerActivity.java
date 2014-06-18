@@ -44,7 +44,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkPermission(DataModelPermission.permissionUpdate(MaintenanceRequestDTO.class));
+        return super.canEdit() & SecurityController.check(DataModelPermission.permissionUpdate(MaintenanceRequestDTO.class));
     }
 
     @Override

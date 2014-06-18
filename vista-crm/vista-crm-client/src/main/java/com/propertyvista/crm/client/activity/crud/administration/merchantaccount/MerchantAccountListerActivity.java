@@ -37,6 +37,6 @@ public class MerchantAccountListerActivity extends AbstractListerActivity<Mercha
     @Override
     public boolean canCreateNewItem() {
         return VistaFeatures.instance().yardiIntegration()
-                && SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
+                && SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
     }
 }

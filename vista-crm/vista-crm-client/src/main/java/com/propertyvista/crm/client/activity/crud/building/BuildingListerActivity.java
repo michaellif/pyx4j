@@ -36,6 +36,6 @@ public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> 
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkPermission(DataModelPermission.permissionCreate(BuildingDTO.class));
+        return SecurityController.check(DataModelPermission.permissionCreate(BuildingDTO.class));
     }
 }

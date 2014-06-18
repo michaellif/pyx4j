@@ -44,7 +44,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected boolean isPlaceNavigable(AppPlace targetPlace) {
         if (targetPlace instanceof ProspectPortalSiteMap.ApplicationContextSelection) {
-            return SecurityController.checkAnyBehavior(PortalProspectBehavior.HasMultipleApplications);
+            return SecurityController.check(PortalProspectBehavior.HasMultipleApplications);
         } else {
             return true;
         }
@@ -66,9 +66,9 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
             return newPlace;
         }
 
-        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
+        if (SecurityController.check(VistaBasicBehavior.ProspectPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
-        } else if (SecurityController.checkBehavior(PortalProspectBehavior.ApplicationSelectionRequired)) {
+        } else if (SecurityController.check(PortalProspectBehavior.ApplicationSelectionRequired)) {
             return new ProspectPortalSiteMap.ApplicationContextSelection();
         } else {
             return newPlace;

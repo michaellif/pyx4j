@@ -63,7 +63,7 @@ public class ProspectAccessControlListTest {
                 continue;
             }
             IEntity ent = EntityFactory.create(entityClass);
-            if (SecurityController.checkPermission(EntityPermission.permissionRead(ent))) {
+            if (SecurityController.check(EntityPermission.permissionRead(ent))) {
                 @SuppressWarnings("rawtypes")
                 List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, entityClass);
                 if ((rules == null) || rules.size() == 0) {

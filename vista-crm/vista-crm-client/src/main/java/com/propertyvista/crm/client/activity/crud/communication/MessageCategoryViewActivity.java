@@ -35,7 +35,7 @@ public class MessageCategoryViewActivity extends CrmViewerActivity<MessageCatego
 
     @Override
     public boolean canEdit() {
-        return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Maintenance_OLD);
+        return super.canEdit() & SecurityController.check(VistaCrmBehavior.Maintenance_OLD);
     }
 
 }

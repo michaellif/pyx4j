@@ -27,7 +27,7 @@ public class OperationsUserAccountAccesRule implements DatasetAccessRule<Operati
 
     @Override
     public void applyRule(EntityQueryCriteria<OperationsUserCredential> criteria) {
-        if (!SecurityController.checkBehavior(VistaOperationsBehavior.SystemAdmin)) {
+        if (!SecurityController.check(VistaOperationsBehavior.SystemAdmin)) {
             criteria.eq(criteria.proto().user(), VistaContext.getCurrentUserPrimaryKey());
         }
     }

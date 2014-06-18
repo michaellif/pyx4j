@@ -140,7 +140,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         get(proto().complex()).setVisible(!getValue().complex().isNull());
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
-        get(proto().suspended()).setEditable(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
+        get(proto().suspended()).setEditable(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
 
         // tweak property code editing UI:
         if (isEditable()) {
@@ -161,18 +161,18 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     });
         }
 
-        floorplansTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(FloorplanDTO.class)));
+        floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
 
-        mechanicalsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingMechanical.class)));
+        mechanicalsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMechanical.class)));
 
-        addOnsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingAddOns.class)));
+        addOnsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingAddOns.class)));
 
-        financialTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BuildingFinancial.class)));
+        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingFinancial.class)));
 
-        billingCyclesTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(BillingCycleDTO.class)));
+        billingCyclesTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BillingCycleDTO.class)));
 
         if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(Product.class))
+            catalogTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(Product.class))
                     && !getValue().defaultProductCatalog().getValue(false));
         }
 

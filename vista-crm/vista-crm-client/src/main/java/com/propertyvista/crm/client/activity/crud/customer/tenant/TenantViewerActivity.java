@@ -104,7 +104,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Tenants_OLD);
+        return SecurityController.check(VistaCrmBehavior.Tenants_OLD);
     }
 
     @Override

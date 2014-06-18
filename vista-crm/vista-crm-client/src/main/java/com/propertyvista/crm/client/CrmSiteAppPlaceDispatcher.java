@@ -44,9 +44,9 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
         if (!(newPlace instanceof PublicPlace) && !ClientContext.isAuthenticated()) {
             return new CrmSiteMap.Login();
         }
-        if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired)) {
+        if (SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequired)) {
             return new CrmSiteMap.PasswordReset();
-        } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+        } else if (SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
             return new CrmSiteMap.Account.AccountRecoveryOptionsRequired();
         } else {
             return newPlace;

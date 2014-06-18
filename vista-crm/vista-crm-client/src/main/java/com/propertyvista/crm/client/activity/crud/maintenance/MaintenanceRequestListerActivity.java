@@ -36,6 +36,6 @@ public class MaintenanceRequestListerActivity extends AbstractListerActivity<Mai
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkPermission(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
+        return SecurityController.check(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
     }
 }

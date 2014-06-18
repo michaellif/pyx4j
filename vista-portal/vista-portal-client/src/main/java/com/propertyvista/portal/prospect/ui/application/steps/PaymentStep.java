@@ -97,7 +97,7 @@ public class PaymentStep extends ApplicationWizardStep {
     public IsWidget createStepContent() {
         PortalFormPanel formPanel = new PortalFormPanel(getWizard());
 
-        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+        if (SecurityController.check(PortalProspectBehavior.Applicant)) {
             depositHeader = formPanel.h3(i18n.tr("Deposits"));
             formPanel.append(Location.Left, proto().leaseChargesData().deposits(), new DepositFolder());
             formPanel.append(Location.Left, proto().leaseChargesData().totalDeposits()).decorate();
@@ -195,7 +195,7 @@ public class PaymentStep extends ApplicationWizardStep {
 
         boolean isDepositsPresent = !getValue().leaseChargesData().deposits().isEmpty();
 
-        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
+        if (SecurityController.check(PortalProspectBehavior.Applicant)) {
             depositHeader.setVisible(isDepositsPresent);
             get(proto().leaseChargesData().deposits()).setVisible(isDepositsPresent);
             get(proto().leaseChargesData().totalDeposits()).setVisible(isDepositsPresent);

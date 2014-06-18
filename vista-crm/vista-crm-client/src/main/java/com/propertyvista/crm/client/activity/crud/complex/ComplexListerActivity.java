@@ -37,6 +37,6 @@ public class ComplexListerActivity extends AbstractListerActivity<ComplexDTO> {
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkPermission(DataModelPermission.permissionCreate(ComplexDTO.class));
+        return SecurityController.check(DataModelPermission.permissionCreate(ComplexDTO.class));
     }
 }

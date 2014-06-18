@@ -109,7 +109,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
         formPanel.appendLegalQuestion(proto().version().legalQuestions().legalTroubles());
         formPanel.appendLegalQuestion(proto().version().legalQuestions().filedBankruptcy());
 
-        if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+        if (!SecurityController.check(PortalResidentBehavior.Guarantor)) {
             formPanel.h1(proto().emergencyContacts().getMeta().getCaption());
             formPanel.append(Location.Dual, proto().emergencyContacts(), new EmergencyContactFolder(isEditable()));
         }
@@ -168,7 +168,7 @@ public class InfoViewForm extends CForm<TenantInfoDTO> {
 
         // ------------------------------------------------------------------------------------------------
 
-        if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+        if (!SecurityController.check(PortalResidentBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addComponentValidator(new AbstractComponentValidator<List<EmergencyContact>>() {
                 @Override
                 public BasicValidationError isValid() {

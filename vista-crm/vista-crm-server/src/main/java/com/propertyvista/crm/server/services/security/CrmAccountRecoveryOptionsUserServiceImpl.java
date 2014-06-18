@@ -58,7 +58,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
 
         CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
 
-        if (!SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+        if (!SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
             // Verify password
             Persistence.service().retrieve(credential.user());
             AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
@@ -74,7 +74,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
 
         result.useSecurityQuestionChallengeForPasswordReset().setValue(
                 !isEmpty(credential.securityQuestion().getValue())
-                        || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
+                        || SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
 
         result.securityQuestion().setValue(credential.securityQuestion().getValue());
         result.securityAnswer().setValue(credential.securityAnswer().getValue());
@@ -87,7 +87,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
     public void updateRecoveryOptions(AsyncCallback<AuthenticationResponse> callback, AccountRecoveryOptionsDTO request) {
         CrmUserCredential credentials = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
 
-        if (!SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+        if (!SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
             // Verify password
             Persistence.service().retrieve(credentials.user());
             AbstractAntiBot.assertLogin(LoginType.userLogin, credentials.user().email().getValue(), null);
@@ -102,7 +102,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
         }
 
         if (request.useSecurityQuestionChallengeForPasswordReset().getValue(false)
-                || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion)) {
+                || SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion)) {
             assertIsDefined(request.securityQuestion());
             assertIsDefined(request.securityAnswer());
         }
@@ -116,7 +116,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
         Persistence.service().commit();
         log.info("AccountRecoveryOptions changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
-        if (SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+        if (SecurityController.check(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
             callback.onSuccess(new CrmAuthenticationServiceImpl().authenticate(credentials, null));
         } else {
             callback.onSuccess(null);

@@ -70,7 +70,7 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         insuranceGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
         add(profileGadget);
-        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+        if (SecurityController.check(PortalResidentBehavior.Resident)) {
             add(billingGadget);
             add(maintenanceGadget);
             add(insuranceGadget);

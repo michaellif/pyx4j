@@ -59,7 +59,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         boolean editable = (getValue().status().getValue(MerchantAccountActivationStatus.PendindAppoval) == MerchantAccountActivationStatus.PendindAppoval)
-                && SecurityController.checkAnyBehavior(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
+                && SecurityController.check(VistaCrmBehavior.PropertyVistaAccountOwner_OLD, VistaCrmBehavior.PropertyVistaSupport);
 
         get(proto().bankId()).setEditable(editable);
         get(proto().branchTransitNumber()).setEditable(editable);

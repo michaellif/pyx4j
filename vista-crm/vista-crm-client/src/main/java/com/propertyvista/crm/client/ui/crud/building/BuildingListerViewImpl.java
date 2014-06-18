@@ -35,8 +35,8 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
 
         // TODO implement Upload
         // This used to be shown when Leases was disabled.
-        if ((false && SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement_OLD))
-                || SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+        if ((false && SecurityController.check(VistaCrmBehavior.PropertyManagement_OLD))
+                || SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
             upload = new Button(i18n.tr("Upload Update"), new Command() {
 
                 @Override

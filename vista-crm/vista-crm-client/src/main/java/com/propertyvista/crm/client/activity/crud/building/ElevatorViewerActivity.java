@@ -35,6 +35,6 @@ public class ElevatorViewerActivity extends CrmViewerActivity<ElevatorDTO> {
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(ElevatorDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(ElevatorDTO.class));
     }
 }

@@ -68,7 +68,7 @@ public class VistaAccessControlListTest {
     void assertPermission(boolean expected, Class<? extends IService> targetServiceInterface) {
         try {
             Assert.assertEquals("Allow " + targetServiceInterface.getSimpleName(), expected,
-                    SecurityController.checkPermission(new IServiceExecutePermission(targetServiceInterface)));
+                    SecurityController.check(new IServiceExecutePermission(targetServiceInterface)));
         } catch (AssertionError error) {
             debuPermissions();
             throw error;
@@ -97,9 +97,9 @@ public class VistaAccessControlListTest {
             if ((application != null) && (ent instanceof IBoundToApplication)) {
                 ((IBoundToApplication) ent).application().set(application);
             }
-            Assert.assertEquals("Allow Read " + entityClass.getSimpleName(), expected, SecurityController.checkPermission(EntityPermission.permissionRead(ent)));
+            Assert.assertEquals("Allow Read " + entityClass.getSimpleName(), expected, SecurityController.check(EntityPermission.permissionRead(ent)));
             Assert.assertEquals("Allow Update " + entityClass.getSimpleName(), expected,
-                    SecurityController.checkPermission(EntityPermission.permissionUpdate(ent)));
+                    SecurityController.check(EntityPermission.permissionUpdate(ent)));
 
         } catch (AssertionError error) {
             debuPermissions();

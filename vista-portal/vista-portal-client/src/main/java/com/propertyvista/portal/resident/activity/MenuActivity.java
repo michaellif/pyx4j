@@ -45,7 +45,7 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setUserName(ClientContext.getUserVisit().getName());
-        view.setLeasesSelectorEnabled(SecurityController.checkAnyBehavior(PortalResidentBehavior.HasMultipleLeases));
+        view.setLeasesSelectorEnabled(SecurityController.check(PortalResidentBehavior.HasMultipleLeases));
         view.setMenuVisible(!(place instanceof ResidentPortalSiteMap.MoveIn.MoveInWizard)
                 && !(place instanceof ResidentPortalSiteMap.MoveIn.NewTenantWelcomePage)
                 && !(place instanceof ResidentPortalSiteMap.MoveIn.NewGuarantorWelcomePage) && !(place instanceof ResidentPortalSiteMap.LeaseContextSelection));

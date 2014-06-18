@@ -52,7 +52,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
         panel.setWidget(view);
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
-            view.setApplicationsSelectorEnabled(SecurityController.checkAnyBehavior(PortalProspectBehavior.HasMultipleApplications));
+            view.setApplicationsSelectorEnabled(SecurityController.check(PortalProspectBehavior.HasMultipleApplications));
         } else {
             boolean hideLoginButton = place instanceof PortalSiteMap.Login || !VistaFeatures.instance().onlineApplication();
             view.onLogedOut(hideLoginButton);

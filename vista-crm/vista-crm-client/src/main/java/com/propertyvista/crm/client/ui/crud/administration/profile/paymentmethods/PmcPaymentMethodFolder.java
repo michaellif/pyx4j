@@ -105,7 +105,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
                 protected IsWidget createContent() {
                     IsWidget content = super.createContent();
 
-                    if (SecurityController.checkBehavior(VistaCrmBehavior.Billing_OLD)) {
+                    if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
                         ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {

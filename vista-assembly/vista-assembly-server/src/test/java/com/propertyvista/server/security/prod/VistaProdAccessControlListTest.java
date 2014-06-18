@@ -56,7 +56,7 @@ public class VistaProdAccessControlListTest {
 
     void assertPermission(boolean expected, Class<? extends IService> targetServiceInterface) {
         Assert.assertEquals("Allow " + targetServiceInterface.getSimpleName(), expected,
-                SecurityController.checkPermission(new IServiceExecutePermission(targetServiceInterface)));
+                SecurityController.check(new IServiceExecutePermission(targetServiceInterface)));
     }
 
     @Test

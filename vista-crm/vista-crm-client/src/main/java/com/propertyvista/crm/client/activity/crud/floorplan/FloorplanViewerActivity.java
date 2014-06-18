@@ -35,6 +35,6 @@ public class FloorplanViewerActivity extends CrmViewerActivity<FloorplanDTO> imp
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(FloorplanDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(FloorplanDTO.class));
     }
 }

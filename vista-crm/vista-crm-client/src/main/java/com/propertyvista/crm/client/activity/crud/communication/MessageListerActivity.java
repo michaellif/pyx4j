@@ -35,7 +35,7 @@ public class MessageListerActivity extends AbstractListerActivity<MessageDTO> {
 
     @Override
     public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.Maintenance_OLD);
+        return SecurityController.check(VistaCrmBehavior.Maintenance_OLD);
     }
 
 }

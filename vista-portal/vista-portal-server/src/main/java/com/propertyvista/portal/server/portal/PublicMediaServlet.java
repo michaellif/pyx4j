@@ -95,7 +95,7 @@ public class PublicMediaServlet extends HttpServlet {
             if (holder != null) {
                 file = holder.file();
                 if (!PublicVisibilityType.global.equals(holder.visibility().getValue())) {
-                    if (!SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
+                    if (!SecurityController.check(VistaBasicBehavior.CRM)) {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                         return;
                     }

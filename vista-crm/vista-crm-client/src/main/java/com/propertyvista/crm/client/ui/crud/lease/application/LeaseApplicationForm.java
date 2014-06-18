@@ -81,9 +81,9 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().decisionDate()).setVisible(status.isProcessed());
         get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
 
-        paymentsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
-        financialTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
-        applicationDocumentsTab.setTabVisible(SecurityController.checkPermission(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
+        paymentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
+        financialTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(TenantFinancialDTO.class)));
+        applicationDocumentsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(LeaseApplicationDocument.class)));
     }
 
     private IsWidget createInfoTab() {

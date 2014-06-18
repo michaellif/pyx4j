@@ -163,7 +163,7 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
                 }
 
                 if (editor != null) {
-                    if (!SecurityController.checkBehavior(PortalProspectBehavior.Guarantor)) {
+                    if (!SecurityController.check(PortalProspectBehavior.Guarantor)) {
                         editor.setEditable(true);
                         editor.inheritEditable(false);
                     }

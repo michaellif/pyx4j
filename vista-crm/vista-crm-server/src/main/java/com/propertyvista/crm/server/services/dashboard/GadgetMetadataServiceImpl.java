@@ -90,7 +90,7 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
             if (//@formatter:off
                     isAcceptedBy(boardType, gadgetMetadataClass)
                         & isVistaFeaturesCompatible(gadgetMetadataClass)
-                        & SecurityController.checkAnyBehavior(gadgetDescription.allowedBehaviors())
+                        & SecurityController.check(gadgetDescription.allowedBehaviors())
                         & !AccessDeniedGagetMetadata.class.equals(gadgetMetadataClass) // this is a special gadget that can't be added
                         & !DemoGadget.class.isAssignableFrom(gadgetMetadataClass) // don't allow demo gadgets
                         ) {//@formatter:on

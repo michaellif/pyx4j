@@ -72,7 +72,7 @@ public class NavigFolder {
     }
 
     public void addNavigItem(AppPlace item, Behavior... behaviors) {
-        if (SecurityController.checkAnyBehavior(behaviors)) {
+        if (SecurityController.check(behaviors)) {
             navigItems.add(item);
         }
     }

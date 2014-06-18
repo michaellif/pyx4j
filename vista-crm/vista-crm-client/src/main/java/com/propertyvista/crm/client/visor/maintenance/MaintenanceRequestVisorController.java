@@ -51,7 +51,7 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
                 MaintenanceRequestDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return (SecurityController.checkPermission(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)) && MaintenanceRequestVisorController.this
+                return (SecurityController.check(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)) && MaintenanceRequestVisorController.this
                         .canCreateNewItem());
             }
 

@@ -45,12 +45,12 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
 
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+        if (SecurityController.check(PortalResidentBehavior.Resident)) {
             add(billingSummarygGadget = new BillingSummaryGadget(this));
             add(autoPayAgreementsGadget = new AutoPayAgreementsGadget(this));
             add(latestActivitiesGadget = new LatestActivitiesGadget(this));
             add(paymentMethodsGadget = new PaymentMethodsGadget(this));
-        } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+        } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
             add(new ComingSoonGadget(this));
         }
 

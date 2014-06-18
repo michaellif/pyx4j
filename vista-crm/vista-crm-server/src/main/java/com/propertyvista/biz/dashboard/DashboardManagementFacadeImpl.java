@@ -151,7 +151,7 @@ public class DashboardManagementFacadeImpl implements DashboardManagementFacade 
      */
     private GadgetMetadata enforcePermissions(GadgetMetadata gadgetMetadata) {
         GadgetDescription description = gadgetMetadata.getInstanceValueClass().getAnnotation(GadgetDescription.class);
-        if (SecurityController.checkAnyBehavior(description.allowedBehaviors())) {
+        if (SecurityController.check(description.allowedBehaviors())) {
             return gadgetMetadata;
         } else {
             AccessDeniedGagetMetadata accessDenied = EntityFactory.create(AccessDeniedGagetMetadata.class);

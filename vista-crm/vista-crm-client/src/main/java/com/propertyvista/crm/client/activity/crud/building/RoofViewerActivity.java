@@ -35,6 +35,6 @@ public class RoofViewerActivity extends CrmViewerActivity<RoofDTO> {
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(RoofDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(RoofDTO.class));
     }
 }

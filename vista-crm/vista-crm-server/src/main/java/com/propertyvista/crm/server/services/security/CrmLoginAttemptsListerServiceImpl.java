@@ -79,7 +79,7 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // security measures 
-        if (!SecurityController.checkBehavior(VistaCrmBehavior.EmployeeBasic)) {
+        if (!SecurityController.check(VistaCrmBehavior.EmployeeBasic)) {
             dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().user(), VistaContext.getCurrentUserPrimaryKey()));
         }
 

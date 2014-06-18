@@ -37,7 +37,7 @@ public class EmployeeEditorActivity extends CrmEditorActivity<EmployeeDTO> imple
 
     @Override
     public void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.EmployeeFull), ClientContext
+        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.check(VistaCrmBehavior.EmployeeFull), ClientContext
                 .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
         super.onPopulateSuccess(result);
     }

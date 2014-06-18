@@ -60,7 +60,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
         setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
-        setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.checkBehavior(VistaCrmBehavior.Billing_OLD));
+        setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.check(VistaCrmBehavior.Billing_OLD));
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
 

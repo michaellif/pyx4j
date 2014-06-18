@@ -100,7 +100,7 @@ public class EftReportGenerator implements ReportExporter {
                     EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
                     eftReportRecordDto.bankId().setValue(echeck.bankId().getValue());
                     eftReportRecordDto.transitNumber().setValue(echeck.branchTransitNumber().getValue());
-                    if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+                    if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
                         eftReportRecordDto.accountNumber().setValue(echeck.accountNo().number().getValue());
                     } else {
                         eftReportRecordDto.accountNumber().setValue(echeck.accountNo().obfuscatedNumber().getValue());

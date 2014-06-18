@@ -116,7 +116,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     protected void populateBills(Lease result) {
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Billing_OLD)) {
+        if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
             EntityFiltersBuilder<BillDataDTO> filters = EntityFiltersBuilder.create(BillDataDTO.class);
             filters.eq(filters.proto().bill().billingAccount().id(), result.billingAccount().getPrimaryKey());
             billLister.setPreDefinedFilters(filters.getFilters());

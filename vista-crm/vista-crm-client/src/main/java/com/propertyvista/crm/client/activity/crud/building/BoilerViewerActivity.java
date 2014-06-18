@@ -35,6 +35,6 @@ public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(BoilerDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(BoilerDTO.class));
     }
 }

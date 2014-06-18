@@ -61,7 +61,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
             }
         });
 
-        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+        if (SecurityController.check(PortalResidentBehavior.Resident)) {
 
             ((BillingService) GWT.create(BillingService.class)).retreiveBillingSummary(new DefaultAsyncCallback<BillingSummaryDTO>() {
                 @Override

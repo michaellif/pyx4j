@@ -71,7 +71,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
-        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+        if (SecurityController.check(PortalResidentBehavior.Resident)) {
 
             mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
 

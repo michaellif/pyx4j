@@ -87,7 +87,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
                 ));
         //@formatter:on
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+        if (SecurityController.check(VistaCrmBehavior.PropertyVistaSupport)) {
             if (VistaFeatures.instance().yardiIntegration()) {
                 columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().billingAccount().invoiceLineItems().$().chargeCode(), false)
                         .columnTitle("Yardi Charge Codes").searchableOnly().build());

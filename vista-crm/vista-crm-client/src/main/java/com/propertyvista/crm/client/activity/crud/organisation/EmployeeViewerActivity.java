@@ -48,12 +48,12 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(EmployeeDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(EmployeeDTO.class));
     }
 
     @Override
     public boolean canChangePassword() {
-        return SecurityController.checkPermission(new ActionPermission(CRMUserSecurityActions.class)) //
+        return SecurityController.check(new ActionPermission(CRMUserSecurityActions.class)) //
                 || ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(entity.user().getPrimaryKey());
     }
 
@@ -81,7 +81,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     @Override
     protected void onPopulateSuccess(EmployeeDTO result) {
         this.entity = result;
-        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.EmployeeFull), ClientContext
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.check(VistaCrmBehavior.EmployeeFull), ClientContext
                 .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
         super.onPopulateSuccess(result);
     }

@@ -57,7 +57,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.AccountSelf);
+        return SecurityController.check(VistaCrmBehavior.AccountSelf);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
                 new AccountRecoveryOptionsDialog(//@formatter:off
                         password,
                         result,
-                        SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
+                        SecurityController.check(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
                         false,
                         accountRecoveryOptionsService
                 ).show();//@formatter:on
@@ -121,7 +121,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
 
     @Override
     protected void onPopulateSuccess(EmployeeDTO result) {
-        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.EmployeeFull), true);
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.check(VistaCrmBehavior.EmployeeFull), true);
         super.onPopulateSuccess(result);
     }
 

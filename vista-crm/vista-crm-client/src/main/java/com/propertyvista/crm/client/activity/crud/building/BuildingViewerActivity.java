@@ -165,7 +165,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public boolean canEdit() {
-        return SecurityController.checkPermission(DataModelPermission.permissionUpdate(BuildingDTO.class));
+        return SecurityController.check(DataModelPermission.permissionUpdate(BuildingDTO.class));
     }
 
     @Override
@@ -212,7 +212,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         concessionLister.setParent(result.productCatalog().getPrimaryKey());
         concessionLister.populate();
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Billing_OLD)) {
+        if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
             billingCycleLister.clearPreDefinedFilters();
             billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
             billingCycleLister.populate();

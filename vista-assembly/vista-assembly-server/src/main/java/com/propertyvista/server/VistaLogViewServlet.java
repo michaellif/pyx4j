@@ -30,7 +30,7 @@ public class VistaLogViewServlet extends com.pyx4j.essentials.server.download.Lo
 
     @Override
     protected void authentication(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (!ApplicationMode.isDevelopment() && !SecurityController.checkBehavior(VistaOperationsBehavior.SystemAdmin)) {
+        if (!ApplicationMode.isDevelopment() && !SecurityController.check(VistaOperationsBehavior.SystemAdmin)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             throw new ServletException("Request requires authentication.");
         }

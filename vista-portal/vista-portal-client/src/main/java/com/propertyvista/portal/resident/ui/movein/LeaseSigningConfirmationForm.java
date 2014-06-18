@@ -54,13 +54,13 @@ public class LeaseSigningConfirmationForm extends CPortalEntityForm<LeaseAgreeme
 
         formPanel.br();
 
-        if (SecurityController.checkBehavior(PortalResidentBehavior.Resident)) {
+        if (SecurityController.check(PortalResidentBehavior.Resident)) {
             HTML helpText = new HTML(
                     i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, submit maintenance requests, view special offers and more."));
             //" Please use the links below to continue with the setup of your tenant services, then continue on to the mycommunity dashboard."
             helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
             formPanel.append(Location.Left, helpText);
-        } else if (SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
+        } else if (SecurityController.check(PortalResidentBehavior.Guarantor)) {
             HTML helpText = new HTML(
                     i18n.tr("You now have access to the mycommunity portal. From the dashboard you can manage your payments, view special offers and more."));
             helpText.getElement().getStyle().setTextAlign(TextAlign.LEFT);
