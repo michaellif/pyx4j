@@ -25,9 +25,9 @@ import com.pyx4j.security.shared.SecurityController;
 
 public class PermitViewAccessAdapter implements IAccessAdapter {
 
-    private final Permission permission;
+    private final Permission[] permission;
 
-    public PermitViewAccessAdapter(Permission permission) {
+    public PermitViewAccessAdapter(Permission... permission) {
         this.permission = permission;
     }
 
@@ -43,7 +43,7 @@ public class PermitViewAccessAdapter implements IAccessAdapter {
 
     @Override
     public Boolean isVisible() {
-        return SecurityController.checkPermission(permission);
+        return SecurityController.check(permission);
     }
 
     @Override

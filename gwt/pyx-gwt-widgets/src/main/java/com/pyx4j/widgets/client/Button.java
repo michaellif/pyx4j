@@ -67,7 +67,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private boolean active = false;
 
-    private Permission permission;
+    private Permission[] permission;
 
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
@@ -87,7 +87,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         this.command = command;
     }
 
-    public Button(String text, Command command, Permission permission) {
+    public Button(String text, Command command, Permission... permission) {
         this(text, command);
         this.setPermission(permission);
     }
@@ -228,14 +228,14 @@ public class Button extends FocusPanel implements IFocusWidget {
         }
     }
 
-    public void setPermission(Permission permission) {
+    public void setPermission(Permission... permission) {
         this.permission = permission;
-        super.setVisible(SecurityController.checkPermission(permission));
+        super.setVisible(SecurityController.check(permission));
     }
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible && ((permission == null) || SecurityController.checkPermission(permission)));
+        super.setVisible(visible && ((permission == null) || SecurityController.check(permission)));
     }
 
     public boolean isActive() {
@@ -440,17 +440,17 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     public static class SecureMenuItem extends MenuItem {
 
-        private final Permission permission;
+        private final Permission[] permissions;
 
-        public SecureMenuItem(String text, ScheduledCommand cmd, Permission permission) {
+        public SecureMenuItem(String text, ScheduledCommand cmd, Permission... permissions) {
             super(text, cmd);
-            this.permission = permission;
-            super.setVisible(SecurityController.checkPermission(permission));
+            this.permissions = permissions;
+            super.setVisible(SecurityController.check(permissions));
         }
 
         @Override
         public void setVisible(boolean visible) {
-            super.setVisible(visible && SecurityController.checkPermission(permission));
+            super.setVisible(visible && SecurityController.check(permissions));
         }
 
     }

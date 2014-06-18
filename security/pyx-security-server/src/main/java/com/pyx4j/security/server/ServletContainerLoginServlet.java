@@ -68,7 +68,7 @@ public class ServletContainerLoginServlet extends HttpServlet {
     }
 
     private void createContainerSession(Behavior behavior) {
-        if (SecurityController.checkBehavior(behavior)) {
+        if (SecurityController.check(behavior)) {
             log.info("behavior {} already present", behavior);
             return;
         }

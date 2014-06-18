@@ -39,14 +39,14 @@ public class SideMenuAppPlaceItem extends SideMenuItem {
 
     public SideMenuAppPlaceItem(final AppPlace appPlace, Behavior... behaviors) {
         this(appPlace, null, null);
-        if (!SecurityController.checkAnyBehavior(behaviors)) {
+        if (!SecurityController.check(behaviors)) {
             setVisible(false);
         }
     }
 
-    public SideMenuAppPlaceItem(final AppPlace appPlace, Permission permission) {
+    public SideMenuAppPlaceItem(final AppPlace appPlace, Permission... permission) {
         this(appPlace, null, null);
-        if (!SecurityController.checkPermission(permission)) {
+        if (!SecurityController.check(permission)) {
             setVisible(false);
         }
     }

@@ -60,11 +60,7 @@ public abstract class SecurityController {
 
     public abstract Set<Behavior> getAllBehaviors(Set<Behavior> behaviors);
 
-    public static boolean checkBehavior(Behavior behavior) {
-        return controller.getAcl().checkBehavior(behavior);
-    }
-
-    public static <T extends Behavior> boolean checkAnyBehavior(Collection<T> list) {
+    public static <T extends Behavior> boolean check(Collection<T> list) {
         for (Behavior behavior : list) {
             if (controller.getAcl().checkBehavior(behavior)) {
                 return true;
@@ -73,7 +69,7 @@ public abstract class SecurityController {
         return false;
     }
 
-    public static boolean checkAnyBehavior(Behavior... behaviors) {
+    public static boolean check(Behavior... behaviors) {
         for (Behavior behavior : behaviors) {
             if (controller.getAcl().checkBehavior(behavior)) {
                 return true;
@@ -82,19 +78,8 @@ public abstract class SecurityController {
         return false;
     }
 
-    public static void assertBehavior(Behavior behavior) {
-        if (!checkBehavior(behavior)) {
-            log.warn("Permission denied {}", behavior);
-            if (ApplicationMode.isDevelopment()) {
-                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + behavior);
-            } else {
-                throw new SecurityViolationException("Permission denied");
-            }
-        }
-    }
-
-    public static void assertAnyBehavior(Behavior... behaviors) {
-        if (!checkAnyBehavior(behaviors)) {
+    public static void assertBehavior(Behavior... behaviors) throws SecurityViolationException {
+        if (!check(behaviors)) {
             log.warn("Permission denied {}", ConverterUtils.convertArray(behaviors, " or "));
             if (ApplicationMode.isDevelopment()) {
                 throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + ConverterUtils.convertArray(behaviors, " or "));
@@ -114,15 +99,20 @@ public abstract class SecurityController {
         return controller.getAcl().getPermissions();
     }
 
-    public static boolean checkPermission(Permission permission) {
-        return controller.getAcl().checkPermission(permission);
+    public static boolean check(Permission... permissions) {
+        for (Permission permission : permissions) {
+            if (controller.getAcl().checkPermission(permission)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public static void assertPermission(Permission permission) throws SecurityViolationException {
-        if (!checkPermission(permission)) {
-            log.warn("Permission denied {}", permission);
+    public static void assertPermission(Permission... permissions) throws SecurityViolationException {
+        if (!check(permissions)) {
+            log.warn("Permission denied {}", ConverterUtils.convertArray(permissions, " or "));
             if (ApplicationMode.isDevelopment()) {
-                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + permission);
+                throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + ConverterUtils.convertArray(permissions, " or "));
             } else {
                 throw new SecurityViolationException("Permission denied");
             }

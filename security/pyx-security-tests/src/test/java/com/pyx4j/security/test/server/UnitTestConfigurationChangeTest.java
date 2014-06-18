@@ -77,21 +77,21 @@ public class UnitTestConfigurationChangeTest extends TestCase {
      */
     public void testUnitTestConfigurationChange() {
         // initialize default configuration
-        assertTrue(SecurityController.checkPermission(new EntityPermission("EntP1", EntityPermission.READ)));
-        assertTrue(SecurityController.checkPermission(new EntityPermission("EntD1", EntityPermission.READ)));
+        assertTrue(SecurityController.check(new EntityPermission("EntP1", EntityPermission.READ)));
+        assertTrue(SecurityController.check(new EntityPermission("EntD1", EntityPermission.READ)));
 
         ServerSideConfiguration.setInstance(new ServerSideConfiguration1());
 
-        assertTrue(SecurityController.checkPermission(new EntityPermission("EntP1", EntityPermission.READ)));
-        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD1", EntityPermission.READ)));
-        assertFalse(SecurityController.checkPermission(new EntityPermission("EntP2", EntityPermission.READ)));
-        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD2", EntityPermission.READ)));
+        assertTrue(SecurityController.check(new EntityPermission("EntP1", EntityPermission.READ)));
+        assertFalse(SecurityController.check(new EntityPermission("EntD1", EntityPermission.READ)));
+        assertFalse(SecurityController.check(new EntityPermission("EntP2", EntityPermission.READ)));
+        assertFalse(SecurityController.check(new EntityPermission("EntD2", EntityPermission.READ)));
 
         ServerSideConfiguration.setInstance(new ServerSideConfiguration2());
 
-        assertFalse(SecurityController.checkPermission(new EntityPermission("EntP1", EntityPermission.READ)));
-        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD1", EntityPermission.READ)));
-        assertTrue(SecurityController.checkPermission(new EntityPermission("EntP2", EntityPermission.READ)));
-        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD2", EntityPermission.READ)));
+        assertFalse(SecurityController.check(new EntityPermission("EntP1", EntityPermission.READ)));
+        assertFalse(SecurityController.check(new EntityPermission("EntD1", EntityPermission.READ)));
+        assertTrue(SecurityController.check(new EntityPermission("EntP2", EntityPermission.READ)));
+        assertFalse(SecurityController.check(new EntityPermission("EntD2", EntityPermission.READ)));
     }
 }

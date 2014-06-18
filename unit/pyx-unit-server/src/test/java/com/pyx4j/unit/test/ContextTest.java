@@ -61,8 +61,8 @@ public class ContextTest extends TestCase {
 
         TestLifecycle.beginRequest();
         try {
-            assertTrue("Does not have Behavior.USER", SecurityController.checkBehavior(CoreBehavior.USER));
-            assertTrue("Has Behavior.DEVELOPER", !SecurityController.checkBehavior(CoreBehavior.DEVELOPER));
+            assertTrue("Does not have Behavior.USER", SecurityController.check(CoreBehavior.USER));
+            assertTrue("Has Behavior.DEVELOPER", !SecurityController.check(CoreBehavior.DEVELOPER));
         } finally {
             TestLifecycle.endRequest();
         }

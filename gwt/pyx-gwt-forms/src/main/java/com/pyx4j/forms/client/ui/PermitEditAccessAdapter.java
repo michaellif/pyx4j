@@ -25,9 +25,9 @@ import com.pyx4j.security.shared.SecurityController;
 
 public class PermitEditAccessAdapter implements IAccessAdapter {
 
-    private final Permission permission;
+    private final Permission[] permission;
 
-    public PermitEditAccessAdapter(Permission permission) {
+    public PermitEditAccessAdapter(Permission... permission) {
         this.permission = permission;
     }
 
@@ -38,7 +38,7 @@ public class PermitEditAccessAdapter implements IAccessAdapter {
 
     @Override
     public Boolean isEditable() {
-        return SecurityController.checkPermission(permission);
+        return SecurityController.check(permission);
     }
 
     @Override

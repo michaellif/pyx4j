@@ -301,7 +301,7 @@ public class ClientContext {
             attributes.clear();
             ClientSecurityController.instance().authorize(authenticationResponse.getBehaviors(), authenticationResponse.getPermissions());
             ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
-            if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
+            if (ClientSecurityController.check(CoreBehavior.DEVELOPER)) {
                 RPCManager.enableAppEngineUsageStats();
             }
             systemWallMessage = authenticationResponse.getSystemWallMessage();
