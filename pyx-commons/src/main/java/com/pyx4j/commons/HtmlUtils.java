@@ -31,6 +31,14 @@ public class HtmlUtils {
 
     public static final char ZERO_WIDTH_SPACE_UTF8 = '\u200B';
 
+    public static final char RIGHT_ARROW_UTF8 = '\u2192';
+
+    public static final String RIGHT_ARROW_HTML = "&#8594;";
+
+    public static final char LEFT_ARROW_UTF8 = '\u2190';
+
+    public static final String LEFT_ARROW_HTML = "&#8592;";
+
     private final static String[] HTML_ENTITIES = {
 
     ">", "&gt;",
