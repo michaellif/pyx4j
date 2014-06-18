@@ -29,6 +29,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -40,6 +41,8 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     private static final Logger log = LoggerFactory.getLogger(AbstractCrudServiceDtoImpl.class);
 
     private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
+
+    private final boolean TODO_DataModelPermissionEnable = false;
 
     protected AbstractCrudServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
         super(boClass, toClass);
@@ -72,14 +75,23 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     protected TO init(InitializationData initializationData) {
+        if (TODO_DataModelPermissionEnable)
+            SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
         return EntityFactory.create(toClass);
     }
 
+    /**
+     * Default implementation calls persist(...)
+     * 
+     * @param bo
+     * @param to
+     */
     protected void create(BO bo, TO to) {
         persist(bo, to);
     }
 
     /**
+     * Default implementation calls persist(...)
      * 
      * @param bo
      * @param to
@@ -125,7 +137,9 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
+    public final void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
+        if (TODO_DataModelPermissionEnable)
+            SecurityController.assertPermission(DataModelPermission.permissionRead(toClass));
         TO to = EntityFactory.createIdentityStub(toClass, toId);
         BO bo = retrieve(getBOKey(to), retrieveTarget);
         if (bo != null) {
@@ -139,12 +153,15 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public final void init(AsyncCallback<TO> callback, InitializationData initializationData) {
-        SecurityController.assertPermission(EntityPermission.permissionCreate(boClass));
+        if (TODO_DataModelPermissionEnable)
+            SecurityController.assertPermission(EntityPermission.permissionCreate(boClass));
         callback.onSuccess(init(initializationData));
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, TO to) {
+    public final void create(AsyncCallback<Key> callback, TO to) {
+        if (TODO_DataModelPermissionEnable)
+            SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
         BO bo = createBO(to);
         create(bo, to);
         Persistence.service().commit();
@@ -160,7 +177,9 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, TO to) {
+    public final void save(AsyncCallback<Key> callback, TO to) {
+        if (TODO_DataModelPermissionEnable)
+            SecurityController.assertPermission(DataModelPermission.permissionUpdate(toClass));
         BO bo = retrieveForSave(to);
         retrievedSingle(bo, null);
         copyTOtoBO(to, bo);
