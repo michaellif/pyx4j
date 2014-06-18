@@ -74,7 +74,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
                 ++row,
                 0,
                 2,
-                addVisibilityCondition(inject(proto().passwordChangeRequired(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
+                addVisibilityCondition(inject(proto().changePassword(), new FieldDecoratorBuilder(true).build()), isSelfManagedUserCondition));
 
         content.setWidget(++row, 0, 2, inject(proto().credentialUpdated(), new FieldDecoratorBuilder(true).build()));
 

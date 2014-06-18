@@ -62,7 +62,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         newEmployee.privileges().enabled().setValue(true);
         newEmployee.privileges().restrictAccessToSelectedBuildingsAndPortfolios().setValue(false);
-        newEmployee.privileges().passwordChangeRequired().setValue(true);
+        newEmployee.privileges().changePassword().setValue(true);
 
         return newEmployee;
 
@@ -86,7 +86,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
             to.privileges().enabled().set(crs.enabled());
             to.privileges().restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
-            to.privileges().passwordChangeRequired().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+            to.privileges().changePassword().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             to.privileges().roles().addAll(crs.roles());
             to.privileges().credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
@@ -172,7 +172,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.roles().clear();
             credential.roles().addAll(in.privileges().roles());
             credential.accessAllBuildings().setValue(!in.privileges().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
-            credential.requiredPasswordChangeOnNextLogIn().setValue(in.privileges().passwordChangeRequired().getValue());
+            credential.requiredPasswordChangeOnNextLogIn().setValue(in.privileges().changePassword().getValue());
 
             Persistence.service().persist(credential);
 

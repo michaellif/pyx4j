@@ -42,7 +42,7 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
         bind(toProto.updated(), boProto.user().updated());
 
         bind(toProto.enabled(), boProto.enabled());
-        bind(toProto.passwordChangeRequired(), boProto.requiredPasswordChangeOnNextLogIn());
+        bind(toProto.changePassword(), boProto.requiredPasswordChangeOnNextLogIn());
     }
 
     @Override

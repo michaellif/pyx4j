@@ -55,9 +55,9 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     @Override
     public List<FolderColumnDescriptor> columns() {
         ArrayList<FolderColumnDescriptor> columns = new ArrayList<FolderColumnDescriptor>();
-        columns.add(new FolderColumnDescriptor(proto().name(), "10em"));
-        columns.add(new FolderColumnDescriptor(proto().description(), "15em"));
-        columns.add(new FolderColumnDescriptor(proto().behaviors(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().name(), "15em"));
+        columns.add(new FolderColumnDescriptor(proto().description(), "20em"));
+        columns.add(new FolderColumnDescriptor(proto().behaviors(), "40em"));
         return columns;
     }
 

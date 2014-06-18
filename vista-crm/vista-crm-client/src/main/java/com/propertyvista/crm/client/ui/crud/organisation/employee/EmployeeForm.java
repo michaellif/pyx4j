@@ -119,7 +119,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
         get(proto().privileges().enabled()).setVisible(isManager);
-        get(proto().privileges().passwordChangeRequired()).setVisible(isManager);
+        get(proto().privileges().changePassword()).setVisible(isManager);
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
         get(proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
@@ -177,13 +177,13 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         formPanel.append(Location.Left, proto().privileges().password()).decorate();
         formPanel.append(Location.Left, proto().privileges().passwordConfirm()).decorate();
         formPanel.br();
-        formPanel.append(Location.Left, proto().privileges().enabled()).decorate().componentWidth(50);
-        formPanel.append(Location.Right, proto().privileges().passwordChangeRequired()).decorate().componentWidth(50);
-        formPanel.append(Location.Left, proto().privileges().isSecurityQuestionSet(), new CBooleanLabel()).decorate().componentWidth(50);
+        formPanel.append(Location.Left, proto().privileges().enabled()).decorate().componentWidth("auto");
+        formPanel.append(Location.Right, proto().privileges().changePassword()).decorate().componentWidth("auto");
+        formPanel.append(Location.Left, proto().privileges().isSecurityQuestionSet(), new CBooleanLabel()).decorate().componentWidth("auto");
         formPanel.append(Location.Right, proto().privileges().credentialUpdated()).decorate().componentWidth(150);
 
         formPanel.h1(i18n.tr("Roles"));
-        formPanel.append(Location.Left, proto().privileges().roles(), new CrmRoleFolder(this));
+        formPanel.append(Location.Dual, proto().privileges().roles(), new CrmRoleFolder(this));
 
         formPanel.h1(i18n.tr("Buildings Access"));
         formPanel.append(Location.Left, proto().privileges().restrictAccessToSelectedBuildingsAndPortfolios()).decorate().componentWidth(200);
