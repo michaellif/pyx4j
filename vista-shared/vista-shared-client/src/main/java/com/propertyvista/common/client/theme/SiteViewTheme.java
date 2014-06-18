@@ -62,7 +62,7 @@ public class SiteViewTheme extends Theme {
         style = new Style(".", StyleName.SiteViewHeader, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("line-height", "30px");
         style.addProperty("height", "30px");
-        style.addProperty("padding", "3px");
+        style.addProperty("padding", "3px 10px 3px 3px");
         style.addProperty("background", "none");
         style.addProperty("border", "none");
         style.addProperty("outline", "none");
