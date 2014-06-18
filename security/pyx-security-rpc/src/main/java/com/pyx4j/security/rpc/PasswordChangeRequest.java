@@ -77,7 +77,7 @@ public interface PasswordChangeRequest extends IEntity {
     @NotNull
     IPrimitive<Pair<String, String>> captcha();
 
-    @Caption(name = "Require to change password on next sign in")
-    IPrimitive<Boolean> requireChangePasswordOnNextSignIn();
+    @Caption(description = "Require to change password on next sign in")
+    IPrimitive<Boolean> passwordChangeRequired();
 
 }
