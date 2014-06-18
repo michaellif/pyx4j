@@ -65,13 +65,13 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    public void retrieve(AsyncCallback<LoginAttemptDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
-        throw new Error("retrieve is not implemented");
+    protected AuditRecord retrieve(Key entityId, RetrieveTarget retrieveTarget) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, LoginAttemptDTO dto) {
-        throw new Error("save is not implemented");
+    protected boolean persist(AuditRecord bo, LoginAttemptDTO to) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -24,7 +24,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -122,24 +121,18 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        throw new RuntimeException("Not Implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, MoneyInBatchDTO editableEntity) {
-        throw new RuntimeException("Operation NOT supported");
+    protected void create(PaymentPostingBatch bo, MoneyInBatchDTO to) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<Key> callback, MoneyInBatchDTO editableEntity) {
-        PaymentPostingBatch postingBatch = Persistence.secureRetrieve(PaymentPostingBatch.class, editableEntity.getPrimaryKey());
-
-        postingBatch.depositDetails().depositDate().setValue(editableEntity.depositDate().getValue());
-
-        Persistence.secureSave(postingBatch);
-        Persistence.service().commit();
-        callback.onSuccess(postingBatch.getPrimaryKey());
+    public void copyTOtoBO(MoneyInBatchDTO to, PaymentPostingBatch bo) {
+        // Only one filed is updatable, TODO move to bind
+        bo.depositDetails().depositDate().setValue(to.depositDate().getValue());
     }
 
 }

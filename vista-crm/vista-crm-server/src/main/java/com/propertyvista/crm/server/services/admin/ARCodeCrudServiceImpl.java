@@ -46,15 +46,9 @@ public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> imple
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, ARCode dto) {
-        assertIsValid(dto);
-        super.save(callback, dto);
-    }
-
-    @Override
-    public void create(AsyncCallback<Key> callback, ARCode dto) {
-        assertIsValid(dto);
-        super.create(callback, dto);
+    protected boolean persist(ARCode bo, ARCode to) {
+        assertIsValid(to);
+        return super.persist(bo, to);
     }
 
     @Override

@@ -13,10 +13,6 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
@@ -28,11 +24,11 @@ public class RestrictionsPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, RestrictionsPolicyDTO dto) {
-        if (!dto.enforceAgeOfMajority().getValue(false)) {
-            dto.ageOfMajority().setValue(null);
+    public void copyTOtoBO(RestrictionsPolicyDTO to, RestrictionsPolicy bo) {
+        if (!to.enforceAgeOfMajority().getValue(false)) {
+            to.ageOfMajority().setValue(null);
         }
-        super.save(callback, dto);
+        super.copyTOtoBO(to, bo);
     }
 
 }

@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -29,6 +26,7 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.server.common.reference.PMSiteContentCache;
 
 public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIntroPage> implements CityIntroPageCrudService {
+
     private static final I18n i18n = I18n.get(CityIntroPageCrudServiceImpl.class);
 
     public CityIntroPageCrudServiceImpl() {
@@ -41,19 +39,13 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, CityIntroPage dto) {
-        // check for city duplicates
-        CityIntroPage dup = findDuplicate(dto);
-        if (dup != null) {
-            callback.onFailure(new UserRuntimeException(i18n.tr("CityIntroPage already exists for city: {0}, {1}", dup.cityName().getValue(), dup.province()
-                    .getValue())));
-        } else {
-            super.save(callback, dto);
-        }
-    }
-
-    @Override
     protected boolean persist(CityIntroPage bo, CityIntroPage to) {
+        // check for city duplicates
+        CityIntroPage dup = findDuplicate(to);
+        if (dup != null) {
+            throw new UserRuntimeException(i18n.tr("CityIntroPage already exists for city: {0}, {1}", dup.cityName().getValue(), dup.province().getValue()));
+        }
+
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
         if (bo.getPrimaryKey() == null) {

@@ -20,7 +20,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.biz.system.VistaContext;
@@ -50,13 +49,9 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, DashboardMetadata dashboardMetadata) {
-        if (dashboardMetadata.getPrimaryKey() == null) {
-            dashboardMetadata.ownerUser().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-            super.create(callback, dashboardMetadata);
-        } else {
-            throw new SecurityViolationException("Trying to overwrite an existing entity");
-        }
+    protected void create(DashboardMetadata bo, DashboardMetadata to) {
+        bo.ownerUser().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+        super.create(bo, to);
     }
 
     @Override

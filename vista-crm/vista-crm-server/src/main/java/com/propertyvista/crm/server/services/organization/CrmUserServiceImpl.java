@@ -54,6 +54,11 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
+    protected Key getBOKey(EmployeeDTO to) {
+        return CrmAppContext.getCurrentUserEmployee().getPrimaryKey();
+    }
+
+    @Override
     protected void enhanceRetrieved(Employee bo, EmployeeDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(bo.portfolios());
         to.portfolios().set(bo.portfolios());
@@ -80,12 +85,6 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
             Persistence.service().retrieve(item.portfolios());
         }
         Persistence.service().retrieve(to.signature());
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<EmployeeDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
-        // Enforce access only to current user
-        super.retrieve(callback, CrmAppContext.getCurrentUserEmployee().getPrimaryKey(), retrieveTarget);
     }
 
     @Override
@@ -116,8 +115,8 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, EmployeeDTO dto) {
-        throw new IllegalArgumentException();
+    protected void create(Employee bo, EmployeeDTO to) {
+        throw new UnsupportedOperationException();
     }
 
     private void assertSamePortfolios(EmployeeDTO dto) {

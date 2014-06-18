@@ -13,11 +13,8 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
-import javax.naming.OperationNotSupportedException;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
@@ -44,7 +41,7 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnitOccupancySegment bo, AptUnitOccupancySegment to, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(AptUnitOccupancySegment bo, AptUnitOccupancySegment to, RetrieveTarget retrieveTarget) {
         if (to.dateFrom().getValue().equals(OccupancyFacade.MIN_DATE)) {
             to.dateFrom().setValue(null);
         }
@@ -59,12 +56,8 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, AptUnitOccupancySegment entity) {
-        callback.onFailure(new OperationNotSupportedException());
+    protected boolean persist(AptUnitOccupancySegment bo, AptUnitOccupancySegment to) {
+        throw new UnsupportedOperationException();
     }
 
-    @Override
-    public void create(AsyncCallback<Key> callback, AptUnitOccupancySegment entity) {
-        callback.onFailure(new OperationNotSupportedException());
-    }
 }
