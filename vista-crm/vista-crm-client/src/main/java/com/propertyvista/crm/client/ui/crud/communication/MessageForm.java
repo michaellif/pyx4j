@@ -271,7 +271,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             inject(proto().isInRecipients());
 
             statusToolBar = new Toolbar();
-            statusToolBar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
 
             starImage = new Image(CrmImages.INSTANCE.noStar());
             starImage.addClickHandler(new ClickHandler() {
