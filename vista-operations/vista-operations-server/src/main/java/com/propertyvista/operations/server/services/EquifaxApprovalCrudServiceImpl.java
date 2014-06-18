@@ -21,7 +21,6 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -43,33 +42,33 @@ public class EquifaxApprovalCrudServiceImpl extends AbstractCrudServiceDtoImpl<P
     }
 
     @Override
-    public void retrieve(AsyncCallback<EquifaxSetupRequestDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget ) {
+    protected Key getBOKey(EquifaxSetupRequestDTO to) {
+        // TODO Auto-generated method stub
+        return super.getBOKey(to);
+    }
+
+    @Override
+    protected PmcEquifaxInfo retrieve(Key entityId, RetrieveTarget retrieveTarget) {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, entityId);
         Persistence.service().retrieveMember(pmc.equifaxInfo());
-        EquifaxSetupRequestDTO dto = createTO(pmc.equifaxInfo());
-        dto.pmc().setAttachLevel(AttachLevel.ToStringMembers);
-        callback.onSuccess(dto);
+        PmcEquifaxInfo to = pmc.equifaxInfo().detach();
+        to.pmc().setAttachLevel(AttachLevel.ToStringMembers);
+        return to;
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, EquifaxSetupRequestDTO editableEntity) {
-        throw new Error("invalid operation!");
-    }
-
-    @Override
-    @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<Key> callback, EquifaxSetupRequestDTO editableEntity) {
-        throw new Error("invalid operation!");
+    protected boolean persist(PmcEquifaxInfo bo, EquifaxSetupRequestDTO to) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<EquifaxSetupRequestDTO>> callback, EntityListCriteria<EquifaxSetupRequestDTO> criteria) {
-        throw new Error("invalid operation!");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        throw new Error("invalid operation!");
+        throw new UnsupportedOperationException();
     }
 
     @Override

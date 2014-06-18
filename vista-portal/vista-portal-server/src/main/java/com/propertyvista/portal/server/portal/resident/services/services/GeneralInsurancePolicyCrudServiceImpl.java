@@ -53,10 +53,8 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, GeneralInsurancePolicyDTO dto) {
-        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(ResidentPortalContext.getTenant(), dto.certificate());
-        Persistence.service().commit();
-        callback.onSuccess(null);
+    protected void create(GeneralInsurancePolicy bo, GeneralInsurancePolicyDTO to) {
+        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(ResidentPortalContext.getTenant(), to.certificate());
     }
 
     @Override
@@ -73,7 +71,7 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, GeneralInsurancePolicyDTO to) {
+    protected boolean save(GeneralInsurancePolicy bo, GeneralInsurancePolicyDTO to) {
         throw new UnsupportedOperationException();
     }
 

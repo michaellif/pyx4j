@@ -15,7 +15,6 @@ package com.propertyvista.operations.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -47,12 +46,12 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<OperationsUserDTO>> callback, EntityListCriteria<OperationsUserDTO> dtoCriteria) {
-        throw new IllegalStateException("this operation is not supported for this service");
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, OperationsUserDTO dto) {
-        throw new IllegalStateException("this operation is not supported for this service");
+    protected void create(OperationsUserCredential bo, OperationsUserDTO to) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -13,14 +13,10 @@
  */
 package com.propertyvista.operations.server.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSummary;
@@ -61,13 +57,8 @@ public class FundsReconciliationSummaryCrudServiceImpl extends AbstractCrudServi
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, FundsReconciliationSummaryDTO editableEntity) {
-        throw new RuntimeException("Operation not Supported");
+    protected boolean persist(FundsReconciliationSummary bo, FundsReconciliationSummaryDTO to) {
+        throw new UnsupportedOperationException();
     }
 
-    @Override
-    @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<Key> callback, FundsReconciliationSummaryDTO editableEntity) {
-        throw new RuntimeException("Operation not Supported");
-    }
 }
