@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
@@ -37,7 +36,6 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderViewImpl extends FlowPanel implements HeaderView {
@@ -189,9 +187,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
                         break;
                     }
-
-                    presenter.showMessages(communicationButton);
-
                 }
             });
 
@@ -224,9 +219,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             toolbar.addItem(adminButton);
             toolbar.addItem(userButton);
             toolbar.addItem(languageButton);
-            if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-                toolbar.addItem(communicationButton);
-            }
+            toolbar.addItem(communicationButton);
             add(toolbar);
         }
 
@@ -252,9 +245,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     @Override
     public void onLogedOut() {
         this.loggedIn = false;
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            communicationButton.setVisible(false);
-        }
+        communicationButton.setVisible(false);
         support.setVisible(false);
 
         userButton.setVisible(false);
@@ -266,9 +257,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     @Override
     public void onLogedIn(String userName) {
         this.loggedIn = true;
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            communicationButton.setVisible(true);
-        }
+        communicationButton.setVisible(true);
 
         support.setVisible(true);
 

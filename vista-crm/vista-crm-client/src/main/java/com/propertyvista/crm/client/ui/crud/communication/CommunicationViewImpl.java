@@ -189,8 +189,6 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.lister);
                     AppSite.getPlaceController().goTo(place);
-
-                    ((PopupPanel) CommunicationViewImpl.this.getParent()).hide();
                 }
             });
             messagesAnchor.setStyleName(CommunicationCrmTheme.StyleName.CommHeaderTitle.name());
@@ -206,8 +204,6 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
                     CrudAppPlace place = new CrmSiteMap.Communication.Message();
                     place.setType(Type.editor);
                     AppSite.getPlaceController().goTo(place);
-
-                    ((PopupPanel) CommunicationViewImpl.this.getParent()).hide();
                 }
             });
             add(messagesAnchor);

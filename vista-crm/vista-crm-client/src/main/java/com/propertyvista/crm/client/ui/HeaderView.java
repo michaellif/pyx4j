@@ -3,7 +3,6 @@ package com.propertyvista.crm.client.ui;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.site.client.IsView;
 
@@ -24,8 +23,6 @@ public interface HeaderView extends IsWidget, IsView {
         void showAccount();
 
         void showProperties();
-
-        void showMessages(UIObject relativePosition);
 
         void back2CrmView();
 

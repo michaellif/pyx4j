@@ -160,9 +160,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             rightToolbar.addItem(languageButton);
         }
 
-        if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED) {
-            rightToolbar.addItem(communicationButton);
-        }
+        rightToolbar.addItem(communicationButton);
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         rightToolbar.getElement().getStyle().setProperty("right", "0");
 

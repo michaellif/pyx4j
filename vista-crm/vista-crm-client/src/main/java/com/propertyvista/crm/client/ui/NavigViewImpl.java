@@ -226,7 +226,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             if (!VistaFeatures.instance().yardiIntegration()) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Organization.Vendor()));
             }
-            if (ApplicationMode.isDevelopment() && VistaTODO.COMMUNICATION_FUNCTIONALITY_ENABLED && SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
+            if (SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message()));
             }
         }

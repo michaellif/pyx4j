@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
+import com.propertyvista.crm.client.mvp.CommunicationActivityMapper;
 import com.propertyvista.crm.client.mvp.ContentActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.HeaderActivityMapper;
@@ -49,6 +50,7 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
         bind(new FooterActivityMapper(), asWidget().getDisplay(DisplayType.footer));
         bind(new NavigActivityMapper(), asWidget().getDisplay(DisplayType.menu));
+        bind(new CommunicationActivityMapper(), asWidget().getDisplay(DisplayType.communication));
         bind(new ShortCutsActivityMapper(), asWidget().getDisplay(DisplayType.extra1));
         bind(new HelpActivityMapper(), asWidget().getDisplay(DisplayType.extra2));
         bind(new ContentActivityMapper(), asWidget().getDisplay(DisplayType.content));
