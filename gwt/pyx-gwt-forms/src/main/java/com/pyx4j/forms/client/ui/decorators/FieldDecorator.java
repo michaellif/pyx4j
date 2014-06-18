@@ -448,7 +448,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
 
         private String customLabel;
 
-        private Widget assistantWidget;
+        private IsWidget assistantWidget;
 
         private boolean useLabelSemicolon = true;
 
@@ -532,7 +532,7 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         }
 
         @SuppressWarnings("unchecked")
-        public E assistantWidget(Widget assistantWidget) {
+        public E assistantWidget(IsWidget assistantWidget) {
             this.assistantWidget = assistantWidget;
             return (E) this;
         }
