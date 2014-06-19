@@ -89,8 +89,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
     }
 
     public void assignOwnership(Employee employee) {
-        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(
-        /getValue(), employee);
+        ((MessageViewerView.Presenter) getParentView().getPresenter()).assignOwnership(getValue(), employee);
     }
 
     public IsWidget createGeneralForm() {
