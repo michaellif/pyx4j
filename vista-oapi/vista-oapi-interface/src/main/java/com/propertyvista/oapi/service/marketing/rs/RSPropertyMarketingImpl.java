@@ -14,8 +14,9 @@
 package com.propertyvista.oapi.service.marketing.rs;
 
 import java.util.List;
+import java.util.Set;
 
-import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -32,6 +33,9 @@ import com.propertyvista.oapi.service.marketing.PropertyMarketingService;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria;
+import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria.AmenityChoice;
+import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria.BathroomChoice;
+import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria.BedroomChoice;
 
 @Path("marketing")
 public class RSPropertyMarketingImpl implements PropertyMarketingService {
@@ -39,8 +43,19 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @GET
     @Path("getPropertyList")
     @Produces(MediaType.APPLICATION_XML)
+    public List<BuildingIO> getPropertyList( //
+            @QueryParam("city") String city, @QueryParam("province") String province, //
+            @QueryParam("minBeds") BedroomChoice minBeds, @QueryParam("maxBeds") BedroomChoice maxBeds, //
+            @QueryParam("minBaths") BathroomChoice minBaths, @QueryParam("maxBaths") BathroomChoice maxBaths, //
+            @QueryParam("minPrice") Integer minPrice, @QueryParam("maxPrice") Integer maxPrice, //
+            @QueryParam("amenities") Set<AmenityChoice> amenities//
+    ) {
+        PropertySearchCriteria crit = new PropertySearchCriteria(city, province, minBeds, maxBeds, minBaths, maxBaths, minPrice, maxPrice, amenities);
+        return getPropertyList(crit);
+    }
+
     @Override
-    public List<BuildingIO> getPropertyList(@BeanParam PropertySearchCriteria criteria) {
+    public List<BuildingIO> getPropertyList(PropertySearchCriteria criteria) {
         return new PropertyMarketingProcessor().getPropertyList(criteria);
     }
 
@@ -78,9 +93,10 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
 
     @POST
     @Path("requestAppointment")
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public void requestAppointment(@BeanParam AppointmentRequest request) {
+    public void requestAppointment(AppointmentRequest request) {
         new PropertyMarketingProcessor().requestAppointment(request);
     }
 

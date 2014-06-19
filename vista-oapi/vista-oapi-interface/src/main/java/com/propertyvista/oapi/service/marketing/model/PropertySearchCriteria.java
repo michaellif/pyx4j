@@ -15,7 +15,6 @@ package com.propertyvista.oapi.service.marketing.model;
 
 import java.util.Set;
 
-import javax.ws.rs.QueryParam;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -94,31 +93,40 @@ public class PropertySearchCriteria {
         }
     };
 
-    @QueryParam("city")
+    public PropertySearchCriteria( //
+            String city, String province, //
+            BedroomChoice minBeds, BedroomChoice maxBeds, //
+            BathroomChoice minBaths, BathroomChoice maxBaths, //
+            Integer minPrice, Integer maxPrice, //
+            Set<AmenityChoice> amenities//
+    ) {
+        this.city = city;
+        this.province = province;
+        this.minBeds = minBeds;
+        this.maxBeds = maxBeds;
+        this.minBaths = minBaths;
+        this.maxBaths = maxBaths;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.amenities = amenities;
+    }
+
     public String city;
 
-    @QueryParam("province")
     public String province;
 
-    @QueryParam("minBeds")
     public BedroomChoice minBeds;
 
-    @QueryParam("maxBeds")
     public BedroomChoice maxBeds;
 
-    @QueryParam("minBaths")
     public BathroomChoice minBaths;
 
-    @QueryParam("maxBaths")
     public BathroomChoice maxBaths;
 
-    @QueryParam("minPrice")
     public Integer minPrice;
 
-    @QueryParam("maxPrice")
     public Integer maxPrice;
 
-    @QueryParam("amenities")
     public Set<AmenityChoice> amenities;
 
 }
