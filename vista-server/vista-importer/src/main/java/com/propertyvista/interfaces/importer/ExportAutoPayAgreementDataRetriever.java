@@ -34,7 +34,7 @@ public class ExportAutoPayAgreementDataRetriever {
         EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
         criteria.eq(criteria.proto().tenant(), leaseTermTenant.leaseParticipant());
-        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
+        criteria.in(criteria.proto().paymentMethod().type(), PaymentType.Echeck, PaymentType.CreditCard);
         return Persistence.service().query(criteria);
 
     }
