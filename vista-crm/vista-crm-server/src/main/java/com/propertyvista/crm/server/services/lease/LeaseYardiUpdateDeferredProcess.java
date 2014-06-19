@@ -75,9 +75,9 @@ class LeaseYardiUpdateDeferredProcess extends AbstractDeferredProcess {
             r.setProgressMaximum(100);
             r.setProgress((int) (100 * monitor.getProcessed() / monitor.getExpectedTotal()));
         } else if (monitor.getErred() > 0) {
-            r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
+            r.setErrorStatusMessage(monitor.getTextMessages(CompletionType.erred, CompletionType.failed));
         } else {
-            r.setMessage(monitor.getTextMessages(CompletionType.erred) + monitor.getTextMessages(CompletionType.failed));
+            r.setMessage(monitor.getTextMessages(CompletionType.erred, CompletionType.failed));
         }
         return r;
     }
