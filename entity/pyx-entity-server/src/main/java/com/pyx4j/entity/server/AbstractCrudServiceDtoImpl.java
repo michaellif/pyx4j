@@ -111,31 +111,6 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         return Persistence.secureSave(bo);
     }
 
-    /**
-     * Allows to map BO to id of different TO entity.
-     * if changed, need to change getTOKey
-     * 
-     * @experimental
-     * 
-     * @param toId
-     * @return primary key of BO entity
-     */
-    protected Key getBOKey(TO to) {
-        return to.getPrimaryKey();
-    }
-
-    /**
-     * Default implementation does noting since the keys mapped one to one.
-     * 
-     * @experimental
-     * 
-     * @param bo
-     * @param to
-     */
-    protected Key getTOKey(BO bo, TO to) {
-        return bo.getPrimaryKey();
-    }
-
     @Override
     public final void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
         if (TODO_DataModelPermissionEnable)

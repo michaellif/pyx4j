@@ -27,6 +27,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 import com.pyx4j.entity.core.criterion.AndCriterion;
@@ -45,6 +46,31 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
         super(boClass, toClass);
+    }
+
+    /**
+     * Allows to map BO to id of different TO entity.
+     * if changed, need to change getTOKey
+     * 
+     * @experimental
+     * 
+     * @param toId
+     * @return primary key of BO entity
+     */
+    protected Key getBOKey(TO to) {
+        return to.getPrimaryKey();
+    }
+
+    /**
+     * Default implementation does noting since the keys mapped one to one.
+     * 
+     * @experimental
+     * 
+     * @param bo
+     * @param to
+     */
+    protected Key getTOKey(BO bo, TO to) {
+        return bo.getPrimaryKey();
     }
 
     /**
@@ -167,16 +193,17 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     }
 
-    protected void delete(BO actualEntity) {
-        Persistence.service().delete(actualEntity);
+    protected void delete(BO bo) {
+        Persistence.service().delete(bo);
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         SecurityController.assertPermission(new EntityPermission(boClass, EntityPermission.DELETE));
-        BO actualEntity = Persistence.service().retrieve(boClass, entityId);
-        SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
-        delete(actualEntity);
+        TO to = EntityFactory.createIdentityStub(toClass, entityId);
+        BO bo = Persistence.service().retrieve(boClass, getBOKey(to));
+        SecurityController.assertPermission(EntityPermission.permissionDelete(bo));
+        delete(bo);
         Persistence.service().commit();
         callback.onSuccess(true);
     }
