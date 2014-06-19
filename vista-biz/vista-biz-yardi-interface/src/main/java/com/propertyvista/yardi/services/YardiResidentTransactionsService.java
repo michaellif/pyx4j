@@ -150,45 +150,46 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      *             if operation fails
      */
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        updateProperties(yc, ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor), true, executionMonitor);
+        // retrieve list of property codes configured for PMC in Yardi
+        List<String> propertyCodes = ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor);
+
+        // Find buildings that are no longer in the list and suspend them
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().integrationSystemId(), yc.getPrimaryKey());
+        criteria.in(criteria.proto().suspended(), false);
+        ICursorIterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        try {
+            while (buildings.hasNext()) {
+                final Building building = buildings.next();
+                if (!CollectionUtils.exists(propertyCodes, new Predicate<String>() {
+                    @Override
+                    public boolean evaluate(String object) {
+                        return BuildingsMapper.getPropertyCode(object).equals(building.propertyCode().getValue());
+                    }
+                })) {
+                    suspendBuilding(building);
+                    executionMonitor.addInfoEvent("BuildingSuspended", building.propertyCode().getValue());
+                }
+            }
+        } finally {
+            buildings.close();
+        }
+
+        updateProperties(yc, propertyCodes, executionMonitor);
     }
 
     public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), false, executionMonitor);
+        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor);
     }
 
-    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, boolean suspendNotListed, ExecutionMonitor executionMonitor)
-            throws YardiServiceException, RemoteException {
+    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, ExecutionMonitor executionMonitor) throws YardiServiceException,
+            RemoteException {
         try {
             ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
 
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
             final Key yardiInterfaceId = yc.getPrimaryKey();
-
-            // Find buildings that are no longer in list and suspend them
-            if (suspendNotListed) {
-                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
-                criteria.in(criteria.proto().suspended(), false);
-                ICursorIterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.Attached);
-                try {
-                    while (buildings.hasNext()) {
-                        final Building building = buildings.next();
-                        if (!CollectionUtils.exists(propertyCodes, new Predicate<String>() {
-                            @Override
-                            public boolean evaluate(String object) {
-                                return BuildingsMapper.getPropertyCode(object).equals(building.propertyCode().getValue());
-                            }
-                        })) {
-                            suspendBuilding(building);
-                            executionMonitor.addInfoEvent("BuildingSuspended", building.propertyCode().getValue());
-                        }
-                    }
-                } finally {
-                    buildings.close();
-                }
-            }
 
             List<Building> importedBuildings = new ArrayList<>();
 
