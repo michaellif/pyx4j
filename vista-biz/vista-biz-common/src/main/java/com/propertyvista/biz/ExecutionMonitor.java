@@ -15,11 +15,14 @@ package com.propertyvista.biz;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -505,14 +508,19 @@ public class ExecutionMonitor {
     }
 
     public String getTextMessages() {
-        return getTextMessages(null);
+        return getTextMessages((CompletionType[]) null);
     }
 
-    public String getTextMessages(CompletionType type) {
+    public String getTextMessages(CompletionType... types) {
         StringBuilder textMessage = new StringBuilder();
 
+        Set<CompletionType> filter = new HashSet<>();
+        if (types != null) {
+            filter.addAll(Arrays.asList(types));
+        }
+
         for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
-            if (type != null && !section.getKey().type.equals(type)) {
+            if (types != null && !filter.contains(section.getKey().type)) {
                 continue;
             }
             for (ReportMessage message : section.getValue().messages) {

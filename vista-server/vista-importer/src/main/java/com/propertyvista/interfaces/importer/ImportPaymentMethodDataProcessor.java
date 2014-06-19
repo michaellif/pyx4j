@@ -18,13 +18,16 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.converter.AddressSimpleConverter;
 import com.propertyvista.interfaces.importer.model.CreditCardIO;
@@ -33,23 +36,23 @@ import com.propertyvista.interfaces.importer.model.PaymentMethodIO;
 
 public class ImportPaymentMethodDataProcessor {
 
-    public LeasePaymentMethod importModel(ImportProcessorContext context, LeaseTermTenant leaseTermTenant, PaymentMethodIO model) {
+    public LeasePaymentMethod importModel(ImportProcessorContext context, Lease lease, LeaseTermTenant leaseTermTenant, PaymentMethodIO model) {
         Persistence.ensureRetrieve(leaseTermTenant.leaseParticipant().customer().paymentMethods(), AttachLevel.Attached);
         LeasePaymentMethod paymentMethod = retrievePaymentMethod(leaseTermTenant.leaseParticipant().customer(), model);
         if (paymentMethod == null) {
-            paymentMethod = createPaymentMethod(context.building, leaseTermTenant.leaseParticipant().customer(), model);
+            paymentMethod = createPaymentMethod(context, lease, leaseTermTenant.leaseParticipant().customer(), model);
         }
         return paymentMethod;
     }
 
-    private LeasePaymentMethod createPaymentMethod(Building buildingId, Customer customer, PaymentMethodIO model) {
+    private LeasePaymentMethod createPaymentMethod(ImportProcessorContext context, Lease lease, Customer customer, PaymentMethodIO model) {
         LeasePaymentMethod method = EntityFactory.create(LeasePaymentMethod.class);
         method.isProfiledMethod().setValue(Boolean.TRUE);
         method.sameAsCurrent().setValue(Boolean.FALSE);
-        method.type().setValue(PaymentType.Echeck);
         method.customer().set(customer);
 
         if (model.details().isInstanceOf(EcheckIO.class)) {
+            method.type().setValue(PaymentType.Echeck);
             EcheckIO ec = model.details().cast();
             EcheckInfo details = EntityFactory.create(EcheckInfo.class);
             details.nameOn().setValue(ec.nameOnAccount().getValue());
@@ -58,6 +61,7 @@ public class ImportPaymentMethodDataProcessor {
             details.branchTransitNumber().setValue(ec.transitNumber().getValue().trim());
             method.details().set(details);
         } else if (model.details().isInstanceOf(CreditCardIO.class)) {
+            method.type().setValue(PaymentType.CreditCard);
             CreditCardIO cc = model.details().cast();
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
 
@@ -66,12 +70,27 @@ public class ImportPaymentMethodDataProcessor {
             details.card().newNumber().setValue(cc.cardNumber().getValue());
             details.expiryDate().setValue(cc.expiryDate().getValue());
 
+            if (!ServerSideFactory.create(CreditCardFacade.class).validateCreditCard(details)) {
+                if (cc.propertyVistaId().isNull()) {
+                    context.monitor.addErredEvent("PaymentMethod", "Lease " + lease.leaseId().getStringView() + " Invalid Credit Card Number");
+                } else {
+                    Pmc pmc = VistaDeployment.getCurrentPmc();
+                    if (cc.propertyVistaId().getValue().startsWith(pmc.id().getStringView() + ":")) {
+                        context.monitor.addErredEvent("PaymentMethod", "Lease " + lease.leaseId().getStringView() + " Credit Card Reference Not Found");
+                    } else {
+                        context.monitor.addFailedEvent("PaymentMethod", "Lease " + lease.leaseId().getStringView()
+                                + " Cross PMC Credit Card migration not supported");
+                    }
+                }
+                return null;
+            }
+
             method.details().set(details);
         }
 
         method.billingAddress().set(new AddressSimpleConverter().createBO(model.billingAddress()));
 
-        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method, buildingId);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method, context.building);
 
         return method;
     }
@@ -89,9 +108,15 @@ public class ImportPaymentMethodDataProcessor {
             } else if (method.type().getValue().equals(PaymentType.CreditCard) && model.details().isInstanceOf(CreditCardIO.class)) {
                 CreditCardInfo details = method.details().cast();
                 CreditCardIO cc = model.details().cast();
-                if (method.id().getValue().toString().equals(cc.propertyVistaId().getValue()) //
-                        && details.cardType().getValue().equals(cc.cardType().getValue())) {
-                    return method;
+
+                Pmc pmc = VistaDeployment.getCurrentPmc();
+                if (cc.propertyVistaId().getValue().startsWith(pmc.id().getStringView() + ":")) {
+                    // Only use ID in the same PMC
+                    String paymentMethodId = cc.propertyVistaId().getValue().substring(cc.propertyVistaId().getValue().indexOf(':') + 1);
+                    if (method.id().getValue().toString().equals(paymentMethodId) //
+                            && details.cardType().getValue().equals(cc.cardType().getValue())) {
+                        return method;
+                    }
                 }
             }
         }

@@ -34,7 +34,10 @@ public class ImportAutoPayAgreementsDataProcessor {
 
     public void importModel(ImportProcessorContext context, Lease lease, LeaseTermTenant leaseTermTenant, AutoPayAgreementIO model) {
 
-        LeasePaymentMethod paymentMethod = new ImportPaymentMethodDataProcessor().importModel(context, leaseTermTenant, model.paymentMethod());
+        LeasePaymentMethod paymentMethod = new ImportPaymentMethodDataProcessor().importModel(context, lease, leaseTermTenant, model.paymentMethod());
+        if (paymentMethod == null) {
+            return;
+        }
 
         AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
         pap.paymentMethod().set(paymentMethod);

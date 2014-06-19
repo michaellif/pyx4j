@@ -15,9 +15,11 @@ package com.propertyvista.interfaces.importer;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.interfaces.importer.converter.AddressSimpleConverter;
 import com.propertyvista.interfaces.importer.model.CreditCardIO;
 import com.propertyvista.interfaces.importer.model.EcheckIO;
@@ -42,9 +44,10 @@ public class ExportPaymentMethodDataRetriever {
             break;
         case CreditCard:
             CreditCardInfo ccInfo = paymentMethod.details().cast();
+            Pmc pmc = VistaDeployment.getCurrentPmc();
 
             CreditCardIO cc = EntityFactory.create(CreditCardIO.class);
-            cc.propertyVistaId().setValue(paymentMethod.id().getValue().toString());
+            cc.propertyVistaId().setValue(pmc.id().getStringView() + ":" + paymentMethod.id().getStringView());
             cc.nameOnAccount().setValue(ccInfo.nameOn().getValue());
             cc.cardType().setValue(ccInfo.cardType().getValue());
             cc.cardNumber().setValue(ccInfo.card().obfuscatedNumber().getValue());
