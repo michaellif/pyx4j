@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
@@ -28,6 +29,7 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
@@ -89,15 +91,35 @@ class DirectDebitReceiveProcessor {
                 record.pmc().set(ServerSideFactory.create(IdAssignmentFacade.class).getPmcByAccountNumber(record.accountNumber().getValue()));
                 if (record.pmc().isNull()) {
                     record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Invalid);
+                    addOperationsNotes(record, "Account Number Range Not assigned to PMC");
                 } else {
                     // verify we actually have the account
 
                     BillingAccount billingAccount = TaskRunner.runInTargetNamespace(record.pmc(), new Callable<BillingAccount>() {
                         @Override
                         public BillingAccount call() {
-                            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-                            criteria.eq(criteria.proto().accountNumber(), record.accountNumber());
-                            return Persistence.service().retrieve(criteria);
+                            BillingAccount billingAccount;
+                            {
+                                EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+                                criteria.eq(criteria.proto().accountNumber(), record.accountNumber());
+                                billingAccount = Persistence.service().retrieve(criteria);
+                            }
+                            if (billingAccount == null) {
+                                addOperationsNotes(record, "Billing Account Not found in PMC '" + record.pmc().name().getStringView() + "'");
+                            } else {
+                                // Sold building validation
+                                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                                criteria.eq(criteria.proto().units().$().leases(), billingAccount.lease());
+                                Building building = Persistence.service().retrieve(criteria);
+                                if (building.suspended().getValue()) {
+                                    billingAccount = null;
+                                    addOperationsNotes(record, "Building " + building.propertyCode().getStringView() + " Suspended in PMC '"
+                                            + record.pmc().name().getStringView() + "'");
+                                } else {
+                                    // TODO Validate MID
+                                }
+                            }
+                            return billingAccount;
                         }
                     });
 
@@ -109,6 +131,7 @@ class DirectDebitReceiveProcessor {
                 }
             } else {
                 record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Invalid);
+                addOperationsNotes(record, "Account Number Invalid Format");
             }
 
             Persistence.service().persist(record);
@@ -120,5 +143,10 @@ class DirectDebitReceiveProcessor {
                 ServerSideFactory.create(OperationsNotificationFacade.class).invalidDirectDebitReceived(record);
             }
         }
+    }
+
+    private static void addOperationsNotes(DirectDebitRecord record, String message) {
+        record.operationsNotes().setValue( //
+                CommonsStringUtils.nvl_concat(record.operationsNotes().getValue(), message, "\n"));
     }
 }

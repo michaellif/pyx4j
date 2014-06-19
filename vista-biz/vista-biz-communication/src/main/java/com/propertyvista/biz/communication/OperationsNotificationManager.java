@@ -77,10 +77,11 @@ public class OperationsNotificationManager {
         email.setSubject(i18n.tr("Invalid Direct Debit Received"));
 
         MessageTemplate template = new MessageTemplate();
-        template.setBodyTemplate("Invalid Direct Debit received. See <a href=\"${link}\">Payment Record details</a>");
+        template.setBodyTemplate("Invalid Direct Debit received. See <a href=\"${link}\">Payment Record details</a><br/>${operationsNotes}");
 
         template.variable("${link}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
                 new OperationsSiteMap.FundsTransfer.DirectDebitRecord().formViewerPlace(paymentRecord.getPrimaryKey())));
+        template.variable("${operationsNotes}", paymentRecord.operationsNotes());
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;
