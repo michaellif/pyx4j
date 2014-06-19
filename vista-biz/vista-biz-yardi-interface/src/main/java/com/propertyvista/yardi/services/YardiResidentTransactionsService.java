@@ -150,15 +150,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      *             if operation fails
      */
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        updateProperties(yc, ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor), executionMonitor);
+        updateProperties(yc, ServerSideFactory.create(YardiConfigurationFacade.class).retrievePropertyCodes(yc, executionMonitor), true, executionMonitor);
     }
 
     public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor);
+        updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), false, executionMonitor);
     }
 
-    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, ExecutionMonitor executionMonitor) throws YardiServiceException,
-            RemoteException {
+    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, boolean suspendNotListed, ExecutionMonitor executionMonitor)
+            throws YardiServiceException, RemoteException {
         try {
             ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
@@ -167,7 +167,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             final Key yardiInterfaceId = yc.getPrimaryKey();
 
             // Find buildings that are no longer in list and suspend them
-            {
+            if (suspendNotListed) {
                 EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
                 criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
                 criteria.in(criteria.proto().suspended(), false);
