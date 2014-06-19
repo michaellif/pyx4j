@@ -77,6 +77,7 @@ public class PreauthorizedPaymentsForm extends CForm<PreauthorizedPaymentsDTO> {
         public PreauthorizedPaymentFolder() {
             super(PreauthorizedPaymentDTO.class, true);
             setOrderable(false);
+            setNoDataLabel(i18n.tr("No AutoPay payments are setup"));
         }
 
         @Override
