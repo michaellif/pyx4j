@@ -67,7 +67,7 @@ public class EquifaxApprovalCrudServiceImpl extends AbstractCrudServiceDtoImpl<P
     }
 
     @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+    protected void delete(PmcEquifaxInfo actualEntity) {
         throw new UnsupportedOperationException();
     }
 
