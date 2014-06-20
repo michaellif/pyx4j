@@ -148,4 +148,4 @@ BEGIN TRANSACTION;
     WHERE   p.transaction_authorization_number = d.payment_reference_number
     AND     p.id IN (52381,47842,43410);
 
--COMMIT;
+COMMIT;
