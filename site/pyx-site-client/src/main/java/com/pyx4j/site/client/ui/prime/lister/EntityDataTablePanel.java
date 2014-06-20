@@ -29,11 +29,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
@@ -57,7 +56,7 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
-public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implements RequiresResize, ProvidesResize {
+public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     private static final Logger log = LoggerFactory.getLogger(EntityDataTablePanel.class);
 
@@ -73,7 +72,7 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
 
     private final DataTablePanel<E> dataTablePanel;
 
-    private CDataGrid dataGridPanel;
+    private CDataGrid<E> dataGridPanel;
 
     private ListerDataSource<E> dataSource;
 
@@ -102,6 +101,7 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
         setStyleName(DefaultPaneTheme.StyleName.Lister.name());
         setSize("100%", "100%");
         dataTablePanel = new DataTablePanel<E>(clazz, criteriaForm);
+        dataTablePanel.getElement().getStyle().setPaddingBottom(40, Unit.PX);
 
         dataTablePanel.setFilterApplyCommand(new Command() {
             @Override
@@ -160,12 +160,12 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
         dataTablePanel.getDataTable().setMultipleSelection(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
-        add(dataTablePanel);
-
         //experimental CDataGrid
-        if (false) {
+        if (true) {
+            setWidget(dataTablePanel);
+        } else {
             dataGridPanel = new CDataGrid<E>(clazz);
-            add(dataGridPanel);
+            setWidget(dataGridPanel);
         }
 
         setAllowAddNew(allowAddNew);
@@ -447,12 +447,4 @@ public class EntityDataTablePanel<E extends IEntity> extends FlowPanel implement
         return criteria;
     }
 
-    @Override
-    public void onResize() {
-        for (Widget child : getChildren()) {
-            if (child instanceof RequiresResize) {
-                ((RequiresResize) child).onResize();
-            }
-        }
-    }
 }

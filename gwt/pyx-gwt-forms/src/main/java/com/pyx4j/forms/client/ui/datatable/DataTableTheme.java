@@ -64,7 +64,6 @@ public class DataTableTheme extends Theme {
         style.addProperty("border-right", "1px solid");
         style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
         style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
-        style.addProperty("max-height", "300px");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableHeader);
@@ -123,7 +122,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableActionsBar);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
-        style.addProperty("padding-top", "6px");
+        style.addProperty("padding", "6px 0");
         style.addProperty("background-color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
@@ -131,7 +130,7 @@ public class DataTableTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
         style.addProperty("color", ThemeColor.foreground, 0.9);
-        style.addProperty("height", "20px");
+        style.addProperty("height", "2em");
         style.addProperty("margin", "0 6px");
         style.addProperty("padding", "0 6px");
         style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
@@ -152,6 +151,7 @@ public class DataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableActionsBarContent);
         style.addProperty("display", "inline-block");
         style.addProperty("width", "100%");
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableToolBar);
