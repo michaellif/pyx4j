@@ -19,23 +19,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.tenant.lead.Lead.DayPart;
+import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AppointmentRequest {
-
-    public enum LeaseTerm {
-        months6(6), months12(12), months18(18), other(null);
-
-        public final Integer months;
-
-        private LeaseTerm(Integer months) {
-            this.months = months;
-        }
-    }
-
-    public enum DayPart {
-        Morning, Afternoon, Evening;
-    }
 
     LogicalDate moveInDate;
 

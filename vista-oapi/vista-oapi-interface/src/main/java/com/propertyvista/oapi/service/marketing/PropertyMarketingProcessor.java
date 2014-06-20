@@ -17,9 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.oapi.marshaling.BuildingMarshaller;
+import com.propertyvista.oapi.marshaling.FloorplanMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
@@ -38,18 +42,26 @@ public class PropertyMarketingProcessor {
     }
 
     public BuildingIO getPropertyInfo(String propertyId) {
-        // TODO Auto-generated method stub
-        return null;
+        return BuildingMarshaller.getInstance().marshal(PropertyFinder.getBuildingDetails(propertyId));
     }
 
     public List<FloorplanIO> getFloorplanList(String propertyId) {
-        // TODO Auto-generated method stub
-        return null;
+        List<FloorplanIO> result = new ArrayList<>();
+        Building building = PropertyFinder.getBuildingDetails(propertyId);
+        if (building != null) {
+            for (Floorplan fp : PropertyFinder.getBuildingFloorplans(building).keySet()) {
+                result.add(FloorplanMarshaller.getInstance().marshal(fp));
+            }
+        }
+        return result;
     }
 
-    public FloorplanIO getFloorplanInfo(String fpId) {
-        // TODO Auto-generated method stub
-        return null;
+    public FloorplanIO getFloorplanInfo(String propertyId, String fpId) {
+        EntityQueryCriteria<Floorplan> dbCriteria = EntityQueryCriteria.create(Floorplan.class);
+        dbCriteria.eq(dbCriteria.proto().name(), fpId);
+        dbCriteria.eq(dbCriteria.proto().building().propertyCode(), propertyId);
+        Floorplan fp = Persistence.service().retrieve(dbCriteria);
+        return fp == null ? null : FloorplanMarshaller.getInstance().marshal(PropertyFinder.getFloorplanDetails(fp.getPrimaryKey().asLong()));
     }
 
     public List<FloorplanAvailability> getFloorplanAvailability(String fpId, LogicalDate date) {

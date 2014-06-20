@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -188,7 +189,7 @@ public class PropertyFinder {
         }
         // if search criteria returns nothing, quit now!
         if (searchCriteria != null && !addSearchCriteria(dbCriteria, searchCriteria)) {
-            return null;
+            return Collections.emptyList();
         }
 
         // get buildings
@@ -257,7 +258,7 @@ public class PropertyFinder {
 
     public static Map<Floorplan, List<AptUnit>> getBuildingFloorplans(Building bld) {
         if (!isPropertyVisible(bld)) {
-            return null;
+            return Collections.emptyMap();
         }
         final Map<Floorplan, List<AptUnit>> floorplans = new HashMap<Floorplan, List<AptUnit>>();
         EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
@@ -275,7 +276,7 @@ public class PropertyFinder {
 
     public static List<AptUnit> getBuildingAptUnits(Building bld, Floorplan fp) {
         if (!isPropertyVisible(bld)) {
-            return null;
+            return Collections.emptyList();
         }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -305,7 +306,7 @@ public class PropertyFinder {
 
     public static List<BuildingAmenity> getBuildingAmenities(Building bld) {
         if (!isPropertyVisible(bld)) {
-            return null;
+            return Collections.emptyList();
         }
 
         EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
@@ -334,7 +335,7 @@ public class PropertyFinder {
 
     public static List<AptUnit> getFloorplanUnits(Floorplan fp) {
         if (!isPropertyVisible(fp.building())) {
-            return null;
+            return Collections.emptyList();
         }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -345,7 +346,7 @@ public class PropertyFinder {
 
     public static List<FloorplanAmenity> getFloorplanAmenities(Floorplan fp) {
         if (!isPropertyVisible(fp.building())) {
-            return null;
+            return Collections.emptyList();
         }
         EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
         criteria.eq(criteria.proto().floorplan(), fp);

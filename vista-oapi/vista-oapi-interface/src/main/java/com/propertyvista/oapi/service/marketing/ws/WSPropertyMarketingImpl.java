@@ -52,8 +52,8 @@ public class WSPropertyMarketingImpl implements PropertyMarketingService {
     }
 
     @Override
-    public FloorplanIO getFloorplanInfo(@WebParam(name = "floorplanId") String fpId) {
-        return new PropertyMarketingProcessor().getFloorplanInfo(fpId);
+    public FloorplanIO getFloorplanInfo(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId) {
+        return new PropertyMarketingProcessor().getFloorplanInfo(propertyId, fpId);
     }
 
     @Override

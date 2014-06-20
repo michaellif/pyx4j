@@ -79,8 +79,8 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Path("getFloorplanInfo")
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public FloorplanIO getFloorplanInfo(@QueryParam("fpId") String fpId) {
-        return new PropertyMarketingProcessor().getFloorplanInfo(fpId);
+    public FloorplanIO getFloorplanInfo(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {
+        return new PropertyMarketingProcessor().getFloorplanInfo(propertyId, fpId);
     }
 
     @GET

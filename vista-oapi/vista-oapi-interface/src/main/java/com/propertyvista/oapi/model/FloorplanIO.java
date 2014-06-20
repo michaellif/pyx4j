@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
@@ -27,7 +28,11 @@ import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
+@XmlRootElement(name = "floorplan")
 public class FloorplanIO extends AbstractElementIO {
+
+    @XmlAttribute
+    public String propertyCode;
 
     //mandatory for portal
     @XmlAttribute
@@ -42,6 +47,7 @@ public class FloorplanIO extends AbstractElementIO {
 
     public IntegerIO floorCount;
 
+    @Deprecated
     public IntegerIO unitCount;
 
     //mandatory for portal

@@ -35,7 +35,7 @@ public interface PropertyMarketingService {
 
     List<FloorplanIO> getFloorplanList(String propertyId);
 
-    FloorplanIO getFloorplanInfo(String fpId);
+    FloorplanIO getFloorplanInfo(String propertyId, String fpId);
 
     List<FloorplanAvailability> getFloorplanAvailability(String fpId, LogicalDate date);
 
