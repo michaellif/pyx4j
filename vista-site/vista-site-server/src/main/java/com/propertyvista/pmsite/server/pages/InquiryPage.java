@@ -29,11 +29,11 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 import com.propertyvista.pmsite.server.panels.InquiryPanel;
+import com.propertyvista.server.common.util.PropertyFinder;
 
 public class InquiryPage extends BasePage {
 

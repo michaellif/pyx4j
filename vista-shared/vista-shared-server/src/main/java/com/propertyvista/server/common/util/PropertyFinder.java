@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.pmsite.server;
+package com.propertyvista.server.common.util;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,10 +43,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria.BathroomChoice;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria.BedroomChoice;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria.SearchType;
+import com.propertyvista.dto.PropertySearchCriteria;
+import com.propertyvista.dto.PropertySearchCriteria.BathroomChoice;
+import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.dto.PropertySearchCriteria.SearchType;
 
 public class PropertyFinder {
 
@@ -63,11 +63,11 @@ public class PropertyFinder {
         if (SearchType.city.equals(searchCriteria.searchType().getValue())) {
             String prov = searchCriteria.province().getValue();
             if (!StringUtils.isEmpty(prov)) {
-                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().province(), prov));
+                dbCriteria.add(PropertyCriterion.like(dbCriteria.proto().info().address().province(), prov));
             }
             String city = searchCriteria.city().getValue();
             if (!StringUtils.isEmpty(city)) {
-                dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().info().address().city(), city));
+                dbCriteria.add(PropertyCriterion.like(dbCriteria.proto().info().address().city(), city));
             }
         } else {
             // Vicinity search within the given searchRadius of the centerPoint

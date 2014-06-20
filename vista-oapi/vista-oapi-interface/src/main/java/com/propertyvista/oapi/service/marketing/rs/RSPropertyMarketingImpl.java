@@ -26,16 +26,16 @@ import javax.ws.rs.core.MediaType;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.dto.PropertySearchCriteria.BathroomChoice;
+import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.service.marketing.PropertyMarketingProcessor;
 import com.propertyvista.oapi.service.marketing.PropertyMarketingService;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria;
-import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria.AmenityChoice;
-import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria.BathroomChoice;
-import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 
 @Path("marketing")
 public class RSPropertyMarketingImpl implements PropertyMarketingService {
@@ -48,14 +48,14 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
             @QueryParam("minBeds") BedroomChoice minBeds, @QueryParam("maxBeds") BedroomChoice maxBeds, //
             @QueryParam("minBaths") BathroomChoice minBaths, @QueryParam("maxBaths") BathroomChoice maxBaths, //
             @QueryParam("minPrice") Integer minPrice, @QueryParam("maxPrice") Integer maxPrice, //
-            @QueryParam("amenities") Set<AmenityChoice> amenities//
+            @QueryParam("amenities") Set<BuildingAmenity.Type> amenities//
     ) {
-        PropertySearchCriteria crit = new PropertySearchCriteria(city, province, minBeds, maxBeds, minBaths, maxBaths, minPrice, maxPrice, amenities);
-        return getPropertyList(crit);
+        WSPropertySearchCriteria criteria = new WSPropertySearchCriteria(city, province, minBeds, maxBeds, minBaths, maxBaths, minPrice, maxPrice, amenities);
+        return getPropertyList(criteria);
     }
 
     @Override
-    public List<BuildingIO> getPropertyList(PropertySearchCriteria criteria) {
+    public List<BuildingIO> getPropertyList(WSPropertySearchCriteria criteria) {
         return new PropertyMarketingProcessor().getPropertyList(criteria);
     }
 

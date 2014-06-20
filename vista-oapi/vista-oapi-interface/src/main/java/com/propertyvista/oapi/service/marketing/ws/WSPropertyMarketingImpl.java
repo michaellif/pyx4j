@@ -30,14 +30,14 @@ import com.propertyvista.oapi.service.marketing.PropertyMarketingProcessor;
 import com.propertyvista.oapi.service.marketing.PropertyMarketingService;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria;
+import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL, parameterStyle = ParameterStyle.WRAPPED)
 public class WSPropertyMarketingImpl implements PropertyMarketingService {
 
     @Override
-    public List<BuildingIO> getPropertyList(@WebParam(name = "criteria") PropertySearchCriteria criteria) {
+    public List<BuildingIO> getPropertyList(@WebParam(name = "criteria") WSPropertySearchCriteria criteria) {
         return new PropertyMarketingProcessor().getPropertyList(criteria);
     }
 

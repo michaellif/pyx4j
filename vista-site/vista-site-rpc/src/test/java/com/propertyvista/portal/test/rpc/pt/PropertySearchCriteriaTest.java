@@ -15,8 +15,8 @@ package com.propertyvista.portal.test.rpc.pt;
 
 import junit.framework.TestCase;
 
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria.BedroomRange;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria.PriceRange;
+import com.propertyvista.dto.PropertySearchCriteria.BedroomRange;
+import com.propertyvista.dto.PropertySearchCriteria.PriceRange;
 
 public class PropertySearchCriteriaTest extends TestCase {
 

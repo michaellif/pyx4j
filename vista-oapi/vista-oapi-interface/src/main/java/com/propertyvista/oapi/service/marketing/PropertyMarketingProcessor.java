@@ -18,22 +18,22 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.oapi.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
-import com.propertyvista.oapi.service.marketing.model.PropertySearchCriteria;
+import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
+import com.propertyvista.server.common.util.PropertyFinder;
 
 public class PropertyMarketingProcessor {
 
-    public List<BuildingIO> getPropertyList(PropertySearchCriteria criteria) {
+    public List<BuildingIO> getPropertyList(WSPropertySearchCriteria criteria) {
         List<BuildingIO> result = new ArrayList<>();
-        BuildingIO building = new BuildingIO();
-        building.propertyCode = criteria.city;
-        result.add(building);
-        building = new BuildingIO();
-        building.propertyCode = criteria.province;
-        result.add(building);
+        for (Building building : PropertyFinder.getPropertyList(criteria.getDbCriteria())) {
+            result.add(BuildingMarshaller.getInstance().marshal(building));
+        }
         return result;
     }
 

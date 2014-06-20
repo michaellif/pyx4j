@@ -64,6 +64,7 @@ import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
+import com.propertyvista.server.common.util.PropertyFinder;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {

@@ -39,10 +39,10 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.server.common.util.PropertyFinder;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitDetailsPage extends BasePage {

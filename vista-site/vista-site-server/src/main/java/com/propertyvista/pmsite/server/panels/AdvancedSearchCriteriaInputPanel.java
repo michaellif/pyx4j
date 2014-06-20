@@ -37,12 +37,12 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.dto.PropertySearchCriteria;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadio;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+import com.propertyvista.server.common.util.PropertyFinder;
 
 public class AdvancedSearchCriteriaInputPanel extends Panel {
 

@@ -27,15 +27,15 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.PropertySearchCriteria;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+import com.propertyvista.server.common.util.PropertyFinder;
 
 public class AdvancedSearchCriteriaPanel extends Panel {
     private static final long serialVersionUID = 1L;

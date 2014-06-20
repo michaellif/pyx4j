@@ -25,10 +25,10 @@ import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.pmsite.server.PropertyFinder;
+import com.propertyvista.dto.PropertySearchCriteria;
+import com.propertyvista.server.common.util.PropertyFinder;
 import com.propertyvista.site.rpc.dto.PropertyDTO;
 import com.propertyvista.site.rpc.dto.PropertyListDTO;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
 import com.propertyvista.site.rpc.services.PortalSiteServices;
 import com.propertyvista.site.server.Converter;
 

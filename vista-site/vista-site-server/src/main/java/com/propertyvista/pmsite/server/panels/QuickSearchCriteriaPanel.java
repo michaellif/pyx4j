@@ -27,16 +27,16 @@ import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.PropertySearchCriteria;
+import com.propertyvista.dto.PropertySearchCriteria.BedroomChoice;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
-import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
-import com.propertyvista.site.rpc.dto.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.server.common.util.PropertyFinder;
 
 //http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
 public class QuickSearchCriteriaPanel extends Panel {
