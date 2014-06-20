@@ -16,18 +16,25 @@ package com.propertyvista.oapi.marshaling;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.MinMaxPair;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.xml.BigDecimalIO;
 import com.propertyvista.oapi.xml.IntegerIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.server.common.util.PropertyFinder;
 
@@ -74,7 +81,7 @@ public class FloorplanMarshaller implements Marshaller<Floorplan, FloorplanIO> {
         fpIO.rentTo = new BigDecimalIO(minMaxRent.getMax());
         fpIO.sqftFrom = new IntegerIO(minMaxArea.getMin());
         fpIO.sqftTo = new IntegerIO(minMaxArea.getMax());
-        // TODO - fpIO.availableFrom = new LogicalDateIO(availableFrom);
+        fpIO.availableFrom = new LogicalDateIO(getDateAvailable(fp.name().getValue()));
         return fpIO;
     }
 
@@ -117,5 +124,15 @@ public class FloorplanMarshaller implements Marshaller<Floorplan, FloorplanIO> {
         fp.amenities().addAll(FloorplanAmenityMarshaller.getInstance().unmarshal(fpIO.amenities));
 
         return fp;
+    }
+
+    private LogicalDate getDateAvailable(String fpName) {
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        criteria.eq(criteria.proto().floorplan().name(), fpName);
+        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available,
+                SystemDateManager.getDate(), null));
+        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
+        AptUnit unit = Persistence.service().retrieve(criteria);
+        return unit == null ? null : unit.availability().availableForRent().getValue();
     }
 }

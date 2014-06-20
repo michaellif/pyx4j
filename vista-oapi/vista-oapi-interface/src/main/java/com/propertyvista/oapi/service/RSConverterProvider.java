@@ -38,7 +38,7 @@ public class RSConverterProvider implements ParamConverterProvider {
     }
 
     static class LogicalDateConverter implements ParamConverter<LogicalDate> {
-        private final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        private final SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-MM");
 
         @Override
         public LogicalDate fromString(String value) {

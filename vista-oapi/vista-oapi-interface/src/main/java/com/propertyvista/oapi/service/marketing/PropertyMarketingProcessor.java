@@ -16,12 +16,20 @@ package com.propertyvista.oapi.service.marketing;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.oapi.marshaling.BuildingMarshaller;
 import com.propertyvista.oapi.marshaling.FloorplanMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
@@ -65,8 +73,21 @@ public class PropertyMarketingProcessor {
     }
 
     public List<FloorplanAvailability> getFloorplanAvailability(String fpId, LogicalDate date) {
-        // TODO Auto-generated method stub
-        return null;
+        List<FloorplanAvailability> availInfo = new ArrayList<>();
+        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
+        criteria.eq(criteria.proto().floorplan().name(), fpId);
+        criteria.add(ServerSideFactory.create(OccupancyFacade.class).buildAvalableCriteria(criteria.proto(), AptUnitOccupancySegment.Status.available, date,
+                DateUtils.addDays(date, 30)));
+        criteria.sort(new Sort(criteria.proto().availability().availableForRent(), false));
+        for (AptUnit unit : Persistence.service().query(criteria)) {
+            FloorplanAvailability avail = new FloorplanAvailability();
+            avail.floorplanName = fpId;
+            avail.marketRent = unit.financial()._marketRent().getValue();
+            avail.areaSqFeet = DomainUtil.getAreaInSqFeet(unit.info().area(), unit.info().areaUnits());
+            avail.dateAvailable = unit.availability().availableForRent().getValue();
+            availInfo.add(avail);
+        }
+        return availInfo;
     }
 
     public void requestAppointment(AppointmentRequest request) {

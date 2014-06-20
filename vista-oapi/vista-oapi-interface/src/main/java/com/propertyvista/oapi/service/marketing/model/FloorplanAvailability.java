@@ -13,16 +13,24 @@
  */
 package com.propertyvista.oapi.service.marketing.model;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.pyx4j.commons.LogicalDate;
 
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FloorplanAvailability {
 
-    String floorplanName;
+    public String floorplanName;
 
-    LogicalDate dateAvailable;
+    public BigDecimal marketRent;
+
+    public Integer areaSqFeet;
+
+    public LogicalDate dateAvailable;
 
 }

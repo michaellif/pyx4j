@@ -22,6 +22,8 @@ public class MediaImageIO extends AbstractElementIO {
 
     public StringIO mimeType;
 
+    public StringIO accessUrl;
+
     // file conversion not implemented
     public StringIO fileId;
 }

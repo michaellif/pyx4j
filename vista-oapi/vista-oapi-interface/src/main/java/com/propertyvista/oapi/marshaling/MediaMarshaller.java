@@ -42,6 +42,7 @@ public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
         }
         MediaImageIO mediaIO = new MediaImageIO();
         mediaIO.caption = MarshallerUtils.createIo(StringIO.class, media.caption());
+        // TODO - need access to MediaUtils - mediaIO.accessUrl = new StringIO(MediaUtils.createMediaImageUrl(media));
         return mediaIO;
     }
 
