@@ -29,6 +29,7 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.MerchantAccount.ElectronicPaymentSetup;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
@@ -116,7 +117,12 @@ class DirectDebitReceiveProcessor {
                                     addOperationsNotes(record, "Building " + building.propertyCode().getStringView() + " Suspended in PMC '"
                                             + record.pmc().name().getStringView() + "'");
                                 } else {
-                                    // TODO Validate MID
+                                    // Validate MID
+                                    ElectronicPaymentSetup setup = PaymentUtils.getEffectiveElectronicPaymentsSetup(building);
+                                    if (!setup.acceptedDirectBanking().getValue(false)) {
+                                        addOperationsNotes(record, "No MID or Building " + building.propertyCode().getStringView()
+                                                + " is not setup to accept DirectBanking in PMC '" + record.pmc().name().getStringView() + "'");
+                                    }
                                 }
                             }
                             return billingAccount;
