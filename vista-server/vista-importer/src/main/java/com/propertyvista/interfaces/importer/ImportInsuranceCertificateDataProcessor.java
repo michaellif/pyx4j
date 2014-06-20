@@ -98,11 +98,10 @@ public class ImportInsuranceCertificateDataProcessor {
                 if (scanOriginal == null) {
                     context.monitor.addFailedEvent("Insurance", "Lease " + lease.leaseId().getStringView()
                             + " Insurance scan not found; Cross PMC migration not supported");
-                    return;
+                } else {
+                    scan.file().set(scanOriginal.file());
+                    FileUploadRegistry.register(scanOriginal.file());
                 }
-
-                scan.file().set(scanOriginal.file());
-                FileUploadRegistry.register(scanOriginal.file());
 
                 certificate.certificateDocs().add(scan);
             }
