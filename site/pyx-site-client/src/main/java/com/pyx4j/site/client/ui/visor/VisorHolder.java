@@ -40,11 +40,7 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
 
     private final Layout layout;
 
-    private final LayoutCommand vizorCmd;
-
     private IsWidget visorPaneWidget;
-
-    private IsWidget previousVisorPaneWidget;
 
     private final IPane parentPane;
 
@@ -52,7 +48,6 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
         this.parentPane = parentPane;
         setElement(Document.get().createDivElement());
         layout = new Layout(getElement());
-        vizorCmd = new VisorShowLayoutCommand();
     }
 
     public void setContentPane(IsWidget widget) {
@@ -82,7 +77,7 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
             return;
         }
 
-        previousVisorPaneWidget = visorPaneWidget;
+        IsWidget previousVisorPaneWidget = visorPaneWidget;
         visorPaneWidget = visor;
 
         visor.asWidget().removeFromParent();
@@ -99,14 +94,14 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
             ((AbstractVisorPane) visor).setParentPane(parentPane);
         }
 
-        vizorCmd.schedule(animationDuration, null);
+        new VisorShowLayoutCommand(previousVisorPaneWidget).schedule(animationDuration, null);
     }
 
     public void hideVisorPane() {
-        previousVisorPaneWidget = visorPaneWidget;
+        IsWidget previousVisorPaneWidget = visorPaneWidget;
         visorPaneWidget = null;
         if (previousVisorPaneWidget != null) {
-            vizorCmd.schedule(animationDuration, null);
+            new VisorShowLayoutCommand(previousVisorPaneWidget).schedule(animationDuration, null);
         }
     }
 
@@ -143,9 +138,6 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
                 visorPaneWidget = null;
             }
 
-            if (previousVisorPaneWidget == w) {
-                previousVisorPaneWidget = null;
-            }
         }
         return removed;
     }
@@ -156,8 +148,12 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
     }
 
     private class VisorShowLayoutCommand extends LayoutCommand {
-        public VisorShowLayoutCommand() {
+
+        private final IsWidget previousVisorPaneWidget;
+
+        public VisorShowLayoutCommand(IsWidget previousVisorPaneWidget) {
             super(layout);
+            this.previousVisorPaneWidget = previousVisorPaneWidget;
         }
 
         @Override
