@@ -139,5 +139,13 @@ BEGIN TRANSACTION;
                     FROM    dms.payment_record p
                     JOIN    dms.payment_method pm ON (pm.id = p.payment_method) 
                     WHERE   p.id IN (52381,47842,43410));
+                    
+    -- Update of _admin_.direct_debit_record
+    
+    UPDATE  _admin_.direct_debit_record AS d
+    SET     pmc = 493
+    FROM    dms.payment_record p 
+    WHERE   p.transaction_authorization_number = d.payment_reference_number
+    AND     p.id IN (52381,47842,43410);
 
 -COMMIT;
