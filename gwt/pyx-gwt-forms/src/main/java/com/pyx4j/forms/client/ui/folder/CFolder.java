@@ -60,9 +60,9 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
 
     private static final I18n i18n = I18n.get(CFolder.class);
 
-    private FlowPanel container;
+    private final FlowPanel container;
 
-    private SimplePanel noDataNotificationHolder;
+    private final SimplePanel noDataNotificationHolder;
 
     private boolean orderable = true;
 
@@ -82,6 +82,12 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
         this.rowClass = rowClass;
         asWidget().setStyleName(DefaultFolderTheme.StyleName.CFolder.name());
         itemsList = new ArrayList<CFolderItem<E>>();
+
+        container = new FlowPanel();
+
+        noDataNotificationHolder = new SimplePanel();
+        noDataNotificationHolder.setStyleName(DefaultFolderTheme.StyleName.CFolderNoDataMessage.name());
+        noDataNotificationHolder.setWidget(new Label(i18n.tr("No Data")));
 
         if (rowClass != null) {
             entityPrototype = EntityFactory.getEntityPrototype(rowClass);
@@ -158,15 +164,8 @@ public abstract class CFolder<E extends IEntity> extends CContainer<CFolder<E>, 
     @Override
     protected IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
-
-        noDataNotificationHolder = new SimplePanel();
-        noDataNotificationHolder.setStyleName(DefaultFolderTheme.StyleName.CFolderNoDataMessage.name());
-        noDataNotificationHolder.setWidget(new Label(i18n.tr("No Data")));
         contentPanel.add(noDataNotificationHolder);
-
-        container = new FlowPanel();
         contentPanel.add(container);
-
         return contentPanel;
     }
 
