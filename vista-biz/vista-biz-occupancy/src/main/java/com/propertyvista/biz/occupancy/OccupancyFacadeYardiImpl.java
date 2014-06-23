@@ -235,7 +235,7 @@ public class OccupancyFacadeYardiImpl implements OccupancyFacade {
                     try {
                         ServerSideFactory.create(YardiLeaseApplicationFacade.class).unreserveUnit(leaseId);
                     } catch (YardiServiceException e) {
-                        throw new UserRuntimeException(i18n.tr("Unreserve Unit failed") + "\n" + e.getMessage(), e);
+                        throw new UserRuntimeException(i18n.tr("Release Unit failed") + "\n" + e.getMessage(), e);
                     }
                     return true;
                 } else {

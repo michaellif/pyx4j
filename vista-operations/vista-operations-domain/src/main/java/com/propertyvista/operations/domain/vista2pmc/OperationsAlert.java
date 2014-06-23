@@ -17,6 +17,8 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -42,7 +44,10 @@ public interface OperationsAlert extends IEntity {
     @Caption(name = "Modified by")
     IPrimitive<Key> user();
 
-    IPrimitive<Boolean> handled();
+    IPrimitive<Boolean> resolved();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> operationsNotes();
 
     IPrimitive<Key> admin();
 

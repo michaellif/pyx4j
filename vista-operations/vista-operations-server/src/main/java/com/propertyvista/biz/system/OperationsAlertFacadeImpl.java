@@ -59,7 +59,7 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
             @Override
             public Void call() {
                 OperationsAlert record = EntityFactory.create(OperationsAlert.class);
-                record.handled().setValue(Boolean.FALSE);
+                record.resolved().setValue(Boolean.FALSE);
                 record.namespace().setValue(namespace);
                 record.remoteAddr().setValue(ip);
                 record.details().setValue(details);
