@@ -74,6 +74,10 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
         return service;
     }
 
+    public Class<E> getEntityClass() {
+        return getDataSource().getEntityClass();
+    }
+
     @Override
     public ListerDataSource<E> getDataSource() {
         return dataSource;

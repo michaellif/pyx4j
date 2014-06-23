@@ -109,6 +109,10 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
 
     @Override
     protected void onObtainSuccess() {
+        updateActionsState();
+    }
+
+    protected void updateActionsState() {
         if (getDataTablePanel().getAddButton() != null) {
             getDataTablePanel().getAddButton().setEnabled(getPresenter().canCreateNewItem());
         }
@@ -120,6 +124,7 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     public void setPresenter(Presenter<E> presenter) {
         this.presenter = presenter;
         setDataSource(presenter.getDataSource());
+        updateActionsState();
     }
 
     @Override

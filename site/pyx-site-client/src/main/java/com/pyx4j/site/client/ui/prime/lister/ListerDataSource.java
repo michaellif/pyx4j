@@ -32,8 +32,8 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.forms.client.ui.EntityDataSource;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
+import com.pyx4j.forms.client.ui.EntityDataSource;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> {
@@ -49,6 +49,10 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     public ListerDataSource(Class<E> entityClass, AbstractListService<E> service) {
         this.entityClass = entityClass;
         this.service = service;
+    }
+
+    public Class<E> getEntityClass() {
+        return entityClass;
     }
 
     @Override
