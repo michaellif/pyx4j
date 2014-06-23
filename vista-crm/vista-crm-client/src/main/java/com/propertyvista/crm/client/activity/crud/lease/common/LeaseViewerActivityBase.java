@@ -20,9 +20,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
@@ -61,7 +63,8 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
                 GWT.<PaymentRecordCrudService> create(PaymentRecordCrudService.class), PaymentRecordDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
+                return SecurityController.check(DataModelPermission.permissionCreate(PaymentRecordDTO.class))
+                        && (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
             }
         };
 

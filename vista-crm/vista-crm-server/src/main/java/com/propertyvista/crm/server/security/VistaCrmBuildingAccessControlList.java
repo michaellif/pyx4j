@@ -136,11 +136,13 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
         grant(BuildingFinancial, BuildingFinancial.class, READ);
         grant(BuildingAccounting, BuildingFinancial.class, READ);
         grant(BuildingAdministrator, BuildingFinancial.class, ALL);
+        // see also VistaCrmFinancialAccessControlList  FinancialFull
 
         //billing cycles
         grant(BuildingFinancial, BillingCycleDTO.class, READ);
         grant(BuildingAccounting, BillingCycleDTO.class, READ);
         grant(BuildingAdministrator, BillingCycleDTO.class, ALL);
+        // see also VistaCrmFinancialAccessControlList  FinancialFull
 
         // "actions/community events"
         grant(BuildingProperty, CommunityEvents.class);

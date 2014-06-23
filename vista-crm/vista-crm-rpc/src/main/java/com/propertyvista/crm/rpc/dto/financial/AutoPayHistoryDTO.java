@@ -28,7 +28,7 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
 @ExtendsBO
-public interface AutoPayDTO extends AutopayAgreement {
+public interface AutoPayHistoryDTO extends AutopayAgreement {
 
     @ReadOnly
     @Format("#,##0.00")

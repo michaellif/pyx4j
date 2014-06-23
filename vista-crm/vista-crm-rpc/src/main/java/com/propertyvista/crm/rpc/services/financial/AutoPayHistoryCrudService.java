@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services.financial;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 
-public interface AutoPayCrudService extends AbstractCrudService<AutoPayDTO> {
+public interface AutoPayHistoryCrudService extends AbstractCrudService<AutoPayHistoryDTO> {
 
 }

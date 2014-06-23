@@ -19,15 +19,15 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
-import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
+import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 
-public class AutoPayCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAgreement, AutoPayDTO> implements AutoPayCrudService {
+public class AutoPayHistoryCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAgreement, AutoPayHistoryDTO> implements AutoPayHistoryCrudService {
 
-    public AutoPayCrudServiceImpl() {
-        super(AutopayAgreement.class, AutoPayDTO.class);
+    public AutoPayHistoryCrudServiceImpl() {
+        super(AutopayAgreement.class, AutoPayHistoryDTO.class);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAg
     }
 
     @Override
-    protected void enhanceRetrieved(AutopayAgreement bo, AutoPayDTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(AutopayAgreement bo, AutoPayHistoryDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
         Persistence.ensureRetrieve(to.tenant().lease(), AttachLevel.ToStringMembers);
@@ -45,7 +45,7 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAg
     }
 
     @Override
-    protected void enhanceListRetrieved(AutopayAgreement bo, AutoPayDTO dto) {
+    protected void enhanceListRetrieved(AutopayAgreement bo, AutoPayHistoryDTO dto) {
         super.enhanceListRetrieved(bo, dto);
 
         Persistence.ensureRetrieve(dto.tenant().lease().unit().building(), AttachLevel.Attached);

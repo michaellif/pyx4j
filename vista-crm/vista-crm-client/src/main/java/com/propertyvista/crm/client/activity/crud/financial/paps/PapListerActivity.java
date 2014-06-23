@@ -23,18 +23,18 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.financial.paps.PapListerView;
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
-import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
+import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
-public class PapListerActivity extends AbstractListerActivity<AutoPayDTO> {
+public class PapListerActivity extends AbstractListerActivity<AutoPayHistoryDTO> {
 
     public PapListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class), AutoPayDTO.class);
+        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class), AutoPayHistoryDTO.class);
     }
 
     @Override
-    protected void parseExternalFilters(AppPlace place, Class<AutoPayDTO> entityClass, EntityFiltersBuilder<AutoPayDTO> filters) {
+    protected void parseExternalFilters(AppPlace place, Class<AutoPayHistoryDTO> entityClass, EntityFiltersBuilder<AutoPayHistoryDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
 
         AutopayAgreement argProto = EntityFactory.getEntityPrototype(AutopayAgreement.class);

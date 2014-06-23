@@ -69,6 +69,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.N4GenerationQue
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
@@ -194,12 +195,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }));
 
-        addView(new MenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
+        addView(new SecureMenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
             }
-        }));
+        }, DataModelPermission.permissionRead(AutoPayHistoryDTO.class)));
 
         // Actions:
         addAction(sendMailAction = new SecureMenuItem(i18n.tr("Send Mail..."), new Command() {

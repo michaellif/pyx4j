@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.financial.paps;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 
-public class PapListerViewImpl extends CrmListerViewImplBase<AutoPayDTO> implements PapListerView {
+public class PapListerViewImpl extends CrmListerViewImplBase<AutoPayHistoryDTO> implements PapListerView {
 
     public PapListerViewImpl() {
         setLister(new PapLister());

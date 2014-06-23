@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.ui.crud.financial.paps;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 
-public class PapViewerViewImpl extends CrmViewerViewImplBase<AutoPayDTO> implements PapViewerView {
+public class PapViewerViewImpl extends CrmViewerViewImplBase<AutoPayHistoryDTO> implements PapViewerView {
 
     private static final I18n i18n = I18n.get(PapViewerViewImpl.class);
 

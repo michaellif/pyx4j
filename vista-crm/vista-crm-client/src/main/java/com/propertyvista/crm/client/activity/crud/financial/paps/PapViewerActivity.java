@@ -20,12 +20,12 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.financial.paps.PapViewerView;
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
-import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
+import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 
-public class PapViewerActivity extends CrmViewerActivity<AutoPayDTO> implements PapViewerView.Presenter {
+public class PapViewerActivity extends CrmViewerActivity<AutoPayHistoryDTO> implements PapViewerView.Presenter {
 
     public PapViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(PapViewerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(PapViewerView.class), GWT.<AutoPayHistoryCrudService> create(AutoPayHistoryCrudService.class));
     }
 }

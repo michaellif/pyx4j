@@ -21,17 +21,18 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.crm.rpc.dto.financial.AutoPayDTO;
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 
-public class PapLister extends AbstractLister<AutoPayDTO> {
+public class PapLister extends AbstractLister<AutoPayHistoryDTO> {
 
     private static final I18n i18n = I18n.get(PapLister.class);
 
     public PapLister() {
-        super(AutoPayDTO.class, false);
+        super(AutoPayHistoryDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().id()).build(),
+                new MemberColumnDescriptor.Builder(proto().isDeleted()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().price()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().payment()).searchable(false).sortable(false).build(),
@@ -56,9 +57,9 @@ public class PapLister extends AbstractLister<AutoPayDTO> {
                 
                 new MemberColumnDescriptor.Builder(proto().updatedByTenant(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updatedBySystem(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().updated()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().updated()).searchable(false).build()
                 
-                new MemberColumnDescriptor.Builder(proto().isDeleted(), false).build()
+
         );//@formatter:on
     }
 

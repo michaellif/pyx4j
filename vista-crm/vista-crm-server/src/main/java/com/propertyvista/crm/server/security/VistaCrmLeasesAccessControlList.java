@@ -13,19 +13,48 @@
  */
 package com.propertyvista.crm.server.security;
 
+import static com.propertyvista.domain.security.VistaCrmBehavior.LeasesAdvance;
+import static com.propertyvista.domain.security.VistaCrmBehavior.LeasesBasic;
+import static com.propertyvista.domain.security.VistaCrmBehavior.LeasesFull;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
+import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
+import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
+import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public class VistaCrmLeasesAccessControlList extends UIAclBuilder {
 
     VistaCrmLeasesAccessControlList() {
 
-        grant(VistaCrmBehavior.LeasesBasic, new ActionPermission(SendMail.class));
-        grant(VistaCrmBehavior.LeasesAdvance, new ActionPermission(SendMail.class));
-        grant(VistaCrmBehavior.LeasesFull, new ActionPermission(SendMail.class));
+        // TODO move ? to proper secion in this file
+        grant(LeasesBasic, new ActionPermission(SendMail.class));
+        grant(LeasesAdvance, new ActionPermission(SendMail.class));
+        grant(LeasesFull, new ActionPermission(SendMail.class));
+
+        //------   Payment
+        grant(LeasesBasic, PaymentRecordDTO.class, READ);
+        grant(LeasesBasic, PreauthorizedPaymentsDTO.class, READ);
+        grant(LeasesBasic, AutoPayHistoryDTO.class, READ);
+        grant(LeasesBasic, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
+
+        grant(LeasesAdvance, PaymentRecordDTO.class, READ);
+        grant(LeasesAdvance, PreauthorizedPaymentsDTO.class, READ);
+        grant(LeasesAdvance, AutoPayHistoryDTO.class, READ);
+        grant(LeasesAdvance, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
+
+        grant(LeasesFull, PaymentRecordDTO.class, ALL);
+        grant(LeasesFull, PreauthorizedPaymentsDTO.class, ALL);
+        grant(LeasesFull, AutoPayHistoryDTO.class, READ);
+        grant(LeasesFull, new IServiceExecutePermission(AutoPayHistoryCrudService.class));
+        //See also VistaCrmFinancialAccessControlList
+
     }
 
 }

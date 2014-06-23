@@ -205,9 +205,7 @@ public class NavigViewImpl extends Composite implements NavigView {
             if (SecurityController.check(VistaCrmBehavior.BuildingFinancial_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay()));
             }
-            if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
-                list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview()));
-            }
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPayReview(), DataModelPermission.permissionUpdate(MoneyInBatchDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn(), DataModelPermission.permissionCreate(MoneyInBatchDTO.class)));
             list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.MoneyIn.Batch(), DataModelPermission.permissionRead(MoneyInBatchDTO.class)));
 
