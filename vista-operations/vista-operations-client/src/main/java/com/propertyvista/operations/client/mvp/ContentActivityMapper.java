@@ -53,6 +53,8 @@ import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorA
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
+import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertListerActivity;
+import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertViewerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.EquifaxApprovalViewActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcListerActivity;
@@ -113,6 +115,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 Activity activity = null;
                 if (place instanceof CrudAppPlace) {
                     CrudAppPlace crudPlace = (CrudAppPlace) place;
+// - Management:                    
                     if (place instanceof OperationsSiteMap.Management.PMC) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -168,36 +171,15 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new RunDataViewerActivity(crudPlace);
                             break;
                         }
+
                     } else if (place instanceof OperationsSiteMap.Management.CreditCheckTransaction) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new CustomerCreditCheckTransactionListerActivity(place);
+                            activity = new CustomerCreditCheckTransactionListerActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new CustomerCreditCheckTransactionViewerActivity(crudPlace);
                         default:
-                            break;
-                        }
-// - Security:
-                    } else if (place instanceof OperationsSiteMap.Security.AuditRecord) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new AuditRecordListerActivity(place);
-                            break;
-                        case viewer:
-                            activity = new AuditRecordViewerActivity(crudPlace);
-                        default:
-                            break;
-                        }
-
-// - Administration:
-                    } else if (place instanceof OperationsSiteMap.Administration.Maintenance) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new MaintenanceEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new MaintenanceViewerActivity(crudPlace);
                             break;
                         }
 
@@ -212,6 +194,91 @@ public class ContentActivityMapper implements AppActivityMapper {
                         default:
                             break;
                         }
+
+                    } else if (place instanceof OperationsSiteMap.Management.PmcMerchantAccount) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new MerchantAccountListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new MerchantAccountEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new MerchantAccountViewerActivity(crudPlace);
+                            break;
+                        }
+// - Security:
+                    } else if (place instanceof OperationsSiteMap.Security.AuditRecord) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new AuditRecordListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new AuditRecordViewerActivity(crudPlace);
+                        default:
+                            break;
+                        }
+// - Legal:
+                    } else if (place instanceof OperationsSiteMap.Legal.VistaTermsAccess) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new VistaTermsDefaultActivity(crudPlace, ((VistaTermsAccess) place).getTarget());
+                            break;
+                        case editor:
+                            activity = new VistaTermsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
+// - Administration:
+                    } else if (place instanceof OperationsSiteMap.Administration.Maintenance) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new MaintenanceEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new MaintenanceViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.Administration.Simulation) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new SimulationEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new SimulationViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.Administration.AdminUsers) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new AdminUserEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new AdminUserViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new AdminUserListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.Administration.OperationsAlert) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new OperationsAlertListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new OperationsAlertViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
+                        activity = new EncryptedStorageActivity((AppPlace) place);
+
+// - FundsTransfer:                        
 
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.DirectDebitRecord) {
                         switch (crudPlace.getType()) {
@@ -296,32 +363,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Administration.Simulation) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new SimulationEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new SimulationViewerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (ApplicationMode.isDevelopment() && place instanceof OperationsSiteMap.DevelopmentOnlyPlace) {
-// All simulations go this this function
-                        activity = createDevelopmentOnlyActivity(place);
-
-                    } else if (place instanceof OperationsSiteMap.Administration.AdminUsers) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new AdminUserEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new AdminUserViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new AdminUserListerActivity(crudPlace);
-                            break;
-                        }
                     } else if (place instanceof OperationsSiteMap.Account) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -332,34 +373,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Legal.VistaTermsAccess) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, ((VistaTermsAccess) place).getTarget());
-                            break;
-                        case editor:
-                            activity = new VistaTermsEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new VistaTermsViewerActivity(crudPlace);
-                            break;
-                        }
-                    } else if (place instanceof OperationsSiteMap.Management.PmcMerchantAccount) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new MerchantAccountListerActivity(crudPlace);
-                            break;
-                        case editor:
-                            activity = new MerchantAccountEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new MerchantAccountViewerActivity(crudPlace);
-                            break;
-                        }
+                    } else if (ApplicationMode.isDevelopment() && place instanceof OperationsSiteMap.DevelopmentOnlyPlace) {
+// All simulations go this this function
+                        activity = createDevelopmentOnlyActivity(place);
                     }
-                } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
-                    activity = new EncryptedStorageActivity((AppPlace) place);
-
 // - Other:
 
                 } else if (place instanceof OperationsSiteMap.Login) {

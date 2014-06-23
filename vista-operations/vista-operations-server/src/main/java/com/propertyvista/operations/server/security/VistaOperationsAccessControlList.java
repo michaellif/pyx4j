@@ -47,6 +47,7 @@ import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
@@ -63,6 +64,7 @@ import com.propertyvista.operations.rpc.services.FundsReconciliationSummaryCrudS
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
+import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
@@ -197,6 +199,9 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OperationsAlertCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsAlert.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(MerchantAccountFileUploadService.class));
 
