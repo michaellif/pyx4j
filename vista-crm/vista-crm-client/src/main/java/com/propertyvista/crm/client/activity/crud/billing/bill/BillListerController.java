@@ -20,14 +20,14 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.ListerController;
+import com.pyx4j.site.client.activity.SecureListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillListerPresenter;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 
-public class BillListerController extends ListerController<BillDataDTO> implements BillListerPresenter {
+public class BillListerController extends SecureListerController<BillDataDTO> implements BillListerPresenter {
 
     public BillListerController(ILister<BillDataDTO> view) {
         super(view, GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);

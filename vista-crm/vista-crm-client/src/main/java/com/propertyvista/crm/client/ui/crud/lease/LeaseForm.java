@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -28,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryView
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -63,6 +65,8 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.check(VistaCrmBehavior.Billing_OLD));
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
+
+        setTabVisible(maintenanceTab, SecurityController.check(DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
 
         if (VistaFeatures.instance().yardiIntegration()) {
             setTabVisible(depositsTab, false);

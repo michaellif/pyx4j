@@ -18,11 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractVisorController;
-import com.pyx4j.site.client.activity.ListerController;
+import com.pyx4j.site.client.activity.SecureListerController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -47,12 +45,11 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
     public MaintenanceRequestVisorController(IPane parentView, final Key buildingId, final Key tenantId) {
         super(parentView);
         visor = new MaintenanceRequestVisorView(this);
-        lister = new ListerController<MaintenanceRequestDTO>(visor.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
+        lister = new SecureListerController<MaintenanceRequestDTO>(visor.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
                 MaintenanceRequestDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return (SecurityController.check(DataModelPermission.permissionCreate(MaintenanceRequestDTO.class)) && MaintenanceRequestVisorController.this
-                        .canCreateNewItem());
+                return super.canCreateNewItem() && MaintenanceRequestVisorController.this.canCreateNewItem();
             }
 
             @Override

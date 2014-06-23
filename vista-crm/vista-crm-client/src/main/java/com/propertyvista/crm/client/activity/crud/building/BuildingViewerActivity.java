@@ -69,7 +69,6 @@ import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -212,11 +211,9 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         concessionLister.setParent(result.productCatalog().getPrimaryKey());
         concessionLister.populate();
 
-        if (SecurityController.check(VistaCrmBehavior.Billing_OLD)) {
-            billingCycleLister.clearPreDefinedFilters();
-            billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
-            billingCycleLister.populate();
-        }
+        billingCycleLister.clearPreDefinedFilters();
+        billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
+        billingCycleLister.populate();
     }
 
     @Override
