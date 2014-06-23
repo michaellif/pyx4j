@@ -15,10 +15,13 @@ package com.propertyvista.portal.prospect.ui.application.steps;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -35,6 +38,20 @@ public class FeatureReadOnlyFolder extends PortalBoxFolder<BillableItem> {
     @Override
     protected CForm<BillableItem> createItemForm(IObject<?> member) {
         return new FeatureItemViewer();
+    }
+
+    @Override
+    public BoxFolderItemDecorator<BillableItem> createItemDecorator() {
+        BoxFolderItemDecorator<BillableItem> decor = super.createItemDecorator();
+        decor.setCaptionFormatter(new IFormatter<BillableItem, String>() {
+            @Override
+            public String format(BillableItem value) {
+                return SimpleMessageFormat.format("{0}, Rent ${1}", (value.description().isNull() ? value.item().name() : value.description()),
+                        value.agreedPrice());
+            }
+        });
+
+        return decor;
     }
 
     class FeatureItemViewer extends CForm<BillableItem> {

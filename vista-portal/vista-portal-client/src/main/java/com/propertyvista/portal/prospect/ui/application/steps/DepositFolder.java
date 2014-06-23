@@ -45,8 +45,7 @@ public class DepositFolder extends PortalBoxFolder<Deposit> {
         decor.setCaptionFormatter(new IFormatter<Deposit, String>() {
             @Override
             public String format(Deposit value) {
-                return SimpleMessageFormat.format("{0}, ${1}", (value.description().isNull() ? value.type().getStringView() : value.description()
-                        .getStringView()), value.amount());
+                return SimpleMessageFormat.format("{0}, ${1}", (value.description().isNull() ? value.type() : value.description()), value.amount());
             }
         });
 

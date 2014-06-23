@@ -17,12 +17,15 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.IFormatter;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
@@ -77,6 +80,20 @@ public class FeatureFolder extends PortalBoxFolder<BillableItem> {
     @Override
     protected CForm<BillableItem> createItemForm(IObject<?> member) {
         return new FeatureItemForm();
+    }
+
+    @Override
+    public BoxFolderItemDecorator<BillableItem> createItemDecorator() {
+        BoxFolderItemDecorator<BillableItem> decor = super.createItemDecorator();
+        decor.setCaptionFormatter(new IFormatter<BillableItem, String>() {
+            @Override
+            public String format(BillableItem value) {
+                return SimpleMessageFormat.format("{0}, Rent: ${1}", (value.description().isNull() ? value.item().name() : value.description()),
+                        value.agreedPrice());
+            }
+        });
+
+        return decor;
     }
 
     class FeatureItemForm extends CForm<BillableItem> {
