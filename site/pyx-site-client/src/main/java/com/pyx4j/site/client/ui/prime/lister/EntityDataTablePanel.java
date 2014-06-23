@@ -72,8 +72,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     private final DataTablePanel<E> dataTablePanel;
 
-    private CDataGrid<E> dataGridPanel;
-
     private ListerDataSource<E> dataSource;
 
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
@@ -160,13 +158,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel.getDataTable().setMultipleSelection(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
-        //experimental CDataGrid
-        if (true) {
-            setWidget(dataTablePanel);
-        } else {
-            dataGridPanel = new CDataGrid<E>(clazz);
-            setWidget(dataGridPanel);
-        }
+        setWidget(dataTablePanel);
 
         setAllowAddNew(allowAddNew);
         setAllowDelete(allowDelete);

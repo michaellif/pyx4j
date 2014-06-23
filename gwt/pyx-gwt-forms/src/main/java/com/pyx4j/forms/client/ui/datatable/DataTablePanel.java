@@ -298,7 +298,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     class DataTableScrollPanel extends ScrollPanel {
 
         public DataTableScrollPanel() {
-            super(dataTable);
+            super(dataTable.asWidget());
         }
 
         protected void updateColumnVizibility() {
