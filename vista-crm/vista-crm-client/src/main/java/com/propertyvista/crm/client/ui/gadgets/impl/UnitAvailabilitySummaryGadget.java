@@ -105,8 +105,8 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
         tableModel = new DataTableModel<UnitAvailabilityStatusSummaryLineDTO>(UnitAvailabilityStatusSummaryLineDTO.class);
         tableModel.setColumnDescriptors(COLUMN_DESCRIPTORS);
         table = new DataTable<UnitAvailabilityStatusSummaryLineDTO>(tableModel);
-        table.setWidth("100%");
-        table.getElement().getStyle().setProperty("tableLayout", "auto");
+        table.asWidget().setWidth("100%");
+        table.asWidget().getElement().getStyle().setProperty("tableLayout", "auto");
         table.setHasColumnClickSorting(false);
         table.setColumnSelectorVisible(false);
         table.setMarkSelectedRow(false);
