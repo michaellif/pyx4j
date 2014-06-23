@@ -47,8 +47,8 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     private IsWidget createEdtorFormTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().numberOfRequiredIDs()).decorate().componentWidth(50);
-        formPanel.append(Location.Right, proto().mandatoryProofOfIncome()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().numberOfRequiredIDs()).decorate().labelWidth(200).componentWidth(50);
+        formPanel.append(Location.Left, proto().mandatoryProofOfIncome()).decorate().labelWidth(200).componentWidth(110);
 
         formPanel.h3(proto().allowedIDs().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().allowedIDs(), new IdentificationDocumentFolder());

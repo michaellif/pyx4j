@@ -119,7 +119,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     protected IsWidget createPreauthorizedPaymentsTab() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().nextScheduledPaymentDate(), new CDateLabel()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().nextScheduledPaymentDate(), new CDateLabel()).decorate().labelWidth(200).componentWidth(120);
         formPanel.h3(proto().preauthorizedPayments().getMeta().getCaption());
         formPanel.append(Location.Dual, proto().preauthorizedPayments(), new PreauthorizedPaymentFolder());
 
