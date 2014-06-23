@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -21,18 +23,21 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     private static final I18n i18n = I18n.get(MessageEditForm.class);
 
-    private final CommunicationEndpointFolder receiverSelector;
+    private FlowPanel searchCriteriaPanel;
+
+    private CommunicationEndpointSelector communicationEndpointSelector;
 
     public MessageEditForm(IForm<MessageDTO> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
-        receiverSelector = new CommunicationEndpointFolder(this);
         selectTab(addTab(createGeneralForm(), i18n.tr("New message")));
         inheritEditable(true);
         inheritViewable(false);
@@ -44,7 +49,10 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h4("To");
-        formPanel.append(Location.Dual, proto().to(), receiverSelector);
+        searchCriteriaPanel = new FlowPanel();
+
+        searchCriteriaPanel.add(createCommunicationEndpointSelector());
+        formPanel.append(Location.Dual, searchCriteriaPanel);
         formPanel.h3("");
         formPanel.br();
         formPanel.append(Location.Dual, proto().subject()).decorate();
@@ -59,11 +67,41 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         return formPanel;
     }
 
+    public void addToItem(CommunicationEndpointDTO item) {
+        getValue().to().add(item);
+    }
+
+    public void removeToItem(CommunicationEndpointDTO item) {
+        getValue().to().remove(item);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        communicationEndpointSelector.removeAll();
+
+    }
+
     @Override
     public boolean isValid() {
         if (getValue() != null && getValue().to() != null && getValue().to().size() < 1) {
             return false;
         }
         return super.isValid();
+    }
+
+    private Widget createCommunicationEndpointSelector() {
+        return communicationEndpointSelector = new CommunicationEndpointSelector() {//@formatter:off
+            @Override protected void onItemAdded(CommunicationEndpointDTO item) {
+                super.onItemAdded(item);
+                MessageEditForm.this.addToItem(item);
+             }
+            @Override
+            protected void onItemRemoved(CommunicationEndpointDTO item) {
+                MessageEditForm.this.removeToItem(item);
+            }
+
+
+        };//@formatter:on
     }
 }

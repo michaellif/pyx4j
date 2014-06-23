@@ -57,6 +57,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerUserListService;
@@ -225,8 +226,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private Anchor btnReply;
 
-        private final CommunicationEndpointFolder receiverSelector;
-
         Image starImage;
 
         Image highImportnaceImage;
@@ -239,9 +238,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         MessageAttachmentFolder attachemnts;
 
+        private FormPanel searchCriteriaPanel;
+
+        private CommunicationEndpointSelector communicationEndpointSelector;
+
         public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
-            receiverSelector = new CommunicationEndpointFolder(MessageForm.this);
 
             inheritEditable(false);
             inheritViewable(false);
@@ -287,8 +289,12 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false).assistantWidget(statusToolBar);
             formPanel.br();
+
             formPanel.h4("To");
-            formPanel.append(Location.Dual, proto().to(), receiverSelector);
+            searchCriteriaPanel = new FormPanel(this);
+
+            searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
+            formPanel.append(Location.Dual, searchCriteriaPanel);
             formPanel.br();
             formPanel.br();
             formPanel.br();
@@ -450,6 +456,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             if (getValue().isPrototype() || getValue().date() == null || getValue().date().isNull()) {
+                communicationEndpointSelector.removeAll();
                 BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
                 setViewable(false);
@@ -475,6 +482,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
+                communicationEndpointSelector.addAll(getValue().to(), true);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(!ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())
@@ -495,6 +503,27 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 statusToolBar.asWidget().setVisible(starImage.isVisible() || highImportnaceImage.isVisible());
 
             }
+        }
+
+        private Widget createCommunicationEndpointSelector() {
+            return communicationEndpointSelector = new CommunicationEndpointSelector() {//@formatter:off
+                @Override protected void onItemAdded(CommunicationEndpointDTO item) {
+                    super.onItemAdded(item);
+                    MessageFolderItem.this.addToItem(item);
+                }
+                @Override
+                protected void onItemRemoved(CommunicationEndpointDTO item) {
+                    MessageFolderItem.this.removeToItem(item);
+                }
+            };//@formatter:on
+        }
+
+        public void addToItem(CommunicationEndpointDTO item) {
+            getValue().to().add(item);
+        }
+
+        public void removeToItem(CommunicationEndpointDTO item) {
+            getValue().to().remove(item);
         }
     }
 }

@@ -33,6 +33,9 @@ import com.pyx4j.widgets.client.dashboard.DashboardTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
+import com.pyx4j.widgets.client.selector.SelectedItemHolder;
+import com.pyx4j.widgets.client.selector.SuggestiveSelector;
+import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -58,9 +61,6 @@ import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
-import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SelectedItemHolder;
-import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
-import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewFolder;
 import com.propertyvista.crm.client.ui.tools.financial.autopayreview.PapReviewsHolderForm;
@@ -817,7 +817,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         // This is for 'Super Selector' used in bulk operation search criteria forms:
-        style = new Style("." + SuperSelector.Styles.SuperSelectorStyle.name()); // should be similar to a regular text box
+        style = new Style("." + SuggestiveSelector.Styles.SuperSelectorStyle.name()); // should be similar to a regular text box
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("background-color", "white");
 
@@ -830,13 +830,13 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         // remove 'clear field' X mark that appears in IE10
-        style = new Style("." + SuperSelector.Styles.SuperSelectorStyle.name() + " input::-ms-clear");
+        style = new Style("." + SuggestiveSelector.Styles.SuperSelectorStyle.name() + " input::-ms-clear");
         style.addProperty("width", "0px");
         style.addProperty("height", "0px");
         style.addProperty("display", "none");
         addStyle(style);
         // remove orange outline from chrome
-        style = new Style("." + SuperSelector.Styles.SuperSelectorStyle.name() + " input:focus");
+        style = new Style("." + SuggestiveSelector.Styles.SuperSelectorStyle.name() + " input:focus");
         style.addProperty("outline", "0px");
         addStyle(style);
 
@@ -850,7 +850,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style("." + SuperSuggestiveSelector.Styles.SuggestionsPopup.name());
+        style = new Style("." + SuggestiveSelector.Styles.SuggestionsPopup.name());
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("padding", "5px");
         style.addProperty("border-color", ThemeColor.foreground);

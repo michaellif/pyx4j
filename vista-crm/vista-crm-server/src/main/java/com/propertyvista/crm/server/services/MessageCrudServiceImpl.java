@@ -176,7 +176,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
         if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
             SystemEndpoint e = entity.cast();
-            rec.name().setValue(e.name().getValue().name());
+            rec.name().setValue(e.name().getValue());
             rec.type().setValue(ContactType.System);
         } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
             CrmUser e = entity.cast();

@@ -28,14 +28,14 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 
-import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
 
 // TODO refactor and merge duplication with PortfolioSuggestionsProvider (don't forget about possible pagination)
-class BuildingSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsProvider<BuildingForSelectionDTO> {
+class BuildingSuggestionsProvider extends SuggestiveSelector.SuggestionsProvider<BuildingForSelectionDTO> {
 
     private static final class RankedMatch implements Comparable<RankedMatch> {
 

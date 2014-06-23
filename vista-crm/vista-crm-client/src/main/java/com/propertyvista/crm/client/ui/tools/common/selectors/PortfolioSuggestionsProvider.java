@@ -25,13 +25,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 
-import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
 
-public class PortfolioSuggestionsProvider extends SuperSuggestiveSelector.SuggestionsProvider<PortfolioForSelectionDTO> {
+public class PortfolioSuggestionsProvider extends SuggestiveSelector.SuggestionsProvider<PortfolioForSelectionDTO> {
 
     private final SelectPortfolioListService service;
 

@@ -99,7 +99,7 @@ public class CommunicationManager {
 
         if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
             SystemEndpoint e = entity.cast();
-            return e.name().getValue().name();
+            return e.name().getValue();
         } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
             CrmUser e = entity.cast();
             return e.name().getValue();

@@ -32,7 +32,7 @@ public class SystemEndpointPreloader extends AbstractDataPreloader {
 
     private void createSystemEndpoint(SystemEndpointName name) {
         SystemEndpoint ep = EntityFactory.create(SystemEndpoint.class);
-        ep.name().setValue(name);
+        ep.name().setValue(name.toString());
         PersistenceServicesFactory.getPersistenceService().persist(ep);
     }
 

@@ -151,6 +151,7 @@ import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingUtilityListService;
+import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
@@ -485,6 +486,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(MessageAttachment.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(CommunicationThread.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageAttachmentUploadService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCommunicationEndpointListService.class));
 
         grant(VistaCrmBehavior.Tenants_OLD, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
@@ -659,6 +661,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmLeaseApllicationAccessControlList());
         merge(new VistaCrmLeasesAccessControlList());
         merge(new VistaCrmMaintenanceAccessControlList());
+        merge(new VistaCrmYardiAccessControlList());
         merge(new VistaCrmYardiAccessControlList());
 
         freeze();

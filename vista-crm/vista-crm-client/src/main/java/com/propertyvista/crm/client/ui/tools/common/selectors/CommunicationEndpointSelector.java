@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-12-06
+ * Created on 2013-12-09
  * @author ArtyomB
  * @version $Id$
  */
@@ -19,26 +19,22 @@ import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 
-import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 
-public class BuildingSelector extends SuggestiveSelector<BuildingForSelectionDTO> {
+public class CommunicationEndpointSelector extends SuggestiveSelector<CommunicationEndpointDTO> {
 
-    public BuildingSelector() {
-        super(new IFormatter<BuildingForSelectionDTO, String>() {
+    public CommunicationEndpointSelector() {
+        super(new IFormatter<CommunicationEndpointDTO, String>() {
             @Override
-            public String format(BuildingForSelectionDTO value) {
-                if (!value.name().isNull()) {
-                    return value.propertyCode().getValue() + " (" + value.name().getValue() + ")";
-                } else {
-                    return value.propertyCode().getValue();
-                }
+            public String format(CommunicationEndpointDTO value) {
+                return value.name().getValue();
             }
-        }, new IParser<BuildingForSelectionDTO>() {
+        }, new IParser<CommunicationEndpointDTO>() {
             @Override
-            public BuildingForSelectionDTO parse(String string) throws ParseException {
+            public CommunicationEndpointDTO parse(String string) throws ParseException {
                 return null;
             }
-        }, new BuildingForSelectionCell(), new BuildingSuggestionsProvider(), true, true);
+        }, new CommunicationEndpointForSelectionCell(), new CommunicationEndpointSuggestionsProvider(), true, false);
     }
 
 }

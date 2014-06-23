@@ -33,7 +33,7 @@ public class SystemEndpointManager {
     }
 
     private static class SystemEndpointCacheKey {
-        static String getCacheKey(SystemEndpointName seName) {
+        static String getCacheKey(String seName) {
             return String.format("%s_%s", SystemEndpoint.class.getName(), seName);
         }
     }
@@ -52,7 +52,7 @@ public class SystemEndpointManager {
     }
 
     public SystemEndpoint getSystemEndpointFromCache(SystemEndpointName sepName) {
-        SystemEndpoint ep = CacheService.get(SystemEndpointCacheKey.getCacheKey(sepName));
+        SystemEndpoint ep = CacheService.get(SystemEndpointCacheKey.getCacheKey(sepName.toString()));
         return ep;
     }
 }

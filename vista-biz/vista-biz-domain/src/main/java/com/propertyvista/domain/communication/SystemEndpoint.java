@@ -41,5 +41,5 @@ public interface SystemEndpoint extends CommunicationEndpoint {
     }
 
     @NotNull
-    IPrimitive<SystemEndpointName> name();
+    IPrimitive<String> name();
 }
