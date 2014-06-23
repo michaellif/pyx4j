@@ -20,11 +20,13 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -90,6 +92,11 @@ public class MoneyInBatchViewerActivity extends CrmViewerActivity<MoneyInBatchDT
                 MoneyInBatchViewerActivity.this.startProcessingProgress(i18n.tr("Canceling Batch..."), deferredCorrelationId);
             }
         }, getEntityId());
+    }
+
+    @Override
+    public boolean canEdit() {
+        return SecurityController.check(DataModelPermission.permissionUpdate(MoneyInBatchDTO.class));
     }
 
     @Override

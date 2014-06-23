@@ -13,14 +13,32 @@
  */
 package com.propertyvista.crm.server.security;
 
+import static com.pyx4j.entity.security.AbstractCRUDPermission.ALL;
+import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
+
+import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
+
+import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
+import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
+import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
     VistaCrmFinancialAccessControlList() {
 
-        // grant(VistaCrmBehavior.FinancialMoneyIN, new ActionPermission(UpdateFromYardi.class));
+        // ------ Financial: Money IN
+        grant(VistaCrmBehavior.FinancialMoneyIN, MoneyInBatchDTO.class, ALL);
+        grant(VistaCrmBehavior.FinancialMoneyIN, new IServiceExecutePermission(MoneyInToolService.class));
+        grant(VistaCrmBehavior.FinancialMoneyIN, new IServiceExecutePermission(MoneyInBatchCrudService.class));
+        grant(VistaCrmBehavior.FinancialMoneyIN, new IServiceExecutePermission(MoneyInBatchDepositSlipPrintService.class));
 
+        // ------ Financial: Aggregated Transfer 
+        grant(VistaCrmBehavior.FinancialAggregatedTransfer, AggregatedTransfer.class, READ);
+        grant(VistaCrmBehavior.FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
     }
-
 }
