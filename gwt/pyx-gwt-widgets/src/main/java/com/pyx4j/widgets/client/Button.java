@@ -77,6 +77,11 @@ public class Button extends FocusPanel implements IFocusWidget {
         this((ImageResource) null, text);
     }
 
+    public Button(String text, Permission... permission) {
+        this((ImageResource) null, text);
+        this.setPermission(permission);
+    }
+
     public Button(ImageResource imageResource, Command command) {
         this(imageResource);
         this.command = command;
