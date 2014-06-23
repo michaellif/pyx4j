@@ -87,8 +87,9 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @Path("getFloorplanAvailability")
     @Produces(MediaType.APPLICATION_XML)
     @Override
-    public List<FloorplanAvailability> getFloorplanAvailability(@QueryParam("fpId") String fpId, @QueryParam("moveIn") LogicalDate date) {
-        return new PropertyMarketingProcessor().getFloorplanAvailability(fpId, date);
+    public List<FloorplanAvailability> getFloorplanAvailability(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId,
+            @QueryParam("moveIn") LogicalDate date) {
+        return new PropertyMarketingProcessor().getFloorplanAvailability(prId, fpId, date);
     }
 
     @POST
@@ -102,9 +103,8 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
 
     @GET
     @Path("getApplyForLeaseUrl")
-    @Produces(MediaType.APPLICATION_XML)
     @Override
-    public String getApplyForLeaseUrl(@QueryParam("prId") String propertyId, @QueryParam("fpId") String fpId) {
-        return new PropertyMarketingProcessor().getApplyForLeaseUrl(propertyId, fpId);
+    public String getApplyForLeaseUrl(@QueryParam("prId") String prId, @QueryParam("fpId") String fpId) {
+        return new PropertyMarketingProcessor().getApplyForLeaseUrl(prId, fpId);
     }
 }

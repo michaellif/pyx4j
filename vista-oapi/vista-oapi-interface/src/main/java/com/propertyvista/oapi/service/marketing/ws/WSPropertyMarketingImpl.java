@@ -57,8 +57,9 @@ public class WSPropertyMarketingImpl implements PropertyMarketingService {
     }
 
     @Override
-    public List<FloorplanAvailability> getFloorplanAvailability(@WebParam(name = "floorplanId") String fpId, @WebParam(name = "moveinDate") LogicalDate date) {
-        return new PropertyMarketingProcessor().getFloorplanAvailability(fpId, date);
+    public List<FloorplanAvailability> getFloorplanAvailability(@WebParam(name = "propertyId") String propertyId, @WebParam(name = "floorplanId") String fpId,
+            @WebParam(name = "moveinDate") LogicalDate date) {
+        return new PropertyMarketingProcessor().getFloorplanAvailability(propertyId, fpId, date);
     }
 
     @Override

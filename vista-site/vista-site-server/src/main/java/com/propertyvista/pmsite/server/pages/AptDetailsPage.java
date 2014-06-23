@@ -144,7 +144,9 @@ public class AptDetailsPage extends BasePage {
                 item.add(new Label("amenity", item.getModelObject().name().getValue()));
             }
         });
-        add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
+        PageParameters apmtParam = new PageParameters();
+        apmtParam.set(PMSiteApplication.ParamNameBuilding, propCode);
+        add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, apmtParam).setBody(new Model<String>(i18n.tr("Request Appointment"))));
 
         String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
                 ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, building.propertyCode().getValue());

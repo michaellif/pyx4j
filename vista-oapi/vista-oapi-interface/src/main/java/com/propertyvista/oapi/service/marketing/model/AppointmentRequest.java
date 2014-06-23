@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.person.Name.Prefix;
 import com.propertyvista.domain.tenant.lead.Lead.DayPart;
 import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 
@@ -26,19 +27,35 @@ import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AppointmentRequest {
 
-    LogicalDate moveInDate;
+    public Prefix namePrefix;
 
-    LeaseTerm leaseTerm;
+    public String firstName;
 
-    String floorplanName;
+    public String lastName;
 
-    String comments;
+    public String homePhone;
 
-    LogicalDate preferredDate1;
+    public String mobilePhone;
 
-    DayPart preferredTime1;
+    public String workPhone;
 
-    LogicalDate preferredDate2;
+    public String email;
 
-    DayPart preferredTime2;
+    public LogicalDate moveInDate;
+
+    public LeaseTerm leaseTerm;
+
+    public String propertyId;
+
+    public String floorplanId;
+
+    public String comments;
+
+    public LogicalDate preferredDate1;
+
+    public DayPart preferredTime1;
+
+    public LogicalDate preferredDate2;
+
+    public DayPart preferredTime2;
 }
