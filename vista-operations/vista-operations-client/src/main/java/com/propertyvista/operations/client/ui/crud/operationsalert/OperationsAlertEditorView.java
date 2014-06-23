@@ -7,18 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2014-06-23
- * @author VladL
+ * Created on Aug 17, 2012
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
+
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 
-public class OperationsAlertListerViewImpl extends OperationsListerViewImplBase<OperationsAlertDTO> {
-
-    public OperationsAlertListerViewImpl() {
-        setLister(new OperationsAlertLister());
-    }
+public interface OperationsAlertEditorView extends IEditor<OperationsAlertDTO> {
 }

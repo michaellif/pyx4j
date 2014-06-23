@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-12
- * @author ArtyomB
+ * Created on 2014-06-23
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
@@ -20,7 +20,6 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.operations.client.themes.OperationsTheme;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 
@@ -36,17 +35,21 @@ public class OperationsAlertForm extends OperationsEntityForm<OperationsAlertDTO
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.append(Location.Left, proto().namespace()).decorate();
-        formPanel.append(Location.Left, proto().user(), new CLabel<Key>()).decorate();
+
         formPanel.append(Location.Left, proto().admin(), new CLabel<Key>()).decorate();
+
         formPanel.append(Location.Left, proto().remoteAddr()).decorate();
         formPanel.append(Location.Left, proto().created()).decorate();
         formPanel.append(Location.Left, proto().app()).decorate();
-        formPanel.append(Location.Left, proto().entityId()).decorate();
+
+        formPanel.append(Location.Left, proto().entityId(), new CLabel<Key>()).decorate();
         formPanel.append(Location.Left, proto().entityClass()).decorate();
-        formPanel.append(Location.Left, proto().resolved()).decorate();
-        formPanel.append(Location.Left, proto().operationsNotes()).decorate();
 
         formPanel.append(Location.Dual, proto().details()).decorate();
+
+        formPanel.append(Location.Left, proto().user(), new CLabel<Key>()).decorate();
+        formPanel.append(Location.Left, proto().resolved()).decorate();
+        formPanel.append(Location.Dual, proto().operationsNotes()).decorate();
 
         selectTab(addTab(formPanel, i18n.tr("OperationsAlert")));
     }

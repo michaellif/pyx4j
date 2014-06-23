@@ -61,7 +61,7 @@ class PaymentHealthMonitor {
             }
         }
 
-        // UnPpocessed  FundsTransferBatch Acknowledgement
+        // UnPpocessed  FundsTransferBatch Acknowledgment
         {
             Date reportSince = DateUtils.addHours(SystemDateManager.getDate(), -6);
             EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);

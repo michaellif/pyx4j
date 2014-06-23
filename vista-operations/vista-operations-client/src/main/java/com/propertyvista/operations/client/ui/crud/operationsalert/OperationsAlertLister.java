@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 17, 2012
- * @author ArtyomB
+ * Created on 2014-06-23
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
@@ -29,14 +29,16 @@ public class OperationsAlertLister extends AbstractLister<OperationsAlertDTO> {
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().namespace()).build(),
+                new MemberColumnDescriptor.Builder(proto().admin()).build(),
+                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
+                new MemberColumnDescriptor.Builder(proto().created()).build(),
+                new MemberColumnDescriptor.Builder(proto().app()).build(),
+                new MemberColumnDescriptor.Builder(proto().entityId()).build(),
+                new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
+                new MemberColumnDescriptor.Builder(proto().details()).build(),                
                 new MemberColumnDescriptor.Builder(proto().user()).build(),
                 new MemberColumnDescriptor.Builder(proto().resolved()).build(),
-                new MemberColumnDescriptor.Builder(proto().admin()).build(),
-                new MemberColumnDescriptor.Builder(proto().created()).build(),
-                new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
-                new MemberColumnDescriptor.Builder(proto().entityId()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
-                new MemberColumnDescriptor.Builder(proto().details()).build()                
+                new MemberColumnDescriptor.Builder(proto().operationsNotes()).build()
         );//@formatter:on
     }
 

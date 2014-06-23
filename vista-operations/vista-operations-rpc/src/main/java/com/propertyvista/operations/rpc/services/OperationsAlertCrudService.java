@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 17, 2012
- * @author ArtyomB
+ * Created on 2014-06-23
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.operations.rpc.services;

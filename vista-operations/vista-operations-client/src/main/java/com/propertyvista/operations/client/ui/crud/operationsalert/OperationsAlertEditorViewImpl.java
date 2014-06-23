@@ -11,22 +11,14 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.operations.server.services;
+package com.propertyvista.operations.client.ui.crud.operationsalert;
 
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-
-import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
+import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
-import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 
-public class OperationsAlertCrudServiceImpl extends AbstractCrudServiceDtoImpl<OperationsAlert, OperationsAlertDTO> implements OperationsAlertCrudService {
+public class OperationsAlertEditorViewImpl extends OperationsEditorViewImplBase<OperationsAlertDTO> implements OperationsAlertEditorView {
 
-    public OperationsAlertCrudServiceImpl() {
-        super(OperationsAlert.class, OperationsAlertDTO.class);
-    }
-
-    @Override
-    protected void bind() {
-        bindCompleteObject();
+    public OperationsAlertEditorViewImpl() {
+        setForm(new OperationsAlertForm(this));
     }
 }

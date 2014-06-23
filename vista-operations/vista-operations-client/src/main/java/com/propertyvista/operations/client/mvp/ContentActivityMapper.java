@@ -53,6 +53,7 @@ import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorA
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
+import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertEditorActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertListerActivity;
 import com.propertyvista.operations.client.activity.crud.operationsalert.OperationsAlertViewerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.EquifaxApprovalViewActivity;
@@ -272,6 +273,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new OperationsAlertViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new OperationsAlertEditorActivity(crudPlace);
                             break;
                         }
 

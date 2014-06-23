@@ -38,6 +38,7 @@ import com.propertyvista.operations.rpc.dto.FundsReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferBatchDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferFileDTO;
 import com.propertyvista.operations.rpc.dto.FundsTransferRecordDTO;
+import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -48,6 +49,7 @@ public class OperationsEntityMapper {
 
     public static void init() {
         register(OperationsUser.class, OperationsSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
+        register(OperationsAlertDTO.class, OperationsSiteMap.Administration.OperationsAlert.class, DEFAULT_IMAGE);
 
         register(PmcDTO.class, OperationsSiteMap.Management.PMC.class, DEFAULT_IMAGE);
         register(PmcMerchantAccountDTO.class, OperationsSiteMap.Management.PmcMerchantAccount.class, DEFAULT_IMAGE);

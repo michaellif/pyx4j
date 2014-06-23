@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -305,6 +306,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         for (int i = 0; i < config().numPotentialTenants2CreditCheck; i++) {
             AptUnit unit = aptUnitSource.next();
             unit = makeAvailable(unit);
+
+            ServerSideFactory.create(OperationsAlertFacade.class).record(unit, "Unit {0} set to Available", unit.getStringView());
+
             Lease lease = generator.createLease(unit);
             if (!tenantsEquifaxTestCasesGenerator.addTenants(lease)) {
                 break;

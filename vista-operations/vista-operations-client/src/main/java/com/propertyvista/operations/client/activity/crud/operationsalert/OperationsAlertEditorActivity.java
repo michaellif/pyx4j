@@ -15,18 +15,18 @@ package com.propertyvista.operations.client.activity.crud.operationsalert;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.AbstractViewerActivity;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.operationsalert.OperationsAlertViewerView;
+import com.propertyvista.operations.client.ui.crud.operationsalert.OperationsAlertEditorView;
 import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 import com.propertyvista.operations.rpc.services.OperationsAlertCrudService;
 
-public class OperationsAlertViewerActivity extends AbstractViewerActivity<OperationsAlertDTO> {
+public class OperationsAlertEditorActivity extends AbstractEditorActivity<OperationsAlertDTO> {
 
-    public OperationsAlertViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().getView(OperationsAlertViewerView.class), GWT
-                .<OperationsAlertCrudService> create(OperationsAlertCrudService.class));
+    public OperationsAlertEditorActivity(CrudAppPlace place) {
+        super(place, OperationsSite.getViewFactory().getView(OperationsAlertEditorView.class), GWT
+                .<OperationsAlertCrudService> create(OperationsAlertCrudService.class), OperationsAlertDTO.class);
     }
 }

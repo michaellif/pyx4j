@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-12
- * @author ArtyomB
+ * Created on 2014-06-23
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.operationsalert;
@@ -19,7 +19,6 @@ import com.propertyvista.operations.rpc.dto.OperationsAlertDTO;
 public class OperationsAlertViewerViewImpl extends OperationsViewerViewImplBase<OperationsAlertDTO> {
 
     public OperationsAlertViewerViewImpl() {
-        super(true);
         setForm(new OperationsAlertForm(this));
     }
 }

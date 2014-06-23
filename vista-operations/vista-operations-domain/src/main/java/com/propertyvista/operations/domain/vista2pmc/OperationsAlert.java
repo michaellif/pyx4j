@@ -37,11 +37,13 @@ public interface OperationsAlert extends IEntity {
 
     @Length(63)
     @Indexed(group = { "f,2" })
+    @Editor(type = EditorType.label)
     IPrimitive<String> namespace();
 
     @Indexed(group = { "f,1" })
     @MemberColumn(name = "usr")
     @Caption(name = "Modified by")
+    @Editor(type = EditorType.label)
     IPrimitive<Key> user();
 
     IPrimitive<Boolean> resolved();
@@ -49,21 +51,28 @@ public interface OperationsAlert extends IEntity {
     @Editor(type = EditorType.textarea)
     IPrimitive<String> operationsNotes();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Key> admin();
 
     @Length(39)
+    @Editor(type = EditorType.label)
     IPrimitive<String> remoteAddr();
 
     @Caption(name = "When")
     @Timestamp(Timestamp.Update.Created)
+    @Editor(type = EditorType.label)
     IPrimitive<Date> created();
 
+    @Editor(type = EditorType.label)
     IPrimitive<VistaApplication> app();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Key> entityId();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> entityClass();
 
     @Length(2048)
+    @Editor(type = EditorType.label)
     IPrimitive<String> details();
 }
