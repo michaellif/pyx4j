@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
+import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class VistaCrmLeasesAccessControlList extends UIAclBuilder {
@@ -38,7 +39,12 @@ public class VistaCrmLeasesAccessControlList extends UIAclBuilder {
         grant(LeasesAdvance, new ActionPermission(SendMail.class));
         grant(LeasesFull, new ActionPermission(SendMail.class));
 
-        //------   Payment
+        //------ Lease itself:
+        grant(LeasesBasic, LeaseDTO.class, READ);
+        grant(LeasesAdvance, LeaseDTO.class, READ);
+        grant(LeasesFull, LeaseDTO.class, ALL);
+
+        //------ Payment:
         grant(LeasesBasic, PaymentRecordDTO.class, READ);
         grant(LeasesBasic, PreauthorizedPaymentsDTO.class, READ);
         grant(LeasesBasic, AutoPayHistoryDTO.class, READ);

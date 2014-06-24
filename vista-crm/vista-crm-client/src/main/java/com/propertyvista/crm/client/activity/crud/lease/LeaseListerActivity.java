@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ReportDialog;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
@@ -30,7 +29,6 @@ import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -40,7 +38,6 @@ public class LeaseListerActivity extends LeaseListerActivityBase<LeaseDTO> imple
 
     public LeaseListerActivity(Place place) {
         super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
-        ((LeaseListerView) getView()).setPadFileControlsEnabled(SecurityController.check(VistaCrmBehavior.PropertyVistaSupport));
     }
 
     @Override

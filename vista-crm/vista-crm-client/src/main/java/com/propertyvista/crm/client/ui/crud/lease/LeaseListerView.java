@@ -26,7 +26,4 @@ public interface LeaseListerView extends ILister<LeaseDTO> {
         void downloadPadFile();
 
     }
-
-    void setPadFileControlsEnabled(boolean isEnabled);
-
 }

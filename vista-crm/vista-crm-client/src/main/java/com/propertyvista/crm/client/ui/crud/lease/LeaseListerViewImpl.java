@@ -31,9 +31,4 @@ public class LeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> impleme
             }
         });
     }
-
-    @Override
-    public void setPadFileControlsEnabled(boolean isEnabled) {
-        ((LeaseLister) getLister()).setPadFileControlsEnabled(isEnabled);
-    }
 }

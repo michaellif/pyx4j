@@ -21,16 +21,20 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.ActionPermission;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
+import com.propertyvista.crm.rpc.services.lease.ac.PadFileDownload;
+import com.propertyvista.crm.rpc.services.lease.ac.PadFileUpload;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
@@ -39,10 +43,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseLister extends AbstractLister<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(LeaseLister.class);
-
-    private Button padFileUpload;
-
-    private Button padFileDownload;
 
     public LeaseLister() {
         super(LeaseDTO.class, false);
@@ -106,37 +106,40 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
 //        }));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addActionItem(new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
+            Button createLease;
+            addActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.New).show();
                 }
             }));
+            createLease.setPermission(DataModelPermission.permissionCreate(LeaseDTO.class));
         }
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addActionItem(new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
+            Button createLease;
+            addActionItem(createLease = new Button(FolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.Current).show();
                 }
             }));
+            createLease.setPermission(DataModelPermission.permissionCreate(LeaseDTO.class));
         }
 
-        addActionItem(padFileUpload = new Button(i18n.tr("Upload PAD File"), new Command() {
+        addActionItem(new Button(i18n.tr("Upload PAD File"), new Command() {
             @Override
             public void execute() {
                 onPadFileUpload();
             }
-        }));
+        }, new ActionPermission(PadFileUpload.class)));
 
-        addActionItem(padFileDownload = new Button(i18n.tr("Download PAD File"), new Command() {
+        addActionItem(new Button(i18n.tr("Download PAD File"), new Command() {
             @Override
             public void execute() {
                 onPadFileDownload();
             }
-        }));
-
+        }, new ActionPermission(PadFileDownload.class)));
     }
 
     @Override
@@ -156,10 +159,5 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
 
     public void onPadFileDownload() {
 
-    }
-
-    public void setPadFileControlsEnabled(boolean isEnabled) {
-        padFileDownload.setVisible(isEnabled);
-        padFileUpload.setVisible(isEnabled);
     }
 }
