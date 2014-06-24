@@ -157,7 +157,7 @@ public class DataTableModel<E extends IEntity> {
     protected void fireTableChanged(DataTableModelEvent e) {
         for (Iterator<DataTableModelListener> iter = listenerList.iterator(); iter.hasNext();) {
             DataTableModelListener listener = iter.next();
-            listener.onTableModelChanged(e);
+            listener.onDataTableModelChanged(e);
         }
     }
 

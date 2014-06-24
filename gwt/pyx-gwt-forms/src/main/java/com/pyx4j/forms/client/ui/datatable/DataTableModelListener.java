@@ -22,6 +22,6 @@ package com.pyx4j.forms.client.ui.datatable;
 
 public interface DataTableModelListener {
 
-    public void onTableModelChanged(DataTableModelEvent e);
+    public void onDataTableModelChanged(DataTableModelEvent e);
 
 }

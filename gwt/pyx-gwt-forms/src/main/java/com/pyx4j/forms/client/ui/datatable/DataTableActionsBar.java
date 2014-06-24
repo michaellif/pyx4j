@@ -71,7 +71,7 @@ public class DataTableActionsBar extends SimplePanel implements DataTableModelLi
     }
 
     @Override
-    public void onTableModelChanged(DataTableModelEvent e) {
+    public void onDataTableModelChanged(DataTableModelEvent e) {
         pageNavigBar.onTableModelChanged(e);
     }
 

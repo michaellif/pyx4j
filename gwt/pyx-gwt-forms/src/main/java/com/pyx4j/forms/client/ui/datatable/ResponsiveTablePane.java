@@ -27,6 +27,12 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 
 public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
 
+    private final DataTable<E> dataTable;
+
+    public ResponsiveTablePane(final DataTable<E> dataTable) {
+        this.dataTable = dataTable;
+    }
+
     @Override
     public Widget asWidget() {
         // TODO Auto-generated method stub
@@ -40,21 +46,9 @@ public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     @Override
-    public void renderTable() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public boolean isItemZoomInAvailable() {
         // TODO Auto-generated method stub
         return false;
-    }
-
-    @Override
-    public void onTableModelChanged(DataTableModelEvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -63,4 +57,15 @@ public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
 
     }
 
+    @Override
+    public void onDataTableModelChanged(DataTableModelEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void renderTable() {
+        // TODO Auto-generated method stub
+
+    }
 }

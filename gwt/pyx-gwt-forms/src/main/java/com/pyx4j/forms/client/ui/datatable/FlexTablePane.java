@@ -393,7 +393,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     @Override
-    public void onTableModelChanged(DataTableModelEvent e) {
+    public void onDataTableModelChanged(DataTableModelEvent e) {
         if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
             renderTable();
         } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
