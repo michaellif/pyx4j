@@ -2,6 +2,7 @@ package com.pyx4j.site.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -119,7 +120,7 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
 
     protected abstract void onClickOk();
 
-    protected Set<E> getSelectedItems() {
+    protected Collection<E> getSelectedItems() {
         return lister.getSelectedItems();
     }
 

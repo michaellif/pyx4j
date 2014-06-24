@@ -21,10 +21,10 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -43,7 +43,7 @@ public class DataTableModel<E extends IEntity> {
 
     private final ArrayList<DataItem<E>> data = new ArrayList<DataItem<E>>();
 
-    private final HashSet<DataItem<E>> selected = new HashSet<DataItem<E>>();
+    private final Collection<DataItem<E>> selected = new HashSet<DataItem<E>>();
 
     private boolean multipleSelection = false;
 
@@ -285,7 +285,7 @@ public class DataTableModel<E extends IEntity> {
         fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
     }
 
-    public Set<DataItem<E>> getSelectedRows() {
+    public Collection<DataItem<E>> getSelectedRows() {
         return selected;
     }
 

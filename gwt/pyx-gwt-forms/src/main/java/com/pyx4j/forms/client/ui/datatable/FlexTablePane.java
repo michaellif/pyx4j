@@ -53,7 +53,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.gwt.commons.BrowserType;
 
-public class FlexTablePane<E extends IEntity> implements ITablePane {
+public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
     private static final Logger log = LoggerFactory.getLogger(FlexTablePane.class);
 

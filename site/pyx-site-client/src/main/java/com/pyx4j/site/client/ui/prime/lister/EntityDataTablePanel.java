@@ -22,8 +22,8 @@ package com.pyx4j.site.client.ui.prime.lister;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,7 +232,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     protected void onItemNew() {
     }
 
-    protected void onItemsDelete(Set<E> items) {
+    protected void onItemsDelete(Collection<E> items) {
     }
 
     public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
@@ -283,7 +283,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel.getDataTable().setMultipleSelection(multipleSelection);
     }
 
-    public Set<E> getSelectedItems() {
+    public Collection<E> getSelectedItems() {
         return dataTablePanel.getDataTable().getSelectedItems();
     }
 

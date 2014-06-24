@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class DataTable<E extends IEntity> implements IsWidget, DataTableModelListener {
 
-    private FlexTablePane<E> tablePanel;
+    private ITablePane<E> tablePanel;
 
     private DataTableModel<E> model;
 
@@ -96,7 +97,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     }
 
     public E getSelectedItem() {
-        Set<E> selectedItems = getSelectedItems();
+        Collection<E> selectedItems = getSelectedItems();
         if (selectedItems.size() == 1) {
             return selectedItems.iterator().next();
         } else {
@@ -104,7 +105,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         }
     }
 
-    public Set<E> getSelectedItems() {
+    public Collection<E> getSelectedItems() {
         HashSet<E> checked = new HashSet<E>();
         for (DataItem<E> dataItem : model.getSelectedRows()) {
             checked.add(dataItem.getEntity());

@@ -20,8 +20,41 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Widget;
 
-public class ResponsiveTablePane extends FlexTable implements ITablePane {
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+
+public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
+
+    @Override
+    public Widget asWidget() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void renderTable() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void markSelected() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isItemZoomInAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }

@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -125,7 +124,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         return lister;
     }
 
-    protected Set<E> getSelectedItems() {
+    protected Collection<E> getSelectedItems() {
         return lister.getSelectedItems();
     }
 
