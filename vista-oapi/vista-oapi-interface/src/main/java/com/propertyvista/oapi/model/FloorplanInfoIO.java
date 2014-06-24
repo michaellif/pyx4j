@@ -7,23 +7,38 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 28, 2011
- * @author dmitry
+ * Created on Jun 24, 2014
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.oapi.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.propertyvista.oapi.xml.AbstractElementIO;
+import com.propertyvista.oapi.xml.BigDecimalIO;
+import com.propertyvista.oapi.xml.IntegerIO;
+import com.propertyvista.oapi.xml.LogicalDateIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MediaImageIO extends AbstractElementIO {
+@XmlRootElement(name = "floorplanInfo")
+public class FloorplanInfoIO extends AbstractElementIO {
 
-    public StringIO caption;
+    public StringIO marketingName;
 
-    public StringIO mimeType;
+    public StringIO description;
 
-    public String accessUrl;
+    public IntegerIO bedrooms;
 
-    // file conversion not implemented
-    public StringIO fileId;
+    public IntegerIO dens;
+
+    public IntegerIO bathrooms;
+
+    public IntegerIO halfBath;
+
+    public BigDecimalIO rentFrom;
+
+    public IntegerIO sqftFrom;
+
+    public LogicalDateIO availableFrom;
 }

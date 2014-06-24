@@ -36,22 +36,31 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.oapi.marshaling.BuildingInfoMarshaller;
 import com.propertyvista.oapi.marshaling.BuildingMarshaller;
+import com.propertyvista.oapi.marshaling.FloorplanInfoMarshaller;
 import com.propertyvista.oapi.marshaling.FloorplanMarshaller;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
+import com.propertyvista.oapi.service.marketing.model.FloorplanList;
+import com.propertyvista.oapi.service.marketing.model.FloorplanList.FloorplanListItem;
+import com.propertyvista.oapi.service.marketing.model.PropertyList;
+import com.propertyvista.oapi.service.marketing.model.PropertyList.PropertyListItem;
 import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.server.common.util.PropertyFinder;
 
 public class PropertyMarketingProcessor {
 
-    public List<BuildingIO> getPropertyList(WSPropertySearchCriteria criteria) {
-        List<BuildingIO> result = new ArrayList<>();
+    public PropertyList getPropertyList(WSPropertySearchCriteria criteria) {
+        PropertyList result = new PropertyList();
         for (Building building : PropertyFinder.getPropertyList(criteria.getDbCriteria())) {
-            result.add(BuildingMarshaller.getInstance().marshal(building));
+            PropertyListItem item = new PropertyListItem();
+            item.propertyId = building.propertyCode().getValue();
+            item.propertyInfo = BuildingInfoMarshaller.getInstance().marshal(building.info());
+            result.items.add(item);
         }
         return result;
     }
@@ -60,12 +69,15 @@ public class PropertyMarketingProcessor {
         return BuildingMarshaller.getInstance().marshal(PropertyFinder.getBuildingDetails(propertyId));
     }
 
-    public List<FloorplanIO> getFloorplanList(String propertyId) {
-        List<FloorplanIO> result = new ArrayList<>();
+    public FloorplanList getFloorplanList(String propertyId) {
+        FloorplanList result = new FloorplanList();
         Building building = PropertyFinder.getBuildingDetails(propertyId);
         if (building != null) {
             for (Floorplan fp : PropertyFinder.getBuildingFloorplans(building).keySet()) {
-                result.add(FloorplanMarshaller.getInstance().marshal(fp));
+                FloorplanListItem item = new FloorplanListItem();
+                item.floorplanId = fp.name().getValue();
+                item.floorplanInfo = FloorplanInfoMarshaller.getInstance().marshal(fp);
+                result.items.add(item);
             }
         }
         return result;

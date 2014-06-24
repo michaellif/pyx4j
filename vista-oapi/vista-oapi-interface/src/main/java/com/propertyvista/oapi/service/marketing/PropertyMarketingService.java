@@ -21,6 +21,8 @@ import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
+import com.propertyvista.oapi.service.marketing.model.FloorplanList;
+import com.propertyvista.oapi.service.marketing.model.PropertyList;
 import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 
 /*
@@ -29,11 +31,11 @@ import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
  */
 public interface PropertyMarketingService {
 
-    List<BuildingIO> getPropertyList(WSPropertySearchCriteria criteria);
+    PropertyList getPropertyList(WSPropertySearchCriteria criteria);
 
     BuildingIO getPropertyInfo(String propertyId);
 
-    List<FloorplanIO> getFloorplanList(String propertyId);
+    FloorplanList getFloorplanList(String propertyId);
 
     FloorplanIO getFloorplanInfo(String propertyId, String fpId);
 

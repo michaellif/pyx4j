@@ -30,6 +30,8 @@ import com.propertyvista.oapi.service.marketing.PropertyMarketingProcessor;
 import com.propertyvista.oapi.service.marketing.PropertyMarketingService;
 import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
+import com.propertyvista.oapi.service.marketing.model.FloorplanList;
+import com.propertyvista.oapi.service.marketing.model.PropertyList;
 import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 
 @WebService
@@ -37,7 +39,7 @@ import com.propertyvista.oapi.service.marketing.model.WSPropertySearchCriteria;
 public class WSPropertyMarketingImpl implements PropertyMarketingService {
 
     @Override
-    public List<BuildingIO> getPropertyList(@WebParam(name = "criteria") WSPropertySearchCriteria criteria) {
+    public PropertyList getPropertyList(@WebParam(name = "criteria") WSPropertySearchCriteria criteria) {
         return new PropertyMarketingProcessor().getPropertyList(criteria);
     }
 
@@ -47,7 +49,7 @@ public class WSPropertyMarketingImpl implements PropertyMarketingService {
     }
 
     @Override
-    public List<FloorplanIO> getFloorplanList(@WebParam(name = "propertyId") String propertyId) {
+    public FloorplanList getFloorplanList(@WebParam(name = "propertyId") String propertyId) {
         return new PropertyMarketingProcessor().getFloorplanList(propertyId);
     }
 

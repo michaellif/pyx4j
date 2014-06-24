@@ -18,9 +18,14 @@ import java.util.List;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.media.ThumbnailSize;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.oapi.model.MediaImageIO;
 import com.propertyvista.oapi.xml.StringIO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.portal.ImageConsts;
 
 public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
 
@@ -42,7 +47,7 @@ public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
         }
         MediaImageIO mediaIO = new MediaImageIO();
         mediaIO.caption = MarshallerUtils.createIo(StringIO.class, media.caption());
-        // TODO - need access to MediaUtils - mediaIO.accessUrl = new StringIO(MediaUtils.createMediaImageUrl(media));
+        mediaIO.accessUrl = getMediaImgUrl(media);
         return mediaIO;
     }
 
@@ -70,4 +75,15 @@ public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
         }
         return medias;
     }
+
+    private String getMediaImgUrl(MediaFile media) {
+        return getSiteHomeUrl() + DeploymentConsts.mediaImagesServletMapping + media.id().getStringView() + "/" + ThumbnailSize.large.name() + "."
+                + ImageConsts.THUMBNAIL_TYPE;
+    }
+
+    private String getSiteHomeUrl() {
+        String homeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.site, false);
+        return homeUrl + (homeUrl.endsWith("/") ? "" : "/");
+    }
+
 }
