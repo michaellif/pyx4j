@@ -26,30 +26,50 @@ import com.pyx4j.security.shared.ActionPermission;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class VistaCrmLeasesAccessControlList extends UIAclBuilder {
 
     VistaCrmLeasesAccessControlList() {
 
-        // TODO move ? to proper secion in this file
+        // Actions:
+        // TODO move ? to proper section in this file
         grant(LeasesBasic, new ActionPermission(SendMail.class));
         grant(LeasesAdvance, new ActionPermission(SendMail.class));
         grant(LeasesFull, new ActionPermission(SendMail.class));
 
-        //------ Lease itself:
+        grant(LeasesAdvance, new ActionPermission(LeaseAgreementSigning.class));
+        grant(LeasesFull, new ActionPermission(LeaseAgreementSigning.class));
+
+        // Lease itself:
         grant(LeasesBasic, LeaseDTO.class, READ);
         grant(LeasesAdvance, LeaseDTO.class, READ);
         grant(LeasesFull, LeaseDTO.class, ALL);
-        //------ LeaseTerm:
+        // LeaseTerm:
         grant(LeasesBasic, LeaseTermDTO.class, READ);
         grant(LeasesAdvance, LeaseTermDTO.class, READ);
         grant(LeasesFull, LeaseTermDTO.class, ALL);
 
-        //------ Payment:
+        // LegalLetter
+        grant(LeasesAdvance, LegalLetter.class, READ);
+        grant(LeasesFull, LegalLetter.class, ALL);
+
+        // LeaseLegalStateDTO
+        grant(LeasesAdvance, LeaseLegalStateDTO.class, READ);
+        grant(LeasesFull, LeaseLegalStateDTO.class, ALL);
+
+        // TransactionHistoryDTO
+        grant(LeasesAdvance, TransactionHistoryDTO.class, READ);
+        grant(LeasesFull, TransactionHistoryDTO.class, READ);
+
+        // Payment:
         grant(LeasesBasic, PaymentRecordDTO.class, READ);
         grant(LeasesBasic, PreauthorizedPaymentsDTO.class, READ);
         grant(LeasesBasic, AutoPayHistoryDTO.class, READ);

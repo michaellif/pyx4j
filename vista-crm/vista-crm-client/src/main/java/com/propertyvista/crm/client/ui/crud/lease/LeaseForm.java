@@ -27,6 +27,7 @@ import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYar
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -64,8 +65,9 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.check(VistaCrmBehavior.Billing_OLD));
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
-        setTabVisible(financialTab, !getValue().status().getValue().isDraft());
-
+        setTabVisible(financialTab,
+                !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(TransactionHistoryDTO.class)));
+        setTabVisible(communicationTab, SecurityController.check(DataModelPermission.permissionRead(LegalLetter.class)));
         setTabVisible(maintenanceTab, SecurityController.check(DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
 
         if (VistaFeatures.instance().yardiIntegration()) {

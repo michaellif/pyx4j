@@ -71,6 +71,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.domain.communication.EmailTemplateType;
@@ -85,6 +86,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -157,7 +159,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         // Buttons:
 
-        leaseAgreementButton = new Button(i18n.tr("Lease Agreement"));
+        leaseAgreementButton = new Button(i18n.tr("Lease Agreement"), new ActionPermission(LeaseAgreementSigning.class));
         ButtonMenuBar leaseAgreementDocumentMenu = new ButtonMenuBar();
 
         leaseAgreementDocumentMenu.addItem(new MenuItem(i18n.tr("Signing Progress/Upload..."), new Command() {
@@ -188,12 +190,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         }));
 
-        addView(new MenuItem(i18n.tr("View Legal State"), new Command() {
+        addView(new SecureMenuItem(i18n.tr("View Legal State"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).legalState();
             }
-        }));
+        }, DataModelPermission.permissionRead(LeaseLegalStateDTO.class)));
 
         addView(new SecureMenuItem(i18n.tr("View Deleted AutoPays"), new Command() {
             @Override
