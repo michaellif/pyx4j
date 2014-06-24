@@ -24,7 +24,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.CCheckBox.Alignment;
 import com.pyx4j.widgets.client.CheckBox;
 
 public class NCheckBox extends NFocusField<Boolean, CheckBox, CCheckBox, HTML> implements INativeFocusField<Boolean> {

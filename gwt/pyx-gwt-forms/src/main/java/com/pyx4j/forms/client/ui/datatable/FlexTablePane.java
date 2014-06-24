@@ -40,13 +40,11 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.GWTJava5Helper;
@@ -54,7 +52,6 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.gwt.commons.BrowserType;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class FlexTablePane<E extends IEntity> implements ITablePane {
 
@@ -115,7 +112,15 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
     private void processHeaderClick(int column) {
         if (dataTable.hasColumnClickSorting()) {
             ColumnDescriptor columnDescriptor = dataTable.getDataTableModel().getVisibleColumnDescriptor(column);
-            dataTable.selectSortColumn(columnDescriptor);
+            DataTableModel<E> model = dataTable.getDataTableModel();
+            if (columnDescriptor.isSortable()) {
+                if (columnDescriptor.equals(model.getSortColumn())) {
+                    model.setSortAscending(!model.isSortAscending());
+                } else {
+                    model.setSortColumn(columnDescriptor);
+                }
+                dataTable.onSortColumnChanged();
+            }
         }
     }
 
@@ -348,61 +353,11 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
         selector.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ColumnSelectorDialog().show();
+                dataTable.showColumnSelectorDialog();
             }
         });
 
         return selector;
-    }
-
-    private class ColumnSelectorDialog extends OkCancelDialog {
-
-        private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
-
-        public ColumnSelectorDialog() {
-            super("Select Columns");
-
-            setDialogPixelWidth(300);
-            FlowPanel panel = new FlowPanel();
-            for (ColumnDescriptor column : dataTable.getDataTableModel().getColumnDescriptors()) {
-                if (!column.isSearchableOnly()) {
-                    CheckBox columnCheck = new CheckBox(column.getColumnTitle());
-                    columnCheck.setValue(column.isVisible());
-                    columnChecksList.add(columnCheck);
-                    panel.add(columnCheck);
-                    panel.add(new HTML());
-                }
-            }
-
-            ScrollPanel scroll = new ScrollPanel(panel);
-            scroll.setHeight("200px");
-            scroll.setStyleName(DataTableTheme.StyleName.DataTableColumnMenu.name());
-
-            setBody(scroll.asWidget());
-        }
-
-        @Override
-        public boolean onClickOk() {
-            boolean hasChanged = false;
-            int checksListIdx = 0;
-            for (ColumnDescriptor column : dataTable.getDataTableModel().getColumnDescriptors()) {
-                if (!column.isSearchableOnly()) {
-                    boolean requestedVisible = columnChecksList.get(checksListIdx).getValue();
-                    if (column.isVisible() != requestedVisible) {
-                        column.setVisible(requestedVisible);
-                        hasChanged = true;
-                    }
-                    checksListIdx++;
-                }
-            }
-
-            if (hasChanged) {
-                renderTable();
-                dataTable.onColumnSelectionChanged();
-            }
-
-            return true;
-        }
     }
 
     public void releaseCheckedItems() {

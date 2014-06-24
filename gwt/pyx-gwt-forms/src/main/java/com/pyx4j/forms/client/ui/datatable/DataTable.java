@@ -25,10 +25,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class DataTable<E extends IEntity> implements IsWidget, DataTableModelListener {
 
@@ -37,8 +42,6 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     private DataTableModel<E> model;
 
     private boolean hasColumnClickSorting = false;
-
-    private final boolean markSelectedRow = true;
 
     private boolean columnSelectorVisible = true;
 
@@ -193,7 +196,6 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
             tablePanel.markSelected();
             onRowSelectionChanged();
         }
-
     }
 
     public void updateColumnVizibility(int offsetWidth, boolean reduceColumns) {
@@ -213,23 +215,16 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         void onChange();
     }
 
-    public void selectSortColumn(ColumnDescriptor columnDescriptor) {
-        if (columnDescriptor.isSortable()) {
-            if (columnDescriptor.equals(getDataTableModel().getSortColumn())) {
-                getDataTableModel().setSortAscending(!getDataTableModel().isSortAscending());
-            } else {
-                getDataTableModel().setSortColumn(columnDescriptor);
-            }
-            // notify listeners:
-            if (sortChangeHandlers != null) {
-                for (SortChangeHandler<?> handler : sortChangeHandlers) {
-                    handler.onChange();
-                }
+    public void onSortColumnChanged() {
+        // notify listeners:
+        if (sortChangeHandlers != null) {
+            for (SortChangeHandler<?> handler : sortChangeHandlers) {
+                handler.onChange();
             }
         }
     }
 
-    void onColumnSelectionChanged() {
+    private void onColumnSelectionChanged() {
         if (columnSelectionHandlers != null) {
             for (ColumnSelectionHandler handler : columnSelectionHandlers) {
                 handler.onChange();
@@ -238,7 +233,6 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     }
 
     private void onRowSelectionChanged() {
-        // notify listeners:
         if (itemSelectionHandlers != null) {
             for (ItemSelectionHandler handler : itemSelectionHandlers) {
                 handler.onChange();
@@ -247,4 +241,57 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     }
 
+    protected void showColumnSelectorDialog() {
+        new ColumnSelectorDialog().show();
+    }
+
+    private class ColumnSelectorDialog extends OkCancelDialog {
+
+        private final List<CheckBox> columnChecksList = new ArrayList<CheckBox>();
+
+        public ColumnSelectorDialog() {
+            super("Select Columns");
+
+            setDialogPixelWidth(300);
+            FlowPanel panel = new FlowPanel();
+            for (ColumnDescriptor column : getDataTableModel().getColumnDescriptors()) {
+                if (!column.isSearchableOnly()) {
+                    CheckBox columnCheck = new CheckBox(column.getColumnTitle());
+                    columnCheck.setValue(column.isVisible());
+                    columnChecksList.add(columnCheck);
+                    panel.add(columnCheck);
+                    panel.add(new HTML());
+                }
+            }
+
+            ScrollPanel scroll = new ScrollPanel(panel);
+            scroll.setHeight("200px");
+            scroll.setStyleName(DataTableTheme.StyleName.DataTableColumnMenu.name());
+
+            setBody(scroll.asWidget());
+        }
+
+        @Override
+        public boolean onClickOk() {
+            boolean hasChanged = false;
+            int checksListIdx = 0;
+            for (ColumnDescriptor column : getDataTableModel().getColumnDescriptors()) {
+                if (!column.isSearchableOnly()) {
+                    boolean requestedVisible = columnChecksList.get(checksListIdx).getValue();
+                    if (column.isVisible() != requestedVisible) {
+                        column.setVisible(requestedVisible);
+                        hasChanged = true;
+                    }
+                    checksListIdx++;
+                }
+            }
+
+            if (hasChanged) {
+                tablePanel.renderTable();
+                onColumnSelectionChanged();
+            }
+
+            return true;
+        }
+    }
 }

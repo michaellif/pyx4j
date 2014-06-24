@@ -22,8 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
+import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NTextBox<E>> {

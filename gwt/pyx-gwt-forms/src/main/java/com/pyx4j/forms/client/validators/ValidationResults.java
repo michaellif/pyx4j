@@ -23,9 +23,6 @@ package com.pyx4j.forms.client.validators;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.i18n.shared.I18n;
 
