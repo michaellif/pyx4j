@@ -29,7 +29,7 @@ public class VistaTODO {
      */
     public static boolean removedForProduction = true;
 
-    public static boolean removedForProductionOAPI = true;
+    public static boolean removedForProductionOAPI = false;
 
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!
