@@ -152,7 +152,7 @@ public class EntityImplReflectionHelper {
             try {
                 method = interfaceClass.getMethod(memberName, (Class[]) null);
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException("Unknown member " + memberName + " in " + interfaceClass.getName());
+                throw new RuntimeException("Unknown member '" + memberName + "' in " + interfaceClass.getName());
             }
             methodInfo = new MethodInfo();
             methodInfo.klass = method.getReturnType();
@@ -189,7 +189,7 @@ public class EntityImplReflectionHelper {
         } else if (IPrimitiveSet.class.equals(methodInfo.klass)) {
             return implHandler.lazyCreateMemberIPrimitiveSet(memberName, (Class<IEntity>) methodInfo.valueCalss);
         } else {
-            throw new RuntimeException("Unknown member " + memberName + " type " + methodInfo.klass);
+            throw new RuntimeException("Unknown member '" + memberName + "' type " + methodInfo.klass);
         }
     }
 }
