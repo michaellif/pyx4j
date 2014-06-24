@@ -16,16 +16,17 @@ package com.propertyvista.oapi.service.marketing.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.model.FloorplanInfoIO;
 
 @XmlRootElement
 public class FloorplanList {
-    @XmlElement(name = "floorplanListItem")
+    @XmlElementRef
     public List<FloorplanListItem> items = new ArrayList<>();
 
+    @XmlRootElement
     public static class FloorplanListItem {
         public String floorplanId;
 

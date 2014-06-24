@@ -6,7 +6,7 @@
       name="PropertyService"
       implementation="com.propertyvista.oapi.ws.WSPropertyServiceImpl"
       url-pattern="/interfaces/oapi/ws/WSPropertyService"/>
-<endpoint
+  <endpoint
       name="ScreeningService"
       interface="com.yardi.ws.WSScreeningService"
       implementation="com.propertyvista.yardi.ws.WSScreeningServiceImpl"
@@ -14,4 +14,9 @@
       service="{http://propertyvista.com/interfaces/ws/ApplicantScreening}ScreeningService"
       port="{http://propertyvista.com/interfaces/ws/ApplicantScreening}WSScreeningService"
       url-pattern="/interfaces/ws/ApplicantScreening"/>
+  <endpoint
+      name="WSPropertyMarketing"
+      implementation="com.propertyvista.oapi.service.marketing.ws.WSPropertyMarketingImpl"
+      url-pattern="/interfaces/oapi/ws/WSPropertyMarketing"/>
+      
 </endpoints>

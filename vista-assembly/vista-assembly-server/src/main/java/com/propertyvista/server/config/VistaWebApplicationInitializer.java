@@ -47,6 +47,7 @@ import com.propertyvista.ils.ILSAuthFilter;
 import com.propertyvista.ils.kijiji.rs.KijijiApiRsApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.oapi.rs.OpenApiRsApplication;
+import com.propertyvista.oapi.service.marketing.rs.OapiRsApplication;
 import com.propertyvista.operations.server.services.VistaConfigInfoServlet;
 import com.propertyvista.operations.server.services.simulator.CardServiceSimulationServlet;
 import com.propertyvista.operations.server.servlet.VistaStackTraceViewServlet;
@@ -177,7 +178,11 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 {
                     ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
                     sc.addMapping("/interfaces/oapi/rs/*");
-                    sc.setInitParameter("javax.ws.rs.Application", OpenApiRsApplication.class.getName());
+                    if (false) {
+                        sc.setInitParameter("javax.ws.rs.Application", OpenApiRsApplication.class.getName());
+                    } else {
+                        sc.setInitParameter("javax.ws.rs.Application", OapiRsApplication.class.getName());
+                    }
                 }
             }
 

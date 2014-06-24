@@ -16,16 +16,17 @@ package com.propertyvista.oapi.service.marketing.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.propertyvista.oapi.model.BuildingInfoIO;
 
 @XmlRootElement
 public class PropertyList {
-    @XmlElement(name = "propertyListItem")
+    @XmlElementRef
     public List<PropertyListItem> items = new ArrayList<>();
 
+    @XmlRootElement
     public static class PropertyListItem {
         public String propertyId;
 
