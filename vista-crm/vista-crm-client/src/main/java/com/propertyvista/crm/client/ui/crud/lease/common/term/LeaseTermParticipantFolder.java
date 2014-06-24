@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -152,15 +153,16 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         }
 
         protected Widget createBody() {
-            VerticalPanel content = new VerticalPanel();
-            content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            content.setSpacing(5);
-
-            content.add(new Label(getAddItemDialogSelectionText()));
-            content.add(selection.asWidget());
-            selection.asWidget().getElement().getStyle().setMarginLeft(75, Unit.PX);
-
+            FlowPanel content = new FlowPanel();
             content.setWidth("100%");
+
+            Label label = new Label(getAddItemDialogSelectionText());
+            content.add(label);
+            label.getElement().getStyle().setProperty("padding", "20px 20px 0");
+
+            content.add(selection);
+            selection.asWidget().getElement().getStyle().setProperty("padding", "20px");
+
             return content.asWidget();
         }
 
