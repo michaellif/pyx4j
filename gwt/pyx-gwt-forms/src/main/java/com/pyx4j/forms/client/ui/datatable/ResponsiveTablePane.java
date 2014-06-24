@@ -46,15 +46,21 @@ public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     @Override
-    public void updateSelectionStyle() {
+    public boolean isItemZoomInAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void onTableModelChanged(DataTableModelEvent e) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public boolean isItemZoomInAvailable() {
+    public void setDataTableModel(DataTableModel<E> model) {
         // TODO Auto-generated method stub
-        return false;
+
     }
 
 }

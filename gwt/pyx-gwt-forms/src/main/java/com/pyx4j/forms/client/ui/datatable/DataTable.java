@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -36,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public class DataTable<E extends IEntity> implements IsWidget, DataTableModelListener {
+public class DataTable<E extends IEntity> implements IsWidget {
 
     private ITablePane<E> tablePanel;
 
@@ -82,14 +81,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 // Data manipulation:
 
     public void setDataTableModel(DataTableModel<E> model) {
-        if (this.model != null) {
-            this.model.removeDataTableModelListener(this);
-        }
-        this.model = model;
-        model.addDataTableModelListener(this);
-        if (model.getColumnDescriptors() != null) {
-            tablePanel.renderTable();
-        }
+        tablePanel.setDataTableModel(model);
     }
 
     public DataTableModel<E> getDataTableModel() {
@@ -189,21 +181,11 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 // Internals:
 //
 
-    @Override
-    public void onTableModelChanged(DataTableModelEvent e) {
-        if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
-            tablePanel.renderTable();
-        } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
-            tablePanel.updateSelectionStyle();
-            onRowSelectionChanged();
-        }
-    }
-
     public void updateColumnVizibility(int offsetWidth, boolean reduceColumns) {
 
     }
 
-    public void onSortColumnChanged() {
+    void onSortColumnChanged() {
         if (sortChangeHandlers != null) {
             for (SortChangeHandler<?> handler : sortChangeHandlers) {
                 handler.onChange();
@@ -211,7 +193,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         }
     }
 
-    private void onColumnSelectionChanged() {
+    void onColumnSelectionChanged() {
         if (columnSelectionHandlers != null) {
             for (ColumnSelectionHandler handler : columnSelectionHandlers) {
                 handler.onChange();
@@ -219,7 +201,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         }
     }
 
-    private void onRowSelectionChanged() {
+    void onRowSelectionChanged() {
         if (itemSelectionHandlers != null) {
             for (ItemSelectionHandler handler : itemSelectionHandlers) {
                 handler.onChange();

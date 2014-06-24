@@ -25,13 +25,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 
-public interface ITablePane<E extends IEntity> extends IsWidget {
+public interface ITablePane<E extends IEntity> extends IsWidget, DataTableModelListener {
 
     void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand);
 
     void renderTable();
 
-    void updateSelectionStyle();
-
     boolean isItemZoomInAvailable();
+
+    void setDataTableModel(DataTableModel<E> model);
 }
