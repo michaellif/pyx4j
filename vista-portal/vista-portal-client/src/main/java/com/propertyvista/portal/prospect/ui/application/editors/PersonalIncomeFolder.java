@@ -45,8 +45,12 @@ public class PersonalIncomeFolder extends PortalBoxFolder<CustomerScreeningIncom
         this(true);
     }
 
-    public PersonalIncomeFolder(boolean modifiable) {
-        super(CustomerScreeningIncome.class, i18n.tr("Personal Income"), modifiable);
+    public PersonalIncomeFolder(boolean editable) {
+        super(CustomerScreeningIncome.class, i18n.tr("Personal Income"), editable);
+
+        if (editable) {
+            setNoDataLabel(i18n.tr("Please enter your source(s) of income if present"));
+        }
     }
 
     public void setDocumentsPolicy(ApplicationDocumentationPolicy policy) {

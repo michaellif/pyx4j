@@ -30,7 +30,6 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
 import com.propertyvista.portal.shared.ui.PortalFormPanel;
 import com.propertyvista.portal.shared.ui.util.PortalBoxFolder;
-import com.propertyvista.portal.shared.ui.util.decorators.FieldDecoratorBuilder;
 
 public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPersonalAsset> {
 
@@ -40,8 +39,12 @@ public class PersonalAssetFolder extends PortalBoxFolder<CustomerScreeningPerson
         this(true);
     }
 
-    public PersonalAssetFolder(boolean modifiable) {
-        super(CustomerScreeningPersonalAsset.class, i18n.tr("Personal Asset"), modifiable);
+    public PersonalAssetFolder(boolean editable) {
+        super(CustomerScreeningPersonalAsset.class, i18n.tr("Personal Asset"), editable);
+
+        if (editable) {
+            setNoDataLabel(i18n.tr("Please enter your asset(s) if present"));
+        }
     }
 
     @Override
