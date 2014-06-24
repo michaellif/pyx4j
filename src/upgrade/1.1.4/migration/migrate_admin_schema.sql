@@ -83,6 +83,13 @@ SET search_path = '_admin_';
         
         ALTER TABLE dev_equifax_simulator_config ADD COLUMN force_result_risk_code VARCHAR(500);
         
+        
+        -- operations_alert
+        
+        ALTER TABLE operations_alert RENAME COLUMN handled TO resolved;
+        ALTER TABLE operations_alert ADD COLUMN operations_notes VARCHAR(500);
+        
+        
         -- outgoing_mail_queue
         
         ALTER TABLE outgoing_mail_queue ADD COLUMN priority INT;
