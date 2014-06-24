@@ -33,4 +33,6 @@ public @interface ImportColumn {
 
     String[] names() default {};
 
+    String format() default "";
+
 }

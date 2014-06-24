@@ -533,13 +533,23 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             if ("".equals(value)) {
                 return null;
             } else {
-                return new LogicalDate(DateUtils.detectDateformat(value));
+                ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
+                if ((importColumn == null) || CommonsStringUtils.isEmpty(importColumn.format())) {
+                    return new LogicalDate(DateUtils.detectDateformat(value));
+                } else {
+                    return new LogicalDate(parseAndValidate(value, importColumn.format()));
+                }
             }
         } else if (valueClass.isAssignableFrom(Date.class)) {
             if ("".equals(value)) {
                 return null;
             } else {
-                return DateUtils.detectDateformat(value);
+                ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
+                if ((importColumn == null) || CommonsStringUtils.isEmpty(importColumn.format())) {
+                    return DateUtils.detectDateformat(value);
+                } else {
+                    return parseAndValidate(value, importColumn.format());
+                }
             }
         } else if (Number.class.isAssignableFrom(valueClass)) {
             if ("".equals(value)) {
@@ -551,6 +561,21 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         } else {
             return PrimitiveHandler.parsString(valueClass, value);
         }
+    }
+
+    protected Date parseAndValidate(String value, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        format.setLenient(false);
+        Date dateObj;
+        try {
+            dateObj = format.parse(value);
+        } catch (ParseException e) {
+            throw new RuntimeException("undetected date format [" + value + "]");
+        }
+        if (!value.equals(format.format(dateObj))) {
+            throw new RuntimeException("Date value [" + value + "] does not match pattern [" + pattern + "]");
+        }
+        return dateObj;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
