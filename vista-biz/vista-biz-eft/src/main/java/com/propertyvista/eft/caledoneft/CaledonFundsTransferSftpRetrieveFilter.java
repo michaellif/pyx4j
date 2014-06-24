@@ -15,20 +15,18 @@ package com.propertyvista.eft.caledoneft;
 
 import java.io.File;
 
+import com.propertyvista.eft.AbstractSftpRetrieveFilter;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
-import com.propertyvista.server.sftp.SftpRetrieveFilter;
 
-public class CaledonFundsTransferSftpRetrieveFilter implements SftpRetrieveFilter<CaledonFundsTransferSftpFile> {
-
-    private final File targetDirectory;
+public class CaledonFundsTransferSftpRetrieveFilter extends AbstractSftpRetrieveFilter<CaledonFundsTransferSftpFile> {
 
     private final String companyId;
 
     private final CaledonFundsTransferFileType fileType;
 
     public CaledonFundsTransferSftpRetrieveFilter(File targetDirectory, String companyId, CaledonFundsTransferFileType fileType) {
-        this.targetDirectory = targetDirectory;
+        super(targetDirectory);
         this.companyId = companyId;
         this.fileType = fileType;
     }
@@ -53,17 +51,15 @@ public class CaledonFundsTransferSftpRetrieveFilter implements SftpRetrieveFilte
             return null;
         }
 
-        File dst = new File(targetDirectory, fileName);
-        File dst2 = new File(new File(targetDirectory, "processed"), fileName);
-        if ((dst.exists()) || (dst2.exists())) {
+        if (existsLoadedOrProcessed(fileName)) {
             return null;
-        } else {
-            CaledonFundsTransferSftpFile sftpFile = new CaledonFundsTransferSftpFile();
-            sftpFile.fundsTransferType = CaledonFundsTransferDirectories.getFundsTransferTypeByDirectory(directoryName);
-            sftpFile.fileType = fileType;
-            sftpFile.localFile = dst;
-            return sftpFile;
         }
 
+        CaledonFundsTransferSftpFile sftpFile = new CaledonFundsTransferSftpFile();
+        sftpFile.fundsTransferType = CaledonFundsTransferDirectories.getFundsTransferTypeByDirectory(directoryName);
+        sftpFile.fileType = fileType;
+        sftpFile.localFile = new File(targetDirectory, fileName);
+        return sftpFile;
     }
+
 }

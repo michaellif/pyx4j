@@ -36,6 +36,11 @@ class CaledonFundsTransferConfigurationProdTest extends CaledonFundsTransferConf
     }
 
     @Override
+    public String getCardsReconciliationId() {
+        return config.getConfigProperties().getValue("fundsTransfer.cardsReconciliationId", getIntefaceCompanyId());
+    }
+
+    @Override
     public String sftpHost() {
         return config.getConfigProperties().getValue("fundsTransfer.sftpHost", "apato.caledoncard.com");
     }

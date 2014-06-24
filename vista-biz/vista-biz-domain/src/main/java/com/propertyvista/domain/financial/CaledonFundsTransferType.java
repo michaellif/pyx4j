@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.financial;
 
-
 public enum CaledonFundsTransferType {
 
     PreAuthorizedDebit("PAD", "pad"),
@@ -41,5 +40,18 @@ public enum CaledonFundsTransferType {
 
     public String getDirectoryName(String name) {
         return fileNamePart + "_" + name;
+    }
+
+    public FundsTransferType asFundsTransferType() {
+        switch (this) {
+        case PreAuthorizedDebit:
+            return FundsTransferType.PreAuthorizedDebit;
+        case DirectBankingPayment:
+            return FundsTransferType.DirectBankingPayment;
+        case InteracOnlinePayment:
+            return FundsTransferType.InteracOnlinePayment;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 }

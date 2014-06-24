@@ -13,13 +13,17 @@
  */
 package com.propertyvista.biz.system.eft;
 
+import java.util.Collection;
+
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
+import com.propertyvista.eft.caledoncards.reports.CardsReconciliationManager;
 import com.propertyvista.eft.caledoneft.CaledonFundsTransferManager;
 import com.propertyvista.eft.dbp.BmoManager;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 
 public class EFTTransportFacadeImpl implements EFTTransportFacade {
@@ -52,6 +56,16 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     @Override
     public void confirmReceivedBmoFile(String fileName, boolean protocolErrorFlag) {
         new BmoManager().confirmReceivedBmoFile(fileName, protocolErrorFlag);
+    }
+
+    @Override
+    public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
+        return new CardsReconciliationManager().receiveCardsReconciliationFiles(cardsReconciliationId);
+    }
+
+    @Override
+    public void confirmReceivedCardsReconciliationFiles(Collection<String> fileNames, boolean protocolErrorFlag) {
+        new CardsReconciliationManager().confirmReceivedCardsReconciliationFiles(fileNames, protocolErrorFlag);
     }
 
 }

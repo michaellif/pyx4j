@@ -82,7 +82,7 @@ abstract class AbstractReconciliationProcessor {
             at.status().setValue(AggregatedTransferStatus.Paid);
             break;
         }
-        at.fundsTransferType().setValue(summary.reconciliationFile().fundsTransferType().getValue());
+        at.fundsTransferType().setValue(summary.reconciliationFile().fundsTransferType().getValue().asFundsTransferType());
         at.paymentDate().setValue(summary.paymentDate().getValue());
         at.grossPaymentAmount().setValue(summary.grossPaymentAmount().getValue());
         at.grossPaymentFee().setValue(summary.grossPaymentFee().getValue());

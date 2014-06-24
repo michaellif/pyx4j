@@ -26,6 +26,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
@@ -53,7 +54,7 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
     protected void createRejectedAggregatedTransfer(FundsTransferBatch padBatch) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
-        at.fundsTransferType().setValue(CaledonFundsTransferType.DirectBankingPayment);
+        at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
         at.paymentDate().setValue(new LogicalDate(padBatch.padFile().created().getValue()));
         at.grossPaymentAmount().setValue(padBatch.batchAmount().getValue());
         at.grossPaymentCount().setValue(padBatch.records().size());
@@ -74,7 +75,7 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
 
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
-        at.fundsTransferType().setValue(CaledonFundsTransferType.DirectBankingPayment);
+        at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
         at.paymentDate().setValue(new LogicalDate(padDebitRecord.padBatch().padFile().created().getValue()));
         at.grossPaymentAmount().setValue(padDebitRecord.amount().getValue());
         at.grossPaymentCount().setValue(1);

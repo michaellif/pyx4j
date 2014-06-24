@@ -40,6 +40,11 @@ class CaledonFundsTransferConfigurationSimulatorCustom extends CaledonFundsTrans
     }
 
     @Override
+    public String getCardsReconciliationId() {
+        return config.getConfigProperties().getValue("fundsTransfer.cardsReconciliationId", getIntefaceCompanyId());
+    }
+
+    @Override
     public String sftpHost() {
         return config.getConfigProperties().getValue("simulator.fundsTransfer.sftpHost", "qa.birchwoodsoftwaregroup.com");
     }

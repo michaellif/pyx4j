@@ -43,6 +43,10 @@ public interface PaymentProcessFacade {
 
     void processPmcDirectDebitReconciliation(ExecutionMonitor executionMonitor);
 
+    Integer receiveCardsReconciliation(ExecutionMonitor executionMonitor);
+
+    void processCardsReconciliation(ExecutionMonitor executionMonitor);
+
     void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate padGenerationDate);
 
     void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate);

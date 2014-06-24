@@ -13,14 +13,19 @@
  */
 package com.propertyvista.biz.system.eft;
 
+import java.util.Collection;
+
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 
 public interface EFTTransportFacade {
+
+    // CaledonEFT
 
     void sendFundsTransferFile(FundsTransferFile padFile) throws SftpTransportConnectionException, FileCreationException;
 
@@ -32,6 +37,14 @@ public interface EFTTransportFacade {
      * Remove the file from remote server directory in success.
      */
     void confirmReceivedFile(CaledonFundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
+
+    // CaledonCards
+
+    CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException;
+
+    void confirmReceivedCardsReconciliationFiles(Collection<String> fileNames, boolean protocolErrorFlag);
+
+    // BMO
 
     DirectDebitFile receiveBmoFile() throws SftpTransportConnectionException;
 

@@ -14,6 +14,8 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 
@@ -47,6 +49,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFileCreationNumber;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 
 public class FundsTransferCaledon {
 
@@ -362,6 +365,46 @@ public class FundsTransferCaledon {
         }
 
         return reconciliationFile.fundsTransferType().getValue();
+    }
+
+    public Integer receiveCardsReconciliation(final ExecutionMonitor executionMonitor) {
+        final CardsReconciliationTO reconciliationFile;
+        try {
+            reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receiveCardsReconciliationFiles(
+                    ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
+                            .getCardsReconciliationId());
+        } catch (SftpTransportConnectionException e) {
+            executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
+            return null;
+        }
+        if (reconciliationFile == null) {
+            executionMonitor.addInfoEvent("Pooled, No file found on server", null);
+            return null;
+        } else {
+            executionMonitor.addInfoEvent("received CardTotal file", reconciliationFile.fileNameCardTotal().getValue());
+            executionMonitor.addInfoEvent("received MerchantTotal file", reconciliationFile.fileNameMerchantTotal().getValue());
+        }
+
+        boolean processedOk = false;
+        try {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    new CardsReconciliationAcceptor(executionMonitor).validateAndPersistFile(reconciliationFile);
+                    return null;
+                }
+            });
+
+            processedOk = true;
+        } finally {
+            Collection<String> fileNames = new ArrayList<>();
+            fileNames.add(reconciliationFile.fileNameCardTotal().getValue());
+            fileNames.add(reconciliationFile.fileNameMerchantTotal().getValue());
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedCardsReconciliationFiles(fileNames, !processedOk);
+        }
+        return reconciliationFile.merchantTotals().size();
+
     }
 
 }

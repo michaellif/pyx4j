@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 29, 2013
+ * Created on Jun 24, 2014
  * @author vlads
  * @version $Id$
  */
@@ -16,35 +16,27 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
-import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
-import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
-public class PaymentsBmoReceiveProcess implements PmcProcess {
-
-    private Integer recordsReceived;
+public class PaymentsProcessCardsReconciliationProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        recordsReceived = ServerSideFactory.create(PaymentProcessFacade.class).receiveBmoFiles(context.getExecutionMonitor());
-        return recordsReceived != null;
+        return true;
     }
 
     @Override
     public boolean allowExecution(PmcVistaFeatures features) {
-        return false;
+        return true;
     }
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        throw new Error("this should not be called");
+        ServerSideFactory.create(PaymentProcessFacade.class).processCardsReconciliation(context.getExecutionMonitor());
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        if ((recordsReceived != null) && (recordsReceived > 0)) {
-            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcess);
-        }
     }
 
 }

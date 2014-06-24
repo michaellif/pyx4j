@@ -36,6 +36,11 @@ class CaledonFundsTransferConfigurationProd extends CaledonFundsTransferConfigur
     }
 
     @Override
+    public String getCardsReconciliationId() {
+        return config.getConfigProperties().getValue("fundsTransfer.cardsReconciliationId", "PROPERTYVISTA");
+    }
+
+    @Override
     public String sftpHost() {
         return config.getConfigProperties().getValue("fundsTransfer.sftpHost", "apato.caledoncard.com");
     }

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.eft.mock.efttransport;
 
+import java.util.Collection;
+
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.biz.system.eft.FileCreationException;
@@ -20,6 +22,7 @@ import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitFile;
 
 public class EFTTransportFacadeMock implements EFTTransportFacade {
@@ -49,6 +52,18 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     }
 
     @Override
+    public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void confirmReceivedCardsReconciliationFiles(Collection<String> fileNames, boolean protocolErrorFlag) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public DirectDebitFile receiveBmoFile() throws SftpTransportConnectionException {
         // TODO Auto-generated method stub
         return null;
@@ -58,4 +73,5 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     public void confirmReceivedBmoFile(String fileName, boolean protocolErrorFlag) {
 
     }
+
 }

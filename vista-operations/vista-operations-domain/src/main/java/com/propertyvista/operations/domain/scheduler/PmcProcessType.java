@@ -78,8 +78,8 @@ public enum PmcProcessType implements Serializable {
     @Translate("P 8A - Payments Receive Cards Reconciliation from Caledon")
     paymentsReceiveCardsReconciliation(PmcProcessOptions.GlobalOnly),
 
-    @Translate("P 8B - Payments Cards Process Reconciliation (auto triggered by paymentsReceiveCardsReconciliation)")
-    paymentsCardsProcessReconciliation,
+    @Translate("P 8B - Payments Process Cards Reconciliation (auto triggered by paymentsReceiveCardsReconciliation)")
+    paymentsProcessCardsReconciliation,
 
     paymentsTenantSure(PmcProcessOptions.RunForDay, PmcProcessOptions.RequiredDaily),
 

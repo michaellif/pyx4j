@@ -73,6 +73,16 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
+    public Integer receiveCardsReconciliation(ExecutionMonitor executionMonitor) {
+        return new FundsTransferCaledon().receiveCardsReconciliation(executionMonitor);
+    }
+
+    @Override
+    public void processCardsReconciliation(ExecutionMonitor executionMonitor) {
+        new CardsReconciliationProcessor(executionMonitor).processPmcReconciliation();
+    }
+
+    @Override
     public void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
         new AutopaytManager().createPreauthorisedPayments(executionMonitor, runDate);
     }

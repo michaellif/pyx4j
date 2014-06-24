@@ -79,6 +79,11 @@ public class PmcProcessFactory {
         case paymentsDbpProcessReconciliation:
             return new PaymentsFundsTransferProcessReconciliationProcess(CaledonFundsTransferType.DirectBankingPayment);
 
+        case paymentsReceiveCardsReconciliation:
+            return new PaymentsReceiveCardsReconciliationProcess();
+        case paymentsProcessCardsReconciliation:
+            return new PaymentsProcessCardsReconciliationProcess();
+
         case paymentsTenantSure:
             return new PaymentsTenantSureProcess();
 

@@ -64,7 +64,7 @@ public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
     MerchantAccount merchantAccount();
 
     @MemberColumn(notNull = true)
-    IPrimitive<CaledonFundsTransferType> fundsTransferType();
+    IPrimitive<FundsTransferType> fundsTransferType();
 
     IPrimitive<Key> padReconciliationSummaryKey();
 

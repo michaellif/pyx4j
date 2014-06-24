@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 29, 2013
+ * Created on Jun 24, 2014
  * @author vlads
  * @version $Id$
  */
@@ -20,13 +20,13 @@ import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
-public class PaymentsBmoReceiveProcess implements PmcProcess {
+public class PaymentsReceiveCardsReconciliationProcess implements PmcProcess {
 
     private Integer recordsReceived;
 
     @Override
     public boolean start(PmcProcessContext context) {
-        recordsReceived = ServerSideFactory.create(PaymentProcessFacade.class).receiveBmoFiles(context.getExecutionMonitor());
+        recordsReceived = ServerSideFactory.create(PaymentProcessFacade.class).receiveCardsReconciliation(context.getExecutionMonitor());
         return recordsReceived != null;
     }
 
@@ -43,8 +43,9 @@ public class PaymentsBmoReceiveProcess implements PmcProcess {
     @Override
     public void complete(PmcProcessContext context) {
         if ((recordsReceived != null) && (recordsReceived > 0)) {
-            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcess);
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsProcessCardsReconciliation);
         }
+
     }
 
 }

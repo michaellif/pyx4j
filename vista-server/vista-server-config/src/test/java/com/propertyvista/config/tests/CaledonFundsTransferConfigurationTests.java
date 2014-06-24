@@ -39,4 +39,9 @@ public class CaledonFundsTransferConfigurationTests extends CaledonFundsTransfer
         return "test";
     }
 
+    @Override
+    public String getCardsReconciliationId() {
+        return "test";
+    }
+
 }

@@ -7,23 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-03-01
+ * Created on Jun 24, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.domain.financial;
 
-public abstract class CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
-    public abstract String getIntefaceCompanyId();
+@I18n
+public enum FundsTransferType {
 
-    public abstract String getCardsReconciliationId();
+    PreAuthorizedDebit,
+
+    DirectBankingPayment,
+
+    InteracOnlinePayment,
+
+    Cards;
 
     @Override
     public String toString() {
-        StringBuilder b = new StringBuilder(super.toString());
-        b.append("IntefaceCompanyId                 : ").append(getIntefaceCompanyId()).append("\n");
-        b.append("CardsReconciliationId             : ").append(getCardsReconciliationId()).append("\n");
-        return b.toString();
+        return I18nEnum.toString(this);
     }
+
 }

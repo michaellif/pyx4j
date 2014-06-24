@@ -36,6 +36,11 @@ public class CaledonFundsTransferConfigurationSimulator extends CaledonFundsTran
     }
 
     @Override
+    public String getCardsReconciliationId() {
+        return getIntefaceCompanyId();
+    }
+
+    @Override
     public String sftpHost() {
         return "interfaces.dev.birchwoodsoftwaregroup.com";
     }

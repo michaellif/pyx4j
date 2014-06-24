@@ -7,40 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 29, 2013
+ * Created on Jun 24, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.eft.dbp;
+package com.propertyvista.eft.caledoncards.reports;
 
 import java.io.File;
 
 import com.propertyvista.eft.AbstractSftpRetrieveFilter;
 import com.propertyvista.server.sftp.SftpFile;
 
-public class BmoSftpRetrieveFilter extends AbstractSftpRetrieveFilter<SftpFile> {
+class CardsReconciliationCardTotalRetrieveFilter extends AbstractSftpRetrieveFilter<SftpFile> {
 
-    private final String bmoMailboxNumber;
+    private final String expectedFileName;
 
-    public BmoSftpRetrieveFilter(File targetDirectory, String bmoMailboxNumber) {
+    public CardsReconciliationCardTotalRetrieveFilter(File targetDirectory, String dailyconsolidatedtotalsFileName) {
         super(targetDirectory);
-        this.bmoMailboxNumber = bmoMailboxNumber;
+        expectedFileName = dailyconsolidatedtotalsFileName.replace("dailyconsolidatedtotals", "dailycardtotals");
     }
 
-    //%BMOCOM-SEND%ADW30451-BMOREMI-FILE-A%SFTP%POLLABLE%39fea1007thm70nj000lvgl3
-    //%BMOCOM-SEND%ADW30451-BMOREMI-FILE-A%SFTP%ACCEPTED%39fea1007thm70nj000lvgl3
     @Override
     public SftpFile accept(String directoryName, String fileName) {
-        if (!fileName.contains("%BMOCOM-SEND%" + bmoMailboxNumber + "-BMOREMI-FILE")) {
+        if (!fileName.equals(expectedFileName)) {
             return null;
         }
+
         if (existsLoadedOrProcessed(fileName)) {
-            return null;
-        }
-        if (fileName.contains("%POLLABLE%") && existsLoadedOrProcessed(fileName.replace("%POLLABLE%", "%ACCEPTED%"))) {
-            return null;
-        }
-        if (fileName.contains("%ACCEPTED%") && existsLoadedOrProcessed(fileName.replace("%ACCEPTED%", "%POLLABLE%"))) {
             return null;
         }
 
