@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.bill;
 
-import java.util.Set;
+import java.util.Collection;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 
@@ -21,5 +21,5 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public interface BillListerPresenter extends Presenter<BillDataDTO> {
 
-    void confirm(Set<BillDataDTO> bills);
+    void confirm(Collection<BillDataDTO> bills);
 }

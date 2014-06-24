@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -137,7 +138,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         updateSelection(new HashSet<Building>());
     }
 
-    private void updateSelection(Set<Building> addedBuildings) {
+    private void updateSelection(Collection<Building> addedBuildings) {
         // update selected buildings
         HashSet<Building> updatedFilter = new HashSet<Building>(getSelectedBuildingsStubs().size() + addedBuildings.size());
         updatedFilter.addAll(buildings);

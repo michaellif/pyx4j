@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -72,7 +71,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     }
 
     @Override
-    public void confirm(Set<BillDataDTO> bills) {
+    public void confirm(Collection<BillDataDTO> bills) {
         ((BillingCycleBillListService) getService()).confirm(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
@@ -82,7 +81,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     }
 
     @Override
-    public void reject(Set<BillDataDTO> bills, String reason) {
+    public void reject(Collection<BillDataDTO> bills, String reason) {
         ((BillingCycleBillListService) getService()).reject(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
@@ -92,7 +91,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     }
 
     @Override
-    public void print(Set<BillDataDTO> bills) {
+    public void print(Collection<BillDataDTO> bills) {
         for (BillDataDTO bill : bills) {
             EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().id(), bill.bill()));
