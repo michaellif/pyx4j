@@ -97,7 +97,6 @@ public class RSPropertyMarketingImpl implements PropertyMarketingService {
     @POST
     @Path("requestAppointment")
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
     @Override
     public void requestAppointment(AppointmentRequest request) {
         new PropertyMarketingProcessor().requestAppointment(request);
