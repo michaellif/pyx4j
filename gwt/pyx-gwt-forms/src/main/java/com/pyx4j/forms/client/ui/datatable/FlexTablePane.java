@@ -124,14 +124,17 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         }
     }
 
+    @Override
     public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
         this.itemZoomInCommand = itemZoomInCommand;
     }
 
+    @Override
     public boolean isItemZoomInAvailable() {
         return itemZoomInCommand != null;
     }
 
+    @Override
     public void renderTable() {
 
         assert dataTable.getDataTableModel().getColumnDescriptors() != null : "getColumnDescriptors() shouldn't be null";
@@ -250,7 +253,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 if (!dataIterator.hasNext()) {
                     log.trace("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex - 1,
                             TimeUtils.since(start));
-                    markSelected();
+                    updateSelectionStyle();
                     return false;
                 }
 
@@ -317,9 +320,10 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         //this.ensureDebugId(model.getDebugId());
     }
 
-    public void markSelected() {
+    @Override
+    public void updateSelectionStyle() {
         for (int i = 0; i < dataTable.getDataTableModel().getData().size(); i++) {
-            markRow(i, dataTable.getDataTableModel().getSelectedRows().contains(dataTable.getDataTableModel().getData().get(i)));
+            updateSelectionStyle(i, dataTable.getDataTableModel().getSelectedRows().contains(dataTable.getDataTableModel().getData().get(i)));
         }
 
         if (dataTable.getDataTableModel().isMultipleSelection() && selectionCheckBoxAll != null) {
@@ -327,7 +331,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         }
     }
 
-    private void markRow(int row, boolean selected) {
+    private void updateSelectionStyle(int row, boolean selected) {
         if (row >= 0) {
             Element previous = flexTable.getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
             String className = DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.selected.name();

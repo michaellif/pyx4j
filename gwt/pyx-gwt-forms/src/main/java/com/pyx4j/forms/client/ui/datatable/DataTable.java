@@ -194,7 +194,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
             tablePanel.renderTable();
         } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
-            tablePanel.markSelected();
+            tablePanel.updateSelectionStyle();
             onRowSelectionChanged();
         }
     }

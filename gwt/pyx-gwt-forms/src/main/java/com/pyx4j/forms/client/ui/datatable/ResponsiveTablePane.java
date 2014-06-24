@@ -46,7 +46,7 @@ public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     @Override
-    public void markSelected() {
+    public void updateSelectionStyle() {
         // TODO Auto-generated method stub
 
     }
