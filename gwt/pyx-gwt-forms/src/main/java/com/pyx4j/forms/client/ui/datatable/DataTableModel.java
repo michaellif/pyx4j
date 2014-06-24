@@ -21,8 +21,10 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
@@ -40,6 +42,10 @@ public class DataTableModel<E extends IEntity> {
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
 
     private final ArrayList<DataItem<E>> data = new ArrayList<DataItem<E>>();
+
+    private final HashSet<DataItem<E>> selected = new HashSet<DataItem<E>>();
+
+    private boolean multipleSelection = false;
 
     private List<ColumnDescriptor> columnDescriptors;
 
@@ -204,6 +210,10 @@ public class DataTableModel<E extends IEntity> {
         return data;
     }
 
+    public int indexOf(DataItem<E> item) {
+        return data.indexOf(item);
+    }
+
     public void populateData(List<DataItem<E>> dataItems, int pageNumber, boolean hasMoreData, int totalRows) {
         data.clear();
         if (dataItems != null) {
@@ -251,25 +261,69 @@ public class DataTableModel<E extends IEntity> {
         return totalRows;
     }
 
-    public void setRowChecked(boolean checked, int rowIndex) {
-        data.get(rowIndex).setChecked(checked);
+    public void clearSelection() {
+        selected.clear();
     }
 
-    public boolean isAllChecked() {
+    public void setRowSelected(boolean checked, int rowIndex) {
+        if (!checked) {
+            selected.remove(data.get(rowIndex));
+        } else {
+            if (!multipleSelection) {
+                selected.clear();
+            }
+            selected.add(data.get(rowIndex));
+        }
+        fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
+    }
+
+    public void setAllRowsSelected(boolean checked) {
+        selected.clear();
+        if (checked) {
+            selected.addAll(data);
+        }
+        fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
+    }
+
+    public Set<DataItem<E>> getSelectedRows() {
+        return selected;
+    }
+
+    public boolean isRowSelected(DataItem<E> dataItem) {
+        return selected.contains(dataItem);
+    }
+
+    public boolean isRowSelected(int rowIndex) {
+        return isRowSelected(data.get(rowIndex));
+    }
+
+    public boolean isAllRowsSelected() {
         for (DataItem<E> dataItem : data) {
-            if (!dataItem.isChecked()) {
+            if (!selected.contains(dataItem)) {
                 return false;
             }
         }
         return data.size() > 0 ? true : false;
     }
 
-    public boolean isAnyChecked() {
+    public boolean isAnyRowSelected() {
         for (DataItem<E> dataItem : data) {
-            if (dataItem.isChecked()) {
+            if (selected.contains(dataItem)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean isMultipleSelection() {
+        return multipleSelection;
+    }
+
+    public void setMultipleSelection(boolean multipleSelection) {
+        if (multipleSelection != this.multipleSelection) {
+            this.multipleSelection = multipleSelection;
+            selected.clear();
+            fireTableChanged(new DataTableModelEvent(DataTableModelEvent.Type.SELECTION));
+        }
     }
 }

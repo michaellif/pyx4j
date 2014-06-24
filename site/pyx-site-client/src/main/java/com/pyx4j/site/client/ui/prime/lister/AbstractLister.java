@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.client.ui.prime.lister;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.Command;
 
@@ -96,7 +96,7 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     }
 
     @Override
-    protected void onItemsDelete(final List<E> items) {
+    protected void onItemsDelete(final Set<E> items) {
         MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
             @Override
             public void execute() {

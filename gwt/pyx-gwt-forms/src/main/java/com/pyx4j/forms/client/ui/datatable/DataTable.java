@@ -21,7 +21,9 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,15 +38,11 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     private boolean hasColumnClickSorting = false;
 
-    private boolean multipleSelection = false;
-
-    private boolean markSelectedRow = true;
+    private final boolean markSelectedRow = true;
 
     private boolean columnSelectorVisible = true;
 
     private List<ItemSelectionHandler> itemSelectionHandlers;
-
-    private List<CheckSelectionHandler> checkSelectionHandlers;
 
     private List<SortChangeHandler<E>> sortChangeHandlers;
 
@@ -86,7 +84,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         this.model = model;
         model.addDataTableModelListener(this);
         if (model.getColumnDescriptors() != null) {
-            renderTable();
+            tablePanel.renderTable();
         }
     }
 
@@ -95,22 +93,19 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     }
 
     public E getSelectedItem() {
-        int selectedRow = tablePanel.getSelectedRow();
-        if (selectedRow >= 0 && selectedRow < model.getData().size()) {
-            return model.getData().get(selectedRow).getEntity();
+        Set<E> selectedItems = getSelectedItems();
+        if (selectedItems.size() == 1) {
+            return selectedItems.iterator().next();
+        } else {
+            return null;
         }
-        return null;
     }
 
-    public List<E> getCheckedItems() {
-        ArrayList<E> checked = new ArrayList<E>();
-
-        for (DataItem<E> dataItem : model.getData()) {
-            if (dataItem.isChecked()) {
-                checked.add(dataItem.getEntity());
-            }
+    public Set<E> getSelectedItems() {
+        HashSet<E> checked = new HashSet<E>();
+        for (DataItem<E> dataItem : model.getSelectedRows()) {
+            checked.add(dataItem.getEntity());
         }
-
         return checked;
     }
 
@@ -126,19 +121,6 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     public void remItemSelectionHandler(ItemSelectionHandler handler) {
         if (itemSelectionHandlers != null) {
             itemSelectionHandlers.remove(handler);
-        }
-    }
-
-    public void addCheckSelectionHandler(CheckSelectionHandler handler) {
-        if (checkSelectionHandlers == null) {
-            checkSelectionHandlers = new ArrayList<CheckSelectionHandler>(2);
-        }
-        checkSelectionHandlers.add(handler);
-    }
-
-    public void remCheckSelectionHandler(CheckSelectionHandler handler) {
-        if (checkSelectionHandlers != null) {
-            checkSelectionHandlers.remove(handler);
         }
     }
 
@@ -171,14 +153,6 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
 // UI & behaviour setup:
 
-    public boolean isMarkSelectedRow() {
-        return markSelectedRow;
-    }
-
-    public void setMarkSelectedRow(boolean markSelectedRow) {
-        this.markSelectedRow = markSelectedRow;
-    }
-
     public boolean hasColumnClickSorting() {
         return hasColumnClickSorting;
     }
@@ -188,11 +162,11 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     }
 
     public boolean isMultipleSelection() {
-        return multipleSelection;
+        return model.isMultipleSelection();
     }
 
     public void setMultipleSelection(boolean multipleSelection) {
-        this.multipleSelection = multipleSelection;
+        model.setMultipleSelection(multipleSelection);
     }
 
     public boolean isColumnSelectorVisible() {
@@ -211,19 +185,15 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 // Internals:
 //
 
-    public void renderTable() {
-        tablePanel.renderTable();
-    }
-
     @Override
     public void onTableModelChanged(DataTableModelEvent e) {
         if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
-            renderTable();
+            tablePanel.renderTable();
+        } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
+            tablePanel.markSelected();
+            onRowSelectionChanged();
         }
-    }
 
-    protected void markRow(int row, boolean selected) {
-        tablePanel.markRow(row, selected);
     }
 
     public void updateColumnVizibility(int offsetWidth, boolean reduceColumns) {
@@ -232,19 +202,15 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     // Events:
     public interface ItemSelectionHandler {
-        void onSelect(int selectedRow);
-    }
-
-    public interface CheckSelectionHandler {
-        void onCheck(boolean isAnyChecked);
+        void onChange();
     }
 
     public interface SortChangeHandler<E> {
-        void onChange(ColumnDescriptor column);
+        void onChange();
     }
 
     public interface ColumnSelectionHandler {
-        void onColumSelectionChanged();
+        void onChange();
     }
 
     public void selectSortColumn(ColumnDescriptor columnDescriptor) {
@@ -257,37 +223,28 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
             // notify listeners:
             if (sortChangeHandlers != null) {
                 for (SortChangeHandler<?> handler : sortChangeHandlers) {
-                    handler.onChange(columnDescriptor);
+                    handler.onChange();
                 }
             }
         }
     }
 
-    protected void selectRow(int selectedRow) {
-        tablePanel.setSelectedRow(selectedRow);
+    void onColumnSelectionChanged() {
+        if (columnSelectionHandlers != null) {
+            for (ColumnSelectionHandler handler : columnSelectionHandlers) {
+                handler.onChange();
+            }
+        }
+    }
+
+    private void onRowSelectionChanged() {
         // notify listeners:
         if (itemSelectionHandlers != null) {
             for (ItemSelectionHandler handler : itemSelectionHandlers) {
-                handler.onSelect(selectedRow);
+                handler.onChange();
             }
         }
+
     }
 
-    void onColumSelectionChanged() {
-        if (columnSelectionHandlers != null) {
-            for (ColumnSelectionHandler handler : columnSelectionHandlers) {
-                handler.onColumSelectionChanged();
-            }
-        }
-    }
-
-    void onCheckSelectionChanged() {
-        // notify listeners:
-        if (checkSelectionHandlers != null) {
-            boolean isAnyChecked = model.isAnyChecked();
-            for (CheckSelectionHandler handler : checkSelectionHandlers) {
-                handler.onCheck(isAnyChecked);
-            }
-        }
-    }
 }

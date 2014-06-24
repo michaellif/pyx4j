@@ -34,7 +34,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.meta.EntityMeta;
 import com.pyx4j.forms.client.images.FolderImages;
-import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;
 import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
@@ -145,12 +145,12 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar.getToolbar()
                 .insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
 
-        delButton.setEnabled(getDataTableModel().isAnyChecked());
+        delButton.setEnabled(getDataTableModel().isAnyRowSelected());
         getDataTable().setMultipleSelection(true);
-        getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
+        getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
-            public void onCheck(boolean isAnyChecked) {
-                delButton.setEnabled(isAnyChecked);
+            public void onChange() {
+                delButton.setEnabled(getDataTable().getDataTableModel().isAnyRowSelected());
             }
         });
     }
@@ -219,7 +219,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         }
         getDataTableModel().populateData(dataItems, pageNumber, hasMoreData, totalRows);
         if (delButton != null) {
-            delButton.setEnabled(getDataTableModel().isAnyChecked());
+            delButton.setEnabled(getDataTableModel().isAnyRowSelected());
         }
     }
 

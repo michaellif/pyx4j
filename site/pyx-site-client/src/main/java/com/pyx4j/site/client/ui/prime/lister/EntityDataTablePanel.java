@@ -23,6 +23,7 @@ package com.pyx4j.site.client.ui.prime.lister;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,6 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.forms.client.ui.datagrid.CDataGrid;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
@@ -144,7 +144,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
-            public void onChange(ColumnDescriptor column) {
+            public void onChange() {
                 obtain(getPageNumber());
             }
         });
@@ -156,7 +156,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
         dataTablePanel.setStyleName(DefaultPaneTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setMultipleSelection(false);
-        dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
         setWidget(dataTablePanel);
 
@@ -175,7 +174,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
             dataTablePanel.setDelActionCommand(new Command() {
                 @Override
                 public void execute() {
-                    onItemsDelete(getDataTablePanel().getDataTable().getCheckedItems());
+                    onItemsDelete(getDataTablePanel().getDataTable().getSelectedItems());
                 }
             });
         }
@@ -233,7 +232,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     protected void onItemNew() {
     }
 
-    protected void onItemsDelete(List<E> items) {
+    protected void onItemsDelete(Set<E> items) {
     }
 
     public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
@@ -254,14 +253,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     // selection/checking stuff:
 
-    public boolean isSelectable() {
-        return dataTablePanel.getDataTable().isMarkSelectedRow();
-    }
-
-    public void setSelectable(boolean isSelectable) {
-        dataTablePanel.getDataTable().setMarkSelectedRow(isSelectable);
-    }
-
     public E getSelectedItem() {
         return dataTablePanel.getDataTable().getSelectedItem();
     }
@@ -274,7 +265,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         itemSelectionHandlers.add(handler);
         dataTablePanel.getDataTable().addItemSelectionHandler(new DataTable.ItemSelectionHandler() {
             @Override
-            public void onSelect(int selectedRow) {
+            public void onChange() {
                 if (itemSelectionHandlers != null) {
                     for (ItemSelectionHandler<E> handler : itemSelectionHandlers) {
                         handler.onSelect(dataTablePanel.getDataTable().getSelectedItem());
@@ -284,20 +275,16 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
         });
     }
 
-    public void addActionItem(Widget widget) {
-        dataTablePanel.addUpperActionItem(widget);
-    }
-
     public boolean isMultipleSelection() {
         return dataTablePanel.getDataTable().isMultipleSelection();
     }
 
-    public void setHasCheckboxColumn(boolean hasCheckboxColumn) {
-        dataTablePanel.getDataTable().setMultipleSelection(hasCheckboxColumn);
+    public void setMultipleSelection(boolean multipleSelection) {
+        dataTablePanel.getDataTable().setMultipleSelection(multipleSelection);
     }
 
-    public List<E> getCheckedItems() {
-        return dataTablePanel.getDataTable().getCheckedItems();
+    public Set<E> getSelectedItems() {
+        return dataTablePanel.getDataTable().getSelectedItems();
     }
 
     public int getPageSize() {
@@ -306,6 +293,10 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
     public int getPageNumber() {
         return dataTablePanel.getPageNumber();
+    }
+
+    public void addActionItem(Widget widget) {
+        dataTablePanel.addUpperActionItem(widget);
     }
 
     public List<Criterion> getFilters() {

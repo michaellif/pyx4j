@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui.datatable;
 public class DataTableModelEvent {
 
     public enum Type {
-        UPDATE, DELETE, INSERT, REBUILD
+        UPDATE, DELETE, INSERT, REBUILD, SELECTION
     }
 
     protected Type type;

@@ -35,6 +35,8 @@ import com.google.gwt.dom.client.Style.TableLayout;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -74,8 +76,6 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
 
     private SelectionCheckBox selectionCheckBoxAll;
 
-    private int selectedRow = -1;
-
     public FlexTablePane(final DataTable<E> dataTable) {
         this.dataTable = dataTable;
         flexTable = new FlexTable();
@@ -99,7 +99,8 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
                     if (itemZoomInCommand != null) {
                         itemZoomInCommand.execute(dataTable.getDataTableModel().getData().get(cell.getRowIndex() - 1).getEntity());
                     } else {
-                        setSelectedRow(cell.getRowIndex() - 1); // actual table row index - without the header!...
+                        dataTable.getDataTableModel().setRowSelected(!dataTable.getDataTableModel().isRowSelected(cell.getRowIndex() - 1),
+                                cell.getRowIndex() - 1);
                     }
                 }
             }
@@ -145,10 +146,11 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
 
         renderHeader();
         renderBody();
+
     }
 
     public void clearTable() {
-        selectedRow = -1;
+        dataTable.getDataTableModel().clearSelection();
         selectionCheckBoxes.clear();
         for (int row = flexTable.getRowCount() - 1; row > 0; row--) {
             flexTable.removeRow(row);
@@ -162,7 +164,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
 
         int colIndex = 0;
         if (dataTable.isMultipleSelection()) {
-            selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, dataTable.getDataTableModel().isAllChecked());
+            selectionCheckBoxAll = new SelectionCheckBox(HEADER_RAW_INDEX, dataTable.getDataTableModel().isAllRowsSelected());
             flexTable.setWidget(0, 0, selectionCheckBoxAll);
             if (!BrowserType.isIE()) {
                 flexTable.getColumnFormatter().setWidth(colIndex, CHECK_MARK_COLUMN_SIZE + "px");
@@ -243,6 +245,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
                 if (!dataIterator.hasNext()) {
                     log.trace("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex - 1,
                             TimeUtils.since(start));
+                    markSelected();
                     return false;
                 }
 
@@ -257,7 +260,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
 
                 int colIndex = 0;
                 if (dataTable.isMultipleSelection()) {
-                    SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
+                    SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, model.isRowSelected(dataItem));
                     selectionCheckBoxes.add(selectionCheckBox);
 
                     selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE + "px");
@@ -309,10 +312,25 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
         //this.ensureDebugId(model.getDebugId());
     }
 
-    protected void markRow(int row, boolean selected) {
-        if (dataTable.isMarkSelectedRow() && row >= 0) {
+    public void markSelected() {
+        for (int i = 0; i < dataTable.getDataTableModel().getData().size(); i++) {
+            markRow(i, dataTable.getDataTableModel().getSelectedRows().contains(dataTable.getDataTableModel().getData().get(i)));
+        }
+
+        if (dataTable.getDataTableModel().isMultipleSelection() && selectionCheckBoxAll != null) {
+            selectionCheckBoxAll.setValue(dataTable.getDataTableModel().isAllRowsSelected());
+        }
+    }
+
+    private void markRow(int row, boolean selected) {
+        if (row >= 0) {
             Element previous = flexTable.getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
             String className = DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.selected.name();
+
+            if (dataTable.getDataTableModel().isMultipleSelection()) {
+                selectionCheckBoxes.get(row).setValue(selected);
+            }
+
             if (selected) {
                 previous.addClassName(className);
             } else {
@@ -380,23 +398,11 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
 
             if (hasChanged) {
                 renderTable();
-                dataTable.onColumSelectionChanged();
+                dataTable.onColumnSelectionChanged();
             }
 
             return true;
         }
-    }
-
-    public int getSelectedRow() {
-        return selectedRow;
-    }
-
-    protected void setSelectedRow(int selectedRow) {
-
-        markRow(getSelectedRow(), false);
-        this.selectedRow = selectedRow;
-        markRow(getSelectedRow(), true);
-
     }
 
     public void releaseCheckedItems() {
@@ -411,30 +417,21 @@ public class FlexTablePane<E extends IEntity> implements ITablePane {
         public SelectionCheckBox(final int rowIndex, boolean checked) {
             setValue(checked);
 
-            addClickHandler(new ClickHandler() {
+            addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
                 @Override
-                public void onClick(ClickEvent event) {
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (rowIndex == HEADER_RAW_INDEX) {
-                        for (DataItem<E> dataItem : dataTable.getDataTableModel().getData()) {
-                            dataItem.setChecked(getValue());
-                            for (SelectionCheckBox selectionCheckBox : selectionCheckBoxes) {
-                                selectionCheckBox.setValue(getValue());
-                            }
-                        }
+                        dataTable.getDataTableModel().setAllRowsSelected(getValue());
                     } else {
-                        boolean allChecked = true;
-                        dataTable.getDataTableModel().setRowChecked(getValue(), rowIndex - 1);
-                        for (SelectionCheckBox selectionCheckBox : selectionCheckBoxes) {
-                            if (!selectionCheckBox.getValue()) {
-                                allChecked = false;
-                                break;
-                            }
-                        }
-                        selectionCheckBoxAll.setValue(allChecked);
+
+                        dataTable.getDataTableModel().setRowSelected(getValue(), rowIndex - 1);
+                        selectionCheckBoxAll.setValue(dataTable.getDataTableModel().isAllRowsSelected());
                     }
-                    dataTable.onCheckSelectionChanged();
                 }
             });
+
         }
     }
+
 }

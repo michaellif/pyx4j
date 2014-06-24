@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -42,7 +43,6 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -84,21 +84,13 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
                 EntitySelectorTableDialog.super.show();
             }
         };
-        if (this.isMultiselect) {
-            lister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
-                @Override
-                public void onCheck(boolean isAnyChecked) {
-                    getOkButton().setEnabled(isAnyChecked);
-                }
-            });
-        } else {
-            lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
-                @Override
-                public void onSelect(int selectedRow) {
-                    getOkButton().setEnabled(lister.getSelectedItem() != null);
-                }
-            });
-        }
+        lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+            @Override
+            public void onChange() {
+                getOkButton().setEnabled(lister.getDataTablePanel().getDataTable().getDataTableModel().isAnyRowSelected());
+            }
+        });
+
         dataSource = new ListerDataSource<E>(entityClass, getSelectService());
         setFilters(createRestrictionFilterForAlreadySelected());
         lister.setDataSource(dataSource);
@@ -122,7 +114,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
     }
 
     protected Widget createBody() {
-        getOkButton().setEnabled(!lister.getCheckedItems().isEmpty());
+        getOkButton().setEnabled(!lister.getSelectedItems().isEmpty());
         VerticalPanel vPanel = new VerticalPanel();
         vPanel.add(lister.asWidget());
         vPanel.setWidth("100%");
@@ -133,23 +125,8 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         return lister;
     }
 
-    protected E getSelectedItem() {
-        if (isMultiselect) {
-            List<E> items = lister.getCheckedItems();
-            return items.isEmpty() ? null : items.get(0);
-        } else {
-            return lister.getSelectedItem();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    protected List<E> getSelectedItems() {
-        if (isMultiselect) {
-            return lister.getCheckedItems();
-        } else {
-            E item = lister.getSelectedItem();
-            return item == null ? Collections.EMPTY_LIST : Arrays.asList(item);
-        }
+    protected Set<E> getSelectedItems() {
+        return lister.getSelectedItems();
     }
 
     protected E proto() {
@@ -224,11 +201,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         public SelectEntityLister(Class<E> clazz, boolean isVersioned) {
             super(clazz);
 
-            if (EntitySelectorTableDialog.this.isMultiselect) {
-                setHasCheckboxColumn(true);
-            } else {
-                setSelectable(true);
-            }
+            setMultipleSelection(EntitySelectorTableDialog.this.isMultiselect);
 
             getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             getDataTablePanel().setPageSize(PAGESIZE_SMALL);

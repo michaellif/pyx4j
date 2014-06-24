@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -21,7 +22,6 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -44,7 +44,7 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
 
     private final Class<E> entityClass;
 
-    private final List<E> alreadySelected;
+    private final Set<E> alreadySelected;
 
     private boolean isMultiselect;
 
@@ -56,17 +56,17 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
         this(parentView, entityClass, false, isMultiselect, null, caption);
     }
 
-    public EntitySelectorTableVisorController(IPane parentView, Class<E> entityClass, boolean isMultiselect, List<E> alreadySelected, String caption) {
+    public EntitySelectorTableVisorController(IPane parentView, Class<E> entityClass, boolean isMultiselect, Set<E> alreadySelected, String caption) {
         this(parentView, entityClass, false, isMultiselect, alreadySelected, caption);
     }
 
-    public EntitySelectorTableVisorController(IPane parentView, Class<E> entityClass, boolean isVersioned, boolean isMultiselect, List<E> alreadySelected,
+    public EntitySelectorTableVisorController(IPane parentView, Class<E> entityClass, boolean isVersioned, boolean isMultiselect, Set<E> alreadySelected,
             final String caption) {
         super(parentView);
 
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
-        this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptyList());
+        this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptySet());
 
         lister = new SelectEntityLister(entityClass, isVersioned);
         listerController = new ListerController<E>(lister, getSelectService(), entityClass);
@@ -101,21 +101,14 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
             }
         };
         // add OK button control
-        if (this.isMultiselect) {
-            lister.getDataTablePanel().getDataTable().addCheckSelectionHandler(new CheckSelectionHandler() {
-                @Override
-                public void onCheck(boolean isAnyChecked) {
-                    getOkButton().setEnabled(isAnyChecked);
-                }
-            });
-        } else {
-            lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
-                @Override
-                public void onSelect(int selectedRow) {
-                    getOkButton().setEnabled(lister.getSelectedItem() != null);
-                }
-            });
-        }
+
+        lister.getDataTablePanel().getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
+            @Override
+            public void onChange() {
+                getOkButton().setEnabled(lister.getDataTablePanel().getDataTable().getDataTableModel().isAnyRowSelected());
+            }
+        });
+
         // handle already selected items
         setFilters(createRestrictionFilterForAlreadySelected());
     }
@@ -126,22 +119,15 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
 
     protected abstract void onClickOk();
 
-    protected E getSelectedItem() {
-        if (isMultiselect) {
-            List<E> items = lister.getCheckedItems();
-            return items.isEmpty() ? null : items.get(0);
-        } else {
-            return lister.getSelectedItem();
-        }
+    protected Set<E> getSelectedItems() {
+        return lister.getSelectedItems();
     }
 
-    @SuppressWarnings("unchecked")
-    protected List<E> getSelectedItems() {
-        if (isMultiselect) {
-            return lister.getCheckedItems();
+    protected E getSelectedItem() {
+        if (getSelectedItems().size() == 1) {
+            return getSelectedItems().iterator().next();
         } else {
-            E item = lister.getSelectedItem();
-            return item == null ? Collections.EMPTY_LIST : Arrays.asList(item);
+            return null;
         }
     }
 
@@ -235,11 +221,7 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
         public SelectEntityLister(Class<E> clazz, boolean isVersioned) {
             super(clazz);
 
-            if (EntitySelectorTableVisorController.this.isMultiselect) {
-                setHasCheckboxColumn(true);
-            } else {
-                setSelectable(true);
-            }
+            setMultipleSelection(EntitySelectorTableVisorController.this.isMultiselect);
 
             getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
             getDataTablePanel().setPageSize(PAGESIZE_SMALL);

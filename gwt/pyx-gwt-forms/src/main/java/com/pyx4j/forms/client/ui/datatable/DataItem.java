@@ -24,8 +24,6 @@ import com.pyx4j.entity.core.IEntity;
 
 public class DataItem<E extends IEntity> {
 
-    private boolean checked;
-
     private final E entity;
 
     public DataItem(E entity) {
@@ -34,14 +32,6 @@ public class DataItem<E extends IEntity> {
 
     public E getEntity() {
         return entity;
-    }
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 
     public Object getCellValue(ColumnDescriptor descriptor) {
