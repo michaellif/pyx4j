@@ -28,7 +28,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.PaymentType;
@@ -44,7 +44,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
     private static final Logger log = LoggerFactory.getLogger(DirectDebitReconciliationProcessor.class);
 
     DirectDebitReconciliationProcessor(ExecutionMonitor executionMonitor) {
-        super(FundsTransferType.DirectBankingPayment, executionMonitor);
+        super(CaledonFundsTransferType.DirectBankingPayment, executionMonitor);
     }
 
     @Override

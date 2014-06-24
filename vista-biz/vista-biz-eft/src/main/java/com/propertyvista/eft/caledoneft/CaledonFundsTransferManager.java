@@ -29,7 +29,7 @@ import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.FileCreationException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.eft.EftFileUtils;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
@@ -153,7 +153,7 @@ public class CaledonFundsTransferManager {
         }
     }
 
-    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
+    public void confirmReceivedFile(CaledonFundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
         File padWorkdir = getPadBaseDir();
         if (protocolErrorFlag) {
             EftFileUtils.move(new File(padWorkdir, fileName), padWorkdir, "error");

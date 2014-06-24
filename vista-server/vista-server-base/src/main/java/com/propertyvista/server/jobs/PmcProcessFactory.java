@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.jobs;
 
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.server.jobs.insurance.PaymentsTenantSureProcess;
@@ -61,23 +61,23 @@ public class PmcProcessFactory {
 
 // Caledon
         case paymentsPadSend:
-            return new PaymentsFundsTransferSendProcess(FundsTransferType.PreAuthorizedDebit);
+            return new PaymentsFundsTransferSendProcess(CaledonFundsTransferType.PreAuthorizedDebit);
         case paymentsDbpSend:
-            return new PaymentsFundsTransferSendProcess(FundsTransferType.DirectBankingPayment);
+            return new PaymentsFundsTransferSendProcess(CaledonFundsTransferType.DirectBankingPayment);
 
         case paymentsReceiveAcknowledgment:
             return new PaymentsFundsTransferReceiveAcknowledgmentProcess();
         case paymentsPadProcessAcknowledgment:
-            return new PaymentsFundsTransferProcessAcknowledgmentProcess(FundsTransferType.PreAuthorizedDebit);
+            return new PaymentsFundsTransferProcessAcknowledgmentProcess(CaledonFundsTransferType.PreAuthorizedDebit);
         case paymentsDbpProcessAcknowledgment:
-            return new PaymentsFundsTransferProcessAcknowledgmentProcess(FundsTransferType.DirectBankingPayment);
+            return new PaymentsFundsTransferProcessAcknowledgmentProcess(CaledonFundsTransferType.DirectBankingPayment);
 
         case paymentsReceiveReconciliation:
             return new PaymentsFundsTransferReceiveReconciliationProcess();
         case paymentsPadProcessReconciliation:
-            return new PaymentsFundsTransferProcessReconciliationProcess(FundsTransferType.PreAuthorizedDebit);
+            return new PaymentsFundsTransferProcessReconciliationProcess(CaledonFundsTransferType.PreAuthorizedDebit);
         case paymentsDbpProcessReconciliation:
-            return new PaymentsFundsTransferProcessReconciliationProcess(FundsTransferType.DirectBankingPayment);
+            return new PaymentsFundsTransferProcessReconciliationProcess(CaledonFundsTransferType.DirectBankingPayment);
 
         case paymentsTenantSure:
             return new PaymentsTenantSureProcess();

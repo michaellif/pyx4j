@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -33,7 +33,7 @@ public interface FundsTransferFileCreationNumber extends IEntity {
 
     IPrimitive<String> companyId();
 
-    IPrimitive<FundsTransferType> fundsTransferType();
+    IPrimitive<CaledonFundsTransferType> fundsTransferType();
 
     IPrimitive<Boolean> simulator();
 }

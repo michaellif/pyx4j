@@ -38,7 +38,7 @@ import com.propertyvista.biz.system.eft.FileCreationException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
@@ -55,7 +55,7 @@ public class FundsTransferCaledon {
     private final String companyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
             .getIntefaceCompanyId();
 
-    public FundsTransferFile prepareFundsTransferFile(final FundsTransferType fundsTransferType) {
+    public FundsTransferFile prepareFundsTransferFile(final CaledonFundsTransferType fundsTransferType) {
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<FundsTransferFile, RuntimeException>() {
 
             @Override
@@ -209,7 +209,7 @@ public class FundsTransferCaledon {
      *            the file is sent or attempt to send is made, the sequence is changed
      * @return
      */
-    private String getNextFileCreationNumber(FundsTransferType fundsTransferType, boolean consumeNumber, FundsTransferFile consumerFile) {
+    private String getNextFileCreationNumber(CaledonFundsTransferType fundsTransferType, boolean consumeNumber, FundsTransferFile consumerFile) {
         boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().useFundsTransferSimulator().getValue(Boolean.FALSE);
         boolean useFileBaseSequence = !VistaDeployment.isVistaProduction();
         if (useSimulator) {
@@ -291,7 +291,7 @@ public class FundsTransferCaledon {
         }
     }
 
-    public FundsTransferType receiveFundsTransferAcknowledgementFile(final ExecutionMonitor executionMonitor) {
+    public CaledonFundsTransferType receiveFundsTransferAcknowledgementFile(final ExecutionMonitor executionMonitor) {
         final FundsTransferAckFile padAkFile;
         try {
             padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receiveFundsTransferAcknowledgementFile(companyId);
@@ -328,7 +328,7 @@ public class FundsTransferCaledon {
         return padAkFile.fundsTransferType().getValue();
     }
 
-    public FundsTransferType receiveFundsTransferReconciliation(final ExecutionMonitor executionMonitor) {
+    public CaledonFundsTransferType receiveFundsTransferReconciliation(final ExecutionMonitor executionMonitor) {
         final FundsReconciliationFile reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receiveFundsTransferReconciliation(companyId);

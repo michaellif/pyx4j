@@ -35,7 +35,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.pmc.Pmc;
@@ -51,11 +51,11 @@ abstract class AbstractReconciliationProcessor {
 
     protected final ExecutionMonitor executionMonitor;
 
-    protected final FundsTransferType fundsTransferType;
+    protected final CaledonFundsTransferType fundsTransferType;
 
     protected final Pmc pmc;
 
-    AbstractReconciliationProcessor(FundsTransferType fundsTransferType, ExecutionMonitor executionMonitor) {
+    AbstractReconciliationProcessor(CaledonFundsTransferType fundsTransferType, ExecutionMonitor executionMonitor) {
         this.executionMonitor = executionMonitor;
         this.fundsTransferType = fundsTransferType;
         this.pmc = VistaDeployment.getCurrentPmc();

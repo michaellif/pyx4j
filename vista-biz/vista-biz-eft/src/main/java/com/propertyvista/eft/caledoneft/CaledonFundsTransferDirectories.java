@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 
 public class CaledonFundsTransferDirectories {
 
@@ -39,20 +39,20 @@ public class CaledonFundsTransferDirectories {
 
     public static final String getSrc = "out";
 
-    private static final Map<String, FundsTransferType> postDirectories = buildDirectories(postDst);
+    private static final Map<String, CaledonFundsTransferType> postDirectories = buildDirectories(postDst);
 
-    private static final Map<String, FundsTransferType> getDirectories = buildDirectories(getSrc);
+    private static final Map<String, CaledonFundsTransferType> getDirectories = buildDirectories(getSrc);
 
-    private static Map<String, FundsTransferType> buildDirectories(String name) {
-        Map<String, FundsTransferType> directories = new HashMap<String, FundsTransferType>();
-        for (FundsTransferType fundsTransferType : FundsTransferType.values()) {
+    private static Map<String, CaledonFundsTransferType> buildDirectories(String name) {
+        Map<String, CaledonFundsTransferType> directories = new HashMap<String, CaledonFundsTransferType>();
+        for (CaledonFundsTransferType fundsTransferType : CaledonFundsTransferType.values()) {
             directories.put(fundsTransferType.getDirectoryName(name), fundsTransferType);
         }
         return directories;
     }
 
-    public static FundsTransferType getFundsTransferTypeByDirectory(String directoryName) {
-        FundsTransferType fundsTransferType = getDirectories.get(directoryName);
+    public static CaledonFundsTransferType getFundsTransferTypeByDirectory(String directoryName) {
+        CaledonFundsTransferType fundsTransferType = getDirectories.get(directoryName);
         if (fundsTransferType == null) {
             fundsTransferType = postDirectories.get(directoryName);
         }

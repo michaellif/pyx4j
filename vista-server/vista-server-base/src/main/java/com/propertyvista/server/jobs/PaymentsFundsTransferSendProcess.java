@@ -17,17 +17,17 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 
 public class PaymentsFundsTransferSendProcess implements PmcProcess {
 
-    private final FundsTransferType fundsTransferType;
+    private final CaledonFundsTransferType fundsTransferType;
 
     private FundsTransferFile padFile;
 
-    public PaymentsFundsTransferSendProcess(FundsTransferType fundsTransferType) {
+    public PaymentsFundsTransferSendProcess(CaledonFundsTransferType fundsTransferType) {
         this.fundsTransferType = fundsTransferType;
     }
 

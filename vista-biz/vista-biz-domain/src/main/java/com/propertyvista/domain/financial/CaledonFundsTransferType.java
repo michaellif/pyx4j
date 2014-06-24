@@ -14,7 +14,7 @@
 package com.propertyvista.domain.financial;
 
 
-public enum FundsTransferType {
+public enum CaledonFundsTransferType {
 
     PreAuthorizedDebit("PAD", "pad"),
 
@@ -26,7 +26,7 @@ public enum FundsTransferType {
 
     private final String fileNamePart;
 
-    FundsTransferType(String code, String fileNamePart) {
+    CaledonFundsTransferType(String code, String fileNamePart) {
         this.code = code;
         this.fileNamePart = fileNamePart;
     }

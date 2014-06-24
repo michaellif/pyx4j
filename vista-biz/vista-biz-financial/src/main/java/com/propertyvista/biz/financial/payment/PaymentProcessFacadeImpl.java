@@ -16,14 +16,14 @@ package com.propertyvista.biz.financial.payment;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
-    public FundsTransferFile prepareFundsTransferFile(FundsTransferType fundsTransferType) {
+    public FundsTransferFile prepareFundsTransferFile(CaledonFundsTransferType fundsTransferType) {
         return new FundsTransferCaledon().prepareFundsTransferFile(fundsTransferType);
     }
 
@@ -43,7 +43,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor) {
+    public CaledonFundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor) {
         return new FundsTransferCaledon().receiveFundsTransferAcknowledgementFile(executionMonitor);
     }
 
@@ -58,7 +58,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor) {
+    public CaledonFundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor) {
         return new FundsTransferCaledon().receiveFundsTransferReconciliation(executionMonitor);
     }
 

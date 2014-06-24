@@ -28,7 +28,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
@@ -42,7 +42,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
     private static final Logger log = LoggerFactory.getLogger(PadReconciliationProcessor.class);
 
     PadReconciliationProcessor(ExecutionMonitor executionMonitor) {
-        super(FundsTransferType.PreAuthorizedDebit, executionMonitor);
+        super(CaledonFundsTransferType.PreAuthorizedDebit, executionMonitor);
     }
 
     @Override

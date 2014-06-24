@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 
 /**
  * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
@@ -112,7 +112,7 @@ public interface FundsTransferFile extends IEntity {
     IPrimitive<PadFileStatus> status();
 
     @Indexed(group = { "n,2" }, uniqueConstraint = true)
-    IPrimitive<FundsTransferType> fundsTransferType();
+    IPrimitive<CaledonFundsTransferType> fundsTransferType();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

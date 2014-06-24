@@ -16,13 +16,13 @@ package com.propertyvista.biz.financial.payment;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 
 public interface PaymentProcessFacade {
 
-    FundsTransferFile prepareFundsTransferFile(FundsTransferType fundsTransferType);
+    FundsTransferFile prepareFundsTransferFile(CaledonFundsTransferType fundsTransferType);
 
     void prepareEcheckFundsTransfer(ExecutionMonitor executionMonitor, FundsTransferFile padFile);
 
@@ -31,13 +31,13 @@ public interface PaymentProcessFacade {
     boolean sendFundsTransferFile(FundsTransferFile padFile);
 
     //Funds Transfer
-    FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor);
+    CaledonFundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor);
 
     void processPmcPadAcknowledgement(ExecutionMonitor executionMonitor);
 
     void processPmcDirectDebitAcknowledgement(ExecutionMonitor executionMonitor);
 
-    FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor);
+    CaledonFundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor);
 
     void processPmcPadReconciliation(ExecutionMonitor executionMonitor);
 

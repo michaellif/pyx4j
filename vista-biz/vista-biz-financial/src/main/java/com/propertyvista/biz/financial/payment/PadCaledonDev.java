@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 
 public class PadCaledonDev {
 
@@ -51,7 +51,7 @@ public class PadCaledonDev {
         return new Properties();
     }
 
-    public static void saveFileCreationNumber(String companyId, FundsTransferType fundsTransferType, int number) {
+    public static void saveFileCreationNumber(String companyId, CaledonFundsTransferType fundsTransferType, int number) {
         saveFileProperty(fundsTransferType.getCode() + "." + companyId, number);
     }
 
@@ -70,7 +70,7 @@ public class PadCaledonDev {
         }
     }
 
-    public static int restoreFileCreationNumber(String companyId, FundsTransferType fundsTransferType) {
+    public static int restoreFileCreationNumber(String companyId, CaledonFundsTransferType fundsTransferType) {
         return restoreFileProperty(fundsTransferType.getCode() + "." + companyId);
     }
 

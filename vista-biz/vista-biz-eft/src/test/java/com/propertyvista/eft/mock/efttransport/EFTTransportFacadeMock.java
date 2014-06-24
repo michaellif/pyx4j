@@ -16,7 +16,7 @@ package com.propertyvista.eft.mock.efttransport;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.biz.system.eft.FileCreationException;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
@@ -45,7 +45,7 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     }
 
     @Override
-    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
+    public void confirmReceivedFile(CaledonFundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
     }
 
     @Override

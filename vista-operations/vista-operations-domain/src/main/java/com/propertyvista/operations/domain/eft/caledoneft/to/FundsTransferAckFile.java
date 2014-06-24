@@ -24,7 +24,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 
 /**
  * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
@@ -47,7 +47,7 @@ public interface FundsTransferAckFile extends IEntity {
     @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> fileNameDate();
 
-    IPrimitive<FundsTransferType> fundsTransferType();
+    IPrimitive<CaledonFundsTransferType> fundsTransferType();
 
     IPrimitive<Integer> version();
 

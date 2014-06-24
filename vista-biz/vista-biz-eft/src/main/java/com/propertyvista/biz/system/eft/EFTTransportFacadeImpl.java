@@ -14,7 +14,7 @@
 package com.propertyvista.biz.system.eft;
 
 import com.propertyvista.biz.system.SftpTransportConnectionException;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.eft.caledoneft.CaledonFundsTransferManager;
 import com.propertyvista.eft.dbp.BmoManager;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
@@ -40,7 +40,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
+    public void confirmReceivedFile(CaledonFundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
         new CaledonFundsTransferManager().confirmReceivedFile(fundsTransferType, fileName, protocolErrorFlag);
     }
 

@@ -14,7 +14,7 @@
 package com.propertyvista.biz.system.eft;
 
 import com.propertyvista.biz.system.SftpTransportConnectionException;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
@@ -31,7 +31,7 @@ public interface EFTTransportFacade {
     /**
      * Remove the file from remote server directory in success.
      */
-    void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
+    void confirmReceivedFile(CaledonFundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
 
     DirectDebitFile receiveBmoFile() throws SftpTransportConnectionException;
 

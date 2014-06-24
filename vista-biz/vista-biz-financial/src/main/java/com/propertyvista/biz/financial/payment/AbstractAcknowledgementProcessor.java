@@ -30,7 +30,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
@@ -46,9 +46,9 @@ abstract class AbstractAcknowledgementProcessor {
 
     protected final ExecutionMonitor executionMonitor;
 
-    private final FundsTransferType fundsTransferType;
+    private final CaledonFundsTransferType fundsTransferType;
 
-    AbstractAcknowledgementProcessor(FundsTransferType fundsTransferType, ExecutionMonitor executionMonitor) {
+    AbstractAcknowledgementProcessor(CaledonFundsTransferType fundsTransferType, ExecutionMonitor executionMonitor) {
         this.executionMonitor = executionMonitor;
         this.fundsTransferType = fundsTransferType;
     }

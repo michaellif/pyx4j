@@ -22,7 +22,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.eft.caledoneft.simulator.CaledonFundsTransferSimulatorSftpRetrieveFilter;
 import com.propertyvista.server.sftp.SftpClient;
 
@@ -34,11 +34,11 @@ public class CaledonPadSftpClient {
         configuration = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration();
     }
 
-    public void sftpPut(FundsTransferType fundsTransferType, File file) throws SftpTransportConnectionException {
+    public void sftpPut(CaledonFundsTransferType fundsTransferType, File file) throws SftpTransportConnectionException {
         SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.postDst));
     }
 
-    public void sftpPutSim(FundsTransferType fundsTransferType, File file) throws SftpTransportConnectionException {
+    public void sftpPutSim(CaledonFundsTransferType fundsTransferType, File file) throws SftpTransportConnectionException {
         if (!ApplicationMode.isDevelopment()) {
             throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }
@@ -59,11 +59,11 @@ public class CaledonPadSftpClient {
                 CaledonFundsTransferDirectories.allPostDirectories());
     }
 
-    public void removeFile(FundsTransferType fundsTransferType, String fileName) throws SftpTransportConnectionException {
+    public void removeFile(CaledonFundsTransferType fundsTransferType, String fileName) throws SftpTransportConnectionException {
         SftpClient.removeFile(configuration, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.getSrc), fileName);
     }
 
-    public void removeFilesSim(FundsTransferType fundsTransferType, String fileName) throws SftpTransportConnectionException {
+    public void removeFilesSim(CaledonFundsTransferType fundsTransferType, String fileName) throws SftpTransportConnectionException {
         if (!ApplicationMode.isDevelopment()) {
             throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }

@@ -25,25 +25,25 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimDebitRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 
 public class PadSimFileParser {
 
-    private static final Map<String, FundsTransferType> fundsTransferTypeCodes = buildFundsTransferTypeCodes();
+    private static final Map<String, CaledonFundsTransferType> fundsTransferTypeCodes = buildFundsTransferTypeCodes();
 
-    private static Map<String, FundsTransferType> buildFundsTransferTypeCodes() {
-        Map<String, FundsTransferType> codes = new HashMap<String, FundsTransferType>();
-        for (FundsTransferType fundsTransferType : FundsTransferType.values()) {
+    private static Map<String, CaledonFundsTransferType> buildFundsTransferTypeCodes() {
+        Map<String, CaledonFundsTransferType> codes = new HashMap<String, CaledonFundsTransferType>();
+        for (CaledonFundsTransferType fundsTransferType : CaledonFundsTransferType.values()) {
             codes.put(fundsTransferType.getCode(), fundsTransferType);
         }
         return codes;
     }
 
-    public static FundsTransferType getFundsTransferTypeByCode(String code) {
-        FundsTransferType fundsTransferType = fundsTransferTypeCodes.get(code);
+    public static CaledonFundsTransferType getFundsTransferTypeByCode(String code) {
+        CaledonFundsTransferType fundsTransferType = fundsTransferTypeCodes.get(code);
         if (fundsTransferType == null) {
             throw new Error("Unknown FundsTransferType code " + code);
         }

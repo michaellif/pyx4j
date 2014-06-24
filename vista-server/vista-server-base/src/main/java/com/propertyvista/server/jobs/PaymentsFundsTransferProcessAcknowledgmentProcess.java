@@ -16,14 +16,14 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class PaymentsFundsTransferProcessAcknowledgmentProcess implements PmcProcess {
 
-    private final FundsTransferType fundsTransferType;
+    private final CaledonFundsTransferType fundsTransferType;
 
-    public PaymentsFundsTransferProcessAcknowledgmentProcess(FundsTransferType fundsTransferType) {
+    public PaymentsFundsTransferProcessAcknowledgmentProcess(CaledonFundsTransferType fundsTransferType) {
         this.fundsTransferType = fundsTransferType;
     }
 

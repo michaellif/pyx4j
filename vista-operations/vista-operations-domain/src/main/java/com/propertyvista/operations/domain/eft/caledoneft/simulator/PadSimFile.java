@@ -35,7 +35,7 @@ import com.pyx4j.entity.core.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 
 /**
  * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
@@ -64,7 +64,7 @@ public interface PadSimFile extends IEntity {
 
     @ToString(index = 1)
     @Editor(type = Editor.EditorType.label)
-    IPrimitive<FundsTransferType> fundsTransferType();
+    IPrimitive<CaledonFundsTransferType> fundsTransferType();
 
     @ToString(index = 2)
     @Editor(type = Editor.EditorType.label)

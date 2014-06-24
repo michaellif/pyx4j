@@ -13,12 +13,12 @@
  */
 package com.propertyvista.eft.caledoneft;
 
-import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.server.sftp.SftpFile;
 
 public class CaledonFundsTransferSftpFile extends SftpFile {
 
-    public FundsTransferType fundsTransferType;
+    public CaledonFundsTransferType fundsTransferType;
 
     public CaledonFundsTransferFileType fileType;
 
