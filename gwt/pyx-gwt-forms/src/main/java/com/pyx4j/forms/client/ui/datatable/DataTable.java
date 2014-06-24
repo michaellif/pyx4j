@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public class DataTable<E extends IEntity> implements IsWidget {
+public class DataTable<E extends IEntity> implements IsWidget, DataTableModelListener {
 
     private ITablePane<E> tablePanel;
 
@@ -80,8 +80,26 @@ public class DataTable<E extends IEntity> implements IsWidget {
 
 // Data manipulation:
 
+    @Override
+    public void onDataTableModelChanged(DataTableModelEvent e) {
+        if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
+            tablePanel.renderTable();
+        } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
+            tablePanel.updateSelectionStyle();
+            onRowSelectionChanged();
+        }
+    }
+
     public void setDataTableModel(DataTableModel<E> model) {
-        tablePanel.setDataTableModel(model);
+        DataTableModel<E> previousModel = getDataTableModel();
+        if (previousModel != null) {
+            previousModel.removeDataTableModelListener(this);
+        }
+        this.model = model;
+        model.addDataTableModelListener(this);
+        if (model.getColumnDescriptors() != null) {
+            tablePanel.renderTable();
+        }
     }
 
     public DataTableModel<E> getDataTableModel() {
@@ -276,4 +294,5 @@ public class DataTable<E extends IEntity> implements IsWidget {
             return true;
         }
     }
+
 }

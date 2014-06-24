@@ -52,19 +52,13 @@ public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     @Override
-    public void setDataTableModel(DataTableModel<E> model) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onDataTableModelChanged(DataTableModelEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void renderTable() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void updateSelectionStyle() {
         // TODO Auto-generated method stub
 
     }

@@ -320,7 +320,8 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         //this.ensureDebugId(model.getDebugId());
     }
 
-    private void updateSelectionStyle() {
+    @Override
+    public void updateSelectionStyle() {
         for (int i = 0; i < dataTable.getDataTableModel().getData().size(); i++) {
             updateSelectionStyle(i, dataTable.getDataTableModel().getSelectedRows().contains(dataTable.getDataTableModel().getData().get(i)));
         }
@@ -392,26 +393,4 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         }
     }
 
-    @Override
-    public void onDataTableModelChanged(DataTableModelEvent e) {
-        if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
-            renderTable();
-        } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
-            updateSelectionStyle();
-            dataTable.onRowSelectionChanged();
-        }
-    }
-
-    @Override
-    public void setDataTableModel(DataTableModel<E> model) {
-        DataTableModel<E> previousModel = dataTable.getDataTableModel();
-        if (previousModel != null) {
-            previousModel.removeDataTableModelListener(this);
-        }
-        dataTable.setDataTableModel(model);
-        model.addDataTableModelListener(this);
-        if (model.getColumnDescriptors() != null) {
-            renderTable();
-        }
-    }
 }
