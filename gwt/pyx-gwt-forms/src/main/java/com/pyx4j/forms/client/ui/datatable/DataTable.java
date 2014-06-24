@@ -202,21 +202,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     }
 
-    // Events:
-    public interface ItemSelectionHandler {
-        void onChange();
-    }
-
-    public interface SortChangeHandler<E> {
-        void onChange();
-    }
-
-    public interface ColumnSelectionHandler {
-        void onChange();
-    }
-
     public void onSortColumnChanged() {
-        // notify listeners:
         if (sortChangeHandlers != null) {
             for (SortChangeHandler<?> handler : sortChangeHandlers) {
                 handler.onChange();
@@ -243,6 +229,19 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     protected void showColumnSelectorDialog() {
         new ColumnSelectorDialog().show();
+    }
+
+    // Events:
+    public interface ItemSelectionHandler {
+        void onChange();
+    }
+
+    public interface SortChangeHandler<E> {
+        void onChange();
+    }
+
+    public interface ColumnSelectionHandler {
+        void onChange();
     }
 
     private class ColumnSelectorDialog extends OkCancelDialog {
