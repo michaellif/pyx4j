@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -48,8 +49,8 @@ public class MoneyInCandidateSearchVisorView extends AbstractVisorPane {
         addFooterToolbarItem(new Button(i18n.tr("Add Payment(s)"), new Command() {
             @Override
             public void execute() {
-                if (candidateLister.getCheckedItems() != null && !candidateLister.getCheckedItems().isEmpty()) {
-                    ((MoneyInCandidateSearchViewController) getController()).addPaymentCandidate(candidateLister.getCheckedItems());
+                if (candidateLister.getSelectedItems() != null && !candidateLister.getSelectedItems().isEmpty()) {
+                    ((MoneyInCandidateSearchViewController) getController()).addPaymentCandidate(new ArrayList<>(candidateLister.getSelectedItems()));
                 }
             }
         }));

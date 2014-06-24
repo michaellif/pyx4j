@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -103,7 +104,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
     private class EmployeeSelectorDialog extends EntitySelectorTableVisorController<Employee> {
 
         public EmployeeSelectorDialog(IPane parentView) {
-            super(parentView, Employee.class, true, getValue(), i18n.tr("Select Employee"));
+            super(parentView, Employee.class, true, new HashSet<>(getValue()), i18n.tr("Select Employee"));
 
             // add restriction for papa/mama employee, so that he/she won't be able manage himself :)
             // FIXME: somehow we need to forbid circular references. maybe only server side (if someone wants to be a smart ass)

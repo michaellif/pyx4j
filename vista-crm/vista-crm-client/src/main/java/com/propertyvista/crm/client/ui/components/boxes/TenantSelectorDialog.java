@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.components.boxes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
@@ -39,18 +40,18 @@ public abstract class TenantSelectorDialog extends EntitySelectorTableVisorContr
     }
 
     public TenantSelectorDialog(IPane parentView, boolean isMultiselect) {
-        this(parentView, isMultiselect, Collections.<Tenant> emptyList());
+        this(parentView, isMultiselect, Collections.<Tenant> emptySet());
     }
 
-    public TenantSelectorDialog(IPane parentView, List<Tenant> alreadySelected) {
+    public TenantSelectorDialog(IPane parentView, Set<Tenant> alreadySelected) {
         this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public TenantSelectorDialog(IPane parentView, boolean isMultiselect, List<Tenant> alreadySelected) {
+    public TenantSelectorDialog(IPane parentView, boolean isMultiselect, Set<Tenant> alreadySelected) {
         this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Tenant"));
     }
 
-    public TenantSelectorDialog(IPane parentView, boolean isMultiselect, List<Tenant> alreadySelected, String caption) {
+    public TenantSelectorDialog(IPane parentView, boolean isMultiselect, Set<Tenant> alreadySelected, String caption) {
         super(parentView, Tenant.class, isMultiselect, alreadySelected, caption);
     }
 

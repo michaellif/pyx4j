@@ -84,7 +84,7 @@ public class ListerUtils {
 
             dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new ColumnSelectionHandler() {
                 @Override
-                public void onColumSelectionChanged() {
+                public void onChange() {
                     List<ColumnUserSettings> diff = ColumnDescriptorDiffUtil.getDescriptorsDiff(columnDescriptors, dataTablePanel.getDataTable()
                             .getDataTableModel().getColumnDescriptors());
                     userSettingsProvider.get().overriddenColumns().clear();
@@ -101,7 +101,6 @@ public class ListerUtils {
             dataTablePanel.setPageSizeOptions(null); // turn off page size selection control 
             dataTablePanel.getDataTable().setHasColumnClickSorting(true);
             dataTablePanel.getDataTable().setMultipleSelection(false);
-            dataTablePanel.getDataTable().setMarkSelectedRow(false);
 
         }
     }

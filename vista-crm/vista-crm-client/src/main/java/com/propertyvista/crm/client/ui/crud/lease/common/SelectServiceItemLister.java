@@ -26,7 +26,6 @@ public class SelectServiceItemLister extends AbstractLister<ProductItem> {
 
     public SelectServiceItemLister() {
         super(ProductItem.class);
-        getDataTablePanel().getDataTable().setMarkSelectedRow(true);
         getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
         setColumnDescriptors(//@formatter:off

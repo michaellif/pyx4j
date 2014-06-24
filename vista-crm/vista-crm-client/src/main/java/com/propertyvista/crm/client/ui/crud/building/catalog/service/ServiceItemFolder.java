@@ -14,17 +14,18 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
@@ -79,7 +80,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     protected void addItem() {
         IShowable buildingElementSelectionBox = null;
         if (ARCode.Type.unitRelatedServices().contains(parent.getValue().code().type().getValue())) {
-            List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
+            Set<AptUnit> alreadySelected = new HashSet<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
                 alreadySelected.add((AptUnit) item.element().cast());
             }

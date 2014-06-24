@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.administration.financial.tax;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -22,9 +23,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
@@ -82,7 +81,7 @@ public class TaxFolder extends VistaTableFolder<Tax> {
     private class TaxSelectorDialog extends EntitySelectorTableVisorController<Tax> {
 
         public TaxSelectorDialog(IPane parentView) {
-            super(parentView, Tax.class, true, getValue(), i18n.tr("Select Tax"));
+            super(parentView, Tax.class, true, new HashSet<>(getValue()), i18n.tr("Select Tax"));
         }
 
         @Override

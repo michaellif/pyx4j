@@ -65,7 +65,6 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
         MessageGadget(MessageLister lister) {
             super(MessageViewImpl.this, null, i18n.tr("Tenant Communication"), ThemeColor.foreground, 0.3);
             lister.setWidth("100%");
-            lister.setSelectable(true);
             lister.showColumnSelector(true);
 
             lister.addItemSelectionHandler(new ItemSelectionHandler<MessageDTO>() {

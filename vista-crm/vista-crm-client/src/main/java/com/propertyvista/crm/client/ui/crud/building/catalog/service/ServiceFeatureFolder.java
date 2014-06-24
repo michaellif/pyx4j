@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -108,7 +109,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     private class FeatureSelectorDialog extends EntitySelectorTableVisorController<Feature> {
 
         public FeatureSelectorDialog(IPane parentView) {
-            super(parentView, Feature.class, true, getValue(), i18n.tr("Select Feature"));
+            super(parentView, Feature.class, true, new HashSet<>(getValue()), i18n.tr("Select Feature"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
             if (!VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
                 addFilter(PropertyCriterion.eq(proto().defaultCatalogItem(), Boolean.FALSE));

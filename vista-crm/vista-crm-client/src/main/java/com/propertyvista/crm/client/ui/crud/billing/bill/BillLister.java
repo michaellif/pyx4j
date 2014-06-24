@@ -68,11 +68,11 @@ public class BillLister extends AbstractLister<BillDataDTO> {
         addActionItem(new Button(i18n.tr("Confirm Checked"), new Command() {
             @Override
             public void execute() {
-                if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
+                if (!getLister().getDataTablePanel().getDataTable().getSelectedItems().isEmpty()) {
                     MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to Confirm checked bills?"), new ConfirmDecline() {
                         @Override
                         public void onConfirmed() {
-                            ((BillListerPresenter) getPresenter()).confirm(getDataTablePanel().getDataTable().getCheckedItems());
+                            ((BillListerPresenter) getPresenter()).confirm(getDataTablePanel().getDataTable().getSelectedItems());
                         }
 
                         @Override

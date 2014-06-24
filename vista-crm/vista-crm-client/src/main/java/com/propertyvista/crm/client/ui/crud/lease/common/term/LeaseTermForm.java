@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -511,7 +512,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         private class BuildingUtilitySelectorDialog extends EntitySelectorTableVisorController<BuildingUtility> {
 
             public BuildingUtilitySelectorDialog(IPane parentView) {
-                super(parentView, BuildingUtility.class, true, getValue(), i18n.tr("Select Building Utility"));
+                super(parentView, BuildingUtility.class, true, new HashSet<>(getValue()), i18n.tr("Select Building Utility"));
                 setParentFiltering(LeaseTermForm.this.getValue().unit().building().getPrimaryKey());
             }
 

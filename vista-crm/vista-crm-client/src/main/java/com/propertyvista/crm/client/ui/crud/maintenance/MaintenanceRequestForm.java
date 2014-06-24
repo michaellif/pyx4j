@@ -493,8 +493,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             BuildingSelectorDialog buildingDialog = new BuildingSelectorDialog(MaintenanceRequestForm.this.getParentView()) {
                 @Override
                 public void onClickOk() {
-                    if (!getSelectedItem().isNull()) {
-                        setValue(getSelectedItems().get(0));
+                    if (getSelectedItems().size() == 1) {
+                        setValue(getSelectedItems().toArray(new Building[] {})[0]);
                         setMaintenanceRequestCategoryMeta();
                     }
                 }
@@ -517,8 +517,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                 @Override
                 public void onClickOk() {
-                    if (!getSelectedItem().isNull()) {
-                        setValue(getSelectedItems().get(0));
+                    if (getSelectedItems().size() == 1) {
+                        setValue(getSelectedItems().toArray(new AptUnit[] {})[0]);
                     }
                 }
 
@@ -548,8 +548,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
                 @Override
                 public void onClickOk() {
-                    if (!getSelectedItem().isNull()) {
-                        setValue(getSelectedItems().get(0));
+                    if (getSelectedItems().size() == 1) {
+                        setValue(getSelectedItems().toArray(new Tenant[] {})[0]);
                     }
                 }
 

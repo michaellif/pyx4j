@@ -184,7 +184,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         private final AsyncCallback<Floorplan> onSelectedCallback;
 
         public BuildingBoundFloorplanSelectorDialog(IPane parentView, Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
-            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Select Floorplan"));
+            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptySet(), i18n.tr("Select Floorplan"));
             setParentFiltering(ownerBuildingPk);
             this.onSelectedCallback = onSelectedCallback;
         }

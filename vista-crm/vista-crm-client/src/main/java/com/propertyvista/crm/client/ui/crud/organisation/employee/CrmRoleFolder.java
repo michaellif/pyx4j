@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -84,7 +85,7 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
     private class CrmRoleSelectorDialog extends EntitySelectorTableVisorController<CrmRole> {
 
         public CrmRoleSelectorDialog() {
-            super(parent.getParentView(), CrmRole.class, true, getValue(), i18n.tr("Select roles"));
+            super(parent.getParentView(), CrmRole.class, true, new HashSet<>(getValue()), i18n.tr("Select roles"));
         }
 
         @Override

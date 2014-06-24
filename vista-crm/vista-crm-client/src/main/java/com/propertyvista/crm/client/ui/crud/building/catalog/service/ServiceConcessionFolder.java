@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -104,7 +105,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
     private class ConcessionSelectorDialog extends EntitySelectorTableVisorController<Concession> {
 
         public ConcessionSelectorDialog() {
-            super(parent.getParentView(), Concession.class, true, getValue(), i18n.tr("Select Concession"));
+            super(parent.getParentView(), Concession.class, true, new HashSet<>(getValue()), i18n.tr("Select Concession"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
         }
 

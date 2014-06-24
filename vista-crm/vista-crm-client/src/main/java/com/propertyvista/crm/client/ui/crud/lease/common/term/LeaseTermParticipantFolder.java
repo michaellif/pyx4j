@@ -15,7 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -92,7 +94,7 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
                         @Override
                         public void onClickOk() {
                             if (!getSelectedItems().isEmpty()) {
-                                addParticipants(getSelectedItems());
+                                addParticipants(new ArrayList<>(getSelectedItems()));
                             }
                         }
                     }.show();
@@ -115,8 +117,8 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     protected abstract void addParticipant();
 
-    private List<Customer> retrieveExistingCustomers() {
-        List<Customer> customers = new ArrayList<Customer>();
+    private Set<Customer> retrieveExistingCustomers() {
+        HashSet<Customer> customers = new HashSet<Customer>();
         customers.addAll(retrieveCurrentCustomers());
         customers.addAll(retrieveConcurrentCustomers());
         return customers;

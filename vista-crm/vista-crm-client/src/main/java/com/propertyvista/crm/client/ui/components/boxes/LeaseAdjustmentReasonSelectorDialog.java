@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.components.boxes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
@@ -39,18 +40,18 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
     }
 
     public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect) {
-        this(parentView, isMultiselect, Collections.<ARCode> emptyList());
+        this(parentView, isMultiselect, Collections.<ARCode> emptySet());
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, List<ARCode> alreadySelected) {
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, Set<ARCode> alreadySelected) {
         this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect, List<ARCode> alreadySelected) {
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect, Set<ARCode> alreadySelected) {
         this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Adjustment Code"));
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect, List<ARCode> alreadySelected, String caption) {
+    public LeaseAdjustmentReasonSelectorDialog(IPane parentView, boolean isMultiselect, Set<ARCode> alreadySelected, String caption) {
         super(parentView, ARCode.class, isMultiselect, alreadySelected, caption);
     }
 

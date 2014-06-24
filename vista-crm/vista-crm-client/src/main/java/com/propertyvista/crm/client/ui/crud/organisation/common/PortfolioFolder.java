@@ -15,7 +15,9 @@ package com.propertyvista.crm.client.ui.crud.organisation.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
@@ -27,8 +29,8 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -60,8 +62,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     public List<FolderColumnDescriptor> columns() {
-        return java.util.Arrays.asList(new FolderColumnDescriptor(proto().name(), "20em"),
-                new FolderColumnDescriptor(proto().description(), "30em"));
+        return java.util.Arrays.asList(new FolderColumnDescriptor(proto().name(), "20em"), new FolderColumnDescriptor(proto().description(), "30em"));
     }
 
     @Override
@@ -101,12 +102,12 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     @Override
     protected void addItem() {
-        new PortfolioSelectorDialog(parentView, getValue()).show();
+        new PortfolioSelectorDialog(parentView, new HashSet<>(getValue())).show();
     }
 
     private class PortfolioSelectorDialog extends EntitySelectorTableVisorController<Portfolio> {
 
-        public PortfolioSelectorDialog(IPane parentView, List<Portfolio> alreadySelected) {
+        public PortfolioSelectorDialog(IPane parentView, Set<Portfolio> alreadySelected) {
             super(parentView, Portfolio.class, true, alreadySelected, i18n.tr("Select Portfolio"));
         }
 

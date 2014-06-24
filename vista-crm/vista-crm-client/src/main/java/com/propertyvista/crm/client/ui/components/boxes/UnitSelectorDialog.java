@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.components.boxes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
@@ -39,18 +40,18 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableVisorControl
     }
 
     public UnitSelectorDialog(IPane parentView, boolean isMultiselect) {
-        this(parentView, isMultiselect, Collections.<AptUnit> emptyList());
+        this(parentView, isMultiselect, Collections.<AptUnit> emptySet());
     }
 
-    public UnitSelectorDialog(IPane parentView, List<AptUnit> alreadySelected) {
+    public UnitSelectorDialog(IPane parentView, Set<AptUnit> alreadySelected) {
         this(parentView, alreadySelected != null, alreadySelected, i18n.tr("Select Unit"));
     }
 
-    public UnitSelectorDialog(IPane parentView, boolean isMultiselect, List<AptUnit> alreadySelected) {
+    public UnitSelectorDialog(IPane parentView, boolean isMultiselect, Set<AptUnit> alreadySelected) {
         this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Unit"));
     }
 
-    public UnitSelectorDialog(IPane parentView, boolean isMultiselect, List<AptUnit> alreadySelected, String caption) {
+    public UnitSelectorDialog(IPane parentView, boolean isMultiselect, Set<AptUnit> alreadySelected, String caption) {
         super(parentView, AptUnit.class, isMultiselect, alreadySelected, caption);
     }
 

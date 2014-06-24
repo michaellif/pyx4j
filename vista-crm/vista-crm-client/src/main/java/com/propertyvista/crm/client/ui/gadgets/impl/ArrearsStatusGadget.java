@@ -189,7 +189,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
         });
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<LeaseArrearsSnapshotDTO>() {
             @Override
-            public void onChange(ColumnDescriptor column) {
+            public void onChange() {
                 populate(false);
             }
         });

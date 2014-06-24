@@ -180,12 +180,12 @@ public class LeadForm extends CrmEntityForm<Lead> {
     private class FloorplanSelectorDialogDialog extends EntitySelectorTableVisorController<Floorplan> {
 
         public FloorplanSelectorDialogDialog(IPane parentView) {
-            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Building/Floorplan Selection"));
+            super(parentView, Floorplan.class, false, Collections.<Floorplan> emptySet(), i18n.tr("Building/Floorplan Selection"));
         }
 
         @Override
         public void onClickOk() {
-            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItems().get(0));
+            ((LeadEditorView.Presenter) ((LeadEditorView) getParentView()).getPresenter()).setSelectedFloorplan(getSelectedItem());
         }
 
         @Override

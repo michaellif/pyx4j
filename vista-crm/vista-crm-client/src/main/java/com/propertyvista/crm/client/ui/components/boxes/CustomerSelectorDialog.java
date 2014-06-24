@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.components.boxes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
@@ -39,18 +40,18 @@ public abstract class CustomerSelectorDialog extends EntitySelectorTableVisorCon
     }
 
     public CustomerSelectorDialog(IPane parentView, boolean isMultiselect) {
-        this(parentView, isMultiselect, Collections.<Customer> emptyList());
+        this(parentView, isMultiselect, Collections.<Customer> emptySet());
     }
 
-    public CustomerSelectorDialog(IPane parentView, List<Customer> alreadySelected) {
+    public CustomerSelectorDialog(IPane parentView, Set<Customer> alreadySelected) {
         this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public CustomerSelectorDialog(IPane parentView, boolean isMultiselect, List<Customer> alreadySelected) {
+    public CustomerSelectorDialog(IPane parentView, boolean isMultiselect, Set<Customer> alreadySelected) {
         this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Customer"));
     }
 
-    public CustomerSelectorDialog(IPane parentView, boolean isMultiselect, List<Customer> alreadySelected, String caption) {
+    public CustomerSelectorDialog(IPane parentView, boolean isMultiselect, Set<Customer> alreadySelected, String caption) {
         super(parentView, Customer.class, isMultiselect, alreadySelected, caption);
     }
 

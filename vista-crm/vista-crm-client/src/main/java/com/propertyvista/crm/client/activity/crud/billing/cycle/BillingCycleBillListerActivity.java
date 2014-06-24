@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -44,7 +45,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     private Bill.BillStatus billStatusValue;
 
     public BillingCycleBillListerActivity(AppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(BillingCycleBillListerView.class), GWT
+        super(place, CrmSite.getViewFactory().getView(BillingCycleBillListerView.class), GWT
                 .<BillingCycleBillListService> create(BillingCycleBillListService.class), BillDataDTO.class);
 
         String val;
@@ -71,7 +72,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     }
 
     @Override
-    public void confirm(List<BillDataDTO> bills) {
+    public void confirm(Set<BillDataDTO> bills) {
         ((BillingCycleBillListService) getService()).confirm(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
@@ -81,7 +82,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     }
 
     @Override
-    public void reject(List<BillDataDTO> bills, String reason) {
+    public void reject(Set<BillDataDTO> bills, String reason) {
         ((BillingCycleBillListService) getService()).reject(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
@@ -91,7 +92,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     }
 
     @Override
-    public void print(List<BillDataDTO> bills) {
+    public void print(Set<BillDataDTO> bills) {
         for (BillDataDTO bill : bills) {
             EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().id(), bill.bill()));

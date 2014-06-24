@@ -42,8 +42,8 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
         approveAction = new Button(i18n.tr("Confirm Selected"), new Command() {
             @Override
             public void execute() {
-                if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
-                    ((BillingCycleBillListerView.Presenter) getPresenter()).confirm(getLister().getDataTablePanel().getDataTable().getCheckedItems());
+                if (!getLister().getDataTablePanel().getDataTable().getSelectedItems().isEmpty()) {
+                    ((BillingCycleBillListerView.Presenter) getPresenter()).confirm(getLister().getDataTablePanel().getDataTable().getSelectedItems());
                 }
             }
         });
@@ -52,7 +52,7 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
         rejectAction = new Button(i18n.tr("Reject Selected"), new Command() {
             @Override
             public void execute() {
-                if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
+                if (!getLister().getDataTablePanel().getDataTable().getSelectedItems().isEmpty()) {
                     new ReasonBox(i18n.tr("Reject Selected")) {
                         @Override
                         public boolean onClickOk() {
@@ -60,7 +60,7 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
                                 MessageDialog.error(i18n.tr("Error"), i18n.tr("Please fill the reason"));
                                 return false;
                             }
-                            ((BillingCycleBillListerView.Presenter) getPresenter()).reject(getLister().getDataTablePanel().getDataTable().getCheckedItems(),
+                            ((BillingCycleBillListerView.Presenter) getPresenter()).reject(getLister().getDataTablePanel().getDataTable().getSelectedItems(),
                                     getReason());
                             return true;
                         }
@@ -73,8 +73,8 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
         print = new Button(i18n.tr("Print Selected"), new Command() {
             @Override
             public void execute() {
-                if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
-                    ((BillingCycleBillListerView.Presenter) getPresenter()).print(getLister().getDataTablePanel().getDataTable().getCheckedItems());
+                if (!getLister().getDataTablePanel().getDataTable().getSelectedItems().isEmpty()) {
+                    ((BillingCycleBillListerView.Presenter) getPresenter()).print(getLister().getDataTablePanel().getDataTable().getSelectedItems());
                 }
             }
         });

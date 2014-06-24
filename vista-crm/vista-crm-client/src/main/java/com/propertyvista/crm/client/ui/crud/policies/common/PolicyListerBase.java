@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import com.google.gwt.user.client.Command;
 
@@ -78,7 +79,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends Abstract
     }
 
     @Override
-    protected void onItemsDelete(final List<P> items) {
+    protected void onItemsDelete(final Set<P> items) {
         MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
             @Override
             public void execute() {

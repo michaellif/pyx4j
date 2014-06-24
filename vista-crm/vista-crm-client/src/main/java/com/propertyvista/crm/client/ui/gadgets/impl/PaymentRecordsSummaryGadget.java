@@ -225,7 +225,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
         });
         paymentsSummaryTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<PaymentsSummary>() {
             @Override
-            public void onChange(ColumnDescriptor column) {
+            public void onChange() {
                 populate(false);
             }
         });

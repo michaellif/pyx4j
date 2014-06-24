@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
@@ -23,11 +23,11 @@ public interface BillingCycleBillListerView extends ILister<BillDataDTO> {
 
     interface Presenter extends ILister.Presenter<BillDataDTO> {
 
-        void confirm(List<BillDataDTO> bills);
+        void confirm(Set<BillDataDTO> bills);
 
-        void reject(List<BillDataDTO> bills, String reason);
+        void reject(Set<BillDataDTO> bills, String reason);
 
-        void print(List<BillDataDTO> bills);
+        void print(Set<BillDataDTO> bills);
     }
 
     void setActionButtonsVisible(boolean visible);

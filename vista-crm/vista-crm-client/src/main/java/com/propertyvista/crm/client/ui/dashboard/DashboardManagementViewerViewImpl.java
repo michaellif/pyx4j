@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -42,20 +42,19 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
     public class NewDashboardOwnerSelectionDialog extends EntitySelectorTableVisorController<CrmUser> {
 
         public NewDashboardOwnerSelectionDialog(IPane parentView) {
-            super(parentView, CrmUser.class, false, new ArrayList<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
+            super(parentView, CrmUser.class, false, new HashSet<CrmUser>(), i18n.tr("Choose a new dashboard owner"));
         }
 
         @Override
         public void onClickOk() {
             if (!getSelectedItems().isEmpty()) {
-                MessageDialog.confirm("", i18n.tr("Are you sure you want to pass your dashboard to {0}?", getSelectedItems().get(0).getStringView()),
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                ((DashboardManagementViewerView.Presenter) getPresenter()).changeOwnership(getForm().getValue()
-                                        .<DashboardMetadata> createIdentityStub(), getSelectedItems().get(0).<CrmUser> createIdentityStub());
-                            }
-                        });
+                MessageDialog.confirm("", i18n.tr("Are you sure you want to pass your dashboard to {0}?", getSelectedItem().getStringView()), new Command() {
+                    @Override
+                    public void execute() {
+                        ((DashboardManagementViewerView.Presenter) getPresenter()).changeOwnership(getForm().getValue()
+                                .<DashboardMetadata> createIdentityStub(), getSelectedItem().<CrmUser> createIdentityStub());
+                    }
+                });
             }
         }
 

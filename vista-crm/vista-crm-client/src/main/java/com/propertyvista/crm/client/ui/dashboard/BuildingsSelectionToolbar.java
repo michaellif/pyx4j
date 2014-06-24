@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.dom.client.Style.Float;
@@ -51,7 +54,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
 
     private final HTML buildingsView;
 
-    private Vector<Building> buildings;
+    private Set<Building> buildings;
 
     private Button allBuilidngsButton;
 
@@ -62,7 +65,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
     public BuildingsSelectionToolbar(IPane parentView) {
         this.parentView = parentView;
         this.eventBus = new SimpleEventBus();
-        this.buildings = new Vector<Building>();
+        this.buildings = new HashSet<Building>();
 
         bar = new FlowPanel();
         bar.setStyleName(AbstractDashboard.DEFAULT_STYLE_PREFIX + AbstractDashboard.StyleSuffix.actionsPanel);
@@ -97,7 +100,7 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         bar.add(buttons);
 
         this.initWidget(bar);
-        updateSelection(new Vector<Building>());
+        updateSelection(new HashSet<Building>());
     }
 
     @Override
@@ -130,14 +133,13 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
     }
 
     private void selectAllBuildings() {
-        buildings = new Vector<Building>();
-        updateSelection(new Vector<Building>());
+        buildings = new HashSet<Building>();
+        updateSelection(new HashSet<Building>());
     }
 
-    private void updateSelection(List<Building> addedBuildings) {
+    private void updateSelection(Set<Building> addedBuildings) {
         // update selected buildings
-        Vector<Building> updatedFilter = new Vector<Building>();
-        updatedFilter = new Vector<Building>(getSelectedBuildingsStubs().size() + addedBuildings.size());
+        HashSet<Building> updatedFilter = new HashSet<Building>(getSelectedBuildingsStubs().size() + addedBuildings.size());
         updatedFilter.addAll(buildings);
         updatedFilter.addAll(addedBuildings);
         buildings = updatedFilter;
@@ -147,10 +149,10 @@ final class BuildingsSelectionToolbar extends Composite implements IBuildingFilt
         if (buildings.isEmpty()) {
             buildingsLabel.appendEscaped(i18n.tr("All"));
         } else {
-            new SafeHtmlBuilder();
-            for (int i = 0; i < buildings.size(); ++i) {
-                buildingsLabel.appendEscaped(buildings.get(i).propertyCode().getValue());
-                if (i < buildings.size() - 1) {
+            Iterator<Building> iterator = updatedFilter.iterator();
+            while (iterator.hasNext()) {
+                buildingsLabel.appendEscaped(iterator.next().propertyCode().getValue());
+                if (iterator.hasNext()) {
                     buildingsLabel.appendEscaped(", ");
                 }
             }

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.dashboard;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.Command;
 
@@ -49,7 +50,7 @@ public class DashboardLister extends AbstractLister<DashboardMetadata> {
     }
 
     @Override
-    protected void onItemsDelete(final List<DashboardMetadata> items) {
+    protected void onItemsDelete(final Set<DashboardMetadata> items) {
         MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
             @Override
             public void execute() {

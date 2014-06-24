@@ -13,9 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -73,7 +74,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
         @Override
         protected void addItem() {
-            final List<ARCode> alreadySelectedProducts = new ArrayList<ARCode>();
+            final Set<ARCode> alreadySelectedProducts = new HashSet<>();
             for (ProductTaxPolicyItem item : getValue()) {
                 if (!item.productCode().isNull()) {
                     alreadySelectedProducts.add(item.productCode());
@@ -107,7 +108,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
         private class ProductSelectorDialog extends EntitySelectorTableVisorController<ARCode> {
 
-            public ProductSelectorDialog(IPane parentView, List<ARCode> alreadySelectedProducts) {
+            public ProductSelectorDialog(IPane parentView, Set<ARCode> alreadySelectedProducts) {
                 super(parentView, ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
             }
 

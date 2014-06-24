@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.landlord;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -65,7 +66,7 @@ public class LandlordBuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(parentForm.getParentView(), getValue()) {
+        new BuildingSelectorDialog(parentForm.getParentView(), new HashSet<>(getValue())) {
             @Override
             protected void setFilters(List<Criterion> filters) {
                 super.setFilters(filters);

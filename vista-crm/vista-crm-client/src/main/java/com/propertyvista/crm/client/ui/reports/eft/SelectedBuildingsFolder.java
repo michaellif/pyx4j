@@ -14,14 +14,14 @@
 package com.propertyvista.crm.client.ui.reports.eft;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
 import com.pyx4j.site.client.ui.IPane;
@@ -74,7 +74,7 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(parentView, getValue()) {
+        new BuildingSelectorDialog(parentView, new HashSet<>(getValue())) {
             @Override
             public void onClickOk() {
                 for (Building building : getSelectedItems()) {

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.components.boxes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
@@ -39,18 +40,18 @@ public abstract class BuildingSelectorDialog extends EntitySelectorTableVisorCon
     }
 
     public BuildingSelectorDialog(IPane parentView, boolean isMultiselect) {
-        this(parentView, isMultiselect, Collections.<Building> emptyList());
+        this(parentView, isMultiselect, Collections.<Building> emptySet());
     }
 
-    public BuildingSelectorDialog(IPane parentView, List<Building> alreadySelected) {
+    public BuildingSelectorDialog(IPane parentView, Set<Building> alreadySelected) {
         this(parentView, alreadySelected != null, alreadySelected);
     }
 
-    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect, List<Building> alreadySelected) {
+    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect, Set<Building> alreadySelected) {
         this(parentView, isMultiselect, alreadySelected, i18n.tr("Select Buildings"));
     }
 
-    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect, List<Building> alreadySelected, String caption) {
+    public BuildingSelectorDialog(IPane parentView, boolean isMultiselect, Set<Building> alreadySelected, String caption) {
         super(parentView, Building.class, isMultiselect, alreadySelected, caption);
     }
 

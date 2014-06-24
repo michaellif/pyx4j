@@ -14,8 +14,10 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 
@@ -87,8 +89,8 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
         }.show();
     }
 
-    private List<Pmc> getAlreadySelected() {
-        List<Pmc> alreadySelected = new LinkedList<Pmc>();
+    private Set<Pmc> getAlreadySelected() {
+        HashSet<Pmc> alreadySelected = new HashSet<>();
         for (TriggerPmc item : getValue()) {
             alreadySelected.add(item.pmc());
         }

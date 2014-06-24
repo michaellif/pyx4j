@@ -33,7 +33,7 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     private final Key versionedEntityPk;
 
     public VersionSelectorDialog(IPane parentView, Class<V> entityVersionClass, Key entityId) {
-        super(parentView, entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
+        super(parentView, entityVersionClass, false, Collections.<V> emptySet(), i18n.tr("Select Version"));
         setParentFiltering(entityId);
         this.versionedEntityPk = entityId;
     }

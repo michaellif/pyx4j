@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation.common;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -89,7 +90,7 @@ public class BuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected void addItem() {
-        new BuildingSelectorDialog(parentView, getValue()) {
+        new BuildingSelectorDialog(parentView, new HashSet<>(getValue())) {
             @Override
             public void onClickOk() {
                 for (Building selected : getSelectedItems()) {

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.bill;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -34,7 +34,7 @@ public class BillListerController extends SecureListerController<BillDataDTO> im
     }
 
     @Override
-    public void confirm(List<BillDataDTO> bills) {
+    public void confirm(Set<BillDataDTO> bills) {
         ((BillCrudService) getService()).confirm(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
