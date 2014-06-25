@@ -63,6 +63,7 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE aggregated_transfer DROP CONSTRAINT aggregated_transfer_funds_transfer_type_e_ck;
         ALTER TABLE billable_item_adjustment DROP CONSTRAINT billable_item_adjustment_adjustment_type_e_ck;
         -- ALTER TABLE communication_message DROP CONSTRAINT communication_message_sender_discriminator_d_ck;
         -- ALTER TABLE communication_thread DROP CONSTRAINT communication_thread_responsible_discriminator_d_ck;
@@ -888,6 +889,8 @@ BEGIN
             
         -- check constraints
         
+        ALTER TABLE aggregated_transfer ADD CONSTRAINT aggregated_transfer_funds_transfer_type_e_ck 
+            CHECK ((funds_transfer_type) IN ('Cards', 'DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_country_e_ck 
             CHECK ((info_legal_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 
                 'Angola', 'Anguilla', 'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 

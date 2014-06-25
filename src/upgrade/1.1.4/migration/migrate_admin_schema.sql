@@ -216,18 +216,15 @@ SET search_path = '_admin_';
                         'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
 
         
-        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
-            CHECK ((trigger_type) IN (  'billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 
-                                        'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 'initializeFutureBillingCycles', 
-                                        'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 
-                                        'paymentsDbpProcess', 'paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 
-                                        'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 'paymentsPadProcessAcknowledgment', 
-                                        'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsReceiveAcknowledgment', 
-                                        'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 
-                                        'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 
-                                        'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 
-                                        'vistaBusinessReport', 'vistaCaleonReport', 'vistaHeathMonitor', 'yardiARDateVerification', 
-                                        'yardiImportProcess'));
+    ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+        CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 
+        'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess', 
+        'paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 
+        'paymentsPadProcessAcknowledgment', 'paymentsPadProcessReconciliation', 'paymentsPadSend', 'paymentsProcessCardsReconciliation', 
+        'paymentsReceiveAcknowledgment', 'paymentsReceiveCardsReconciliation', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 
+        'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
+        'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'vistaHeathMonitor', 'yardiARDateVerification', 
+        'yardiImportProcess'));
 
                 
         /**
