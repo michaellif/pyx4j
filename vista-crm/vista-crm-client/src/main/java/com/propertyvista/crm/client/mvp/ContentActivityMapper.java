@@ -152,10 +152,10 @@ import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplica
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermViewerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleEditorActivity;
-import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceCreditViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceDebitViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.financial.deposit.DepositLifecycleEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.financial.deposit.DepositLifecycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestEditorActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestListerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestViewerActivity;

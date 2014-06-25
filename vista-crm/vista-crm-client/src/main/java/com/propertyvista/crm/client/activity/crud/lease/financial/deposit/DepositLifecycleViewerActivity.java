@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 11, 2012
+ * Created on Jan 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.lease.common.deposit;
+package com.propertyvista.crm.client.activity.crud.lease.financial.deposit;
 
 import com.google.gwt.core.client.GWT;
 
@@ -19,16 +19,15 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleEditorView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleViewerView;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleEditorActivity extends CrmEditorActivity<DepositLifecycleDTO> implements DepositLifecycleEditorView.Presenter {
+public class DepositLifecycleViewerActivity extends CrmViewerActivity<DepositLifecycleDTO> implements DepositLifecycleViewerView.Presenter {
 
-    public DepositLifecycleEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(DepositLifecycleEditorView.class), GWT
-                .<AbstractCrudService<DepositLifecycleDTO>> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
+    public DepositLifecycleViewerActivity(CrudAppPlace place) {
+        super(place,  CrmSite.getViewFactory().getView(DepositLifecycleViewerView.class), GWT
+                .<AbstractCrudService<DepositLifecycleDTO>> create(DepositLifecycleCrudService.class));
     }
-
 }
