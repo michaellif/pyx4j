@@ -26,6 +26,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -45,6 +46,7 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -58,6 +60,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
@@ -118,8 +121,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 super(NotesAndAttachments.class);
                 setOrderable(false);
                 inheritEditable(false);
-                setEditable(true);
-
+                setEditable(SecurityController.check(DataModelPermission.permissionUpdate(HasNotesAndAttachments.class)));
+                setAddable(SecurityController.check(DataModelPermission.permissionCreate(HasNotesAndAttachments.class)));
             }
 
             @Override
@@ -136,16 +139,17 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             protected CFolderItem<NotesAndAttachments> createItem(boolean first) {
                 final CFolderItem<NotesAndAttachments> item = super.createItem(first);
 
-                item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
-
-                    @SuppressWarnings("rawtypes")
-                    @Override
-                    public void execute() {
-                        item.setViewable(false);
-                        ((BoxFolderItemDecorator) item.getDecorator()).setExpended(true);
-                        ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
-                    }
-                });
+                if (SecurityController.check(DataModelPermission.permissionUpdate(HasNotesAndAttachments.class))) {
+                    item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
+                        @SuppressWarnings("rawtypes")
+                        @Override
+                        public void execute() {
+                            item.setViewable(false);
+                            ((BoxFolderItemDecorator) item.getDecorator()).setExpended(true);
+                            ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
+                        }
+                    });
+                }
 
                 return item;
             }

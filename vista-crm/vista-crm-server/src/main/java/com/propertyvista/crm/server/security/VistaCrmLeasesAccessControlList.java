@@ -30,6 +30,7 @@ import com.propertyvista.crm.rpc.services.financial.AutoPayHistoryCrudService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -67,6 +68,9 @@ public class VistaCrmLeasesAccessControlList extends UIAclBuilder {
 
         grant(LeasesAdvance, LeaseLegalStateDTO.class, READ);
         grant(LeasesFull, LeaseLegalStateDTO.class, ALL);
+
+        grant(LeasesAdvance, HasNotesAndAttachments.class, READ);
+        grant(LeasesFull, HasNotesAndAttachments.class, ALL);
 
         // ---- Financial:
 

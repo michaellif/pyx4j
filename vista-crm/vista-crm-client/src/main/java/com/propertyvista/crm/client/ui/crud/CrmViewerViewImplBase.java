@@ -27,7 +27,6 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
@@ -45,11 +44,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private final boolean viewOnly;
 
-    private BreadcrumbsBar breadcrumbsBar;
+    private final BreadcrumbsBar breadcrumbsBar;
 
-    private BreadcrumbsService breadcumbsService;
+    private final BreadcrumbsService breadcumbsService;
 
-    private Button notesButton;
+    private final Button notesButton;
 
     private Button editButton;
 
@@ -63,11 +62,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private MenuItem finalizeMenu;
 
-    private Button viewsButton;
+    private final Button viewsButton;
 
     private Button.ButtonMenuBar viewsMenu;
 
-    private Button actionsButton;
+    private final Button actionsButton;
 
     private Button.ButtonMenuBar actionsMenu;
 
@@ -128,6 +127,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
     public CrmViewerViewImplBase(CrmEntityForm<E> form, boolean viewOnly) {
         this(viewOnly);
         setForm(form);
+    }
+
+    public Button getNotesButton() {
+        return notesButton;
     }
 
     public MenuItemSeparator addActionSeparator() {
