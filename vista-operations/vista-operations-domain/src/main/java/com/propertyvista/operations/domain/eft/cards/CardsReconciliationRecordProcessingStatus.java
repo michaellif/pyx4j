@@ -7,25 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 24, 2014
+ * Created on Jun 25, 2014
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.payment;
+package com.propertyvista.operations.domain.eft.cards;
 
-import com.propertyvista.biz.ExecutionMonitor;
+public enum CardsReconciliationRecordProcessingStatus {
 
-class CardsReconciliationProcessor {
+    Received,
 
-    private final ExecutionMonitor executionMonitor;
-
-    CardsReconciliationProcessor(ExecutionMonitor executionMonitor) {
-        this.executionMonitor = executionMonitor;
-    }
-
-    public void processPmcReconciliation() {
-        // TODO Auto-generated method stub
-
-    }
+    Processed;
 
 }

@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.eft.cards.to;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
@@ -36,6 +37,7 @@ public interface CardsReconciliationCardTotalRecord extends IEntity {
 
     @NotNull
     @ImportColumn(format = "MM/dd/yyyy")
+    @ToString
     IPrimitive<LogicalDate> date();
 
     @NotNull
@@ -44,10 +46,12 @@ public interface CardsReconciliationCardTotalRecord extends IEntity {
 
     @NotNull
     @ImportColumn
+    @ToString
     IPrimitive<String> terminalID();
 
     @NotNull
     @ImportColumn
+    @ToString
     IPrimitive<CardTotalRecordType> type();
 
     @ImportColumn
