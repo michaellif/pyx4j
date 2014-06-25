@@ -24,6 +24,7 @@ import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
@@ -40,13 +41,16 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     // TODO Move to new Service  LeaseOperationService
 
+    @AccessControl(LeaseStateManagement.class)
     void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
             LogicalDate moveOutDate, LogicalDate leseEndDate);
 
     void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback, Key entityId);
 
+    @AccessControl(LeaseStateManagement.class)
     void cancelCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
+    @AccessControl(LeaseStateManagement.class)
     void moveOut(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     /**
@@ -55,10 +59,13 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     @AccessControl(SendMail.class)
     void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseTermParticipant<?>> users, EmailTemplateType emailType);
 
+    @AccessControl(LeaseStateManagement.class)
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 
+    @AccessControl(LeaseStateManagement.class)
     void closeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
+    @AccessControl(LeaseStateManagement.class)
     void cancelLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     /**
@@ -70,6 +77,7 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     /**
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
      */
+    @AccessControl(LeaseStateManagement.class)
     void simpleLeaseRenew(AsyncCallback<VoidSerializable> callback, Key entityId, LogicalDate leaseEndDate);
 
     // Legal Start //@formatter:off
