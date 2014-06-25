@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
-import com.propertyvista.eft.caledoncards.reports.CardsReconciliationManager;
+import com.propertyvista.eft.caledoncards.reports.CardsReconciliationReceiveManager;
 import com.propertyvista.eft.caledoneft.CaledonFundsTransferManager;
 import com.propertyvista.eft.dbp.BmoManager;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
@@ -60,12 +60,12 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
 
     @Override
     public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
-        return new CardsReconciliationManager().receiveCardsReconciliationFiles(cardsReconciliationId);
+        return new CardsReconciliationReceiveManager().receiveCardsReconciliationFiles(cardsReconciliationId);
     }
 
     @Override
     public void confirmReceivedCardsReconciliationFiles(Collection<String> fileNames, boolean protocolErrorFlag) {
-        new CardsReconciliationManager().confirmReceivedCardsReconciliationFiles(fileNames, protocolErrorFlag);
+        new CardsReconciliationReceiveManager().confirmReceivedCardsReconciliationFiles(fileNames, protocolErrorFlag);
     }
 
 }

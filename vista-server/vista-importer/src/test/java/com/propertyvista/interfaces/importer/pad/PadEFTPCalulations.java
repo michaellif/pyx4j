@@ -208,7 +208,6 @@ public class PadEFTPCalulations {
         EntityReportFormatter<PadEFTReportModel> entityFormatter = new EntityReportFormatter<PadEFTReportModel>(PadEFTReportModel.class);
         entityFormatter.createHeader(formatter);
         entityFormatter.reportAll(formatter, reportModels);
-        formatter.getBinaryData();
 
         File file = new File(new File("target"), fileNamePrefix + namePrefix + "_result.xls");
         if (file.exists()) {

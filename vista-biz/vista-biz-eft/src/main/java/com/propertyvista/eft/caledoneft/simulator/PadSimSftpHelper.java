@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.util.FileUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.eft.caledoncards.reports.CardsReconciliationReceiveManager;
 import com.propertyvista.eft.caledoneft.CaledonFundsTransferDirectories;
 
 public class PadSimSftpHelper {
@@ -49,6 +50,7 @@ public class PadSimSftpHelper {
             for (String dirName : CaledonFundsTransferDirectories.allGetDirectories()) {
                 FileUtils.forceMkdir(new File(dir, dirName));
             }
+            FileUtils.forceMkdir(new File(dir, CardsReconciliationReceiveManager.remoteDirectory));
         } catch (IOException e) {
             throw new Error(e);
         }

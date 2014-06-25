@@ -34,11 +34,11 @@ import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.server.sftp.SftpClient;
 import com.propertyvista.server.sftp.SftpFile;
 
-public class CardsReconciliationManager {
+public class CardsReconciliationReceiveManager {
 
-    private static final Logger log = LoggerFactory.getLogger(CardsReconciliationManager.class);
+    private static final Logger log = LoggerFactory.getLogger(CardsReconciliationReceiveManager.class);
 
-    private static final String remoteDirectory = "cards_out";
+    public static final String remoteDirectory = "cards_out";
 
     public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
         File workdir = getLocalWorkir();

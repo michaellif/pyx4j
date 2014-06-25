@@ -291,6 +291,11 @@ public class OperationsSiteMap implements SiteMap {
             public static class CardServiceSimulationMerchantAccount extends CrudAppPlace implements DevelopmentOnlyPlace {
 
             }
+
+            @PlaceProperties(caption = "Simulated Cards Reconciliation", navigLabel = "Cards Reconciliations")
+            public static class CardServiceSimulationReconciliation extends CrudAppPlace implements DevelopmentOnlyPlace {
+
+            }
         }
 
         public static class PadSimulation extends CrudAppPlace {

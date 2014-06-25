@@ -123,6 +123,9 @@ public class NavigViewImpl extends Composite implements NavigView {
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction(),
                     VistaOperationsBehavior.Caledon));
 
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationReconciliation(),
+                    VistaOperationsBehavior.Caledon));
+
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.DirectBankingSimRecord(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.Simulator.DirectBankingSimFile(), VistaOperationsBehavior.Caledon));
         }

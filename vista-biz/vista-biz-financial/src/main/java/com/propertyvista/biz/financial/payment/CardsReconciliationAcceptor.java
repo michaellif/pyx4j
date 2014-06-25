@@ -61,7 +61,7 @@ class CardsReconciliationAcceptor {
         Persistence.service().persist(fileMerchantTotal);
 
         CardsReconciliationFile fileCardTotal = EntityFactory.create(CardsReconciliationFile.class);
-        fileMerchantTotal.fileName().setValue(reconciliationFile.fileNameCardTotal().getValue());
+        fileCardTotal.fileName().setValue(reconciliationFile.fileNameCardTotal().getValue());
         fileCardTotal.remoteFileDate().setValue(reconciliationFile.remoteFileDateCardTotal().getValue());
         Persistence.service().persist(fileCardTotal);
 

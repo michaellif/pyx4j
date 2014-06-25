@@ -33,6 +33,7 @@ import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationReconciliationRecord;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.eft.dbp.simulator.DirectDebitSimFile;
@@ -88,6 +89,7 @@ import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationConfigService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationMerchantAccountCrudService;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationReconciliationCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordCrudService;
@@ -190,6 +192,9 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(CardServiceSimulationReconciliationCrudService.class));
+        grant(VistaOperationsBehavior.Caledon, new EntityPermission(CardServiceSimulationReconciliationRecord.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.Caledon, new IServiceExecutePermission(DirectDebitSimRecordCrudService.class));
         grant(VistaOperationsBehavior.Caledon, new EntityPermission(DirectDebitSimRecord.class, EntityPermission.ALL));
