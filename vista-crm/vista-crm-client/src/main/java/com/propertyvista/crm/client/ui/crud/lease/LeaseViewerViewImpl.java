@@ -71,6 +71,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
@@ -237,7 +238,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 noticeActionExecuter();
             }
-        }, new ActionPermission(LeaseStateManagement.class));
+        }, new ActionPermission(LeaseCompletion.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(noticeAction);
         }
@@ -247,7 +248,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 cancelCmpletion(CompletionType.Notice);
             }
-        }, new ActionPermission(LeaseStateManagement.class));
+        }, new ActionPermission(LeaseCompletion.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelNoticeAction);
         }
@@ -257,7 +258,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 evictActionExecuter();
             }
-        }, new ActionPermission(LeaseStateManagement.class));
+        }, new ActionPermission(LeaseCompletion.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(evictAction);
         }
@@ -267,7 +268,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 cancelCmpletion(CompletionType.Eviction);
             }
-        }, new ActionPermission(LeaseStateManagement.class));
+        }, new ActionPermission(LeaseCompletion.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelEvictAction);
         }
@@ -277,7 +278,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 terminateActionExecuter();
             }
-        }, new ActionPermission(LeaseStateManagement.class));
+        }, new ActionPermission(LeaseCompletion.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(terminateAction);
         }
@@ -287,7 +288,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 cancelCmpletion(CompletionType.Termination);
             }
-        }, new ActionPermission(LeaseStateManagement.class));
+        }, new ActionPermission(LeaseCompletion.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelTerminateAction);
         }
