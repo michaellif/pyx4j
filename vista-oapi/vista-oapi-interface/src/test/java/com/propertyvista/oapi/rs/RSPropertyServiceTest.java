@@ -41,10 +41,7 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     @Override
     protected void preloadData() {
         super.preloadData();
-        if (false) {
-            // TODO make it work - DefaultProductCatalogFactory.class is not visible
-            mockManager.getDataModel(BuildingDataModel.class).addBuilding();
-        }
+        getDataModel(BuildingDataModel.class).addBuilding();
     }
 
     @Test

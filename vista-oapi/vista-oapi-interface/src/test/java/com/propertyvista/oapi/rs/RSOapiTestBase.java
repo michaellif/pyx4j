@@ -20,15 +20,19 @@ import javax.ws.rs.core.Application;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
+import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
@@ -36,6 +40,7 @@ import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
+import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 
 public class RSOapiTestBase extends JerseyTest {
@@ -44,10 +49,18 @@ public class RSOapiTestBase extends JerseyTest {
 
     protected MockManager mockManager;
 
+    protected Building building;
+
     @Override
     protected Application configure() {
         Class<?> serviceClass = getServiceClass();
-        return serviceClass == null ? new OpenApiRsApplication() : new ResourceConfig(serviceClass);
+        return new ResourceConfig(serviceClass == null ? OpenApiRsApplication.class : serviceClass);
+    }
+
+    @Override
+    protected TestContainerFactory getTestContainerFactory() {
+        // Use this factory to run RS server in the same thread as the test and preserve the pmc namespace
+        return new InMemoryTestContainerFactory();
     }
 
     protected Class<?> getServiceClass() {
@@ -72,8 +85,21 @@ public class RSOapiTestBase extends JerseyTest {
         return 7771;
     }
 
+    public <E extends MockDataModel<?>> E getDataModel(Class<E> modelClass) {
+        return mockManager.getDataModel(modelClass);
+    }
+
     protected void preloadData() {
         preloadData(new MockConfig());
+    }
+
+    protected Building getBuilding() {
+        if (building == null) {
+            building = getDataModel(BuildingDataModel.class).addBuilding();
+            getDataModel(MerchantAccountDataModel.class).addMerchantAccount(building);
+            Persistence.service().commit();
+        }
+        return building;
     }
 
     protected void preloadData(final MockConfig config) {

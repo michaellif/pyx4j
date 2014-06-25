@@ -60,6 +60,12 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+                <artifactId>jersey-test-framework-provider-inmemory</artifactId>
+                <scope>test</scope>
+            </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -102,6 +108,14 @@
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-dev-generator</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-preloader</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
             <optional>true</optional>
