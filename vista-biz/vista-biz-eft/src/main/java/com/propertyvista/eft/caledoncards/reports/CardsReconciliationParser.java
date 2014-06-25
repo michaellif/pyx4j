@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
@@ -43,6 +44,9 @@ public class CardsReconciliationParser {
             throw new RuntimeException("File not found");
         }
         CSVLoad.loadFile(is, StandardCharsets.US_ASCII, new CSVParser(), reciver);
+        if (!reciver.isHeaderFound()) {
+            throw new UserRuntimeException("Column header declaration not found in file " + file.getName());
+        }
         return reciver.getEntities();
     }
 
@@ -70,6 +74,9 @@ public class CardsReconciliationParser {
             throw new RuntimeException("File not found");
         }
         CSVLoad.loadFile(is, StandardCharsets.US_ASCII, new CSVParser(), reciver);
+        if (!reciver.isHeaderFound()) {
+            throw new UserRuntimeException("Column header declaration not found in file " + file.getName());
+        }
         return reciver.getEntities();
     }
 

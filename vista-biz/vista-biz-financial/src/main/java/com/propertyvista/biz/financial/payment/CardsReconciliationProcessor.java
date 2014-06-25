@@ -36,6 +36,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
@@ -106,8 +107,10 @@ class CardsReconciliationProcessor {
 
     private void createAggregatedTransfer(CardsReconciliationRecord reconciliationRecord) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        at.fundsTransferType().setValue(FundsTransferType.Cards);
         at.padReconciliationSummaryKey().setValue(reconciliationRecord.getPrimaryKey());
         at.status().setValue(AggregatedTransferStatus.Paid);
+        at.paymentDate().setValue(reconciliationRecord.date().getValue());
         // Find MerchantAccount
         {
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);

@@ -103,14 +103,14 @@ class CardsReconciliationAcceptor {
 
             switch (merchantTotal.type().getValue()) {
             case Deposit:
-                Validate.isTrue(merchantTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {}", merchantTotal);
-                Validate.isTrue(record.totalDeposit().isNull(), "Duplicate Deposit {}", merchantTotal);
+                Validate.isTrue(merchantTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", merchantTotal);
+                Validate.isTrue(record.totalDeposit().isNull(), "Duplicate Deposit {0}", merchantTotal);
                 record.totalDeposit().setValue(merchantTotal.credit().getValue());
                 executionMonitor.addProcessedEvent("Merchant Deposit", record.totalDeposit().getValue());
                 break;
             case Fees:
-                Validate.isTrue(merchantTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {}", merchantTotal);
-                Validate.isTrue(record.totalFee().isNull(), "Duplicate Fees {}", merchantTotal);
+                Validate.isTrue(merchantTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", merchantTotal);
+                Validate.isTrue(record.totalFee().isNull(), "Duplicate Fees {0}", merchantTotal);
                 record.totalFee().setValue(merchantTotal.debit().getValue());
                 executionMonitor.addProcessedEvent("Merchant Fee", record.totalFee().getValue());
                 break;
@@ -134,27 +134,27 @@ class CardsReconciliationAcceptor {
 
             switch (cardTotal.type().getValue()) {
             case VisaDeposit:
-                Validate.isTrue(cardTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {}", cardTotal);
-                Validate.isTrue(record.totalDeposit().isNull(), "Duplicate VisaDeposit {}", cardTotal);
+                Validate.isTrue(cardTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", cardTotal);
+                Validate.isTrue(record.visaDeposit().isNull(), "Duplicate VisaDeposit {0}", cardTotal);
                 record.visaDeposit().setValue(cardTotal.credit().getValue());
                 break;
             case VisaFees:
-                Validate.isTrue(cardTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {}", cardTotal);
-                Validate.isTrue(record.visaFee().isNull(), "Duplicate VisaFees {}", cardTotal);
+                Validate.isTrue(cardTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", cardTotal);
+                Validate.isTrue(record.visaFee().isNull(), "Duplicate VisaFees {0}", cardTotal);
                 record.visaFee().setValue(cardTotal.debit().getValue());
                 break;
             case MastercardDeposit:
-                Validate.isTrue(cardTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {}", cardTotal);
-                Validate.isTrue(record.mastercardDeposit().isNull(), "Duplicate MastercardDeposit {}", cardTotal);
-                record.visaDeposit().setValue(cardTotal.credit().getValue());
+                Validate.isTrue(cardTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", cardTotal);
+                Validate.isTrue(record.mastercardDeposit().isNull(), "Duplicate MastercardDeposit {0}", cardTotal);
+                record.mastercardDeposit().setValue(cardTotal.credit().getValue());
                 break;
             case MastercardFees:
-                Validate.isTrue(cardTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {}", cardTotal);
-                Validate.isTrue(record.mastercardFee().isNull(), "Duplicate MastercardFees {}", cardTotal);
+                Validate.isTrue(cardTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", cardTotal);
+                Validate.isTrue(record.mastercardFee().isNull(), "Duplicate MastercardFees {0}", cardTotal);
                 record.mastercardFee().setValue(cardTotal.debit().getValue());
                 break;
             case Adjustment:
-                Validate.isTrue(record.adjustments().contains(asCredit(cardTotal)), "Adjustment mismatch to total", cardTotal);
+                Validate.isTrue(record.adjustments().contains(asCredit(cardTotal)), "Adjustment mismatch to total for {0}", cardTotal);
                 break;
             case Chargeback:
                 Validate.isTrue(record.chargebacks().contains(asCredit(cardTotal)), "Chargeback mismatch to total", cardTotal);

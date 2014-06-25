@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +41,6 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -100,7 +100,7 @@ public class CardReconciliationSimulationManager {
     private CardServiceSimulationReconciliationRecord createReportRecord(Date transactionDate, CardServiceSimulationMerchantAccount merchant) {
         CardServiceSimulationReconciliationRecord record = EntityFactory.create(CardServiceSimulationReconciliationRecord.class);
         record.merchant().set(merchant);
-        record.date().setValue(new LogicalDate(transactionDate));
+        record.date().setValue(new LogicalDate(new LogicalDate(DateUtils.addDays(transactionDate, +1))));
         record.totalDeposit().setValue(BigDecimal.ZERO);
         record.totalFee().setValue(BigDecimal.ZERO);
         record.visaTransactions().setValue(0);
@@ -211,7 +211,8 @@ public class CardReconciliationSimulationManager {
     }
 
     private void createMerchantTotalsFile(String cardsReconciliationId, String fileId, List<CardsReconciliationMerchantTotalRecord> merchantTotals) {
-        ReportTableFormatter formatter = new ReportTableCSVFormatter();
+        ReportTableCSVFormatter formatter = new ReportTableCSVFormatter(StandardCharsets.US_ASCII);
+        formatter.setForceQuote(true);
         EntityReportFormatter<CardsReconciliationMerchantTotalRecord> entityFormatter = new EntityReportFormatter<CardsReconciliationMerchantTotalRecord>(
                 CardsReconciliationMerchantTotalRecord.class);
         entityFormatter.createHeader(formatter);
@@ -235,7 +236,8 @@ public class CardReconciliationSimulationManager {
     }
 
     private void createCardTotalsFile(String cardsReconciliationId, String fileId, List<CardsReconciliationCardTotalRecord> cardTotals) {
-        ReportTableFormatter formatter = new ReportTableCSVFormatter();
+        ReportTableCSVFormatter formatter = new ReportTableCSVFormatter(StandardCharsets.US_ASCII);
+        formatter.setForceQuote(true);
         EntityReportFormatter<CardsReconciliationCardTotalRecord> entityFormatter = new EntityReportFormatter<CardsReconciliationCardTotalRecord>(
                 CardsReconciliationCardTotalRecord.class);
         entityFormatter.createHeader(formatter);
