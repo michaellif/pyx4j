@@ -20,17 +20,17 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.propertyvista.oapi.PropertyService;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 
+@Ignore
 public class RSPropertyServiceTest extends RSOapiTestBase {
 
     @Override
@@ -46,9 +46,8 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
 
     @Test
     public void testGetBuildings() {
-        System.out.println("Created Buildings: " + PropertyService.getBuildings().buildings.size());
         BuildingsIO buildings = target().path("buildings").queryParam("province", "Ontario").request().get(BuildingsIO.class);
-        System.out.println("Got Buildings: " + buildings.buildings.size());
+        Assert.assertEquals(buildings.buildings.size(), 1);
     }
 
     @Test
