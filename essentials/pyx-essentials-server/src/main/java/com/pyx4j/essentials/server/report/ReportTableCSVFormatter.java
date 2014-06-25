@@ -40,6 +40,8 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     private int rowCount = 0;
 
+    private int cellCount = 0;
+
     public ReportTableCSVFormatter() {
         dataBuilder = new DataBuilder();
         dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -101,6 +103,11 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
         } else {
             text = value.toString();
         }
+
+        if (cellCount > 0) {
+            dataBuilder.append(',');
+        }
+
         boolean needQuote = text.contains("\"") || text.contains("\n") || text.contains(",");
         if (needQuote) {
             dataBuilder.append("\"");
@@ -110,13 +117,14 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
         if (needQuote) {
             dataBuilder.append("\"");
         }
-        dataBuilder.append(',');
+        cellCount++;
     }
 
     @Override
     public void newRow() {
         dataBuilder.append("\r\n");
         rowCount++;
+        cellCount = 0;
     }
 
     @Override
