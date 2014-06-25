@@ -30,7 +30,7 @@ BEGIN
                 ||'FROM '||v_schema_name||'.merchant_account '
                 ||'WHERE    merchant_terminal_id_convenience_fee IS NOT NULL '
                 ||'AND  merchant_terminal_id_convenience_fee NOT IN '
-                ||'     (SELECT DISTINCT COALESCE(merchant_terminal_id,''x'' FROM _admin_.admin_pmc_merchant_account_index))';
+                ||'     (SELECT DISTINCT COALESCE(merchant_terminal_id,''x'') FROM _admin_.admin_pmc_merchant_account_index))';
     END LOOP;
 END;
 $$
