@@ -22,6 +22,7 @@ import static com.pyx4j.entity.security.AbstractCRUDPermission.READ;
 
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.UIAclBuilder;
+import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
@@ -34,6 +35,7 @@ import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -42,6 +44,9 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
     VistaCrmFinancialAccessControlList() {
+
+        //  ---- Actions:
+        grant(FinancialFull, new ActionPermission(LeaseRunBill.class));
 
         // ------ Financial: Money IN
         grant(FinancialMoneyIN, MoneyInBatchDTO.class, ALL);
