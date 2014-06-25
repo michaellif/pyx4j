@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
-import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
+import com.propertyvista.crm.client.ui.crud.lease.financial.TransactionHistoryViewer;
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.legal.LegalLetter;

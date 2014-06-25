@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.financial;
+package com.propertyvista.crm.client.ui.crud.lease.financial.invoice;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 

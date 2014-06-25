@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease;
+package com.propertyvista.crm.client.ui.crud.lease.agreement;
 
 import java.util.List;
 

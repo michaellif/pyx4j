@@ -11,7 +11,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease;
+package com.propertyvista.crm.client.ui.crud.lease.insurance;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IObject;
@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
+import com.propertyvista.crm.client.ui.crud.lease.insurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;

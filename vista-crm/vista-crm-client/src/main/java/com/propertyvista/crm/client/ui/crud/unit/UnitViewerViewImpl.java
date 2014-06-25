@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;

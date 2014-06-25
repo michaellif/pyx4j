@@ -7,19 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
+package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
-
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public interface DepositLifecycleViewerView extends IViewer<DepositLifecycleDTO> {
-
-    interface Presenter extends IViewer.Presenter {
-
+public class DepositLifecycleEditorViewImpl extends CrmEditorViewImplBase<DepositLifecycleDTO> implements DepositLifecycleEditorView {
+    public DepositLifecycleEditorViewImpl() {
+        setForm(new DepositLifecycleForm(this));
     }
 }

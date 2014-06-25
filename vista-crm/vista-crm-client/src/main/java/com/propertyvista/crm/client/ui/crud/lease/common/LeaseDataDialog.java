@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
+package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;

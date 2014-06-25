@@ -49,8 +49,8 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFo
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
-import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.crm.client.ui.crud.lease.application.components.EmergencyContactFolder;
+import com.propertyvista.crm.client.ui.crud.lease.insurance.TenantInsuranceCertificateFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.EmergencyContact;

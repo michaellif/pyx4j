@@ -11,13 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
+package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
+
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleEditorViewImpl extends CrmEditorViewImplBase<DepositLifecycleDTO> implements DepositLifecycleEditorView {
-    public DepositLifecycleEditorViewImpl() {
-        setForm(new DepositLifecycleForm(this));
-    }
+public interface DepositLifecycleEditorView extends IEditor<DepositLifecycleDTO> {
+
 }

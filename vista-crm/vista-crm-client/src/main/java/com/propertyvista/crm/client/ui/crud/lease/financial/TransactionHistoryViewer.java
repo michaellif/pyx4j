@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.invoice;
+package com.propertyvista.crm.client.ui.crud.lease.financial;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.financial.deposit.DepositLifecycleViewerView;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.dto.DepositLifecycleDTO;
 

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.financial;
+package com.propertyvista.crm.client.ui.crud.lease.financial.invoice;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceCreditDTO;

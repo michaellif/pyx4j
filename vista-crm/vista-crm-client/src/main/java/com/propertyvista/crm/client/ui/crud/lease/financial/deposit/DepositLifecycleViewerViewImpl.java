@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
+package com.propertyvista.crm.client.ui.crud.lease.financial.deposit;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.dto.DepositLifecycleDTO;

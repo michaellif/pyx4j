@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
+package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

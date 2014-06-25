@@ -32,7 +32,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseDataDialog;
 import com.propertyvista.crm.rpc.services.lease.ac.PadFileDownload;
 import com.propertyvista.crm.rpc.services.lease.ac.PadFileUpload;
 import com.propertyvista.domain.security.VistaCrmBehavior;

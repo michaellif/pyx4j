@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceDebitViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.financial.invoice.InvoiceDebitViewerView;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceDebitDTO;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceDebitCrudService;
 
