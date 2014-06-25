@@ -27,8 +27,11 @@ import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYar
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
 import com.propertyvista.crm.client.ui.crud.lease.legal.LegalLetterFolder;
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -61,15 +64,26 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         get(proto().leaseId()).setVisible(true);
 
-        setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
-        setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
-        setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.check(VistaCrmBehavior.Billing_OLD));
+        setTabVisible(depositsTab,
+                !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(DepositLifecycleDTO.class)));
+
+        setTabVisible(adjustmentsTab,
+                !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(LeaseAdjustment.class)));
+
+        setTabVisible(
+                billsTab,
+                !getValue().status().getValue().isDraft() && SecurityController.check(VistaCrmBehavior.Billing_OLD)
+                        && SecurityController.check(DataModelPermission.permissionRead(BillDataDTO.class)));
+
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
+
         setTabVisible(financialTab,
                 !getValue().status().getValue().isDraft() && SecurityController.check(DataModelPermission.permissionRead(TransactionHistoryDTO.class)));
+
         setTabVisible(communicationTab, SecurityController.check(DataModelPermission.permissionRead(LegalLetter.class)));
         setTabVisible(maintenanceTab, SecurityController.check(DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
 
+        // Yardi mode overrides:
         if (VistaFeatures.instance().yardiIntegration()) {
             setTabVisible(depositsTab, false);
             setTabVisible(adjustmentsTab, false);

@@ -92,7 +92,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
         billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
 
-        leaseAdjustmentLister = new ListerController<LeaseAdjustment>(((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
+        leaseAdjustmentLister = new SecureListerController<LeaseAdjustment>(((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
                 GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
 
         maintenanceLister = new SecureListerController<MaintenanceRequestDTO>(((LeaseViewerView) getView()).getMaintenanceListerView(),
