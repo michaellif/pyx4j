@@ -16,6 +16,7 @@ package com.propertyvista.eft.caledoncards.reports;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,11 @@ public class CardsReconciliationManager {
         boolean parsOk = false;
         try {
             to.fileNameMerchantTotal().setValue(sftpFileMerchant.remoteName);
+            to.remoteFileDateMerchantTotal().setValue(new Date(sftpFileMerchant.lastModified));
             to.merchantTotals().addAll(new CardsReconciliationParser().parsMerchantTotalReport(sftpFileMerchant.localFile));
 
             to.fileNameCardTotal().setValue(sftpFileCards.remoteName);
+            to.remoteFileDateCardTotal().setValue(new Date(sftpFileCards.lastModified));
             to.cardTotals().addAll(new CardsReconciliationParser().parsCardTotalReport(sftpFileCards.localFile));
 
             parsOk = true;

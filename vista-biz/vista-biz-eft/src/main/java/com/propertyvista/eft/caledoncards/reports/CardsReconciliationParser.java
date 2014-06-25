@@ -14,7 +14,16 @@
 package com.propertyvista.eft.caledoncards.reports;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import com.pyx4j.entity.core.IObject;
+import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.csv.CSVParser;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationCardTotalRecord;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerchantTotalRecord;
@@ -22,11 +31,46 @@ import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerch
 public class CardsReconciliationParser {
 
     List<CardsReconciliationMerchantTotalRecord> parsMerchantTotalReport(File file) {
-        return null;
+        EntityCSVReciver<CardsReconciliationMerchantTotalRecord> reciver = EntityCSVReciver.create(CardsReconciliationMerchantTotalRecord.class);
+
+        reciver.setVerifyRequiredHeaders(true);
+        reciver.setVerifyRequiredValues(true);
+
+        InputStream is;
+        try {
+            is = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found");
+        }
+        CSVLoad.loadFile(is, StandardCharsets.US_ASCII, new CSVParser(), reciver);
+        return reciver.getEntities();
     }
 
     List<CardsReconciliationCardTotalRecord> parsCardTotalReport(File file) {
-        return null;
+        EntityCSVReciver<CardsReconciliationCardTotalRecord> reciver = new EntityCSVReciver<CardsReconciliationCardTotalRecord>(
+                CardsReconciliationCardTotalRecord.class) {
+
+            @Override
+            protected Object parsePrimitive(IObject<?> member, Class<?> valueClass, String value) {
+                if (valueClass == CardsReconciliationCardTotalRecord.CardTotalRecordType.class) {
+                    return CardsReconciliationCardTotalRecord.CardTotalRecordType.valueOf(value.replace(" ", ""));
+                } else {
+                    return super.parsePrimitive(member, valueClass, value);
+                }
+            }
+
+        };
+
+        reciver.setVerifyRequiredHeaders(true);
+        reciver.setVerifyRequiredValues(true);
+        InputStream is;
+        try {
+            is = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found");
+        }
+        CSVLoad.loadFile(is, StandardCharsets.US_ASCII, new CSVParser(), reciver);
+        return reciver.getEntities();
     }
 
 }

@@ -16,10 +16,12 @@ package com.propertyvista.operations.domain.eft.cards.to;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.essentials.rpc.ImportColumn;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
@@ -34,21 +36,30 @@ public interface CardsReconciliationMerchantTotalRecord extends IEntity {
     }
 
     @NotNull
+    @ImportColumn(format = "MM/dd/yyyy")
+    @ToString
     IPrimitive<LogicalDate> date();
 
     @NotNull
+    @ImportColumn
     IPrimitive<String> merchantID();
 
     @NotNull
+    @ImportColumn
+    @ToString
     IPrimitive<String> terminalID();
 
     @NotNull
+    @ImportColumn
+    @ToString
     IPrimitive<MerchantTotalRecordType> type();
 
     @NotNull
+    @ImportColumn
     IPrimitive<BigDecimal> credit();
 
     @NotNull
+    @ImportColumn
     IPrimitive<BigDecimal> debit();
 
 }

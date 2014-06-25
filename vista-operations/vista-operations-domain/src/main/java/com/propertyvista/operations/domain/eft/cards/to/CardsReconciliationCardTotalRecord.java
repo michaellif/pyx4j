@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.essentials.rpc.ImportColumn;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**
@@ -34,19 +35,25 @@ public interface CardsReconciliationCardTotalRecord extends IEntity {
     }
 
     @NotNull
+    @ImportColumn(format = "MM/dd/yyyy")
     IPrimitive<LogicalDate> date();
 
     @NotNull
+    @ImportColumn
     IPrimitive<String> merchantID();
 
     @NotNull
+    @ImportColumn
     IPrimitive<String> terminalID();
 
     @NotNull
+    @ImportColumn
     IPrimitive<CardTotalRecordType> type();
 
+    @ImportColumn
     IPrimitive<BigDecimal> credit();
 
+    @ImportColumn
     IPrimitive<BigDecimal> debit();
 
 }

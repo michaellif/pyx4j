@@ -59,8 +59,7 @@ public interface CardsReconciliationRecord extends IEntity {
 
     IPrimitive<BigDecimal> mastercardFee();
 
-    CardsReconciliationFile fileCardTotal();
-
     CardsReconciliationFile fileMerchantTotal();
 
+    CardsReconciliationFile fileCardTotal();
 }

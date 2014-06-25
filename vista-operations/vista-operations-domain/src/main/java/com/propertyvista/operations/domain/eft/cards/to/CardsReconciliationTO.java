@@ -13,6 +13,8 @@
  */
 package com.propertyvista.operations.domain.eft.cards.to;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IList;
@@ -28,9 +30,13 @@ public interface CardsReconciliationTO extends IEntity {
 
     IPrimitive<String> fileNameMerchantTotal();
 
+    IPrimitive<Date> remoteFileDateMerchantTotal();
+
     IList<CardsReconciliationMerchantTotalRecord> merchantTotals();
 
     IPrimitive<String> fileNameCardTotal();
+
+    IPrimitive<Date> remoteFileDateCardTotal();
 
     IList<CardsReconciliationCardTotalRecord> cardTotals();
 
