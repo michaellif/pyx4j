@@ -47,8 +47,8 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.AbstractValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -376,7 +376,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
-        setRestrictions(getValue(), true);
+        setRestrictions(getValue(), false);
     }
 
     @Override

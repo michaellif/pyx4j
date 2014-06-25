@@ -149,7 +149,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (!getComponent().getValue().isNull()) {
                     boolean applicant = false;
                     for (LeaseTermTenant item : getComponent().getValue()) {
                         if (applicant) {
@@ -171,7 +171,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         this.addComponentValidator(new AbstractComponentValidator<IList<LeaseTermTenant>>() {
             @Override
             public BasicValidationError isValid() {
-                if (getComponent().getValue() != null) {
+                if (!getComponent().getValue().isNull()) {
                     if (getComponent().getValue().isEmpty()) {
                         return new BasicValidationError(getComponent(), i18n.tr("At least one Person should be present!"));
                     }
