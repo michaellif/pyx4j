@@ -250,8 +250,10 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             return new String[] { member.getMeta().getCaptionNL(), member.getMeta().getCaption() };
         } else if (importColumn.ignore()) {
             return null;
-        } else {
+        } else if (importColumn.names().length > 0) {
             return importColumn.names();
+        } else {
+            return new String[] { member.getMeta().getCaptionNL(), member.getMeta().getCaption() };
         }
     }
 
@@ -418,7 +420,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                     paths.add(member.getPath());
                 } else {
                     if (!"".equals(header)) {
-                        log.debug("Unknown header [{}]", header);
+                        log.debug("Unknown header [{}]; available headers [{}] [{}]", header, membersNames.keySet(), entityMeta.getMemberNames());
                     }
                     paths.add(null);
                 }

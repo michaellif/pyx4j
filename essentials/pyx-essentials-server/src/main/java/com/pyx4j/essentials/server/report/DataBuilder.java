@@ -24,6 +24,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class DataBuilder implements Externalizable {
@@ -60,8 +61,8 @@ public class DataBuilder implements Externalizable {
         out.write(b);
     }
 
-    public byte[] getBinaryData() {
-        return data.toString().getBytes(StandardCharsets.UTF_8);
+    public byte[] getBinaryData(Charset charset) {
+        return data.toString().getBytes(charset);
     }
 
     public int getBinaryDataSize() {

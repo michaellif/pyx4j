@@ -20,6 +20,8 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -38,14 +40,31 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     protected SimpleDateFormat dateTimeFormat;
 
+    protected final Charset charset;
+
+    private boolean forceQuote;
+
     private int rowCount = 0;
 
     private int cellCount = 0;
 
     public ReportTableCSVFormatter() {
-        dataBuilder = new DataBuilder();
-        dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        this(StandardCharsets.UTF_8);
+    }
+
+    public ReportTableCSVFormatter(Charset charset) {
+        this.charset = charset;
+        this.dataBuilder = new DataBuilder();
+        this.dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        this.dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    }
+
+    public boolean isForceQuote() {
+        return forceQuote;
+    }
+
+    public void setForceQuote(boolean forceQuote) {
+        this.forceQuote = forceQuote;
     }
 
     public void setTimezoneOffset(int timezoneOffset) {
@@ -66,14 +85,18 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     @Override
     public byte[] getBinaryData() {
-        byte[] b = dataBuilder.getBinaryData();
-        byte[] utf = new byte[b.length + 3];
-        // Add UTF-8 BOM for MS Excel
-        utf[0] = (byte) 0xEF;
-        utf[1] = (byte) 0xBB;
-        utf[2] = (byte) 0xBF;
-        System.arraycopy(b, 0, utf, 3, b.length);
-        return utf;
+        byte[] b = dataBuilder.getBinaryData(charset);
+        if (charset.equals(StandardCharsets.UTF_8)) {
+            byte[] utf = new byte[b.length + 3];
+            // Add UTF-8 BOM for MS Excel
+            utf[0] = (byte) 0xEF;
+            utf[1] = (byte) 0xBB;
+            utf[2] = (byte) 0xBF;
+            System.arraycopy(b, 0, utf, 3, b.length);
+            return utf;
+        } else {
+            return b;
+        }
     }
 
     @Override
@@ -110,11 +133,13 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
         boolean needQuote = text.contains("\"") || text.contains("\n") || text.contains(",");
         if (needQuote) {
-            dataBuilder.append("\"");
             text = text.replaceAll("\"", "\"\"");
         }
+        if (needQuote || isForceQuote()) {
+            dataBuilder.append("\"");
+        }
         dataBuilder.append(text);
-        if (needQuote) {
+        if (needQuote || isForceQuote()) {
             dataBuilder.append("\"");
         }
         cellCount++;
