@@ -24,6 +24,7 @@ import com.pyx4j.security.annotations.AccessControl;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
@@ -91,8 +92,10 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void signLease(AsyncCallback<String> callback, Lease leaseId);
 
     // Agreement Documents
+    @AccessControl(LeaseAgreementSigning.class)
     void getLeaseAgreementDocuments(AsyncCallback<LeaseAgreementDocumentsDTO> callback, Lease leaseId);
 
+    @AccessControl(LeaseAgreementSigning.class)
     void updateLeaseAgreementDocuments(AsyncCallback<VoidSerializable> callback, Lease leaseId, LeaseAgreementDocumentsDTO documents);
 
 }

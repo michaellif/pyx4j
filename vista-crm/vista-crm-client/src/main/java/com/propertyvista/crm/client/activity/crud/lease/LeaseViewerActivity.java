@@ -36,7 +36,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.activity.SecureListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -87,7 +86,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
-        depositLister = new ListerController<DepositLifecycleDTO>(((LeaseViewerView) getView()).getDepositListerView(),
+        depositLister = new SecureListerController<DepositLifecycleDTO>(((LeaseViewerView) getView()).getDepositListerView(),
                 GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
 
         billLister = new BillListerController(((LeaseViewerView) getView()).getBillListerView());
