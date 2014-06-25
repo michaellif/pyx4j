@@ -82,6 +82,16 @@ abstract class AbstractReconciliationProcessor {
             at.status().setValue(AggregatedTransferStatus.Paid);
             break;
         }
+        // Find MerchantAccount
+        {
+            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId());
+            at.merchantAccount().set(Persistence.service().retrieve(criteria));
+            if (at.merchantAccount().isNull()) {
+                throw new Error("Merchant Account '" + summary.merchantTerminalId().getValue() + "' not found");
+            }
+        }
+
         at.fundsTransferType().setValue(summary.reconciliationFile().fundsTransferType().getValue().asFundsTransferType());
         at.paymentDate().setValue(summary.paymentDate().getValue());
         at.grossPaymentAmount().setValue(summary.grossPaymentAmount().getValue());
@@ -98,16 +108,6 @@ abstract class AbstractReconciliationProcessor {
         at.previousBalance().setValue(summary.previousBalance().getValue());
         at.merchantBalance().setValue(summary.merchantBalance().getValue());
         at.fundsReleased().setValue(summary.fundsReleased().getValue());
-
-        // Find MerchantAccount
-        {
-            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId());
-            at.merchantAccount().set(Persistence.service().retrieve(criteria));
-            if (at.merchantAccount().isNull()) {
-                throw new Error("Merchant Account '" + summary.merchantTerminalId().getValue() + "' not found");
-            }
-        }
 
         return at;
     }
