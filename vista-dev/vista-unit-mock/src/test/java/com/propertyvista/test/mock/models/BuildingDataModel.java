@@ -25,9 +25,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IMoneyPercentAmount.ValueType;
+import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductDeposit;
@@ -80,9 +82,12 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
         building.info().address().province().setValue(prov.name);
         building.info().address().country().setValue(prov.country);
+        building.info().location().setValue(new GeoPoint(123, 456));
 
         generateParking(building);
         generateLockerArea(building);
+
+        building.marketing().visibility().setValue(PublicVisibilityType.global);
 
         Persistence.service().persist(building);
 
@@ -102,13 +107,17 @@ public class BuildingDataModel extends MockDataModel<Building> {
     }
 
     public ProductItem addResidentialUnitServiceItem(Building building, BigDecimal price) {
+        return this.addResidentialUnitServiceItem(building, price, null);
+    }
+
+    public ProductItem addResidentialUnitServiceItem(Building building, BigDecimal price, String unitNo) {
         Service standardResidentialService = standardResidentialServices.get(building);
 
         standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.name().setValue(arCodes.get(ARCode.Type.Residential).get(0).name().getValue());
-        productItem.element().set(generateResidentialUnit(building));
+        productItem.element().set(generateResidentialUnit(building, unitNo));
         productItem.price().setValue(price);
         productItem.description().setValue(productItem.name().getValue());
 
@@ -130,11 +139,20 @@ public class BuildingDataModel extends MockDataModel<Building> {
         }
     }
 
-    private AptUnit generateResidentialUnit(Building building) {
-        AptUnit unit = EntityFactory.create(AptUnit.class);
-        unit.building().set(building);
-
-        ServerSideFactory.create(BuildingFacade.class).persist(unit);
+    private AptUnit generateResidentialUnit(Building building, String unitNo) {
+        AptUnit unit = null;
+        if (unitNo != null) {
+            EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
+            crit.eq(crit.proto().building(), building);
+            crit.eq(crit.proto().info().number(), unitNo);
+            unit = Persistence.service().retrieve(crit);
+        }
+        if (unit == null) {
+            unit = EntityFactory.create(AptUnit.class);
+            unit.building().set(building);
+            unit.info().number().setValue(unitNo);
+            ServerSideFactory.create(BuildingFacade.class).persist(unit);
+        }
         return unit;
     }
 

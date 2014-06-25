@@ -13,52 +13,84 @@
  */
 package com.propertyvista.oapi.rs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import com.pyx4j.entity.core.AttachLevel;
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
+
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
 import com.propertyvista.oapi.xml.StringIO;
-import com.propertyvista.test.mock.models.BuildingDataModel;
 
-@Ignore
 public class RSPropertyServiceTest extends RSOapiTestBase {
 
+    private Building building;
+
+    private Floorplan fp;
+
+    private AptUnit unit;
+
     @Override
-    protected Class<?> getServiceClass() {
-        return RSPropertyService.class;
+    protected Class<? extends Application> getServiceApplication() {
+        return OpenApiRsApplication.class;
     }
 
     @Override
     protected void preloadData() {
         super.preloadData();
-        getDataModel(BuildingDataModel.class).addBuilding();
+        building = getBuilding();
+        Persistence.ensureRetrieve(building.floorplans(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.units(), AttachLevel.Attached);
+        if (building.floorplans().size() < 1) {
+            // set building details
+            fp = EntityFactory.create(Floorplan.class);
+            fp.building().set(building);
+            fp.name().setValue("2bdrm");
+            Persistence.service().persist(fp);
+
+            unit = EntityFactory.create(AptUnit.class);
+            unit.building().set(building);
+            unit.info().number().setValue("1");
+            unit.floorplan().set(fp);
+            Persistence.service().persist(unit);
+
+            Persistence.service().commit();
+        } else {
+            fp = new ArrayList<Floorplan>(building.floorplans()).get(0);
+            unit = new ArrayList<AptUnit>(building.units()).get(0);
+        }
     }
 
     @Test
     public void testGetBuildings() {
-        BuildingsIO buildings = target().path("buildings").queryParam("province", "Ontario").request().get(BuildingsIO.class);
-        Assert.assertEquals(buildings.buildings.size(), 1);
+        BuildingsIO response = target("buildings").queryParam("province", "Ontario").request().get(BuildingsIO.class);
+        Assert.assertEquals(1, response.buildings.size());
     }
 
     @Test
     public void testGetBuildingsByProvince_NonExistingProvince() {
-        BuildingsIO buildings = target().path("buildings;province=MockProvince").request().get(BuildingsIO.class);
+        BuildingsIO buildings = target("buildings").queryParam("province", "NonExisting").request().get(BuildingsIO.class);
         Assert.assertTrue(buildings.buildings.isEmpty());
     }
 
     @Test
     public void testGetBuildingByPropertyCode_NonExistingPropertyCode() {
-        Response response = target().path("buildings/MockCode").request().get();
+        Response response = target("buildings/MockCode").request().get();
         Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
@@ -66,24 +98,24 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
     public void testGetAllUnitsByPropertyCode_NonExistingPropertyCode() {
         GenericType<List<UnitIO>> gt = new GenericType<List<UnitIO>>() {
         };
-        List<UnitIO> units = target().path("buildings/MockCode/units").request().get(gt);
+        List<UnitIO> units = target("buildings/MockCode/units").request().get(gt);
         Assert.assertTrue(units.isEmpty());
     }
 
     @Test
     public void testGetUnitByNumber_NonExistingPropertyCodeAndUnitNumber() {
-        Response response = target().path("buildings/MockCode/units/MockNumber").request().get(Response.class);
+        Response response = target("buildings/MockCode/units/MockNumber").request().get(Response.class);
         Assert.assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void testUpdateUnits() {
         UnitIO unit = new UnitIO();
-        unit.number = "1";
-        unit.propertyCode = "testCode";
+        unit.propertyCode = building.propertyCode().getValue();
+        unit.floorplanName = new StringIO(fp.name().getValue());
+        unit.number = "2";
         unit.baths = new IntegerIO(1);
         unit.beds = new IntegerIO(2);
-        unit.floorplanName = new StringIO("2bdrm");
 
         Response response = target("buildings/MockCode/units/updateUnit").request(MediaType.APPLICATION_XML).post(Entity.xml(unit));
         // requires preloaded building

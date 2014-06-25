@@ -13,23 +13,21 @@
  */
 package com.propertyvista.oapi.ws;
 
-import static org.junit.Assert.assertEquals;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.propertyvista.oapi.model.LeaseIO;
 
 public class WSLeaseServiceTest extends WSOapiTestBase {
 
-    @Before
-    public void init() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
         publish(WSLeaseService.class);
     }
 

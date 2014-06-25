@@ -20,23 +20,15 @@ import java.util.List;
 
 import javax.xml.ws.Endpoint;
 
-import org.junit.After;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
-
-import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.MockManager;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 
-public class WSOapiTestBase {
+public abstract class WSOapiTestBase extends IntegrationTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(WSOapiTestBase.class);
 
@@ -46,13 +38,15 @@ public class WSOapiTestBase {
 
     Endpoint endpoint = null;
 
-    @Before
-    public void initDB() throws Exception {
-        VistaTestDBSetup.init();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        preloadData();
     }
 
-    @After
-    public void stop() {
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
         if (endpoint != null) {
             endpoint.stop();
         }
@@ -94,27 +88,7 @@ public class WSOapiTestBase {
         return code;
     }
 
-    protected void preloadData() {
-        preloadData(new MockConfig());
-    }
-
-    protected void preloadData(final MockConfig config) {
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
-
-            @Override
-            public MockManager execute() {
-
-                MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
-                    mockManager.addModel(modelType);
-                }
-
-                return mockManager;
-            }
-        });
-    }
-
+    @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);

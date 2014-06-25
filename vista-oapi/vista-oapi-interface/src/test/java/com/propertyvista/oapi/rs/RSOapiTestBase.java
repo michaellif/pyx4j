@@ -16,109 +16,99 @@ package com.propertyvista.oapi.rs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
-import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.MockManager;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
-import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 
-public class RSOapiTestBase extends JerseyTest {
+public abstract class RSOapiTestBase extends IntegrationTestBase {
 
-    private static final Logger log = LoggerFactory.getLogger(RSOapiTestBase.class);
+    private Building building;
 
-    protected MockManager mockManager;
+    protected final JerseyTest RSTestHelper = new JerseyTest() {
 
-    protected Building building;
+        @Override
+        protected Application configure() {
+            Class<?> serviceClass = getServiceClass();
+            if (serviceClass != null) {
+                return new ResourceConfig(serviceClass);
+            } else {
+                Class<?> appClass = getServiceApplication();
+                if (appClass != null) {
+                    try {
+                        return (Application) appClass.newInstance();
+                    } catch (Exception ignore) {
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected TestContainerFactory getTestContainerFactory() {
+            // Use this factory to run RS server in the same thread as the test and preserve the pmc namespace
+            return new InMemoryTestContainerFactory();
+        }
+    };
 
     @Override
-    protected Application configure() {
-        Class<?> serviceClass = getServiceClass();
-        return new ResourceConfig(serviceClass == null ? OpenApiRsApplication.class : serviceClass);
+    protected void setUp() throws Exception {
+        super.setUp();
+        RSTestHelper.setUp();
+        initDB();
     }
 
     @Override
-    protected TestContainerFactory getTestContainerFactory() {
-        // Use this factory to run RS server in the same thread as the test and preserve the pmc namespace
-        return new InMemoryTestContainerFactory();
+    protected void tearDown() throws Exception {
+        RSTestHelper.tearDown();
+        super.tearDown();
+    }
+
+    public void initDB() throws Exception {
+        VistaTestDBSetup.init();
+        preloadData();
+        // load building
+        getBuilding();
     }
 
     protected Class<?> getServiceClass() {
         return null;
     }
 
+    protected Class<? extends Application> getServiceApplication() {
+        return null;
+    }
+
+    protected WebTarget target() {
+        return RSTestHelper.target();
+    }
+
+    protected WebTarget target(String path) {
+        return RSTestHelper.target().path(path);
+    }
+
+    protected Client client() {
+        return RSTestHelper.client();
+    }
+
     @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Before
-    public void initDB() throws Exception {
-        VistaTestDBSetup.init();
-        preloadData();
-    }
-
-//    @Override
-    protected int getPort(int defaultPort) {
-        // See README-ports.txt
-        return 7771;
-    }
-
-    public <E extends MockDataModel<?>> E getDataModel(Class<E> modelClass) {
-        return mockManager.getDataModel(modelClass);
-    }
-
-    protected void preloadData() {
-        preloadData(new MockConfig());
-    }
-
-    protected Building getBuilding() {
-        if (building == null) {
-            building = getDataModel(BuildingDataModel.class).addBuilding();
-            getDataModel(MerchantAccountDataModel.class).addMerchantAccount(building);
-            Persistence.service().commit();
-        }
-        return building;
-    }
-
-    protected void preloadData(final MockConfig config) {
-
-        mockManager = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
-
-            @Override
-            public MockManager execute() {
-
-                MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
-                    mockManager.addModel(modelType);
-                }
-
-                return mockManager;
-            }
-        });
-    }
-
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
@@ -129,4 +119,13 @@ public class RSOapiTestBase extends JerseyTest {
         return models;
     }
 
+    protected Building getBuilding() {
+        if (building == null) {
+            building = Persistence.service().retrieve(EntityQueryCriteria.create(Building.class));
+        }
+        if (building == null) {
+            building = getDataModel(BuildingDataModel.class).addBuilding();
+        }
+        return building;
+    }
 }

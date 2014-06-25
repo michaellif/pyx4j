@@ -108,7 +108,7 @@ public class PropertyService {
 
         new UnitPersister().persist(unitDTO);
 
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unitDTO.building(), unitDTO);
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unitDTO.building(), new UnitPersister().retrieve(unitDTO));
 
         Persistence.service().commit();
     }
