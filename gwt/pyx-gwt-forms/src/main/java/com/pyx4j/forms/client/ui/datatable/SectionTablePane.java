@@ -20,23 +20,32 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import java.util.ArrayList;
+
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.sectiontable.SectionTable;
+import com.pyx4j.forms.client.ui.datatable.sectiontable.BasicSectionTableRow;
 
-public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
+public class SectionTablePane<E extends IEntity> implements ITablePane<E> {
+
+    private final SimplePanel contentHolder;
+
+    private SectionTable contentPanel;
 
     private final DataTable<E> dataTable;
 
-    public ResponsiveTablePane(final DataTable<E> dataTable) {
+    public SectionTablePane(final DataTable<E> dataTable) {
         this.dataTable = dataTable;
+        contentHolder = new SimplePanel();
     }
 
     @Override
     public Widget asWidget() {
-        // TODO Auto-generated method stub
-        return null;
+        return contentHolder.asWidget();
     }
 
     @Override
@@ -53,8 +62,13 @@ public class ResponsiveTablePane<E extends IEntity> implements ITablePane<E> {
 
     @Override
     public void renderTable() {
-        // TODO Auto-generated method stub
 
+        DataTableModel<E> model = dataTable.getDataTableModel();
+
+        contentPanel = new SectionTable(model.getColumnDescriptors());
+        contentHolder.setWidget(contentPanel);
+
+        contentPanel.addSection(new BasicSectionTableRow());
     }
 
     @Override

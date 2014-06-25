@@ -60,8 +60,11 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
     }
 
     public DataTable() {
-        tablePanel = new FlexTablePane<E>(this);
-
+        if (true) {
+            tablePanel = new FlexTablePane<E>(this);
+        } else {
+            tablePanel = new SectionTablePane<E>(this);
+        }
     }
 
     public DataTable(DataTableModel<E> model) {
@@ -97,9 +100,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         }
         this.model = model;
         model.addDataTableModelListener(this);
-        if (model.getColumnDescriptors() != null) {
-            tablePanel.renderTable();
-        }
+        tablePanel.renderTable();
     }
 
     public DataTableModel<E> getDataTableModel() {

@@ -137,7 +137,9 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     @Override
     public void renderTable() {
 
-        assert dataTable.getDataTableModel().getColumnDescriptors() != null : "getColumnDescriptors() shouldn't be null";
+        if (dataTable.getDataTableModel().getColumnDescriptors() == null) {
+            return;
+        }
 
         flexTable.removeAllRows();
 
