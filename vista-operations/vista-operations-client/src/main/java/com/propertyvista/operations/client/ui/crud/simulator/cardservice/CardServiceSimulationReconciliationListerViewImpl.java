@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
@@ -33,7 +34,7 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
 
         public CardServiceSimulationReconciliationLister() {
             super(CardServiceSimulationReconciliationRecord.class, false, true);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<CardServiceSimulationReconciliationRecord>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().id()).build(),
                     new MemberColumnDescriptor.Builder(proto().date()).build(),
                     new MemberColumnDescriptor.Builder(proto().merchant()).build(),
@@ -42,7 +43,7 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
                     new MemberColumnDescriptor.Builder(proto().visaTransactions()).build(),
                     new MemberColumnDescriptor.Builder(proto().mastercardDeposit()).build(),
                     new MemberColumnDescriptor.Builder(proto().mastercardTransactions()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
 
         @Override
