@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -59,7 +61,6 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
 
     public void allocateNotificationsSpace(int number) {
         asWidget().setNotificationsHeight(number * NOTIFICATION_HEIGHT);
-        asWidget().forceLayout(0);
     }
 
     @Override
@@ -76,7 +77,13 @@ public class CrmRootPane extends RootPane<BackOfficeLayoutPanel> {
             asWidget().setMenuVisible(true);
         }
 
-        asWidget().forceLayout(0);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                asWidget().forceLayout(0);
+            }
+        });
+
     }
 
 }

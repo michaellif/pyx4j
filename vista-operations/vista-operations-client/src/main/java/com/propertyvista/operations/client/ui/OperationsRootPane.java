@@ -13,8 +13,9 @@
  */
 package com.propertyvista.operations.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
@@ -29,14 +30,16 @@ import com.propertyvista.operations.client.mvp.NavigActivityMapper;
 import com.propertyvista.operations.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
-public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> implements IsWidget {
+public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> {
+
+    public static final int HEADER_HEIGHT = 50;
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public OperationsRootPane() {
         super(new BackOfficeLayoutPanel(null, null));
 
-        asWidget().setHeaderHeight(50);
+        asWidget().setHeaderHeight(HEADER_HEIGHT);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
 
         bind(new HeaderActivityMapper(), asWidget().getDisplay(DisplayType.header));
@@ -54,6 +57,12 @@ public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> implemen
         } else {
             asWidget().setMenuVisible(true);
         }
-        asWidget().forceLayout(0);
+
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                asWidget().forceLayout(0);
+            }
+        });
     }
 }
