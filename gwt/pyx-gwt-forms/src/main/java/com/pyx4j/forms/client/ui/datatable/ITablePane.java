@@ -31,7 +31,7 @@ public interface ITablePane<E extends IEntity> extends IsWidget {
 
     void renderTable();
 
-    void updateSelectionStyle();
+    void updateSelectionHighlights();
 
     boolean isItemZoomInAvailable();
 

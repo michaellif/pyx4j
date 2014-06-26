@@ -21,7 +21,9 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -36,8 +38,6 @@ public class DataTableModel<E extends IEntity> {
 
     public static final int PAGE_SIZE = 20;
 
-    private final Class<E> clazz;
-
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
 
@@ -47,7 +47,7 @@ public class DataTableModel<E extends IEntity> {
 
     private boolean multipleSelection = false;
 
-    private List<ColumnDescriptor> columnDescriptors;
+    private final List<ColumnDescriptor> columnDescriptors;
 
     private ColumnDescriptor sortColumn;
 
@@ -65,8 +65,12 @@ public class DataTableModel<E extends IEntity> {
 
     private int totalRows;
 
-    public DataTableModel(Class<E> clazz) {
-        this.clazz = clazz;
+    public DataTableModel(ColumnDescriptor... columnDescriptors) {
+        this(Arrays.asList(columnDescriptors));
+    }
+
+    public DataTableModel(List<ColumnDescriptor> columnDescriptors) {
+        this.columnDescriptors = columnDescriptors;
     }
 
     public void close() {
@@ -74,12 +78,8 @@ public class DataTableModel<E extends IEntity> {
         data.clear();
     }
 
-    public Class<E> getEntityClass() {
-        return clazz;
-    }
-
     public List<ColumnDescriptor> getColumnDescriptors() {
-        return columnDescriptors;
+        return Collections.unmodifiableList(columnDescriptors);
     }
 
     public List<ColumnDescriptor> getColumnDescriptorsVisible() {
@@ -91,11 +91,6 @@ public class DataTableModel<E extends IEntity> {
             }
         }
         return descriptors;
-    }
-
-    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
-        this.columnDescriptors = columnDescriptors;
-
     }
 
     public ColumnDescriptor getColumnDescriptor(int index) {

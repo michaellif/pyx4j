@@ -24,25 +24,40 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataItem;
+
 public class BasicSectionTableRow implements ISection {
 
     private final FlowPanel contentPanel;
 
     private SectionTable parent;
 
-    public BasicSectionTableRow() {
+    private final DataItem<?> item;
+
+    public BasicSectionTableRow(DataItem<?> item) {
+        this.item = item;
         contentPanel = new FlowPanel();
-        contentPanel.add(new HTML("Test1"));
+        contentPanel.getElement().getStyle().setProperty("display", "table-row");
     }
 
     @Override
     public void setParent(SectionTable parent) {
         this.parent = parent;
+        render();
     }
 
     @Override
     public Widget asWidget() {
         return contentPanel;
+    }
+
+    private void render() {
+        for (ColumnDescriptor columnDescriptor : parent.getColumnDescriptors()) {
+            HTML cell = new HTML(item.getCellValue(columnDescriptor).toString());
+            cell.getElement().getStyle().setProperty("display", "table-cell");
+            contentPanel.add(cell);
+        }
     }
 
 }

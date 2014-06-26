@@ -70,6 +70,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
 
     private Button filterButton;
 
+    private final Class<E> clazz;
+
     public DataTablePanel(Class<E> clazz) {
         this(clazz, null, FolderImages.INSTANCE);
     }
@@ -79,6 +81,7 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
     }
 
     public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, WidgetsImages images) {
+        this.clazz = clazz;
         this.images = images;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
@@ -110,13 +113,19 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         });
         topActionsBar.getToolbar().addItem(filterButton);
 
-        setDataTableModel(new DataTableModel<E>(clazz));
     }
 
-    protected void setDataTableModel(DataTableModel<E> model) {
+    public Class<E> getEntityClass() {
+        return clazz;
+    }
+
+    public void setDataTableModel(DataTableModel<E> model) {
         dataTable.setDataTableModel(model);
         topActionsBar.setDataTableModel(model);
         bottomActionsBar.setDataTableModel(model);
+        if (delButton != null) {
+            model.setMultipleSelection(true);
+        }
     }
 
     public void setItemZoomInCommand(ItemZoomInCommand<E> itemZoomInCommand) {
@@ -145,8 +154,12 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         topActionsBar.getToolbar()
                 .insertItem(delButton = new Button(FolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
 
-        delButton.setEnabled(getDataTableModel().isAnyRowSelected());
-        getDataTable().setMultipleSelection(true);
+        delButton.setEnabled(getDataTableModel() != null && getDataTableModel().isAnyRowSelected());
+
+        if (getDataTable().getDataTableModel() != null) {
+            getDataTable().getDataTableModel().setMultipleSelection(true);
+        }
+
         getDataTable().addItemSelectionHandler(new ItemSelectionHandler() {
             @Override
             public void onChange() {
@@ -238,20 +251,8 @@ public class DataTablePanel<E extends IEntity> extends FlowPanel implements Requ
         }
     }
 
-    public void setPageSize(int pageSize) {
-        if (getDataTableModel() != null) {
-            getDataTableModel().setPageSize(pageSize);
-        } else {
-            throw new RuntimeException("dataTableModel is not set");
-        }
-    }
-
     public String toStringForPrint() {
         return dataTable.toString();
-    }
-
-    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
-        getDataTableModel().setColumnDescriptors(columnDescriptors);
     }
 
     public int getPageNumber() {

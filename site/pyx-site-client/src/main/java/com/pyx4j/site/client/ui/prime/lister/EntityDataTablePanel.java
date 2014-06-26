@@ -46,6 +46,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
@@ -140,7 +141,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
             }
         });
 
-        dataTablePanel.getDataTable().setMultipleSelection(true);
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
             @Override
@@ -153,9 +153,7 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
 
         dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM, PAGESIZE_LARGE }));
 
-        dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
         dataTablePanel.setStyleName(DefaultPaneTheme.StyleName.ListerListPanel.name());
-        dataTablePanel.getDataTable().setMultipleSelection(false);
 
         setWidget(dataTablePanel);
 
@@ -235,12 +233,9 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
     protected void onItemsDelete(Collection<E> items) {
     }
 
-    public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(Arrays.asList(columnDescriptors));
-    }
-
-    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
-        dataTablePanel.setColumnDescriptors(columnDescriptors);
+    public void setDataTableModel(DataTableModel<E> dataTableModel) {
+        dataTableModel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
+        dataTablePanel.setDataTableModel(dataTableModel);
     }
 
     public E proto() {
@@ -273,14 +268,6 @@ public class EntityDataTablePanel<E extends IEntity> extends ScrollPanel {
                 }
             }
         });
-    }
-
-    public boolean isMultipleSelection() {
-        return dataTablePanel.getDataTable().isMultipleSelection();
-    }
-
-    public void setMultipleSelection(boolean multipleSelection) {
-        dataTablePanel.getDataTable().setMultipleSelection(multipleSelection);
     }
 
     public Collection<E> getSelectedItems() {

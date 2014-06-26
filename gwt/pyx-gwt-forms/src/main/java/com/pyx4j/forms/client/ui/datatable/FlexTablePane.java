@@ -47,8 +47,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -88,7 +86,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 if (cell == null) {
                     return; // do not process empty clicks!...
                 } else if (cell.getRowIndex() == 0) {
-                    if (cell.getCellIndex() >= (dataTable.isMultipleSelection() ? 1 : 0)
+                    if (cell.getCellIndex() >= (dataTable.getDataTableModel().isMultipleSelection() ? 1 : 0)
                             && cell.getCellIndex() < flexTable.getCellCount(0) - (dataTable.isColumnSelectorVisible() ? 1 : 0)) {
                         processHeaderClick(dataTable.isMultipleSelection() ? cell.getCellIndex() - 1 : cell.getCellIndex()); // actual table column index - without the first check one!...
                     }
@@ -238,11 +236,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
 
         final DataTableModel<E> model = dataTable.getDataTableModel();
 
-        log.trace("dataTable {} render start {}", GWTJava5Helper.getSimpleName(model.getEntityClass()), model.getData().size());
-
         Scheduler.get().scheduleIncremental(new RepeatingCommand() {
-
-            final long start = System.currentTimeMillis();
 
             final Iterator<DataItem<E>> dataIterator = model.getData().iterator();
 
@@ -253,9 +247,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
             @Override
             public boolean execute() {
                 if (!dataIterator.hasNext()) {
-                    log.trace("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex - 1,
-                            TimeUtils.since(start));
-                    updateSelectionStyle();
+                    updateSelectionHighlights();
                     return false;
                 }
 
@@ -269,7 +261,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
                 }
 
                 int colIndex = 0;
-                if (dataTable.isMultipleSelection()) {
+                if (dataTable.getDataTableModel().isMultipleSelection()) {
                     SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, model.isRowSelected(dataItem));
                     selectionCheckBoxes.add(selectionCheckBox);
 
@@ -323,9 +315,9 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
     }
 
     @Override
-    public void updateSelectionStyle() {
+    public void updateSelectionHighlights() {
         for (int i = 0; i < dataTable.getDataTableModel().getData().size(); i++) {
-            updateSelectionStyle(i, dataTable.getDataTableModel().getSelectedRows().contains(dataTable.getDataTableModel().getData().get(i)));
+            highlightRow(i, dataTable.getDataTableModel().getSelectedRows().contains(dataTable.getDataTableModel().getData().get(i)));
         }
 
         if (dataTable.getDataTableModel().isMultipleSelection() && selectionCheckBoxAll != null) {
@@ -333,7 +325,7 @@ public class FlexTablePane<E extends IEntity> implements ITablePane<E> {
         }
     }
 
-    private void updateSelectionStyle(int row, boolean selected) {
+    private void highlightRow(int row, boolean selected) {
         if (row >= 0) {
             Element previous = flexTable.getRowFormatter().getElement(row + 1); // raw table row index - including the header!...
             String className = DataTableTheme.StyleName.DataTableRow.name() + "-" + DataTableTheme.StyleDependent.selected.name();

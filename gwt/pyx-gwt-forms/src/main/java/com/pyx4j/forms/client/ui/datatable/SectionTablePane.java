@@ -20,15 +20,13 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
-import com.pyx4j.forms.client.ui.datatable.sectiontable.SectionTable;
 import com.pyx4j.forms.client.ui.datatable.sectiontable.BasicSectionTableRow;
+import com.pyx4j.forms.client.ui.datatable.sectiontable.SectionTable;
 
 public class SectionTablePane<E extends IEntity> implements ITablePane<E> {
 
@@ -68,11 +66,13 @@ public class SectionTablePane<E extends IEntity> implements ITablePane<E> {
         contentPanel = new SectionTable(model.getColumnDescriptors());
         contentHolder.setWidget(contentPanel);
 
-        contentPanel.addSection(new BasicSectionTableRow());
+        for (DataItem<?> item : model.getData()) {
+            contentPanel.addSection(new BasicSectionTableRow(item));
+        }
     }
 
     @Override
-    public void updateSelectionStyle() {
+    public void updateSelectionHighlights() {
         // TODO Auto-generated method stub
 
     }

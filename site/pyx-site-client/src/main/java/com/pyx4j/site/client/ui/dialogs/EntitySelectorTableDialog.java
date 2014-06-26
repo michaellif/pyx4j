@@ -43,6 +43,7 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.IShowable;
@@ -200,15 +201,15 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         public SelectEntityLister(Class<E> clazz, boolean isVersioned) {
             super(clazz);
 
-            setMultipleSelection(EntitySelectorTableDialog.this.isMultiselect);
-
             getDataTablePanel().setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM }));
-            getDataTablePanel().setPageSize(PAGESIZE_SMALL);
             if (isVersioned) {
                 getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
             }
 
-            setColumnDescriptors(EntitySelectorTableDialog.this.defineColumnDescriptors());
+            DataTableModel<E> dataTableModel = new DataTableModel<E>(EntitySelectorTableDialog.this.defineColumnDescriptors());
+            dataTableModel.setPageSize(PAGESIZE_SMALL);
+            dataTableModel.setMultipleSelection(EntitySelectorTableDialog.this.isMultiselect);
+            setDataTableModel(dataTableModel);
         }
 
         @Override

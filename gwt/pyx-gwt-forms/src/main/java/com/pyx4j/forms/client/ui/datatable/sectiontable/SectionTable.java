@@ -43,6 +43,7 @@ public class SectionTable implements IsWidget {
     public SectionTable(List<ColumnDescriptor> columnDescriptors) {
         this.columnDescriptors = columnDescriptors;
         contentPanel = new FlowPanel();
+
         sectionsPanel = new FlowPanel();
 
         if (columnDescriptors != null) {
@@ -63,10 +64,17 @@ public class SectionTable implements IsWidget {
         section.setParent(this);
     }
 
+    public List<ColumnDescriptor> getColumnDescriptors() {
+        return columnDescriptors;
+    }
+
     protected class TableHeader extends FlowPanel {
         TableHeader() {
-            for (ColumnDescriptor descriptor : columnDescriptors) {
-                add(new HTML(descriptor.getColumnTitle()));
+            getElement().getStyle().setProperty("display", "table-row");
+            for (ColumnDescriptor columnDescriptor : columnDescriptors) {
+                HTML cell = new HTML(columnDescriptor.getColumnTitle());
+                cell.getElement().getStyle().setProperty("display", "table-cell");
+                add(cell);
             }
         }
     }

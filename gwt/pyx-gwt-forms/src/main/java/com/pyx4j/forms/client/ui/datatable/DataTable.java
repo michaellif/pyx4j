@@ -88,7 +88,7 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
         if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
             tablePanel.renderTable();
         } else if (e.getType().equals(DataTableModelEvent.Type.SELECTION)) {
-            tablePanel.updateSelectionStyle();
+            tablePanel.updateSelectionHighlights();
             onRowSelectionChanged();
         }
     }
@@ -178,10 +178,6 @@ public class DataTable<E extends IEntity> implements IsWidget, DataTableModelLis
 
     public boolean isMultipleSelection() {
         return model.isMultipleSelection();
-    }
-
-    public void setMultipleSelection(boolean multipleSelection) {
-        model.setMultipleSelection(multipleSelection);
     }
 
     public boolean isColumnSelectorVisible() {

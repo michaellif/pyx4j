@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.forms.client.ui.AsyncLoadingHandler;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
@@ -78,7 +79,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
             for (int col = 0; col < cols; col++) {
                 columns[col] = new MemberColumnDescriptor.Builder(proto().getMember("field" + col), true).build();
             }
-            setColumnDescriptors(columns);
+            setDataTableModel(new DataTableModel<ListerDataItem>(columns));
             setDataSource(new TestListerDataSource(cols, rows));
             obtain(0);
         }
