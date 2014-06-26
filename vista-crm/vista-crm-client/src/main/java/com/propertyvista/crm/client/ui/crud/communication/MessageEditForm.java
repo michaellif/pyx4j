@@ -33,8 +33,6 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     private FlowPanel searchCriteriaPanel;
 
-    private CommunicationEndpointSelector communicationEndpointSelector;
-
     public MessageEditForm(IForm<MessageDTO> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
@@ -53,6 +51,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
         searchCriteriaPanel.add(createCommunicationEndpointSelector());
         formPanel.append(Location.Dual, searchCriteriaPanel);
+
         formPanel.h3("");
         formPanel.br();
         formPanel.append(Location.Dual, proto().subject()).decorate();
@@ -78,8 +77,6 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        communicationEndpointSelector.removeAll();
-
     }
 
     @Override
@@ -91,7 +88,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     }
 
     private Widget createCommunicationEndpointSelector() {
-        return communicationEndpointSelector = new CommunicationEndpointSelector() {//@formatter:off
+        return new CommunicationEndpointSelector() {//@formatter:off
             @Override protected void onItemAdded(CommunicationEndpointDTO item) {
                 super.onItemAdded(item);
                 MessageEditForm.this.addToItem(item);

@@ -35,14 +35,15 @@ public class CommunicationEndpointSuggestionsProvider extends SuggestiveSelector
 
     private final SelectCommunicationEndpointListService service;
 
-    private EntityListCriteria<CommunicationEndpoint> prevCriteria;
+    private EntityListCriteria<CommunicationEndpointDTO> prevCriteria;
 
     private Vector<CommunicationEndpointDTO> cached;
 
     private List<CommunicationEndpointDTO> filtered;
 
     public CommunicationEndpointSuggestionsProvider() {
-        service = createCachingProxy(GWT.<SelectCommunicationEndpointListService> create(SelectCommunicationEndpointListService.class));
+        service = //createCachingProxy(
+        GWT.<SelectCommunicationEndpointListService> create(SelectCommunicationEndpointListService.class);
         filtered = new LinkedList<CommunicationEndpointDTO>();
         cached = new Vector<CommunicationEndpointDTO>();
     }
@@ -56,12 +57,15 @@ public class CommunicationEndpointSuggestionsProvider extends SuggestiveSelector
             }
 
         };
-        EntityListCriteria<CommunicationEndpoint> criteria = EntityListCriteria.create(CommunicationEndpoint.class);
+        EntityListCriteria<CommunicationEndpointDTO> criteria = EntityListCriteria.create(CommunicationEndpointDTO.class);
+        criteria.setPageSize(SuggestiveSelector.SUGGESTIONS_PER_PAGE);
+        criteria.eq(criteria.proto().name(), newSuggestion);
         service.getEndpointForSelection(callback, criteria);
     }
 
     @Override
     protected void onRangeChanged(HasData<CommunicationEndpointDTO> display) {
+        updateRowCount(filtered.size(), true);
         updateRowData(display, 0, filtered);
     }
 
@@ -92,7 +96,7 @@ public class CommunicationEndpointSuggestionsProvider extends SuggestiveSelector
         return new SelectCommunicationEndpointListService() {//@formatter:off
             private final SelectCommunicationEndpointListService delegatedService = service;
 
-            @Override public void getEndpointForSelection(final AsyncCallback<Vector<CommunicationEndpointDTO>> callback, final EntityListCriteria<CommunicationEndpoint> criteria) {
+            @Override public void getEndpointForSelection(final AsyncCallback<Vector<CommunicationEndpointDTO>> callback, final EntityListCriteria<CommunicationEndpointDTO> criteria) {
                 if (prevCriteria == null || !prevCriteria.equals(criteria)) {
                     delegatedService.getEndpointForSelection(new AsyncCallback<Vector<CommunicationEndpointDTO>>() {
                         @Override public void onSuccess(Vector<CommunicationEndpointDTO> result) {

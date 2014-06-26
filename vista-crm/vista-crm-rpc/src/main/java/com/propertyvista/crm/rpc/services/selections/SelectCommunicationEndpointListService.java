@@ -25,6 +25,6 @@ import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public interface SelectCommunicationEndpointListService extends AbstractListService<CommunicationEndpoint> {
 
-    void getEndpointForSelection(AsyncCallback<Vector<CommunicationEndpointDTO>> callback, EntityListCriteria<CommunicationEndpoint> criteria);
+    void getEndpointForSelection(AsyncCallback<Vector<CommunicationEndpointDTO>> callback, EntityListCriteria<CommunicationEndpointDTO> criteria);
 
 }

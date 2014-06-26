@@ -27,6 +27,7 @@ import com.propertyvista.domain.communication.MessageCategory.MessageGroupCatego
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public interface CommunicationMessageFacade {
 
@@ -40,5 +41,7 @@ public interface CommunicationMessageFacade {
 
     public String extractEndpointName(CommunicationEndpoint entity);
 
-    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint);
+    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup);
+
+    public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity);
 }

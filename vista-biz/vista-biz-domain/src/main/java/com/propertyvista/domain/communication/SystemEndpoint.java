@@ -31,7 +31,7 @@ public interface SystemEndpoint extends CommunicationEndpoint {
         @Translate("Automatic")
         Automatic,
 
-        @Translate("Unassigned")
+        @Translate("Unassigned Ticket Dispatcher")
         Unassigned;
 
         @Override

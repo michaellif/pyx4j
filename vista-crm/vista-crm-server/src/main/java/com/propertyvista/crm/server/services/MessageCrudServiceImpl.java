@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -34,18 +35,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
-import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
@@ -114,7 +112,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         dto.highImportance().setValue(false);
         dto.allowedReply().setValue(true);
         dto.status().setValue(ThreadStatus.Unassigned);
-        dto.sender().set(generateEndpointDTO(CrmAppContext.getCurrentUser()));
+        dto.sender().set((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(CrmAppContext.getCurrentUser())));
 
         if (initializationData instanceof MessageInitializationData) {
             dto.text().set(((MessageInitializationData) initializationData).initalizedText());
@@ -132,8 +130,10 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             bo.date().setValue(SystemDateManager.getDate());
         }
 
+        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
         for (CommunicationEndpointDTO todep : to.to()) {
-            bo.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(todep.endpoint()));
+            bo.recipients().add(communicationFacade.createDeliveryHandle(todep.endpoint(), false));
+            expandCommunicationEndpoint(bo, communicationFacade, todep);
         }
 
         bo.attachments().set(to.attachments());
@@ -151,10 +151,48 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         t.status().setValue(isNew && !MessageGroupCategory.Custom.equals(to.topic().category().getValue()) ? ThreadStatus.New : ThreadStatus.Unassigned);
         t.content().add(bo);
         t.owner().set(
-                to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? ServerSideFactory.create(
-                        CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned) : to.owner().endpoint());
+                to.owner() == null || to.owner().isEmpty() || to.owner().isPrototype() || to.owner().isNull() ? communicationFacade
+                        .getSystemEndpointFromCache(SystemEndpointName.Unassigned) : to.owner().endpoint());
 
         return Persistence.secureSave(t);
+    }
+
+    private void expandCommunicationEndpoint(Message bo, CommunicationMessageFacade communicationFacade, CommunicationEndpointDTO ep) {
+        EntityListCriteria<Tenant> criteria = createActiveLeaseCriteria();
+
+        switch (ep.type().getValue()) {
+        case Building: {
+            criteria.eq(criteria.proto().lease().unit().building(), ep.endpoint());
+            break;
+        }
+        case Unit: {
+            criteria.eq(criteria.proto().lease().unit(), ep.endpoint());
+            break;
+        }
+        case Portfolio: {
+            criteria.eq(criteria.proto().lease().unit().building().portfolios().$(), ep.endpoint());
+            break;
+        }
+        case Tenants:
+        case Employee:
+        default: {
+            return;
+        }
+        }
+
+        Vector<Tenant> tenants = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
+        if (tenants != null) {
+            for (Tenant t : tenants) {
+                Persistence.ensureRetrieve(t.customer(), AttachLevel.Attached);
+                bo.recipients().add(communicationFacade.createDeliveryHandle(t.customer().user(), true));
+            }
+        }
+    }
+
+    private EntityListCriteria<Tenant> createActiveLeaseCriteria() {
+        EntityListCriteria<Tenant> criteria = EntityListCriteria.create(Tenant.class);
+        criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
+        return criteria;
     }
 
     @Override
@@ -165,29 +203,6 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     @Override
     protected void enhanceListRetrieved(Message entity, MessageDTO dto) {
         enhanceDbo(entity, dto, true);
-    }
-
-    private CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
-        if (entity == null) {
-            return null;
-        }
-        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
-        rec.endpoint().set(entity);
-
-        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
-            SystemEndpoint e = entity.cast();
-            rec.name().setValue(e.name().getValue());
-            rec.type().setValue(ContactType.System);
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Employee);
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Tenants);
-        }
-        return rec;
     }
 
     protected void enhanceDbo(Message bo, MessageDTO to, boolean isForList) {
@@ -240,11 +255,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         boolean star = false;
         boolean isRead = true;
 
+        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
         messageDTO.isInRecipients().setValue(false);
         for (DeliveryHandle dh : m.recipients()) {
-            if (!isForList) {
+            if (!isForList && !dh.generatedFromGroup().getValue(false)) {
                 Persistence.ensureRetrieve(dh.recipient(), AttachLevel.Attached);
-                messageDTO.to().add(generateEndpointDTO(dh.recipient()));
+                messageDTO.to().add((communicationFacade.generateEndpointDTO(dh.recipient())));
             }
             if (!CrmAppContext.getCurrentUser().equals(dh.recipient())) {
                 continue;
@@ -264,7 +280,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.status().set(m.thread().status());
         Persistence.ensureRetrieve(m.thread().owner(), AttachLevel.Attached);
         if (!isForList) {
-            messageDTO.owner().set(generateEndpointDTO(m.thread().owner()));
+            messageDTO.owner().set((communicationFacade.generateEndpointDTO(m.thread().owner())));
         }
         messageDTO.text().set(m.text());
         messageDTO.date().set(m.date());
@@ -273,11 +289,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.attachments().set(m.attachments());
         messageDTO.highImportance().set(m.highImportance());
         messageDTO.sender().setAttachLevel(AttachLevel.Attached);
-        messageDTO.sender().set(generateEndpointDTO(m.sender()));
+        messageDTO.sender().set((communicationFacade.generateEndpointDTO(m.sender())));
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
         messageDTO.topic().set(m.thread().topic());
-        messageDTO.header().sender().setValue(ServerSideFactory.create(CommunicationMessageFacade.class).extractEndpointName(m.sender()));
+        messageDTO.header().sender().setValue(communicationFacade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
 
         return messageDTO;
@@ -287,7 +303,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     public void saveMessage(AsyncCallback<MessageDTO> callback, MessageDTO message, ThreadStatus threadStatus) {
         if (message.date().isNull()) {
             CommunicationThread thread = Persistence.secureRetrieve(CommunicationThread.class, message.thread().id().getValue());
-
+            CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
             Message m = EntityFactory.create(Message.class);
             if (threadStatus != null) {
                 message.status().setValue(threadStatus);
@@ -295,12 +311,12 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
                 Persistence.service().persist(thread);
                 m.recipients().add(
-                        ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(
-                                ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)));
+                        communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), true));
 
             } else {
                 for (CommunicationEndpointDTO d : message.to()) {
-                    m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(d.endpoint()));
+                    m.recipients().add(communicationFacade.createDeliveryHandle(d.endpoint(), false));
+                    expandCommunicationEndpoint(m, communicationFacade, d);
                 }
             }
             m.thread().set(thread);
@@ -338,7 +354,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         Persistence.service().persist(thread);
         Persistence.service().commit();
         Persistence.ensureRetrieve(employee.user(), AttachLevel.Attached);
-        message.owner().set(generateEndpointDTO(employee.user()));
+        message.owner().set((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(employee.user())));
         message.status().set(thread.status());
         callback.onSuccess(message);
     }

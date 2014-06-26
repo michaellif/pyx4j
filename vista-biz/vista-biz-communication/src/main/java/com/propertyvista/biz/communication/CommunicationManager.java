@@ -26,12 +26,16 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.dto.CommunicationEndpointDTO;
 
 public class CommunicationManager {
     private static class SingletonHolder {
@@ -106,15 +110,54 @@ public class CommunicationManager {
         } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
             CustomerUser e = entity.cast();
             return e.name().getValue();
+        } else if (entity.getInstanceValueClass().equals(Building.class)) {
+            Building e = entity.cast();
+            return e.propertyCode().getValue();
         }
         return null;
     }
 
-    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint) {
+    public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup) {
         DeliveryHandle dh = EntityFactory.create(DeliveryHandle.class);
         dh.isRead().setValue(false);
         dh.star().setValue(false);
         dh.recipient().set(endpoint);
+        dh.generatedFromGroup().setValue(generatedFromGroup);
         return dh;
+    }
+
+    public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
+        if (entity == null) {
+            return null;
+        }
+        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
+        rec.endpoint().set(entity);
+
+        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
+            SystemEndpoint e = entity.cast();
+            rec.name().setValue(e.name().getValue());
+            rec.type().setValue(ContactType.System);
+        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
+            CrmUser e = entity.cast();
+            rec.name().set(e.name());
+            rec.type().setValue(ContactType.Employee);
+        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
+            CustomerUser e = entity.cast();
+            rec.name().set(e.name());
+            rec.type().setValue(ContactType.Tenants);
+        } else if (entity.getInstanceValueClass().equals(Building.class)) {
+            Building e = entity.cast();
+            rec.name().set(e.propertyCode());
+            rec.type().setValue(ContactType.Building);
+        } else if (entity.getInstanceValueClass().equals(Portfolio.class)) {
+            Portfolio e = entity.cast();
+            rec.name().set(e.name());
+            rec.type().setValue(ContactType.Portfolio);
+        }/*- else if (entity.getInstanceValueClass().equals(Lease.class)) {
+            Lease e = entity.cast();
+            rec.name().set(e.leaseId());
+            rec.type().setValue(ContactType.Unit);
+         }-*/
+        return rec;
     }
 }

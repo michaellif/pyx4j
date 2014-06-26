@@ -16,13 +16,8 @@ package com.propertyvista.domain.communication;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -41,17 +36,20 @@ public interface CommunicationEndpoint extends IEntity {
         Tenants,
 
         @Translate("Corporate")
-        Employee;
+        Employee,
+
+        @Translate("Building")
+        Building,
+
+        @Translate("Unit")
+        Unit,
+
+        @Translate("Portfolio")
+        Portfolio;
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
     }
-
-    @Editor(type = EditorType.email)
-    @Length(64)
-    @Indexed(uniqueConstraint = true, ignoreCase = true)
-    IPrimitive<String> email();
-
 }

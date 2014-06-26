@@ -17,16 +17,18 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
+import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpointListService;
 import com.propertyvista.domain.communication.CommunicationEndpoint;
-import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
-import com.propertyvista.domain.communication.SystemEndpoint;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -45,42 +47,59 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
     }
 
     @Override
-    public void getEndpointForSelection(AsyncCallback<Vector<CommunicationEndpointDTO>> callback, EntityListCriteria<CommunicationEndpoint> criteria) {
-        EntityListCriteria<CrmUser> crmUserCriteria = EntityListCriteria.create(CrmUser.class);
-        EntityListCriteria<CustomerUser> tenantUserCriteria = EntityListCriteria.create(CustomerUser.class);
+    public void getEndpointForSelection(AsyncCallback<Vector<CommunicationEndpointDTO>> callback, EntityListCriteria<CommunicationEndpointDTO> criteria) {
+        PropertyCriterion nameCriteria = criteria.getCriterion(criteria.proto().name());
+        String namePattern = null;
+        if (nameCriteria != null) {
+            namePattern = nameCriteria.getValue().toString();
+        }
 
-        EntitySearchResult<CrmUser> crmUsers = Persistence.secureQuery(crmUserCriteria);
-        EntitySearchResult<CustomerUser> tenants = Persistence.secureQuery(tenantUserCriteria);
-        Vector<CommunicationEndpointDTO> dtos = new Vector<CommunicationEndpointDTO>(crmUsers.getData().size() + tenants.getData().size());
-        for (CommunicationEndpoint ep : crmUsers.getData()) {
-            dtos.add(generateEndpointDTO(ep));
-        }
-        for (CommunicationEndpoint ep : tenants.getData()) {
-            dtos.add(generateEndpointDTO(ep));
-        }
+        int pageSize = criteria.getPageSize();
+        Vector<CommunicationEndpointDTO> dtos = new Vector<CommunicationEndpointDTO>();
+
+        accumulate(dtos, createByPatternCriteria(CustomerUser.class, pageSize, namePattern));
+        accumulate(dtos, createByPatternCriteria(CrmUser.class, pageSize, namePattern));
+        accumulate(dtos, createByPatternCriteria(Building.class, pageSize, namePattern));
+        accumulate(dtos, createByPatternCriteria(Portfolio.class, pageSize, namePattern));
+        //accumulate(dtos, createCriteria(AptUnit.class, pageSize, namePattern));
+
         callback.onSuccess(dtos);
     }
 
-    private CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
-        if (entity == null) {
-            return null;
+    private <T extends CommunicationEndpoint> void accumulate(Vector<CommunicationEndpointDTO> accumulatedDtos, EntityListCriteria<T> criteria) {
+        if (criteria.getPageSize() > 0 && accumulatedDtos.size() >= criteria.getPageSize()) {
+            return;
         }
-        CommunicationEndpointDTO rec = EntityFactory.create(CommunicationEndpointDTO.class);
-        rec.endpoint().set(entity);
+        EntitySearchResult<T> endpoints = Persistence.secureQuery(criteria);
 
-        if (entity.getInstanceValueClass().equals(SystemEndpoint.class)) {
-            SystemEndpoint e = entity.cast();
-            rec.name().setValue(e.name().getValue());
-            rec.type().setValue(ContactType.System);
-        } else if (entity.getInstanceValueClass().equals(CrmUser.class)) {
-            CrmUser e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Employee);
-        } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
-            CustomerUser e = entity.cast();
-            rec.name().set(e.name());
-            rec.type().setValue(ContactType.Tenants);
+        if (endpoints != null && endpoints.getData() != null && endpoints.getData().size() > 0) {
+            for (CommunicationEndpoint ep : endpoints.getData()) {
+                if (criteria.getPageSize() > 0 && accumulatedDtos.size() >= criteria.getPageSize()) {
+                    return;
+                }
+                accumulatedDtos.add((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(ep)));
+            }
         }
-        return rec;
     }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends CommunicationEndpoint> EntityListCriteria<T> createByPatternCriteria(Class<T> entityClass, int pageSize, String namePattern) {
+        EntityListCriteria<T> criteria = EntityListCriteria.create(entityClass);
+        criteria.setPageSize(pageSize);
+
+        if (entityClass.equals(CustomerUser.class)) {
+            criteria.like(((EntityListCriteria<CustomerUser>) criteria).proto().name(), namePattern);
+        } else if (entityClass.equals(CrmUser.class)) {
+            criteria.like(((EntityListCriteria<CrmUser>) criteria).proto().name(), namePattern);
+        } else if (entityClass.equals(Building.class)) {
+            criteria.like(((EntityListCriteria<Building>) criteria).proto().propertyCode(), namePattern);
+        } else if (entityClass.equals(Portfolio.class)) {
+            criteria.like(((EntityListCriteria<Portfolio>) criteria).proto().name(), namePattern);
+        }
+        //else if (entityClass.equals(AptUnit.class)){
+        //    criteria.like(((EntityListCriteria<AptUnit> )criteria).proto().name(), namePattern);
+        //}
+        return criteria;
+    }
+
 }

@@ -114,17 +114,16 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         bo.sender().set(ResidentPortalContext.getCurrentUser());
         bo.text().set(to.text());
         bo.highImportance().set(to.highImportance());
-        bo.recipients().add(
-                ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(
-                        ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned)));
+        CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
+        bo.recipients().add(communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), false));
 
         CommunicationThread t = EntityFactory.create(CommunicationThread.class);
         t.subject().set(to.subject());
         t.allowedReply().setValue(true);
         t.status().setValue(ThreadStatus.New);
-        t.topic().set(ServerSideFactory.create(CommunicationMessageFacade.class).getMessageCategoryFromCache(MessageGroupCategory.TenantOriginated));
+        t.topic().set(communicationFacade.getMessageCategoryFromCache(MessageGroupCategory.TenantOriginated));
         t.content().add(bo);
-        t.owner().set(ServerSideFactory.create(CommunicationMessageFacade.class).getSystemEndpointFromCache(SystemEndpointName.Unassigned));
+        t.owner().set(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned));
 
         return Persistence.secureSave(t);
     }
@@ -238,7 +237,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             if (message.recipients() != null && message.recipients().size() > 0) {
                 m.recipients().add(message.recipients().get(0));
             } else {
-                m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(thread.owner()));
+                m.recipients().add(ServerSideFactory.create(CommunicationMessageFacade.class).createDeliveryHandle(thread.owner(), false));
             }
             Persistence.service().persist(m);
         } else {

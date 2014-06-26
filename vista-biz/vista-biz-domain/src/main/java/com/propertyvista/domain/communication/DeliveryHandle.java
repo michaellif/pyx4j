@@ -51,4 +51,8 @@ public interface DeliveryHandle extends IEntity {
     @Indexed
     @ToString(index = 0)
     Message message();
+
+    @NotNull
+    @ReadOnly
+    IPrimitive<Boolean> generatedFromGroup();
 }
