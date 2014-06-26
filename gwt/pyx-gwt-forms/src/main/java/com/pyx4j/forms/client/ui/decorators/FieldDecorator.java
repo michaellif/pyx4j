@@ -318,6 +318,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     }
 
     protected void updateLabelPosition() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         if (builder.labelPosition == LabelPosition.hidden) {
             labelHolder.getElement().getStyle().setDisplay(Display.NONE);
         } else if (builder.labelPosition == LabelPosition.left && !narrowLayout) {
@@ -335,6 +338,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     }
 
     protected void updateLabelAlignment() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         switch (builder.labelAlignment) {
         case left:
             labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
@@ -353,10 +359,16 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     }
 
     private void updateVisibility() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         setVisible(component.isVisible());
     }
 
     private void updateTooltip() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
@@ -371,6 +383,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     }
 
     private void updateNote() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         if (component.getNote() != null && component.getNote().trim().length() > 0) {
             noteLabel.setText(component.getNote());
             noteLabel.setVisible(true);
@@ -385,6 +400,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     }
 
     protected void updateViewable() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         if (component.isViewable()) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(false);
@@ -395,6 +413,9 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
     }
 
     protected void updateCaption() {
+        if (component == null) {//Not initiated yet
+            return;
+        }
         String caption = builder.customLabel;
         if (caption == null) {
             caption = component.getTitle();
