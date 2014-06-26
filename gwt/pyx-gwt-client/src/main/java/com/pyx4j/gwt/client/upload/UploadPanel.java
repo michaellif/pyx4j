@@ -110,11 +110,12 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
         upload.setName("upload");
 
         HorizontalPanel line = new HorizontalPanel();
+        line.setWidth("100%");
         content.add(line);
 
         line.add(upload);
         line.add(deferredProgressPanel = new DeferredProgressPanel("Connecting...", false, this));
-        deferredProgressPanel.setSize("70px", "20px");
+        deferredProgressPanel.setSize("100%", "20px");
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
 
@@ -155,6 +156,7 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
                     uploadId = result;
                     postCorrelationId.setValue(uploadId.getDeferredCorrelationId());
                     uploadForm.submit();
+                    upload.setVisible(false);
                 }
             }, getUploadData());
         }
@@ -183,6 +185,7 @@ public class UploadPanel<U extends IEntity, B extends AbstractIFileBlob> extends
     }
 
     protected void onUploadError(UploadError error, String args) {
+        upload.setVisible(true);
         String message = "n/a";
         switch (error) {
         case NoFileSelected:
