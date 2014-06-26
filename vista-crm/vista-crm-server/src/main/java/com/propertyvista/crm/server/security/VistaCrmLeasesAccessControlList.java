@@ -75,8 +75,11 @@ public class VistaCrmLeasesAccessControlList extends UIAclBuilder {
         grant(LeasesAdvance, LeaseLegalStateDTO.class, READ);
         grant(LeasesFull, LeaseLegalStateDTO.class, ALL);
 
-        grant(LeasesAdvance, HasNotesAndAttachments.class, READ);
-        grant(LeasesFull, HasNotesAndAttachments.class, ALL);
+        // TODO  this BAD  change this
+        {
+            grant(LeasesAdvance, HasNotesAndAttachments.class, READ);
+            grant(LeasesFull, HasNotesAndAttachments.class, ALL);
+        }
 
         // ---- Financial:
 

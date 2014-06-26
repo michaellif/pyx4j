@@ -121,8 +121,11 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 super(NotesAndAttachments.class);
                 setOrderable(false);
                 inheritEditable(false);
-                setEditable(SecurityController.check(DataModelPermission.permissionUpdate(HasNotesAndAttachments.class)));
-                setAddable(SecurityController.check(DataModelPermission.permissionCreate(HasNotesAndAttachments.class)));
+                // TODO  this BAD  change this
+                {
+                    setEditable(SecurityController.check(DataModelPermission.permissionUpdate(HasNotesAndAttachments.class)));
+                    setAddable(SecurityController.check(DataModelPermission.permissionCreate(HasNotesAndAttachments.class)));
+                }
             }
 
             @Override
