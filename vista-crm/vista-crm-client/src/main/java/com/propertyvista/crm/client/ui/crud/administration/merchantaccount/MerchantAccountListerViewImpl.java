@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.merchantaccount;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -30,12 +31,12 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
         public MerchantAccountLister() {
             super(MerchantAccount.class, true);
 
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<MerchantAccount>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().bankId()).build(),
                 new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentsStatus()).searchable(false).sortable(false).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
     }
 }

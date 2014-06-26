@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class PadSimBatchLister extends AbstractLister<PadSimBatch> {
     public PadSimBatchLister() {
         super(PadSimBatch.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<PadSimBatch>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().terminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().bankId()).build(),
@@ -32,6 +33,6 @@ public class PadSimBatchLister extends AbstractLister<PadSimBatch> {
                 new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
                 new MemberColumnDescriptor.Builder(proto().batchAmount()).build(),
                 new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 }

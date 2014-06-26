@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -31,7 +32,7 @@ public class BuildingLister extends AbstractLister<BuildingDTO> {
     public BuildingLister() {
         super(BuildingDTO.class, !VistaFeatures.instance().yardiIntegration() ? true : false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<BuildingDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
             new MemberColumnDescriptor.Builder(proto().complex()).build(),
             new MemberColumnDescriptor.Builder(proto().complexPrimary(), false).build(),
@@ -74,7 +75,7 @@ public class BuildingLister extends AbstractLister<BuildingDTO> {
             new MemberColumnDescriptor.Builder(proto().financial().currency().name(), false).title(proto().financial().currency()).build(),
             
             new MemberColumnDescriptor.Builder(proto().marketing().name(), false).title(i18n.tr("Marketing Name")).build()
-        ); //@formatter:on
+        )); //@formatter:on
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -30,7 +31,7 @@ public class DepositLifecycleLister extends AbstractLister<DepositLifecycleDTO> 
     public DepositLifecycleLister() {
         super(DepositLifecycleDTO.class, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<DepositLifecycleDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature")).build(),
             new MemberColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(),
@@ -38,7 +39,7 @@ public class DepositLifecycleLister extends AbstractLister<DepositLifecycleDTO> 
             new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(),
             new MemberColumnDescriptor.Builder(proto().refundDate()).build(),
             new MemberColumnDescriptor.Builder(proto().currentAmount()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

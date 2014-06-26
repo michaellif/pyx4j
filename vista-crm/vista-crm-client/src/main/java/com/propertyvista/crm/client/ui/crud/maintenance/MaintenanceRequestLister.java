@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -36,7 +37,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
     public MaintenanceRequestLister() {
         super(MaintenanceRequestDTO.class, true);
 
-        setColumnDescriptors(createColumnDescriptors());
+        setDataTableModel(new DataTableModel<MaintenanceRequestDTO>(createColumnDescriptors()));
     }
 
     public static ColumnDescriptor[] createColumnDescriptors() {

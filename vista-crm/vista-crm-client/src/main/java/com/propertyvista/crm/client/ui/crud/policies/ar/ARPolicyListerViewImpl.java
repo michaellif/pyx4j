@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -29,10 +30,11 @@ public class ARPolicyListerViewImpl extends CrmListerViewImplBase<ARPolicyDTO> i
 
         public ARPolicyLister() {
             super(ARPolicyDTO.class);
-            setColumnDescriptors(// @formatter:off
+            setDataTableModel(new DataTableModel<ARPolicyDTO>(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().creditDebitRule()).build()
-
-            ); // @formatter:on
+            ));//@formatter:on
 
         }
     }

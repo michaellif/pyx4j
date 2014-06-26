@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -29,7 +30,9 @@ public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<Rest
 
         public RestrictionsPolicyLister() {
             super(RestrictionsPolicyDTO.class);
-            setColumnDescriptors( // @formatter:off
+            setDataTableModel(new DataTableModel<RestrictionsPolicyDTO>( // @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().occupantsPerBedRoom()).build(), 
                     new MemberColumnDescriptor.Builder(proto().maxParkingSpots()).build(),
                     new MemberColumnDescriptor.Builder(proto().maxLockers()).build(),
@@ -38,7 +41,7 @@ public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<Rest
                     new MemberColumnDescriptor.Builder(proto().enforceAgeOfMajority()).build(), 
                     new MemberColumnDescriptor.Builder(proto().maturedOccupantsAreApplicants()).build(),
                     new MemberColumnDescriptor.Builder(proto().noNeedGuarantors()).build() 
-            ); // @formatter:on
+            )); // @formatter:on
         }
     }
 

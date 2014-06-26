@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ColumnSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 
 import com.propertyvista.domain.dashboard.gadgets.util.ColumnUserSettings;
@@ -79,8 +80,11 @@ public class ListerUtils {
             assert userSettingsProvider != null;
             assert onColumnSelectionChanged != null;
 
-            dataTablePanel.setColumnDescriptors(ColumnDescriptorDiffUtil.applyDiff((Class<E>) dataTablePanel.proto().getInstanceValueClass(),
-                    columnDescriptors, userSettingsProvider.get()));
+            DataTableModel<E> dataTableModel = new DataTableModel<E>(ColumnDescriptorDiffUtil.applyDiff((Class<E>) dataTablePanel.proto()
+                    .getInstanceValueClass(), columnDescriptors, userSettingsProvider.get()));
+            dataTableModel.setMultipleSelection(false);
+            dataTableModel.setPageSize(userSettingsProvider.get().pageSize().isNull() ? 10 : userSettingsProvider.get().pageSize().getValue());
+            dataTablePanel.setDataTableModel(dataTableModel);
 
             dataTablePanel.getDataTable().addColumnSelectionChangeHandler(new ColumnSelectionHandler() {
                 @Override
@@ -95,12 +99,10 @@ public class ListerUtils {
             });
 
             dataTablePanel.getDataTable().setItemZoomInCommand(itemZoomInCommand);
-            dataTablePanel.setPageSize(userSettingsProvider.get().pageSize().isNull() ? 10 : userSettingsProvider.get().pageSize().getValue());
             dataTablePanel.getDataTable().setColumnSelectorVisible(isSetupable);
             dataTablePanel.setFilteringEnabled(false);
             dataTablePanel.setPageSizeOptions(null); // turn off page size selection control 
             dataTablePanel.getDataTable().setHasColumnClickSorting(true);
-            dataTablePanel.getDataTable().setMultipleSelection(false);
 
         }
     }

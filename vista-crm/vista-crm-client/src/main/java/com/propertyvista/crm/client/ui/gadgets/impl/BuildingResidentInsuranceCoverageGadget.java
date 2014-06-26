@@ -61,7 +61,7 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().setPageSize(getMetadata().buildingInsuranceCoverageListerSettings().pageSize().getValue());
+                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().buildingInsuranceCoverageListerSettings().pageSize().getValue());
 
                 lister.getDataSource().clearPreDefinedFilters();
                 if (!containerBoard.getSelectedBuildingsStubs().isEmpty()) {

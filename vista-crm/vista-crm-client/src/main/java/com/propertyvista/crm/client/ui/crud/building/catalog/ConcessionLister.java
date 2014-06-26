@@ -20,21 +20,19 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionLister extends VersionedLister<Concession> {
 
-    private final static I18n i18n = I18n.get(ConcessionLister.class);
-
     public ConcessionLister() {
         super(Concession.class, true, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<Concession>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().version().type()).build(),
             new MemberColumnDescriptor.Builder(proto().version().term()).build(),
@@ -64,7 +62,7 @@ public class ConcessionLister extends VersionedLister<Concession> {
             new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
             new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
             new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
-        );//@formatter:on        
+        ));//@formatter:on        
     }
 
     @Override

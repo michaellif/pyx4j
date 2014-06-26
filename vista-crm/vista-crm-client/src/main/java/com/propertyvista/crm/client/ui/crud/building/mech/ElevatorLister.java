@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -28,7 +29,7 @@ public class ElevatorLister extends AbstractLister<ElevatorDTO> {
         super(ElevatorDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<ElevatorDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build(),
             new MemberColumnDescriptor.Builder(proto().make()).build(),
@@ -38,7 +39,7 @@ public class ElevatorLister extends AbstractLister<ElevatorDTO> {
             new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(),
             new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
             new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

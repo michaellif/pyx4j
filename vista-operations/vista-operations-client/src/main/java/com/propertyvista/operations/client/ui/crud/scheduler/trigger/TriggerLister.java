@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,7 +28,7 @@ public class TriggerLister extends AbstractLister<TriggerDTO> {
     public TriggerLister() {
         super(TriggerDTO.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        DataTableModel<TriggerDTO> dataTableModel = new DataTableModel<TriggerDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(),
@@ -36,8 +37,9 @@ public class TriggerLister extends AbstractLister<TriggerDTO> {
             new MemberColumnDescriptor.Builder(proto().populationType(), false).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()
         );//@formatter:on
+        dataTableModel.setPageSize(PAGESIZE_LARGE);
+        setDataTableModel(dataTableModel);
 
-        getDataTablePanel().setPageSize(PAGESIZE_LARGE);
     }
 
     @Override

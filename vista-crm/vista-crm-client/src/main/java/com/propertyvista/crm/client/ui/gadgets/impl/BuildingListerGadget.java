@@ -71,7 +71,7 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().setPageSize(getMetadata().buildingListerSettings().pageSize().getValue());
+                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().buildingListerSettings().pageSize().getValue());
                 lister.obtain(0);
                 populateSucceded();
             }

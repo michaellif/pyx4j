@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -30,11 +31,13 @@ public class ApplicationDocumentationPolicyListerViewImpl extends CrmListerViewI
 
         public ApplicationDocumentationPolicyLister() {
             super(ApplicationDocumentationPolicyDTO.class);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<ApplicationDocumentationPolicyDTO>(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().numberOfRequiredIDs()).build(),
                     new MemberColumnDescriptor.Builder(proto().allowedIDs()).build(),
                     new MemberColumnDescriptor.Builder(proto().mandatoryProofOfIncome()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
     }
 }

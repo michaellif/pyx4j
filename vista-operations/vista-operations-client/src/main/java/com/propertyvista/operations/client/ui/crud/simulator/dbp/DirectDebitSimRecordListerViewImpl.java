@@ -13,8 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
-import java.util.Arrays;
-
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -31,7 +30,7 @@ public class DirectDebitSimRecordListerViewImpl extends OperationsListerViewImpl
 
         public DirectDebitSimRecordLister() {
             super(DirectDebitSimRecord.class, true);
-            setColumnDescriptors(Arrays.asList(//@formatter:off
+            setDataTableModel(new DataTableModel<DirectDebitSimRecord>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().amount()).build(),
                     new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),

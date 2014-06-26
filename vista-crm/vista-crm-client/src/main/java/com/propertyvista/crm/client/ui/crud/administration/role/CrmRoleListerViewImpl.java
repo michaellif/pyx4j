@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -34,11 +35,11 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
         public CrmRoleLister() {
             super(CrmRole.class, true);
 
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<CrmRole>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().name()).build(),
                 new MemberColumnDescriptor.Builder(proto().description()).build(),
                 new MemberColumnDescriptor.Builder(proto().behaviors()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
 
         @Override

@@ -17,10 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
+import com.propertyvista.dto.AptUnitDTO;
 
 public class BuildingUnitLister extends UnitLister {
 
@@ -34,7 +36,7 @@ public class BuildingUnitLister extends UnitLister {
 
     @Override
     protected void setupColumns() {
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<AptUnitDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().number()).build(),
                 new MemberColumnDescriptor.Builder(proto().info().area()).build(),
@@ -51,7 +53,7 @@ public class BuildingUnitLister extends UnitLister {
                 new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build()
-       );//@formatter:on
+       ));//@formatter:on
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -33,7 +34,7 @@ public class PmcLister extends AbstractLister<PmcDTO> {
     public PmcLister() {
         super(PmcDTO.class, true);
 
-        setColumnDescriptors( //@formatter:off
+        setDataTableModel(new DataTableModel<PmcDTO>( //@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
             new MemberColumnDescriptor.Builder(proto().namespace()).visible(false).build(),
@@ -48,7 +49,7 @@ public class PmcLister extends AbstractLister<PmcDTO> {
             new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().equifaxInfo().status()).columnTitle("Equifax Status").visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().equifaxInfo().reportType()).visible(false).build()
-        );//@formatter:on
+        ));//@formatter:on
 
         addActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
             @Override

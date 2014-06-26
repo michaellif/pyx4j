@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -87,10 +88,10 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
             getDataTablePanel().setFilteringEnabled(false);
             // No filtering work for it
             getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
-            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().isRead()).build(),
-                    new MemberColumnDescriptor.Builder(proto().highImportance()).build(), new MemberColumnDescriptor.Builder(proto().star()).build(),
-                    new MemberColumnDescriptor.Builder(proto().sender()).build(), new MemberColumnDescriptor.Builder(proto().subject()).build(),
-                    new MemberColumnDescriptor.Builder(proto().date()).build());
+            setDataTableModel(new DataTableModel<MessageDTO>(new MemberColumnDescriptor.Builder(proto().isRead()).build(), new MemberColumnDescriptor.Builder(
+                    proto().highImportance()).build(), new MemberColumnDescriptor.Builder(proto().star()).build(), new MemberColumnDescriptor.Builder(proto()
+                    .sender()).build(), new MemberColumnDescriptor.Builder(proto().subject()).build(),
+                    new MemberColumnDescriptor.Builder(proto().date()).build()));
         }
 
         @Override

@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
@@ -27,9 +30,11 @@ public class N4PolicyListerViewImpl extends CrmListerViewImplBase<N4PolicyDTO> i
 
         public N4PolicyLister() {
             super(N4PolicyDTO.class);
-            setColumnDescriptors(//@formatter:off
-                    
-            );//@formatter:on
+
+            setDataTableModel(new DataTableModel<N4PolicyDTO>(// @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            )); // @formatter:on
         }
     }
 }

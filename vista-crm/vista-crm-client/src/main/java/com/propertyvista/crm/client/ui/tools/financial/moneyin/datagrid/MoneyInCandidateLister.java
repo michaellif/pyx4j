@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -22,8 +23,8 @@ public class MoneyInCandidateLister extends AbstractLister<MoneyInCandidateDTO> 
 
     public MoneyInCandidateLister() {
         super(MoneyInCandidateDTO.class);
-        setMultipleSelection(true);
-        setColumnDescriptors(//@formatter:off
+
+        DataTableModel<MoneyInCandidateDTO> dataTableModel = new DataTableModel<MoneyInCandidateDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().building()).build(),
                 new MemberColumnDescriptor.Builder(proto().unit()).build(),
                 new MemberColumnDescriptor.Builder(proto().leaseId()).build(),
@@ -44,6 +45,9 @@ public class MoneyInCandidateLister extends AbstractLister<MoneyInCandidateDTO> 
 //                    }
 //                }, 
                 new MemberColumnDescriptor.Builder(proto().totalOutstanding()).build());
+        
+        dataTableModel.setMultipleSelection(true);
+        
+        setDataTableModel(dataTableModel);
     }
-
 }

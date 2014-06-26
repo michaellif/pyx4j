@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -30,7 +31,7 @@ public class LeadLister extends AbstractLister<Lead> {
     public LeadLister() {
         super(Lead.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<Lead>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().leadId(), true).build(),
             new MemberColumnDescriptor.Builder(proto().guests(), true).build(),
             new MemberColumnDescriptor.Builder(proto().guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly().build(),
@@ -39,7 +40,7 @@ public class LeadLister extends AbstractLister<Lead> {
             new MemberColumnDescriptor.Builder(proto().floorplan(), true).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
             new MemberColumnDescriptor.Builder(proto().status(), true).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

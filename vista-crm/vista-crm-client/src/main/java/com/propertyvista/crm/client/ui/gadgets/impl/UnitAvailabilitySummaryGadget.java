@@ -102,8 +102,7 @@ public class UnitAvailabilitySummaryGadget extends GadgetInstanceBase<UnitAvaila
         contentPanel.add(asOf);
         contentPanel.setCellHorizontalAlignment(asOf, HasHorizontalAlignment.ALIGN_CENTER);
 
-        tableModel = new DataTableModel<UnitAvailabilityStatusSummaryLineDTO>(UnitAvailabilityStatusSummaryLineDTO.class);
-        tableModel.setColumnDescriptors(COLUMN_DESCRIPTORS);
+        tableModel = new DataTableModel<UnitAvailabilityStatusSummaryLineDTO>(COLUMN_DESCRIPTORS);
         table = new DataTable<UnitAvailabilityStatusSummaryLineDTO>(tableModel);
         table.asWidget().setWidth("100%");
         table.asWidget().getElement().getStyle().setProperty("tableLayout", "auto");

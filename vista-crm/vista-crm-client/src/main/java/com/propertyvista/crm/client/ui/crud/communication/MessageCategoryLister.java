@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -29,7 +30,7 @@ public class MessageCategoryLister extends AbstractLister<MessageCategory> {
     public MessageCategoryLister() {
         super(MessageCategory.class, true, true);
 
-        setColumnDescriptors(createColumnDescriptors());
+        setDataTableModel(new DataTableModel<MessageCategory>(createColumnDescriptors()));
     }
 
     public static ColumnDescriptor[] createColumnDescriptors() {

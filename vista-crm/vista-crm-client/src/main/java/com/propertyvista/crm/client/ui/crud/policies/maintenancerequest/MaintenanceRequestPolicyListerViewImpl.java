@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.maintenancerequest;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.MaintenanceRequestPolicyDTO;
@@ -27,6 +30,11 @@ public class MaintenanceRequestPolicyListerViewImpl extends CrmListerViewImplBas
 
         public MaintenanceRequestPolicyLister() {
             super(MaintenanceRequestPolicyDTO.class);
+
+            setDataTableModel(new DataTableModel<MaintenanceRequestPolicyDTO>(// @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            )); // @formatter:on
         }
     }
 }

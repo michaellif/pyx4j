@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -32,7 +33,7 @@ public class FormerLeaseLister extends AbstractLister<LeaseDTO> {
     public FormerLeaseLister() {
         super(LeaseDTO.class, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<LeaseDTO>(//@formatter:off
             new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
             new Builder(proto().type()).build(),
             
@@ -55,7 +56,7 @@ public class FormerLeaseLister extends AbstractLister<LeaseDTO> {
             
             new Builder(proto().approvalDate(), false).build(),
             new Builder(proto().creationDate(), false).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

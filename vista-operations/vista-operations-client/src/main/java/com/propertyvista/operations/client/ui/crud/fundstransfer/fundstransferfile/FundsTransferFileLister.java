@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,7 +28,7 @@ public class FundsTransferFileLister extends AbstractLister<FundsTransferFileDTO
     public FundsTransferFileLister() {
         super(FundsTransferFileDTO.class, false, false);
 
-        setColumnDescriptors(//@formatter:off                
+        setDataTableModel(new DataTableModel<FundsTransferFileDTO>(//@formatter:off                
                     new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().fileName()).build(),
                     new MemberColumnDescriptor.Builder(proto().companyId()).build(),
@@ -44,7 +45,7 @@ public class FundsTransferFileLister extends AbstractLister<FundsTransferFileDTO
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentFileName(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentRemoteFileDate(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().acknowledgmentStatus()).build()
-            );//@formatter:on
+            ));//@formatter:on
     }
 
     @Override

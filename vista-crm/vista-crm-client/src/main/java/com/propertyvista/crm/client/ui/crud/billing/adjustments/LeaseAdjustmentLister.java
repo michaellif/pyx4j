@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class LeaseAdjustmentLister extends AbstractLister<LeaseAdjustment> {
     public LeaseAdjustmentLister() {
         super(LeaseAdjustment.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<LeaseAdjustment>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().code()).build(),
             new MemberColumnDescriptor.Builder(proto().executionType()).build(),
             new MemberColumnDescriptor.Builder(proto().receivedDate(), false).build(),
@@ -34,6 +35,6 @@ public class LeaseAdjustmentLister extends AbstractLister<LeaseAdjustment> {
             new MemberColumnDescriptor.Builder(proto().updated(), false).build(),
             new MemberColumnDescriptor.Builder(proto().created(), false).build(),
             new MemberColumnDescriptor.Builder(proto().createdBy(), false).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 }

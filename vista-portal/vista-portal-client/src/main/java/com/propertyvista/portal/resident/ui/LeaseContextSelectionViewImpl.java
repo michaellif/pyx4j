@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.rpc.InMemeoryListService;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler;
@@ -108,7 +109,7 @@ public class LeaseContextSelectionViewImpl extends SimplePanel implements LeaseC
         public LeaseLister() {
             super(LeaseContextChoiceDTO.class, false, false);
             getDataTablePanel().setFilteringEnabled(false);
-            setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build());
+            setDataTableModel(new DataTableModel<LeaseContextChoiceDTO>(new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build()));
         }
     }
 

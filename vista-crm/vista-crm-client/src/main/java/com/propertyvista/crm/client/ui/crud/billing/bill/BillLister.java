@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -35,36 +36,38 @@ public class BillLister extends AbstractLister<BillDataDTO> {
     public BillLister() {
         super(BillDataDTO.class, false);
 
-        setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().bill().billType()).build(),
+        DataTableModel<BillDataDTO> dataTableModel = new DataTableModel<BillDataDTO>(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().bill().billType()).build(),
 
-            new MemberColumnDescriptor.Builder(proto().bill().executionDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().billingPeriodStartDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().billingPeriodEndDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().dueDate()).build(),
-         
-            new MemberColumnDescriptor.Builder(proto().bill().pastDueAmount()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().currentAmount()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().taxes()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().totalDueAmount()).build(),
-            
-            new MemberColumnDescriptor.Builder(proto().bill().billStatus()).build(),
-            
-            new MemberColumnDescriptor.Builder(proto().bill().balanceForwardAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().paymentReceivedAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().depositRefundAmount(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().nsfCharges(),false).build(),
-            
-            new MemberColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().depositAmount(),false).build(),
-            
-            new MemberColumnDescriptor.Builder(proto().bill().serviceCharge(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
-        );//@formatter:on
+                new MemberColumnDescriptor.Builder(proto().bill().executionDate()).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().billingPeriodStartDate()).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().billingPeriodEndDate()).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().dueDate()).build(),
+             
+                new MemberColumnDescriptor.Builder(proto().bill().pastDueAmount()).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().currentAmount()).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().taxes()).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().totalDueAmount()).build(),
+                
+                new MemberColumnDescriptor.Builder(proto().bill().billStatus()).build(),
+                
+                new MemberColumnDescriptor.Builder(proto().bill().balanceForwardAmount(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().paymentReceivedAmount(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().depositRefundAmount(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().nsfCharges(),false).build(),
+                
+                new MemberColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().depositAmount(),false).build(),
+                
+                new MemberColumnDescriptor.Builder(proto().bill().serviceCharge(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
+                new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
+            );//@formatter:on
+        dataTableModel.setMultipleSelection(true);
 
-        getDataTablePanel().getDataTable().setMultipleSelection(true);
+        setDataTableModel(dataTableModel);
+
         addActionItem(new Button(i18n.tr("Confirm Checked"), new Command() {
             @Override
             public void execute() {

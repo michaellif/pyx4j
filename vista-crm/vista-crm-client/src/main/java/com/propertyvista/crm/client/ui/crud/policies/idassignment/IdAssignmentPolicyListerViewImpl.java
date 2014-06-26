@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
@@ -29,6 +32,11 @@ public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAs
             super(IdAssignmentPolicyDTO.class);
             getAddButton().setVisible(false);
             getDeleteButton().setVisible(false);
+
+            setDataTableModel(new DataTableModel<IdAssignmentPolicyDTO>(// @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            )); // @formatter:on
         }
     }
 

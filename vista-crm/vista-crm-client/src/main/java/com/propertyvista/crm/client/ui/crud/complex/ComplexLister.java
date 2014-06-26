@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,13 +28,13 @@ public class ComplexLister extends AbstractLister<ComplexDTO> {
     public ComplexLister() {
         super(ComplexDTO.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<ComplexDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(), 
             new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().primaryBuilding()).sortable(false).searchable(false).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class PadSimFileLister extends AbstractLister<PadSimFile> {
     public PadSimFileLister() {
         super(PadSimFile.class, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<PadSimFile>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().fileName()).build(),
             new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
             new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
@@ -33,6 +34,6 @@ public class PadSimFileLister extends AbstractLister<PadSimFile> {
             new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
             new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 }

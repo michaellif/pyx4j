@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -34,7 +35,7 @@ public class TenantLister extends AbstractLister<TenantDTO> {
     public TenantLister(boolean addDownloadListOfTenantsWithouPortalAccess) {
         super(TenantDTO.class, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<TenantDTO>(//@formatter:off
             new Builder(proto().participantId()).build(),
             new Builder(proto().role()).sortable(false).searchable(false).build(),
             
@@ -57,7 +58,7 @@ public class TenantLister extends AbstractLister<TenantDTO> {
             new Builder(proto().lease().unit().building().propertyCode()).visible(false).build(),
             new Builder(proto().lease().unit().building().info().name()).visible(false).columnTitle(i18n.tr("Building Name")).build()
             
-        ); // @formatter:on
+        )); // @formatter:on
 
     }
 

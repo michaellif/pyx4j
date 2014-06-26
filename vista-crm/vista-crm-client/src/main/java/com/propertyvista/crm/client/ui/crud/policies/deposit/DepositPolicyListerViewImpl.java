@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
@@ -27,6 +30,11 @@ public class DepositPolicyListerViewImpl extends CrmListerViewImplBase<DepositPo
 
         public DepositPolicyLister() {
             super(DepositPolicyDTO.class);
+
+            setDataTableModel(new DataTableModel<DepositPolicyDTO>(// @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            )); // @formatter:on
         }
     }
 

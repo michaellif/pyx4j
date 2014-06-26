@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,7 +28,7 @@ public class EmployeeLister extends AbstractLister<EmployeeDTO> {
     public EmployeeLister() {
         super(EmployeeDTO.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<EmployeeDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().title()).build(),
@@ -35,7 +36,7 @@ public class EmployeeLister extends AbstractLister<EmployeeDTO> {
             new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
             new MemberColumnDescriptor.Builder(proto().email()).build(),
             new MemberColumnDescriptor.Builder(proto().updated(), false).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

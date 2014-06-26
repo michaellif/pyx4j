@@ -20,6 +20,7 @@ import java.util.Vector;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -67,7 +68,7 @@ public class RunLister extends AbstractLister<Run> {
 
     public RunLister(boolean isInlineMode) {
         super(Run.class, false);
-        setColumnDescriptors(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS);
+        setDataTableModel(new DataTableModel<Run>(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS));
     }
 
     @Override

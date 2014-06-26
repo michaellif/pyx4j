@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -26,14 +27,13 @@ public class CardServiceSimulationMerchantAccountListerViewImpl extends Operatio
 
         public CardServiceSimulationLister() {
             super(CardServiceSimulationMerchantAccount.class, true, true);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<CardServiceSimulationMerchantAccount>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().terminalID()).build(),
                     new MemberColumnDescriptor.Builder(proto().balance()).build(),
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().created()).build()
-            );//@formatter:off
+            ));//@formatter:off
         }
-
     }
 
     public CardServiceSimulationMerchantAccountListerViewImpl() {

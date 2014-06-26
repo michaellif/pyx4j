@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -28,11 +29,11 @@ public class LockerAreaLister extends AbstractLister<LockerAreaDTO> {
         super(LockerAreaDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<LockerAreaDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().levels()).build(),
             new MemberColumnDescriptor.Builder(proto().totalLockers()).build()
-        ); // @formatter:on
+        )); // @formatter:on
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -56,7 +57,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
             }
         });
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<ExecutionReportSection>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().counter()).build(),
@@ -81,7 +82,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
                 }
             }
 
-        );//@formatter:on
+        ));//@formatter:on
 
         setDataSource(new ListerDataSource<ExecutionReportSection>(ExecutionReportSection.class,
                 GWT.<AbstractListService<ExecutionReportSection>> create(ExecutionReportSectionService.class)));
@@ -100,10 +101,10 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
         public ExecutionReportMessageLister() {
             super(ExecutionReportMessage.class);
 
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<ExecutionReportMessage>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().eventTime()).build(),
                 new MemberColumnDescriptor.Builder(proto().message()).build()
-            );//@formatter:on
+            ));//@formatter:on
 
             setDataSource(new ListerDataSource<ExecutionReportMessage>(ExecutionReportMessage.class,
                     GWT.<AbstractListService<ExecutionReportMessage>> create(ExecutionReportMessageService.class)));

@@ -13,21 +13,31 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.yardiinterface;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
 public class YardiInterfacePolicyListerViewImpl extends CrmListerViewImplBase<YardiInterfacePolicyDTO> implements YardiInterfacePolicyListerView {
 
+    public YardiInterfacePolicyListerViewImpl() {
+        setLister(new YardiInterfacePolicyLister());
+
+    }
+
     public static class YardiInterfacePolicyLister extends PolicyListerBase<YardiInterfacePolicyDTO> {
 
         public YardiInterfacePolicyLister() {
             super(YardiInterfacePolicyDTO.class);
+
+            setDataTableModel(new DataTableModel<YardiInterfacePolicyDTO>(// @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            )); // @formatter:on
         }
 
     }
 
-    public YardiInterfacePolicyListerViewImpl() {
-        setLister(new YardiInterfacePolicyLister());
-    }
 }

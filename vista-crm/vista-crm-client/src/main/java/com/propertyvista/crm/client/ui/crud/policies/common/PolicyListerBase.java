@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.common;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.Queue;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
@@ -40,35 +38,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends Abstract
     public PolicyListerBase(Class<P> clazz) {
         super(clazz, true, true);
         getDataTablePanel().setFilteringEnabled(false);
-
-        defaultColumns = Arrays.asList(//@formatter:off
-                 new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
-                 new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
-        );//@formatter:on
-        setColumnDescriptors(new LinkedList<ColumnDescriptor>());
     }
-
-    /**
-     * Set column descriptors for the {@link PolicyListerBase}, the columns for {@link PolicyDTOBase#nodeType()} and {@link PolicyDTOBase#nodeRepresentation()}
-     * are added implicitly, so there's no need to `set' them.
-     */
-    @Override
-    public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {
-        List<ColumnDescriptor> columns = new LinkedList<ColumnDescriptor>(defaultColumns);
-        columns.addAll(columnDescriptors);
-        super.setColumnDescriptors(columns);
-    }
-
-    /**
-     * Set column descriptors for the {@link PolicyListerBase}, the columns for {@link PolicyDTOBase#nodeType()} and {@link PolicyDTOBase#nodeRepresentation()}
-     * are added implicitly, so there's no need to `set' them.
-     */
-    @Override
-    public void setColumnDescriptors(ColumnDescriptor... columnDescriptors) {
-        List<ColumnDescriptor> columns = new LinkedList<ColumnDescriptor>(defaultColumns);
-        columns.addAll(Arrays.asList(columnDescriptors));
-        super.setColumnDescriptors(columns.toArray(new ColumnDescriptor[columns.size()]));
-    };
 
     public Button getAddButton() {
         return getDataTablePanel().getAddButton();

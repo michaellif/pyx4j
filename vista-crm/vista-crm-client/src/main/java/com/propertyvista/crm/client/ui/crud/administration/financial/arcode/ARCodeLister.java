@@ -20,6 +20,7 @@ import java.util.List;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -58,7 +59,7 @@ public class ARCodeLister extends AbstractLister<ARCode> {
             columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().yardiChargeCodes()).build());
         }
 
-        setColumnDescriptors(columnDescriptors);
+        setDataTableModel(new DataTableModel<ARCode>(columnDescriptors));
     }
 
     @Override

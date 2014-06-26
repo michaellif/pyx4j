@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationsummary;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconc
     public FundsReconciliationSummaryLister() {
         super(FundsReconciliationSummaryDTO.class, false, false);
 
-        setColumnDescriptors( //
+        setDataTableModel(new DataTableModel<FundsReconciliationSummaryDTO>( //
                 new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(), //
                 new MemberColumnDescriptor.Builder(proto().reconciliationFile().fileName()).build(), //
@@ -39,7 +40,7 @@ public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconc
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
                 new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(), //
                 new MemberColumnDescriptor.Builder(proto().rejectItemsCount()).build() //
-        );
+        ));
     }
 
 }

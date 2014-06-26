@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -30,7 +31,7 @@ public class CardServiceSimulationTransactionListerViewImpl extends OperationsLi
 
         public CardServiceSimulationTransactionLister() {
             super(CardServiceSimulationTransaction.class, false, true);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<CardServiceSimulationTransaction>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().id()).build(),
                     new MemberColumnDescriptor.Builder(proto().card().number()).columnTitle("Card Number").build(),
                     new MemberColumnDescriptor.Builder(proto().merchant()).build(),
@@ -42,7 +43,7 @@ public class CardServiceSimulationTransactionListerViewImpl extends OperationsLi
                     new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().voided()).build(),
                     new MemberColumnDescriptor.Builder(proto().transactionDate()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
 
         @Override

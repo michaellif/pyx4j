@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasesigning;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.LeaseAgreementLegalPolicyDTO;
@@ -26,6 +29,10 @@ public class LeaseAgreementLegalPolicyListerViewImpl extends CrmListerViewImplBa
     public static class AgreementLegalPolicyLister extends PolicyListerBase<LeaseAgreementLegalPolicyDTO> {
         public AgreementLegalPolicyLister() {
             super(LeaseAgreementLegalPolicyDTO.class);
+            setDataTableModel(new DataTableModel<LeaseAgreementLegalPolicyDTO>(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+                    ));//@formatter:on
         }
     }
 }

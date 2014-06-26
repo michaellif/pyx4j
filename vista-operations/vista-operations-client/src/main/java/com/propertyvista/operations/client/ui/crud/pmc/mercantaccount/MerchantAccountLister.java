@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class MerchantAccountLister extends AbstractLister<PmcMerchantAccountDTO>
     public MerchantAccountLister() {
         super(PmcMerchantAccountDTO.class, false, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<PmcMerchantAccountDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                 new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                 
@@ -42,6 +43,6 @@ public class MerchantAccountLister extends AbstractLister<PmcMerchantAccountDTO>
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).visible(false).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedCreditCardVisaDebit()).visible(false).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().setup().acceptedInterac()).visible(false).searchable(false).sortable(false).build()
-            );//@formatter:on
+            ));//@formatter:on
     }
 }

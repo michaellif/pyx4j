@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -26,14 +27,14 @@ public class AppointmentLister extends AbstractLister<Appointment> {
 
     public AppointmentLister() {
         super(Appointment.class, true);
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<Appointment>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().date()).build(),
                 new MemberColumnDescriptor.Builder(proto().time()).build(),
                 new MemberColumnDescriptor.Builder(proto().agent()).build(),
                 new MemberColumnDescriptor.Builder(proto().phone()).build(),
                 new MemberColumnDescriptor.Builder(proto().email()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

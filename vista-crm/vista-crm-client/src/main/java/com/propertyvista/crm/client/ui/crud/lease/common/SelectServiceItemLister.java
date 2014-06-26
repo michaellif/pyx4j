@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -26,13 +27,15 @@ public class SelectServiceItemLister extends AbstractLister<ProductItem> {
 
     public SelectServiceItemLister() {
         super(ProductItem.class);
-        getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
-        setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().price()).build(),
-            new MemberColumnDescriptor.Builder(proto().description()).build()
+        DataTableModel<ProductItem> dataTableModel = new DataTableModel<ProductItem>(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().name()).build(),
+                new MemberColumnDescriptor.Builder(proto().price()).build(),
+                new MemberColumnDescriptor.Builder(proto().description()).build()
         );//@formatter:on
+        dataTableModel.setPageSize(PAGESIZE_SMALL);
+
+        setDataTableModel(dataTableModel);
     }
 
     @Override

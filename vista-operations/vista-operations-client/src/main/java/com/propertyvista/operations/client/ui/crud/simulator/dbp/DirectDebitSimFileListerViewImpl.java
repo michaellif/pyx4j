@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -29,13 +30,12 @@ public class DirectDebitSimFileListerViewImpl extends OperationsListerViewImplBa
 
         public DirectDebitSimFileLister() {
             super(DirectDebitSimFile.class, true);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<DirectDebitSimFile>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().serialNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().creatationDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().sentDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().status()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
-
     }
 }

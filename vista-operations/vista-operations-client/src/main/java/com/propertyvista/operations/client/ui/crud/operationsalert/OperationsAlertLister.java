@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,7 +28,7 @@ public class OperationsAlertLister extends AbstractLister<OperationsAlertDTO> {
     public OperationsAlertLister() {
         super(OperationsAlertDTO.class, false, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<OperationsAlertDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().namespace()).build(),
                 new MemberColumnDescriptor.Builder(proto().admin()).build(),
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
@@ -39,7 +40,7 @@ public class OperationsAlertLister extends AbstractLister<OperationsAlertDTO> {
                 new MemberColumnDescriptor.Builder(proto().user()).build(),
                 new MemberColumnDescriptor.Builder(proto().resolved()).build(),
                 new MemberColumnDescriptor.Builder(proto().operationsNotes()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

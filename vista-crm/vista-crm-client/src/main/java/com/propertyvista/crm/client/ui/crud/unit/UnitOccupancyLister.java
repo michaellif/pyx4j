@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemZoomInCommand;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -37,7 +38,7 @@ public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment>
             }
         });
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<AptUnitOccupancySegment>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().dateFrom()).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().dateTo()).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().status()).sortable(false).build(),
@@ -45,7 +46,6 @@ public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment>
             new MemberColumnDescriptor.Builder(proto().lease().leaseId()).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).sortable(false).build()
-        );//@formatter:on        
+        ));//@formatter:on        
     }
-
 }

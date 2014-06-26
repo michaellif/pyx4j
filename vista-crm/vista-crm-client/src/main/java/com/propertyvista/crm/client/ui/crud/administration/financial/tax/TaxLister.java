@@ -17,25 +17,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxLister extends AbstractLister<Tax> {
 
-    private static final I18n i18n = I18n.get(TaxLister.class);
-
     public TaxLister() {
         super(Tax.class, true, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<Tax>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().authority()).build(),
             new MemberColumnDescriptor.Builder(proto().rate()).build(),
             new MemberColumnDescriptor.Builder(proto().compound()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

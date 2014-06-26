@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,7 +28,7 @@ public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
     public PaymentLister() {
         super(PaymentRecordDTO.class, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<PaymentRecordDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
             new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
             new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).searchable(false).build(),
@@ -43,7 +44,7 @@ public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
             new MemberColumnDescriptor.Builder(proto().rejectedWithNSF()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().transactionErrorMessage()).visible(false).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

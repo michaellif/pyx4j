@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,7 +28,7 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO>
     public AuditRecordsLister() {
         super(AuditRecordOperationsDTO.class, false, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<AuditRecordOperationsDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().when()).build(),
                 new MemberColumnDescriptor.Builder(proto().worldTime()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().namespace()).build(),
@@ -42,7 +43,7 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO>
                 new MemberColumnDescriptor.Builder(proto().entityId()).build(),
                 new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
                 new MemberColumnDescriptor.Builder(proto().details()).build()                
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

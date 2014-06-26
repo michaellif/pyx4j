@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -31,7 +32,7 @@ public class RunDataLister extends AbstractLister<RunData> {
 
     public RunDataLister(boolean isInlineMode) {
         super(RunData.class, false);
-        setColumnDescriptors((isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors());
+        setDataTableModel(new DataTableModel<RunData>((isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors()));
     }
 
     private List<ColumnDescriptor> createViewColumnDescriptors() {

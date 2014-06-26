@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,19 +24,19 @@ public class FundsReconciliationSummaryLister extends AbstractLister<FundsReconc
     public FundsReconciliationSummaryLister() {
         super(FundsReconciliationSummaryDTO.class, false, false);
 
-        setColumnDescriptors( //
-                new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(),//
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().pmc()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().pmc().namespace()).visible(false).build(), //
-                new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), //
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(), //  
-                new MemberColumnDescriptor.Builder(proto().merchantAccount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().reconciliationStatus()).build(),//   
-                new MemberColumnDescriptor.Builder(proto().processingStatus()).build(), //
-                new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(), //
-                new MemberColumnDescriptor.Builder(proto().rejectItemsCount()).build() //
-        );
+        setDataTableModel(new DataTableModel<FundsReconciliationSummaryDTO>(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().id()).columnTitle("Summary Id").searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().pmc()).build(), 
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().pmc().namespace()).visible(false).build(), 
+                new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), 
+                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),   
+                new MemberColumnDescriptor.Builder(proto().merchantAccount()).build(), 
+                new MemberColumnDescriptor.Builder(proto().reconciliationStatus()).build(),   
+                new MemberColumnDescriptor.Builder(proto().processingStatus()).build(), 
+                new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(), 
+                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(), 
+                new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(), 
+                new MemberColumnDescriptor.Builder(proto().rejectItemsCount()).build() 
+        ));//@formatter:on
     }
 }

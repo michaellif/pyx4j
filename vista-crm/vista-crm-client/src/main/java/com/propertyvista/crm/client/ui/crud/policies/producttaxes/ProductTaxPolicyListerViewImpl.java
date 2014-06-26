@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
@@ -20,13 +23,18 @@ import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyListerView {
 
     public ProductTaxPolicyListerViewImpl() {
-        setLister(new ChargePolicyLister());
+        setLister(new ProductTaxPolicyLister());
     }
 
-    public static class ChargePolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {
+    public static class ProductTaxPolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {
 
-        public ChargePolicyLister() {
+        public ProductTaxPolicyLister() {
             super(ProductTaxPolicyDTO.class);
+
+            setDataTableModel(new DataTableModel<ProductTaxPolicyDTO>(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            ));//@formatter:on
         }
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.misc;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
@@ -29,10 +30,12 @@ public class DatesPolicyListerViewImpl extends CrmListerViewImplBase<DatesPolicy
 
         public DatesPolicyLister() {
             super(DatesPolicyDTO.class);
-            setColumnDescriptors( // @formatter:off
+            setDataTableModel(new DataTableModel<DatesPolicyDTO>( // @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto().yearRangeFutureSpan()).build(), 
                     new MemberColumnDescriptor.Builder(proto().yearRangeStart()).build() 
-            ); // @formatter:on
+            )); // @formatter:on
 
         }
     }

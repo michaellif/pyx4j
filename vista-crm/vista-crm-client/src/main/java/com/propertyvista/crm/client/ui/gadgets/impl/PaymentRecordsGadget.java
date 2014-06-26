@@ -86,7 +86,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                lister.getDataTablePanel().setPageSize(getMetadata().paymentRecordsListerSettings().pageSize().getValue());
+                lister.getDataTablePanel().getDataTableModel().setPageSize(getMetadata().paymentRecordsListerSettings().pageSize().getValue());
 
                 lister.getDataSource().clearPreDefinedFilters();
                 List<Criterion> criteria = new ArrayList<Criterion>();

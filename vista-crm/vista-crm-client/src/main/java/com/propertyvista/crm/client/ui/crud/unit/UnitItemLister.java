@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -28,13 +29,13 @@ public class UnitItemLister extends AbstractLister<AptUnitItem> {
         super(AptUnitItem.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<AptUnitItem>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build(),
             new MemberColumnDescriptor.Builder(proto().flooringType()).build(),
             new MemberColumnDescriptor.Builder(proto().cabinetsType()).build(),
             new MemberColumnDescriptor.Builder(proto().counterTopType()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

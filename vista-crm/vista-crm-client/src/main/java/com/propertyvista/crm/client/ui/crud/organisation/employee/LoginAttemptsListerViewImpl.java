@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import static java.util.Arrays.asList;
-
 import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -35,7 +34,7 @@ public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAtte
 
         public LoginAttemptsLister() {
             super(LoginAttemptDTO.class);
-            setColumnDescriptors(asList(//@formatter:off
+            setDataTableModel(new DataTableModel<LoginAttemptDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().time()).build(),
                     new MemberColumnDescriptor.Builder(proto().remoteAddress()).build(),
                     new MemberColumnDescriptor.Builder(proto().outcome()).build()

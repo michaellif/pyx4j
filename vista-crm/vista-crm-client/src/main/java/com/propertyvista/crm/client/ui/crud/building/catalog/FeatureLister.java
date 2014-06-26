@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
@@ -43,7 +44,7 @@ public class FeatureLister extends AbstractLister<Feature> {
         getDataTablePanel().setFilteringEnabled(false);
 
         if (VistaTODO.VISTA_2256_Default_Product_Catalog_Show) {
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<Feature>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().code(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().version().price()).build(),
@@ -53,9 +54,9 @@ public class FeatureLister extends AbstractLister<Feature> {
                 new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
                 new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
                 new MemberColumnDescriptor.Builder(proto().defaultCatalogItem()).build()
-            );//@formatter:on
+            ));//@formatter:on
         } else {
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<Feature>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().code(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().version().price()).build(),
@@ -64,7 +65,7 @@ public class FeatureLister extends AbstractLister<Feature> {
                 new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
                 new MemberColumnDescriptor.Builder(proto().version().availableOnline()).build(),
                 new MemberColumnDescriptor.Builder(proto().expiredFrom()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
     }
 

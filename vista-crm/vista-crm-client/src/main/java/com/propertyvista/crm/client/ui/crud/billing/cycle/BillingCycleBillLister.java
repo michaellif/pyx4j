@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -26,9 +27,8 @@ public class BillingCycleBillLister extends AbstractLister<BillDataDTO> {
 
     public BillingCycleBillLister() {
         super(BillDataDTO.class, false);
-        getDataTablePanel().getDataTable().setMultipleSelection(true);
 
-        setColumnDescriptors(//@formatter:off
+        DataTableModel<BillDataDTO> dataTableModel = new DataTableModel<BillDataDTO>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().bill().billType()).build(),
 
             new MemberColumnDescriptor.Builder(proto().bill().executionDate()).build(),
@@ -56,6 +56,10 @@ public class BillingCycleBillLister extends AbstractLister<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
         );//@formatter:on
+
+        dataTableModel.setMultipleSelection(true);
+
+        setDataTableModel(dataTableModel);
     }
 
     @Override

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class FundsReconciliationDebitRecordLister extends AbstractLister<FundsRe
     public FundsReconciliationDebitRecordLister() {
         super(FundsReconciliationRecordRecordDTO.class, false, false);
 
-        setColumnDescriptors(//@formatter:off       
+        setDataTableModel(new DataTableModel<FundsReconciliationRecordRecordDTO>(//@formatter:off       
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().id()).columnTitle("Summary Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().fileName()).build(),
@@ -40,6 +41,6 @@ public class FundsReconciliationDebitRecordLister extends AbstractLister<FundsRe
                     new MemberColumnDescriptor.Builder(proto().reasonText()).build(),
                     new MemberColumnDescriptor.Builder(proto().fee()).build(),
                     new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
-                );//@formatter:on   
+                ));//@formatter:on   
     }
 }

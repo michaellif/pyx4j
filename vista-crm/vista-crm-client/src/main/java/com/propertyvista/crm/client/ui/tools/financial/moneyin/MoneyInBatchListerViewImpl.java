@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -35,7 +36,7 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
         public MoneyInBatchLister() {
             super(MoneyInBatchDTO.class, false, false);
 
-            setColumnDescriptors(Arrays.asList(//@formatter:off
+            setDataTableModel(new DataTableModel<MoneyInBatchDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().building()).build(),
                     new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().bankAccountName()).build(),
@@ -46,12 +47,11 @@ public class MoneyInBatchListerViewImpl extends CrmListerViewImplBase<MoneyInBat
                     
             ));//@formatter:off
         }
-        
+
         @Override
         public List<Sort> getDefaultSorting() {
             return Arrays.asList(new Sort(proto().depositDate(), true));
         }
     }
-    
-    
+
 }

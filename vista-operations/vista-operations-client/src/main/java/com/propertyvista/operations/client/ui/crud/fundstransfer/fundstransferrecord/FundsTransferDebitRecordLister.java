@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -23,7 +24,7 @@ public class FundsTransferDebitRecordLister extends AbstractLister<FundsTransfer
     public FundsTransferDebitRecordLister() {
         super(FundsTransferRecordDTO.class, false, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<FundsTransferRecordDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fileName(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().status(), false).columnTitle("File status").build(),
@@ -45,6 +46,6 @@ public class FundsTransferDebitRecordLister extends AbstractLister<FundsTransfer
                     new MemberColumnDescriptor.Builder(proto().processingStatus()).build(),
                     new MemberColumnDescriptor.Builder(proto().statusChangeDate()).build()
 
-            );//@formatter:on
+            ));//@formatter:on
     }
 }

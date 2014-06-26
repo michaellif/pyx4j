@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.onlineapplication;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.domain.policy.dto.LeaseApplicationPolicyDTO;
@@ -20,12 +23,17 @@ import com.propertyvista.domain.policy.dto.LeaseApplicationPolicyDTO;
 public class LeaseApplicationPolicyListerViewImpl extends CrmListerViewImplBase<LeaseApplicationPolicyDTO> implements LeaseApplicationPolicyListerView {
 
     public LeaseApplicationPolicyListerViewImpl() {
-        setLister(new OnlineApplicationPolicyLister());
+        setLister(new LeaseApplicationPolicyLister());
     }
 
-    public static class OnlineApplicationPolicyLister extends PolicyListerBase<LeaseApplicationPolicyDTO> {
-        public OnlineApplicationPolicyLister() {
+    public static class LeaseApplicationPolicyLister extends PolicyListerBase<LeaseApplicationPolicyDTO> {
+        public LeaseApplicationPolicyLister() {
             super(LeaseApplicationPolicyDTO.class);
+
+            setDataTableModel(new DataTableModel<LeaseApplicationPolicyDTO>(// @formatter:off
+                    new MemberColumnDescriptor.Builder(proto().nodeType()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().nodeRepresentation()).sortable(false).build()
+            )); // @formatter:on
         }
     }
 }

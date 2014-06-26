@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -30,7 +31,7 @@ public class GuarantorLister extends AbstractLister<GuarantorDTO> {
     public GuarantorLister() {
         super(GuarantorDTO.class, false);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<GuarantorDTO>(//@formatter:off
             new Builder(proto().participantId()).build(),
             
             new Builder(proto().customer().person().name()).searchable(false).build(),
@@ -48,7 +49,7 @@ public class GuarantorLister extends AbstractLister<GuarantorDTO> {
             new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
             
             new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

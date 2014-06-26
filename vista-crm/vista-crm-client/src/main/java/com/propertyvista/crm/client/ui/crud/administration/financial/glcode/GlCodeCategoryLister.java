@@ -17,24 +17,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryLister extends AbstractLister<GlCodeCategory> {
 
-    private static final I18n i18n = I18n.get(GlCodeCategoryLister.class);
-
     public GlCodeCategoryLister() {
         super(GlCodeCategory.class, true, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<GlCodeCategory>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().categoryId()).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build(),
             new MemberColumnDescriptor.Builder(proto().glCodes()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

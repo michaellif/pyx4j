@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -33,13 +34,13 @@ public class AdminUserListerViewImpl extends OperationsListerViewImplBase<Operat
 
         public AdminUserLister() {
             super(OperationsUserDTO.class, true);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<OperationsUserDTO>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().email()).build(),
                     new MemberColumnDescriptor.Builder(proto().enabled()).build(),
                     new MemberColumnDescriptor.Builder(proto().created()).build(),
                     new MemberColumnDescriptor.Builder(proto().credentialUpdated()).build()
-            );//@formatter:on
+            ));//@formatter:on
         }
 
         @Override

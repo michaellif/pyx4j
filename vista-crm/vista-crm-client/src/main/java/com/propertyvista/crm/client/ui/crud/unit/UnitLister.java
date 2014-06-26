@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
@@ -53,7 +54,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
     }
 
     protected void setupColumns() {
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<AptUnitDTO>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
@@ -71,7 +72,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
                 new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().availability().availableForRent()).build()
-       );//@formatter:on
+       ));//@formatter:on
     }
 
     @Override

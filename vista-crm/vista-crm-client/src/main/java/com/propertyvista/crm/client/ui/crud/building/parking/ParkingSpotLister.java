@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -27,10 +28,10 @@ public class ParkingSpotLister extends AbstractLister<ParkingSpot> {
     public ParkingSpotLister() {
         super(ParkingSpot.class, true);
 
-        setColumnDescriptors(//@formatter:off
+        setDataTableModel(new DataTableModel<ParkingSpot>(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build()
-        );//@formatter:on
+        ));//@formatter:on
     }
 
     @Override

@@ -216,7 +216,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
             @Override
             public void onSuccess(EntitySearchResult<LeaseArrearsSnapshotDTO> result) {
                 redrawTitleBanner();
-                dataTablePanel.setPageSize(getMetadata().arrearsStatusListerSettings().pageSize().getValue());
+                dataTablePanel.getDataTableModel().setPageSize(getMetadata().arrearsStatusListerSettings().pageSize().getValue());
                 dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
                 populateSucceded();
             }

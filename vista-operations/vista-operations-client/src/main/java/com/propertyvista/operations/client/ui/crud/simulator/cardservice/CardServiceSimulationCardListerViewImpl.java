@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -26,7 +27,7 @@ public class CardServiceSimulationCardListerViewImpl extends OperationsListerVie
 
         public CardServiceSimulationLister() {
             super(CardServiceSimulationCard.class, true, true);
-            setColumnDescriptors(//@formatter:off
+            setDataTableModel(new DataTableModel<CardServiceSimulationCard>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().cardType()).build(),
                     new MemberColumnDescriptor.Builder(proto().number()).build(),
                     new MemberColumnDescriptor.Builder(proto().expiryDate()).build(),
@@ -34,9 +35,8 @@ public class CardServiceSimulationCardListerViewImpl extends OperationsListerVie
                     new MemberColumnDescriptor.Builder(proto().creditLimit(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().created()).build()
-            );//@formatter:off
+            ));//@formatter:off
         }
-
     }
 
     public CardServiceSimulationCardListerViewImpl() {

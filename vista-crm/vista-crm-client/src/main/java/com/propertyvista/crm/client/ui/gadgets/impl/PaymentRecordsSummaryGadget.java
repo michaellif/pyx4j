@@ -124,7 +124,7 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
                     
                     @Override
                     public void onSuccess(EntitySearchResult<PaymentsSummary> result) {
-                        paymentsSummaryTablePanel.setPageSize(getMetadata().paymentsSummaryListerSettings().pageSize().getValue());
+                        paymentsSummaryTablePanel.getDataTableModel().setPageSize(getMetadata().paymentsSummaryListerSettings().pageSize().getValue());
                         paymentsSummaryTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
                         populateFeesPanel();
                     }

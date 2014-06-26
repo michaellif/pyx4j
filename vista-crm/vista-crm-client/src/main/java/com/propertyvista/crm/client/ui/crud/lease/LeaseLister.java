@@ -24,6 +24,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.forms.client.images.FolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -95,7 +96,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
             columnDescriptors.add(new MemberColumnDescriptor.Builder(proto().billingAccount().id(), false).columnTitle("Billing Account Id").build());
         }
 
-        setColumnDescriptors(columnDescriptors);
+        setDataTableModel(new DataTableModel<LeaseDTO>(columnDescriptors));
 
         // TODO currently disabled till new drop-down quick filters selector implemented:
 //        addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Application"), new Command() {
