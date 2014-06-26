@@ -26,6 +26,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -92,7 +93,7 @@ class CardsReconciliationProcessor {
 
                 });
 
-                executionMonitor.addInfoEvent("AggregatedTransfer", null, reconciliationRecord.totalDeposit().getValue());
+                executionMonitor.addProcessedEvent("AggregatedTransfer", reconciliationRecord.totalDeposit().getValue());
 
             } catch (Throwable e) {
                 log.error("AggregatedTransfer {} creation failed", reconciliationRecord.id().getValue(), e);
@@ -114,7 +115,9 @@ class CardsReconciliationProcessor {
         // Find MerchantAccount
         {
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.eq(criteria.proto().merchantTerminalId(), reconciliationRecord.merchantTerminalId());
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().merchantTerminalId(), reconciliationRecord.merchantTerminalId());
+            or.right().eq(criteria.proto().merchantTerminalIdConvenienceFee(), reconciliationRecord.merchantTerminalId());
             at.merchantAccount().set(Persistence.service().retrieve(criteria));
             if (at.merchantAccount().isNull()) {
                 throw new Error("Merchant Account '" + reconciliationRecord.merchantTerminalId().getValue() + "' not found");
@@ -153,7 +156,7 @@ class CardsReconciliationProcessor {
                 at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
                 at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue().add(paymentRecord.amount().getValue()));
 
-                executionMonitor.addProcessedEvent("PaymentRecord", paymentRecord.amount().getValue());
+                executionMonitor.addInfoEvent("PaymentRecord", null, paymentRecord.amount().getValue());
             }
         } finally {
             it.close();

@@ -79,6 +79,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
                 @Override
                 public Void call() {
                     dto.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, entity.merchantAccountKey().getValue()));
+                    dto.merchantTerminalId().setValue(dto.merchantAccount().merchantTerminalId().getValue());
                     dto.merchantTerminalIdConvenienceFee().setValue(dto.merchantAccount().merchantTerminalIdConvenienceFee().getValue());
 
                     EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
