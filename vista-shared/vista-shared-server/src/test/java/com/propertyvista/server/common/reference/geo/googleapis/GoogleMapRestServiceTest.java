@@ -16,11 +16,13 @@ package com.propertyvista.server.common.reference.geo.googleapis;
 import java.math.BigDecimal;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class GoogleMapRestServiceTest {
 
     @Test
+    @Ignore
     public void testGeocode() {
 
         GeocodeResponse result = GoogleMapRestService.getGeocode("1600 Amphitheatre Parkway, Mountain View, CA");
