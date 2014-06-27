@@ -79,7 +79,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
                 @Override
                 public Void call() {
                     dto.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, entity.merchantAccountKey().getValue()));
-                    dto.merchantTerminalId().setValue(dto.merchantAccount().merchantTerminalId().getValue());
+                    dto.terminalId().setValue(dto.merchantAccount().merchantTerminalId().getValue());
                     dto.merchantTerminalIdConvenienceFee().setValue(dto.merchantAccount().merchantTerminalIdConvenienceFee().getValue());
 
                     EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
@@ -122,7 +122,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
         Pmc pmc = Persistence.service().retrieve(Pmc.class, to.pmc().getPrimaryKey());
 
         // Copy RpcTransient value
-        to.merchantAccount().merchantTerminalId().setValue(to.merchantTerminalId().getValue());
+        to.merchantAccount().merchantTerminalId().setValue(to.terminalId().getValue());
         to.merchantAccount().merchantTerminalIdConvenienceFee().setValue(to.merchantTerminalIdConvenienceFee().getValue());
 
         ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, to.merchantAccount());

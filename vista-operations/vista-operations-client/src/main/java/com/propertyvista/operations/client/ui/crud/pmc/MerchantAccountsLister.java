@@ -38,7 +38,7 @@ public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAcco
         });
 
         setDataTableModel(new DataTableModel<PmcMerchantAccountDTO>(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
+                new MemberColumnDescriptor.Builder(proto().terminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalIdConvenienceFee()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(),

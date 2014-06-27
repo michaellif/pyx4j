@@ -16,68 +16,16 @@ package com.propertyvista.domain.financial;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.AttachLevel;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.ISet;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.PaymentRecord.PaidOrRejectedAggregatedTransferId;
-import com.propertyvista.domain.financial.PaymentRecord.ReturnAggregatedTransferId;
-import com.propertyvista.domain.note.HasNotesAndAttachments;
-
-@DiscriminatorValue("AggregatedTransfer")
-public interface EftAggregatedTransfer extends IEntity, HasNotesAndAttachments {
-
-    @I18n
-    enum AggregatedTransferStatus {
-
-        Rejected,
-
-        Canceled,
-
-        Paid,
-
-        Hold;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-
-    };
-
-    IPrimitive<LogicalDate> paymentDate();
-
-    IPrimitive<AggregatedTransferStatus> status();
-
-    MerchantAccount merchantAccount();
-
-    @MemberColumn(notNull = true)
-    IPrimitive<FundsTransferType> fundsTransferType();
+@DiscriminatorValue("EftAggregatedTransfer")
+public interface EftAggregatedTransfer extends AggregatedTransfer {
 
     IPrimitive<Key> padReconciliationSummaryKey();
-
-    @NotNull
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> grossPaymentAmount();
-
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> grossPaymentFee();
-
-    IPrimitive<Integer> grossPaymentCount();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
@@ -119,17 +67,4 @@ public interface EftAggregatedTransfer extends IEntity, HasNotesAndAttachments {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> fundsReleased();
 
-    @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = PaidOrRejectedAggregatedTransferId.class)
-    ISet<PaymentRecord> payments();
-
-    @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = ReturnAggregatedTransferId.class)
-    ISet<PaymentRecord> returnedPayments();
-
-    @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecordProcessing.class, mappedBy = PaymentRecordProcessing.RejectedBatchAggregatedTransferId.class)
-    ISet<PaymentRecord> rejectedBatchPayments();
-
-    IPrimitive<String> transactionErrorMessage();
 }

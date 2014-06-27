@@ -32,5 +32,5 @@ public interface PaymentRecordProcessing extends IEntity {
 
     @JoinColumn(RejectedBatchAggregatedTransferId.class)
     @ReadOnly(allowOverrideNull = true)
-    EftAggregatedTransfer aggregatedTransfer();
+    AggregatedTransfer aggregatedTransfer();
 }

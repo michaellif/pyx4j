@@ -57,7 +57,7 @@ public class MerchantAccountManager {
             if (!orig.merchantTerminalId().isNull()) {
                 EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
                 criteria.eq(criteria.proto().pmc(), pmc);
-                criteria.eq(criteria.proto().merchantTerminalId(), orig.merchantTerminalId());
+                criteria.eq(criteria.proto().terminalId(), orig.merchantTerminalId());
                 criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey());
                 pmcMerchantAccountMainIndex = Persistence.service().retrieve(criteria);
                 if (pmcMerchantAccountMainIndex == null) {
@@ -67,7 +67,7 @@ public class MerchantAccountManager {
             if (!orig.merchantTerminalIdConvenienceFee().isNull()) {
                 EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
                 criteria.eq(criteria.proto().pmc(), pmc);
-                criteria.eq(criteria.proto().merchantTerminalId(), orig.merchantTerminalIdConvenienceFee());
+                criteria.eq(criteria.proto().terminalId(), orig.merchantTerminalIdConvenienceFee());
                 criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey());
                 pmcMerchantAccountConvenienceFeeIndex = Persistence.service().retrieve(criteria);
                 if (pmcMerchantAccountConvenienceFeeIndex == null) {
@@ -106,12 +106,12 @@ public class MerchantAccountManager {
         }
 
         pmcMerchantAccountMainIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
-        pmcMerchantAccountMainIndex.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
+        pmcMerchantAccountMainIndex.terminalId().setValue(merchantAccount.merchantTerminalId().getValue());
         Persistence.service().persist(pmcMerchantAccountMainIndex);
 
         if (!pmcMerchantAccountConvenienceFeeIndex.id().isNull() || !merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
             pmcMerchantAccountConvenienceFeeIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
-            pmcMerchantAccountConvenienceFeeIndex.merchantTerminalId().setValue(merchantAccount.merchantTerminalIdConvenienceFee().getValue());
+            pmcMerchantAccountConvenienceFeeIndex.terminalId().setValue(merchantAccount.merchantTerminalIdConvenienceFee().getValue());
             Persistence.service().persist(pmcMerchantAccountConvenienceFeeIndex);
         }
     }

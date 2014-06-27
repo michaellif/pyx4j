@@ -41,11 +41,11 @@ public interface PmcMerchantAccountIndex extends IEntity {
 
     @Length(8)
     @Indexed(uniqueConstraint = true)
-    IPrimitive<String> merchantTerminalId();
+    IPrimitive<String> terminalId();
 
     @Length(8)
     @Indexed(uniqueConstraint = true)
-    IPrimitive<String> merchantTerminalIdConvenienceFee();
+    IPrimitive<String> terminalIdConvFee();
 
     IPrimitive<Key> merchantAccountKey();
 

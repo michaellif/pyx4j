@@ -57,7 +57,7 @@ class PadCaledonReconciliation {
             summary.reconciliationFile().set(reconciliationFile);
 
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-            criteria.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId());
+            criteria.eq(criteria.proto().terminalId(), summary.merchantTerminalId());
             PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
             if (macc == null) {
                 throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + reconciliationFile.fileName().getValue());

@@ -119,7 +119,7 @@ public class MerchantAccountProcessor {
 
         {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-            criteria.eq(criteria.proto().merchantTerminalId(), model.terminalId());
+            criteria.eq(criteria.proto().terminalId(), model.terminalId());
             criteria.ne(criteria.proto().pmc(), pmc);
             PmcMerchantAccountIndex otherPmcAccount = Persistence.service().retrieve(criteria);
 
@@ -203,7 +203,7 @@ public class MerchantAccountProcessor {
         PmcMerchantAccountIndex otherAccountWithSameMID = null;
         {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-            criteria.eq(criteria.proto().merchantTerminalId(), model.terminalId());
+            criteria.eq(criteria.proto().terminalId(), model.terminalId());
             criteria.eq(criteria.proto().pmc(), pmc);
             otherAccountWithSameMID = Persistence.service().retrieve(criteria);
         }

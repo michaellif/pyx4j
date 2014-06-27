@@ -84,7 +84,7 @@ class CardsReconciliationAcceptor {
 
                 {
                     EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-                    criteria.eq(criteria.proto().merchantTerminalId(), record.merchantTerminalId());
+                    criteria.eq(criteria.proto().terminalId(), record.merchantTerminalId());
                     PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
                     if (macc == null) {
                         throw new Error("Unexpected TerminalId '" + record.merchantTerminalId().getValue() + "' in file "

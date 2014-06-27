@@ -149,7 +149,7 @@ public class PmcFacadeImpl implements PmcFacade {
 
         Persistence.service().retrieveMember(pmc.merchantAccounts());
         for (PmcMerchantAccountIndex merchantAccount : pmc.merchantAccounts()) {
-            merchantAccount.merchantTerminalId().setValue(null);
+            merchantAccount.terminalId().setValue(null);
             Persistence.service().persist(merchantAccount);
         }
 

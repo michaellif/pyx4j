@@ -85,7 +85,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
                 inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FieldDecoratorBuilder().build()));
         content.setWidget(row, 1, inject(proto().merchantAccount().status(), new FieldDecoratorBuilder().build()));
 
-        content.setWidget(++row, 0, inject(proto().merchantTerminalId(), new FieldDecoratorBuilder().build()));
+        content.setWidget(++row, 0, inject(proto().terminalId(), new FieldDecoratorBuilder().build()));
         content.setWidget(row, 1, inject(proto().merchantAccount().paymentsStatus(), new FieldDecoratorBuilder().build()));
 
         content.setWidget(++row, 0, inject(proto().merchantTerminalIdConvenienceFee(), new FieldDecoratorBuilder().build()));
@@ -165,7 +165,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
     private void devGenerateAccount() {
         get(proto().merchantAccount().status()).setValue(MerchantAccountActivationStatus.Active);
-        get(proto().merchantTerminalId()).setValue("T" + System.currentTimeMillis() % 1000000);
+        get(proto().terminalId()).setValue("T" + System.currentTimeMillis() % 1000000);
         get(proto().merchantAccount().bankId()).setValue("123");
         get(proto().merchantAccount().branchTransitNumber()).setValue("12345");
         get(proto().merchantAccount().accountNumber()).setValue(String.valueOf(System.currentTimeMillis() % 10000000));
