@@ -22,16 +22,16 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
-public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer> {
+public class AggregatedTransferLister extends AbstractLister<EftAggregatedTransfer> {
 
     private static final I18n i18n = I18n.get(AggregatedTransferLister.class);
 
     public AggregatedTransferLister() {
-        super(AggregatedTransfer.class, false);
+        super(EftAggregatedTransfer.class, false);
 
-        setDataTableModel(new DataTableModel<AggregatedTransfer>(//@formatter:off
+        setDataTableModel(new DataTableModel<EftAggregatedTransfer>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number")).build(), 

@@ -23,8 +23,8 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -52,7 +52,7 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
 
     @Override
     protected void createRejectedAggregatedTransfer(FundsTransferBatch padBatch) {
-        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
         at.paymentDate().setValue(new LogicalDate(padBatch.padFile().created().getValue()));
@@ -73,7 +73,7 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
     // DirectBanking is Aggregated Transfer anyway
     protected void acknowledgmentReject(FundsTransferRecord padDebitRecord) {
 
-        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
         at.paymentDate().setValue(new LogicalDate(padDebitRecord.padBatch().padFile().created().getValue()));
@@ -88,7 +88,7 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
         rejectPaymentRecords(padDebitRecord, at);
     }
 
-    private void rejectPaymentRecords(FundsTransferRecord padDebitRecord, AggregatedTransfer at) {
+    private void rejectPaymentRecords(FundsTransferRecord padDebitRecord, EftAggregatedTransfer at) {
 
         for (FundsTransferRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, transactionRecord.paymentRecordKey().getValue());

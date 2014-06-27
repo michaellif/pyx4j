@@ -246,14 +246,14 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @JoinColumn(PaidOrRejectedAggregatedTransferId.class)
     @ReadOnly(allowOverrideNull = true)
-    AggregatedTransfer aggregatedTransfer();
+    EftAggregatedTransfer aggregatedTransfer();
 
     interface ReturnAggregatedTransferId extends ColumnId {
     }
 
     @JoinColumn(ReturnAggregatedTransferId.class)
     @ReadOnly(allowOverrideNull = true)
-    AggregatedTransfer aggregatedTransferReturn();
+    EftAggregatedTransfer aggregatedTransferReturn();
 
     /**
      * Key of record PadReconciliationDebitRecord from shared namespace.

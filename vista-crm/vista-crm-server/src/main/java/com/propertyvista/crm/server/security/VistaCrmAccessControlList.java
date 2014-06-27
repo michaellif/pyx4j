@@ -212,7 +212,7 @@ import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -632,7 +632,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new CommunityEventDatasetAccessRule(), CommunityEvent.class);
 
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), EftAggregatedTransfer.class);
 
         // Data Access for Gadgets & Reports
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AptUnitDatasetAccessRule(), AptUnit.class);

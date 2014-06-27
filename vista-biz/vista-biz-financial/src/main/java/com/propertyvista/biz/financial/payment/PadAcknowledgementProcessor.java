@@ -27,8 +27,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -47,7 +47,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
 
     @Override
     protected void createRejectedAggregatedTransfer(FundsTransferBatch padBatch) {
-        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.PreAuthorizedDebit);
         at.paymentDate().setValue(new LogicalDate(padBatch.padFile().created().getValue()));

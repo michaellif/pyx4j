@@ -36,7 +36,7 @@ import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -55,7 +55,7 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
         grant(FinancialMoneyIN, new IServiceExecutePermission(MoneyInBatchDepositSlipPrintService.class));
 
         // ------ Financial: Aggregated Transfer 
-        grant(FinancialAggregatedTransfer, AggregatedTransfer.class, READ);
+        grant(FinancialAggregatedTransfer, EftAggregatedTransfer.class, READ);
         grant(FinancialAggregatedTransfer, new IServiceExecutePermission(AggregatedTransferCrudService.class));
 
         // ------ Financial: Payments

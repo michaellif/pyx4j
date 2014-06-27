@@ -19,14 +19,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
-public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
+public class AggregatedTransferForm extends CrmEntityForm<EftAggregatedTransfer> {
 
     private static final I18n i18n = I18n.get(AggregatedTransferForm.class);
 
-    public AggregatedTransferForm(IForm<AggregatedTransfer> view) {
-        super(AggregatedTransfer.class, view);
+    public AggregatedTransferForm(IForm<EftAggregatedTransfer> view) {
+        super(EftAggregatedTransfer.class, view);
         createTabs();
     }
 

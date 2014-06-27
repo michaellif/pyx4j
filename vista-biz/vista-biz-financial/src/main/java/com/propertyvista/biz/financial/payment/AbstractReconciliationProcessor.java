@@ -33,8 +33,8 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -71,8 +71,8 @@ abstract class AbstractReconciliationProcessor {
      */
     protected abstract void processReconciliationSummary(FundsReconciliationSummary summary);
 
-    protected AggregatedTransfer createAggregatedTransfer(FundsReconciliationSummary summary) {
-        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+    protected EftAggregatedTransfer createAggregatedTransfer(FundsReconciliationSummary summary) {
+        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
         at.padReconciliationSummaryKey().setValue(summary.getPrimaryKey());
         switch (summary.reconciliationStatus().getValue()) {
         case HOLD:

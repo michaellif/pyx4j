@@ -18,12 +18,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
-public interface AggregatedTransferCrudService extends AbstractCrudService<AggregatedTransfer> {
+public interface AggregatedTransferCrudService extends AbstractCrudService<EftAggregatedTransfer> {
 
     /**
      * Available as error recovery for Failed PadBatch. Usually due to errors in merchantAccount.
      */
-    public void cancelTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub);
+    public void cancelTransactions(AsyncCallback<VoidSerializable> callback, EftAggregatedTransfer aggregatedTransferStub);
 }

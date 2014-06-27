@@ -21,12 +21,12 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
-public class AggregatedTransferListerActivity extends AbstractListerActivity<AggregatedTransfer> {
+public class AggregatedTransferListerActivity extends AbstractListerActivity<EftAggregatedTransfer> {
 
     public AggregatedTransferListerActivity(Place place) {
         super(place,  CrmSite.getViewFactory().getView(AggregatedTransferListerView.class), GWT
-                .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), AggregatedTransfer.class);
+                .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), EftAggregatedTransfer.class);
     }
 }

@@ -37,7 +37,7 @@ import com.propertyvista.domain.financial.PaymentRecord.ReturnAggregatedTransfer
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 @DiscriminatorValue("AggregatedTransfer")
-public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
+public interface EftAggregatedTransfer extends IEntity, HasNotesAndAttachments {
 
     @I18n
     enum AggregatedTransferStatus {

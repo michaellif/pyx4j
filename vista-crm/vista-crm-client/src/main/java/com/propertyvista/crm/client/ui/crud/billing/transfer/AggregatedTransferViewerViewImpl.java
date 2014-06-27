@@ -23,12 +23,12 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentRecordLister;
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<AggregatedTransfer> implements AggregatedTransferViewerView {
+public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<EftAggregatedTransfer> implements AggregatedTransferViewerView {
 
     private static final I18n i18n = I18n.get(AggregatedTransferViewerViewImpl.class);
 
@@ -71,7 +71,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     }
 
     @Override
-    public void populate(AggregatedTransfer value) {
+    public void populate(EftAggregatedTransfer value) {
         super.populate(value);
 
         setActionVisible(cancelAction, value.fundsTransferType().getValue() == FundsTransferType.PreAuthorizedDebit

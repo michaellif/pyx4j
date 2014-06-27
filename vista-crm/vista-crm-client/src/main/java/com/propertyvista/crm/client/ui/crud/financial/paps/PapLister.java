@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
 public class PapLister extends AbstractLister<AutoPayHistoryDTO> {
 

@@ -27,7 +27,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
@@ -54,7 +54,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
 
     @Override
     protected void processReconciliationSummary(FundsReconciliationSummary summary) {
-        AggregatedTransfer at = createAggregatedTransfer(summary);
+        EftAggregatedTransfer at = createAggregatedTransfer(summary);
         Persistence.service().persist(at);
 
         // Override Caledon report values by calculating our onw fee

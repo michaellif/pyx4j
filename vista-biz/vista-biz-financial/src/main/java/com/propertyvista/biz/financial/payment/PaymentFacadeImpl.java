@@ -47,8 +47,8 @@ import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -454,8 +454,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub) {
-        AggregatedTransfer at = Persistence.service().retrieve(AggregatedTransfer.class, aggregatedTransferStub.getPrimaryKey());
+    public void cancelAggregatedTransfer(EftAggregatedTransfer aggregatedTransferStub) {
+        EftAggregatedTransfer at = Persistence.service().retrieve(EftAggregatedTransfer.class, aggregatedTransferStub.getPrimaryKey());
         if (!EnumSet.of(AggregatedTransferStatus.Rejected).contains(at.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed transaction can't be canceled"));
         }

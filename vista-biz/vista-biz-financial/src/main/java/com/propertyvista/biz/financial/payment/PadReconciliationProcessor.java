@@ -27,7 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
@@ -47,7 +47,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
 
     @Override
     protected void processReconciliationSummary(final FundsReconciliationSummary summary) {
-        AggregatedTransfer at = createAggregatedTransfer(summary);
+        EftAggregatedTransfer at = createAggregatedTransfer(summary);
         Persistence.service().persist(at);
 
         // Validate payment records and add them to this aggregatedTransfer

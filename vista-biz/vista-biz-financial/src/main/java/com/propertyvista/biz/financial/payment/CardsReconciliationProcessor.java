@@ -35,8 +35,8 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -107,7 +107,7 @@ class CardsReconciliationProcessor {
     }
 
     private void createAggregatedTransfer(CardsReconciliationRecord reconciliationRecord) {
-        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        EftAggregatedTransfer at = EntityFactory.create(EftAggregatedTransfer.class);
         at.fundsTransferType().setValue(FundsTransferType.Cards);
         at.padReconciliationSummaryKey().setValue(reconciliationRecord.getPrimaryKey());
         at.status().setValue(AggregatedTransferStatus.Paid);
@@ -143,7 +143,7 @@ class CardsReconciliationProcessor {
         }
     }
 
-    private void attachPaymentRecords(AggregatedTransfer at, CardsReconciliationRecord reconciliationRecord) {
+    private void attachPaymentRecords(EftAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord) {
         LogicalDate transactionsDate = new LogicalDate(DateUtils.addDays(reconciliationRecord.date().getValue(), -1));
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().finalizeDate(), transactionsDate);

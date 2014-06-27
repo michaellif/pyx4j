@@ -20,7 +20,7 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess.RunningProcess;
 
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.AllowedPaymentsSetup;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentPostingBatch;
@@ -88,7 +88,7 @@ public interface PaymentFacade {
 
     // PMC AggregatedTransfer management
 
-    void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
+    void cancelAggregatedTransfer(EftAggregatedTransfer aggregatedTransferStub);
 
     /** get payments for the last 3 months */
     List<PaymentRecord> getLatestPaymentActivity(BillingAccount billingAccount);

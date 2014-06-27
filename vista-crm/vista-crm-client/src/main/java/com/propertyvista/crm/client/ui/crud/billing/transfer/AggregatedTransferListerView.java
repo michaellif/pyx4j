@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
-public interface AggregatedTransferListerView extends ILister<AggregatedTransfer> {
+public interface AggregatedTransferListerView extends ILister<EftAggregatedTransfer> {
 
 }

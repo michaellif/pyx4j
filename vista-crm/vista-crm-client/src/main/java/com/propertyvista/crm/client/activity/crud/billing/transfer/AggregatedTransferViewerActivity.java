@@ -28,10 +28,10 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerView;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
+public class AggregatedTransferViewerActivity extends CrmViewerActivity<EftAggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
 
     private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
@@ -54,7 +54,7 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
     }
 
     @Override
-    protected void onPopulateSuccess(AggregatedTransfer result) {
+    protected void onPopulateSuccess(EftAggregatedTransfer result) {
         super.onPopulateSuccess(result);
 
         PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
@@ -79,6 +79,6 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, EntityFactory.createIdentityStub(AggregatedTransfer.class, getEntityId()));
+        }, EntityFactory.createIdentityStub(EftAggregatedTransfer.class, getEntityId()));
     }
 }

@@ -36,7 +36,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -150,7 +150,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(BillingCycle.class, Finance.BillingCycle.class, defaultImage);
         AppPlaceEntityMapper.register(Bill.class, Finance.Bill.class, defaultImage);
         AppPlaceEntityMapper.register(PaymentRecord.class, Finance.Payment.class, defaultImage);
-        AppPlaceEntityMapper.register(AggregatedTransfer.class, Finance.AggregatedTransfer.class, defaultImage);
+        AppPlaceEntityMapper.register(EftAggregatedTransfer.class, Finance.AggregatedTransfer.class, defaultImage);
         AppPlaceEntityMapper.register(DepositLifecycle.class, Finance.LeaseDeposit.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustment.class, Finance.LeaseAdjustment.class, defaultImage);
 
