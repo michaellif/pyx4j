@@ -646,12 +646,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 protected IsWidget createContent() {
                     FormPanel formPanel = new FormPanel(this);
 
-                    formPanel.append(Location.Left, proto().moveOutSubmissionDate()).decorate().componentWidth(120)
+                    formPanel.append(Location.Left, proto().moveOutSubmissionDate()).decorate().labelWidth(200).componentWidth(120)
                             .customLabel(action.toString() + i18n.tr(" Submission Date"));
-                    formPanel.append(Location.Left, proto().expectedMoveOut()).decorate().componentWidth(120);
+                    formPanel.append(Location.Left, proto().expectedMoveOut()).decorate().labelWidth(200).componentWidth(120);
 
                     if (showTermination) {
-                        formPanel.append(Location.Left, proto().terminationLeaseTo()).decorate().componentWidth(120)
+                        formPanel.append(Location.Left, proto().terminationLeaseTo()).decorate().labelWidth(200).componentWidth(120)
                                 .customLabel(i18n.tr("Lease Termination Date"));
                     }
 
