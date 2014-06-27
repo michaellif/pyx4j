@@ -752,6 +752,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         @Override
         protected Widget initBody(boolean isMultiselectAllowed, List<LeaseTermParticipant<?>> data) {
             VerticalPanel body = new VerticalPanel();
+            body.setSpacing(4);
 
             body.add(new HTML(i18n.tr("Email Type:")));
             body.add(initEmailTypes(Arrays.asList(EmailTemplateType.TenantInvitation)));
@@ -761,7 +762,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             body.add(new HTML(i18n.tr("Recipient(s):")));
             body.add(super.initBody(isMultiselectAllowed, data));
 
-            body.setSpacing(4);
             body.setWidth("100%");
             return body;
         }
@@ -786,6 +786,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             });
             emailType.setMandatory(true);
+            emailType.asWidget().setWidth("250px");
             return emailType.asWidget();
         }
 
