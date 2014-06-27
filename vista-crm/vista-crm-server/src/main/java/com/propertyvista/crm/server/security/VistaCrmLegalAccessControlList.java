@@ -13,16 +13,21 @@
  */
 package com.propertyvista.crm.server.security;
 
+import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.LegalCollectionsFull;
 
 import com.pyx4j.security.server.UIAclBuilder;
 import com.pyx4j.security.shared.ActionPermission;
 
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 
 public class VistaCrmLegalAccessControlList extends UIAclBuilder {
 
     VistaCrmLegalAccessControlList() {
+
+        grant(LegalCollectionsBasic, new ActionPermission(LeaseNotice.class));
+        grant(LegalCollectionsFull, new ActionPermission(LeaseNotice.class));
 
         grant(LegalCollectionsFull, new ActionPermission(LeaseCompletion.class));
     }

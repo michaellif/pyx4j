@@ -72,6 +72,7 @@ import com.propertyvista.crm.rpc.dto.financial.AutoPayHistoryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseNotice;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
@@ -238,7 +239,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 noticeActionExecuter();
             }
-        }, new ActionPermission(LeaseCompletion.class));
+        }, new ActionPermission(LeaseNotice.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(noticeAction);
         }
@@ -248,7 +249,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             public void execute() {
                 cancelCmpletion(CompletionType.Notice);
             }
-        }, new ActionPermission(LeaseCompletion.class));
+        }, new ActionPermission(LeaseNotice.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelNoticeAction);
         }

@@ -25,7 +25,6 @@ import com.pyx4j.security.annotations.AccessControl;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4BatchRequestDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseAgreementSigning;
-import com.propertyvista.crm.rpc.services.lease.ac.LeaseCompletion;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseStateManagement;
 import com.propertyvista.crm.rpc.services.lease.ac.SendMail;
 import com.propertyvista.crm.rpc.services.lease.ac.UpdateFromYardi;
@@ -43,13 +42,17 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
 
     // TODO Move to new Service  LeaseOperationService
 
-    @AccessControl(LeaseCompletion.class)
+//TODO need accumulative (OR) permissions
+//  @AccessControl(LeaseNotice.class)
+//  @AccessControl(LeaseCompletion.class)
     void createCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, Lease.CompletionType completionType, LogicalDate eventDate,
             LogicalDate moveOutDate, LogicalDate leseEndDate);
 
     void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback, Key entityId);
 
-    @AccessControl(LeaseCompletion.class)
+//TODO need accumulative (OR) permissions
+//    @AccessControl(LeaseNotice.class)
+//    @AccessControl(LeaseCompletion.class)
     void cancelCompletionEvent(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     @AccessControl(LeaseStateManagement.class)
