@@ -38,6 +38,7 @@ import com.propertyvista.oapi.rs.RSOapiTestBase;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.service.marketing.model.PropertyList;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 
 public class RSPropertyMarketingTest extends RSOapiTestBase {
@@ -80,7 +81,7 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
 
             Persistence.service().commit();
         } else {
-            throw new RuntimeException("===> Oops, Should not be here (" + NamespaceManager.getNamespace() + ")");
+            throw new RuntimeException("Oops, Should not be here (" + NamespaceManager.getNamespace() + ")");
         }
     }
 
@@ -140,6 +141,15 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
     @Test
     public void testGetApplyForLeaseUrl() {
         // in - String propertyId, String fpId; out - String
+        String url = target("marketing/getApplyForLeaseUrl") //
+                .queryParam("prId", building.propertyCode().getValue()) //
+                .queryParam("fpId", fp.name().getValue()) //
+                .request().get(String.class);
+        StringBuilder params = new StringBuilder() //
+                .append(ProspectPortalSiteMap.ARG_ILS_BUILDING_ID).append("=").append(building.propertyCode().getValue()) //
+                .append("&") //
+                .append(ProspectPortalSiteMap.ARG_ILS_FLOORPLAN_ID).append("=").append(fp.name().getValue());
+        Assert.assertTrue(url.endsWith(params.toString()));
     }
 
 }
