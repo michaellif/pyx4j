@@ -15,7 +15,9 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.EntityFactory;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.eft.cards.CardsReconciliationFile;
 import com.propertyvista.operations.domain.eft.cards.CardsReconciliationRecord;
@@ -65,6 +68,7 @@ class CardsReconciliationAcceptor {
         fileCardTotal.remoteFileDate().setValue(reconciliationFile.remoteFileDateCardTotal().getValue());
         Persistence.service().persist(fileCardTotal);
 
+        Set<Pmc> pmcCount = new HashSet<>();
         Map<String, CardsReconciliationRecord> recordsByMid = new HashMap<>();
 
         for (CardsReconciliationMerchantTotalRecord merchantTotal : reconciliationFile.merchantTotals()) {
@@ -87,6 +91,9 @@ class CardsReconciliationAcceptor {
                                 + reconciliationFile.fileNameMerchantTotal().getValue());
                     }
                     record.merchantAccount().set(macc);
+                    if (pmcCount.add(macc.pmc())) {
+                        executionMonitor.addInfoEvent("Pmc", null, BigDecimal.ONE);
+                    }
                 }
 
                 {

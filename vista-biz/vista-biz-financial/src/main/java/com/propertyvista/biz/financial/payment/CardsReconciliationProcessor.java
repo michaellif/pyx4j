@@ -135,6 +135,12 @@ class CardsReconciliationProcessor {
 
         // AggregatedTransfer updated
         Persistence.service().persist(at);
+
+        if (reconciliationRecord.totalDeposit().getValue().compareTo(at.grossPaymentAmount().getValue()) != 0) {
+            executionMonitor.addFailedEvent("DailyTotals", at.grossPaymentAmount().getValue().subtract(reconciliationRecord.totalDeposit().getValue()), //
+                    SimpleMessageFormat.format("Merchant {0} deposit {1} does not match transactions total {2}",//
+                            reconciliationRecord.merchantTerminalId(), reconciliationRecord.totalDeposit(), at.grossPaymentAmount()));
+        }
     }
 
     private void attachPaymentRecords(AggregatedTransfer at, CardsReconciliationRecord reconciliationRecord) {

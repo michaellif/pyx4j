@@ -13,13 +13,17 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationRecordRecord;
@@ -46,6 +50,8 @@ class PadCaledonReconciliation {
         List<FundsReconciliationSummary> batches = new ArrayList<FundsReconciliationSummary>(reconciliationFile.batches());
         Persistence.service().persist(reconciliationFile);
 
+        Set<Pmc> pmcCount = new HashSet<>();
+
         // Match merchantAccounts.
         for (FundsReconciliationSummary summary : batches) {
             summary.reconciliationFile().set(reconciliationFile);
@@ -57,6 +63,9 @@ class PadCaledonReconciliation {
                 throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + reconciliationFile.fileName().getValue());
             }
             summary.merchantAccount().set(macc);
+            if (pmcCount.add(macc.pmc())) {
+                executionMonitor.addInfoEvent("Pmc", null, BigDecimal.ONE);
+            }
 
             summary.processingStatus().setValue(false);
 
