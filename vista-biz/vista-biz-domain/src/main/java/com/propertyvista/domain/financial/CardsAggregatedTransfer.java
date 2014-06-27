@@ -13,9 +13,25 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 @DiscriminatorValue("CardsAggregatedTransfer")
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface CardsAggregatedTransfer extends AggregatedTransfer {
+
+    IPrimitive<Key> cardsReconciliationRecordKey();
+
+    IPrimitive<BigDecimal> visaDeposit();
+
+    IPrimitive<BigDecimal> visaFee();
+
+    IPrimitive<BigDecimal> mastercardDeposit();
+
+    IPrimitive<BigDecimal> mastercardFee();
 
 }

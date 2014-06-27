@@ -21,8 +21,10 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 @DiscriminatorValue("EftAggregatedTransfer")
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface EftAggregatedTransfer extends AggregatedTransfer {
 
     IPrimitive<Key> padReconciliationSummaryKey();
@@ -46,14 +48,6 @@ public interface EftAggregatedTransfer extends AggregatedTransfer {
     IPrimitive<BigDecimal> returnItemsFee();
 
     IPrimitive<Integer> returnItemsCount();
-
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> netAmount();
-
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> adjustments();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

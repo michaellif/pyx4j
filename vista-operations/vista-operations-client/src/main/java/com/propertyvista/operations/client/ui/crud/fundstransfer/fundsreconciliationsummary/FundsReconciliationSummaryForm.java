@@ -77,7 +77,10 @@ public class FundsReconciliationSummaryForm extends OperationsEntityForm<FundsRe
         panel.setWidget(++row, 0, 2, inject(proto().returnItemsFee(), new FieldDecoratorBuilder().build()));
 
         panel.setWidget(++row, 0, 2, inject(proto().netAmount(), new FieldDecoratorBuilder().build()));
-        panel.setWidget(++row, 0, 2, inject(proto().adjustments(), new FieldDecoratorBuilder().build()));
+
+        // TODO this is list now
+        //panel.setWidget(++row, 0, 2, inject(proto().adjustments(), new FieldDecoratorBuilder().build()));
+
         panel.setWidget(++row, 0, 2, inject(proto().previousBalance(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 2, inject(proto().merchantBalance(), new FieldDecoratorBuilder().build()));
         panel.setWidget(++row, 0, 2, inject(proto().fundsReleased(), new FieldDecoratorBuilder().build()));

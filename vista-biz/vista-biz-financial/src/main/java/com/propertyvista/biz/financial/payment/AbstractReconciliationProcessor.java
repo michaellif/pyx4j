@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -34,6 +35,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.AggregatedTransferAdjustment;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -104,10 +106,15 @@ abstract class AbstractReconciliationProcessor {
         at.returnItemsFee().setValue(summary.returnItemsFee().getValue());
         at.returnItemsCount().setValue(summary.returnItemsCount().getValue());
         at.netAmount().setValue(summary.netAmount().getValue());
-        at.adjustments().setValue(summary.adjustments().getValue());
         at.previousBalance().setValue(summary.previousBalance().getValue());
         at.merchantBalance().setValue(summary.merchantBalance().getValue());
         at.fundsReleased().setValue(summary.fundsReleased().getValue());
+
+        if (!summary.adjustments().isNull() && summary.adjustments().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            AggregatedTransferAdjustment adjustment = EntityFactory.create(AggregatedTransferAdjustment.class);
+            adjustment.adjustment().setValue(summary.adjustments().getValue());
+            at.adjustments().add(adjustment);
+        }
 
         return at;
     }

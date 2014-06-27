@@ -24,9 +24,12 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
@@ -67,6 +70,10 @@ public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
     @MemberColumn(notNull = true)
     IPrimitive<FundsTransferType> fundsTransferType();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> netAmount();
+
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
@@ -77,6 +84,14 @@ public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
     IPrimitive<BigDecimal> grossPaymentFee();
 
     IPrimitive<Integer> grossPaymentCount();
+
+    @Owned
+    @OrderBy(PrimaryKey.class)
+    IList<AggregatedTransferAdjustment> adjustments();
+
+    @Owned
+    @OrderBy(PrimaryKey.class)
+    IList<AggregatedTransferChargeback> chargebacks();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = PaymentRecord.class, mappedBy = PaidOrRejectedAggregatedTransferId.class)
