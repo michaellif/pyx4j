@@ -40,7 +40,7 @@ public class AddressMarshaller implements Marshaller<InternationalAddress, Addre
         }
         AddressIO addressIO = new AddressIO();
 
-        addressIO.country = new StringIO(MarshallerUtils.getValue(address.country()).name);
+        addressIO.country = MarshallerUtils.createIo(StringIO.class, address.country().getValue().name);
         addressIO.province = MarshallerUtils.createIo(StringIO.class, address.province());
         addressIO.city = MarshallerUtils.createIo(StringIO.class, address.city());
         addressIO.postalCode = MarshallerUtils.createIo(StringIO.class, address.postalCode());

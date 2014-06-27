@@ -65,9 +65,9 @@ public class FloorplanInfoMarshaller implements Marshaller<Floorplan, FloorplanI
         List<AptUnit> units = PropertyFinder.getFloorplanUnits(fp);
         MinMaxPair<BigDecimal> minMaxRent = PropertyFinder.getMinMaxMarketRent(units);
         MinMaxPair<Integer> minMaxArea = PropertyFinder.getMinMaxAreaInSqFeet(units);
-        fpIO.rentFrom = new BigDecimalIO(minMaxRent.getMin());
-        fpIO.sqftFrom = new IntegerIO(minMaxArea.getMin());
-        fpIO.availableFrom = new LogicalDateIO(getDateAvailable(fp));
+        fpIO.rentFrom = MarshallerUtils.createIo(BigDecimalIO.class, minMaxRent.getMin());
+        fpIO.sqftFrom = MarshallerUtils.createIo(IntegerIO.class, minMaxArea.getMin());
+        fpIO.availableFrom = MarshallerUtils.createIo(LogicalDateIO.class, getDateAvailable(fp));
         return fpIO;
     }
 

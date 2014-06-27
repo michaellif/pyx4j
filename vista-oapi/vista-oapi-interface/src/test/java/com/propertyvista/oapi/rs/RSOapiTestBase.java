@@ -28,7 +28,6 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
@@ -72,7 +71,7 @@ public abstract class RSOapiTestBase extends IntegrationTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         RSTestHelper.setUp();
-        initDB();
+        init();
     }
 
     @Override
@@ -81,8 +80,7 @@ public abstract class RSOapiTestBase extends IntegrationTestBase {
         super.tearDown();
     }
 
-    public void initDB() throws Exception {
-        VistaTestDBSetup.init();
+    public void init() throws Exception {
         preloadData();
         // load building
         getBuilding();

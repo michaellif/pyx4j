@@ -64,13 +64,20 @@ public class MarshallerUtils {
      */
     public static <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, IPrimitive<T> primitive) {
         if (primitive != null && !primitive.isNull()) {
+            return createIo(classIO, primitive.getValue());
+        }
+        return null;
+    }
+
+    public static <T extends Serializable, E extends PrimitiveIO<T>> E createIo(Class<E> classIO, T value) {
+        if (value != null) {
             E primitiveIO;
             try {
                 primitiveIO = classIO.newInstance();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            primitiveIO.setValue(primitive.getValue());
+            primitiveIO.setValue(value);
             return primitiveIO;
         }
         return null;
