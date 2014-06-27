@@ -13,16 +13,28 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IObject;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -32,10 +44,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.activity.EntitySelectorTableVisorController;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -43,12 +58,26 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.activity.crud.communication.MessageViewerActivity;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.selectors.CommunicationEndpointSelector;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
+import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
 import com.propertyvista.dto.MessageDTO;
 
@@ -157,11 +186,15 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         private FormPanel searchCriteriaPanel;
 
+        private Button.ButtonMenuBar subMenu;
+
+        private final Button actionsButton;
+
         private CommunicationEndpointSelector communicationEndpointSelector;
 
         public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
-
+            actionsButton = new Button(i18n.tr(""));
             inheritEditable(false);
             inheritViewable(false);
             inheritEnabled(false);
@@ -207,7 +240,74 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false).assistantWidget(statusToolBar);
             formPanel.br();
 
-            formPanel.h4("To");
+            formPanel.h4("To", actionsButton);
+            subMenu = new Button.ButtonMenuBar();
+            subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
+                @Override
+                public void execute() {
+                    new TenantSelectorDialog(MessageForm.this.getParentView(), true) {
+                        @Override
+                        public void onClickOk() {
+                            Collection<Tenant> ts = getSelectedItems();
+                            if (ts != null && getSelectedItems().size() > 0) {
+                                for (Tenant selected : ts) {
+                                    addRecipient(selected);
+                                }
+                            }
+                        }
+                    }.show();
+                }
+            }));
+            subMenu.addItem(new MenuItem(i18n.tr("Corporate"), new Command() {
+                @Override
+                public void execute() {
+                    new CommunicationEndpointSelectorDialog<CrmUser>(MessageForm.this.getParentView(), CrmUser.class) {
+
+                        @Override
+                        protected AbstractListService<CrmUser> getSelectService() {
+                            return GWT.<AbstractListService<CrmUser>> create(SelectCrmUserListService.class);
+                        }
+                    }.show();
+                }
+            }));
+            subMenu.addItem(new MenuItem(i18n.tr("Building"), new Command() {
+                @Override
+                public void execute() {
+                    BuildingSelectorDialog dialog = new BuildingSelectorDialog(MessageForm.this.getParentView(), true) {
+                        @Override
+                        public void onClickOk() {
+                            onAdd(getSelectedItems());
+                        }
+                    };
+                    dialog.getCancelButton().setVisible(true);
+                    dialog.show();
+                }
+            }));
+            subMenu.addItem(new MenuItem(i18n.tr("Portfolio"), new Command() {
+                @Override
+                public void execute() {
+                    new PortfolioSelectorDialog(MessageForm.this.getParentView()) {
+                        @Override
+                        public void onClickOk() {
+                            onAdd(getSelectedItems());
+                        }
+                    }.show();
+                }
+            }));
+
+            subMenu.addItem(new MenuItem(i18n.tr("Unit"), new Command() {
+                @Override
+                public void execute() {
+                    new UnitSelectorDialog(MessageForm.this.getParentView(), true) {
+                        @Override
+                        public void onClickOk() {
+                            onAdd(getSelectedItems());
+                        }
+                    }.show();
+                }
+            }));
+
+            actionsButton.setMenu(subMenu);
             searchCriteriaPanel = new FormPanel(this);
 
             searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
@@ -226,6 +326,91 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, createLowerToolbar());
 
             return formPanel;
+        }
+
+        private abstract class PortfolioSelectorDialog extends EntitySelectorTableVisorController<Portfolio> {
+
+            public PortfolioSelectorDialog(IPane parentView) {
+                super(parentView, Portfolio.class, true, null, i18n.tr("Select Portfolio"));
+            }
+
+            @Override
+            protected List<ColumnDescriptor> defineColumnDescriptors() {
+                return Arrays.asList(//@formatter:off
+                        new MemberColumnDescriptor.Builder(proto().name()).build(),
+                        new MemberColumnDescriptor.Builder(proto().description()).wordWrap(true).build()
+                ); //@formatter:on
+            }
+
+            @Override
+            public List<Sort> getDefaultSorting() {
+                return Arrays.asList(new Sort(proto().name(), false));
+            }
+
+            @Override
+            protected AbstractListService<Portfolio> getSelectService() {
+                return GWT.<AbstractListService<Portfolio>> create(SelectPortfolioListService.class);
+            }
+        }
+
+        private abstract class CommunicationEndpointSelectorDialog<E extends AbstractPmcUser> extends EntitySelectorTableVisorController<E> {
+
+            public CommunicationEndpointSelectorDialog(IPane parentView, Class<E> entityClass) {
+                super(parentView, entityClass, true, i18n.tr("Select User"));
+            }
+
+            @Override
+            protected List<ColumnDescriptor> defineColumnDescriptors() {
+                return Arrays.asList(new MemberColumnDescriptor.Builder(proto().name()).searchable(true).build());
+            }
+
+            @Override
+            public List<Sort> getDefaultSorting() {
+                return Arrays.asList(new Sort(proto().name(), false));
+            }
+
+            @Override
+            public void onClickOk() {
+                onAdd(getSelectedItems());
+            }
+        }
+
+        private void onAdd(Collection<? extends CommunicationEndpoint> eps) {
+            if (eps != null && eps.size() > 0) {
+                for (CommunicationEndpoint selected : eps) {
+                    if (!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(selected.getPrimaryKey())) {
+                        addRecipient(selected);
+                    }
+                }
+            }
+        }
+
+        private void addRecipient(CommunicationEndpoint selected) {
+            CommunicationEndpointDTO proto = EntityFactory.create(CommunicationEndpointDTO.class);
+            Class<? extends IEntity> epType = selected.getInstanceValueClass();
+            if (epType.equals(Building.class)) {
+                proto.name().set(((Building) selected).propertyCode());
+                proto.type().setValue(ContactType.Building);
+            } else if (epType.equals(Portfolio.class)) {
+                proto.name().set(((Portfolio) selected).name());
+                proto.type().setValue(ContactType.Portfolio);
+            }
+            if (epType.equals(AptUnit.class)) {
+                proto.name().setValue(((AptUnit) selected).getStringView());
+                proto.type().setValue(ContactType.Unit);
+            } else if (epType.equals(CustomerUser.class)) {
+                proto.name().set(((CustomerUser) selected).name());
+                proto.type().setValue(ContactType.Tenant);
+            } else if (epType.equals(CrmUser.class)) {
+                proto.name().set(((CrmUser) selected).name());
+                proto.type().setValue(ContactType.Employee);
+            } else if (epType.equals(Tenant.class)) {
+                proto.name().setValue(((Tenant) selected).customer().person().name().getStringView());
+                proto.type().setValue(ContactType.Tenant);
+            }
+
+            proto.endpoint().set(selected);
+            communicationEndpointSelector.addItem(proto);
         }
 
         private String buildForwardText() {
@@ -300,7 +485,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         if (form != null && form instanceof MessageFolderItem) {
                             MessageFolderItem folderItemForm = (MessageFolderItem) form;
                             folderItemForm.setFocusForEditingText();
-                            folderItemForm.communicationEndpointSelector.addAll(getValue().to(), false);
+                            folderItemForm.communicationEndpointSelector.addAll(newItem.getValue().to(), false);
                         }
                         newItem.asWidget().getElement().scrollIntoView();
                     }
@@ -394,11 +579,14 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 highImportnaceImage.setVisible(false);
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
-
+                subMenu.setVisible(true);
+                //searchCriteriaPanel.setVisible(true);
             } else {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
+                subMenu.setVisible(false);
+                //searchCriteriaPanel.setVisible(false);
                 communicationEndpointSelector.addAll(getValue().to(), true);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);

@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -35,6 +38,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
+import com.propertyvista.domain.communication.CommunicationEndpoint.ContactType;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -42,6 +47,8 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -131,10 +138,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         }
 
         CommunicationMessageFacade communicationFacade = ServerSideFactory.create(CommunicationMessageFacade.class);
-        for (CommunicationEndpointDTO todep : to.to()) {
-            bo.recipients().add(communicationFacade.createDeliveryHandle(todep.endpoint(), false));
-            expandCommunicationEndpoint(bo, communicationFacade, todep);
-        }
+        buildRecipientList(bo, to, communicationFacade);
 
         bo.attachments().set(to.attachments());
         bo.date().setValue(SystemDateManager.getDate());
@@ -157,7 +161,26 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         return Persistence.secureSave(t);
     }
 
-    private void expandCommunicationEndpoint(Message bo, CommunicationMessageFacade communicationFacade, CommunicationEndpointDTO ep) {
+    private void buildRecipientList(Message bo, MessageDTO to, CommunicationMessageFacade communicationFacade) {
+        HashMap<CommunicationEndpoint, Boolean> visited = new HashMap<CommunicationEndpoint, Boolean>();
+        for (CommunicationEndpointDTO todep : to.to()) {
+            if (!Tenant.class.equals(todep.endpoint().getInstanceValueClass())) {
+                if (visited.containsKey(todep.endpoint())) {
+                    visited.put(todep.endpoint(), visited.get(todep.endpoint()).booleanValue() || false);
+                } else {
+                    visited.put(todep.endpoint(), false);
+                }
+
+            }
+            expandCommunicationEndpoint(visited, communicationFacade, todep);
+        }
+        for (Entry<CommunicationEndpoint, Boolean> todep : visited.entrySet()) {
+            bo.recipients().add(communicationFacade.createDeliveryHandle(todep.getKey(), todep.getValue()));
+        }
+    }
+
+    private void expandCommunicationEndpoint(HashMap<CommunicationEndpoint, Boolean> visited, CommunicationMessageFacade communicationFacade,
+            CommunicationEndpointDTO ep) {
         EntityListCriteria<Tenant> criteria = createActiveLeaseCriteria();
 
         switch (ep.type().getValue()) {
@@ -170,10 +193,27 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             break;
         }
         case Portfolio: {
-            criteria.eq(criteria.proto().lease().unit().building().portfolios().$(), ep.endpoint());
+            EntityListCriteria<Portfolio> buildingCriteria = EntityListCriteria.create(Portfolio.class);
+            buildingCriteria.in(buildingCriteria.proto().id(), ep.endpoint());
+            Vector<Portfolio> ps = Persistence.secureQuery(buildingCriteria, AttachLevel.Attached);
+            ArrayList<Building> bs = new ArrayList<Building>();
+            if (ps == null || ps.isEmpty()) {
+                return;
+            }
+            for (Portfolio p : ps) {
+                bs.addAll(p.buildings());
+            }
+
+            if (bs.isEmpty()) {
+                return;
+            }
+            criteria.in(criteria.proto().lease().unit().building(), bs);
             break;
         }
-        case Tenants:
+        case Tenant: {
+            criteria.eq(criteria.proto().id(), ep.endpoint().id());
+            break;
+        }
         case Employee:
         default: {
             return;
@@ -184,7 +224,11 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (tenants != null) {
             for (Tenant t : tenants) {
                 Persistence.ensureRetrieve(t.customer(), AttachLevel.Attached);
-                bo.recipients().add(communicationFacade.createDeliveryHandle(t.customer().user(), true));
+                if (visited.containsKey(t.customer().user())) {
+                    visited.put(t.customer().user(), visited.get(t.customer().user()).booleanValue() || !ContactType.Tenant.equals(ep.type().getValue()));
+                } else {
+                    visited.put(t.customer().user(), !ContactType.Tenant.equals(ep.type().getValue()));
+                }
             }
         }
     }
@@ -314,10 +358,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
                         communicationFacade.createDeliveryHandle(communicationFacade.getSystemEndpointFromCache(SystemEndpointName.Unassigned), true));
 
             } else {
-                for (CommunicationEndpointDTO d : message.to()) {
-                    m.recipients().add(communicationFacade.createDeliveryHandle(d.endpoint(), false));
-                    expandCommunicationEndpoint(m, communicationFacade, d);
-                }
+                buildRecipientList(m, message, communicationFacade);
             }
             m.thread().set(thread);
             m.attachments().set(message.attachments());

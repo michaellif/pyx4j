@@ -33,6 +33,7 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -113,6 +114,9 @@ public class CommunicationManager {
         } else if (entity.getInstanceValueClass().equals(Building.class)) {
             Building e = entity.cast();
             return e.propertyCode().getValue();
+        } else if (entity.getInstanceValueClass().equals(AptUnit.class)) {
+            AptUnit e = entity.cast();
+            return e.getStringView();
         }
         return null;
     }
@@ -144,7 +148,7 @@ public class CommunicationManager {
         } else if (entity.getInstanceValueClass().equals(CustomerUser.class)) {
             CustomerUser e = entity.cast();
             rec.name().set(e.name());
-            rec.type().setValue(ContactType.Tenants);
+            rec.type().setValue(ContactType.Tenant);
         } else if (entity.getInstanceValueClass().equals(Building.class)) {
             Building e = entity.cast();
             rec.name().set(e.propertyCode());
@@ -153,11 +157,11 @@ public class CommunicationManager {
             Portfolio e = entity.cast();
             rec.name().set(e.name());
             rec.type().setValue(ContactType.Portfolio);
-        }/*- else if (entity.getInstanceValueClass().equals(Lease.class)) {
-            Lease e = entity.cast();
-            rec.name().set(e.leaseId());
+        } else if (entity.getInstanceValueClass().equals(AptUnit.class)) {
+            AptUnit e = entity.cast();
+            rec.name().setValue(e.getStringView());
             rec.type().setValue(ContactType.Unit);
-         }-*/
+        }
         return rec;
     }
 }

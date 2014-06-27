@@ -33,7 +33,7 @@ public interface CommunicationEndpoint extends IEntity {
         System,
 
         @Translate("Tenant")
-        Tenants,
+        Tenant,
 
         @Translate("Corporate")
         Employee,

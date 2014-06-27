@@ -29,6 +29,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectCommunicationEndpoint
 import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -61,7 +62,7 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
         accumulate(dtos, createByPatternCriteria(CrmUser.class, pageSize, namePattern));
         accumulate(dtos, createByPatternCriteria(Building.class, pageSize, namePattern));
         accumulate(dtos, createByPatternCriteria(Portfolio.class, pageSize, namePattern));
-        //accumulate(dtos, createCriteria(AptUnit.class, pageSize, namePattern));
+        accumulate(dtos, createByPatternCriteria(AptUnit.class, pageSize, namePattern));
 
         callback.onSuccess(dtos);
     }
@@ -95,10 +96,9 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
             criteria.like(((EntityListCriteria<Building>) criteria).proto().propertyCode(), namePattern);
         } else if (entityClass.equals(Portfolio.class)) {
             criteria.like(((EntityListCriteria<Portfolio>) criteria).proto().name(), namePattern);
+        } else if (entityClass.equals(AptUnit.class)) {
+            criteria.like(((EntityListCriteria<AptUnit>) criteria).proto().info().number(), namePattern);
         }
-        //else if (entityClass.equals(AptUnit.class)){
-        //    criteria.like(((EntityListCriteria<AptUnit> )criteria).proto().name(), namePattern);
-        //}
         return criteria;
     }
 

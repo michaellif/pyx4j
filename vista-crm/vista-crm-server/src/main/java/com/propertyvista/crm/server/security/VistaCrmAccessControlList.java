@@ -162,6 +162,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.crm.rpc.services.selections.SelectGlCodeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
+import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
@@ -469,6 +470,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoteAttachmentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCrmUserListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectPortfolioListService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseAdjustmentCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DepositLifecycleCrudService.class));
