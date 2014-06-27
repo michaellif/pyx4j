@@ -51,37 +51,19 @@ public class MerchantAccountManager {
             }));
         }
 
-        PmcMerchantAccountIndex pmcMerchantAccountMainIndex = null;
-        PmcMerchantAccountIndex pmcMerchantAccountConvenienceFeeIndex = null;
-        if (orig != null) {
-            if (!orig.merchantTerminalId().isNull()) {
-                EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-                criteria.eq(criteria.proto().pmc(), pmc);
-                criteria.eq(criteria.proto().terminalId(), orig.merchantTerminalId());
-                criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey());
-                pmcMerchantAccountMainIndex = Persistence.service().retrieve(criteria);
-                if (pmcMerchantAccountMainIndex == null) {
-                    throw new Error("MerchantAccount integrity broken");
-                }
-            }
-            if (!orig.merchantTerminalIdConvenienceFee().isNull()) {
-                EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-                criteria.eq(criteria.proto().pmc(), pmc);
-                criteria.eq(criteria.proto().terminalId(), orig.merchantTerminalIdConvenienceFee());
-                criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey());
-                pmcMerchantAccountConvenienceFeeIndex = Persistence.service().retrieve(criteria);
-                if (pmcMerchantAccountConvenienceFeeIndex == null) {
-                    throw new Error("MerchantAccount integrity broken");
-                }
+        PmcMerchantAccountIndex pmcMerchantAccountIndex = null;
+        if (!orig.id().isNull()) {
+            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+            criteria.eq(criteria.proto().pmc(), pmc);
+            criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey());
+            pmcMerchantAccountIndex = Persistence.service().retrieve(criteria);
+            if (pmcMerchantAccountIndex == null) {
+                throw new Error("MerchantAccount integrity broken");
             }
         }
-        if (pmcMerchantAccountMainIndex == null) {
-            pmcMerchantAccountMainIndex = EntityFactory.create(PmcMerchantAccountIndex.class);
-            pmcMerchantAccountMainIndex.pmc().set(pmc);
-        }
-        if (pmcMerchantAccountConvenienceFeeIndex == null) {
-            pmcMerchantAccountConvenienceFeeIndex = EntityFactory.create(PmcMerchantAccountIndex.class);
-            pmcMerchantAccountConvenienceFeeIndex.pmc().set(pmc);
+        if (pmcMerchantAccountIndex == null) {
+            pmcMerchantAccountIndex = EntityFactory.create(PmcMerchantAccountIndex.class);
+            pmcMerchantAccountIndex.pmc().set(pmc);
         }
 
         TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
@@ -100,19 +82,15 @@ public class MerchantAccountManager {
         });
 
         if (orig.isNull()) {
-            ServerSideFactory.create(AuditFacade.class).created(pmcMerchantAccountMainIndex);
+            ServerSideFactory.create(AuditFacade.class).created(pmcMerchantAccountIndex);
         } else {
-            ServerSideFactory.create(AuditFacade.class).updated(pmcMerchantAccountMainIndex, EntityDiff.getChanges(orig, merchantAccount));
+            ServerSideFactory.create(AuditFacade.class).updated(pmcMerchantAccountIndex, EntityDiff.getChanges(orig, merchantAccount));
         }
 
-        pmcMerchantAccountMainIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
-        pmcMerchantAccountMainIndex.terminalId().setValue(merchantAccount.merchantTerminalId().getValue());
-        Persistence.service().persist(pmcMerchantAccountMainIndex);
+        pmcMerchantAccountIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
+        pmcMerchantAccountIndex.terminalId().setValue(merchantAccount.merchantTerminalId().getValue());
+        pmcMerchantAccountIndex.terminalIdConvFee().setValue(merchantAccount.merchantTerminalIdConvenienceFee().getValue());
+        Persistence.service().persist(pmcMerchantAccountIndex);
 
-        if (!pmcMerchantAccountConvenienceFeeIndex.id().isNull() || !merchantAccount.merchantTerminalIdConvenienceFee().isNull()) {
-            pmcMerchantAccountConvenienceFeeIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
-            pmcMerchantAccountConvenienceFeeIndex.terminalId().setValue(merchantAccount.merchantTerminalIdConvenienceFee().getValue());
-            Persistence.service().persist(pmcMerchantAccountConvenienceFeeIndex);
-        }
     }
 }

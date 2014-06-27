@@ -43,6 +43,8 @@ public interface CardsReconciliationRecord extends IEntity {
     @Indexed
     PmcMerchantAccountIndex merchantAccount();
 
+    IPrimitive<Boolean> convenienceFeeAccount();
+
     IPrimitive<CardsReconciliationRecordProcessingStatus> status();
 
     IPrimitive<BigDecimal> totalDeposit();

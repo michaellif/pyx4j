@@ -115,6 +115,7 @@ class CardsReconciliationProcessor {
         // Find MerchantAccount
         {
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria.eq(criteria.proto().id(), reconciliationRecord.merchantAccount().merchantAccountKey());
             OrCriterion or = criteria.or();
             or.left().eq(criteria.proto().merchantTerminalId(), reconciliationRecord.merchantTerminalId());
             or.right().eq(criteria.proto().merchantTerminalIdConvenienceFee(), reconciliationRecord.merchantTerminalId());
@@ -150,6 +151,11 @@ class CardsReconciliationProcessor {
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
         criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
         criteria.eq(criteria.proto().merchantAccount(), at.merchantAccount());
+        if (reconciliationRecord.convenienceFeeAccount().getValue()) {
+            criteria.isNotNull(criteria.proto().convenienceFeeReferenceNumber());
+        } else {
+            criteria.isNull(criteria.proto().convenienceFeeReferenceNumber());
+        }
         criteria.isNull(criteria.proto().aggregatedTransfer());
 
         ICursorIterator<PaymentRecord> it = Persistence.service().query(null, criteria, AttachLevel.Attached);

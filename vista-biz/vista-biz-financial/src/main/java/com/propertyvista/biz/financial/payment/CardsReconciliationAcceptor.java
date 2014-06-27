@@ -22,6 +22,7 @@ import java.util.Set;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -72,25 +73,33 @@ class CardsReconciliationAcceptor {
         Map<String, CardsReconciliationRecord> recordsByMid = new HashMap<>();
 
         for (CardsReconciliationMerchantTotalRecord merchantTotal : reconciliationFile.merchantTotals()) {
-            CardsReconciliationRecord record = recordsByMid.get(key(merchantTotal));
-            if (record == null) {
-                record = EntityFactory.create(CardsReconciliationRecord.class);
-                record.status().setValue(CardsReconciliationRecordProcessingStatus.Received);
-                record.date().setValue(merchantTotal.date().getValue());
-                record.merchantID().setValue(merchantTotal.merchantID().getValue());
-                record.merchantTerminalId().setValue(merchantTotal.terminalID().getValue());
-                record.fileMerchantTotal().set(fileMerchantTotal);
-                record.fileCardTotal().set(fileCardTotal);
+            CardsReconciliationRecord reconciliationRecord = recordsByMid.get(key(merchantTotal));
+            if (reconciliationRecord == null) {
+                reconciliationRecord = EntityFactory.create(CardsReconciliationRecord.class);
+                reconciliationRecord.status().setValue(CardsReconciliationRecordProcessingStatus.Received);
+                reconciliationRecord.date().setValue(merchantTotal.date().getValue());
+                reconciliationRecord.merchantID().setValue(merchantTotal.merchantID().getValue());
+                reconciliationRecord.merchantTerminalId().setValue(merchantTotal.terminalID().getValue());
+                reconciliationRecord.fileMerchantTotal().set(fileMerchantTotal);
+                reconciliationRecord.fileCardTotal().set(fileCardTotal);
 
                 {
                     EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-                    criteria.eq(criteria.proto().terminalId(), record.merchantTerminalId());
+                    OrCriterion or = criteria.or();
+                    or.left().eq(criteria.proto().terminalId(), reconciliationRecord.merchantTerminalId());
+                    or.right().eq(criteria.proto().terminalIdConvFee(), reconciliationRecord.merchantTerminalId());
                     PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
                     if (macc == null) {
-                        throw new Error("Unexpected TerminalId '" + record.merchantTerminalId().getValue() + "' in file "
+                        throw new Error("Unexpected TerminalId '" + reconciliationRecord.merchantTerminalId().getValue() + "' in file "
                                 + reconciliationFile.fileNameMerchantTotal().getValue());
                     }
-                    record.merchantAccount().set(macc);
+                    reconciliationRecord.merchantAccount().set(macc);
+                    if (macc.terminalIdConvFee().equals(reconciliationRecord.merchantTerminalId())) {
+                        reconciliationRecord.convenienceFeeAccount().setValue(true);
+                    } else {
+                        reconciliationRecord.convenienceFeeAccount().setValue(false);
+                    }
+
                     if (pmcCount.add(macc.pmc())) {
                         executionMonitor.addInfoEvent("Pmc", null, BigDecimal.ONE);
                     }
@@ -98,34 +107,34 @@ class CardsReconciliationAcceptor {
 
                 {
                     EntityQueryCriteria<CardsReconciliationRecord> criteria = EntityQueryCriteria.create(CardsReconciliationRecord.class);
-                    criteria.eq(criteria.proto().date(), record.date());
-                    criteria.eq(criteria.proto().merchantAccount(), record.merchantAccount());
+                    criteria.eq(criteria.proto().date(), reconciliationRecord.date());
+                    criteria.eq(criteria.proto().merchantTerminalId(), reconciliationRecord.merchantTerminalId());
                     if (Persistence.service().count(criteria) > 0) {
-                        throw new Error("Duplicate reconciliation record received " + record.getStringView());
+                        throw new Error("Duplicate reconciliation record received " + reconciliationRecord.getStringView());
                     }
                 }
 
-                recordsByMid.put(key(merchantTotal), record);
+                recordsByMid.put(key(merchantTotal), reconciliationRecord);
             }
 
             switch (merchantTotal.type().getValue()) {
             case Deposit:
                 Validate.isTrue(merchantTotal.debit().getValue().compareTo(BigDecimal.ZERO) == 0, "Debit ZERO expected for {0}", merchantTotal);
-                Validate.isTrue(record.totalDeposit().isNull(), "Duplicate Deposit {0}", merchantTotal);
-                record.totalDeposit().setValue(merchantTotal.credit().getValue());
-                executionMonitor.addProcessedEvent("Merchant Deposit", record.totalDeposit().getValue());
+                Validate.isTrue(reconciliationRecord.totalDeposit().isNull(), "Duplicate Deposit {0}", merchantTotal);
+                reconciliationRecord.totalDeposit().setValue(merchantTotal.credit().getValue());
+                executionMonitor.addProcessedEvent("Merchant Deposit", reconciliationRecord.totalDeposit().getValue());
                 break;
             case Fees:
                 Validate.isTrue(merchantTotal.credit().getValue().compareTo(BigDecimal.ZERO) == 0, "Credit ZERO expected for {0}", merchantTotal);
-                Validate.isTrue(record.totalFee().isNull(), "Duplicate Fees {0}", merchantTotal);
-                record.totalFee().setValue(merchantTotal.debit().getValue());
-                executionMonitor.addProcessedEvent("Merchant Fee", record.totalFee().getValue());
+                Validate.isTrue(reconciliationRecord.totalFee().isNull(), "Duplicate Fees {0}", merchantTotal);
+                reconciliationRecord.totalFee().setValue(merchantTotal.debit().getValue());
+                executionMonitor.addProcessedEvent("Merchant Fee", reconciliationRecord.totalFee().getValue());
                 break;
             case Adjustment:
-                record.adjustments().add(asCredit(merchantTotal));
+                reconciliationRecord.adjustments().add(asCredit(merchantTotal));
                 break;
             case Chargeback:
-                record.chargebacks().add(asCredit(merchantTotal));
+                reconciliationRecord.chargebacks().add(asCredit(merchantTotal));
                 break;
             default:
                 throw new IllegalArgumentException();
