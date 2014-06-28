@@ -74,6 +74,7 @@ BEGIN
         -- ALTER TABLE marketing DROP CONSTRAINT marketing_marketing_address_street_type_e_ck;
         -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_direction_e_ck;
         -- ALTER TABLE n4_policy DROP CONSTRAINT n4_policy_mailing_address_street_type_e_ck;
+        ALTER TABLE notes_and_attachments DROP CONSTRAINT notes_and_attachments_owner_discriminator_d_ck;
         ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
         -- ALTER TABLE system_endpoint DROP CONSTRAINT system_endpoint_type_e_ck;
 
@@ -119,6 +120,64 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
+        
+        -- aggregated_transfer
+        
+        ALTER TABLE aggregated_transfer ADD COLUMN id_discriminator VARCHAR(64),
+                                        ADD COLUMN cards_reconciliation_record_key BIGINT,
+                                        ADD COLUMN mastercard_deposit NUMERIC(18,2),
+                                        ADD COLUMN mastercard_fee NUMERIC(18,2),
+                                        ADD COLUMN visa_deposit NUMERIC(18,2),
+                                        ADD COLUMN visa_fee NUMERIC(18,2);
+                                        
+        -- aggregated_transfer_adjustment
+        
+        CREATE TABLE aggregated_transfer_adjustment
+        (
+            id                          BIGINT                  NOT NULL,
+            adjustment                  NUMERIC(18,2),
+            ag_id                       BIGINT,                 -- very temporary column 
+                CONSTRAINT aggregated_transfer_adjustment_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE aggregated_transfer_adjustment OWNER TO vista;
+        
+        -- aggregated_transfer_chargeback
+        
+        CREATE TABLE aggregated_transfer_chargeback
+        (
+            id                          BIGINT                  NOT NULL,
+            chargeback                  NUMERIC(18,2),
+                CONSTRAINT aggregated_transfer_chargeback_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE aggregated_transfer_chargeback OWNER TO vista;
+        
+        -- aggregated_transfer$adjustments
+        
+        CREATE TABLE aggregated_transfer$adjustments
+        (
+            id                          BIGINT                  NOT NULL,
+            owner                       BIGINT,
+            value                       BIGINT,
+            seq                         INT,
+                CONSTRAINT aggregated_transfer$adjustments_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE aggregated_transfer$adjustments OWNER TO vista;
+        
+        -- aggregated_transfer$chargebacks
+        
+        CREATE TABLE aggregated_transfer$chargebacks
+        (
+            id                          BIGINT                  NOT NULL,
+            owner                       BIGINT,
+            value                       BIGINT,
+            seq                         INT,
+                CONSTRAINT aggregated_transfer$chargebacks_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE aggregated_transfer$chargebacks OWNER TO vista;
         
         -- apt_unit
         
@@ -278,6 +337,16 @@ BEGIN
                                     ADD COLUMN billing_address_street_number VARCHAR(500),
                                     ADD COLUMN billing_address_suite_number VARCHAR(500);
         
+        -- payment_record
+        
+        ALTER TABLE payment_record  ADD COLUMN aggregated_transfer_discriminator VARCHAR(50),
+                                    ADD COLUMN aggregated_transfer_return_discriminator VARCHAR(50);
+                                    
+        
+        -- payment_record_processing
+        
+        ALTER TABLE payment_record_processing ADD COLUMN aggregated_transfer_discriminator VARCHAR(50);
+        
         
         -- online_application
         
@@ -323,8 +392,14 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- _admin_.admin_pmc_merchant_account_index 
         
-         -- province_policy_node
+        EXECUTE 'UPDATE _admin_.admin_pmc_merchant_account_index as a '
+                ||'SET terminal_id_conv_fee = m.merchant_terminal_id_convenience_fee '
+                ||'FROM '||v_schema_name||'.merchant_account m '
+                ||'WHERE    a.merchant_account_key = m.id '; 
+        
+        -- province_policy_node
         
         EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
                 ||'SET  name = ''Newfoundland'' '
@@ -337,6 +412,25 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.province_policy_node '
                 ||'SET  province = replace(INITCAP(name),'' '','''') ';
         
+        
+        -- aggregated_transfer
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer '
+                ||'SET  id_discriminator = ''EftAggregatedTransfer'' ';
+                
+        -- aggregated_transfer_adjustment
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.aggregated_transfer_adjustment (id,adjustment,ag_id) '
+                ||'(SELECT  nextval(''public.aggregated_transfer_adjustment_seq'') AS id, adjustments, id as ag_id '
+                ||'FROM '||v_schema_name||'.aggregated_transfer '
+                ||'WHERE    adjustments IS NOT NULL)';
+                
+        -- aggregated_transfer$adjustments
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.aggregated_transfer$adjustments (id,owner,value) '
+                ||'(SELECT   nextval(''public.aggregated_transfer$adjustments_seq'') AS id, '
+                ||'         ag_id AS owner, id AS value '
+                ||'FROM '||v_schema_name||'.aggregated_transfer_adjustment)';
         
         -- apt_unit
         
@@ -642,6 +736,12 @@ BEGIN
                 ||'SET  mailing_address_street_name = '
                 ||' TRIM(mailing_address_street_name)||'' ''||INITCAP(TRIM(mailing_address_street_direction)) '
                 ||'WHERE    mailing_address_street_direction IS NOT NULL';
+                
+        -- notes_and_attachments
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.notes_and_attachments '
+                ||'SET owner_discriminator = ''EftAggregatedTransfer'' '
+                ||'WHERE    owner_discriminator = ''AggregatedTransfer'' ';
         
          -- online_application
         
@@ -674,6 +774,21 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.payment_method '
                 ||'SET  billing_address_street_number = ''INVALID'' '
                 ||'WHERE billing_address_street_number IS NULL ';
+                
+        -- payment_record
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_record '
+                ||'SET  aggregated_transfer_discriminator = ''EftAggregatedTransfer'' '
+                ||'WHERE    aggregated_transfer IS NOT NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_record '
+                ||'SET  aggregated_transfer_return_discriminator = ''EftAggregatedTransfer'' '
+                ||'WHERE    aggregated_transfer_return IS NOT NULL';
+                
+        -- payment_record_processing
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_record_processing '
+                ||'SET  aggregated_transfer_discriminator = ''EftAggregatedTransfer'' ';
         
         -- product_v
         
@@ -734,6 +849,14 @@ BEGIN
         ***
         ***     ==========================================================================================================
         **/
+        
+        -- aggregated_transfer
+        
+        ALTER TABLE aggregated_transfer DROP COLUMN adjustments;
+        
+        -- aggregated_transfer_adjustment
+        
+        ALTER TABLE aggregated_transfer_adjustment DROP COLUMN ag_id;
         
         -- apt_unit
         
@@ -882,6 +1005,14 @@ BEGIN
         
         -- foreign keys
         
+        ALTER TABLE aggregated_transfer$adjustments ADD CONSTRAINT aggregated_transfer$adjustments_owner_fk FOREIGN KEY(owner) 
+            REFERENCES aggregated_transfer(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE aggregated_transfer$adjustments ADD CONSTRAINT aggregated_transfer$adjustments_value_fk FOREIGN KEY(value) 
+            REFERENCES aggregated_transfer_adjustment(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE aggregated_transfer$chargebacks ADD CONSTRAINT aggregated_transfer$chargebacks_owner_fk 
+            FOREIGN KEY(owner) REFERENCES aggregated_transfer(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE aggregated_transfer$chargebacks ADD CONSTRAINT aggregated_transfer$chargebacks_value_fk 
+            FOREIGN KEY(value) REFERENCES aggregated_transfer_chargeback(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_building_fk FOREIGN KEY(ils_building) 
             REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE master_online_application ADD CONSTRAINT master_online_application_ils_floorplan_fk FOREIGN KEY(ils_floorplan) 
@@ -891,6 +1022,8 @@ BEGIN
         
         ALTER TABLE aggregated_transfer ADD CONSTRAINT aggregated_transfer_funds_transfer_type_e_ck 
             CHECK ((funds_transfer_type) IN ('Cards', 'DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
+        ALTER TABLE aggregated_transfer ADD CONSTRAINT aggregated_transfer_id_discriminator_ck 
+            CHECK ((id_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
         ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_country_e_ck 
             CHECK ((info_legal_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 
                 'Angola', 'Anguilla', 'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 
@@ -965,7 +1098,25 @@ BEGIN
         ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_tax_type_e_ck CHECK ((tax_type) IN ('Monetary', 'Percentage'));
         ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_status_discriminator_d_ck CHECK ((status_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
         ALTER TABLE legal_status ADD CONSTRAINT legal_status_id_discriminator_ck CHECK ((id_discriminator) IN ('LegalStatus', 'LegalStatusN4'));
+        ALTER TABLE notes_and_attachments ADD CONSTRAINT notes_and_attachments_owner_discriminator_d_ck 
+            CHECK ((owner_discriminator) IN ('ARPolicy', 'AgreementLegalPolicy', 'ApplicationDocumentationPolicy', 'AptUnit', 'AutoPayPolicy', 
+            'AutopayAgreement', 'BackgroundCheckPolicy', 'Building', 'CardsAggregatedTransfer', 'Complex', 'DatesPolicy', 'DepositPolicy', 
+            'EftAggregatedTransfer', 'EmailTemplatesPolicy', 'Employee', 'Floorplan', 'Guarantor', 'IdAssignmentPolicy', 'Landlord', 'Lease', 
+            'LeaseAdjustmentPolicy', 'LeaseBillingPolicy', 'LegalTermsPolicy', 'Locker', 'MaintenanceRequest', 'MaintenanceRequestPolicy', 
+            'MerchantAccount', 'N4Policy', 'OnlineAppPolicy', 'Parking', 'PaymentPostingBatch', 'PaymentRecord', 'PaymentTransactionsPolicy', 
+            'PaymentTypeSelectionPolicy', 'PetPolicy', 'ProductTaxPolicy', 'ProspectPortalPolicy', 'RestrictionsPolicy', 'Tenant', 
+            'TenantInsurancePolicy', 'Vendor', 'YardiInterfacePolicy', 'feature', 'service'));
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_aggregated_transfer_discriminator_d_ck 
+            CHECK ((aggregated_transfer_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_aggregated_transfer_return_discriminator_d_ck 
+            CHECK ((aggregated_transfer_return_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
+        ALTER TABLE payment_record_processing ADD CONSTRAINT payment_record_processing_aggregated_transfer_discr_d_ck 
+            CHECK ((aggregated_transfer_discriminator) IN ('CardsAggregatedTransfer', 'EftAggregatedTransfer'));
 
+        
+        -- not null
+        
+        ALTER TABLE aggregated_transfer ALTER COLUMN id_discriminator SET NOT NULL;
         
         /**
         ***     ====================================================================================================
@@ -975,7 +1126,9 @@ BEGIN
         ***     ====================================================================================================
         **/
         
-        
+        CREATE INDEX aggregated_transfer$adjustments_owner_idx ON aggregated_transfer$adjustments USING btree(owner);
+        CREATE INDEX aggregated_transfer$chargebacks_owner_idx ON aggregated_transfer$chargebacks USING btree(owner);
+
         
         -- billing_arrears_snapshot -GiST index!
         

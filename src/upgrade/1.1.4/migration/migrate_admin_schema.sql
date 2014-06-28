@@ -71,6 +71,12 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
+        -- admin_pmc_merchant_account_index
+        
+        ALTER TABLE admin_pmc_merchant_account_index RENAME COLUMN merchant_terminal_id TO terminal_id;
+        ALTER TABLE admin_pmc_merchant_account_index ADD COLUMN terminal_id_conv_fee VARCHAR(8);
+        
+        
         -- business_information
         
         ALTER TABLE business_information    ADD COLUMN business_address_country VARCHAR(50),
