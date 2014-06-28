@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CKeyField;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -53,9 +52,8 @@ public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransfer> 
         formPanel.append(Location.Left, proto().grossPaymentFee()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().grossPaymentCount()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Left, proto().cardsReconciliationRecordKey(), new CKeyField()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().visaDeposit()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().visaFee()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().visaDeposit()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().visaFee()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().mastercardDeposit()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().mastercardFee()).decorate().componentWidth(120);
