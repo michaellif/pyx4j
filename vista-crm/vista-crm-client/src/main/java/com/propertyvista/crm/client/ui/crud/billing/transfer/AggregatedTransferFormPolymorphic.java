@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
 import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -27,15 +27,37 @@ public class AggregatedTransferFormPolymorphic extends CrmEntityForm<AggregatedT
 
     private static final I18n i18n = I18n.get(AggregatedTransferFormPolymorphic.class);
 
-    private final FormPanel formPanel = new FormPanel(this);
+    private final FormPanel detailsPanel = new FormPanel(this);
 
-    CardsAggregatedTransferForm cardsAggregatedTransferForm;
+    private final CardsAggregatedTransferForm cardsAggregatedTransferForm;
 
-    EftAggregatedTransferForm eftAggregatedTransferForm;
+    private final EftAggregatedTransferForm eftAggregatedTransferForm;
 
-    public AggregatedTransferFormPolymorphic(IForm<AggregatedTransfer> view) {
+    private final Tab returnedPaymentsTab;
+
+    private final Tab rejectedBatchPaymentsTab;
+
+    public AggregatedTransferFormPolymorphic(AggregatedTransferViewerView view) {
         super(AggregatedTransfer.class, view);
-        selectTab(addTab(formPanel, i18n.tr("General")));
+
+        // common data form:
+        selectTab(addTab(detailsPanel, i18n.tr("Details")));
+
+        FormPanel tabPanel = new FormPanel(this);
+        tabPanel.append(Location.Dual, view.getPaymentsListerView().asWidget());
+        addTab(tabPanel, proto().payments().getMeta().getCaption());
+
+        tabPanel = new FormPanel(this);
+        tabPanel.append(Location.Dual, view.getReturnedPaymentsListerView().asWidget());
+        returnedPaymentsTab = addTab(tabPanel, proto().returnedPayments().getMeta().getCaption());
+
+        tabPanel = new FormPanel(this);
+        tabPanel.append(Location.Dual, view.getRejectedBatchPaymentsListerView().asWidget());
+        rejectedBatchPaymentsTab = addTab(tabPanel, proto().rejectedBatchPayments().getMeta().getCaption());
+
+        // poly data forms: 
+        cardsAggregatedTransferForm = new CardsAggregatedTransferForm(view);
+        eftAggregatedTransferForm = new EftAggregatedTransferForm(view);
     }
 
     @Override
@@ -45,18 +67,21 @@ public class AggregatedTransferFormPolymorphic extends CrmEntityForm<AggregatedT
     }
 
     private void setPolimorphicData(AggregatedTransfer value, boolean fireEvent, boolean populate) {
-
-        formPanel.clear();
-        cardsAggregatedTransferForm = null;
-        eftAggregatedTransferForm = null;
+        detailsPanel.clear();
 
         if (value != null) {
             if (value.getInstanceValueClass().equals(CardsAggregatedTransfer.class)) {
-                cardsAggregatedTransferForm = new CardsAggregatedTransferForm((AggregatedTransferViewerView) getParentView());
-                formPanel.append(Location.Dual, cardsAggregatedTransferForm.asWidget());
+
+                detailsPanel.append(Location.Dual, cardsAggregatedTransferForm.asWidget());
+                setTabVisible(returnedPaymentsTab, false);
+                setTabVisible(rejectedBatchPaymentsTab, false);
+
             } else if (value.getInstanceValueClass().equals(EftAggregatedTransfer.class)) {
-                eftAggregatedTransferForm = new EftAggregatedTransferForm((AggregatedTransferViewerView) getParentView());
-                formPanel.append(Location.Dual, eftAggregatedTransferForm);
+
+                detailsPanel.append(Location.Dual, eftAggregatedTransferForm.asWidget());
+                setTabVisible(returnedPaymentsTab, true);
+                setTabVisible(rejectedBatchPaymentsTab, true);
+
             } else {
                 assert false;
             }
@@ -65,10 +90,12 @@ public class AggregatedTransferFormPolymorphic extends CrmEntityForm<AggregatedT
 
     @Override
     protected void onValueSet(boolean populate) {
-        if (cardsAggregatedTransferForm != null) {
-            cardsAggregatedTransferForm.setValue((CardsAggregatedTransfer) getValue(), true, populate);
-        } else if (eftAggregatedTransferForm != null) {
-            eftAggregatedTransferForm.setValue((EftAggregatedTransfer) getValue(), true, populate);
+        super.onValueSet(populate);
+
+        if (getValue().getInstanceValueClass().equals(CardsAggregatedTransfer.class)) {
+            cardsAggregatedTransferForm.setValue((CardsAggregatedTransfer) getValue(), !populate, populate);
+        } else if (getValue().getInstanceValueClass().equals(EftAggregatedTransfer.class)) {
+            eftAggregatedTransferForm.setValue((EftAggregatedTransfer) getValue(), !populate, populate);
         } else {
             assert false;
         }
@@ -78,11 +105,7 @@ public class AggregatedTransferFormPolymorphic extends CrmEntityForm<AggregatedT
     public void onReset() {
         super.onReset();
 
-        if (cardsAggregatedTransferForm != null) {
-            cardsAggregatedTransferForm.reset();
-        }
-        if (eftAggregatedTransferForm != null) {
-            eftAggregatedTransferForm.reset();
-        }
+        cardsAggregatedTransferForm.reset();
+        eftAggregatedTransferForm.reset();
     }
 }

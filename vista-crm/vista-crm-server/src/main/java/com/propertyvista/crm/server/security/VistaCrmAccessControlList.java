@@ -636,15 +636,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new CommunityEventDatasetAccessRule(), CommunityEvent.class);
 
-        if (false) {
-            grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
-            grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), CardsAggregatedTransfer.class);
-            grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), EftAggregatedTransfer.class);
-        } else {
-            grant(VistaDataAccessBehavior.BuildingsAssigned, new EntityPermission(AggregatedTransfer.class, EntityPermission.READ));
-            grant(VistaDataAccessBehavior.BuildingsAssigned, new EntityPermission(CardsAggregatedTransfer.class, EntityPermission.READ));
-            grant(VistaDataAccessBehavior.BuildingsAssigned, new EntityPermission(EftAggregatedTransfer.class, EntityPermission.READ));
-        }
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), CardsAggregatedTransfer.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), EftAggregatedTransfer.class);
 
         // Data Access for Gadgets & Reports
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AptUnitDatasetAccessRule(), AptUnit.class);

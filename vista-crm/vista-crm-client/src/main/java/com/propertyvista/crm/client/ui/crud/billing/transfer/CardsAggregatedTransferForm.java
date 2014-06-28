@@ -58,13 +58,13 @@ public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransfer> 
         formPanel.append(Location.Right, proto().mastercardDeposit()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().mastercardFee()).decorate().componentWidth(120);
 
-        formPanel.h3(proto().payments().getMeta().getCaption());
-        formPanel.append(Location.Dual, view.getPaymentsListerView().asWidget());
-        formPanel.h3(proto().returnedPayments().getMeta().getCaption());
-        formPanel.append(Location.Dual, view.getReturnedPaymentsListerView().asWidget());
-
-        formPanel.h3(proto().rejectedBatchPayments().getMeta().getCaption());
-        formPanel.append(Location.Dual, view.getRejectedBatchPaymentsListerView().asWidget());
+//        formPanel.h3(proto().payments().getMeta().getCaption());
+//        formPanel.append(Location.Dual, view.getPaymentsListerView().asWidget());
+//        formPanel.h3(proto().returnedPayments().getMeta().getCaption());
+//        formPanel.append(Location.Dual, view.getReturnedPaymentsListerView().asWidget());
+//
+//        formPanel.h3(proto().rejectedBatchPayments().getMeta().getCaption());
+//        formPanel.append(Location.Dual, view.getRejectedBatchPaymentsListerView().asWidget());
 
         return formPanel;
 
