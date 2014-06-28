@@ -128,7 +128,12 @@ class CardsReconciliationProcessor {
         at.grossPaymentAmount().setValue(BigDecimal.ZERO);
         at.netAmount().setValue(reconciliationRecord.totalDeposit().getValue());
         at.grossPaymentFee().setValue(reconciliationRecord.totalFee().getValue());
-        // TODO all card type details
+        // all card type details
+
+        at.visaDeposit().setValue(reconciliationRecord.visaDeposit().getValue());
+        at.visaFee().setValue(reconciliationRecord.visaFee().getValue());
+        at.mastercardDeposit().setValue(reconciliationRecord.mastercardDeposit().getValue());
+        at.mastercardFee().setValue(reconciliationRecord.mastercardFee().getValue());
 
         Persistence.service().persist(at);
 
@@ -142,6 +147,8 @@ class CardsReconciliationProcessor {
                     SimpleMessageFormat.format("Merchant {0} deposit {1} does not match transactions total {2}",//
                             reconciliationRecord.merchantTerminalId(), reconciliationRecord.totalDeposit(), at.grossPaymentAmount()));
         }
+
+        // TODO Validate card Types Totals.
     }
 
     private void attachPaymentRecords(CardsAggregatedTransfer at, CardsReconciliationRecord reconciliationRecord) {
