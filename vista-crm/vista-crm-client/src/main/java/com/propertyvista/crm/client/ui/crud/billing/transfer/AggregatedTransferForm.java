@@ -19,14 +19,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class AggregatedTransferForm extends CrmEntityForm<EftAggregatedTransfer> {
+public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
     private static final I18n i18n = I18n.get(AggregatedTransferForm.class);
 
-    public AggregatedTransferForm(IForm<EftAggregatedTransfer> view) {
-        super(EftAggregatedTransfer.class, view);
+    public AggregatedTransferForm(IForm<AggregatedTransfer> view) {
+        super(AggregatedTransfer.class, view);
         createTabs();
     }
 
@@ -40,22 +40,22 @@ public class AggregatedTransferForm extends CrmEntityForm<EftAggregatedTransfer>
 
         formPanel.append(Location.Left, proto().netAmount()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().adjustments()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().previousBalance()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().merchantBalance()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().fundsReleased()).decorate().componentWidth(120);
+//        formPanel.append(Location.Left, proto().previousBalance()).decorate().componentWidth(120);
+//        formPanel.append(Location.Left, proto().merchantBalance()).decorate().componentWidth(120);
+//        formPanel.append(Location.Left, proto().fundsReleased()).decorate().componentWidth(120);
 
         formPanel.append(Location.Left, proto().grossPaymentAmount()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().grossPaymentFee()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().grossPaymentCount()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Right, proto().rejectItemsAmount()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().returnItemsAmount()).decorate().componentWidth(120);
-
-        formPanel.append(Location.Right, proto().rejectItemsFee()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().returnItemsFee()).decorate().componentWidth(120);
-
-        formPanel.append(Location.Right, proto().rejectItemsCount()).decorate().componentWidth(60);
-        formPanel.append(Location.Right, proto().returnItemsCount()).decorate().componentWidth(60);
+//        formPanel.append(Location.Right, proto().rejectItemsAmount()).decorate().componentWidth(120);
+//        formPanel.append(Location.Right, proto().returnItemsAmount()).decorate().componentWidth(120);
+//
+//        formPanel.append(Location.Right, proto().rejectItemsFee()).decorate().componentWidth(120);
+//        formPanel.append(Location.Right, proto().returnItemsFee()).decorate().componentWidth(120);
+//
+//        formPanel.append(Location.Right, proto().rejectItemsCount()).decorate().componentWidth(60);
+//        formPanel.append(Location.Right, proto().returnItemsCount()).decorate().componentWidth(60);
 
         formPanel.h3(proto().payments().getMeta().getCaption());
         formPanel.append(Location.Dual, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
@@ -66,6 +66,5 @@ public class AggregatedTransferForm extends CrmEntityForm<EftAggregatedTransfer>
         formPanel.append(Location.Dual, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
 
         selectTab(addTab(formPanel, i18n.tr("General")));
-
     }
 }

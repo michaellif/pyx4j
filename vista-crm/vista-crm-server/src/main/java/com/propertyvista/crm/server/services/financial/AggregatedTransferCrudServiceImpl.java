@@ -22,12 +22,12 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<EftAggregatedTransfer> implements AggregatedTransferCrudService {
+public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<AggregatedTransfer> implements AggregatedTransferCrudService {
 
     public AggregatedTransferCrudServiceImpl() {
-        super(EftAggregatedTransfer.class);
+        super(AggregatedTransfer.class);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<E
     }
 
     @Override
-    public void cancelTransactions(AsyncCallback<VoidSerializable> callback, EftAggregatedTransfer aggregatedTransferStub) {
+    public void cancelTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub) {
         ServerSideFactory.create(PaymentFacade.class).cancelAggregatedTransfer(aggregatedTransferStub);
         Persistence.service().commit();
         callback.onSuccess(null);

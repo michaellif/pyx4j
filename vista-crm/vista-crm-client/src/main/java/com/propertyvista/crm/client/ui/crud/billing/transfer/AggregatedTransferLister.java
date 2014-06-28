@@ -22,34 +22,27 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class AggregatedTransferLister extends AbstractLister<EftAggregatedTransfer> {
+public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer> {
 
     private static final I18n i18n = I18n.get(AggregatedTransferLister.class);
 
     public AggregatedTransferLister() {
-        super(EftAggregatedTransfer.class, false);
+        super(AggregatedTransfer.class, false);
 
-        setDataTableModel(new DataTableModel<EftAggregatedTransfer>(//@formatter:off
+        setDataTableModel(new DataTableModel<AggregatedTransfer>(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number")).build(), 
                 new MemberColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
                 new MemberColumnDescriptor.Builder(proto().netAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().adjustments(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().previousBalance(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().merchantBalance(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().fundsReleased(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
                 new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(),
-                new MemberColumnDescriptor.Builder(proto().rejectItemsFee()).build(),
-                new MemberColumnDescriptor.Builder(proto().rejectItemsCount()).build(),
-                new MemberColumnDescriptor.Builder(proto().returnItemsAmount()).build(), 
-                new MemberColumnDescriptor.Builder(proto().returnItemsFee()).build(),
-                new MemberColumnDescriptor.Builder(proto().returnItemsCount()).build(),
+                new MemberColumnDescriptor.Builder(proto().grossPaymentFee()).build(),
+                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
+                new MemberColumnDescriptor.Builder(proto().adjustments(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().chargebacks(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(),
                 new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
         ));}//@formatter:on

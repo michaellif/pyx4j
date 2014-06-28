@@ -17,13 +17,13 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 public class PadProcessor {
 
-    void cancelAggregatedTransfer(EftAggregatedTransfer aggregatedTransfer) {
+    void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransfer) {
         Persistence.service().retrieveMember(aggregatedTransfer.rejectedBatchPayments(), AttachLevel.Attached);
         for (PaymentRecord paymentRecord : aggregatedTransfer.rejectedBatchPayments()) {
             if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Queued) {

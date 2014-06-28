@@ -16,10 +16,10 @@ package com.propertyvista.crm.client.ui.crud.billing.transfer;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface AggregatedTransferViewerView extends IViewer<EftAggregatedTransfer> {
+public interface AggregatedTransferViewerView extends IViewer<AggregatedTransfer> {
 
     interface Presenter extends IViewer.Presenter {
 

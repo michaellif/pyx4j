@@ -213,8 +213,10 @@ import com.propertyvista.domain.communication.SystemEndpoint;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.CardsAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -634,7 +636,15 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new CommunityEventDatasetAccessRule(), CommunityEvent.class);
 
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), EftAggregatedTransfer.class);
+        if (false) {
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), CardsAggregatedTransfer.class);
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), EftAggregatedTransfer.class);
+        } else {
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new EntityPermission(AggregatedTransfer.class, EntityPermission.READ));
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new EntityPermission(CardsAggregatedTransfer.class, EntityPermission.READ));
+            grant(VistaDataAccessBehavior.BuildingsAssigned, new EntityPermission(EftAggregatedTransfer.class, EntityPermission.READ));
+        }
 
         // Data Access for Gadgets & Reports
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AptUnitDatasetAccessRule(), AptUnit.class);

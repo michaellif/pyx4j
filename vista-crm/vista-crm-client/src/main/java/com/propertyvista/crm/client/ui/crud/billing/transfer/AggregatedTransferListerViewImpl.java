@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class AggregatedTransferListerViewImpl extends CrmListerViewImplBase<EftAggregatedTransfer> implements AggregatedTransferListerView {
+public class AggregatedTransferListerViewImpl extends CrmListerViewImplBase<AggregatedTransfer> implements AggregatedTransferListerView {
 
     public AggregatedTransferListerViewImpl() {
         setLister(new AggregatedTransferLister());

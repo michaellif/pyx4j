@@ -18,13 +18,13 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.financial.EftAggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
 @SuppressWarnings("serial")
-public class AggregatedTransferDatasetAccessRule implements DatasetAccessRule<EftAggregatedTransfer> {
+public class AggregatedTransferDatasetAccessRule implements DatasetAccessRule<AggregatedTransfer> {
 
     @Override
-    public void applyRule(EntityQueryCriteria<EftAggregatedTransfer> criteria) {
+    public void applyRule(EntityQueryCriteria<AggregatedTransfer> criteria) {
         criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount()._buildings().$().userAccess(), Context.getVisit().getUserVisit()
                 .getPrincipalPrimaryKey()));
     }
