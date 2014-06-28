@@ -179,13 +179,21 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public TO createTO(BO bo) {
-        TO dto = EntityFactory.create(toClass);
-        if (copyPrimaryKey) {
-            dto.setPrimaryKey(bo.getPrimaryKey());
+        TO to;
+        if (bo.isAssignableFrom(boClass)) {
+            to = EntityFactory.create(toClass);
+        } else if (toClass.equals(boClass)) {
+            to = (TO) EntityFactory.create((Class<IEntity>) bo.getObjectClass());
+        } else {
+            throw new Error("polymorphic TO binding not implemented");
         }
-        copyBOtoTO(bo, dto);
-        return dto;
+        if (copyPrimaryKey) {
+            to.setPrimaryKey(bo.getPrimaryKey());
+        }
+        copyBOtoTO(bo, to);
+        return to;
     }
 
     protected boolean retriveDetachedMember(IEntity dboMember) {

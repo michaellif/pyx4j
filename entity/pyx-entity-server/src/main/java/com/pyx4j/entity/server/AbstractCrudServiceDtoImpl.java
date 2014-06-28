@@ -115,12 +115,11 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     public final void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
         if (TODO_DataModelPermissionEnable)
             SecurityController.assertPermission(DataModelPermission.permissionRead(toClass));
-        TO to = EntityFactory.createIdentityStub(toClass, toId);
-        BO bo = retrieve(getBOKey(to), retrieveTarget);
+        BO bo = retrieve(getBOKey(EntityFactory.createIdentityStub(toClass, toId)), retrieveTarget);
         if (bo != null) {
             retrievedSingle(bo, retrieveTarget);
         }
-        copyBOtoTO(bo, to);
+        TO to = createTO(bo);
         enhanceRetrieved(bo, to, retrieveTarget);
         to.setPrimaryKey(getTOKey(bo, to));
         callback.onSuccess(to);
