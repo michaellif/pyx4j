@@ -16,6 +16,7 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
@@ -23,18 +24,18 @@ public class VistaHeathMonitorProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        ServerSideFactory.create(VistaSystemFacade.class).healthMonitor(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
+        ServerSideFactory.create(VistaSystemFacade.class).healthMonitorOperations(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
         return true;
     }
 
     @Override
     public boolean allowExecution(PmcVistaFeatures features) {
-        return false;
+        return true;
     }
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        throw new Error("this should not be called");
+        ServerSideFactory.create(PaymentProcessFacade.class).healthMonitorPmc(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
     }
 
     @Override

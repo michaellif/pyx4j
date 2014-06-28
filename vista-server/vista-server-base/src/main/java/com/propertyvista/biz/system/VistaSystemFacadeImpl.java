@@ -42,9 +42,9 @@ public class VistaSystemFacadeImpl implements VistaSystemFacade {
     }
 
     @Override
-    public void healthMonitor(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+    public void healthMonitorOperations(ExecutionMonitor executionMonitor, LogicalDate forDate) {
         new SystemHealthMonitor(executionMonitor).healthMonitor(forDate);
-        ServerSideFactory.create(PaymentProcessFacade.class).healthMonitor(executionMonitor, forDate);
+        ServerSideFactory.create(PaymentProcessFacade.class).healthMonitorOperations(executionMonitor, forDate);
     }
 
 }

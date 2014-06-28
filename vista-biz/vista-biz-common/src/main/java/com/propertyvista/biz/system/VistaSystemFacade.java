@@ -23,5 +23,5 @@ public interface VistaSystemFacade {
 
     boolean isCommunicationsDisabled();
 
-    void healthMonitor(ExecutionMonitor executionMonitor, LogicalDate forDate);
+    void healthMonitorOperations(ExecutionMonitor executionMonitor, LogicalDate forDate);
 }

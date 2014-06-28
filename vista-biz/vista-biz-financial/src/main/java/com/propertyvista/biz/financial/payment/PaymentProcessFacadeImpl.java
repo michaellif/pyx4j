@@ -113,8 +113,13 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void healthMonitor(ExecutionMonitor executionMonitor, LogicalDate forDate) {
-        new PaymentHealthMonitor(executionMonitor).heathMonitor(forDate);
+    public void healthMonitorOperations(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        new PaymentHealthMonitor(executionMonitor).heathMonitorOperations(forDate);
+    }
+
+    @Override
+    public void healthMonitorPmc(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        new PaymentHealthMonitor(executionMonitor).heathMonitorPmc(forDate);
     }
 
 }

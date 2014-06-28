@@ -120,7 +120,7 @@ public enum PmcProcessType implements Serializable {
     @Translate("ILS Email Feed")
     ilsEmailFeed,
 
-    vistaHeathMonitor(PmcProcessOptions.GlobalOnly, PmcProcessOptions.RunForDay),
+    vistaHeathMonitor(PmcProcessOptions.RunForDay),
 
     // Used for scheduler testing
     test;

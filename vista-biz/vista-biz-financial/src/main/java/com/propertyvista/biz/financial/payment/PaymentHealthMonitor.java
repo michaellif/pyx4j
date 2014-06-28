@@ -41,7 +41,7 @@ class PaymentHealthMonitor {
         this.executionMonitor = executionMonitor;
     }
 
-    void heathMonitor(LogicalDate forDate) {
+    void heathMonitorOperations(LogicalDate forDate) {
         verifyFundsTransfer(forDate);
         verifyCardTransactions(forDate);
     }
@@ -96,25 +96,6 @@ class PaymentHealthMonitor {
                 executionMonitor.addFailedEvent("FundsTransferRecord", instance.amount().getValue());
             }
         }
-
-        // see if caledon created reconciliation report
-        {
-            Date reportSince = DateUtils.addMonths(forDate, -2);
-            Date reportBefore = DateUtils.addDays(forDate, -2);
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.ge(criteria.proto().finalizeDate(), reportSince);
-            criteria.le(criteria.proto().finalizeDate(), reportBefore);
-            criteria.in(criteria.proto().paymentMethod().type(), PaymentType.Echeck, PaymentType.DirectBanking);
-            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Queued,
-                    PaymentRecord.PaymentStatus.Received);
-            criteria.isNull(criteria.proto().aggregatedTransfer());
-            int count = Persistence.service().count(criteria);
-            if (count > 0) {
-                PaymentRecord instance = Persistence.service().retrieve(criteria);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "EFT Payment Records {0} do not have Aggregated Transfer", count);
-                executionMonitor.addFailedEvent("EftAggregatedTransfer", instance.amount().getValue());
-            }
-        }
     }
 
     private void verifyCardTransactions(LogicalDate forDate) {
@@ -134,6 +115,35 @@ class PaymentHealthMonitor {
             }
         }
 
+    }
+
+    public void heathMonitorPmc(LogicalDate forDate) {
+        verifyFundsTransferPmc(forDate);
+        verifyCardTransactionsPmc(forDate);
+    }
+
+    private void verifyCardTransactionsPmc(LogicalDate forDate) {
+        // see if we recived and processed reconciliation report
+        {
+            Date reportSince = DateUtils.addMonths(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -2);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.ge(criteria.proto().finalizeDate(), reportSince);
+            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.in(criteria.proto().paymentMethod().type(), PaymentType.Echeck, PaymentType.DirectBanking);
+            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Queued,
+                    PaymentRecord.PaymentStatus.Received);
+            criteria.isNull(criteria.proto().aggregatedTransfer());
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                PaymentRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "EFT Payment Records {0} do not have Aggregated Transfer", count);
+                executionMonitor.addFailedEvent("EftAggregatedTransfer", instance.amount().getValue());
+            }
+        }
+    }
+
+    private void verifyFundsTransferPmc(LogicalDate forDate) {
         // see if caledon created reconciliation report
         {
             Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-17"); // DateUtils.addMonths(forDate, -2);

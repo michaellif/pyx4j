@@ -45,6 +45,6 @@ public class OperationsAlertLister extends AbstractLister<OperationsAlertDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().namespace(), true), new Sort(proto().resolved(), false));
+        return Arrays.asList(new Sort(proto().created(), true));
     }
 }
