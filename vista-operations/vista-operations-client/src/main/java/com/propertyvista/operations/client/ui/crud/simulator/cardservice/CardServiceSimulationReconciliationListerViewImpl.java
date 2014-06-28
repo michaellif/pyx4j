@@ -36,12 +36,15 @@ public class CardServiceSimulationReconciliationListerViewImpl extends Operation
             super(CardServiceSimulationReconciliationRecord.class, false, true);
             setDataTableModel(new DataTableModel<CardServiceSimulationReconciliationRecord>(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().id()).build(),
+                    new MemberColumnDescriptor.Builder(proto().fileId()).build(),
                     new MemberColumnDescriptor.Builder(proto().date()).build(),
                     new MemberColumnDescriptor.Builder(proto().merchant()).build(),
                     new MemberColumnDescriptor.Builder(proto().totalDeposit()).build(),
                     new MemberColumnDescriptor.Builder(proto().visaDeposit()).build(),
+                    new MemberColumnDescriptor.Builder(proto().visaFee()).build(),
                     new MemberColumnDescriptor.Builder(proto().visaTransactions()).build(),
                     new MemberColumnDescriptor.Builder(proto().mastercardDeposit()).build(),
+                    new MemberColumnDescriptor.Builder(proto().mastercardFee()).build(),
                     new MemberColumnDescriptor.Builder(proto().mastercardTransactions()).build()
             ));//@formatter:on
         }

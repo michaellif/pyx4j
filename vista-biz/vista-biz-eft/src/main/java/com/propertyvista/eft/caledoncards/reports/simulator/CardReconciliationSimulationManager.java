@@ -75,7 +75,6 @@ public class CardReconciliationSimulationManager {
                 records.put(key(transaction), record);
             }
             addTransaction(record, transaction);
-
         }
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -116,15 +115,18 @@ public class CardReconciliationSimulationManager {
         switch (transaction.card().cardType().getValue()) {
         case MasterCard:
             add(record.mastercardDeposit(), transaction.amount().getValue());
+            add(record.mastercardFee(), transaction.convenienceFee().getValue());
             inc(record.mastercardTransactions());
             break;
         case Visa:
         case VisaDebit:
             add(record.visaDeposit(), transaction.amount().getValue());
+            add(record.visaFee(), transaction.convenienceFee().getValue());
             inc(record.visaTransactions());
             break;
         }
         add(record.totalDeposit(), transaction.amount().getValue());
+        add(record.totalFee(), transaction.convenienceFee().getValue());
     }
 
     private void inc(IPrimitive<Integer> total) {
@@ -132,7 +134,9 @@ public class CardReconciliationSimulationManager {
     }
 
     private void add(IPrimitive<BigDecimal> total, BigDecimal value) {
-        total.setValue(total.getValue().add(value));
+        if (value != null) {
+            total.setValue(total.getValue().add(value));
+        }
     }
 
     private void createReportFiles(Collection<CardServiceSimulationReconciliationRecord> records) {
@@ -161,18 +165,41 @@ public class CardReconciliationSimulationManager {
                 merchantTotals.add(merchantTotal);
             }
 
+            if (record.totalFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                CardsReconciliationMerchantTotalRecord merchantTotal = createMerchantTotal(record);
+                merchantTotal.type().setValue(MerchantTotalRecordType.Fees);
+                merchantTotal.debit().setValue(record.totalDeposit().getValue());
+                merchantTotals.add(merchantTotal);
+            }
+
             if (record.visaTransactions().getValue() > 0) {
-                CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
-                cardTotal.type().setValue(CardTotalRecordType.VisaDeposit);
-                cardTotal.credit().setValue(record.visaDeposit().getValue());
-                cardTotals.add(cardTotal);
+                {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.VisaDeposit);
+                    cardTotal.credit().setValue(record.visaDeposit().getValue());
+                    cardTotals.add(cardTotal);
+                }
+                if (record.visaFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.VisaFees);
+                    cardTotal.debit().setValue(record.visaFee().getValue());
+                    cardTotals.add(cardTotal);
+                }
             }
 
             if (record.mastercardTransactions().getValue() > 0) {
-                CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
-                cardTotal.type().setValue(CardTotalRecordType.MastercardDeposit);
-                cardTotal.credit().setValue(record.mastercardDeposit().getValue());
-                cardTotals.add(cardTotal);
+                {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.MastercardDeposit);
+                    cardTotal.credit().setValue(record.mastercardDeposit().getValue());
+                    cardTotals.add(cardTotal);
+                }
+                if (record.mastercardFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.MastercardFees);
+                    cardTotal.debit().setValue(record.mastercardFee().getValue());
+                    cardTotals.add(cardTotal);
+                }
             }
 
         }
