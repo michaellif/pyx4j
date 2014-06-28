@@ -59,5 +59,5 @@ public interface PaymentProcessFacade {
 
     void processDirectDebitRecords(ExecutionMonitor executionMonitor);
 
-    void healthMonitor(ExecutionMonitor executionMonitor);
+    void healthMonitor(ExecutionMonitor executionMonitor, LogicalDate forDate);
 }

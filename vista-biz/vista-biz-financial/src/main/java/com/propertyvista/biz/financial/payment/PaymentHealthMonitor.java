@@ -17,13 +17,15 @@ import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.OperationsAlertFacade;
+import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferBatchProcessingStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
@@ -39,15 +41,15 @@ class PaymentHealthMonitor {
         this.executionMonitor = executionMonitor;
     }
 
-    void heathMonitor() {
-        verifyFundsTransfer();
-        verifyCardTransactions();
+    void heathMonitor(LogicalDate forDate) {
+        verifyFundsTransfer(forDate);
+        verifyCardTransactions(forDate);
     }
 
-    private void verifyFundsTransfer() {
+    private void verifyFundsTransfer(LogicalDate forDate) {
         // UnAcknowledged Files 
         {
-            Date reportSince = DateUtils.addHours(SystemDateManager.getDate(), -6);
+            Date reportSince = DateUtils.addHours(forDate, -6);
             EntityQueryCriteria<FundsTransferFile> criteria = EntityQueryCriteria.create(FundsTransferFile.class);
             criteria.eq(criteria.proto().status(), FundsTransferFile.PadFileStatus.Sent);
             criteria.le(criteria.proto().sent(), reportSince);
@@ -63,7 +65,7 @@ class PaymentHealthMonitor {
 
         // UnPpocessed  FundsTransferBatch Acknowledgment
         {
-            Date reportSince = DateUtils.addHours(SystemDateManager.getDate(), -6);
+            Date reportSince = DateUtils.addHours(forDate, -6);
             EntityQueryCriteria<FundsTransferBatch> criteria = EntityQueryCriteria.create(FundsTransferBatch.class);
             criteria.eq(criteria.proto().padFile().status(), FundsTransferFile.PadFileStatus.Acknowledged);
             criteria.le(criteria.proto().padFile().sent(), reportSince);
@@ -79,7 +81,7 @@ class PaymentHealthMonitor {
 
         // No Reconciliation for 2 days
         {
-            Date reportSince = DateUtils.addDays(SystemDateManager.getDate(), -2);
+            Date reportSince = DateUtils.addDays(forDate, -2);
             EntityQueryCriteria<FundsTransferRecord> criteria = EntityQueryCriteria.create(FundsTransferRecord.class);
             criteria.eq(criteria.proto().padBatch().padFile().status(), FundsTransferFile.PadFileStatus.Acknowledged);
             criteria.le(criteria.proto().padBatch().padFile().sent(), reportSince);
@@ -94,11 +96,30 @@ class PaymentHealthMonitor {
                 executionMonitor.addFailedEvent("FundsTransferRecord", instance.amount().getValue());
             }
         }
+
+        // see if caledon created reconciliation report
+        {
+            Date reportSince = DateUtils.addMonths(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -2);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.ge(criteria.proto().finalizeDate(), reportSince);
+            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.in(criteria.proto().paymentMethod().type(), PaymentType.Echeck, PaymentType.DirectBanking);
+            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared, PaymentRecord.PaymentStatus.Queued,
+                    PaymentRecord.PaymentStatus.Received);
+            criteria.isNull(criteria.proto().aggregatedTransfer());
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                PaymentRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "EFT Payment Records {0} do not have Aggregated Transfer", count);
+                executionMonitor.addFailedEvent("EftAggregatedTransfer", instance.amount().getValue());
+            }
+        }
     }
 
-    private void verifyCardTransactions() {
+    private void verifyCardTransactions(LogicalDate forDate) {
         {
-            Date reportSince = DateUtils.addDays(SystemDateManager.getDate(), -1);
+            Date reportSince = DateUtils.addDays(forDate, -1);
             EntityQueryCriteria<CardTransactionRecord> criteria = EntityQueryCriteria.create(CardTransactionRecord.class);
             criteria.ge(criteria.proto().creationDate(), reportSince);
             int count = Persistence.service().count(criteria);
@@ -110,6 +131,25 @@ class PaymentHealthMonitor {
                     ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "All {0} CardTransaction(s) in last 24 hours failed", count);
                     executionMonitor.addFailedEvent("CardTransactionRecord", instance.amount().getValue());
                 }
+            }
+        }
+
+        // see if caledon created reconciliation report
+        {
+            Date reportSince = com.pyx4j.gwt.server.DateUtils.detectDateformat("2014-06-17"); // DateUtils.addMonths(forDate, -2);
+            Date reportBefore = DateUtils.addDays(forDate, -2);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.ge(criteria.proto().finalizeDate(), reportSince);
+            criteria.le(criteria.proto().finalizeDate(), reportBefore);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
+            criteria.isNull(criteria.proto().aggregatedTransfer());
+            int count = Persistence.service().count(criteria);
+            if (count > 0) {
+                PaymentRecord instance = Persistence.service().retrieve(criteria);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(instance, "Cleared Card Payment Records {0} do not have Aggregated Transfer",
+                        count);
+                executionMonitor.addFailedEvent("CardsAggregatedTransfer", instance.amount().getValue());
             }
         }
     }

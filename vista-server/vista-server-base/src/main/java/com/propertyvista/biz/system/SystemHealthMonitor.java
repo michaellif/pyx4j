@@ -17,6 +17,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
@@ -34,7 +35,7 @@ class SystemHealthMonitor {
         this.executionMonitor = executionMonitor;
     }
 
-    void heathMonitor() {
+    void healthMonitor(LogicalDate forDate) {
         verifyStuckProcesses();
     }
 

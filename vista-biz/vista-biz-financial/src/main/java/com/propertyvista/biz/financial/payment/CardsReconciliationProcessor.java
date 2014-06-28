@@ -151,6 +151,7 @@ class CardsReconciliationProcessor {
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
         criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Cleared);
         criteria.eq(criteria.proto().merchantAccount(), at.merchantAccount());
+        criteria.isNull(criteria.proto().aggregatedTransfer());
         if (reconciliationRecord.convenienceFeeAccount().getValue()) {
             criteria.isNotNull(criteria.proto().convenienceFeeReferenceNumber());
         } else {

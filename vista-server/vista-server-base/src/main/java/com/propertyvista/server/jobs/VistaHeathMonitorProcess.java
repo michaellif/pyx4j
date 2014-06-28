@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.jobs;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.VistaSystemFacade;
@@ -22,7 +23,7 @@ public class VistaHeathMonitorProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        ServerSideFactory.create(VistaSystemFacade.class).healthMonitor(context.getExecutionMonitor());
+        ServerSideFactory.create(VistaSystemFacade.class).healthMonitor(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
         return true;
     }
 

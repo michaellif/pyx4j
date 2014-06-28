@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.system;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.biz.ExecutionMonitor;
 
 public interface VistaSystemFacade {
@@ -21,5 +23,5 @@ public interface VistaSystemFacade {
 
     boolean isCommunicationsDisabled();
 
-    void healthMonitor(ExecutionMonitor executionMonitor);
+    void healthMonitor(ExecutionMonitor executionMonitor, LogicalDate forDate);
 }

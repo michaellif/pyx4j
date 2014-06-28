@@ -16,6 +16,7 @@ package com.propertyvista.biz.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -41,9 +42,9 @@ public class VistaSystemFacadeImpl implements VistaSystemFacade {
     }
 
     @Override
-    public void healthMonitor(ExecutionMonitor executionMonitor) {
-        new SystemHealthMonitor(executionMonitor).heathMonitor();
-        ServerSideFactory.create(PaymentProcessFacade.class).healthMonitor(executionMonitor);
+    public void healthMonitor(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        new SystemHealthMonitor(executionMonitor).healthMonitor(forDate);
+        ServerSideFactory.create(PaymentProcessFacade.class).healthMonitor(executionMonitor, forDate);
     }
 
 }
