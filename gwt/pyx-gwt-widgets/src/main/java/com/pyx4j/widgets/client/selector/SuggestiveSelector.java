@@ -111,6 +111,8 @@ public class SuggestiveSelector<DataType> extends Composite {
 
     private boolean inlineInput;
 
+    private boolean isReadOnly;
+
     /**
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
@@ -124,6 +126,7 @@ public class SuggestiveSelector<DataType> extends Composite {
         this.allowSame = allowSame;
         this.inlineInput = inlineInput;
         this.pageData = pageData;
+        this.isReadOnly = false;
 
         FlowPanel panel = new FlowPanel();
         panel.setStyleName(Styles.SuperSelectorStyle.name());
@@ -238,6 +241,14 @@ public class SuggestiveSelector<DataType> extends Composite {
     public void setInput(String input) {
         inputTextBox.setValue(input);
         onInputChanged(input);
+    }
+
+    public void setReadOnly(boolean value) {
+        isReadOnly = value;
+        inputTextBox.setReadOnly(value);
+        if (popup != null) {
+            popup.setVisible(value);
+        }
     }
 
     /** Produces a newly allocated list of selected items */
@@ -374,6 +385,9 @@ public class SuggestiveSelector<DataType> extends Composite {
     }
 
     private void showSuggestions() {
+        if (isReadOnly) {
+            return;
+        }
         if (popup == null) {
             popup = new SuggestionsPopup<DataType>(this, pageData);
             popup.setPopupPositionAndShow(new PositionCallback() {
