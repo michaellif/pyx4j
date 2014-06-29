@@ -47,7 +47,6 @@ import com.yardi.ws.operations.transactions.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.transactions.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.transactions.Ping;
 import com.yardi.ws.operations.transactions.PingResponse;
-import com.yardi.ws.operations.transactions.TransactionXml_type1;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -262,7 +261,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             String trXml = MarshallUtil.marshall(reversalTransactions);
             log.debug(trXml);
-            TransactionXml_type1 transactionXml = new TransactionXml_type1();
+            com.yardi.ws.operations.transactions.TransactionXml_type0 transactionXml = new com.yardi.ws.operations.transactions.TransactionXml_type0();
             OMElement element = AXIOMUtil.stringToOM(trXml);
             transactionXml.setExtraElement(element);
             request.setTransactionXml(transactionXml);

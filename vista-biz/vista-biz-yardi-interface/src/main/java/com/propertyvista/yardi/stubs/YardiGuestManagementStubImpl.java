@@ -51,7 +51,7 @@ import com.yardi.ws.operations.ils.ImportApplication_Login;
 import com.yardi.ws.operations.ils.ImportApplication_LoginResponse;
 import com.yardi.ws.operations.ils.UnitAvailability_Login;
 import com.yardi.ws.operations.ils.UnitAvailability_LoginResponse;
-import com.yardi.ws.operations.ils.XmlDocument_type0;
+import com.yardi.ws.operations.ils.XmlDocument_type1;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
@@ -389,7 +389,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             String leaseAppXml = MarshallUtil.marshall(leaseApp);
             log.debug(leaseAppXml);
-            XmlDocument_type0 xmlDoc = new XmlDocument_type0();
+            XmlDocument_type1 xmlDoc = new XmlDocument_type1();
             OMElement element = AXIOMUtil.stringToOM(leaseAppXml);
             xmlDoc.setExtraElement(element);
             request.setXmlDocument(xmlDoc);

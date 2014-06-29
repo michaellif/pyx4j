@@ -39,7 +39,6 @@ import com.yardi.ws.operations.transactionsbatch.Ping;
 import com.yardi.ws.operations.transactionsbatch.PingResponse;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
-import com.yardi.ws.operations.transactionsbatch.TransactionXml_type1;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -110,7 +109,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterfaceType.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
-            TransactionXml_type1 transactionXml = new TransactionXml_type1();
+            com.yardi.ws.operations.transactionsbatch.TransactionXml_type0 transactionXml = new com.yardi.ws.operations.transactionsbatch.TransactionXml_type0();
 
             String batchXml = MarshallUtil.marshall(residentTransactions);
             log.debug("{}", batchXml);
