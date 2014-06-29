@@ -186,8 +186,8 @@
         <gwtEnableAssertions>false</gwtEnableAssertions>
 
         <scm.revision></scm.revision>
-	<axis2Version>1.6.2</axis2Version>
-	<jerseyVersion>2.9.1</jerseyVersion>
+	    <axis2Version>1.6.2</axis2Version>
+	    <jerseyVersion>2.9.1</jerseyVersion>
         <wicket.version>1.5.0</wicket.version>
 
         <google.translate.apiKey>AIzaSyB4epMBre3NeR-_1fgKFz3-V6iA1qpfh-M</google.translate.apiKey>
@@ -427,7 +427,7 @@
                 <artifactId>jersey-test-framework-provider-inmemory</artifactId>
                 <version>${jerseyVersion}</version>
             </dependency>
-	    
+
             <dependency>
                 <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-rt</artifactId>
