@@ -140,7 +140,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <reuseForks>true</reuseForks>
-                    <!--argLine>-Djava.awt.headless=true -XX:MaxPermSize=64m -Xms64m -Xmx128m -agentpath:D:\prog\dev\YourKit\bin\win64\yjpagent.dll=disablestacktelemetry,disableexceptiontelemetry,builtinprobes=none,delay=10000</argLine-->
+                    <!--argLine>-Djava.awt.headless=true -Xms64m -Xmx128m -agentpath:D:\prog\dev\YourKit\bin\win64\yjpagent.dll=disablestacktelemetry,disableexceptiontelemetry,builtinprobes=none,delay=10000</argLine-->
                 </configuration>
             </plugin>
 

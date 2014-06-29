@@ -276,7 +276,7 @@
                         <parallel>classes</parallel>
                         <threadCount>${surefire.parallelThreadCount}</threadCount>
                         -->
-                        <argLine>-Djava.awt.headless=true -XX:MaxPermSize=64m -Xms64m -Xmx128m</argLine>
+                        <argLine>-Djava.awt.headless=true -Xms64m -Xmx128m</argLine>
                     </configuration>
                 </plugin>
 
