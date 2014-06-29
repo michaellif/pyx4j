@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -61,7 +60,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
 
     private static final I18n i18n = I18n.get(MessageEditForm.class);
 
-    private FlowPanel searchCriteriaPanel;
+    private FormPanel searchCriteriaPanel;
 
     private Button.ButtonMenuBar subMenu;
 
@@ -72,7 +71,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     public MessageEditForm(IForm<MessageDTO> view) {
         super(MessageDTO.class, view);
         setTabBarVisible(false);
-        actionsButton = new Button(i18n.tr(""));
+        actionsButton = new Button(i18n.tr("Select Recipients"));
         selectTab(addTab(createGeneralForm(), i18n.tr("New message")));
         inheritEditable(true);
         inheritViewable(false);
@@ -83,7 +82,7 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
     public IsWidget createGeneralForm() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.h4("To", actionsButton);
+        formPanel.h4("To");
         subMenu = new Button.ButtonMenuBar();
         subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
             @Override
@@ -151,10 +150,9 @@ public class MessageEditForm extends CrmEntityForm<MessageDTO> {
         }));
 
         actionsButton.setMenu(subMenu);
-        //formPanel.append(Location.Left, actionsButton);
-        searchCriteriaPanel = new FlowPanel();
+        searchCriteriaPanel = new FormPanel(this);
 
-        searchCriteriaPanel.add(createCommunicationEndpointSelector());
+        searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
         formPanel.append(Location.Dual, searchCriteriaPanel);
         formPanel.h4("", actionsButton);
 

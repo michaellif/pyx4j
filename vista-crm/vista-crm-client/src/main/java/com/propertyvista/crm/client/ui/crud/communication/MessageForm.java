@@ -194,7 +194,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         public MessageFolderItem() {
             super(MessageDTO.class, new VistaViewersComponentFactory());
-            actionsButton = new Button(i18n.tr(""));
+            actionsButton = new Button(i18n.tr("Select Recipients"));
             inheritEditable(false);
             inheritViewable(false);
             inheritEnabled(false);
@@ -240,7 +240,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             formPanel.append(Location.Dual, proto().header()).decorate().labelWidth(0).customLabel("").useLabelSemicolon(false).assistantWidget(statusToolBar);
             formPanel.br();
 
-            formPanel.h4("To", actionsButton);
+            formPanel.h4("To");
             subMenu = new Button.ButtonMenuBar();
             subMenu.addItem(new MenuItem(i18n.tr("Tenant"), new Command() {
                 @Override
@@ -309,8 +309,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             actionsButton.setMenu(subMenu);
             searchCriteriaPanel = new FormPanel(this);
-
             searchCriteriaPanel.append(Location.Dual, createCommunicationEndpointSelector());
+            searchCriteriaPanel.h4("", actionsButton);
             formPanel.append(Location.Dual, searchCriteriaPanel);
             formPanel.br();
             formPanel.br();
@@ -557,7 +557,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             if (getValue().isPrototype() || getValue().date() == null || getValue().date().isNull()) {
                 communicationEndpointSelector.removeAll();
                 if (getValue().to().size() > 0) {
-                    communicationEndpointSelector.addAll(getValue().to(), true);
+                    communicationEndpointSelector.addAll(getValue().to(), false);
                 }
                 BoxFolderItemDecorator<DeliveryHandle> d = (BoxFolderItemDecorator<DeliveryHandle>) getParent().getDecorator();
                 d.setExpended(true);
@@ -580,14 +580,16 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
                 subMenu.setVisible(true);
-                //searchCriteriaPanel.setVisible(true);
+                communicationEndpointSelector.setReadOnly(false);
+                actionsButton.setVisible(true);
             } else {
                 setViewable(true);
                 setEditable(false);
                 setEnabled(false);
                 subMenu.setVisible(false);
-                //searchCriteriaPanel.setVisible(false);
+                actionsButton.setVisible(false);
                 communicationEndpointSelector.addAll(getValue().to(), true);
+                communicationEndpointSelector.setReadOnly(true);
                 btnSend.setVisible(false);
                 btnCancel.setVisible(false);
                 btnReply.setVisible(!ClientContext.getUserVisit().getName().equals(getValue().header().sender().getValue())
