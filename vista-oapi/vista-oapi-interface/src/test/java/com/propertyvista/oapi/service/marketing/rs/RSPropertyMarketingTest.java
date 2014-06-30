@@ -16,6 +16,7 @@ package com.propertyvista.oapi.service.marketing.rs;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
 
@@ -23,8 +24,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -32,9 +35,13 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.DayPart;
+import com.propertyvista.domain.tenant.lead.Lead.LeaseTerm;
 import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.FloorplanIO;
 import com.propertyvista.oapi.rs.RSOapiTestBase;
+import com.propertyvista.oapi.service.marketing.model.AppointmentRequest;
 import com.propertyvista.oapi.service.marketing.model.FloorplanAvailability;
 import com.propertyvista.oapi.service.marketing.model.FloorplanList;
 import com.propertyvista.oapi.service.marketing.model.PropertyList;
@@ -136,6 +143,21 @@ public class RSPropertyMarketingTest extends RSOapiTestBase {
     @Test
     public void testRequestAppointment() {
         // in - AppointmentRequest request
+        AppointmentRequest ar = new AppointmentRequest();
+        ar.firstName = "John";
+        ar.lastName = "Smith";
+        ar.email = ar.firstName + "-" + ar.lastName + "-" + SystemDateManager.getTimeMillis() + "@pyx4j.com";
+        ar.leaseTerm = LeaseTerm.months12;
+        ar.propertyId = building.propertyCode().getValue();
+        ar.floorplanId = fp.name().getValue();
+        ar.preferredDate1 = SystemDateManager.getLogicalDate();
+        ar.preferredTime1 = DayPart.Afternoon;
+        target("marketing/requestAppointment").request().post(Entity.xml(ar));
+
+        // retrieve the lead
+        EntityQueryCriteria<Lead> crit = EntityQueryCriteria.create(Lead.class);
+        crit.eq(crit.proto().guests().$().person().email(), ar.email);
+        Assert.assertEquals(1, Persistence.service().query(crit).size());
     }
 
     @Test

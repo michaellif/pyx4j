@@ -34,6 +34,7 @@ import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
+import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 
@@ -114,6 +115,7 @@ public abstract class RSOapiTestBase extends IntegrationTestBase {
         models.add(GLCodeDataModel.class);
         models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
+        models.add(IdAssignmentPolicyDataModel.class);
         return models;
     }
 
