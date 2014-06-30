@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchCrudService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInBatchDepositSlipPrintService;
 import com.propertyvista.crm.rpc.services.financial.MoneyInToolService;
+import com.propertyvista.crm.rpc.services.lease.ac.LeaseConfirmBill;
 import com.propertyvista.crm.rpc.services.lease.ac.LeaseRunBill;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
@@ -47,6 +48,7 @@ public class VistaCrmFinancialAccessControlList extends UIAclBuilder {
 
         //  ---- Actions:
         grant(FinancialFull, new ActionPermission(LeaseRunBill.class));
+        grant(FinancialFull, new ActionPermission(LeaseConfirmBill.class));
 
         // ------ Financial: Money IN
         grant(FinancialMoneyIN, MoneyInBatchDTO.class, ALL);
