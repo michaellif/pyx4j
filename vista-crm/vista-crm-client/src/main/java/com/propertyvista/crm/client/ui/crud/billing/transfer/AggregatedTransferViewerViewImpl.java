@@ -47,7 +47,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
         returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
         rejectedBatchPaymentsLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentRecordLister());
 
-        setForm(new AggregatedTransferFormPolymorphic(this));
+        setForm(new AggregatedTransferForm(this));
 
         // Actions:
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {

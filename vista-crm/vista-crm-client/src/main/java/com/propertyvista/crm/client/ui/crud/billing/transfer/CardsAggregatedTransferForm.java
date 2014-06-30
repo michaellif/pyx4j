@@ -40,31 +40,13 @@ public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransfer> 
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Left, proto().paymentDate()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().status()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().merchantAccount()).decorate().componentWidth(200);
-        formPanel.append(Location.Left, proto().fundsTransferType()).decorate().componentWidth(200);
+        formPanel.append(Location.Dual, proto().cardsReconciliationRecordKey()).decorate().componentWidth(120);
 
-        formPanel.append(Location.Left, proto().netAmount()).decorate().componentWidth(120);
-//        formPanel.append(Location.Left, proto().adjustments()).decorate().componentWidth(120);
-
-        formPanel.append(Location.Left, proto().grossPaymentAmount()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().grossPaymentFee()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().grossPaymentCount()).decorate().componentWidth(120);
-
-        formPanel.append(Location.Right, proto().visaDeposit()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().visaFee()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().visaDeposit()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().visaFee()).decorate().componentWidth(120);
 
         formPanel.append(Location.Right, proto().mastercardDeposit()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().mastercardFee()).decorate().componentWidth(120);
-
-//        formPanel.h3(proto().payments().getMeta().getCaption());
-//        formPanel.append(Location.Dual, view.getPaymentsListerView().asWidget());
-//        formPanel.h3(proto().returnedPayments().getMeta().getCaption());
-//        formPanel.append(Location.Dual, view.getReturnedPaymentsListerView().asWidget());
-//
-//        formPanel.h3(proto().rejectedBatchPayments().getMeta().getCaption());
-//        formPanel.append(Location.Dual, view.getRejectedBatchPaymentsListerView().asWidget());
 
         return formPanel;
 
