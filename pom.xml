@@ -678,7 +678,7 @@
                         <configuration>
                         </configuration>
                         <reports>
-                            <~--report>javadoc</report --~>
+                            <~-~-report>javadoc</report -~->
                         </reports>
                     </reportSet>
                     <reportSet>
