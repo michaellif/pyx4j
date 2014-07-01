@@ -662,7 +662,7 @@
                     <linkOnly>true</linkOnly>
                 </configuration>
             </plugin>
-
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -678,7 +678,7 @@
                         <configuration>
                         </configuration>
                         <reports>
-                            <!--report>javadoc</report -->
+                            <~--report>javadoc</report --~>
                         </reports>
                     </reportSet>
                     <reportSet>
@@ -691,7 +691,7 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
