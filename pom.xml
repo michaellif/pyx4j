@@ -429,8 +429,8 @@
                 <inherited>false</inherited>
                 <configuration>
                     <quiet>true</quiet>
-                    <~-- For Linux 64-bit --~>
-                    <~--maxmemory>256m</maxmemory--~>
+                    <~-~- For Linux 64-bit -~->
+                    <~-~-maxmemory>256m</maxmemory-~->
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -438,7 +438,7 @@
                         <configuration>
                         </configuration>
                         <reports>
-                            <~--report>javadoc</report--~>
+                            <~-~-report>javadoc</report-~->
                         </reports>
                     </reportSet>
                     <reportSet>
