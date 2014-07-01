@@ -303,6 +303,7 @@
                 <version>3.3</version>
             </plugin>
 
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -310,8 +311,6 @@
                 <inherited>false</inherited>
                 <configuration>
                     <quiet>true</quiet>
-                    <!-- For Linux 64-bit -->
-                    <!--maxmemory>256m</maxmemory-->
                 </configuration>
                 <executions>
                     <execution>
@@ -323,6 +322,7 @@
                     </execution>
                 </executions>
             </plugin>
+-->
         </plugins>
     </build>
 
@@ -421,6 +421,7 @@
                 </configuration>
             </plugin>
             -->
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -428,8 +429,8 @@
                 <inherited>false</inherited>
                 <configuration>
                     <quiet>true</quiet>
-                    <!-- For Linux 64-bit -->
-                    <!--maxmemory>256m</maxmemory-->
+                    <~-- For Linux 64-bit --~>
+                    <~--maxmemory>256m</maxmemory--~>
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -437,7 +438,7 @@
                         <configuration>
                         </configuration>
                         <reports>
-                            <!--report>javadoc</report-->
+                            <~--report>javadoc</report--~>
                         </reports>
                     </reportSet>
                     <reportSet>
@@ -450,7 +451,7 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
