@@ -24,11 +24,11 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.folder.FolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
@@ -75,48 +75,46 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     public MerchantAccountForm(IForm<PmcMerchantAccountDTO> view) {
         super(PmcMerchantAccountDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
+        FormPanel formPanel = new FormPanel(this);
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().created(), new FieldDecoratorBuilder(10).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().updated(), new FieldDecoratorBuilder(10).build()));
+        formPanel.append(Location.Left, proto().merchantAccount().created()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().merchantAccount().updated()).decorate().componentWidth(120);
 
-        content.setWidget(++row, 0,
-                inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().status(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))).decorate();
+        formPanel.append(Location.Right, proto().merchantAccount().status()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().terminalId(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().paymentsStatus(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().terminalId()).decorate();
+        formPanel.append(Location.Right, proto().merchantAccount().paymentsStatus()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().merchantTerminalIdConvenienceFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantTerminalIdConvenienceFee()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().bankId(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().invalid(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().bankId()).decorate().componentWidth(90);
+        formPanel.append(Location.Right, proto().merchantAccount().invalid()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().branchTransitNumber(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().chargeDescription(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().branchTransitNumber()).decorate().componentWidth(90);
+        formPanel.append(Location.Right, proto().merchantAccount().chargeDescription()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().accountNumber(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().accountName(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().accountNumber()).decorate().componentWidth(180);
+        formPanel.append(Location.Right, proto().merchantAccount().accountName()).decorate();
 
-        content.setWidget(++row, 0, 2, inject(proto().merchantAccount().operationsNotes(), new FieldDecoratorBuilder(15, true).build()));
+        formPanel.append(Location.Dual, proto().merchantAccount().operationsNotes()).decorate();
 
-        content.setH2(++row, 0, 2, i18n.tr("Payment Types Activation"));
+        formPanel.h2(i18n.tr("Payment Types Activation"));
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedEcheck(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedDirectBanking(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().setup().acceptedEcheck()).decorate().componentWidth(90);
+        formPanel.append(Location.Right, proto().merchantAccount().setup().acceptedDirectBanking()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedCreditCard(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedCreditCardConvenienceFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().setup().acceptedCreditCard()).decorate().componentWidth(90);
+        formPanel.append(Location.Right, proto().merchantAccount().setup().acceptedCreditCardConvenienceFee()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().merchantAccount().setup().acceptedInterac(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(row, 1, inject(proto().merchantAccount().setup().acceptedCreditCardVisaDebit(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().merchantAccount().setup().acceptedInterac()).decorate().componentWidth(90);
+        formPanel.append(Location.Right, proto().merchantAccount().setup().acceptedCreditCardVisaDebit()).decorate();
 
-        content.setH2(++row, 0, 2, i18n.tr("Assigned Buildings"));
-        content.setWidget(++row, 0, 2, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));
+        formPanel.h2(i18n.tr("Assigned Buildings"));
+        formPanel.append(Location.Dual, proto().assignedBuildings(), new AssignedBuildingsFolder());
 
         setTabBarVisible(false);
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
     }
 
     @Override
