@@ -16,6 +16,9 @@ package com.propertyvista.operations.client.resources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 import com.pyx4j.widgets.client.images.ButtonImages;
 
@@ -40,6 +43,10 @@ public interface OperationsImages extends ClientBundle {
 
     @Source("search.png")
     ImageResource search();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("menu.png")
+    ImageResource menu();
 
     @Source("add.png")
     ImageResource add();

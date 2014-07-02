@@ -6,16 +6,27 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
+import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.theme.SiteViewTheme;
+import com.propertyvista.operations.client.resources.OperationsImages;
 
 public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
@@ -27,24 +38,44 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private Presenter presenter;
 
-    private HTML greetings;
+    private Button userButton;
 
-    private Anchor logout;
+    private Button loginButton;
 
-    private Anchor login;
+    private LayoutType layoutType;
 
-    private Anchor account;
+    private Button sideMenuButton;
+
+    private boolean loggedIn = false;
 
     public HeaderViewImpl() {
-        // layout designed after Crm.HeaderViewImpl to reuse SiteViewTheme
         setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
 
-        Widget w;
-        add(w = createLogoContainer());
+        {//Left Toolbar
+            Toolbar toolbar = new Toolbar();
+            sideMenuButton = new Button(OperationsImages.INSTANCE.menu(), new Command() {
+                @Override
+                public void execute() {
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
+                }
+            });
+            toolbar.addItem(sideMenuButton);
+            toolbar.addItem(createLogoContainer());
+            add(toolbar);
+        }
 
-        add(w = createActionsContainer());
-        w.getElement().getStyle().setProperty("right", "0");
-        w.getElement().getStyle().setProperty("top", "0");
+        add(createActionsContainer());
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
     }
 
     private Widget createLogoContainer() {
@@ -68,53 +99,39 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private Widget createActionsContainer() {
         Toolbar toolbar = new Toolbar();
+        toolbar.getElement().getStyle().setProperty("right", "0");
+        toolbar.getElement().getStyle().setProperty("top", "0");
+
         toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
-        greetings = new HTML("");
-        greetings.getElement().getStyle().setDisplay(Display.INLINE);
-        greetings.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        greetings.getElement().getStyle().setMarginRight(1, Unit.EM);
+        userButton = new Button("");
 
-        logout = new Anchor(null);
-        logout.addClickHandler(new ClickHandler() {
+        ButtonMenuBar userButtonMenu = new ButtonMenuBar();
+        userButton.setMenu(userButtonMenu);
+
+        userButtonMenu.addItem(new MenuItem(i18n.tr("LogOut"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.logout();
             }
-        });
-        logout.ensureDebugId("logout");
-        logout.setHTML(i18n.tr("LogOut"));
-        logout.setVisible(false);
-        logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        }));
 
-        login = new Anchor(null);
-        login.addClickHandler(new ClickHandler() {
+        userButtonMenu.addItem(new MenuItem(i18n.tr("Account"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                presenter.showAccount();
+            }
+        }));
+
+        loginButton = new Button(i18n.tr("Log In"), new Command() {
+            @Override
+            public void execute() {
                 presenter.login();
             }
         });
 
-        login.ensureDebugId("login");
-        login.setHTML(i18n.tr("Log In"));
-        login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-
-        account = new Anchor(null);
-        account.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showAccount();
-            }
-        });
-
-        account.ensureDebugId("account");
-        account.setHTML(i18n.tr("Account"));
-        account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
-
-        toolbar.addItem(greetings);
-        toolbar.addItem(account);
-        toolbar.addItem(login);
-        toolbar.addItem(logout);
+        toolbar.addItem(userButton);
+        toolbar.addItem(loginButton);
 
         return toolbar.asWidget();
     }
@@ -126,17 +143,40 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     @Override
     public void onLogedOut() {
-        logout.setVisible(false);
-        account.setVisible(false);
-        login.setVisible(true);
-        greetings.setHTML("");
+        this.loggedIn = false;
+
+        userButton.setVisible(false);
+        userButton.setTextLabel("");
+
+        loginButton.setVisible(true);
     }
 
     @Override
     public void onLogedIn(String userName) {
-        logout.setVisible(true);
-        login.setVisible(false);
-        account.setVisible(true);
-        greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
+        this.loggedIn = true;
+
+        loginButton.setVisible(false);
+
+        userButton.setVisible(true);
+        userButton.setTextLabel(userName);
+
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        this.layoutType = layoutType;
+        calculateActionsState();
+    }
+
+    private void calculateActionsState() {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletPortrait:
+            sideMenuButton.setVisible(loggedIn);
+            break;
+        default:
+            sideMenuButton.setVisible(false);
+            break;
+        }
     }
 }
