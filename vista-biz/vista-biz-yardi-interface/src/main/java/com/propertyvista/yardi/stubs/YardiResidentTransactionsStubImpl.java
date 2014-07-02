@@ -277,6 +277,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 YardiLicense.handleVendorLicenseError(messages);
                 if (messages.hasErrorMessage(unableToPostTerminalMessages)) {
                     throw new UnableToPostTerminalYardiServiceException(messages.getPrettyErrorMessageText());
+                } else if (messages.hasErrorMessage(errorMessage_NoAccess)) {
+                    throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                 } else {
                     throw new YardiServiceException(messages.toString());
                 }
@@ -372,8 +374,6 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
                     if (messages.hasErrorMessage(errorMessage_NoAccess)) {
-                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
-                    } else if (messages.hasErrorMessage(errorMessage_NoAccess)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     } else {
                         YardiLicense.handleVendorLicenseError(messages);
