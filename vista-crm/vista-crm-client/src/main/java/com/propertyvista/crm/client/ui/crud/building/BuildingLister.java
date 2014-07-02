@@ -38,6 +38,7 @@ public class BuildingLister extends AbstractLister<BuildingDTO> {
             new MemberColumnDescriptor.Builder(proto().complexPrimary(), false).build(),
             new MemberColumnDescriptor.Builder(proto().externalId(), false).build(),
             new MemberColumnDescriptor.Builder(proto().suspended(), false).build(),
+            new MemberColumnDescriptor.Builder(proto().updated(), false).build(),
             new MemberColumnDescriptor.Builder(proto().propertyManager(), true).build(),
             
             new MemberColumnDescriptor.Builder(proto().info().name(), true).build(),
