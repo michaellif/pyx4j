@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
@@ -32,13 +32,12 @@ public class PmcFeaturesForm extends CForm<PmcVistaFeatures> {
 
     @Override
     protected IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().countryOfOperation(), new FieldDecoratorBuilder(25).build()));
-        content.setWidget(++row, 0, inject(proto().onlineApplication(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().yardiIntegration(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().yardiMaintenance(), new FieldDecoratorBuilder(5).build()));
-        content.setWidget(++row, 0, inject(proto().tenantSureIntegration(), new FieldDecoratorBuilder(5).build()));
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Left, proto().countryOfOperation()).decorate();
+        formPanel.append(Location.Left, proto().onlineApplication()).decorate().componentWidth(90);
+        formPanel.append(Location.Left, proto().yardiIntegration()).decorate().componentWidth(90);
+        formPanel.append(Location.Left, proto().yardiMaintenance()).decorate().componentWidth(90);
+        formPanel.append(Location.Left, proto().tenantSureIntegration()).decorate().componentWidth(90);
 
         final CComponent<?, Boolean, ?> yardiIntegrationSwitch = get(proto().yardiIntegration());
         final CComponent<?, Boolean, ?> yardiMaintenanceSwitch = get(proto().yardiMaintenance());
@@ -48,7 +47,7 @@ public class PmcFeaturesForm extends CForm<PmcVistaFeatures> {
                 yardiMaintenanceSwitch.setEnabled(Boolean.TRUE.equals(event.getValue()));
             }
         });
-        return content;
+        return formPanel;
     }
 
     @Override

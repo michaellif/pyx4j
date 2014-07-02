@@ -16,9 +16,9 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.domain.DemoData;
@@ -32,20 +32,20 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
     public PmcFormNewItem(IForm<PmcDTO> view) {
         super(PmcDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().dnsName(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().firstName(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().lastName(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().email(), new FieldDecoratorBuilder(15).build()));
-        content.setWidget(++row, 0, inject(proto().onboardingUser().password(), new FieldDecoratorBuilder(15).build()));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Left, proto().dnsName()).decorate();
+        formPanel.append(Location.Left, proto().onboardingUser().firstName()).decorate();
+        formPanel.append(Location.Left, proto().onboardingUser().lastName()).decorate();
+        formPanel.append(Location.Left, proto().onboardingUser().email()).decorate();
+        formPanel.append(Location.Left, proto().onboardingUser().password()).decorate();
 
-        content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().features(), new PmcFeaturesForm()));
+        formPanel.h1(proto().features().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().features(), new PmcFeaturesForm());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(formPanel, i18n.tr("General")));
+        setTabBarVisible(false);
     }
 
     @Override
