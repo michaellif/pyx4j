@@ -158,6 +158,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public Integer tableIdentityOffset(String entityShortName) {
+        return null;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionOracle(32, null);
     }

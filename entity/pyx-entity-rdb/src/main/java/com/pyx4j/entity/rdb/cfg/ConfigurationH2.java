@@ -163,6 +163,11 @@ public abstract class ConfigurationH2 implements Configuration {
     }
 
     @Override
+    public Integer tableIdentityOffset(String entityShortName) {
+        return null;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return null;
     }

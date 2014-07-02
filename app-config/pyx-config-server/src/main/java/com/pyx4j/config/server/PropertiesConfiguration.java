@@ -49,8 +49,12 @@ public class PropertiesConfiguration {
         return properties;
     }
 
+    private String getKey(String key) {
+        return (prefix == null) ? key : prefix + "." + key;
+    }
+
     public String getValue(String key) {
-        return properties.get((prefix == null) ? key : prefix + "." + key);
+        return properties.get(getKey(key));
     }
 
     public String getValue(String key, String defaultValue) {
@@ -69,6 +73,18 @@ public class PropertiesConfiguration {
         } else {
             return Integer.valueOf(value.trim()).intValue();
         }
+    }
+
+    public Map<String, Integer> getIntegerValues(String propertyPrefix) {
+        Map<String, Integer> m = new HashMap<>();
+        String keyPrefix = getKey(propertyPrefix) + ".";
+        for (String key : properties.keySet()) {
+            if (key.startsWith(keyPrefix)) {
+                String keyShort = key.substring(keyPrefix.length());
+                m.put(keyShort, getIntegerValue(propertyPrefix + "." + keyShort, 0));
+            }
+        }
+        return m;
     }
 
     public int getSecondsValue(String key, int defaultValue) {
@@ -163,4 +179,5 @@ public class PropertiesConfiguration {
         }
         return m;
     }
+
 }

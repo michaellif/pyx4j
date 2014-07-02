@@ -106,6 +106,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
+    public Integer tableIdentityOffset(String entityShortName) {
+        return properties.tableIdentityOffset.get(entityShortName);
+    }
+
+    @Override
     public Ddl ddl() {
         return properties.ddl;
     }

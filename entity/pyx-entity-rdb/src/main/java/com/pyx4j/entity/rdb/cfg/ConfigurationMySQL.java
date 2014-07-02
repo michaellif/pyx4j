@@ -161,6 +161,11 @@ public abstract class ConfigurationMySQL implements Configuration {
     }
 
     @Override
+    public Integer tableIdentityOffset(String entityShortName) {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return ConfigurationToString.toString(this);
     }

@@ -175,6 +175,14 @@ public interface Configuration extends IPersistenceConfiguration {
      */
     public int tablesIdentityOffset();
 
+    /**
+     * Allow to change Sequence START WITH for specific Entity/Table
+     * 
+     * @param entityShortName
+     * @return initial Sequence value
+     */
+    public Integer tableIdentityOffset(String entityShortName);
+
     public List<String> dbInitializationSqls();
 
     /**
