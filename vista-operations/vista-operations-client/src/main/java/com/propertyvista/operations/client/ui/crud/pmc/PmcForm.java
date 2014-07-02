@@ -19,7 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.core.EntityFactory;
@@ -27,10 +27,10 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.prime.form.FieldDecoratorBuilder;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Anchor;
@@ -103,23 +103,22 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().getValue(false));
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    private IsWidget createGeneralTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("General"));
+        formPanel.h1(i18n.tr("General"));
 
-        content.setWidget(++row, 0, inject(proto().updated(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().updated()).decorate();
+        formPanel.append(Location.Right, proto().created()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().status(), new CLabel<String>(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().namespace(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().status(), new CLabel<String>()).decorate();
+        formPanel.append(Location.Right, proto().namespace()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().name(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().dnsName(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().name()).decorate();
+        formPanel.append(Location.Right, proto().dnsName()).decorate();
 
-        content.setWidget(++row, 0, 2, inject(proto().vistaCrmUrl(), new CLabel<String>(), new FieldDecoratorBuilder(true).build()));
-        ((CField) get(proto().vistaCrmUrl())).setNavigationCommand(new Command() {
+        formPanel.append(Location.Dual, proto().vistaCrmUrl(), new CLabel<String>()).decorate();
+        ((CField<?, ?>) get(proto().vistaCrmUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().vistaCrmUrl().getValue();
@@ -135,8 +134,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setWidget(++row, 0, 2, inject(proto().residentPortalUrl(), new CLabel<String>(), new FieldDecoratorBuilder(true).build()));
-        ((CField) get(proto().residentPortalUrl())).setNavigationCommand(new Command() {
+        formPanel.append(Location.Dual, proto().residentPortalUrl(), new CLabel<String>()).decorate();
+        ((CField<?, ?>) get(proto().residentPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().residentPortalUrl().getValue();
@@ -152,8 +151,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setWidget(++row, 0, 2, inject(proto().prospectPortalUrl(), new CLabel<String>(), new FieldDecoratorBuilder(true).build()));
-        ((CField) get(proto().prospectPortalUrl())).setNavigationCommand(new Command() {
+        formPanel.append(Location.Dual, proto().prospectPortalUrl(), new CLabel<String>()).decorate();
+        ((CField<?, ?>) get(proto().prospectPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().prospectPortalUrl().getValue();
@@ -169,19 +168,18 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().features().countryOfOperation(), new FieldDecoratorBuilder().build()));
+        formPanel.h1(proto().features().getMeta().getCaption());
+        formPanel.append(Location.Left, proto().features().countryOfOperation()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().features().onlineApplication(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().features().onlineApplication()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().features().yardiIntegration(), new FieldDecoratorBuilder().build()));
-        content.setWidget(row, 1, inject(proto().features().yardiMaintenance(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().features().yardiIntegration()).decorate();
+        formPanel.append(Location.Right, proto().features().yardiMaintenance()).decorate();
 
-        content.setWidget(++row, 0, inject(proto().features().tenantSureIntegration(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().features().tenantSureIntegration()).decorate();
 
-        content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
-        content.setWidget(++row, 0, 2, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        formPanel.h1(proto().dnsNameAliases().getMeta().getCaption());
+        formPanel.append(Location.Dual, proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable()));
 
         final CComponent<?, Boolean, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
         final CComponent<?, Boolean, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
@@ -191,46 +189,44 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 yardiMaintenanceSwitch.setEnabled(Boolean.TRUE.equals(event.getValue()));
             }
         });
-        return content;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createOnboardingMerchantAccountsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        panel.setWidget(0, 0, 2, onboardingMerchantAccountsLister = new MerchantAccountsLister());
-        return panel;
+    private IsWidget createOnboardingMerchantAccountsTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, onboardingMerchantAccountsLister = new MerchantAccountsLister());
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createEquifaxlTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    private IsWidget createEquifaxlTab() {
+        FormPanel formPanel = new FormPanel(this);
 
-        int row = -1;
+        formPanel.h1(i18n.tr("Equifax Fee Quote"));
+        formPanel.append(Location.Dual, proto().equifaxFee(), new EquifaxFeeQuoteForm(false));
 
-        content.setH1(++row, 0, 2, i18n.tr("Equifax Fee Quote"));
-        content.setWidget(++row, 0, 2, inject(proto().equifaxFee(), new EquifaxFeeQuoteForm(false)));
+        formPanel.h1(i18n.tr("Equifax"));
+        formPanel.append(Location.Left, proto().equifaxInfo().status()).decorate();
 
-        content.setH1(++row, 0, 2, i18n.tr("Equifax"));
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().status(), new FieldDecoratorBuilder().build()));
-
-        content.setWidget(row, 1, inject(proto().equifaxInfo().equifaxSignUpFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().equifaxInfo().equifaxSignUpFee()).decorate();
         get(proto().equifaxInfo().equifaxSignUpFee()).setViewable(true);
 
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().reportType(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().equifaxInfo().reportType()).decorate();
 
-        content.setWidget(row, 1, inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Right, proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).decorate();
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
         CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         memberNumber.setFormatter(new PasswordIdentityFormat());
         memberNumber.setParser(new PasswordIdentityParser(memberNumber));
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().memberNumber(), memberNumber, new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().equifaxInfo().memberNumber(), memberNumber).decorate();
 
         CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         securityCode.setFormatter(new PasswordIdentityFormat());
         securityCode.setParser(new PasswordIdentityParser(securityCode));
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().securityCode(), securityCode, new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().equifaxInfo().securityCode(), securityCode).decorate();
 
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().customerCode(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().customerReferenceNumber(), new FieldDecoratorBuilder().build()));
+        formPanel.append(Location.Left, proto().equifaxInfo().customerCode()).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().customerReferenceNumber()).decorate();
 
         approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
         approvalLink.addClickHandler(new ClickHandler() {
@@ -239,42 +235,37 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.EquifaxApproval().formViewerPlace(getValue().getPrimaryKey()));
             }
         });
-        content.setWidget(++row, 0, 2, approvalLink);
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formPanel.append(Location.Dual, approvalLink);
 
-        content.setH1(++row, 0, 2, i18n.tr("Equifax Usage Limits"));
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().limit().dailyReports(), new FieldDecoratorBuilder().build()));
-        content.setWidget(++row, 0, inject(proto().equifaxInfo().limit().dailyRequests(), new FieldDecoratorBuilder().build()));
+        formPanel.h1(i18n.tr("Equifax Usage Limits"));
+        formPanel.append(Location.Left, proto().equifaxInfo().limit().dailyReports()).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().limit().dailyRequests()).decorate();
 
-        return content;
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createYardiTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = -1;
-        content.setWidget(++row, 0, 2, inject(proto().yardiCredentials(), new YardiCredentialFolder()));
-        return content;
+    private IsWidget createYardiTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, proto().yardiCredentials(), new YardiCredentialFolder());
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createFundsTransferTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = 0;
-        content.setH2(row, 0, 1, i18n.tr("Default"));
-        content.setH2(row, 1, 1, i18n.tr("Override"));
-        ++row;
-        content.setWidget(row, 0, 1, inject(proto().defaultPaymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class)));
+    private IsWidget createFundsTransferTab() {
+        FormPanel formPanel = new FormPanel(this);
+
+        formPanel.h2(i18n.tr("Default"));
+        formPanel.append(Location.Dual, proto().defaultPaymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class));
         get(proto().defaultPaymentFees()).setViewable(true);
-        content.setWidget(row, 1, 1, inject(proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class)));
 
-        return content;
+        formPanel.h2(i18n.tr("Override"));
+        formPanel.append(Location.Dual, proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class));
+
+        return formPanel;
     }
 
-    private TwoColumnFlexFormPanel createDirectDebitTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-        int row = 0;
-        content.setWidget(++row, 0, 2, directDebitRecordLister = new DirectDebitRecordLister(false));
-
-        return content;
+    private IsWidget createDirectDebitTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, directDebitRecordLister = new DirectDebitRecordLister(false));
+        return formPanel;
     }
 }
