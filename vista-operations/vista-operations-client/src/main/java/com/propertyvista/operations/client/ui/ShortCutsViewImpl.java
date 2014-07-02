@@ -18,7 +18,6 @@ import java.util.Iterator;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,18 +36,14 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
 
     private ShortCutsPresenter presenter;
 
-    private final FlowPanel shortcutsList;
+    private final FlowPanel shortcutsListPanel;
 
     public ShortCutsViewImpl() {
         super();
         setStyleName(SiteViewTheme.StyleName.SiteViewExtra.name());
 
-        HTML shortcutsTitle = new HTML("Shortcuts");
-        shortcutsTitle.setStyleName(SiteViewTheme.StyleName.SiteViewExtraTitle.name());
-        add(shortcutsTitle);
-
-        shortcutsList = new FlowPanel();
-        add(shortcutsList);
+        shortcutsListPanel = new FlowPanel();
+        add(shortcutsListPanel);
 
         setHeight("100%");
 
@@ -61,16 +56,16 @@ public class ShortCutsViewImpl extends FlowPanel implements ShortCutsView {
 
     @Override
     public void updateShortcutFolder(CrudAppPlace place, IEntity value) {
-        for (Iterator<Widget> it = shortcutsList.iterator(); it.hasNext();) {
+        for (Iterator<Widget> it = shortcutsListPanel.iterator(); it.hasNext();) {
             ShortcutItem item = (ShortcutItem) it.next();
             if (item.getPlace().equals(place)) {
                 it.remove();
             }
         }
-        while (shortcutsList.getWidgetCount() >= MAX_ITEMS) {
-            remove(shortcutsList.getWidgetCount() - 1);
+        while (shortcutsListPanel.getWidgetCount() >= MAX_ITEMS) {
+            remove(shortcutsListPanel.getWidgetCount() - 1);
         }
-        shortcutsList.insert(new ShortcutItem(place, value), 0);
+        shortcutsListPanel.insert(new ShortcutItem(place, value), 0);
     }
 
     private class NavigItem extends SimplePanel {

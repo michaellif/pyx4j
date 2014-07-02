@@ -17,6 +17,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.ResponsiveLayoutPanel.DisplayType;
 import com.pyx4j.site.client.ui.layout.backoffice.BackOfficeLayoutPanel;
@@ -32,12 +33,14 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class OperationsRootPane extends RootPane<BackOfficeLayoutPanel> {
 
+    private static final I18n i18n = I18n.get(OperationsRootPane.class);
+
     public static final int HEADER_HEIGHT = 50;
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public OperationsRootPane() {
-        super(new BackOfficeLayoutPanel(null, null));
+        super(new BackOfficeLayoutPanel(i18n.tr("Shortcuts"), null));
 
         asWidget().setHeaderHeight(HEADER_HEIGHT);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
