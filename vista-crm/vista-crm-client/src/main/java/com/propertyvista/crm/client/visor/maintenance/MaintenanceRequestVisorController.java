@@ -84,7 +84,6 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
     @Override
     public void show() {
         lister.populate();
-        visor.setCaption(i18n.tr("Maintenance Requests"));
         getParentView().showVisor(visor);
     }
 }

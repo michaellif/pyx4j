@@ -42,6 +42,8 @@ public class MoneyInCandidateSearchVisorView extends AbstractVisorPane {
     public MoneyInCandidateSearchVisorView(MoneyInCandidateSearchViewController controller, ListerDataSource<MoneyInCandidateDTO> dataSource) {
         super(controller);
 
+        setCaption(i18n.tr("Select Lease(s)"));
+
         candidateLister = new MoneyInCandidateLister();
         candidateLister.setDataSource(dataSource);
         setContentPane(candidateLister);

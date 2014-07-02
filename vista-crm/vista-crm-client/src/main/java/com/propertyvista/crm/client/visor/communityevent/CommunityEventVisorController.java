@@ -50,7 +50,6 @@ public class CommunityEventVisorController extends AbstractVisorController {
         visor.populate(new Command() {
             @Override
             public void execute() {
-                visor.setCaption(i18n.tr("Community Events"));
                 getParentView().showVisor(visor);
             }
         });

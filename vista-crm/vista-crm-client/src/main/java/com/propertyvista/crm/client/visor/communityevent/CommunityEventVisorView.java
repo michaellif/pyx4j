@@ -32,8 +32,8 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
@@ -56,6 +56,8 @@ public class CommunityEventVisorView extends AbstractVisorPane {
 
     public CommunityEventVisorView(CommunityEventVisorController controller) {
         super(controller);
+
+        setCaption(i18n.tr("Community Events"));
 
         form = new CommunityEventForm();
         form.init();

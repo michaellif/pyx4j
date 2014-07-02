@@ -57,7 +57,6 @@ public class PreauthorizedPaymentsVisorController extends AbstractVisorControlle
         visor.populate(new Command() {
             @Override
             public void execute() {
-                visor.setCaption(i18n.tr("Setup Pre-Authorized Payments"));
                 getParentView().showVisor(visor);
             }
         });

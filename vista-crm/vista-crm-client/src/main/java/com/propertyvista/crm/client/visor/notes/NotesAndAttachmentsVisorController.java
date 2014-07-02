@@ -50,7 +50,6 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
         visor.populate(new Command() {
             @Override
             public void execute() {
-                visor.setCaption(i18n.tr("Notes & Attachments"));
                 getParentView().showVisor(visor);
             }
         });

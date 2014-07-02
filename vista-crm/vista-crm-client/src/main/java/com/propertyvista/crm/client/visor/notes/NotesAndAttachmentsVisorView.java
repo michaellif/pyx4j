@@ -75,8 +75,11 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
     public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorController controller) {
         super(controller);
 
+        setCaption(i18n.tr("Notes & Attachments"));
+
         form = new NotesAndAttachmentsForm();
         form.init();
+
         SimplePanel contentPane = new SimplePanel();
         contentPane.getElement().getStyle().setMargin(6, Unit.PX);
         contentPane.setWidget(form.asWidget());
