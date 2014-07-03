@@ -36,7 +36,7 @@ BEGIN TRANSACTION;
                 pad_reconciliation_debit_record_key = NULL,
                 payment_status = 'Returned',
                 last_status_change_date = '30-JUNE-2014',
-                finalize_date = '30-JUNE-2014'
+                finalize_date = '30-JUNE-2014',
                 transaction_error_message = '900 EDIT REJECT'
         WHERE   id = 52682;
        
