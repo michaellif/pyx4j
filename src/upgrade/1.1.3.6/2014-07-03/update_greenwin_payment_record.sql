@@ -40,6 +40,8 @@ BEGIN TRANSACTION;
                 transaction_error_message = '900 EDIT REJECT'
         WHERE   id = 52682;
        
-        
+        UPDATE _admin_.funds_reconciliation_record_record
+        SET     processing_status = TRUE
+        WHERE   id = 50286;
         
 COMMIT;
