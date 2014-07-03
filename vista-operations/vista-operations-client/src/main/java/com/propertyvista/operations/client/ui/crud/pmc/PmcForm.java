@@ -101,8 +101,12 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         if (!isEditable() & getValue().getPrimaryKey() != null) {
             Pmc listerPmcContext = EntityFactory.createIdentityStub(Pmc.class, getValue().getPrimaryKey());
+
             onboardingMerchantAccountsLister.setParentPmc(listerPmcContext);
             onboardingMerchantAccountsLister.obtain(0);
+
+            cardTransactionRecordLister.setParentPmc(listerPmcContext);
+            cardTransactionRecordLister.obtain(0);
 
             directDebitRecordLister.setParentPmc(listerPmcContext);
             directDebitRecordLister.obtain(0);
