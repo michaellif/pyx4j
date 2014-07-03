@@ -59,12 +59,12 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     protected void onLeaseApprovalSuccess(Lease lease, Status leaseStatus) {
-        // N/A - internal impl only
+        // N/A - internal implementation only
     }
 
     @Override
     protected void ensureLeaseUniqness(Lease lease) {
-        // N/A - internal impl only
+        // N/A - internal implementation only
     }
 
     @Override
@@ -75,9 +75,8 @@ public class LeaseYardiApplicationManager extends LeaseAbstractManager {
 
     @Override
     public Lease activate(Lease leaseId) {
-        // approve, newly created leases:
-        super.approve(leaseId, null, null);
-        return super.activate(leaseId);
+        // N/A - internal implementation only
+        return Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
     }
 
     @Override

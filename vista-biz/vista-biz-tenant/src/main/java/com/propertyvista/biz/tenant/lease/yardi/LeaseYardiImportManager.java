@@ -52,26 +52,12 @@ public class LeaseYardiImportManager extends LeaseAbstractManager {
 
     @Override
     protected void onLeaseApprovalSuccess(Lease lease, Status leaseStatus) {
-        // N/A - internal impl only
+        // N/A - internal implementation only
     }
 
     @Override
     protected void ensureLeaseUniqness(Lease lease) {
-        // N/A - internal impl only
-    }
-
-    @Override
-    public Lease activate(Lease leaseId) {
-        // approve, newly created leases:
-        super.approve(leaseId, null, null);
-        return super.activate(leaseId);
-    }
-
-    @Override
-    public Lease approve(Lease leaseId, Employee decidedBy, String decisionReason) {
-        super.approve(leaseId, decidedBy, decisionReason);
-        // activate, newly created leases:
-        return activate(leaseId);
+        // N/A - internal implementation only
     }
 
     @Override

@@ -397,7 +397,7 @@ public class YardiLeaseProcessor {
         new TenantMerger(executionMonitor).createTenants(yardiCustomers, lease.currentTerm());
 
         lease = leaseFacade.persist(lease);
-        leaseFacade.activate(lease);
+        leaseFacade.approve(lease, null, null);
         Persistence.service().retrieve(lease);
 
         log.debug("lease {} created for unit {}", lease.leaseId().getValue(), lease.unit().getStringView());

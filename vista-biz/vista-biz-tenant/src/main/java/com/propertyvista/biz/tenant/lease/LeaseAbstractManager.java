@@ -443,6 +443,7 @@ public abstract class LeaseAbstractManager {
         while (cycle.billingCycleStartDate().getValue().before(now)) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
+
         return lease;
     }
 
