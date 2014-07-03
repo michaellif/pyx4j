@@ -41,4 +41,4 @@ BEGIN TRANSACTION;
     
 COMMIT;
 
-DROP FUNCTION rename_suspended_buildings;
+DROP FUNCTION rename_suspended_buildings();
