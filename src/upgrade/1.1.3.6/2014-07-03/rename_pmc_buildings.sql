@@ -130,6 +130,7 @@ BEGIN TRANSACTION;
     
 COMMIT;
 
+/*
 -- metcap
 
 BEGIN TRANSACTION;
@@ -149,6 +150,8 @@ BEGIN TRANSACTION;
 
     
 COMMIT;
+
+*/
 
 -- sterling
 
