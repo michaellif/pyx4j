@@ -349,6 +349,7 @@ class CreditCardProcessor {
 
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         final CardTransactionRecord transactionRecord = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew,
                 new Executable<CardTransactionRecord, RuntimeException>() {
@@ -358,6 +359,7 @@ class CreditCardProcessor {
                         transactionRecord.amount().setValue(amount);
                         transactionRecord.cardType().setValue(cardType);
                         transactionRecord.merchantTerminalId().setValue(merchantTerminalId);
+                        transactionRecord.pmc().set(pmc);
                         Persistence.service().persist(transactionRecord);
                         return transactionRecord;
                     }

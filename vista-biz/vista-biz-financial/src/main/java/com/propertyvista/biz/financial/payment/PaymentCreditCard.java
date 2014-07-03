@@ -30,9 +30,11 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.OperationsAlertFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.server.TaskRunner;
 
@@ -48,6 +50,8 @@ class PaymentCreditCard {
         } else {
             merchantTerminalId = account.merchantTerminalIdConvenienceFee().getValue();
         }
+
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         final CardTransactionRecord transactionRecord = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew,
                 new Executable<CardTransactionRecord, RuntimeException>() {
@@ -66,6 +70,7 @@ class PaymentCreditCard {
                                             paymentRecord.convenienceFeeReferenceNumber().getValue()));
                             Validate.isEquals(transactionRecord.amount().getValue(), transactionRecord.amount().getValue(), "Convenience Fee Reference");
                         }
+                        transactionRecord.pmc().set(pmc);
                         transactionRecord.paymentTransactionId().setValue(
                                 ServerSideFactory.create(CreditCardFacade.class).getTransactionreferenceNumber(ReferenceNumberPrefix.RentPayments,
                                         paymentRecord.id()));
