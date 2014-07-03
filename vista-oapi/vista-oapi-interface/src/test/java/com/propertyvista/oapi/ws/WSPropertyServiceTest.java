@@ -29,7 +29,7 @@ public class WSPropertyServiceTest extends WSOapiTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        publish(WSPropertyService.class);
+        publish(WSPropertyServiceImpl.class);
     }
 
     @Test

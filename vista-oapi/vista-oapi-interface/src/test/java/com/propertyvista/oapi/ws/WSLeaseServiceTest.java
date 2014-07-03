@@ -28,7 +28,7 @@ public class WSLeaseServiceTest extends WSOapiTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        publish(WSLeaseService.class);
+        publish(WSLeaseServiceImpl.class);
     }
 
     @Test

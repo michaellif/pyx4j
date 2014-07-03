@@ -47,6 +47,9 @@ public class WSPropertySearchCriteria {
 
     public Set<BuildingAmenity.Type> amenities;
 
+    public WSPropertySearchCriteria() {
+    }
+
     public WSPropertySearchCriteria( //
             String city, String province, //
             BedroomChoice minBeds, BedroomChoice maxBeds, //
@@ -76,7 +79,9 @@ public class WSPropertySearchCriteria {
         criteria.maxBaths().setValue(maxBaths);
         criteria.minPrice().setValue(minPrice);
         criteria.maxPrice().setValue(maxPrice);
-        criteria.amenities().addAll(amenities);
+        if (amenities != null) {
+            criteria.amenities().addAll(amenities);
+        }
         return criteria;
     }
 }
