@@ -15,6 +15,9 @@ package com.propertyvista.eft.mock.efttransport;
 
 import com.propertyvista.test.mock.MockEvent;
 
+/**
+ * Reject or Return if record was already reconciled.
+ */
 public class ScheduledResponseReconciliation extends MockEvent<ScheduledResponseReconciliation.Handler> {
 
     public final String transactionId;

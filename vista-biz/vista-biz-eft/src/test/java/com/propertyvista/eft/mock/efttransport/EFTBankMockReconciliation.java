@@ -29,13 +29,23 @@ import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationSum
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferRecord;
 import com.propertyvista.operations.domain.eft.caledoneft.MerchantReconciliationStatus;
 import com.propertyvista.operations.domain.eft.caledoneft.TransactionReconciliationStatus;
+import com.propertyvista.test.mock.MockEventBus;
 
-class EFTBankMockReconciliation {
+class EFTBankMockReconciliation implements ScheduledResponseReconciliation.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
-    EFTBankMockReconciliation() {
+    private final Map<String, ScheduledResponseReconciliation> transactionsScheduled = new HashMap<>();
 
+    EFTBankMockReconciliation() {
+        MockEventBus.addHandler(ScheduledResponseReconciliation.class, this);
+    }
+
+    @Override
+    public void scheduleTransactionReconciliationResponse(ScheduledResponseReconciliation event) {
+        log.debug("schedule transaction reject in Reconciliation for transactionId:{}", event.transactionId);
+        transactionsScheduled.put(event.transactionId, event);
+        EFTBankMock.instance().addReconciliationResponse(event.transactionId);
     }
 
     FundsReconciliationFile createReconciliationFile(List<FundsTransferRecord> records) {
@@ -54,7 +64,8 @@ class EFTBankMockReconciliation {
         return reconciliationFile;
     }
 
-    private FundsReconciliationSummary getSummary(FundsReconciliationFile reconciliationFile, Map<String, FundsReconciliationSummary> byMID, String merchantTerminalId) {
+    private FundsReconciliationSummary getSummary(FundsReconciliationFile reconciliationFile, Map<String, FundsReconciliationSummary> byMID,
+            String merchantTerminalId) {
         FundsReconciliationSummary summary = byMID.get(merchantTerminalId);
         if (summary == null) {
             summary = EntityFactory.create(FundsReconciliationSummary.class);
@@ -78,7 +89,18 @@ class EFTBankMockReconciliation {
         record.transactionId().setValue(padRecord.transactionId().getValue());
         record.amount().setValue(padRecord.amount().getValue());
 
-        record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
+        ScheduledResponseReconciliation reject = transactionsScheduled.get(padRecord.transactionId().getValue());
+        if (reject == null) {
+            record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
+        } else {
+            if (EFTBankMock.instance().hadReconciliation(padRecord)) {
+                record.reconciliationStatus().setValue(TransactionReconciliationStatus.RETURNED);
+            } else {
+                record.reconciliationStatus().setValue(TransactionReconciliationStatus.REJECTED);
+            }
+            record.reasonCode().setValue(reject.reasonCode);
+            record.reasonText().setValue(reject.reasonText);
+        }
 
         summary.records().add(record);
 

@@ -23,6 +23,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.propertyvista.biz.system.YardiPropertyNoAccessException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.beans.Properties;
@@ -76,13 +77,24 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         propertyManagers.clear();
     }
 
-    PropertyManager getExistingPropertyManager(String propertyId) {
+    PropertyManager getExistingPropertyManagerSetup(String propertyId) {
         PropertyManager propertyManager = propertyManagers.get(propertyId);
         if (propertyManager == null) {
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
         if (propertyManager.mockFeatures.isBlockAccess()) {
-            throw new RuntimeException("Access disabled for " + propertyId);
+            throw new RuntimeException("Invalid or no access to Yardi Property " + propertyId);
+        }
+        return propertyManager;
+    }
+
+    PropertyManager getExistingPropertyManagerRuntime(String propertyId) throws YardiServiceException {
+        PropertyManager propertyManager = propertyManagers.get(propertyId);
+        if (propertyManager == null) {
+            throw new RuntimeException("Property '" + propertyId + "' not found");
+        }
+        if (propertyManager.mockFeatures.isBlockAccess()) {
+            throw new YardiPropertyNoAccessException("Invalid or no access to Yardi Property " + propertyId);
         }
         return propertyManager;
     }
@@ -99,12 +111,12 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         return properties;
     }
 
-    public MarketingSources getMarketingSources(String propertyId) {
+    public MarketingSources getMarketingSources(String propertyId) throws YardiServiceException {
         MarketingSources marketingSources = new MarketingSources();
 
         PropertyMarketingSources propertyMarketingSources = new PropertyMarketingSources();
 
-        PropertyManager propertyManager = getExistingPropertyManager(propertyId);
+        PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
 
         propertyMarketingSources.setPropertyCode(propertyManager.getPropertyId());
 
@@ -112,28 +124,28 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         return marketingSources;
     }
 
-    public ResidentTransactions getAllResidentTransactions(String propertyId) {
-        return getExistingPropertyManager(propertyId).getAllResidentTransactions();
+    public ResidentTransactions getAllResidentTransactions(String propertyId) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getAllResidentTransactions();
     }
 
-    public ResidentTransactions getResidentTransactionsForTenant(String propertyId, String tenantId) {
-        return getExistingPropertyManager(propertyId).getResidentTransactionsForTenant(tenantId);
+    public ResidentTransactions getResidentTransactionsForTenant(String propertyId, String tenantId) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getResidentTransactionsForTenant(tenantId);
     }
 
-    public ResidentTransactions getAllLeaseCharges(String propertyId) {
-        return getExistingPropertyManager(propertyId).getAllLeaseCharges();
+    public ResidentTransactions getAllLeaseCharges(String propertyId) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getAllLeaseCharges();
     }
 
-    public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId) {
-        return getExistingPropertyManager(propertyId).getLeaseChargesForTenant(tenantId);
+    public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getLeaseChargesForTenant(tenantId);
     }
 
-    public RentableItems getRentableItems(String propertyId) {
-        return getExistingPropertyManager(propertyId).getRentableItems();
+    public RentableItems getRentableItems(String propertyId) throws YardiServiceException {
+        return getExistingPropertyManagerRuntime(propertyId).getRentableItems();
     }
 
-    public long openReceiptBatch(String propertyId) {
-        PropertyManager propertyManager = getExistingPropertyManager(propertyId);
+    public long openReceiptBatch(String propertyId) throws YardiServiceException {
+        PropertyManager propertyManager = getExistingPropertyManagerRuntime(propertyId);
         if (propertyManager.mockFeatures.isBlockBatchOpening()) {
             throw new RuntimeException("BatchOpening disabled for " + propertyId);
         }
@@ -162,12 +174,12 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         openBatches.remove(batchId);
     }
 
-    public void importResidentTransactions(ResidentTransactions reversalTransactions) {
+    public void importResidentTransactions(ResidentTransactions reversalTransactions) throws YardiServiceException {
         for (com.yardi.entity.resident.Property rtProperty : reversalTransactions.getProperty()) {
             for (RTCustomer rtCustomer : rtProperty.getRTCustomer()) {
                 for (Transactions transaction : rtCustomer.getRTServiceTransactions().getTransactions()) {
-                    getExistingPropertyManager(transaction.getPayment().getDetail().getPropertyPrimaryID())
-                            .importResidentTransactions(transaction.getPayment());
+                    getExistingPropertyManagerRuntime(transaction.getPayment().getDetail().getPropertyPrimaryID()).importResidentTransactions(
+                            transaction.getPayment());
                 }
             }
         }
@@ -187,49 +199,49 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     @Override
     public void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event) {
         TransactionChargeUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateTransactionCharge(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateTransactionCharge(updater);
     }
 
     @Override
     public void addOrUpdateRtCustomer(RtCustomerUpdateEvent event) {
         RtCustomerUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateRtCustomer(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateRtCustomer(updater);
     }
 
     @Override
     public void addOrUpdateCoTenant(CoTenantUpdateEvent event) {
         CoTenantUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateCoTenant(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateCoTenant(updater);
     }
 
     @Override
     public void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateLeaseCharge(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateLeaseCharge(updater);
     }
 
     @Override
     public void removeLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).removeLeaseCharge(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).removeLeaseCharge(updater);
     }
 
     @Override
     public void unitTransferSimulation(UnitTransferSimulatorEvent event) {
         UnitTransferSimulator updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).unitTransferSimulation(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).unitTransferSimulation(updater);
     }
 
     @Override
     public void addOrUpdateRentableItemType(RentableItemTypeUpdateEvent event) {
         RentableItemTypeUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateRentableItemType(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).addOrUpdateRentableItemType(updater);
     }
 
     @Override
     public void removeRentableItemType(RentableItemTypeUpdateEvent event) {
         RentableItemTypeUpdater updater = event.getUpdater();
-        getExistingPropertyManager(updater.getPropertyID()).removeRentableItemType(updater);
+        getExistingPropertyManagerSetup(updater.getPropertyID()).removeRentableItemType(updater);
     }
 
 }

@@ -36,9 +36,9 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
 
     private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
-    private final Map<String, ScheduledResponseAckTransaction> transactionsScheduled = new HashMap<String, ScheduledResponseAckTransaction>();
+    private final Map<String, ScheduledResponseAckTransaction> transactionsScheduled = new HashMap<>();
 
-    private final Map<String, ScheduledResponseAckMerchant> merchantScheduled = new HashMap<String, ScheduledResponseAckMerchant>();
+    private final Map<String, ScheduledResponseAckMerchant> merchantScheduled = new HashMap<>();
 
     EFTBankMockAck() {
         MockEventBus.addHandler(ScheduledResponseAckTransaction.class, this);

@@ -14,8 +14,10 @@
 package com.propertyvista.eft.mock.efttransport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +63,7 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     private final List<FundsTransferRecord> unprocessedRecords = new ArrayList<FundsTransferRecord>();
 
-    private final List<FundsTransferRecord> reconciliationRecords = new ArrayList<FundsTransferRecord>();
+    private final Map<String, FundsTransferRecord> reconciliationRecords = new HashMap<>();
 
     private final EFTBankMockAck acknowledgment = new EFTBankMockAck();
 
@@ -81,6 +83,12 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     void addAcknowledgedRecord(FundsTransferRecord padDebitRecord) {
         log.debug("Acknowledged transactionId:{}", padDebitRecord.transactionId().getValue());
+        unprocessedRecords.add(padDebitRecord);
+    }
+
+    void addReconciliationResponse(String transactionId) {
+        FundsTransferRecord padDebitRecord = reconciliationRecords.get(transactionId);
+        log.debug("Queued RETURN for transactionId:{}", padDebitRecord.transactionId().getValue());
         unprocessedRecords.add(padDebitRecord);
     }
 
@@ -127,13 +135,19 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
             log.debug("No unprocessed records for companyId {} ", companyId);
             return null;
         } else {
-            reconciliationRecords.addAll(records);
             FundsReconciliationFile rec = reconciliation.createReconciliationFile(records);
-            //TODO
+            for (FundsTransferRecord r : records) {
+                reconciliationRecords.put(r.transactionId().getValue(), r);
+            }
+            //TODO ?
             rec.fundsTransferType().setValue(records.get(0).padBatch().padFile().fundsTransferType().getValue());
             DataDump.dumpToDirectory("eft", "reconciliation", rec);
             return rec;
         }
+    }
+
+    boolean hadReconciliation(FundsTransferRecord record) {
+        return reconciliationRecords.containsKey(record.transactionId().getValue());
     }
 
     @Override

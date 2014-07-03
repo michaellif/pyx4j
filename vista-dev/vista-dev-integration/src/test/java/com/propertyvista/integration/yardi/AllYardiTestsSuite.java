@@ -19,11 +19,12 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ //
 //
-        PaymentPostingCreditCardYardiTest.class,//
+PaymentPostingCreditCardYardiTest.class,//
         PaymentPostingCheckYardiTest.class,//
         PaymentBatchSingleBuildingCreditCardYardiTest.class, //
         PaymentBatchSingleBuildingEcheckYardiTest.class, //
         PaymentBatchThreeBuildingYardiTest.class, //
+        PaymentReturnEcheckYardiTest.class, //
         PreauthorizedPaymentChangeReviewYardiTest.class, //
         PreauthorizedPaymentProcessYardiTest.class, //
         PreauthorizedPaymentRenewTest.class, //

@@ -15,8 +15,7 @@ package com.propertyvista.integration.yardi;
 
 import java.math.BigDecimal;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
