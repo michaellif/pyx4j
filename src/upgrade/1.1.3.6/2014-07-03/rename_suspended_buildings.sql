@@ -26,7 +26,8 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.building '
                 ||'SET  property_code = ''!''||property_code '
-                ||'WHERE    suspended ';
+                ||'WHERE    suspended '
+                ||'AND  property_code ~ ''^!'' ';
     
     END LOOP;
         
