@@ -17,6 +17,7 @@ import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
@@ -37,6 +38,8 @@ public interface PmcViewerView extends IViewer<PmcDTO> {
         void runProcess(PmcProcessType pmcProcessType, ScheduleDataDTO date);
 
         ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource();
+
+        ListerDataSource<CardTransactionRecord> getCardTransactionRecordsSource();
 
         ListerDataSource<DirectDebitRecord> getDirectDebitRecordsSource();
     }

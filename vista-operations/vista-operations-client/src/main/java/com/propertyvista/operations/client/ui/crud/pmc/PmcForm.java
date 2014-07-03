@@ -45,6 +45,9 @@ import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords.CardTransactionRecordLister;
+import com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords.DirectDebitRecordLister;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
@@ -56,6 +59,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     private static final I18n i18n = I18n.get(PmcForm.class);
 
     private MerchantAccountsLister onboardingMerchantAccountsLister;
+
+    private CardTransactionRecordLister cardTransactionRecordLister;
 
     private DirectDebitRecordLister directDebitRecordLister;
 
@@ -69,11 +74,16 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         addTab(createEquifaxlTab(), i18n.tr("Equifax"));
         addTab(createYardiTab(), i18n.tr("Yardi"));
         addTab(createFundsTransferTab(), i18n.tr("Funds Transfer"));
+        setTabEnabled(addTab(createCardTransactionTab(), i18n.tr("Card Transaction Records")), !isEditable());
         setTabEnabled(addTab(createDirectDebitTab(), i18n.tr("Direct Debit Records")), !isEditable());
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
         this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
+    }
+
+    public void setCardTransactionRecordsSource(ListerDataSource<CardTransactionRecord> cardTransactionRecordsDataSource) {
+        this.cardTransactionRecordLister.setDataSource(cardTransactionRecordsDataSource);
     }
 
     public void setDirectDebitRecordsSource(ListerDataSource<DirectDebitRecord> directDebitRecordsDataSource) {
@@ -266,6 +276,12 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     private IsWidget createDirectDebitTab() {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Dual, directDebitRecordLister = new DirectDebitRecordLister(false));
+        return formPanel;
+    }
+
+    private IsWidget createCardTransactionTab() {
+        FormPanel formPanel = new FormPanel(this);
+        formPanel.append(Location.Dual, cardTransactionRecordLister = new CardTransactionRecordLister(false));
         return formPanel;
     }
 }

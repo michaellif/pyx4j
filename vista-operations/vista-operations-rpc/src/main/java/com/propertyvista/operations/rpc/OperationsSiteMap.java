@@ -96,6 +96,10 @@ public class OperationsSiteMap implements SiteMap {
 
     public static class FundsTransfer extends AppPlace {
 
+        @PlaceProperties(navigLabel = "Card Transaction Records")
+        public static class CardTransactionRecord extends CrudAppPlace {
+        }
+
         @PlaceProperties(navigLabel = "Direct Debit Records")
         public static class DirectDebitRecord extends CrudAppPlace {
         }

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.pmc;
+package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,32 +24,33 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
+public class CardTransactionRecordLister extends AbstractLister<CardTransactionRecord> {
 
-    public DirectDebitRecordLister(boolean addPmcColumn) {
-        super(DirectDebitRecord.class, false, false);
+    public CardTransactionRecordLister(boolean addPmcColumn) {
+        super(CardTransactionRecord.class, false, false);
 
         if (addPmcColumn) {
-            setDataTableModel(new DataTableModel<DirectDebitRecord>(//@formatter:off                
+            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off                
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                 new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
+                new MemberColumnDescriptor.Builder(proto().cardType()).build(),
                 new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().customerName()).build(),
-                new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
+                new MemberColumnDescriptor.Builder(proto().feeAmount()).build(),
+                new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
+                new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
+                new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build()
             ));//@formatter:on
         } else {
-            setDataTableModel(new DataTableModel<DirectDebitRecord>(//@formatter:off                
-                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
+            setDataTableModel(new DataTableModel<CardTransactionRecord>(//@formatter:off                
+                    new MemberColumnDescriptor.Builder(proto().cardType()).build(),
                     new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().customerName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
+                    new MemberColumnDescriptor.Builder(proto().feeAmount()).build(),
+                    new MemberColumnDescriptor.Builder(proto().paymentTransactionId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().saleResponseCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().feeResponseCode()).build()
             ));//@formatter:on
         }
 

@@ -7,19 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-31
+ * Created on 2013-07-30
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
+package com.propertyvista.operations.rpc.services;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public class DirectDebitRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitRecord> implements DirectDebitRecordListerView {
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-    public DirectDebitRecordListerViewImpl() {
-        setLister(new DirectDebitRecordLister(true));
-    }
-
+public interface PmcCardTransactionRecordCrudService extends AbstractCrudService<CardTransactionRecord> {
 }

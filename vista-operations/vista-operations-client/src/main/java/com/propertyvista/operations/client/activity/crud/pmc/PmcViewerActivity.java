@@ -32,12 +32,14 @@ import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.services.PmcCardTransactionRecordCrudService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
@@ -124,6 +126,12 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
     public ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
         return new ListerDataSource<PmcMerchantAccountDTO>(PmcMerchantAccountDTO.class,
                 GWT.<AbstractListService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
+    }
+
+    @Override
+    public ListerDataSource<CardTransactionRecord> getCardTransactionRecordsSource() {
+        return new ListerDataSource<CardTransactionRecord>(CardTransactionRecord.class,
+                GWT.<AbstractListService<CardTransactionRecord>> create(PmcCardTransactionRecordCrudService.class));
     }
 
     @Override

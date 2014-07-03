@@ -59,6 +59,7 @@ public class NavigViewImpl extends Composite implements NavigView {
         {//Funds Transfer
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Funds Transfer"), null));
+            list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.CardTransactionRecord(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.DirectDebitRecord(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsTransferFile(), VistaOperationsBehavior.Caledon));
             list.addMenuItem(new SideMenuAppPlaceItem(new OperationsSiteMap.FundsTransfer.FundsTransferBatch(), VistaOperationsBehavior.Caledon));

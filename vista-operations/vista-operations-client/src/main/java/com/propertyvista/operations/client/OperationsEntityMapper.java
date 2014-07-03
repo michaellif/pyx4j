@@ -20,6 +20,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.propertyvista.operations.client.resources.OperationsImages;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.eft.caledoneft.simulator.PadSimFile;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
@@ -57,6 +58,8 @@ public class OperationsEntityMapper {
         register(TriggerDTO.class, OperationsSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
         register(Run.class, OperationsSiteMap.Management.TriggerRun.class, DEFAULT_IMAGE);
         register(RunData.class, OperationsSiteMap.Management.TriggerRunData.class, DEFAULT_IMAGE);
+
+        register(CardTransactionRecord.class, OperationsSiteMap.FundsTransfer.CardTransactionRecord.class, DEFAULT_IMAGE);
 
         register(DirectDebitRecord.class, OperationsSiteMap.FundsTransfer.DirectDebitRecord.class, DEFAULT_IMAGE);
 

@@ -34,6 +34,8 @@ import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecor
 import com.propertyvista.operations.client.activity.crud.creditcheck.CustomerCreditCheckTransactionListerActivity;
 import com.propertyvista.operations.client.activity.crud.creditcheck.CustomerCreditCheckTransactionViewerActivity;
 import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.cardtransactionrecords.CardTransactionRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.cardtransactionrecords.CardTransactionRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.FundsReconciliationFileListerActivity;
@@ -284,6 +286,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new EncryptedStorageActivity((AppPlace) place);
 
 // - FundsTransfer:                        
+
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.CardTransactionRecord) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new CardTransactionRecordListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new CardTransactionRecordViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
 
                     } else if (place instanceof OperationsSiteMap.FundsTransfer.DirectDebitRecord) {
                         switch (crudPlace.getType()) {

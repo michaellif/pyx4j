@@ -11,15 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords;
+package com.propertyvista.operations.client.ui.crud.fundstransfer.cardtransactionrecords;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.domain.eft.dbp.DirectDebitRecord;
+import com.propertyvista.operations.domain.eft.cards.CardTransactionRecord;
 
-public class DirectDebitRecordListerViewImpl extends OperationsListerViewImplBase<DirectDebitRecord> implements DirectDebitRecordListerView {
+public class CardTransactionRecordListerViewImpl extends OperationsListerViewImplBase<CardTransactionRecord> implements CardTransactionRecordListerView {
 
-    public DirectDebitRecordListerViewImpl() {
-        setLister(new DirectDebitRecordLister(true));
+    public CardTransactionRecordListerViewImpl() {
+        setLister(new CardTransactionRecordLister(true));
     }
-
 }
