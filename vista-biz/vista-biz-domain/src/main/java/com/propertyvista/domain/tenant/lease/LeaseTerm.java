@@ -130,8 +130,10 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> creationDate();
 
+    @Detached(level = AttachLevel.Detached)
     IList<LeaseAgreementLegalTerm> agreementLegalTerms();
 
+    @Detached(level = AttachLevel.Detached)
     IList<LeaseAgreementConfirmationTerm> agreementConfirmationTerms();
 
     @Owned(cascade = {})

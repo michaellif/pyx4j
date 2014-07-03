@@ -57,6 +57,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
         to.landlordInfo().name().setValue(lease.unit().building().landlord().name().getValue());
         to.landlordInfo().address().setValue(lease.unit().building().landlord().address().getStringView());
 
+        Persistence.ensureRetrieve(lease.currentTerm().agreementLegalTerms(), AttachLevel.Attached);
         for (LeaseAgreementLegalTerm term : lease.currentTerm().agreementLegalTerms()) {
             SignedAgreementLegalTerm signedTerm = EntityFactory.create(SignedAgreementLegalTerm.class);
             signedTerm.term().set(term);
@@ -64,6 +65,7 @@ public class LeaseSigningCrudServiceImpl implements LeaseSigningCrudService {
             to.legalTerms().add(signedTerm);
         }
 
+        Persistence.ensureRetrieve(lease.currentTerm().agreementConfirmationTerms(), AttachLevel.Attached);
         for (LeaseAgreementConfirmationTerm term : lease.currentTerm().agreementConfirmationTerms()) {
             SignedAgreementConfirmationTerm signedTerm = EntityFactory.create(SignedAgreementConfirmationTerm.class);
             signedTerm.term().set(term);

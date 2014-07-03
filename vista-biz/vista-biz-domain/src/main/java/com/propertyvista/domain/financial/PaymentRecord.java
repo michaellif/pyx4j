@@ -246,6 +246,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @JoinColumn(PaidOrRejectedAggregatedTransferId.class)
     @ReadOnly(allowOverrideNull = true)
+    @Detached(level = AttachLevel.ToStringMembers)
     AggregatedTransfer aggregatedTransfer();
 
     interface ReturnAggregatedTransferId extends ColumnId {
@@ -253,6 +254,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @JoinColumn(ReturnAggregatedTransferId.class)
     @ReadOnly(allowOverrideNull = true)
+    @Detached(level = AttachLevel.ToStringMembers)
     AggregatedTransfer aggregatedTransferReturn();
 
     /**
@@ -284,6 +286,7 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     AbstractPmcUser createdBy();
 
     @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
     ISet<PaymentRecordProcessing> processing();
 
     @Detached(level = AttachLevel.Detached)

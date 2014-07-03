@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
@@ -61,6 +62,7 @@ public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
 
     };
 
+    @ToString
     IPrimitive<LogicalDate> paymentDate();
 
     IPrimitive<AggregatedTransferStatus> status();
