@@ -554,6 +554,11 @@ public class YardiLeaseProcessor {
         } else { // past -> active transition (cancel Move Out in Yardi!):
             if (isCurrentLease(rtCustomer, yardiLease) || isFutureLease(rtCustomer, yardiLease)) {
                 lease = cancelLeaseCompletion(lease, yardiLease);
+
+                if (isFutureLease(rtCustomer, yardiLease)) {
+                    lease.status().setValue(Status.Approved);
+                    Persistence.service().merge(lease);
+                }
             }
         }
 
