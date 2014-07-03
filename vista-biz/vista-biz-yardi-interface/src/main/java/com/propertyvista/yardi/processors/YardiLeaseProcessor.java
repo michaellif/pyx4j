@@ -547,7 +547,10 @@ public class YardiLeaseProcessor {
                 }
 
             } else if (isFormerLease(rtCustomer, yardiLease)) {
-                // active -> past transition:
+                // active/approved -> past transition:
+                if (lease.status().getValue() == Status.Approved) {
+                    activateLease(lease);
+                }
                 lease = completeLease(lease, yardiLease);
             }
 

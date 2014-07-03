@@ -132,7 +132,7 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
             lease = Persistence.service().retrieve(criteria);
         }
         assertNotNull("Lease imported", lease);
-        assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
+        assertEquals("Lease Status", Lease.Status.Approved, lease.status().getValue());
     }
 
     public void testInitialImport_FormerResident() throws Exception {
@@ -263,7 +263,7 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
             lease = Persistence.service().retrieve(criteria);
         }
         assertNotNull("Lease imported", lease);
-        assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
+        assertEquals("Lease Status", Lease.Status.Approved, lease.status().getValue());
 
         // Make tenant in Yardi as FORMER
         {
