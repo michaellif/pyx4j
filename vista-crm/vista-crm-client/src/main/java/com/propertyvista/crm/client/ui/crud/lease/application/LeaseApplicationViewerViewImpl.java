@@ -55,6 +55,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationDocumentUploadService;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionApprove;
+import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionCancel;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionDecline;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationDecisionMoreInfo;
 import com.propertyvista.crm.rpc.services.lease.ac.ApplicationStartOnlineApplication;
@@ -68,6 +69,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.LeaseApplicationDocument;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -98,16 +100,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private final MenuItem declineAction;
 
     private final MenuItem cancelAction;
-
-    private static final String INVITE = i18n.tr("Invite");
-
-    private static final String APPROVE = i18n.tr("Approve");
-
-    private static final String MORE_INFO = i18n.tr("More Info");
-
-    private static final String DECLINE = i18n.tr("Decline");
-
-    private static final String CANCEL = i18n.tr("Cancel");
 
     public LeaseApplicationViewerViewImpl() {
         setForm(new LeaseApplicationForm(this));
@@ -148,16 +140,16 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             public void execute() {
                 ((LeaseViewerViewBase.Presenter) getPresenter()).editTerm(getForm().getValue().currentTerm());
             }
-        });
+        }, DataModelPermission.permissionUpdate(LeaseApplicationActionDTO.class));
         addHeaderToolbarItem(editButton.asWidget());
 
         // Views:
-        viewLease = new MenuItem(i18n.tr("View Lease"), new Command() {
+        viewLease = new SecureMenuItem(i18n.tr("View Lease"), new Command() {
             @Override
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).viewLease();
             }
-        });
+        }, DataModelPermission.permissionRead(LeaseDTO.class));
         addView(viewLease);
 
         viewParticipants = new MenuItem(i18n.tr("Tenants/Guarantors"), new Command() {
@@ -180,22 +172,22 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             addAction(createOnlineApplication);
         }
 
-        cancelOnlineApplication = new MenuItem(i18n.tr("Cancel Online Application"), new Command() {
+        cancelOnlineApplication = new SecureMenuItem(i18n.tr("Cancel Online Application"), new Command() {
             @Override
             public void execute() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).cancelOnlineApplication();
             }
-        });
+        }, new ActionPermission(ApplicationStartOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {
             addAction(cancelOnlineApplication);
         }
 
-        inviteAction = new MenuItem(INVITE, new Command() {
+        inviteAction = new SecureMenuItem(i18n.tr("Invite"), new Command() {
             @Override
             public void execute() {
                 inviteActionExecuter();
             }
-        });
+        }, new ActionPermission(ApplicationStartOnlineApplication.class));
         if (VistaFeatures.instance().onlineApplication()) {
             addAction(inviteAction);
         }
@@ -212,7 +204,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
         // TODO Move Lease Action
 
-        approveAction = new SecureMenuItem(APPROVE, new Command() {
+        approveAction = new SecureMenuItem(i18n.tr("Approve"), new Command() {
             @Override
             public void execute() {
                 approveActionExecuter();
@@ -220,7 +212,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }, new ActionPermission(ApplicationDecisionApprove.class));
         addAction(approveAction);
 
-        moreInfoAction = new SecureMenuItem(MORE_INFO, new Command() {
+        moreInfoAction = new SecureMenuItem(i18n.tr("More Info"), new Command() {
             @Override
             public void execute() {
                 moreInfoActionExecuter();
@@ -230,7 +222,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             addAction(moreInfoAction);
         }
 
-        declineAction = new SecureMenuItem(DECLINE, new Command() {
+        declineAction = new SecureMenuItem(i18n.tr("Decline"), new Command() {
             @Override
             public void execute() {
                 declineActionExecuter();
@@ -238,12 +230,12 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }, new ActionPermission(ApplicationDecisionDecline.class));
         addAction(declineAction);
 
-        cancelAction = new MenuItem(CANCEL, new Command() {
+        cancelAction = new SecureMenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 cancelActionExecuter();
             }
-        });
+        }, new ActionPermission(ApplicationDecisionCancel.class));
         addAction(cancelAction);
     }
 
@@ -311,7 +303,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void approveActionExecuter() {
-        new ActionBox(APPROVE) {
+        new ActionBox(i18n.tr("Approve")) {
             @Override
             public boolean onClickOk() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
@@ -337,7 +329,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void declineActionExecuter() {
-        new ActionBox(DECLINE) {
+        new ActionBox(i18n.tr("Decline")) {
             @Override
             public boolean onClickOk() {
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Decline));
@@ -347,7 +339,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     }
 
     private void cancelActionExecuter() {
-        new ActionBox(CANCEL) {
+        new ActionBox(i18n.tr("Cancel")) {
             @Override
             public boolean onClickOk() {
                 if (CommonsStringUtils.isEmpty(getReason())) {

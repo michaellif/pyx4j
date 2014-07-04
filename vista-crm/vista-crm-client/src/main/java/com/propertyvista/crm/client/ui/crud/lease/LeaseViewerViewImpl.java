@@ -89,6 +89,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.DepositLifecycleDTO;
+import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseLegalStateDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -188,12 +189,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         // Views:
 
-        addView(viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
+        addView(viewApplication = new SecureMenuItem(i18n.tr("View Application"), new Command() {
             @Override
             public void execute() {
                 ((LeaseViewerView.Presenter) getPresenter()).viewApplication();
             }
-        }));
+        }, DataModelPermission.permissionRead(LeaseApplicationDTO.class)));
 
         addView(new SecureMenuItem(i18n.tr("View Legal State"), new Command() {
             @Override
