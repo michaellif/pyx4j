@@ -206,21 +206,21 @@ public abstract class AbstractDashboard extends ResizeComposite {
     }
 
     private void arrangeGadgets(List<IGadgetInstance> gadgets) {
-        if (gadgets.size() > 0) {
-            board = activeLayoutManger.arrange(dashboardMetadata.encodedLayout().getValue(), gadgets);
-            board.setReadOnly(isReadOnly);
-            board.addEventHandler(new BoardEvent() {
-                @Override
-                public void onEvent(Reason reason) {
-                    if (reason == Reason.removeGadget | reason == Reason.repositionGadget) {
-                        propagateLayoutToMetadata();
-                    }
+        board = activeLayoutManger.arrange(dashboardMetadata.encodedLayout().getValue(), gadgets);
+        board.setReadOnly(isReadOnly);
+        board.addEventHandler(new BoardEvent() {
+            @Override
+            public void onEvent(Reason reason) {
+                if (reason == Reason.removeGadget | reason == Reason.repositionGadget) {
+                    propagateLayoutToMetadata();
                 }
-            });
+            }
+        });
+        if (gadgets.size() > 0) {
+            scrollPanel.setWidget(board);
         } else {
-            board = new EmptyBoard(i18n.tr("No Gadgets to show. To add gadgets use '+' action button."));
+            scrollPanel.setWidget(new EmptyBoard(i18n.tr("No Gadgets to show. To add gadgets use '+' action button.")));
         }
-        scrollPanel.setWidget(board);
     }
 
     private void startGadgets() {
@@ -277,6 +277,10 @@ public abstract class AbstractDashboard extends ResizeComposite {
                 new AddGadgetDialog(AbstractDashboard.this.getDashboardMetadata().type().getValue()) {
                     @Override
                     protected void onAddGadget(GadgetMetadata gadgetMetadata) {
+                        // if this is the 1st gadget then EmptyBoard was shown - replace it with a real thing
+                        if (!board.getGadgetIterator().hasNext()) {
+                            scrollPanel.setWidget(board);
+                        }
                         IGadgetInstance gadget = gadgetFactory.createGadget(gadgetMetadata);
                         commonGadgetSettingsContainer.bindGadget(gadget);
                         board.addGadget(gadget);
