@@ -13,6 +13,6 @@ BEGIN TRANSACTION;
     UPDATE  sterling.payment_record 
     SET     payment_status = 'Cleared'
     WHERE   id IN (47762,47928)
-    AND     payment_status = 'Submitted'
+    AND     payment_status = 'Submitted';
     
 COMMIT;
