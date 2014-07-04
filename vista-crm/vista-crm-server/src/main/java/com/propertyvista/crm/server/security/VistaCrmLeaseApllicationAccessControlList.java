@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.security;
 
-import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationAdvance;
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationBasic;
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationFull;
 import static com.propertyvista.domain.security.VistaCrmBehavior.ApplicationVerifyDoc;
@@ -44,14 +43,6 @@ public class VistaCrmLeaseApllicationAccessControlList extends UIAclBuilder {
             grant(ApplicationBasic, entities, ALL);
 
             grant(ApplicationBasic, new ActionPermission(ApplicationStartOnlineApplication.class));
-        }
-
-        // Application: Advance
-        {
-            List<Class<? extends IEntity>> entities = entities(LeaseApplicationDTO.class, Lead.class);
-            grant(ApplicationAdvance, entities, ALL);
-
-            grant(ApplicationAdvance, new ActionPermission(ApplicationStartOnlineApplication.class));
         }
 
         // Application: Verify Doc
