@@ -170,6 +170,7 @@ public class IdUploaderFolder extends PortalBoxFolder<IdentificationDocumentFold
             formPanel.append(Location.Left, proto().notes()).decorate();
 
             IdentificationDocumentFolderUploaderFolder docPagesFolder = new IdentificationDocumentFolderUploaderFolder();
+            docPagesFolder.setNoDataLabel(i18n.tr("Please provide at least one document file"));
             docPagesFolder.addComponentValidator(new AbstractComponentValidator<IList<IdentificationDocumentFile>>() {
                 @Override
                 public BasicValidationError isValid() {
