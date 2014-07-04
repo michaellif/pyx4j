@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,9 +38,9 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,6 +51,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.IShowable;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -64,6 +66,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.InternationalAddress;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -223,12 +226,25 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         formPanel.append(Location.Left, proto().storeInProfile()).decorate().componentWidth(50);
         formPanel.append(Location.Left, proto().convenienceFee()).decorate().componentWidth(120);
 
+        formPanel.append(Location.Left, new HTML("&nbsp;"));
+
+        formPanel
+                .append(Location.Left, proto().aggregatedTransfer(),
+                        new CEntityCrudHyperlink<AggregatedTransfer>(AppPlaceEntityMapper.resolvePlace(AggregatedTransfer.class))).decorate()
+                .componentWidth(120);
+        formPanel
+                .append(Location.Left, proto().aggregatedTransferReturn(),
+                        new CEntityCrudHyperlink<AggregatedTransfer>(AppPlaceEntityMapper.resolvePlace(AggregatedTransfer.class))).decorate()
+                .componentWidth(120);
+
+        // ----------------------------------------------------------------------------------------
+
         formPanel.append(Location.Right, proto().amount()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().createdBy(), new CEntityLabel<AbstractPmcUser>()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().createdDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().updated()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().targetDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Right, proto().receivedDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().finalizeDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().paymentStatus()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().rejectedWithNSF()).decorate().componentWidth(60);
@@ -237,6 +253,8 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         formPanel.append(Location.Right, proto().convenienceFeeTransactionAuthorizationNumber()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().transactionErrorMessage()).decorate();
         formPanel.append(Location.Right, proto().notes()).decorate();
+
+        // ----------------------------------------------------------------------------------------
 
         // tweak UI:
         CComponent<?, ?, ?> comp = get(proto().leaseTermParticipant());
@@ -343,6 +361,9 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().convenienceFee()).setVisible(true);
         get(proto().notes()).setVisible(true);
 
+        get(proto().aggregatedTransfer()).setVisible(false);
+        get(proto().aggregatedTransferReturn()).setVisible(false);
+
         updateVisibility(null);
 
         noticeViewer.updateVisibility();
@@ -426,6 +447,9 @@ public class PaymentRecordForm extends CrmEntityForm<PaymentRecordDTO> {
 
             get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
             preauthorizedPaymentMethodViewerHeader.setVisible(!getValue().preauthorizedPayment().isNull());
+
+            get(proto().aggregatedTransfer()).setVisible(!getValue().aggregatedTransfer().isNull() && getValue().aggregatedTransferReturn().isNull());
+            get(proto().aggregatedTransferReturn()).setVisible(!getValue().aggregatedTransferReturn().isNull());
         }
 
         paymentMethodEditor.setVisible(!getValue().paymentMethod().isEmpty());
