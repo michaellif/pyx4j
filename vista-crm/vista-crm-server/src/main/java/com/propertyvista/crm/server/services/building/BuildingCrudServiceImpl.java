@@ -166,7 +166,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
             Persistence.service().retrieveMember(bo.merchantAccounts());
             if (!bo.merchantAccounts().isEmpty()) {
-                bo.merchantAccounts().iterator().next().merchantAccount();
+                origAccount = bo.merchantAccounts().iterator().next().merchantAccount();
             }
 
             if (!to.merchantAccount().equals(origAccount)) {

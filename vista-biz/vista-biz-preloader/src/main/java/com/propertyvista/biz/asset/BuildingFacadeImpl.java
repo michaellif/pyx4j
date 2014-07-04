@@ -28,6 +28,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -46,8 +47,16 @@ public class BuildingFacadeImpl implements BuildingFacade {
                 building.marketing().visibility().setValue(PublicVisibilityType.global);
             }
         }
+        boolean statusModified = false;
         if (building.suspended().isNull()) {
             building.suspended().setValue(false);
+        }
+        if (building.getPrimaryKey() != null) {
+            // compare with the original status
+            Building orig = Persistence.service().retrieve(Building.class, building.getPrimaryKey());
+            if (!orig.suspended().equals(building.suspended())) {
+                statusModified = true;
+            }
         }
         if (building.integrationSystemId().isNull()) {
             building.integrationSystemId().setValue(IntegrationSystem.internal);
@@ -56,6 +65,10 @@ public class BuildingFacadeImpl implements BuildingFacade {
             building.defaultProductCatalog().setValue(!VistaFeatures.instance().yardiIntegration());
         }
         Persistence.service().merge(building);
+
+        if (statusModified) {
+            notifySuspended(building);
+        }
 
         if (isNewBuilding) {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
@@ -88,7 +101,11 @@ public class BuildingFacadeImpl implements BuildingFacade {
     public void suspend(Building building) {
         building.suspended().setValue(true);
         Persistence.service().merge(building);
-        ServerSideFactory.create(OperationsNotificationFacade.class).buildingSuspended(building);
+        notifySuspended(building);
     }
 
+    private void notifySuspended(Building building) {
+        ServerSideFactory.create(OperationsNotificationFacade.class).buildingSuspended(building);
+        ServerSideFactory.create(AuditFacade.class).updated(building, building.suspended().getValue(false) ? "Suspended" : "Unsuspended");
+    }
 }
