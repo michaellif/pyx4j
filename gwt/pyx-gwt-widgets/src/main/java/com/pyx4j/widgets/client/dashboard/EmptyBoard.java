@@ -22,10 +22,8 @@ package com.pyx4j.widgets.client.dashboard;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class EmptyBoard extends SimplePanel implements IBoard {
-    private SimplePanel panel;
 
     private BoardLayout layoutType;
 
@@ -33,18 +31,10 @@ public class EmptyBoard extends SimplePanel implements IBoard {
         setMessage(message);
     }
 
-    @Override
-    public Widget asWidget() {
-        if (panel == null) {
-            panel = new SimplePanel();
-            panel.getElement().getStyle().setProperty("padding", "0 10px");
-        }
-        return panel;
-    }
-
     public void setMessage(String message) {
-        asWidget();
-        panel.setWidget(new HTML(message));
+        HTML label = new HTML(message);
+        label.getElement().getStyle().setProperty("padding", "0 10px");
+        setWidget(label);
     }
 
     @Override
