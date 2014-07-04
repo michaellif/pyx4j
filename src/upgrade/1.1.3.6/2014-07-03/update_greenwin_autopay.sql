@@ -21,6 +21,6 @@ BEGIN TRANSACTION;
     AND     a.id = l.unit
     AND     l.id = lp.lease
     AND     lp.id = aa.tenant
-    AND     effective_from = '01-AUG-2014'
+    AND     effective_from = '01-AUG-2014';
     
 COMMIT;
