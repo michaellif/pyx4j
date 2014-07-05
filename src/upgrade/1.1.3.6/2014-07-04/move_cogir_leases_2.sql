@@ -11,11 +11,11 @@
 BEGIN TRANSACTION;
 
     UPDATE  cogir.lease
-    SET     unit = 75270
+    SET     unit = 85653
     WHERE   lease_id = 't0048910';
     
     UPDATE  cogir.lease
-    SET     unit = 75326
+    SET     unit = 85709
     WHERE   lease_id = 't0048967';
     
 COMMIT;
