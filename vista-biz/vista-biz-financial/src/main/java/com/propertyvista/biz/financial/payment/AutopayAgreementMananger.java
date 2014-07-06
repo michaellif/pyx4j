@@ -42,6 +42,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.essentials.server.dev.EntityFileLogger;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -77,77 +78,86 @@ class AutopayAgreementMananger {
         Validate.isTrue(!preauthorizedPayment.paymentMethod().isNull());
         Validate.isTrue(preauthorizedPayment.paymentMethod().type().getValue().isSchedulable());
 
-        preauthorizedPayment.tenant().set(tenantId);
-        Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
+        boolean ok = false;
+        try {
+            preauthorizedPayment.tenant().set(tenantId);
+            Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
 
-        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(preauthorizedPayment.tenant().lease());
+            BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(
+                    preauthorizedPayment.tenant().lease());
 
-        AutopayAgreement origPreauthorizedPayment;
-        AutopayAgreement orig = null;
+            AutopayAgreement origPreauthorizedPayment;
+            AutopayAgreement orig = null;
 
-        boolean isNewEntity = false;
-        boolean isNewAgreement = false;
-        // Creates a new version of PAP if values changed and there are payments created
-        if (!preauthorizedPayment.id().isNull()) {
-            origPreauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPayment.getPrimaryKey());
-            orig = origPreauthorizedPayment.duplicate();
-            if (!EntityGraph.fullyEqual(origPreauthorizedPayment, preauthorizedPayment)) {
-                boolean hasPaymentRecords = false;
-                {
-                    EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
-                    criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
-                    hasPaymentRecords = Persistence.service().count(criteria) > 0;
+            boolean isNewEntity = false;
+            boolean isNewAgreement = false;
+            // Creates a new version of PAP if values changed and there are payments created
+            if (!preauthorizedPayment.id().isNull()) {
+                origPreauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPayment.getPrimaryKey());
+                orig = origPreauthorizedPayment.duplicate();
+                if (!EntityGraph.fullyEqual(origPreauthorizedPayment, preauthorizedPayment)) {
+                    boolean hasPaymentRecords = false;
+                    {
+                        EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+                        criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
+                        hasPaymentRecords = Persistence.service().count(criteria) > 0;
+                    }
+                    if (hasPaymentRecords) {
+                        origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+                        origPreauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
+                        Persistence.service().merge(origPreauthorizedPayment);
+
+                        ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
+                        isNewEntity = true;
+
+                        preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                        preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
+                        preauthorizedPayment.expiredFrom().setValue(null);
+                    }
+                    preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
+                    preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
+                } else {
+                    log.debug("no changes detected in AutopayAgreement");
+                    ok = true;
+                    return preauthorizedPayment;
                 }
-                if (hasPaymentRecords) {
-                    origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
-                    origPreauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
-                    Persistence.service().merge(origPreauthorizedPayment);
-
-                    ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
-                    isNewEntity = true;
-
-                    preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
-                    preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
-                    preauthorizedPayment.expiredFrom().setValue(null);
-                }
+            } else {
+                isNewEntity = true;
+                isNewAgreement = true;
                 preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
                 preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
-            } else {
-                log.debug("no changes detected in AutopayAgreement");
-                return preauthorizedPayment;
+                preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
             }
-        } else {
-            isNewEntity = true;
-            isNewAgreement = true;
-            preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
-            preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
-            preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
-        }
 
-        //Set Tenant intervention flag
-        if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
-            preauthorizedPayment.updatedByTenant().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
-        }
-        if (!nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem())) {
-            // reset review flag for old updates
-            preauthorizedPayment.updatedBySystem().setValue(null);
-        }
+            //Set Tenant intervention flag
+            if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
+                preauthorizedPayment.updatedByTenant().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
+            }
+            if (!nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem())) {
+                // reset review flag for old updates
+                preauthorizedPayment.updatedBySystem().setValue(null);
+            }
 
-        Persistence.service().merge(preauthorizedPayment);
+            Persistence.service().merge(preauthorizedPayment);
 
-        if (isNewEntity) {
-            ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
-        } else {
-            ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, EntityDiff.getChanges(orig, preauthorizedPayment));
+            if (isNewEntity) {
+                ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
+            } else {
+                ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, EntityDiff.getChanges(orig, preauthorizedPayment));
+            }
+
+            if (isNewAgreement) {
+                ServerSideFactory.create(NotificationFacade.class).autoPaySetupCompleted(preauthorizedPayment);
+            } else if (isAmountsChanged(orig, preauthorizedPayment)) {
+                ServerSideFactory.create(NotificationFacade.class).autoPayChanges(preauthorizedPayment);
+            }
+            ok = true;
+            return preauthorizedPayment;
+        } finally {
+            if (!ok) {
+                EntityFileLogger.log("unexpected-errors", "autopayAgreement-persist", preauthorizedPayment);
+            }
         }
-
-        if (isNewAgreement) {
-            ServerSideFactory.create(NotificationFacade.class).autoPaySetupCompleted(preauthorizedPayment);
-        } else if (isAmountsChanged(orig, preauthorizedPayment)) {
-            ServerSideFactory.create(NotificationFacade.class).autoPayChanges(preauthorizedPayment);
-        }
-
-        return preauthorizedPayment;
     }
 
     private static class AllAmounts {

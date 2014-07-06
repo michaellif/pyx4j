@@ -48,6 +48,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.essentials.server.dev.EntityFileLogger;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
@@ -412,69 +413,75 @@ public class YardiLeaseProcessor {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
 
-        boolean leaseMove = false;
-        if (!lease.currentTerm().yardiLeasePk().isNull()
-                && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
-            // TODO Need to find another lease to merge with
-            leaseMove = true;
+        boolean ok = false;
+        try {
+            boolean leaseMove = false;
+            if (!lease.currentTerm().yardiLeasePk().isNull()
+                    && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
+                // TODO Need to find another lease to merge with
+                leaseMove = true;
+            }
+
+            boolean toPersist = false;
+
+            // if unit update is occurred:
+            String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
+            Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
+            if (leaseMove || (!unitNumber.equals(lease.unit().info().number().getValue()))) {
+                Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
+                AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
+                log.debug("change unit {} for lease {} to unit {}", lease.unit(), getLeaseID(rtCustomer), unit);
+
+                lease = new LeaseMerger().updateUnit(unit, lease);
+                toPersist = true;
+                log.debug("        - LeaseUnitChanged...");
+            }
+
+            if (LeaseMerger.isLeaseDatesChanged(yardiLease, lease)) {
+                lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
+                toPersist = true;
+                log.debug("        - LeaseDatesChanged...");
+            }
+
+            if (LeaseMerger.isTermDatesChanged(yardiLease, lease.currentTerm())) {
+                lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
+                toPersist = true;
+                log.debug("        - TermDatesChanged...");
+            }
+
+            if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {
+                new LeaseMerger().mergePaymentType(rtCustomer, lease);
+                toPersist = true;
+                log.debug("        - PaymentTypeChanged...");
+            }
+
+            Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
+            if (new TenantMerger().isChanged(yardiCustomers, lease.currentTerm().version().tenants(), lease.currentTerm().version().guarantors())) {
+                lease.currentTerm().set(new TenantMerger(executionMonitor).updateTenants(yardiCustomers, lease.currentTerm()));
+                toPersist = true;
+                log.debug("        - TenantsChanged...");
+            }
+
+            lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
+            if (new TenantMerger(executionMonitor).updateTenantsData(yardiCustomers, lease.currentTerm())) {
+                toPersist = true;
+                log.debug("        - TenantDataChanged...");
+            }
+
+            // persist: 
+
+            if (toPersist) {
+                lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+                log.info("        Lease term changes have been processed successfully (set log level to DEBUG to see more details)");
+            } else {
+                log.info("        No lease term changes detected");
+            }
+        } finally {
+            if (!ok) {
+                EntityFileLogger.log("unexpected-errors", "yardi-update-lease", lease);
+            }
         }
-
-        boolean toPersist = false;
-
-        // if unit update is occurred:
-        String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
-        Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
-        if (leaseMove || (!unitNumber.equals(lease.unit().info().number().getValue()))) {
-            Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
-            AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
-            log.debug("updating unit {} for lease {}", unit.getStringView(), getLeaseID(rtCustomer));
-
-            lease = new LeaseMerger().updateUnit(unit, lease);
-            toPersist = true;
-            log.debug("        - LeaseUnitChanged...");
-        }
-
-        if (LeaseMerger.isLeaseDatesChanged(yardiLease, lease)) {
-            lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
-            toPersist = true;
-            log.debug("        - LeaseDatesChanged...");
-        }
-
-        if (LeaseMerger.isTermDatesChanged(yardiLease, lease.currentTerm())) {
-            lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
-            toPersist = true;
-            log.debug("        - TermDatesChanged...");
-        }
-
-        if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {
-            new LeaseMerger().mergePaymentType(rtCustomer, lease);
-            toPersist = true;
-            log.debug("        - PaymentTypeChanged...");
-        }
-
-        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
-        if (new TenantMerger().isChanged(yardiCustomers, lease.currentTerm().version().tenants(), lease.currentTerm().version().guarantors())) {
-            lease.currentTerm().set(new TenantMerger(executionMonitor).updateTenants(yardiCustomers, lease.currentTerm()));
-            toPersist = true;
-            log.debug("        - TenantsChanged...");
-        }
-
-        lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
-        if (new TenantMerger(executionMonitor).updateTenantsData(yardiCustomers, lease.currentTerm())) {
-            toPersist = true;
-            log.debug("        - TenantDataChanged...");
-        }
-
-        // persist: 
-
-        if (toPersist) {
-            lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.info("        Lease term changes have been processed successfully (set log level to DEBUG to see more details)");
-        } else {
-            log.info("        No lease term changes detected");
-        }
-
         return manageLeaseState(lease, rtCustomer, yardiLease);
     }
 

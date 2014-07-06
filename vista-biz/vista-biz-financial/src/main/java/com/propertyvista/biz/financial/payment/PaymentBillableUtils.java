@@ -25,7 +25,7 @@ public class PaymentBillableUtils {
 
     //TODO proper implementation that will use adjustments
     public static BigDecimal getActualPrice(BillableItem billableItem) {
-        return billableItem.agreedPrice().getValue();
+        return billableItem.agreedPrice().getValue(BigDecimal.ZERO);
     }
 
     public static boolean isBillableItemPapable(BillableItem billableItem, BillingCycle cycle) {
