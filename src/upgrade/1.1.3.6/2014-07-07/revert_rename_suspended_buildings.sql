@@ -26,7 +26,7 @@ BEGIN
     LOOP
         
         EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
-                ||'SET  property_code = property_code = substring(property_code,2) '
+                ||'SET  property_code = substring(property_code,2) '
                 ||'WHERE    suspended '
                 ||'AND  property_code ~ ''^!'' '
                 ||'AND NOT EXISTS  (    SELECT  property_code '
