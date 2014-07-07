@@ -605,8 +605,11 @@ public class CrmSiteMap implements SiteMap {
         public static class Message extends CrmCrudAppPlace {
             private String forwardText;
 
-            public Message(String forwardText) {
+            private String forwardSubject;
+
+            public Message(String forwardSubject, String forwardText) {
                 this.forwardText = forwardText;
+                this.forwardSubject = forwardSubject;
             }
 
             public Message() {
@@ -614,6 +617,10 @@ public class CrmSiteMap implements SiteMap {
 
             public String getForwardText() {
                 return forwardText;
+            }
+
+            public String getForwardSubject() {
+                return forwardSubject;
             }
         }
     }

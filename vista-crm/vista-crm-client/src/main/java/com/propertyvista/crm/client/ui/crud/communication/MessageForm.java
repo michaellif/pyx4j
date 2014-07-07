@@ -411,10 +411,34 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             communicationEndpointSelector.addItem(proto);
         }
 
-        private String buildForwardText() {
-            CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
-            String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
-            return forwardText;
+        private String buildForwardText(MessageDTO currentMessage) {
+            if (currentMessage == null) {
+                return null;
+            }
+            StringBuffer bodyText = new StringBuffer();
+            StringBuffer buffer = null;
+            new StringBuffer();
+            for (CommunicationEndpointDTO recipient : currentMessage.to()) {
+                if (buffer == null) {
+                    buffer = new StringBuffer();
+                } else {
+                    buffer.append(", ");
+                }
+                buffer.append(recipient.name().getValue());
+            }
+
+            bodyText.append("\nFrom: ");
+            bodyText.append(currentMessage.sender().name().getValue());
+            bodyText.append("\nDate: ");
+            bodyText.append(currentMessage.date().getStringView());
+            bodyText.append("\nSubject: ");
+            bodyText.append(currentMessage.subject().getValue());
+            bodyText.append("\nTo: ");
+            bodyText.append(buffer.toString());
+            bodyText.append("\n\nFw:\n");
+            bodyText.append(currentMessage.text().getValue());
+
+            return bodyText.toString();
         }
 
         private MessageDTO getCurrent() {
@@ -469,10 +493,9 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
                         MessageDTO currentMessage = getCurrent();
-                        String forwardText = buildForwardText();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
-                        newItem.getValue().text().setValue(forwardText);
+                        newItem.getValue().text().setValue(currentMessage == null ? null : "\nRe:\n" + currentMessage.text().getValue());
 
                         if (!ClientContext.getUserVisit().getName().equals(currentMessage.header().sender().getValue())) {
                             newItem.getValue().to().add(currentMessage.sender());
@@ -498,7 +521,10 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
-                        CrudAppPlace place = new CrmSiteMap.Communication.Message(buildForwardText());
+                        MessageDTO currentMessage = getCurrent();
+                        String forwardSubject = currentMessage == null ? null : "\nFw:\n" + currentMessage.subject().getValue();
+                        String forwardText = buildForwardText(currentMessage);
+                        CrudAppPlace place = new CrmSiteMap.Communication.Message(forwardSubject, forwardText);
                         place.setType(Type.editor);
                         AppSite.getPlaceController().goTo(place);
                     }

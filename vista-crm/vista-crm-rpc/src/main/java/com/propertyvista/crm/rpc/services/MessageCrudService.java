@@ -33,5 +33,7 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
     public static interface MessageInitializationData extends InitializationData {
 
         IPrimitive<String> initalizedText();
+
+        IPrimitive<String> initalizedSubject();
     }
 }

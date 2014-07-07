@@ -123,6 +123,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
 
         if (initializationData instanceof MessageInitializationData) {
             dto.text().set(((MessageInitializationData) initializationData).initalizedText());
+            dto.subject().set(((MessageInitializationData) initializationData).initalizedSubject());
         }
 
         return dto;
