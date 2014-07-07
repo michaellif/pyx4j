@@ -37,29 +37,6 @@ import com.propertyvista.domain.financial.yardi.YardiPayment;
 
 public class YardiLeaseFinancialProcessor {
 
-    private class LeaseFinancialStats {
-
-        private BigDecimal chargesAmount = BigDecimal.ZERO;
-
-        private BigDecimal paymentsAmount = BigDecimal.ZERO;
-
-        public void addCharge(BigDecimal payment) {
-            this.chargesAmount = chargesAmount.add(payment);
-        }
-
-        public void addPayment(BigDecimal payment) {
-            this.paymentsAmount = paymentsAmount.add(payment);
-        }
-
-        public BigDecimal getCharges() {
-            return chargesAmount;
-        }
-
-        public BigDecimal getPayments() {
-            return paymentsAmount;
-        }
-    }
-
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseFinancialProcessor.class);
 
     private final I18n i18n = I18n.get(YardiLeaseFinancialProcessor.class);
@@ -145,5 +122,28 @@ public class YardiLeaseFinancialProcessor {
 
         stats.addPayment(payment.amount().getValue());
         log.info("          Created payment (transactionId={}, amount={}) ", paymentIn.getDetail().getTransactionID(), payment.amount().getValue());
+    }
+
+    private class LeaseFinancialStats {
+    
+        private BigDecimal chargesAmount = BigDecimal.ZERO;
+    
+        private BigDecimal paymentsAmount = BigDecimal.ZERO;
+    
+        public void addCharge(BigDecimal payment) {
+            this.chargesAmount = chargesAmount.add(payment);
+        }
+    
+        public void addPayment(BigDecimal payment) {
+            this.paymentsAmount = paymentsAmount.add(payment);
+        }
+    
+        public BigDecimal getCharges() {
+            return chargesAmount;
+        }
+    
+        public BigDecimal getPayments() {
+            return paymentsAmount;
+        }
     }
 }
