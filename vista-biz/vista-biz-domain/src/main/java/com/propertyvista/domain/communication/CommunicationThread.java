@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -45,6 +46,7 @@ public interface CommunicationThread extends IEntity {
 
     @NotNull
     @ReadOnly
+    @Length(78)
     IPrimitive<String> subject();
 
     @ReadOnly

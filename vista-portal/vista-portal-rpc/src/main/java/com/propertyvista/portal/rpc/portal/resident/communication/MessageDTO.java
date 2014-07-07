@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -55,6 +56,7 @@ public interface MessageDTO extends Message {
 
     @NotNull
     @ReadOnly
+    @Length(78)
     IPrimitive<String> subject();
 
     @NotNull
