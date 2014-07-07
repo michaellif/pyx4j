@@ -145,6 +145,15 @@ BEGIN
                         JOIN    metcap.apt_unit a ON (b.id = a.building)
                         WHERE   b.id = v_building_id);
                         
+                        
+        -- apt_unit_effective_availability
+        
+        DELETE FROM metcap.apt_unit_effective_availability
+        WHERE unit IN (   SELECT  a.id
+                        FROM    metcap.building b
+                        JOIN    metcap.apt_unit a ON (b.id = a.building)
+                        WHERE   b.id = v_building_id);
+        
         -- apt_unit
         
         DELETE FROM metcap.apt_unit
@@ -155,10 +164,77 @@ BEGIN
         DELETE FROM metcap.floorplan
         WHERE building = v_building_id;
         
+        -- product_v$features
+        
+        DELETE  FROM metcap.product_v$features
+        WHERE  id IN (  SELECT  pvf.id 
+                        FROM    metcap.building b
+                        JOIN    metcap.product_catalog pc ON (pc.building = b.id)
+                        JOIN    metcap.product p ON (pc.id = p.catalog)
+                        JOIN    metcap.product_v$features pvf ON (p.id = pvf.value)
+                        WHERE   building = v_building_id);
+        
+        -- product_item
+        
+        DELETE  FROM metcap.product_item
+        WHERE  id IN (  SELECT  pi.id 
+                        FROM    metcap.building b
+                        JOIN    metcap.product_catalog pc ON (pc.building = b.id)
+                        JOIN    metcap.product p ON (pc.id = p.catalog)
+                        JOIN    metcap.product_v pv ON (p.id = pv.holder)
+                        JOIN    metcap.product_item pi ON (pv.id = pi.product)
+                        WHERE   building = v_building_id);
+        
+        -- product_v
+        
+        DELETE  FROM metcap.product_v
+        WHERE  id IN (  SELECT  pv.id 
+                        FROM    metcap.building b
+                        JOIN    metcap.product_catalog pc ON (pc.building = b.id)
+                        JOIN    metcap.product p ON (pc.id = p.catalog)
+                        JOIN    metcap.product_v pv ON (p.id = pv.holder)
+                        WHERE   building = v_building_id);
+        
+        -- delete product
+        
+        DELETE  FROM metcap.product
+        WHERE  id IN (  SELECT p.id 
+                        FROM    metcap.building b
+                        JOIN    metcap.product_catalog pc ON (pc.building = b.id)
+                        JOIN    metcap.product p ON (pc.id = p.catalog)
+                        WHERE   building = v_building_id);
+        
+        -- delete product_catalog
+        
+        DELETE  FROM metcap.product_catalog
+        WHERE   building = v_building_id;
+        
+        -- billing_invoice_line_item
+        
+        DELETE FROM metcap.billing_invoice_line_item
+        WHERE   billing_cycle IN (  SELECT id FROM metcap.billing_billing_cycle 
+                                    WHERE building = v_building_id);
+        
+        -- billing_billing_cycle
+        
+        DELETE FROM metcap.billing_billing_cycle
+        WHERE   building = v_building_id;
+        
+        
+        -- aging_buckets
+        
+        DELETE FROM metcap.aging_buckets
+        WHERE arrears_snapshot IN ( SELECT id FROM metcap.billing_arrears_snapshot
+                                    WHERE   building = v_building_id);
+        
+        -- billing_arrears_snapshot
+        
+        DELETE FROM metcap.billing_arrears_snapshot
+        WHERE   building = v_building_id;
         
         -- delete building
         DELETE FROM metcap.building 
-        WHERE   id = v_building_id
+        WHERE   id = v_building_id;
         
         
         
