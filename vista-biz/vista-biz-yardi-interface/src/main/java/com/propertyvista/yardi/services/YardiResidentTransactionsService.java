@@ -442,20 +442,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
-
-                    // process each property info - import new buildings only
-                    List<Building> newBuildings = importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
-                    importedBuildings.addAll(newBuildings);
-
-                    executionMonitor.addInfoEvent(
-                            "ILSPropertyMarketing",
-                            SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newBuildings.size(),
-                                    ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
-                                        @Override
-                                        public String toString(Building value) {
-                                            return value.propertyCode().getStringView();
-                                        }
-                                    })));
+                    importedBuildings.addAll(importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor));
                 }
             }
 
@@ -472,8 +459,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         } finally {
             AtomicReference<Long> maxRequestTime = new AtomicReference<>();
             long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
+
             executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
             executionMonitor.addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()), new BigDecimal(maxRequestTime.get()));
+
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 
@@ -616,11 +605,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Void execute() throws YardiServiceException {
                 YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor(executionMonitor);
-    
+
                 processor.processCatalog(building, rentableItems, yardiInterfaceId);
                 processor.updateUnits(building, depositInfo);
                 processor.persistCatalog(building);
-    
+
                 return null;
             }
         });
@@ -890,6 +879,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 break;
             }
         }
+
+        executionMonitor.addInfoEvent(
+                "ILSPropertyMarketing",
+                SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newBuildings.size(),
+                        ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
+                            @Override
+                            public String toString(Building value) {
+                                return value.propertyCode().getStringView();
+                            }
+                        })));
 
         return newBuildings;
     }
