@@ -166,7 +166,8 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         for (CommunicationEndpointDTO todep : to.to()) {
             if (!Tenant.class.equals(todep.endpoint().getInstanceValueClass())) {
                 if (visited.containsKey(todep.endpoint())) {
-                    visited.put(todep.endpoint(), visited.get(todep.endpoint()).booleanValue() || false);
+                    Boolean currentValue = visited.get(todep.endpoint());
+                    visited.put(todep.endpoint(), visited.get(todep.endpoint()).booleanValue() && (currentValue == null ? false : currentValue.booleanValue()));
                 } else {
                     visited.put(todep.endpoint(), false);
                 }
@@ -225,7 +226,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             for (Tenant t : tenants) {
                 Persistence.ensureRetrieve(t.customer(), AttachLevel.Attached);
                 if (visited.containsKey(t.customer().user())) {
-                    visited.put(t.customer().user(), visited.get(t.customer().user()).booleanValue() || !ContactType.Tenant.equals(ep.type().getValue()));
+                    Boolean currentValue = visited.get(t.customer().user()).booleanValue();
+
+                    visited.put(t.customer().user(), currentValue && !ContactType.Tenant.equals(ep.type().getValue()));
                 } else {
                     visited.put(t.customer().user(), !ContactType.Tenant.equals(ep.type().getValue()));
                 }
