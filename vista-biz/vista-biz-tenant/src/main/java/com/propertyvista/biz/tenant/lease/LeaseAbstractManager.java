@@ -695,7 +695,7 @@ public abstract class LeaseAbstractManager {
 
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(productItem);
-        newItem.agreedPrice().setValue(productItem.price().getValue());
+        newItem.agreedPrice().setValue(productItem.price().isNull() ? BigDecimal.ZERO : productItem.price().getValue());
 
         // avoid policed deposits for existing Leases:
         if (lease.status().getValue() != Lease.Status.ExistingLease) {
