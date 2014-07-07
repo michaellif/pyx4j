@@ -58,6 +58,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
             view.setLeasesSelectorEnabled(false);
         }
         obtainAvailableLocales();
+        obtainCommunicationMessagesCount();
+
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
@@ -83,6 +85,10 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarPresente
 
     private void obtainAvailableLocales() {
         view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
+    }
+
+    private void obtainCommunicationMessagesCount() {
+        view.setCommunicationMessagesCount(15);
     }
 
     @Override

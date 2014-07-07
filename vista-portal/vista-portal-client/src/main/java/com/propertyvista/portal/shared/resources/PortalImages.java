@@ -95,7 +95,11 @@ public interface PortalImages extends ClientBundle, FolderImages, WidgetsImageBu
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Header_Icon_Notifications-New.png")
-    ImageResource alert();
+    ImageResource alertsOff();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Header_Icon_Notifications-New.png")
+    ImageResource alertsOn();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("brushed_alu.png")

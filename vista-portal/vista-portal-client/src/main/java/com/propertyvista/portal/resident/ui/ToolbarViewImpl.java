@@ -27,12 +27,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.layout.LayoutChangeEvent;
 import com.pyx4j.gwt.commons.layout.LayoutChangeHandler;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent;
-import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.gwt.commons.layout.LayoutChangeRequestEvent.ChangeType;
+import com.pyx4j.gwt.commons.layout.LayoutType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -41,7 +40,6 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.Toolbar;
 
 import com.propertyvista.common.client.ClientLocaleUtils;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -137,7 +135,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         languageButton = new Button(ClientLocaleUtils.getCurrentLocale().toString());
 
-        communicationButton = new Button(PortalImages.INSTANCE.alert(), new Command() {
+        communicationButton = new Button(PortalImages.INSTANCE.alertsOff(), new Command() {
             @Override
             public void execute() {
                 switch (layoutType) {
@@ -151,6 +149,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 }
             }
         });
+        communicationButton.addStyleName(PortalRootPaneTheme.StyleName.AllertButton.name());
 
         rightToolbar.addItem(loginButton);
         rightToolbar.addItem(tenantButton);
@@ -301,4 +300,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         }
     }
 
+    @Override
+    public void setCommunicationMessagesCount(int count) {
+        if (count > 0) {
+            communicationButton.setImage(PortalImages.INSTANCE.alertsOn());
+            communicationButton.setTextLabel(String.valueOf(count));
+        } else {
+            communicationButton.setImage(PortalImages.INSTANCE.alertsOff());
+        }
+
+    }
 }

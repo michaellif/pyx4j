@@ -46,4 +46,6 @@ public interface ToolbarView extends IsView {
 
     void setLeasesSelectorEnabled(boolean enabled);
 
+    void setCommunicationMessagesCount(int count);
+
 }

@@ -33,7 +33,7 @@ public class PortalRootPaneTheme extends Theme {
 
         MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName, MainMenuFooter,
 
-        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage,
+        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage, AllertButton,
 
         ExtraGadget,
 
@@ -325,6 +325,23 @@ public class PortalRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm, " .", StyleName.CommHeaderTitle);
         style.addProperty("line-height", "60px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AllertButton);
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AllertButton, " .", DefaultWidgetsTheme.StyleName.ButtonText);
+        style.addProperty("background", "none repeat scroll 0 0 #FF0000");
+        style.addProperty("border", "1px solid #FF0000");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("font-size", "11px");
+        style.addProperty("height", "auto");
+        style.addProperty("line-height", "11px");
+        style.addProperty("margin", "0 11px");
+        style.addProperty("position", "absolute");
+        style.addProperty("left", "15px");
+        style.addProperty("top", "4px");
         addStyle(style);
 
     }
