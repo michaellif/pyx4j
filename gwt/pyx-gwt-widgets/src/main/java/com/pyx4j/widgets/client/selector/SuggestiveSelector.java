@@ -69,7 +69,7 @@ public class SuggestiveSelector<DataType> extends Composite {
 
     }
 
-    public final static int SUGGESTIONS_PER_PAGE = 20;
+    public final static int SUGGESTIONS_PER_PAGE = 10;
 
     private final static int POPUP_HIDE_DELAY = 400;
 
