@@ -42,4 +42,6 @@ public interface HeaderView extends IsWidget, IsView {
 
     void setAvailableLocales(List<CompiledLocale> locales);
 
+    void setCommunicationMessagesCount(int count);
+
 }

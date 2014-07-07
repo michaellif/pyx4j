@@ -69,6 +69,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
         });
 
         obtainAvailableLocales();
+        obtainCommunicationMessagesCount();
     }
 
     private void updateAuthenticatedView() {
@@ -106,6 +107,10 @@ public class HeaderActivity extends AbstractActivity implements HeaderPresenter 
 
     private void obtainAvailableLocales() {
         view.setAvailableLocales(ClientLocaleUtils.obtainAvailableLocales());
+    }
+
+    private void obtainCommunicationMessagesCount() {
+        view.setCommunicationMessagesCount(3);
     }
 
     @Override

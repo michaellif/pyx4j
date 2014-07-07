@@ -35,6 +35,7 @@ import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.themes.CommunicationCrmTheme;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -175,7 +176,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                 }
             }));
 
-            communicationButton = new Button(CrmImages.INSTANCE.alert(), new Command() {
+            communicationButton = new Button(CrmImages.INSTANCE.alertsOff(), new Command() {
                 @Override
                 public void execute() {
                     switch (layoutType) {
@@ -190,6 +191,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
                     }
                 }
             });
+            communicationButton.addStyleName(CommunicationCrmTheme.StyleName.AllertButton.name());
 
             exitAdminButton = new Button(i18n.tr("Exit Administration"), new Command() {
 
@@ -327,6 +329,17 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             break;
         }
         communicationButton.setVisible(loggedIn);
+    }
+
+    @Override
+    public void setCommunicationMessagesCount(int count) {
+        if (count > 0) {
+            communicationButton.setImage(CrmImages.INSTANCE.alertsOn());
+            communicationButton.setTextLabel(String.valueOf(count));
+        } else {
+            communicationButton.setImage(CrmImages.INSTANCE.alertsOff());
+        }
+
     }
 
 }

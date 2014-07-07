@@ -20,10 +20,11 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class CommunicationCrmTheme extends Theme {
     public static enum StyleName implements IStyleName {
-        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage,
+        Comm, CommContent, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage, AllertButton
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -95,6 +96,24 @@ public class CommunicationCrmTheme extends Theme {
         style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm, " .", StyleName.CommHeaderTitle);
         style.addProperty("line-height", "60px");
         addStyle(style);
+
+        style = new Style(".", StyleName.AllertButton);
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AllertButton, " .", DefaultWidgetsTheme.StyleName.ButtonText);
+        style.addProperty("background", "none repeat scroll 0 0 #FF0000");
+        style.addProperty("border", "1px solid #FF0000");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("font-size", "9px");
+        style.addProperty("height", "auto");
+        style.addProperty("line-height", "9px");
+        style.addProperty("margin", "0 9px");
+        style.addProperty("position", "absolute");
+        style.addProperty("left", "7px");
+        style.addProperty("top", "4px");
+        addStyle(style);
+
     }
 
     @Override

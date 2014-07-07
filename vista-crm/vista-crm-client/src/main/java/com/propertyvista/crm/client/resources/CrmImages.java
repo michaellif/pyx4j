@@ -29,8 +29,11 @@ public interface CrmImages extends VistaImages {
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
 
-    @Source("alerts.png")
-    ImageResource alert();
+    @Source("alerts_off.png")
+    ImageResource alertsOff();
+
+    @Source("alerts_on.png")
+    ImageResource alertsOn();
 
     @Source("envelop.png")
     ImageResource message();
