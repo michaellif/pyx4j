@@ -53,18 +53,6 @@ public class ResidentPortalSiteMap extends PortalSiteMap {
     @PlaceProperties(navigLabel = "My Messages")
     public static class Message extends AppPlace {
         public static class MessageWizard extends AppPlace {
-            private String forwardText;
-
-            public MessageWizard(String forwardText) {
-                this.forwardText = forwardText;
-            }
-
-            public MessageWizard() {
-            }
-
-            public String getForwardText() {
-                return forwardText;
-            }
         }
 
         public static class MessagePage extends AppPlace {

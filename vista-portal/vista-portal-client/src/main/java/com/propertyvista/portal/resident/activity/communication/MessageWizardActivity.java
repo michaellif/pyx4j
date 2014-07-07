@@ -14,11 +14,8 @@
 package com.propertyvista.portal.resident.activity.communication;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.domain.Notification;
@@ -31,7 +28,6 @@ import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Message.MessageWizard;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
-import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService.MessageInitializationData;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class MessageWizardActivity extends AbstractWizardCrudActivity<MessageDTO, MessageWizardView> implements MessageWizardPresenter {
@@ -43,13 +39,6 @@ public class MessageWizardActivity extends AbstractWizardCrudActivity<MessageDTO
     public MessageWizardActivity(AppPlace place) {
         super(MessageWizardView.class, GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class), MessageDTO.class);
         this.place = (MessageWizard) place;
-    }
-
-    @Override
-    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
-        MessageInitializationData initData = EntityFactory.create(MessageInitializationData.class);
-        initData.initalizedText().setValue(place.getForwardText());
-        callback.onSuccess(initData);
     }
 
     @Override

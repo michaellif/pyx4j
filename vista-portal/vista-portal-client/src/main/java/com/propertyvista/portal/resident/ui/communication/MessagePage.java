@@ -132,8 +132,6 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
         private Anchor btnMarkAsUnread;
 
-        private Anchor btnForward;
-
         private Anchor btnReply;
 
         Image starImage;
@@ -256,7 +254,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                         setVisited(true);
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
-                        String forwardText = buildForwardText();
+                        String forwardText = buildReplyText();
                         MessageDTO currentMessage = getCurrent();
                         messagesFolder.addItem();
                         CFolderItem<MessageDTO> newItem = messagesFolder.getItem(messagesFolder.getItemCount() - 1);
@@ -280,18 +278,6 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                     }
                 }
 
-            });
-
-            btnForward = new Anchor(i18n.tr("Forward"), new Command() {
-                @Override
-                public void execute() {
-                    if (!isValid()) {
-                        setVisited(true);
-                        MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
-                    } else {
-                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Message.MessageWizard(buildForwardText()));
-                    }
-                };
             });
 
             btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
@@ -318,7 +304,6 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
 
             tb.addItem(btnSend);
             tb.addItem(btnReply);
-            tb.addItem(btnForward);
             tb.addItem(btnCancel);
             tb.addItem(btnMarkAsUnread);
             btnSend.setVisible(false);
@@ -328,7 +313,7 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
             return tb;
         }
 
-        private String buildForwardText() {
+        private String buildReplyText() {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
             String forwardText = current == null ? null : "\nRe:\n" + current.getValue().text().getValue();
             return forwardText;
@@ -374,7 +359,6 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnSend.setVisible(true);
                 btnCancel.setVisible(true);
                 btnReply.setVisible(false);
-                btnForward.setVisible(false);
                 starImage.setVisible(false);
                 btnMarkAsUnread.setVisible(false);
                 get(proto().star()).setVisible(false);
@@ -392,7 +376,6 @@ public class MessagePage extends CPortalEntityForm<MessageDTO> {
                 btnCancel.setVisible(false);
                 btnReply.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey())
                         && getValue().allowedReply().getValue(true) && !ThreadStatus.Closed.equals(getValue().status().getValue()));
-                btnForward.setVisible(true);
                 get(proto().star()).setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 btnMarkAsUnread.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));
                 starImage.setVisible(!ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().sender().getPrimaryKey()));

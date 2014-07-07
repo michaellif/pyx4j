@@ -97,7 +97,7 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("line-height", "60px");
         addStyle(style);
 
-        style = new Style(".", StyleName.AllertButton);
+        style = new Style(".", DefaultWidgetsTheme.StyleName.Button, ".", StyleName.AllertButton);
         style.addProperty("position", "relative");
         addStyle(style);
 
@@ -110,7 +110,7 @@ public class CommunicationCrmTheme extends Theme {
         style.addProperty("line-height", "9px");
         style.addProperty("margin", "0 9px");
         style.addProperty("position", "absolute");
-        style.addProperty("left", "7px");
+        style.addProperty("right", "0px");
         style.addProperty("top", "4px");
         addStyle(style);
 
