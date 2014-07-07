@@ -15,6 +15,8 @@ package com.propertyvista.biz.communication;
 
 import java.util.HashSet;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -163,5 +165,18 @@ public class CommunicationManager {
             rec.type().setValue(ContactType.Unit);
         }
         return rec;
+    }
+
+    public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders) {
+        if (senders == null || senders.size() < 1) {
+            return "";
+        }
+        if (senders.size() == 1) {
+            return senders.get(0).getStringView();
+        }
+        if (senders.size() == 2) {
+            return senders.get(0).getStringView() + ", " + senders.get(1).getStringView();
+        }
+        return senders.get(0).getStringView() + " ... " + senders.get(senders.size() - 1).getStringView();
     }
 }

@@ -15,6 +15,8 @@ package com.propertyvista.biz.communication;
 
 import java.util.List;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
+
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -44,4 +46,6 @@ public interface CommunicationMessageFacade {
     public DeliveryHandle createDeliveryHandle(CommunicationEndpoint endpoint, boolean generatedFromGroup);
 
     public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity);
+
+    public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders);
 }

@@ -15,6 +15,8 @@ package com.propertyvista.biz.communication;
 
 import java.util.List;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
+
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -64,5 +66,10 @@ public class CommunicationMessageFacadeImpl implements CommunicationMessageFacad
     @Override
     public CommunicationEndpointDTO generateEndpointDTO(CommunicationEndpoint entity) {
         return CommunicationManager.instance().generateEndpointDTO(entity);
+    }
+
+    @Override
+    public String sendersAsStringView(ListOrderedSet<CommunicationEndpoint> senders) {
+        return CommunicationManager.instance().sendersAsStringView(senders);
     }
 }

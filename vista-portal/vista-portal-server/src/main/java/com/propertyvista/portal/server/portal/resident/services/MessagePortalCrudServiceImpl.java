@@ -15,6 +15,8 @@ package com.propertyvista.portal.server.portal.resident.services;
 
 import java.util.List;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -32,6 +34,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
+import com.propertyvista.domain.communication.CommunicationEndpoint;
 import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
@@ -154,6 +157,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             boolean isHighImportance = false;
             boolean hasAttachment = false;
             int messagesInThread = 0;
+            CommunicationMessageFacade facade = ServerSideFactory.create(CommunicationMessageFacade.class);
+            ListOrderedSet<CommunicationEndpoint> senders = new ListOrderedSet<CommunicationEndpoint>();
 
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
@@ -165,7 +170,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 hasAttachment = hasAttachment || m.attachments().size() > 0;
                 messagesInThread++;
 
-                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class));
+                MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), facade);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
                     star = true;
@@ -177,8 +182,10 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                     isHighImportance = false;
                 }
                 if (to.id().equals(currentDTO.id())) {
-                    copyChildDTO(m, to);
+                    copyChildDTO(m, to, facade);
                 }
+
+                senders.add(m.sender());
             }
             if (isHighImportance) {
                 to.highImportance().setValue(true);
@@ -191,10 +198,11 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             }
             to.hasAttachments().setValue(hasAttachment);
             to.messagesInThread().setValue(messagesInThread);
+            to.senders().setValue(facade.sendersAsStringView(senders));
         }
     }
 
-    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO) {
+    private MessageDTO copyChildDTO(Message m, MessageDTO messageDTO, CommunicationMessageFacade facade) {
         boolean star = false;
         boolean isRead = true;
 
@@ -224,7 +232,7 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
         messageDTO.sender().set(m.sender());
         messageDTO.isRead().setValue(isRead);
         messageDTO.star().setValue(star);
-        messageDTO.header().sender().setValue(ServerSideFactory.create(CommunicationMessageFacade.class).extractEndpointName(m.sender()));
+        messageDTO.header().sender().setValue(facade.extractEndpointName(m.sender()));
         messageDTO.header().date().set(m.date());
 
         return messageDTO;

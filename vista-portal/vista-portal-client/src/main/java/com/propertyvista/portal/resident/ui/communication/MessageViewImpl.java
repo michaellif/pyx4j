@@ -94,7 +94,7 @@ public class MessageViewImpl extends SimplePanel implements MessageView {
                     new MemberColumnDescriptor.Builder(proto().highImportance()).build(),
                     new MemberColumnDescriptor.Builder(proto().star()).build(),
                     new MemberColumnDescriptor.Builder(proto().hasAttachments()).build(),
-                    new MemberColumnDescriptor.Builder(proto().sender()).build(),
+                    new MemberColumnDescriptor.Builder(proto().senders()).build(),
                     new MemberColumnDescriptor.Builder(proto().subject()).build(),
                     new MemberColumnDescriptor.Builder(proto().messagesInThread()).build(),
                     new MemberColumnDescriptor.Builder(proto().date()).build()));
