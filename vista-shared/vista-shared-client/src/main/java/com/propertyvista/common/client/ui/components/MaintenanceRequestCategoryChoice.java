@@ -280,4 +280,9 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         }
         return null;
     }
+
+    @Override
+    protected String getDebugInfo() {
+        return "value=" + (getValue() == null ? "null" : getValue().name().getStringView()) + ";";
+    }
 }

@@ -48,7 +48,6 @@ import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -156,11 +155,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     initSelectors();
                 }
             };
-            if (getParentView() instanceof IEditor) {
-                ((MaintenanceRequestEditorView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
-            } else {
-                ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
-            }
+            ((MaintenanceRequestEditorView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
         } else {
             this.meta = meta;
             initSelectors();
