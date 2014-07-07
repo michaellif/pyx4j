@@ -116,28 +116,27 @@ public class YardiLeaseFinancialProcessor {
         BigDecimal balanceDue = new BigDecimal(detail.getBalanceDue());
         BigDecimal amount = amountPaid.add(balanceDue);
 
+        createCharge(account, detail, stats);
+
+        // for a partially paid charge add fully consumed credit for the amount paid
+        if (amount.compareTo(BigDecimal.ZERO) > 0 && amountPaid.compareTo(BigDecimal.ZERO) > 0) {
+
+            detail.setAmount("-" + detail.getAmountPaid()); // negate amount
+            detail.setBalanceDue("0.00"); // translates to fully consumed credit
+            detail.setAmountPaid(detail.getAmount()); // ensure balance
+            detail.setDescription(i18n.tr("{0} amount paid", detail.getDescription()));
+
+            createCharge(account, detail, stats);
+        }
+    }
+
+    private void createCharge(BillingAccount account, ChargeDetail detail, LeaseFinancialStats stats) {
         InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, detail);
         Persistence.service().persist(charge);
 
         stats.addCharge(charge.amount().getValue());
         log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id().getValue(), charge.amount()
                 .getValue());
-
-        // for a partially paid charge add fully consumed credit for the amount paid
-        if (amount.compareTo(BigDecimal.ZERO) > 0 && amountPaid.compareTo(BigDecimal.ZERO) > 0) {
-            // negate amount
-            detail.setAmount("-" + detail.getAmountPaid());
-            detail.setBalanceDue("0.00"); // translates to fully consumed credit
-            detail.setAmountPaid(detail.getAmount()); // ensure balance
-            detail.setDescription(i18n.tr("{0} amount paid", detail.getDescription()));
-
-            charge = YardiARIntegrationAgent.createCharge(account, detail);
-            Persistence.service().persist(charge);
-
-            stats.addCharge(charge.amount().getValue());
-            log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id().getValue(), charge.amount()
-                    .getValue());
-        }
     }
 
     private void processPayment(BillingAccount account, Payment paymentIn, LeaseFinancialStats stats) {
