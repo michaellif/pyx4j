@@ -41,11 +41,9 @@ import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
-import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
-import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
@@ -70,7 +68,6 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.ExecutionMonitor.IterationProgressCounter;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
-import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiPropertyNoAccessException;
@@ -78,11 +75,8 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -95,8 +89,8 @@ import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mappers.BuildingsMapper;
 import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
-import com.propertyvista.yardi.processors.YardiChargeProcessor;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
+import com.propertyvista.yardi.processors.YardiLeaseFinancialProcessor;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
@@ -506,7 +500,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             try {
-                Building building = importProperty(yardiInterfaceId, property.getPropertyID().get(0), executionMonitor);
+                Building building = importBuiling(yardiInterfaceId, property.getPropertyID().get(0), executionMonitor);
                 executionMonitor.addProcessedEvent("Building");
                 importedBuildings.add(building);
 
@@ -538,10 +532,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         executionMonitor.addProcessedEvent("Unit");
 
                         try {
-                            LeaseFinancialStats stats = importLease(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
-                            executionMonitor.addProcessedEvent("Charges", stats.getCharges());
-                            executionMonitor.addProcessedEvent("Payments", stats.getPayments());
-                            executionMonitor.addProcessedEvent("Transactions");
+                            importLease(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
                         } catch (YardiServiceException e) {
                             executionMonitor.addFailedEvent("Transactions",
                                     SimpleMessageFormat.format("Lease for customer {0} ({1})", rtCustomer.getCustomerID(), propertyCode), e);
@@ -592,7 +583,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return importedBuildings;
     }
 
-    private Building importProperty(final Key yardiInterfaceId, final PropertyIDType propertyId, final ExecutionMonitor executionMonitor)
+    private Building importBuiling(final Key yardiInterfaceId, final PropertyIDType propertyId, final ExecutionMonitor executionMonitor)
             throws YardiServiceException {
         log.info("Updating building {}", propertyId.getIdentification().getPrimaryID());
 
@@ -615,6 +606,22 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 AptUnit aptUnit = new YardiBuildingProcessor().updateUnit(building, unit);
                 ServerSideFactory.create(BuildingFacade.class).persist(aptUnit);
                 return aptUnit;
+            }
+        });
+    }
+
+    private void importProductCatalog(final Key yardiInterfaceId, final Building building, final RentableItems rentableItems,
+            final Map<String, BigDecimal> depositInfo, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor(executionMonitor);
+    
+                processor.processCatalog(building, rentableItems, yardiInterfaceId);
+                processor.updateUnits(building, depositInfo);
+                processor.persistCatalog(building);
+    
+                return null;
             }
         });
     }
@@ -656,9 +663,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
-    private LeaseFinancialStats importLease(final Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer,
-            final ExecutionMonitor executionMonitor) throws YardiServiceException {
-        final LeaseFinancialStats state = new LeaseFinancialStats();
+    private void importLease(final Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
+            throws YardiServiceException {
 
         log.info("    Importing Lease (customerId={}):", rtCustomer.getCustomerID());
 
@@ -666,59 +672,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                 @Override
                 public Void execute() throws YardiServiceException {
-                    // update lease
+
                     new YardiLeaseProcessor(executionMonitor).processLease(rtCustomer, yardiInterfaceId, propertyCode);
-
-                    // update charges and payments
-                    final BillingAccount account = new YardiChargeProcessor().getAccount(yardiInterfaceId, rtCustomer);
-                    new YardiChargeProcessor().removeOldCharges(account);
-                    new YardiPaymentProcessor().removeOldPayments(account);
-
-                    log.info("        Importing Lease Transactions:", rtCustomer.getCustomerID());
-                    if (rtCustomer.getRTServiceTransactions() != null) {
-                        if (rtCustomer.getRTServiceTransactions().getTransactions().isEmpty()) {
-                            log.info("          No Transactions for Lease customerId={} ", rtCustomer.getCustomerID());
-                        }
-                        for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
-                            if (tr != null) {
-                                if (tr.getCharge() != null) {
-                                    ChargeDetail detail = tr.getCharge().getDetail();
-                                    BigDecimal amountPaid = new BigDecimal(detail.getAmountPaid());
-                                    BigDecimal balanceDue = new BigDecimal(detail.getBalanceDue());
-                                    BigDecimal amount = amountPaid.add(balanceDue);
-                                    InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, detail);
-                                    Persistence.service().persist(charge);
-                                    state.addCharge(charge.amount().getValue());
-                                    log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id()
-                                            .getValue(), charge.amount().getValue());
-                                    // for a partially paid charge add fully consumed credit for the amount paid
-                                    if (amount.compareTo(BigDecimal.ZERO) > 0 && amountPaid.compareTo(BigDecimal.ZERO) > 0) {
-                                        // negate amount
-                                        detail.setAmount("-" + detail.getAmountPaid());
-                                        detail.setBalanceDue("0.00"); // translates to fully consumed credit
-                                        detail.setAmountPaid(detail.getAmount()); // ensure balance
-                                        detail.setDescription(i18n.tr("{0} amount paid", detail.getDescription()));
-                                        charge = YardiARIntegrationAgent.createCharge(account, detail);
-                                        Persistence.service().persist(charge);
-                                        log.info("          Created charge (transactionId={}, chargePk={}, amount={})", detail.getTransactionID(), charge.id()
-                                                .getValue(), charge.amount().getValue());
-                                        state.addCharge(charge.amount().getValue());
-                                    }
-
-                                }
-
-                                if (tr.getPayment() != null) {
-                                    YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
-                                    Persistence.service().persist(payment);
-                                    state.addPayment(payment.amount().getValue());
-                                    log.info("          Created payment (transactionId={}, amount={}) ", tr.getPayment().getDetail().getTransactionID(),
-                                            payment.amount().getValue());
-                                }
-                            }
-                        }
-                    } else {
-                        log.info("          No RT Service Transactions Received for Lease customerId={} ", rtCustomer.getCustomerID());
-                    }
+                    new YardiLeaseFinancialProcessor(executionMonitor).processLease(rtCustomer, yardiInterfaceId);
 
                     return null;
                 }
@@ -726,26 +682,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         } else {
             log.info("    Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
             // TODO skipping monitor message
-            return state;
         }
-
-        return state;
-    }
-
-    private void importProductCatalog(final Key yardiInterfaceId, final Building building, final RentableItems rentableItems,
-            final Map<String, BigDecimal> depositInfo, final ExecutionMonitor executionMonitor) throws YardiServiceException {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-            @Override
-            public Void execute() throws YardiServiceException {
-                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor(executionMonitor);
-
-                processor.processCatalog(building, rentableItems, yardiInterfaceId);
-                processor.updateUnits(building, depositInfo);
-                processor.persistCatalog(building);
-
-                return null;
-            }
-        });
     }
 
     private void importLeaseCharges(Key yardiInterfaceId, ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor,
@@ -920,7 +857,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 // import new buildings
                 Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
                 if (building == null || !importedBuildings.contains(building)) {
-                    building = importProperty(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
+                    building = importBuiling(yardiInterfaceId, new YardiILSMarketingProcessor().fixPropertyID(property.getPropertyID()), executionMonitor);
                     newBuildings.add(building);
                 }
                 executionMonitor.addProcessedEvent("Building");
@@ -1026,29 +963,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         criteria.eq(criteria.proto().statusUntil(), OccupancyFacade.MAX_DATE);
         UnitAvailabilityStatus status = Persistence.service().retrieve(criteria);
         return status;
-    }
-
-    private class LeaseFinancialStats {
-
-        private BigDecimal chargesAmount = BigDecimal.ZERO;
-
-        private BigDecimal paymentsAmount = BigDecimal.ZERO;
-
-        public void addCharge(BigDecimal payment) {
-            this.chargesAmount = chargesAmount.add(payment);
-        }
-
-        public void addPayment(BigDecimal payment) {
-            this.paymentsAmount = paymentsAmount.add(payment);
-        }
-
-        public BigDecimal getCharges() {
-            return chargesAmount;
-        }
-
-        public BigDecimal getPayments() {
-            return paymentsAmount;
-        }
     }
 
     private List<Lease> getActiveLeases(Key yardiInterfaceId, String propertyCode) {
