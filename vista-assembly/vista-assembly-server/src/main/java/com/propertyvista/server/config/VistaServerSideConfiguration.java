@@ -451,4 +451,9 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     public EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration() {
         return new EquifaxInterfaceConfigurationUatCustom(this);
     }
+
+    @Override
+    public int yardiConnectionTimeout() {
+        return getConfigProperties().getSecondsValue("yardiConnectionTimeout", Consts.MIN2SEC * 9);
+    }
 }

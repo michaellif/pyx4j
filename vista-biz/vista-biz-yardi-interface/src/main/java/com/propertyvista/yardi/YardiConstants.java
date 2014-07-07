@@ -29,8 +29,6 @@ public class YardiConstants {
         GetServiceRequests, CreateOrEditServiceRequests, GetCustomValues
     }
 
-    public static final long TIMEOUT = 180; // minutes
-
     public static final String INTERFACE_ENTITY = "Property Vista";
 
     public static final String MAINTENANCE_INTERFACE_ENTITY = "Property Vista-Maintenance";

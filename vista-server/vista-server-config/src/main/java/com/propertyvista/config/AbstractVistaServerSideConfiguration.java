@@ -96,6 +96,9 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract EquifaxInterfaceConfiguration getEquifaxInterfaceConfiguration();
 
+    //(in seconds) 
+    public abstract int yardiConnectionTimeout();
+
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;
     }

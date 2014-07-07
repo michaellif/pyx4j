@@ -20,6 +20,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
@@ -279,6 +280,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     @Override
     public String rdateServer() {
         return "rdate.birchwoodsoftwaregroup.com";
+    }
+
+    @Override
+    public int yardiConnectionTimeout() {
+        return Consts.MIN2SEC * 9;
     }
 
 }

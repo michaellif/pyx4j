@@ -32,16 +32,17 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.biz.system.yardi.YardiConfigurationFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
-import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterface;
 
@@ -183,7 +184,8 @@ public abstract class AbstractYardiStub implements YardiInterface, ExternalInter
         if (options == null) {
             options = new Options();
         }
-        options.setTimeOutInMilliSeconds(Consts.MIN2MSEC * YardiConstants.TIMEOUT);
+        options.setTimeOutInMilliSeconds(Consts.SEC2MSEC
+                * ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).yardiConnectionTimeout());
 
         options.setProperty(HTTPConstants.HTTP_PROTOCOL_VERSION, HTTPConstants.HEADER_PROTOCOL_11);
 
