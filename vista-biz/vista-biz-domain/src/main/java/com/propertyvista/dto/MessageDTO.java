@@ -72,6 +72,9 @@ public interface MessageDTO extends Message {
     @ReadOnly
     IPrimitive<Boolean> isRead();
 
+    @ReadOnly
+    IPrimitive<Boolean> hasAttachments();
+
     @NotNull
     @ReadOnly
     IPrimitive<Boolean> star();

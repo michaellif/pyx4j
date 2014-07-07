@@ -265,12 +265,14 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             boolean star = false;
             boolean isRead = true;
             boolean isHighImportance = false;
+            boolean hasAttachment = false;
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.sender(), AttachLevel.Attached);
-                if (!isForList) {
+                if (!isForList || !hasAttachment) {
                     Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
                 }
+                hasAttachment = hasAttachment || m.attachments().size() > 0;
                 MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class), isForList);
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
@@ -295,6 +297,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
             if (!isRead) {
                 to.isRead().setValue(false);
             }
+            to.hasAttachments().setValue(hasAttachment);
         }
     }
 

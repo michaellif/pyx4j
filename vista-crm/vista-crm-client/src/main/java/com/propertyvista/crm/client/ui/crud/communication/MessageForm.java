@@ -180,8 +180,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
         Widget attachmentCaption;
 
-        Widget attachmentBr;
-
         MessageAttachmentFolder attachemnts;
 
         private FormPanel searchCriteriaPanel;
@@ -321,7 +319,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
 
             attachmentCaption = formPanel.h3("Attachments");
             formPanel.append(Location.Dual, proto().attachments(), attachemnts = new MessageAttachmentFolder());
-            attachmentBr = formPanel.br();
+            formPanel.br();
 
             formPanel.append(Location.Dual, createLowerToolbar());
 
@@ -573,9 +571,8 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 get(proto().star()).setVisible(false);
                 get(proto().header()).setVisible(false);
 
-                attachmentCaption.setVisible(false);
-                attachmentBr.setVisible(false);
-                attachemnts.setVisible(false);
+                attachmentCaption.setVisible(true);
+                attachemnts.setVisible(true);
                 highImportnaceImage.setVisible(false);
                 get(proto().highImportance()).setVisible(true);
                 statusToolBar.asWidget().setVisible(false);
@@ -603,7 +600,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                 starImage.setResource(get(proto().star()).getValue() ? CrmImages.INSTANCE.fullStar() : (CrmImages.INSTANCE.noStar()));
 
                 attachmentCaption.setVisible(getValue().attachments().size() > 0);
-                attachmentBr.setVisible(true);
                 attachemnts.setVisible(getValue().attachments().size() > 0);
                 highImportnaceImage.setVisible(getValue().highImportance().getValue(false));
                 get(proto().highImportance()).setVisible(false);

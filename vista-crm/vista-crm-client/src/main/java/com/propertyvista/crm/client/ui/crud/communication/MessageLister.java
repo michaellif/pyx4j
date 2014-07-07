@@ -39,14 +39,18 @@ public class MessageLister extends AbstractLister<MessageDTO> {
     public static ColumnDescriptor[] createColumnDescriptors() {
         MessageDTO proto = EntityFactory.getEntityPrototype(MessageDTO.class);
 
-        return new ColumnDescriptor[] { //
-        new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).build(),//
-                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).build(),//
-                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).build(),//
-                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(), //
-                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),//
-                new MemberColumnDescriptor.Builder(proto.topic()).searchableOnly().build() };//
+        return new ColumnDescriptor[] {//@formatter:off
+        new MemberColumnDescriptor.Builder(proto.isRead()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.star()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.highImportance()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.hasAttachments()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.sender().name()).columnTitle(i18n.tr("Sender")).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.topic(), false).searchable(true).build(),
+                new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.status()).searchable(false).build() };
+      //@formatter:on
     }
 
 }

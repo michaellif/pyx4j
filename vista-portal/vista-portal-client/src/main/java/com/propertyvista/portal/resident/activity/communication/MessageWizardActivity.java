@@ -25,7 +25,6 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.communication.MessageWizardView;
 import com.propertyvista.portal.resident.ui.communication.MessageWizardView.MessageWizardPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Message.MessageWizard;
 import com.propertyvista.portal.rpc.portal.resident.communication.MessageDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.MessagePortalCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
@@ -34,11 +33,8 @@ public class MessageWizardActivity extends AbstractWizardCrudActivity<MessageDTO
 
     private static final I18n i18n = I18n.get(MessageWizardActivity.class);
 
-    private final MessageWizard place;
-
     public MessageWizardActivity(AppPlace place) {
         super(MessageWizardView.class, GWT.<MessagePortalCrudService> create(MessagePortalCrudService.class), MessageDTO.class);
-        this.place = (MessageWizard) place;
     }
 
     @Override
