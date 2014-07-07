@@ -125,6 +125,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private YardiResidentTransactionsService() {
     }
 
+    // Public interface:
+
     public static YardiResidentTransactionsService getInstance() {
         return SingletonHolder.INSTANCE;
     }
@@ -137,8 +139,25 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      * @throws RemoteException
      * @throws AxisFault
      */
-    public String ping(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws AxisFault, RemoteException {
+    public static String ping(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws AxisFault, RemoteException {
         return stub.ping(yc);
+    }
+
+    static public List<Property> getProperties(ResidentTransactions transaction) {
+        List<Property> properties = new ArrayList<Property>();
+        for (Property property : transaction.getProperty()) {
+            properties.add(property);
+        }
+        return properties;
+    }
+
+    public List<YardiPropertyConfiguration> getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        return getPropertyConfigurations(ServerSideFactory.create(YardiResidentTransactionsStub.class), yc);
+    }
+
+    public List<YardiPropertyConfiguration> getPropertyConfigurations(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException,
+            RemoteException {
+        return getPropertyConfigurations(stub.getPropertyConfigurations(yc));
     }
 
     /**
@@ -180,85 +199,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     public void updateBuilding(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         updateProperties(yc, Arrays.asList(building.propertyCode().getValue()), executionMonitor);
-    }
-
-    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, ExecutionMonitor executionMonitor) throws YardiServiceException,
-            RemoteException {
-        try {
-            ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
-            ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
-
-            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            final Key yardiInterfaceId = yc.getPrimaryKey();
-
-            List<Building> importedBuildings = new ArrayList<>();
-
-            // resident transactions
-            if (!executionMonitor.isTerminationRequested()) {
-                List<ResidentTransactions> transactions = getResidentTransactions(stub, yc, executionMonitor, propertyCodes);
-                for (ResidentTransactions transaction : transactions) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    importedBuildings.addAll(importTransaction(yardiInterfaceId, transaction, executionMonitor, stub));
-                }
-            }
-
-            // lease charges:
-            if (!executionMonitor.isTerminationRequested()) {
-                List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, importedBuildings);
-                for (ResidentTransactions leaseCharges : allLeaseCharges) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    importLeaseCharges(yardiInterfaceId, leaseCharges, executionMonitor, stub);
-                }
-            }
-
-            // availability:
-            List<PhysicalProperty> properties = Collections.emptyList();
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                properties = getILSPropertyMarketing(yc, executionMonitor, propertyCodes);
-                for (PhysicalProperty property : properties) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-
-                    // process each property info - import new buildings only
-                    List<Building> newBuildings = importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
-                    importedBuildings.addAll(newBuildings);
-
-                    executionMonitor.addInfoEvent(
-                            "ILSPropertyMarketing",
-                            SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newBuildings.size(),
-                                    ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
-                                        @Override
-                                        public String toString(Building value) {
-                                            return value.propertyCode().getStringView();
-                                        }
-                                    })));
-                }
-            }
-
-            // product catalog:
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
-                for (Building building : importedBuildings) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    updateProductCatalog(yc, building, getBuildingDepositInfo(building, properties), executionMonitor);
-                }
-            }
-
-        } finally {
-            AtomicReference<Long> maxRequestTime = new AtomicReference<>();
-            long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
-            executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
-            executionMonitor.addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()), new BigDecimal(maxRequestTime.get()));
-            ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
-        }
-
-        log.info("Update completed.");
     }
 
     public void updateLease(PmcYardiCredential yc, Lease lease, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
@@ -313,43 +253,28 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-        PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, building.propertyCode().getValue());
-        updateProductCatalog(yc, building, getBuildingDepositInfo(building, Arrays.asList(propertyMarketing)), executionMonitor);
+        PhysicalProperty propertyMarketing = ServerSideFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc,
+                building.propertyCode().getValue());
+        Map<String, BigDecimal> depositInfo = getBuildingDepositInfo(building, Arrays.asList(propertyMarketing));
+
+        updateProductCatalog(yc, building, depositInfo, executionMonitor);
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, Map<String, BigDecimal> depositInfo, ExecutionMonitor executionMonitor)
             throws YardiServiceException {
-        YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
-        RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
+        RentableItems rentableItems = ServerSideFactory.create(YardiGuestManagementStub.class).getRentableItems(yc, building.propertyCode().getValue());
+
         importProductCatalog(yc.getPrimaryKey(), building, rentableItems, depositInfo, executionMonitor);
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
-        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions reversalTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
 
-        stub.importResidentTransactions(yc, reversalTransactions);
+        ServerSideFactory.create(YardiResidentTransactionsStub.class).importResidentTransactions(yc, reversalTransactions);
     }
 
-    static public List<Property> getProperties(ResidentTransactions transaction) {
-        List<Property> properties = new ArrayList<Property>();
-        for (Property property : transaction.getProperty()) {
-            properties.add(property);
-        }
-        return properties;
-    }
-
-    public List<YardiPropertyConfiguration> getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        return getPropertyConfigurations(ServerSideFactory.create(YardiResidentTransactionsStub.class), yc);
-    }
-
-    public List<YardiPropertyConfiguration> getPropertyConfigurations(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException,
-            RemoteException {
-        return getPropertyConfigurations(stub.getPropertyConfigurations(yc));
-    }
+    // Internal implementation:
 
     private Map<String, BigDecimal> getBuildingDepositInfo(Building building, List<PhysicalProperty> marketingInfo) {
         for (PhysicalProperty propertyInfo : marketingInfo) {
@@ -374,6 +299,191 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
         return propertyConfigurations;
+    }
+
+    private List<ResidentTransactions> getResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
+            List<String> propertyCodes) throws YardiServiceException, RemoteException {
+        List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
+
+        final Key yardiInterfaceId = yc.getPrimaryKey();
+        for (String propertyCode : propertyCodes) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
+            Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
+            if (building != null) {
+                if (building.suspended().getValue()) {
+                    executionMonitor.addInfoEvent("skip suspended property code for transaction import", CompletionType.failed, propertyCode, null);
+                    continue;
+                }
+            } else {
+                // process as propertyCode or new building
+            }
+            try {
+                ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
+                if (residentTransactions != null) {
+                    transactions.add(residentTransactions);
+                }
+                executionMonitor.addInfoEvent("PropertyTransactions", propertyCode);
+            } catch (YardiPropertyNoAccessException e) {
+                if (suspendBuilding(yardiInterfaceId, propertyCode)) {
+                    executionMonitor.addErredEvent("BuildingSuspended", e);
+                } else {
+                    executionMonitor.addFailedEvent("PropertyTransactions", propertyCode, e);
+                }
+            }
+        }
+
+        return transactions;
+    }
+
+    // TODO - we may need to request Yardi charges for one more cycle forward
+    private List<ResidentTransactions> getLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
+            List<Building> buildings) throws YardiServiceException, RemoteException {
+        final Key yardiInterfaceId = yc.getPrimaryKey();
+        // Make sure YardiChargeCodes have been configured
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
+        criteria.isNotNull(criteria.proto().yardiChargeCodes());
+        if (Persistence.service().count(criteria) < 1) {
+            throw new YardiServiceException("Yardi Charge Codes not configured");
+        }
+        List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
+        for (Building building : buildings) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
+            if (building.suspended().getValue()) {
+                executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, building.propertyCode().getValue(),
+                        null);
+            } else {
+                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly, 1);
+                try {
+                    ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, building.propertyCode().getValue(), nextCycle
+                            .billingCycleStartDate().getValue());
+                    if (residentTransactions != null) {
+                        transactions.add(residentTransactions);
+                    }
+                    executionMonitor.addInfoEvent("PropertyCharges", building.propertyCode().getValue());
+                } catch (YardiPropertyNoAccessException e) {
+                    if (suspendBuilding(yardiInterfaceId, building.propertyCode().getValue())) {
+                        executionMonitor.addErredEvent("BuildingSuspended", e);
+                    } else {
+                        executionMonitor.addFailedEvent("PropertyCharges", building.propertyCode().getValue(), e);
+                    }
+                }
+            }
+        }
+
+        return transactions;
+    }
+
+    private List<PhysicalProperty> getILSPropertyMarketing(PmcYardiCredential yc, ExecutionMonitor executionMonitor, List<String> propertyCodes) {
+        YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
+        List<PhysicalProperty> marketingInfo = new ArrayList<PhysicalProperty>();
+
+        for (String propertyCode : propertyCodes) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
+
+            Building building = MappingUtils.getBuilding(yc.getPrimaryKey(), propertyCode);
+            if (building != null && building.suspended().isBooleanTrue()) {
+                executionMonitor.addInfoEvent("ILSPropertyMarketing", "skipped suspended building: " + propertyCode);
+                continue;
+            }
+
+            try {
+                PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, propertyCode);
+                if (propertyMarketing != null) {
+                    marketingInfo.add(propertyMarketing);
+                }
+                executionMonitor.addInfoEvent("ILSPropertyMarketing", "accessing building info: " + propertyCode);
+            } catch (YardiServiceException e) {
+                executionMonitor.addErredEvent("ILSPropertyMarketing", "accessing building info: " + propertyCode, e);
+            }
+        }
+
+        return marketingInfo;
+    }
+
+    private void updateProperties(PmcYardiCredential yc, List<String> propertyCodes, ExecutionMonitor executionMonitor) throws YardiServiceException,
+            RemoteException {
+        try {
+            ServerSideFactory.create(YardiConfigurationFacade.class).startYardiTimer();
+            ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
+
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            final Key yardiInterfaceId = yc.getPrimaryKey();
+
+            List<Building> importedBuildings = new ArrayList<>();
+
+            // resident transactions
+            if (!executionMonitor.isTerminationRequested()) {
+                List<ResidentTransactions> transactions = getResidentTransactions(stub, yc, executionMonitor, propertyCodes);
+                for (ResidentTransactions transaction : transactions) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                    importedBuildings.addAll(importTransaction(yardiInterfaceId, transaction, executionMonitor, stub));
+                }
+            }
+
+            // lease charges:
+            if (!executionMonitor.isTerminationRequested()) {
+                List<ResidentTransactions> allLeaseCharges = getLeaseCharges(stub, yc, executionMonitor, importedBuildings);
+                for (ResidentTransactions leaseCharges : allLeaseCharges) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                    importLeaseCharges(yardiInterfaceId, leaseCharges, executionMonitor, stub);
+                }
+            }
+
+            // availability:
+            List<PhysicalProperty> properties = Collections.emptyList();
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+                properties = getILSPropertyMarketing(yc, executionMonitor, propertyCodes);
+                for (PhysicalProperty property : properties) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+
+                    // process each property info - import new buildings only
+                    List<Building> newBuildings = importPropertyMarketingInfo(yardiInterfaceId, property, importedBuildings, executionMonitor);
+                    importedBuildings.addAll(newBuildings);
+
+                    executionMonitor.addInfoEvent(
+                            "ILSPropertyMarketing",
+                            SimpleMessageFormat.format("import new buildings: {0}{0,choice,0#|0< [{1}]}", newBuildings.size(),
+                                    ConverterUtils.convertCollection(newBuildings, new ToStringConverter<Building>() {
+                                        @Override
+                                        public String toString(Building value) {
+                                            return value.propertyCode().getStringView();
+                                        }
+                                    })));
+                }
+            }
+
+            // product catalog:
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+                for (Building building : importedBuildings) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                    updateProductCatalog(yc, building, getBuildingDepositInfo(building, properties), executionMonitor);
+                }
+            }
+
+        } finally {
+            AtomicReference<Long> maxRequestTime = new AtomicReference<>();
+            long yardiTime = ServerSideFactory.create(YardiConfigurationFacade.class).stopYardiTimer(maxRequestTime);
+            executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiTime), new BigDecimal(yardiTime));
+            executionMonitor.addInfoEvent("yardiMaxRequestTime", TimeUtils.durationFormat(maxRequestTime.get()), new BigDecimal(maxRequestTime.get()));
+            ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
+        }
+
+        log.info("Update completed.");
     }
 
     private List<Building> importTransaction(Key yardiInterfaceId, ResidentTransactions transaction, final ExecutionMonitor executionMonitor,
@@ -638,42 +748,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
-    private List<ResidentTransactions> getResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
-            List<String> propertyCodes) throws YardiServiceException, RemoteException {
-        List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
-
-        final Key yardiInterfaceId = yc.getPrimaryKey();
-        for (String propertyCode : propertyCodes) {
-            if (executionMonitor.isTerminationRequested()) {
-                break;
-            }
-            Building building = MappingUtils.getBuilding(yardiInterfaceId, propertyCode);
-            if (building != null) {
-                if (building.suspended().getValue()) {
-                    executionMonitor.addInfoEvent("skip suspended property code for transaction import", CompletionType.failed, propertyCode, null);
-                    continue;
-                }
-            } else {
-                // process as propertyCode or new building
-            }
-            try {
-                ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
-                if (residentTransactions != null) {
-                    transactions.add(residentTransactions);
-                }
-                executionMonitor.addInfoEvent("PropertyTransactions", propertyCode);
-            } catch (YardiPropertyNoAccessException e) {
-                if (suspendBuilding(yardiInterfaceId, propertyCode)) {
-                    executionMonitor.addErredEvent("BuildingSuspended", e);
-                } else {
-                    executionMonitor.addFailedEvent("PropertyTransactions", propertyCode, e);
-                }
-            }
-        }
-
-        return transactions;
-    }
-
     private void importLeaseCharges(Key yardiInterfaceId, ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor,
             final ExternalInterfaceLoggingStub interfaceLog) {
         log.info("LeaseCharges: import started...");
@@ -819,76 +893,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 return null;
             }
         });
-    }
-
-    // TODO - we may need to request Yardi charges for one more cycle forward
-    private List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
-            List<Building> buildings) throws YardiServiceException, RemoteException {
-        final Key yardiInterfaceId = yc.getPrimaryKey();
-        // Make sure YardiChargeCodes have been configured
-        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
-        criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
-        criteria.isNotNull(criteria.proto().yardiChargeCodes());
-        if (Persistence.service().count(criteria) < 1) {
-            throw new YardiServiceException("Yardi Charge Codes not configured");
-        }
-        List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
-        for (Building building : buildings) {
-            if (executionMonitor.isTerminationRequested()) {
-                break;
-            }
-            if (building.suspended().getValue()) {
-                executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, building.propertyCode().getValue(),
-                        null);
-            } else {
-                BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(building, BillingPeriod.Monthly, 1);
-                try {
-                    ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, building.propertyCode().getValue(), nextCycle
-                            .billingCycleStartDate().getValue());
-                    if (residentTransactions != null) {
-                        transactions.add(residentTransactions);
-                    }
-                    executionMonitor.addInfoEvent("PropertyCharges", building.propertyCode().getValue());
-                } catch (YardiPropertyNoAccessException e) {
-                    if (suspendBuilding(yardiInterfaceId, building.propertyCode().getValue())) {
-                        executionMonitor.addErredEvent("BuildingSuspended", e);
-                    } else {
-                        executionMonitor.addFailedEvent("PropertyCharges", building.propertyCode().getValue(), e);
-                    }
-                }
-            }
-        }
-
-        return transactions;
-    }
-
-    private List<PhysicalProperty> getILSPropertyMarketing(PmcYardiCredential yc, ExecutionMonitor executionMonitor, List<String> propertyCodes) {
-        YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-        List<PhysicalProperty> marketingInfo = new ArrayList<PhysicalProperty>();
-
-        for (String propertyCode : propertyCodes) {
-            if (executionMonitor.isTerminationRequested()) {
-                break;
-            }
-
-            Building building = MappingUtils.getBuilding(yc.getPrimaryKey(), propertyCode);
-            if (building != null && building.suspended().isBooleanTrue()) {
-                executionMonitor.addInfoEvent("ILSPropertyMarketing", "skipped suspended building: " + propertyCode);
-                continue;
-            }
-
-            try {
-                PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, propertyCode);
-                if (propertyMarketing != null) {
-                    marketingInfo.add(propertyMarketing);
-                }
-                executionMonitor.addInfoEvent("ILSPropertyMarketing", "accessing building info: " + propertyCode);
-            } catch (YardiServiceException e) {
-                executionMonitor.addErredEvent("ILSPropertyMarketing", "accessing building info: " + propertyCode, e);
-            }
-        }
-
-        return marketingInfo;
     }
 
     private List<Building> importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, List<Building> importedBuildings,
