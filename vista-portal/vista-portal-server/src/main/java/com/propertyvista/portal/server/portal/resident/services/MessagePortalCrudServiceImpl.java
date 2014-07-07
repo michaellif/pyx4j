@@ -152,6 +152,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             boolean star = false;
             boolean isRead = true;
             boolean isHighImportance = false;
+            boolean hasAttachment = false;
+            int messagesInThread = 0;
+
             for (Message m : ms) {
                 Persistence.ensureRetrieve(m.recipients(), AttachLevel.Attached);
                 Persistence.ensureRetrieve(m.attachments(), AttachLevel.Attached);
@@ -159,6 +162,9 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
                 if (!ResidentPortalContext.getCurrentUser().equals(m.sender()) && !isRecipientOf(m)) {
                     continue;
                 }
+                hasAttachment = hasAttachment || m.attachments().size() > 0;
+                messagesInThread++;
+
                 MessageDTO currentDTO = copyChildDTO(m, EntityFactory.create(MessageDTO.class));
                 to.content().add(currentDTO);
                 if (currentDTO.star().getValue(false)) {
@@ -183,6 +189,8 @@ public class MessagePortalCrudServiceImpl extends AbstractCrudServiceDtoImpl<Mes
             if (!isRead) {
                 to.isRead().setValue(false);
             }
+            to.hasAttachments().setValue(hasAttachment);
+            to.messagesInThread().setValue(messagesInThread);
         }
     }
 
