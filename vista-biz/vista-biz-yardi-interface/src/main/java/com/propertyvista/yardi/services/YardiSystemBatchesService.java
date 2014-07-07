@@ -32,7 +32,7 @@ import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiSystemBatchesService extends YardiAbstractService {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiSystemBatchesService.class);
 
     private static class SingletonHolder {
         public static final YardiSystemBatchesService INSTANCE = new YardiSystemBatchesService();
