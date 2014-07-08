@@ -261,7 +261,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     @Override
     public void cancel() {
         if (isNewEntity()) {
-            History.back();
+            History.fireCurrentHistoryState();
         } else {
             goToViewer(entityId);
         }
