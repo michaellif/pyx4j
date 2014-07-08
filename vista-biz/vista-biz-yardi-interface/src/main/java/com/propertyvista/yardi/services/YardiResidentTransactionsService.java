@@ -504,20 +504,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     removeLease(activeLeases, leaseId);
 
                     try {
-                        Unit yardiUnit = rtCustomer.getRTUnit().getUnit();
-                        // VISTA-3307 Yardi API ResidentTransactions is broken! the filed unitRent is actually Market Rent, Make vista internal API consistent wit ISL
-                        {
-                            Information yardiUnitInfo = yardiUnit.getInformation().get(0);
-                            if ((yardiUnitInfo.getMarketRent() == null) || (yardiUnitInfo.getMarketRent().compareTo(BigDecimal.ZERO) == 0)) {
-                                yardiUnitInfo.setMarketRent(yardiUnitInfo.getUnitRent());
-                            }
-                        }
-
-                        AptUnit unit = importUnit(building, yardiUnit, executionMonitor);
-                        // try to assign legal address for the unit
-                        if (unit.info().legalAddress().isEmpty() && rtCustomer.getCustomers().getCustomer().get(0).getAddress().size() > 0) {
-                            assignLegalAddress(unit, rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0), executionMonitor);
-                        }
+                        importUnit(building, rtCustomer, executionMonitor);
                         executionMonitor.addProcessedEvent("Unit");
 
                         try {
@@ -586,13 +573,41 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
-    private AptUnit importUnit(final Building building, final Unit unit, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        log.info("    Updating unit #" + unit.getInformation().get(0).getUnitID());
+    private AptUnit importUnit(final Building building, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+        final Unit yardiUnit = rtCustomer.getRTUnit().getUnit();
+        // VISTA-3307 Yardi API ResidentTransactions is broken! the filed unitRent is actually Market Rent, Make vista internal API consistent wit ISL
+        {
+            Information yardiUnitInfo = yardiUnit.getInformation().get(0);
+            if ((yardiUnitInfo.getMarketRent() == null) || (yardiUnitInfo.getMarketRent().compareTo(BigDecimal.ZERO) == 0)) {
+                yardiUnitInfo.setMarketRent(yardiUnitInfo.getUnitRent());
+            }
+        }
+
+        log.info("    Updating unit #" + yardiUnit.getInformation().get(0).getUnitID());
 
         return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
             @Override
             public AptUnit execute() throws YardiServiceException {
-                AptUnit aptUnit = new YardiBuildingProcessor().updateUnit(building, unit);
+                AptUnit aptUnit = new YardiBuildingProcessor().updateUnit(building, yardiUnit);
+
+                // try to assign legal address for the unit
+                if (aptUnit.info().legalAddress().isEmpty() && rtCustomer.getCustomers().getCustomer().get(0).getAddress().size() > 0) {
+                    assignLegalAddress(aptUnit, rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0), executionMonitor);
+                }
+
+                ServerSideFactory.create(BuildingFacade.class).persist(aptUnit);
+                return aptUnit;
+            }
+        });
+    }
+
+    private AptUnit importUnit(final Building building, final Unit yardiUnit, ExecutionMonitor executionMonitor) throws YardiServiceException {
+        log.info("    Updating unit #" + yardiUnit.getInformation().get(0).getUnitID());
+
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
+            @Override
+            public AptUnit execute() throws YardiServiceException {
+                AptUnit aptUnit = new YardiBuildingProcessor().updateUnit(building, yardiUnit);
                 ServerSideFactory.create(BuildingFacade.class).persist(aptUnit);
                 return aptUnit;
             }
@@ -633,23 +648,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         importedAddressToString.append(")");
         log.info("Unit pk={}: Trying to assign legal address: '{}'", unit.getPrimaryKey(), importedAddressToString);
 
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-            @Override
-            public Void execute() throws YardiServiceException {
-                StringBuilder addrErr = new StringBuilder();
-                unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
-                if (addrErr.length() > 0) {
-                    String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
-                    log.warn(msg);
-                    executionMonitor.addInfoEvent("ParseAddress", msg);
-                } else {
-                    log.info("Unit pk={}: legal address has been assigned successfully", unit.getPrimaryKey());
-                }
-
-                ServerSideFactory.create(BuildingFacade.class).persist(unit);
-                return null;
-            }
-        });
+        StringBuilder addrErr = new StringBuilder();
+        unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
+        if (addrErr.length() > 0) {
+            String msg = SimpleMessageFormat.format("Unit pk={0}: got invalid address {1}", unit.getPrimaryKey(), addrErr);
+            log.warn(msg);
+            executionMonitor.addInfoEvent("ParseAddress", msg);
+        } else {
+            log.info("Unit pk={}: legal address has been assigned successfully", unit.getPrimaryKey());
+        }
     }
 
     private void importLease(final Key yardiInterfaceId, final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
