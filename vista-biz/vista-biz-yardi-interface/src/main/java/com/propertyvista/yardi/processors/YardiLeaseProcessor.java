@@ -86,10 +86,12 @@ public class YardiLeaseProcessor {
 
     public Lease findLease(Key yardiInterfaceId, String propertyCode, String customerId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+
         criteria.eq(criteria.proto().leaseId(), customerId);
         criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
         criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
         criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
+
         return Persistence.service().retrieve(criteria);
     }
 
@@ -427,10 +429,10 @@ public class YardiLeaseProcessor {
             // if unit update is occurred:
             String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
             Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
-            if (leaseMove || (!unitNumber.equals(lease.unit().info().number().getValue()))) {
+            if (leaseMove || !unitNumber.equals(lease.unit().info().number().getValue())) {
                 Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
                 AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
-                log.debug("change unit {} for lease {} to unit {}", lease.unit(), getLeaseID(rtCustomer), unit);
+                log.debug("change unit {} for lease {} to unit {}", lease.unit(), lease.leaseId().getValue(), unit);
 
                 lease = new LeaseMerger().updateUnit(unit, lease);
                 toPersist = true;
@@ -509,15 +511,16 @@ public class YardiLeaseProcessor {
 
     private AptUnit retrieveUnit(Key yardiInterfaceId, String propertyCode, String unitNumber) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+
         criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
         criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
         criteria.eq(criteria.proto().info().number(), unitNumber);
+
         AptUnit unit = Persistence.service().retrieve(criteria);
         if (unit == null) {
             throw new Error("Unit " + unitNumber + " not found in building " + propertyCode);
-        } else {
-            return unit;
         }
+        return unit;
     }
 
     private BillableItem createBillableItem(ChargeDetail detail, BillableItem newItem) {

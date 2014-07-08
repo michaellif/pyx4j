@@ -154,10 +154,11 @@ public class YardiUnitAvailabilityStatusAdapter {
     private Lease retrieveLastLease(AptUnit unitId) {
         LogicalDate today = SystemDateManager.getLogicalDate();
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+
         criteria.eq(criteria.proto().unit(), unitId);
         criteria.le(criteria.proto().currentTerm().termFrom(), today);
         criteria.desc(criteria.proto().currentTerm().termTo());
-        Lease lease = Persistence.service().retrieve(criteria);
-        return lease;
+
+        return Persistence.service().retrieve(criteria);
     }
 }
