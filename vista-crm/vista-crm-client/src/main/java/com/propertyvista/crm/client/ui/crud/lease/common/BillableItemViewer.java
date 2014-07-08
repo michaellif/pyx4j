@@ -90,8 +90,9 @@ public class BillableItemViewer extends CForm<BillableItem> {
         });
 
         formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
-        formPanel.append(Location.Right, proto().agreedPrice()).decorate().componentWidth(120);
-        formPanel.append(Location.Left, proto().effectiveDate()).decorate().componentWidth(120);
+        formPanel.append(Location.Left, proto().agreedPrice()).decorate().componentWidth(120);
+
+        formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
 
         formPanel.append(Location.Dual, proto().description()).decorate();
@@ -121,9 +122,8 @@ public class BillableItemViewer extends CForm<BillableItem> {
 
         // tweak UI for ProductItem:
         if (VistaFeatures.instance().yardiIntegration()) {
-
-            get(proto().item()).setVisible(!getValue().item().isNull());
             get(proto().yardiChargeCode()).setVisible(!getValue().yardiChargeCode().isNull());
+            get(proto().item()).setVisible(!getValue().item().isNull());
 
             get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
             get(proto().effectiveDate()).setTooltip(null);

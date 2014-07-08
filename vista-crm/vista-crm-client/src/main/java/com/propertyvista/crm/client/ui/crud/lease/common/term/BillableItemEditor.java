@@ -126,7 +126,9 @@ public class BillableItemEditor extends CForm<BillableItem> {
             }
         }).decorate();
 
+        formPanel.append(Location.Left, proto().yardiChargeCode()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().agreedPrice()).decorate().componentWidth(120);
+
         formPanel.append(Location.Right, proto().effectiveDate()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().expirationDate()).decorate().componentWidth(120);
 
@@ -146,6 +148,7 @@ public class BillableItemEditor extends CForm<BillableItem> {
         itemEffectiveDateEditor = get(proto().effectiveDate());
         itemExpirationDateEditor = get(proto().expirationDate());
 
+        get(proto().yardiChargeCode()).setVisible(false);
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
 
@@ -241,15 +244,17 @@ public class BillableItemEditor extends CForm<BillableItem> {
 
         // Yardi mode correction:
         if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().yardiChargeCode()).setVisible(!getValue().yardiChargeCode().isNull());
             get(proto().item()).setVisible(isEditable() || !getValue().item().isNull());
 
             get(proto().agreedPrice()).setEditable(false);
             get(proto().agreedPrice()).setMandatory(false);
 
-//            get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
-//            get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
-            get(proto().effectiveDate()).setVisible(false);
-            get(proto().expirationDate()).setVisible(false);
+            get(proto().effectiveDate()).setEditable(false);
+            get(proto().expirationDate()).setEditable(false);
+
+            get(proto().effectiveDate()).setVisible(!getValue().effectiveDate().isNull());
+            get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
 
 //            adjustmentPanel.setVisible(((isEditable() && !getValue().item().isEmpty()) || !getValue().adjustments().isEmpty()));
             adjustmentPanel.setVisible(false); // always invisible in Yardi mode!
