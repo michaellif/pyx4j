@@ -24,8 +24,11 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
+import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
+import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
 class SystemHealthMonitor {
 
@@ -37,6 +40,7 @@ class SystemHealthMonitor {
 
     void healthMonitor(LogicalDate forDate) {
         verifyStuckProcesses();
+        verifyEncryptedStorage();
     }
 
     private void verifyStuckProcesses() {
@@ -55,4 +59,18 @@ class SystemHealthMonitor {
             }
         }
     }
+
+    private void verifyEncryptedStorage() {
+        EncryptedStorageDTO state = ServerSideFactory.create(EncryptedStorageFacade.class).getSystemState();
+        for (EncryptedStorageKeyDTO key : state.keys()) {
+            if (!key.decryptionEnabled().getValue() && (key.recordsCount().getValue() > 0)) {
+                executionMonitor.addFailedEvent("EncryptedStorage", "EncryptedStorageKey " + key.name().getStringView() + " decryption not active!");
+                ServerSideFactory.create(OperationsAlertFacade.class).sendEmailAlert(
+                        "Encrypted Storage", //
+                        "Encrypted Storage Decryption not active for key {0}, affected records {1}\nAsk SecurityAdmin to activate ASAP", key.name(),
+                        key.recordsCount());
+            }
+        }
+    }
+
 }

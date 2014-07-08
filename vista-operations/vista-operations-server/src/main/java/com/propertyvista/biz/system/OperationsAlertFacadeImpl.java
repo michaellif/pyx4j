@@ -85,6 +85,19 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
         });
     }
 
+    @Override
+    public void sendEmailAlert(String subject, String messageFormat, Object... args) {
+        if (!ServerSideFactory.create(VistaSystemFacade.class).isCommunicationsDisabled()) {
+            MailMessage m = new MailMessage();
+            m.addToList("support_team@propertyvista.com,support-payments@propertyvista.com");
+            m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
+            m.setSubject("Vista Operations Alert " + subject);
+            m.setTextBody(SimpleMessageFormat.format(messageFormat, args));
+            Mail.queueUofW(m, null, ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getOperationsAlertMailServiceConfiguration());
+        }
+
+    }
+
     private Key getPrincipalPrimaryKey() {
         Visit visit = Context.getVisit();
         if (visit == null) {

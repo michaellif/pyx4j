@@ -17,6 +17,14 @@ import com.pyx4j.entity.core.IEntity;
 
 public interface OperationsAlertFacade {
 
+    /**
+     * Report incident that should be handled.
+     */
     public void record(IEntity entity, String format, Object... args);
+
+    /**
+     * Just action required email.
+     */
+    public void sendEmailAlert(String subject, String messageFormat, Object... args);
 
 }
