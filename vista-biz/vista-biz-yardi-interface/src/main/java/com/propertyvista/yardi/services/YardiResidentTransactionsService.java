@@ -249,7 +249,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateProductCatalog(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {
         PhysicalProperty propertyMarketing = ServerSideFactory.create(YardiILSGuestCardStub.class).getPropertyMarketingInfo(yc,
                 building.propertyCode().getValue());
-        Map<String, BigDecimal> depositInfo = getBuildingDepositInfo(building, Arrays.asList(propertyMarketing));
+        Map<String, BigDecimal> depositInfo = getBuildingDepositInfo(building,
+                (propertyMarketing != null ? Arrays.asList(propertyMarketing) : Collections.<PhysicalProperty> emptyList()));
 
         updateProductCatalog(yc, building, depositInfo, executionMonitor);
     }
