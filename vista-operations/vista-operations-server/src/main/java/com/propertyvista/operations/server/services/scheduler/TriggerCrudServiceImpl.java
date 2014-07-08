@@ -43,11 +43,6 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected TriggerDTO init(InitializationData initializationData) {
         TriggerDTO process = EntityFactory.create(TriggerDTO.class);
 
