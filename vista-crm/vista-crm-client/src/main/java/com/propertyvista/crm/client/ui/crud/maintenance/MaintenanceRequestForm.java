@@ -438,6 +438,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         for (MaintenanceRequestCategoryChoice c : list) {
             categoryPanel.append(Location.Left, c).decorate();
         }
+        // will need to revalidate after this
+        setVisited(false);
     }
 
     @Override
