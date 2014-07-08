@@ -17,22 +17,47 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.PolymorphicEntityBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.CardsAggregatedTransfer;
+import com.propertyvista.domain.financial.EftAggregatedTransfer;
 
 public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<AggregatedTransfer> implements AggregatedTransferCrudService {
 
-    public AggregatedTransferCrudServiceImpl() {
-        super(AggregatedTransfer.class);
+    private static class Binder extends PolymorphicEntityBinder<AggregatedTransfer, AggregatedTransfer> {
+
+        protected Binder() {
+            super(AggregatedTransfer.class, AggregatedTransfer.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(EftAggregatedTransfer.class, EftAggregatedTransfer.class, new CrudEntityBinder<EftAggregatedTransfer, EftAggregatedTransfer>(
+                    EftAggregatedTransfer.class, EftAggregatedTransfer.class) {
+                @Override
+                protected void bind() {
+                    bindCompleteObject();
+                }
+            });
+            bind(CardsAggregatedTransfer.class, CardsAggregatedTransfer.class, new CrudEntityBinder<CardsAggregatedTransfer, CardsAggregatedTransfer>(
+                    CardsAggregatedTransfer.class, CardsAggregatedTransfer.class) {
+                @Override
+                protected void bind() {
+                    bindCompleteObject();
+                }
+            });
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bindCompleteObject();
+    public AggregatedTransferCrudServiceImpl() {
+        super(new Binder());
     }
 
     @Override
