@@ -218,17 +218,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     private static SecretKey createAESSecretKey(int algorithmsVersion, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKey secret;
-        if (algorithmsVersion > 2) {
-            // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
-            // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            SecureRandom random = new SecureRandom();
-            byte[] salt = new byte[8];
-            random.nextBytes(salt);
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
-            SecretKey tmp = factory.generateSecret(spec);
-            secret = new SecretKeySpec(tmp.getEncoded(), "AES");
-        } else {
+        if (algorithmsVersion == 1) {
             byte[] keyBytes;
             try {
                 keyBytes = password.getBytes("UTF-8");
@@ -239,6 +229,18 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             keyBytes = sha.digest(keyBytes);
             keyBytes = Arrays.copyOf(keyBytes, 16); // use only first 128 bit
             secret = new SecretKeySpec(keyBytes, "AES");
+        } else if (algorithmsVersion == 2) {
+            // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
+            // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[8];
+            random.nextBytes(salt);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+        } else {
+            throw new Error("Unsupported AlgorithmsVersion " + algorithmsVersion);
         }
         return secret;
     }
@@ -507,7 +509,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         final EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
         publicKey.name().setValue(new SimpleDateFormat("yyyy-MM-dd_HHmm").format(new Date()));
         int rsaKeysize = getEncryptedStorageConfiguration().newRsaKeySize();
-        if (getEncryptedStorageConfiguration().newRsaKeySize() > 2048) {
+        if (rsaKeysize > 2048) {
             // need unlimited strength jurisdiction policy
             publicKey.algorithmsVersion().setValue(2);
         } else {
