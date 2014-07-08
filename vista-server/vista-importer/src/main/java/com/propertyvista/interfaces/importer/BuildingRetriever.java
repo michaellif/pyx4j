@@ -15,6 +15,7 @@ package com.propertyvista.interfaces.importer;
 
 import java.util.List;
 
+import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
@@ -78,7 +79,7 @@ public class BuildingRetriever {
             }
         }
 
-        Persistence.service().retrieve(building.media());
+        Persistence.ensureRetrieve(building.media(), AttachLevel.Attached);
         for (MediaFile media : building.media()) {
             buildingIO.medias().add(new MediaConverter(buildingConfig, ImageTarget.Building).createTO(media));
         }
@@ -125,7 +126,7 @@ public class BuildingRetriever {
             floorplanConfig.baseFolder = buildingConfig.baseFolder;
             floorplanConfig.directory = buildingConfig.directory + "floorplans/" + floorplan.name().getStringView() + "/";
 
-            Persistence.service().retrieve(floorplan.media());
+            Persistence.ensureRetrieve(floorplan.media(), AttachLevel.Attached);
             for (MediaFile media : floorplan.media()) {
                 floorplanIO.medias().add(new MediaConverter(floorplanConfig, ImageTarget.Floorplan).createTO(media));
             }
