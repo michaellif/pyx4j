@@ -54,7 +54,7 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
 
     protected final TO toProto;
 
-    private final boolean copyPrimaryKey;
+    protected final boolean copyPrimaryKey;
 
     private final List<Binding> binding = new Vector<Binding>();
 
@@ -191,17 +191,8 @@ public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public TO createTO(BO bo) {
-        TO to;
-        if (bo.isAssignableFrom(boClass)) {
-            to = EntityFactory.create(toClass);
-        } else if (toClass.equals(boClass)) {
-            to = (TO) EntityFactory.create((Class<IEntity>) bo.getObjectClass());
-        } else {
-            throw new Error("Polymorphic TO binding of instance " + bo.getInstanceValueClass().getSimpleName() + "/" + boClass.getSimpleName()
-                    + " not implemented");
-        }
+        TO to = EntityFactory.create(toClass);
         if (copyPrimaryKey) {
             to.setPrimaryKey(bo.getPrimaryKey());
         }
