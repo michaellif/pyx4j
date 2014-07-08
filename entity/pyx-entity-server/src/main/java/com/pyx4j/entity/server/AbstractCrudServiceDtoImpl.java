@@ -31,7 +31,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.utils.IEntityBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -49,7 +49,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         super(boClass, toClass);
     }
 
-    protected AbstractCrudServiceDtoImpl(IEntityBinder<BO, TO> binder) {
+    protected AbstractCrudServiceDtoImpl(EntityBinder<BO, TO> binder) {
         super(binder);
     }
 

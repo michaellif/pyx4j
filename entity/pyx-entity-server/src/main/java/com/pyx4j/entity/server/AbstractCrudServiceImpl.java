@@ -22,7 +22,7 @@ package com.pyx4j.entity.server;
 
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.utils.IEntityBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractCrudServiceDtoImpl<E, E> implements AbstractCrudService<E> {
 
@@ -30,7 +30,7 @@ public abstract class AbstractCrudServiceImpl<E extends IEntity> extends Abstrac
         super(entityClass, entityClass);
     }
 
-    protected AbstractCrudServiceImpl(IEntityBinder<E, E> binder) {
+    protected AbstractCrudServiceImpl(EntityBinder<E, E> binder) {
         super(binder);
     }
 }

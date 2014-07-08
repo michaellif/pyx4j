@@ -23,7 +23,7 @@ package com.pyx4j.entity.shared.utils;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
 
-public interface IEntityBinder<BO extends IEntity, TO extends IEntity> {
+public interface EntityBinder<BO extends IEntity, TO extends IEntity> {
 
     public Class<BO> boClass();
 

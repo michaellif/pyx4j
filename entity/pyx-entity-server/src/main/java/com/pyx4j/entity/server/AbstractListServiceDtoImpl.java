@@ -39,8 +39,8 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.utils.CompleteEntityBinder;
-import com.pyx4j.entity.shared.utils.IEntityBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListService<TO> {
@@ -53,19 +53,25 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
 
     protected final TO toProto;
 
-    protected final IEntityBinder<BO, TO> binder;
+    protected final EntityBinder<BO, TO> binder;
 
     protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
-        this(new CompleteEntityBinder<BO, TO>(boClass, toClass) {
+        this(new SimpleEntityBinder<BO, TO>(boClass, toClass) {
+
+            @Override
+            protected void bind() {
+                bindCompleteObject();
+            }
 
             @Override
             protected boolean retriveDetachedMember(IEntity boMember) {
                 return Persistence.service().retrieve(boMember);
             }
+
         });
     }
 
-    protected AbstractListServiceDtoImpl(IEntityBinder<BO, TO> binder) {
+    protected AbstractListServiceDtoImpl(EntityBinder<BO, TO> binder) {
         this.boClass = binder.boClass();
         this.toClass = binder.toClass();
         boProto = EntityFactory.getEntityPrototype(boClass);
