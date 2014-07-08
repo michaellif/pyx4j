@@ -117,7 +117,7 @@ public class BuildingRetriever {
                     occupancyCriteria.add(PropertyCriterion.eq(occupancyCriteria.proto().unit(), unit));
                     for (AptUnitOccupancySegment occupancy : Persistence.service().query(occupancyCriteria)) {
                         AptUnitOccupancyIO occupancyIO = new AptUnitOccupancyConverter().createTO(occupancy);
-                        aptUnitIO.AptUnitOccupancySegment().add(occupancyIO);
+                        aptUnitIO.aptUnitOccupancySegment().add(occupancyIO);
                     }
                 }
             }

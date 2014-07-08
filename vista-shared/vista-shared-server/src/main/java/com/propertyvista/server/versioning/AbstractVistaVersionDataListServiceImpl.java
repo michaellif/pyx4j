@@ -17,7 +17,7 @@ import com.pyx4j.entity.core.IVersionData;
 import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.IEntityBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.security.common.AbstractUser;
 
@@ -26,7 +26,7 @@ public abstract class AbstractVistaVersionDataListServiceImpl<BO extends IVersio
 
     protected Class<? extends AbstractUser> userClass;
 
-    protected AbstractVistaVersionDataListServiceImpl(IEntityBinder<BO, TO> binder, Class<? extends AbstractUser> userClass) {
+    protected AbstractVistaVersionDataListServiceImpl(EntityBinder<BO, TO> binder, Class<? extends AbstractUser> userClass) {
         super(binder);
         this.userClass = userClass;
     }

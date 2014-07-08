@@ -236,7 +236,7 @@ public class BuildingImporter extends ImportPersister {
                         i.info().floor().set(aptUnitIO.floor());
                         items.add(i);
 
-                        for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
+                        for (AptUnitOccupancyIO occupancyIO : aptUnitIO.aptUnitOccupancySegment()) {
                             AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
                             occupancySegment.dateFrom().setValue(occupancyIO.dateFrom().getValue());
                             occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());

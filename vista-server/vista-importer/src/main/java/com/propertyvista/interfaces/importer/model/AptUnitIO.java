@@ -26,8 +26,8 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.core.IList;
 import com.pyx4j.entity.core.IPrimitive;
-import com.pyx4j.entity.core.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
@@ -59,7 +59,7 @@ public interface AptUnitIO extends IEntity {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<AptUnitOccupancyIO> AptUnitOccupancySegment();
+    IList<AptUnitOccupancyIO> aptUnitOccupancySegment();
 
     LeaseIO lease();
 
