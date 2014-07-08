@@ -434,7 +434,7 @@ public class YardiLeaseProcessor {
                 AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
                 log.debug("change unit {} for lease {} to unit {}", lease.unit(), lease.leaseId().getValue(), unit);
 
-                lease = new LeaseMerger().updateUnit(unit, lease);
+                lease = new LeaseMerger().updateUnit(unit, lease, leaseMove);
                 toPersist = true;
                 log.debug("        - LeaseUnitChanged...");
             }

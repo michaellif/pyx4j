@@ -195,20 +195,20 @@ public class LeaseMerger {
         return null;
     }
 
-    public Lease updateUnit(AptUnit unit, Lease lease) {
+    public Lease updateUnit(AptUnit unit, Lease lease, boolean move) {
         // process old term:
-        if (lease.currentTerm().unit().isNull()) {
-            lease.currentTerm().unit().set(lease.unit());
-        }
         lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
         lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        LeaseTerm prevTerm = ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
 
         // set new term:
         lease.currentTerm().set(ServerSideFactory.create(LeaseFacade.class).createOffer(lease, unit, LeaseTerm.Type.FixedEx));
-        lease.currentTerm().termFrom().setValue(lease.currentTerm().termFrom().getValue());
-        lease.currentTerm().termTo().setValue(lease.currentTerm().termTo().getValue());
         lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+        if (!move) {
+            lease.currentTerm().termFrom().setValue(prevTerm.termFrom().getValue());
+            lease.currentTerm().termTo().setValue(prevTerm.termTo().getValue());
+            lease.currentTerm().version().leaseProducts().set(prevTerm.version().leaseProducts().duplicate());
+        }
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
 
         // update lease unit:
