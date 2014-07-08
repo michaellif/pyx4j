@@ -34,12 +34,6 @@ public class SelectPortfolioListServiceImpl extends AbstractListServiceImpl<Port
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     public void getPortfoliosForSelection(AsyncCallback<Vector<PortfolioForSelectionDTO>> callback, EntityListCriteria<Portfolio> criteria) {
         EntitySearchResult<Portfolio> portfolios = Persistence.secureQuery(criteria);
         Vector<PortfolioForSelectionDTO> dtos = new Vector<PortfolioForSelectionDTO>(portfolios.getData().size());

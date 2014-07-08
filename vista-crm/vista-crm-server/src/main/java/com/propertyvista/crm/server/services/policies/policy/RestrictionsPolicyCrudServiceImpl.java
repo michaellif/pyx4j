@@ -24,11 +24,11 @@ public class RestrictionsPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    public void copyTOtoBO(RestrictionsPolicyDTO to, RestrictionsPolicy bo) {
-        if (!to.enforceAgeOfMajority().getValue(false)) {
-            to.ageOfMajority().setValue(null);
+    protected boolean persist(RestrictionsPolicy dbo, RestrictionsPolicyDTO in) {
+        if (!dbo.enforceAgeOfMajority().getValue(false)) {
+            dbo.ageOfMajority().setValue(null);
         }
-        super.copyTOtoBO(to, bo);
+        return super.persist(dbo, in);
     }
 
 }

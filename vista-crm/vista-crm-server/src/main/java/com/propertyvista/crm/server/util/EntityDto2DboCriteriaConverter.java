@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 /**
  * Utility class for converting DTO search/sorting criteria to DBO
@@ -42,7 +42,7 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
     /**
      * Creates a mapper from {@link entity DTO binder}
      */
-    public static PropertyMapper makeMapper(EntityBinder<?, ?> dtoBinder) {
+    public static PropertyMapper makeMapper(SimpleEntityBinder<?, ?> dtoBinder) {
         return new DtoBinderMapper(dtoBinder);
     }
 
@@ -73,7 +73,7 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
                 if (mapper == null) {
                     throw new IllegalStateException("DTO property " + propertyCriterion.getPropertyPath().toString() + " is not bound to DBO property");
                 }
-                dboFilters.add(new PropertyCriterion(mapper.getDboMemberPath(dtoPath), propertyCriterion.getRestriction(), mapper
+                dboFilters.add(new PropertyCriterion(mapper.getBoundBOMemberPath(dtoPath), propertyCriterion.getRestriction(), mapper
                         .convertValue(propertyCriterion.getValue())));
 
             } else if (cr instanceof OrCriterion) {
@@ -97,7 +97,7 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
 
             for (Sort s : dtoSortingCriteria) {
                 Path dtoPath = new Path(s.getPropertyPath());
-                Path dboPath = getMapperForPath(dtoPath).getDboMemberPath(dtoPath);
+                Path dboPath = getMapperForPath(dtoPath).getBoundBOMemberPath(dtoPath);
                 if (dboPath == null) {
                     throw new IllegalStateException("DTO property " + s.getPropertyPath() + " is not bound to DBO property");
                 }
@@ -111,7 +111,7 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
         // TODO implement as a map 
         Path dboPath = null;
         for (PropertyMapper mapper : mappers) {
-            dboPath = mapper.getDboMemberPath(dtoPath);
+            dboPath = mapper.getBoundBOMemberPath(dtoPath);
             if (dboPath != null) {
                 return mapper;
             }
@@ -121,22 +121,22 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
 
     public static interface PropertyMapper {
 
-        Path getDboMemberPath(Path dtoMemberPath);
+        Path getBoundBOMemberPath(Path dtoMemberPath);
 
         Serializable convertValue(Serializable value);
     }
 
     private static class DtoBinderMapper implements PropertyMapper {
 
-        private final EntityBinder<?, ?> binder;
+        private final SimpleEntityBinder<?, ?> binder;
 
-        public DtoBinderMapper(EntityBinder<?, ?> binder) {
+        public DtoBinderMapper(SimpleEntityBinder<?, ?> binder) {
             this.binder = binder;
         }
 
         @Override
-        public Path getDboMemberPath(Path dtoMemberPath) {
-            return binder.getBoundDboMemberPath(dtoMemberPath);
+        public Path getBoundBOMemberPath(Path dtoMemberPath) {
+            return binder.getBoundBOMemberPath(dtoMemberPath);
         }
 
         @Override

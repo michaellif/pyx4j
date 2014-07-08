@@ -27,12 +27,6 @@ public class SelectEmployeeListServiceImpl extends AbstractListServiceImpl<Emplo
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     protected void enhanceListRetrieved(Employee bo, Employee dto) {
         super.enhanceListRetrieved(bo, dto);
         Persistence.service().retrieve(dto.signature(), AttachLevel.IdOnly, false);

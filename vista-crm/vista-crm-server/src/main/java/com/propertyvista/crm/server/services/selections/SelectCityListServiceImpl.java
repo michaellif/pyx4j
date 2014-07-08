@@ -24,9 +24,4 @@ public class SelectCityListServiceImpl extends AbstractListServiceImpl<City> imp
         super(City.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

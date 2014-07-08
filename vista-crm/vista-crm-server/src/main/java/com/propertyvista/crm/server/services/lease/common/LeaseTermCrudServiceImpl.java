@@ -69,18 +69,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected LeaseTermDTO init(InitializationData initializationData) {
         LeaseTermInitializationData initData = (LeaseTermInitializationData) initializationData;
         if (initData.isOffer().getValue(false)) {
             return createOffer(initData.lease(), initData.termType().getValue());
         } else { // creating new Application/Lease:
             Lease lease = createNewLease(initData.leaseType().getValue(), initData.leaseStatus().getValue());
-            LeaseTermDTO term = createTO(lease.currentTerm());
+            LeaseTermDTO term = binder.createTO(lease.currentTerm());
             term.isNewLease().setValue(true);
 
             lease.currentTerm().set(term);
@@ -436,7 +431,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private LeaseTermDTO createOffer(Lease leaseId, Type type) {
         LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(leaseId, type);
 
-        LeaseTermDTO termDto = createTO(term);
+        LeaseTermDTO termDto = binder.createTO(term);
         enhanceRetrieved(term, termDto, RetrieveTarget.Edit);
 
         return termDto;

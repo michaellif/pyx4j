@@ -39,12 +39,6 @@ public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Build
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     public Criterion convertCriterion(EntityListCriteria<Building> criteria, Criterion cr) {
         if (cr instanceof UnitAvailabilityCriteria) {
             UnitAvailabilityCriteria availability = (UnitAvailabilityCriteria) cr;

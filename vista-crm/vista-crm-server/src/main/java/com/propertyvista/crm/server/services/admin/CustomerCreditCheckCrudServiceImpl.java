@@ -33,11 +33,6 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected void enhanceRetrieved(CustomerCreditCheck bo, CustomerCreditCheckDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(to.screening());
         Persistence.service().retrieveMember(to.screening().screene());

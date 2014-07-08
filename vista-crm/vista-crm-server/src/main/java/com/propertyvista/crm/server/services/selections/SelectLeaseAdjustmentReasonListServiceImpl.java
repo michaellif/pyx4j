@@ -26,12 +26,6 @@ public class SelectLeaseAdjustmentReasonListServiceImpl extends AbstractListServ
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     protected void enhanceListCriteria(EntityListCriteria<ARCode> dbCriteria, EntityListCriteria<ARCode> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 

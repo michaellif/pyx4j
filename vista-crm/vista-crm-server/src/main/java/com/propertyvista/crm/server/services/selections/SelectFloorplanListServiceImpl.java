@@ -26,12 +26,6 @@ public class SelectFloorplanListServiceImpl extends AbstractListServiceImpl<Floo
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     protected void enhanceListRetrieved(Floorplan entity, Floorplan dto) {
         Persistence.service().retrieve(dto.building());
         Persistence.service().retrieve(dto.building().complex());

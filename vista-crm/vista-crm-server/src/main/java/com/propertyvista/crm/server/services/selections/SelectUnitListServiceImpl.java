@@ -31,12 +31,6 @@ public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> 
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     public Criterion convertCriterion(EntityListCriteria<AptUnit> criteria, Criterion cr) {
         if (cr instanceof UnitAvailabilityCriteria) {
             UnitAvailabilityCriteria availability = (UnitAvailabilityCriteria) cr;

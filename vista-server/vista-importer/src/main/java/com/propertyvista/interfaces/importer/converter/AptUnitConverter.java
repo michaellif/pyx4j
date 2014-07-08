@@ -13,13 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 
-public class AptUnitConverter extends EntityBinder<AptUnit, AptUnitIO> {
+public class AptUnitConverter extends SimpleEntityBinder<AptUnit, AptUnitIO> {
 
     public AptUnitConverter() {
         super(AptUnit.class, AptUnitIO.class, false);

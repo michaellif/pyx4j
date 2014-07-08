@@ -34,11 +34,6 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
     }
 
     @Override
-    protected void bind() {
-        this.bindCompleteObject();
-    }
-
-    @Override
     protected boolean persist(CityIntroPage bo, CityIntroPage to) {
         // check for city duplicates
         CityIntroPage dup = findDuplicate(to);

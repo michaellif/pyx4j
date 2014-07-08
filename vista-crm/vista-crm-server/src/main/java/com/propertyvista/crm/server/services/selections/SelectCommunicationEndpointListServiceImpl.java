@@ -42,12 +42,6 @@ public class SelectCommunicationEndpointListServiceImpl extends AbstractListServ
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     public void getEndpointForSelection(AsyncCallback<Vector<CommunicationEndpointDTO>> callback, EntityListCriteria<CommunicationEndpointDTO> criteria) {
         PropertyCriterion nameCriteria = criteria.getCriterion(criteria.proto().name());
         String namePattern = null;

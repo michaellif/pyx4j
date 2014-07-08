@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 
-public class FloorplanConverter extends EntityBinder<Floorplan, FloorplanIO> {
+public class FloorplanConverter extends SimpleEntityBinder<Floorplan, FloorplanIO> {
 
     public FloorplanConverter() {
         super(Floorplan.class, FloorplanIO.class, false);

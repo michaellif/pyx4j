@@ -35,7 +35,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.security.shared.SecurityController;
@@ -877,7 +877,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     private void savePaymentData(OnlineApplication bo, OnlineApplicationDTO to) {
         Lease lease = bo.masterOnlineApplication().leaseApplication().lease();
         PaymentDTO pto = to.payment();
-        PaymentRecord pbo = new EntityBinder<PaymentRecord, PaymentDTO>(PaymentRecord.class, PaymentDTO.class) {
+        PaymentRecord pbo = new SimpleEntityBinder<PaymentRecord, PaymentDTO>(PaymentRecord.class, PaymentDTO.class) {
             @Override
             protected void bind() {
                 bindCompleteObject();
@@ -1011,7 +1011,7 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         Persistence.ensureRetrieve(unit.floorplan(), AttachLevel.Attached);
         unit.info().legalAddress().set(AddressRetriever.getUnitLegalAddress(unit));
 
-        return new EntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
+        return new SimpleEntityBinder<AptUnit, AptUnit>(AptUnit.class, AptUnit.class) {
             @Override
             protected void bind() {
                 bind(toProto.id(), boProto.id());

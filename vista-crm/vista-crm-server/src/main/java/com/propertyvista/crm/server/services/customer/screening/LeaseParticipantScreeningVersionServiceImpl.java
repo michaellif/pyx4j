@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningVersionService;
@@ -36,16 +37,23 @@ import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceIm
 public class LeaseParticipantScreeningVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<CustomerScreeningV, LeaseParticipantScreeningTOV>
         implements LeaseParticipantScreeningVersionService {
 
-    public LeaseParticipantScreeningVersionServiceImpl() {
-        super(CustomerScreeningV.class, LeaseParticipantScreeningTOV.class, CrmUser.class);
+    private static class Binder extends SimpleEntityBinder<CustomerScreeningV, LeaseParticipantScreeningTOV> {
+
+        protected Binder() {
+            super(CustomerScreeningV.class, LeaseParticipantScreeningTOV.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.versionNumber(), boProto.versionNumber());
+            bind(toProto.fromDate(), boProto.fromDate());
+            bind(toProto.toDate(), boProto.toDate());
+            bind(toProto.createdByUser(), boProto.createdByUser());
+        }
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.versionNumber(), boProto.versionNumber());
-        bind(toProto.fromDate(), boProto.fromDate());
-        bind(toProto.toDate(), boProto.toDate());
-        bind(toProto.createdByUser(), boProto.createdByUser());
+    public LeaseParticipantScreeningVersionServiceImpl() {
+        super(new Binder(), CrmUser.class);
     }
 
     @Override

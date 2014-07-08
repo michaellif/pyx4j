@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
@@ -29,8 +30,43 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseAgingBuckets, DelinquentLeaseDTO> implements DelinquentLeaseListService {
 
+    private static class Binder extends SimpleEntityBinder<LeaseAgingBuckets, DelinquentLeaseDTO> {
+
+        protected Binder() {
+            super(LeaseAgingBuckets.class, DelinquentLeaseDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.leasePrimaryKey(), boProto.arrearsSnapshot().billingAccount().lease().id());
+            bind(toProto.leaseId(), boProto.arrearsSnapshot().billingAccount().lease().leaseId());
+            bind(toProto.buildingPropertyCode(), boProto.arrearsSnapshot().billingAccount().lease().unit().building().propertyCode());
+            bind(toProto.unitNumber(), boProto.arrearsSnapshot().billingAccount().lease().unit().info().number());
+
+            bind(toProto.participantId(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().participantId());
+            bind(toProto.primaryApplicantsFirstName(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().firstName());
+            bind(toProto.primaryApplicantsLastName(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().lastName());
+            bind(toProto.email(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().email());
+            bind(toProto.mobilePhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone());
+            bind(toProto.homePhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone());
+            bind(toProto.workPhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone());
+
+            bind(toProto.arrears().arCode(), boProto.arCode());
+            bind(toProto.arrears().bucketThisMonth(), boProto.bucketThisMonth());
+            bind(toProto.arrears().bucket30(), boProto.bucket30());
+            bind(toProto.arrears().bucket60(), boProto.bucket60());
+            bind(toProto.arrears().bucket90(), boProto.bucket90());
+            bind(toProto.arrears().bucketOver90(), boProto.bucketOver90());
+            bind(toProto.arrears().arrearsAmount(), boProto.arrearsAmount());
+
+            bind(toProto.legalStatus(), boProto.arrearsSnapshot().legalStatus());
+            bind(toProto.legalStatusDate(), boProto.arrearsSnapshot().legalStatusDate());
+        }
+
+    }
+
     public DelinquentLeaseListServiceImpl() {
-        super(LeaseAgingBuckets.class, DelinquentLeaseDTO.class);
+        super(new Binder());
     }
 
     public EntityListCriteria<LeaseAgingBuckets> convertCriteria(EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
@@ -39,33 +75,6 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
         Persistence.applyDatasetAccessRule(dboCriteria);
 
         return dboCriteria;
-    }
-
-    @Override
-    protected void bind() {
-        bind(toProto.leasePrimaryKey(), boProto.arrearsSnapshot().billingAccount().lease().id());
-        bind(toProto.leaseId(), boProto.arrearsSnapshot().billingAccount().lease().leaseId());
-        bind(toProto.buildingPropertyCode(), boProto.arrearsSnapshot().billingAccount().lease().unit().building().propertyCode());
-        bind(toProto.unitNumber(), boProto.arrearsSnapshot().billingAccount().lease().unit().info().number());
-
-        bind(toProto.participantId(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().participantId());
-        bind(toProto.primaryApplicantsFirstName(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().firstName());
-        bind(toProto.primaryApplicantsLastName(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().lastName());
-        bind(toProto.email(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().email());
-        bind(toProto.mobilePhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone());
-        bind(toProto.homePhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone());
-        bind(toProto.workPhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone());
-
-        bind(toProto.arrears().arCode(), boProto.arCode());
-        bind(toProto.arrears().bucketThisMonth(), boProto.bucketThisMonth());
-        bind(toProto.arrears().bucket30(), boProto.bucket30());
-        bind(toProto.arrears().bucket60(), boProto.bucket60());
-        bind(toProto.arrears().bucket90(), boProto.bucket90());
-        bind(toProto.arrears().bucketOver90(), boProto.bucketOver90());
-        bind(toProto.arrears().arrearsAmount(), boProto.arrearsAmount());
-
-        bind(toProto.legalStatus(), boProto.arrearsSnapshot().legalStatus());
-        bind(toProto.legalStatusDate(), boProto.arrearsSnapshot().legalStatusDate());
     }
 
     @Override

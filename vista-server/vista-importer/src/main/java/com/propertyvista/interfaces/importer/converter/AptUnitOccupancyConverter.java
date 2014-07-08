@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
 
-public class AptUnitOccupancyConverter extends EntityBinder<AptUnitOccupancySegment, AptUnitOccupancyIO> {
+public class AptUnitOccupancyConverter extends SimpleEntityBinder<AptUnitOccupancySegment, AptUnitOccupancyIO> {
 
     public AptUnitOccupancyConverter() {
         super(AptUnitOccupancySegment.class, AptUnitOccupancyIO.class, false);

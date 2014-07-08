@@ -24,9 +24,4 @@ public class SelectLeaseTermListServiceImpl extends AbstractListServiceImpl<Leas
         super(LeaseTerm.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

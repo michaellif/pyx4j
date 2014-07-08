@@ -28,12 +28,6 @@ public class SelectFeatureListServiceImpl extends AbstractListServiceImpl<Featur
     }
 
     @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
-
-    @Override
     protected void enhanceListRetrieved(Feature entity, Feature dto) {
         // Load detached data:
         Persistence.service().retrieveMember(dto.version().items());

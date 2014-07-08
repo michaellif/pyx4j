@@ -13,12 +13,12 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.BillDTO;
 
-public class BillConverter extends EntityBinder<Bill, BillDTO> {
+public class BillConverter extends SimpleEntityBinder<Bill, BillDTO> {
 
     public BillConverter() {
         super(Bill.class, BillDTO.class);

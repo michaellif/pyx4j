@@ -35,7 +35,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -57,7 +57,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     private final static I18n i18n = I18n.get(ArrearsReportServiceImpl.class);
 
     // reminder: resist the urge to make it static because maybe it's not thread safe
-    private final EntityBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoBinder = new EntityBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
+    private final SimpleEntityBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoBinder = new SimpleEntityBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
             LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class) {
 
         @Override
@@ -229,7 +229,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         PropertyMapper bucketMapper = new PropertyMapper() {
             @Override
-            public Path getDboMemberPath(Path dtoMemberPath) {
+            public Path getBoundBOMemberPath(Path dtoMemberPath) {
                 if (dtoMemberPath.toString().startsWith(dtoProto.selectedBuckets().getPath().toString())) {
                     return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(),
                             dboProto.agingBuckets().$().getPath().toString()));

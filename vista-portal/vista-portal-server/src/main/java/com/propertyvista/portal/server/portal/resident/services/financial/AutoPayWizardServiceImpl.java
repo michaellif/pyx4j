@@ -153,7 +153,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     public void preview(AsyncCallback<AutopayAgreement> callback, AutoPayDTO currentValue) {
-        AutopayAgreement entity = createBO(currentValue);
+        AutopayAgreement entity = binder.createBO(currentValue);
 
         updateCoveredItems(entity, currentValue);
 

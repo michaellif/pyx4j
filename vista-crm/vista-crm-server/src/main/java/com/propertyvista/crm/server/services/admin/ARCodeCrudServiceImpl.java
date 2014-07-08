@@ -41,11 +41,6 @@ public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> imple
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected boolean persist(ARCode bo, ARCode to) {
         assertIsValid(to);
         return super.persist(bo, to);

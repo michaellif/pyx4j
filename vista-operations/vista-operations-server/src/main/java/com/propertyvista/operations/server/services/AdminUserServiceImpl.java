@@ -20,6 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.system.VistaContext;
@@ -30,18 +31,20 @@ import com.propertyvista.operations.rpc.services.AdminUserService;
 public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserService {
 
     public AdminUserServiceImpl() {
-        super(OperationsUserCredential.class, OperationsUserDTO.class);
-    }
+        super(new SimpleEntityBinder<OperationsUserCredential, OperationsUserDTO>(OperationsUserCredential.class, OperationsUserDTO.class) {
 
-    @Override
-    protected void bind() {
-        bind(toProto.name(), boProto.user().name());
-        bind(toProto.email(), boProto.user().email());
-        bind(toProto.created(), boProto.user().created());
-        bind(toProto.updated(), boProto.user().updated());
+            @Override
+            protected void bind() {
+                bind(toProto.name(), boProto.user().name());
+                bind(toProto.email(), boProto.user().email());
+                bind(toProto.created(), boProto.user().created());
+                bind(toProto.updated(), boProto.user().updated());
 
-        bind(toProto.enabled(), boProto.enabled());
-        bind(toProto.changePassword(), boProto.requiredPasswordChangeOnNextLogIn());
+                bind(toProto.enabled(), boProto.enabled());
+                bind(toProto.changePassword(), boProto.requiredPasswordChangeOnNextLogIn());
+
+            }
+        });
     }
 
     @Override

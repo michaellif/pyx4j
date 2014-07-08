@@ -24,9 +24,4 @@ public class SelectTaxListServiceImpl extends AbstractListServiceImpl<Tax> imple
         super(Tax.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

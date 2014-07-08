@@ -55,15 +55,10 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    public void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected MaintenanceRequestDTO init(InitializationData initializationData) {
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(
                 ResidentPortalContext.getLeaseTermTenant().leaseParticipant());
-        MaintenanceRequestDTO dto = createTO(maintenanceRequest);
+        MaintenanceRequestDTO dto = binder.createTO(maintenanceRequest);
         setPermissionToEnterNote(dto);
 
         return dto;

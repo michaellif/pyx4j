@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
 import com.propertyvista.domain.property.Landlord;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.LandlordDTO;
 
 public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord, LandlordDTO> implements LandlordCrudService {
 
-    private class BuildingBinder extends EntityBinder<Building, Building> {
+    private static class BuildingBinder extends SimpleEntityBinder<Building, Building> {
 
         protected BuildingBinder() {
             super(Building.class, Building.class);
@@ -42,18 +42,26 @@ public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord
 
     }
 
-    public LandlordCrudServiceImpl() {
-        super(Landlord.class, LandlordDTO.class);
+    private static class Binder extends SimpleEntityBinder<Landlord, LandlordDTO> {
+
+        protected Binder() {
+            super(Landlord.class, LandlordDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.name(), boProto.name());
+            bind(toProto.address(), boProto.address());
+            bind(toProto.website(), boProto.website());
+            bind(toProto.logo(), boProto.logo());
+            bind(toProto.signature(), boProto.signature());
+            bind(toProto.buildings(), boProto.buildings(), new BuildingBinder());
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.name(), boProto.name());
-        bind(toProto.address(), boProto.address());
-        bind(toProto.website(), boProto.website());
-        bind(toProto.logo(), boProto.logo());
-        bind(toProto.signature(), boProto.signature());
-        bind(toProto.buildings(), boProto.buildings(), new BuildingBinder());
+    public LandlordCrudServiceImpl() {
+        super(new Binder());
     }
 
     @Override

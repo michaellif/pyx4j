@@ -13,13 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.interfaces.importer.model.InsuranceCertificateIO;
 
 @SuppressWarnings("rawtypes")
-public class InsuranceCertificateConverter extends EntityBinder<InsuranceCertificate, InsuranceCertificateIO> {
+public class InsuranceCertificateConverter extends SimpleEntityBinder<InsuranceCertificate, InsuranceCertificateIO> {
 
     public InsuranceCertificateConverter() {
         super(InsuranceCertificate.class, InsuranceCertificateIO.class, false);

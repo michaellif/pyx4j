@@ -49,11 +49,6 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected POLICY_DTO init(InitializationData initializationData) {
         POLICY_DTO policyDTO = EntityFactory.create(toClass);
 

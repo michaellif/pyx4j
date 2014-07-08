@@ -60,11 +60,6 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected Path convertPropertyDTOPathToDBOPath(String path, Message boProto, MessageDTO toProto) {
         if (path.equals(toProto.topic().getPath().toString())) {
             return boProto.thread().topic().getPath();
@@ -104,11 +99,6 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
     @Override
     protected EntitySearchResult<Message> query(EntityListCriteria<Message> criteria) {
         return ServerSideFactory.create(CommunicationMessageFacade.class).query(criteria);
-    }
-
-    @Override
-    public void copyTOtoBO(MessageDTO to, Message bo) {
-        super.copyTOtoBO(to, bo);
     }
 
     @Override

@@ -24,9 +24,4 @@ public class SelectGlCodeListServiceImpl extends AbstractListServiceImpl<GlCode>
         super(GlCode.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

@@ -27,6 +27,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -52,12 +53,14 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         extends AbstractCrudServiceDtoImpl<BO, TO> implements LeaseParticipantCrudServiceBase<TO> {
 
     public LeaseParticipantCrudServiceBaseImpl(Class<BO> boClass, Class<TO> toClass) {
-        super(boClass, toClass);
-    }
+        super(new SimpleEntityBinder<BO, TO>(boClass, toClass) {
 
-    @Override
-    protected void bind() {
-        bind(LeaseParticipant.class, toProto, boProto);
+            @Override
+            protected void bind() {
+                bind(LeaseParticipant.class, toProto, boProto);
+            }
+
+        });
     }
 
     @Override

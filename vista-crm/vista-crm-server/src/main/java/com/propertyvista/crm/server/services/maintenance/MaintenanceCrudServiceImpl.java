@@ -47,11 +47,6 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(bo.pictures());
         to.pictures().set(bo.pictures());
@@ -177,7 +172,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         if (bo == null) {
             bo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest();
         }
-        return createTO(bo);
+        return binder.createTO(bo);
     }
 
     @Override

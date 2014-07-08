@@ -38,11 +38,6 @@ public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     public void retrieveHomeItem(AsyncCallback<Key> callback) {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         List<Key> list = Persistence.service().queryKeys(criteria);

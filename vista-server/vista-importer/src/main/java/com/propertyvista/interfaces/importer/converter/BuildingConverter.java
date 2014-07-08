@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 
-public class BuildingConverter extends EntityBinder<Building, BuildingIO> {
+public class BuildingConverter extends SimpleEntityBinder<Building, BuildingIO> {
 
     public BuildingConverter() {
         super(Building.class, BuildingIO.class, false);

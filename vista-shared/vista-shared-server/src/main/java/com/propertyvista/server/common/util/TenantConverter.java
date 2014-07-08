@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.common.util;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -25,7 +25,7 @@ import com.propertyvista.dto.TenantInfoDTO;
 
 public class TenantConverter {
 
-    public static class TenantEditorConverter extends EntityBinder<LeaseTermTenant, TenantInLeaseDTO> {
+    public static class TenantEditorConverter extends SimpleEntityBinder<LeaseTermTenant, TenantInLeaseDTO> {
 
         public TenantEditorConverter() {
             super(LeaseTermTenant.class, TenantInLeaseDTO.class);
@@ -40,7 +40,7 @@ public class TenantConverter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static class LeaseParticipant2TenantInfo extends EntityBinder<LeaseTermParticipant, TenantInfoDTO> {
+    public static class LeaseParticipant2TenantInfo extends SimpleEntityBinder<LeaseTermParticipant, TenantInfoDTO> {
 
         public LeaseParticipant2TenantInfo() {
             super(LeaseTermParticipant.class, TenantInfoDTO.class);
@@ -54,7 +54,7 @@ public class TenantConverter {
         }
     }
 
-    public static class Tenant2TenantInfo extends EntityBinder<LeaseTermTenant, TenantInfoDTO> {
+    public static class Tenant2TenantInfo extends SimpleEntityBinder<LeaseTermTenant, TenantInfoDTO> {
 
         public Tenant2TenantInfo() {
             super(LeaseTermTenant.class, TenantInfoDTO.class);
@@ -67,7 +67,7 @@ public class TenantConverter {
         }
     }
 
-    public static class Guarantor2TenantInfo extends EntityBinder<LeaseTermGuarantor, TenantInfoDTO> {
+    public static class Guarantor2TenantInfo extends SimpleEntityBinder<LeaseTermGuarantor, TenantInfoDTO> {
 
         public Guarantor2TenantInfo() {
             super(LeaseTermGuarantor.class, TenantInfoDTO.class);
@@ -79,7 +79,7 @@ public class TenantConverter {
         }
     }
 
-    public static class TenantScreening2TenantInfo extends EntityBinder<CustomerScreening, TenantInfoDTO> {
+    public static class TenantScreening2TenantInfo extends SimpleEntityBinder<CustomerScreening, TenantInfoDTO> {
 
         public TenantScreening2TenantInfo() {
             super(CustomerScreening.class, TenantInfoDTO.class);
@@ -94,7 +94,7 @@ public class TenantConverter {
         }
     }
 
-    public static class TenantFinancialEditorConverter extends EntityBinder<CustomerScreening, TenantFinancialDTO> {
+    public static class TenantFinancialEditorConverter extends SimpleEntityBinder<CustomerScreening, TenantFinancialDTO> {
 
         public TenantFinancialEditorConverter() {
             super(CustomerScreening.class, TenantFinancialDTO.class);

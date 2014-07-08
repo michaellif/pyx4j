@@ -24,9 +24,4 @@ public class SelectLeasePaymentMethodServiceImpl extends AbstractListServiceImpl
         super(LeasePaymentMethod.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

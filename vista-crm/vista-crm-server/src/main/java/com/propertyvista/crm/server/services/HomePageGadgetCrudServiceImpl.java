@@ -32,11 +32,6 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected HomePageGadget init(InitializationData initializationData) {
         HomePageGadgetInitializationData initData = (HomePageGadgetInitializationData) initializationData;
 

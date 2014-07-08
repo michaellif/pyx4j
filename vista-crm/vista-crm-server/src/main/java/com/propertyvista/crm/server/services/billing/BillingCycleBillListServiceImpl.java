@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -29,13 +30,21 @@ import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillingCycleBillListServiceImpl extends AbstractListServiceDtoImpl<Bill, BillDataDTO> implements BillingCycleBillListService {
 
-    public BillingCycleBillListServiceImpl() {
-        super(Bill.class, BillDataDTO.class);
+    private static class Binder extends SimpleEntityBinder<Bill, BillDataDTO> {
+
+        protected Binder() {
+            super(Bill.class, BillDataDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(boClass, toProto.bill(), boProto);
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(boClass, toProto.bill(), boProto);
+    public BillingCycleBillListServiceImpl() {
+        super(new Binder());
     }
 
     @Override

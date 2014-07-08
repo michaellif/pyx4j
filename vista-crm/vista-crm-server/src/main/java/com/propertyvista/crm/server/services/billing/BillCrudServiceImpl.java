@@ -23,6 +23,7 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -34,13 +35,21 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
 public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDataDTO> implements BillCrudService {
 
-    public BillCrudServiceImpl() {
-        super(Bill.class, BillDataDTO.class);
+    private static class Binder extends SimpleEntityBinder<Bill, BillDataDTO> {
+
+        protected Binder() {
+            super(Bill.class, BillDataDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(boClass, toProto.bill(), boProto);
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(boClass, toProto.bill(), boProto);
+    public BillCrudServiceImpl() {
+        super(new Binder());
     }
 
     @Override

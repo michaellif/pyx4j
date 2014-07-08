@@ -24,9 +24,4 @@ public class SelectConcessionListServiceImpl extends AbstractListServiceImpl<Con
         super(Concession.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

@@ -29,8 +29,8 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
@@ -59,12 +59,12 @@ public class EftReportGenerator implements ReportExporter {
 
     private volatile ReportProgressStatusHolderExectutionMonitorAdapter reportProgressStatusHolder;
 
-    private final EntityBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
+    private final SimpleEntityBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
 
     private BuildingsCriteriaNormalizer buildingCriteriaNormalizer;
 
     public EftReportGenerator() {
-        dtoBinder = new EntityBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
+        dtoBinder = new SimpleEntityBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
 
             @Override
             protected void bind() {
@@ -113,8 +113,8 @@ public class EftReportGenerator implements ReportExporter {
             }
         };
 
-        buildingCriteriaNormalizer = new BuildingsCriteriaNormalizer(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().lease()
-                .unit().building());
+        buildingCriteriaNormalizer = new BuildingsCriteriaNormalizer(EntityFactory.getEntityPrototype(PaymentRecord.class).billingAccount().lease().unit()
+                .building());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class EftReportGenerator implements ReportExporter {
             if (!reportMetadata.orderBy().isNull()) {
                 Collections.sort(
                         paymentRecords,
-                        EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundDboMemberPath(new Path(reportMetadata.orderBy().memberPath()
+                        EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath()
                                 .getValue()))));
             }
 
@@ -225,7 +225,7 @@ public class EftReportGenerator implements ReportExporter {
             criteria.asc(criteria.proto().preauthorizedPayment().tenant().participantId());
             criteria.asc(criteria.proto().amount());
         } else {
-            Sort orderBy = new Sort(criteria.proto().getMember(dtoBinder.getBoundDboMemberPath(new Path(reportMetadata.orderBy().memberPath().getValue()))),
+            Sort orderBy = new Sort(criteria.proto().getMember(dtoBinder.getBoundBOMemberPath(new Path(reportMetadata.orderBy().memberPath().getValue()))),
                     reportMetadata.orderBy().isDesc().getValue(false));
             criteria.sort(orderBy);
         }

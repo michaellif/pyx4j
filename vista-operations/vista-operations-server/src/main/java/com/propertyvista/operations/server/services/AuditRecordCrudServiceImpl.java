@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.common.AbstractUser;
@@ -30,23 +31,23 @@ import com.propertyvista.server.TaskRunner;
 public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordOperationsDTO> implements AuditRecordCrudService {
 
     public AuditRecordCrudServiceImpl() {
-        super(AuditRecord.class, AuditRecordOperationsDTO.class);
-    }
-
-    @Override
-    protected void bind() {
-        bind(toProto.remoteAddr(), boProto.remoteAddr());
-        bind(toProto.userKey(), boProto.user());
-        bind(toProto.when(), boProto.created());
-        bind(toProto.worldTime(), boProto.worldTime());
-        bind(toProto.sessionId(), boProto.sessionId());
-        bind(toProto.event(), boProto.event());
-        bind(toProto.namespace(), boProto.namespace());
-        bind(toProto.pmc(), boProto.pmc());
-        bind(toProto.application(), boProto.app());
-        bind(toProto.details(), boProto.details());
-        bind(toProto.entityId(), boProto.entityId());
-        bind(toProto.entityClass(), boProto.entityClass());
+        super(new SimpleEntityBinder<AuditRecord, AuditRecordOperationsDTO>(AuditRecord.class, AuditRecordOperationsDTO.class) {
+            @Override
+            protected void bind() {
+                bind(toProto.remoteAddr(), boProto.remoteAddr());
+                bind(toProto.userKey(), boProto.user());
+                bind(toProto.when(), boProto.created());
+                bind(toProto.worldTime(), boProto.worldTime());
+                bind(toProto.sessionId(), boProto.sessionId());
+                bind(toProto.event(), boProto.event());
+                bind(toProto.namespace(), boProto.namespace());
+                bind(toProto.pmc(), boProto.pmc());
+                bind(toProto.application(), boProto.app());
+                bind(toProto.details(), boProto.details());
+                bind(toProto.entityId(), boProto.entityId());
+                bind(toProto.entityClass(), boProto.entityClass());
+            }
+        });
     }
 
     @Override

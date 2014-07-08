@@ -22,6 +22,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.VistaContext;
@@ -33,19 +34,27 @@ import com.propertyvista.server.TaskRunner;
 
 public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl<AuditRecord, AuditRecordDTO> implements CrmAuditRecordsListerService {
 
-    public CrmAuditRecordsListerServiceImpl() {
-        super(AuditRecord.class, AuditRecordDTO.class);
+    private static class Binder extends SimpleEntityBinder<AuditRecord, AuditRecordDTO> {
+
+        protected Binder() {
+            super(AuditRecord.class, AuditRecordDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.remoteAddr(), boProto.remoteAddr());
+            bind(toProto.when(), boProto.created());
+            bind(toProto.event(), boProto.event());
+            bind(toProto.application(), boProto.app());
+            bind(toProto.targetEntity(), boProto.entityClass());
+            bind(toProto.targetEntityId(), boProto.entityId());
+            bind(toProto.details(), boProto.details());
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.remoteAddr(), boProto.remoteAddr());
-        bind(toProto.when(), boProto.created());
-        bind(toProto.event(), boProto.event());
-        bind(toProto.application(), boProto.app());
-        bind(toProto.targetEntity(), boProto.entityClass());
-        bind(toProto.targetEntityId(), boProto.entityId());
-        bind(toProto.details(), boProto.details());
+    public CrmAuditRecordsListerServiceImpl() {
+        super(new Binder());
     }
 
     @Override

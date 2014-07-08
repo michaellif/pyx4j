@@ -24,9 +24,4 @@ public class SelectGuarantorListServiceImpl extends AbstractListServiceImpl<Leas
         super(LeaseTermGuarantor.class);
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bindCompleteObject();
-    }
 }

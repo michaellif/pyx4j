@@ -32,11 +32,6 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected PageDescriptor init(InitializationData initializationData) {
         PageDescriptorInitializationData initData = (PageDescriptorInitializationData) initializationData;
 

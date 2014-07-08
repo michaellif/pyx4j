@@ -13,6 +13,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDiff;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.system.AuditFacade;
@@ -24,20 +25,21 @@ import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserCrudService {
 
     public AdminUserCrudServiceImpl() {
-        super(OperationsUserCredential.class, OperationsUserDTO.class);
-    }
+        super(new SimpleEntityBinder<OperationsUserCredential, OperationsUserDTO>(OperationsUserCredential.class, OperationsUserDTO.class) {
 
-    @Override
-    protected void bind() {
-        bind(toProto.name(), boProto.user().name());
-        bind(toProto.email(), boProto.user().email());
-        bind(toProto.created(), boProto.user().created());
-        bind(toProto.updated(), boProto.user().updated());
+            @Override
+            protected void bind() {
+                bind(toProto.name(), boProto.user().name());
+                bind(toProto.email(), boProto.user().email());
+                bind(toProto.created(), boProto.user().created());
+                bind(toProto.updated(), boProto.user().updated());
 
-        bind(toProto.enabled(), boProto.enabled());
-        bind(toProto.changePassword(), boProto.requiredPasswordChangeOnNextLogIn());
-        bind(toProto.credentialUpdated(), boProto.credentialUpdated());
+                bind(toProto.enabled(), boProto.enabled());
+                bind(toProto.changePassword(), boProto.requiredPasswordChangeOnNextLogIn());
+                bind(toProto.credentialUpdated(), boProto.credentialUpdated());
 
+            }
+        });
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
@@ -51,8 +52,50 @@ public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDt
     // TODO not a good thing but i'm afraid there was no other choice
     private LogicalDate asOfDate;
 
+    private static class Binder extends SimpleEntityBinder<UnitAvailabilityStatus, UnitAvailabilityStatusDTO> {
+
+        protected Binder() {
+            super(UnitAvailabilityStatus.class, UnitAvailabilityStatusDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            // REFERENCES        
+            bind(toProto.propertyCode(), boProto.building().propertyCode());
+            bind(toProto.externalId(), boProto.building().externalId());
+            bind(toProto.buildingName(), boProto.building().info().name());
+            bind(toProto.address(), boProto.building().info().address());
+            bind(toProto.propertyManager(), boProto.building().propertyManager().name());
+            bind(toProto.complex(), boProto.building().complex().name());
+            bind(toProto.unit(), boProto.unit().info().number());
+            bind(toProto.floorplanName(), boProto.floorplan().name());
+            bind(toProto.floorplanMarketingName(), boProto.floorplan().marketingName());
+
+            // STATUS DATA    
+            bind(toProto.statusFrom(), boProto.statusFrom());
+            bind(toProto.statusUntil(), boProto.statusUntil());
+            bind(toProto.vacancyStatus(), boProto.vacancyStatus());
+            bind(toProto.rentedStatus(), boProto.rentedStatus());
+            bind(toProto.scoping(), boProto.scoping());
+            bind(toProto.rentReadinessStatus(), boProto.rentReadinessStatus());
+            bind(toProto.unitRent(), boProto.unitRent());
+            bind(toProto.marketRent(), boProto.marketRent());
+            bind(toProto.rentDeltaAbsolute(), boProto.rentDeltaAbsolute());
+            bind(toProto.rentDeltaRelative(), boProto.rentDeltaRelative());
+            bind(toProto.rentEndDay(), boProto.rentEndDay());
+            bind(toProto.vacantSince(), boProto.vacantSince());
+            bind(toProto.rentedFromDay(), boProto.rentedFromDay());
+            bind(toProto.moveInDay(), boProto.moveInDay());
+
+            // BUISNESS DATA
+            bind(toProto.unitId(), boProto.unit().id());
+            bind(toProto.buildingsFilterAnchor(), boProto.building());
+        }
+
+    }
+
     public UnitAvailabilityStatusListServiceImpl(LeasedStatusProvider leasedStatusProvider) {
-        super(UnitAvailabilityStatus.class, UnitAvailabilityStatusDTO.class);
+        super(new Binder());
         this.leasedStatusProvider = leasedStatusProvider;
     }
 
@@ -69,40 +112,6 @@ public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDt
                 return Persistence.service().count(criteria) != 0;
             }
         });
-    }
-
-    @Override
-    protected void bind() {
-        // REFERENCES        
-        bind(toProto.propertyCode(), boProto.building().propertyCode());
-        bind(toProto.externalId(), boProto.building().externalId());
-        bind(toProto.buildingName(), boProto.building().info().name());
-        bind(toProto.address(), boProto.building().info().address());
-        bind(toProto.propertyManager(), boProto.building().propertyManager().name());
-        bind(toProto.complex(), boProto.building().complex().name());
-        bind(toProto.unit(), boProto.unit().info().number());
-        bind(toProto.floorplanName(), boProto.floorplan().name());
-        bind(toProto.floorplanMarketingName(), boProto.floorplan().marketingName());
-
-        // STATUS DATA    
-        bind(toProto.statusFrom(), boProto.statusFrom());
-        bind(toProto.statusUntil(), boProto.statusUntil());
-        bind(toProto.vacancyStatus(), boProto.vacancyStatus());
-        bind(toProto.rentedStatus(), boProto.rentedStatus());
-        bind(toProto.scoping(), boProto.scoping());
-        bind(toProto.rentReadinessStatus(), boProto.rentReadinessStatus());
-        bind(toProto.unitRent(), boProto.unitRent());
-        bind(toProto.marketRent(), boProto.marketRent());
-        bind(toProto.rentDeltaAbsolute(), boProto.rentDeltaAbsolute());
-        bind(toProto.rentDeltaRelative(), boProto.rentDeltaRelative());
-        bind(toProto.rentEndDay(), boProto.rentEndDay());
-        bind(toProto.vacantSince(), boProto.vacantSince());
-        bind(toProto.rentedFromDay(), boProto.rentedFromDay());
-        bind(toProto.moveInDay(), boProto.moveInDay());
-
-        // BUISNESS DATA
-        bind(toProto.unitId(), boProto.unit().id());
-        bind(toProto.buildingsFilterAnchor(), boProto.building());
     }
 
     @Override

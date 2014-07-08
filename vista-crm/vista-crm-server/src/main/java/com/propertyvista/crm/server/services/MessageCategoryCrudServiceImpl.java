@@ -27,11 +27,6 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     protected MessageCategory init(InitializationData initializationData) {
         MessageCategory dto = super.init(initializationData);
         dto.category().setValue(MessageGroupCategory.Custom);

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -35,21 +36,35 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentPostingBatch, MoneyInBatchDTO> implements MoneyInBatchCrudService {
 
-    public MoneyInBatchCrudServiceImpl() {
-        super(PaymentPostingBatch.class, MoneyInBatchDTO.class);
+    private static class Binder extends SimpleEntityBinder<PaymentPostingBatch, MoneyInBatchDTO> {
+
+        protected Binder() {
+            super(PaymentPostingBatch.class, MoneyInBatchDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.id(), boProto.id());
+            bind(toProto.building(), boProto.building().propertyCode());
+            bind(toProto.depositDate(), boProto.depositDetails().depositDate());
+            bind(toProto.bankId(), boProto.depositDetails().merchantAccount().bankId());
+            bind(toProto.bankTransitNumber(), boProto.depositDetails().merchantAccount().branchTransitNumber());
+            bind(toProto.bankAccountNumber(), boProto.depositDetails().merchantAccount().accountNumber());
+            bind(toProto.bankAccountName(), boProto.depositDetails().merchantAccount().accountName());
+            bind(toProto.postingStatus(), boProto.status());
+            bind(toProto.batchNumber(), boProto.externalBatchNumber());
+        }
+
+        @Override
+        public void copyTOtoBO(MoneyInBatchDTO to, PaymentPostingBatch bo) {
+            // Only one filed is updatable, TODO move to bind
+            bo.depositDetails().depositDate().setValue(to.depositDate().getValue());
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.id(), boProto.id());
-        bind(toProto.building(), boProto.building().propertyCode());
-        bind(toProto.depositDate(), boProto.depositDetails().depositDate());
-        bind(toProto.bankId(), boProto.depositDetails().merchantAccount().bankId());
-        bind(toProto.bankTransitNumber(), boProto.depositDetails().merchantAccount().branchTransitNumber());
-        bind(toProto.bankAccountNumber(), boProto.depositDetails().merchantAccount().accountNumber());
-        bind(toProto.bankAccountName(), boProto.depositDetails().merchantAccount().accountName());
-        bind(toProto.postingStatus(), boProto.status());
-        bind(toProto.batchNumber(), boProto.externalBatchNumber());
+    public MoneyInBatchCrudServiceImpl() {
+        super(new Binder());
     }
 
     @Override
@@ -127,12 +142,6 @@ public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<Paym
     @Override
     protected void create(PaymentPostingBatch bo, MoneyInBatchDTO to) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void copyTOtoBO(MoneyInBatchDTO to, PaymentPostingBatch bo) {
-        // Only one filed is updatable, TODO move to bind
-        bo.depositDetails().depositDate().setValue(to.depositDate().getValue());
     }
 
 }

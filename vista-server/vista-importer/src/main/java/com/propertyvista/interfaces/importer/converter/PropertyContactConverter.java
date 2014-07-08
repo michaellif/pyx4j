@@ -13,13 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.interfaces.importer.model.PropertyPhoneIO;
 
-public class PropertyContactConverter extends EntityBinder<PropertyContact, PropertyPhoneIO> {
+public class PropertyContactConverter extends SimpleEntityBinder<PropertyContact, PropertyPhoneIO> {
 
     public PropertyContactConverter() {
         super(PropertyContact.class, PropertyPhoneIO.class, false);

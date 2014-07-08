@@ -13,11 +13,9 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.LinkedList;
-
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
@@ -26,25 +24,33 @@ import com.propertyvista.domain.financial.PaymentRecord;
 public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements
         PaymentRecordsGadgetListService {
 
-    public PaymentRecordsGadgetListServiceImpl() {
-        super(PaymentRecord.class, PaymentRecordForReportDTO.class);
+    private static class Binder extends SimpleEntityBinder<PaymentRecord, PaymentRecordForReportDTO> {
+
+        protected Binder() {
+            super(PaymentRecord.class, PaymentRecordForReportDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.merchantAccount(), boProto.merchantAccount().accountNumber());
+            bind(toProto.building(), boProto.billingAccount().lease().unit().building().propertyCode());
+            bind(toProto.lease(), boProto.billingAccount().lease().leaseId());
+            bind(toProto.tenant(), boProto.paymentMethod().customer());
+            bind(toProto.method(), boProto.paymentMethod().type());
+            bind(toProto.status(), boProto.paymentStatus());
+            bind(toProto.created(), boProto.createdDate());
+            bind(toProto.received(), boProto.receivedDate());
+            bind(toProto.finalized(), boProto.finalizeDate());
+            bind(toProto.target(), boProto.targetDate());
+            bind(toProto.amount(), boProto.amount());
+            bind(toProto.lastStatusChangeDate(), boProto.lastStatusChangeDate());
+            bind(toProto.buildingFilterAnchor(), boProto.billingAccount().lease().unit().building());
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.merchantAccount(), boProto.merchantAccount().accountNumber());
-        bind(toProto.building(), boProto.billingAccount().lease().unit().building().propertyCode());
-        bind(toProto.lease(), boProto.billingAccount().lease().leaseId());
-        bind(toProto.tenant(), boProto.paymentMethod().customer());
-        bind(toProto.method(), boProto.paymentMethod().type());
-        bind(toProto.status(), boProto.paymentStatus());
-        bind(toProto.created(), boProto.createdDate());
-        bind(toProto.received(), boProto.receivedDate());
-        bind(toProto.finalized(), boProto.finalizeDate());
-        bind(toProto.target(), boProto.targetDate());
-        bind(toProto.amount(), boProto.amount());
-        bind(toProto.lastStatusChangeDate(), boProto.lastStatusChangeDate());
-        bind(toProto.buildingFilterAnchor(), boProto.billingAccount().lease().unit().building());
+    public PaymentRecordsGadgetListServiceImpl() {
+        super(new Binder());
     }
 
     @Override
@@ -63,21 +69,6 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
 
         Persistence.service().retrieve(entity.merchantAccount());
         dto.merchantAccount().setValue(entity.merchantAccount().accountNumber().getValue());
-    }
-
-    @Override
-    protected boolean retriveDetachedMember(IEntity dboMember) {
-        LinkedList<IEntity> detachedParents = new LinkedList<IEntity>();
-        IEntity member = dboMember.getOwner();
-
-        while (member != null && member.isValueDetached()) {
-            detachedParents.push(member);
-            member = member.getOwner();
-        }
-        while (!detachedParents.isEmpty()) {
-            Persistence.service().retrieve(detachedParents.pop());
-        }
-        return Persistence.service().retrieve(dboMember);
     }
 
 }

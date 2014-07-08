@@ -26,7 +26,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -132,7 +132,7 @@ public class BillingServiceImpl implements BillingService {
 
         // create and fill resulting DTO:
         BillViewDTO result = EntityFactory.create(BillViewDTO.class);
-        result.billData().set(new EntityBinder<Bill, BillDTO>(Bill.class, BillDTO.class) {
+        result.billData().set(new SimpleEntityBinder<Bill, BillDTO>(Bill.class, BillDTO.class) {
             @Override
             protected void bind() {
                 bindCompleteObject();

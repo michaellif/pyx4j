@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.admin.PmcCompanyInfoDTO;
 import com.propertyvista.crm.rpc.services.admin.PmcCompanyInfoCrudService;
@@ -29,7 +29,7 @@ import com.propertyvista.domain.settings.PmcCompanyInfo;
 
 public class PmcCompanyInfoCrudServiceImpl implements PmcCompanyInfoCrudService {
 
-    private class CompanyInfoBinder extends EntityBinder<PmcCompanyInfo, PmcCompanyInfoDTO> {
+    private class CompanyInfoBinder extends SimpleEntityBinder<PmcCompanyInfo, PmcCompanyInfoDTO> {
 
         CompanyInfoBinder() {
             super(PmcCompanyInfo.class, PmcCompanyInfoDTO.class);

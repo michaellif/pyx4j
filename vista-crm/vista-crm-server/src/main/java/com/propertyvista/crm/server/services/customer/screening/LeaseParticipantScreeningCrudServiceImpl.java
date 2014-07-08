@@ -21,6 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
@@ -35,19 +36,27 @@ import com.propertyvista.misc.VistaTODO;
 public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<CustomerScreening, LeaseParticipantScreeningTO> implements
         LeaseParticipantScreeningCrudService {
 
-    public LeaseParticipantScreeningCrudServiceImpl() {
-        super(CustomerScreening.class, LeaseParticipantScreeningTO.class);
+    private static class Binder extends SimpleEntityBinder<CustomerScreening, LeaseParticipantScreeningTO> {
+
+        protected Binder() {
+            super(CustomerScreening.class, LeaseParticipantScreeningTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bind(toProto.screening().id(), boProto.id());
+            bind(toProto.screening().screene(), boProto.screene());
+            bind(toProto.screening().version(), boProto.version());
+
+            bind(toProto.version().versionNumber(), boProto.version().versionNumber());
+            bind(toProto.version().fromDate(), boProto.version().fromDate());
+            bind(toProto.version().toDate(), boProto.version().toDate());
+        }
+
     }
 
-    @Override
-    protected void bind() {
-        bind(toProto.screening().id(), boProto.id());
-        bind(toProto.screening().screene(), boProto.screene());
-        bind(toProto.screening().version(), boProto.version());
-
-        bind(toProto.version().versionNumber(), boProto.version().versionNumber());
-        bind(toProto.version().fromDate(), boProto.version().fromDate());
-        bind(toProto.version().toDate(), boProto.version().toDate());
+    public LeaseParticipantScreeningCrudServiceImpl() {
+        super(new Binder());
     }
 
     @Override
