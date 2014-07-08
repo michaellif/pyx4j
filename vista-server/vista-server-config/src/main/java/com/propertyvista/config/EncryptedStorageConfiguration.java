@@ -28,7 +28,7 @@ public interface EncryptedStorageConfiguration {
         sftp
     }
 
-    int rsaKeysize();
+    int newRsaKeySize();
 
     File privateKeyDirectory();
 

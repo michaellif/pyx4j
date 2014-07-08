@@ -31,8 +31,8 @@ public class VistaEncryptedStorageConfiguration implements EncryptedStorageConfi
     }
 
     @Override
-    public int rsaKeysize() {
-        return config.getConfigProperties().getIntegerValue("EncryptedStorage.rsaKeysize", 2048);
+    public int newRsaKeySize() {
+        return config.getConfigProperties().getIntegerValue("EncryptedStorage.newRsaKeySize", 2048);
     }
 
     @Override
@@ -71,6 +71,16 @@ public class VistaEncryptedStorageConfiguration implements EncryptedStorageConfi
     @Override
     public Credentials sftpCredentials() {
         return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), "keystore-sftp-credentials.properties"));
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("configurationClass                : ").append(getClass().getName()).append("\n");
+        b.append("newRsaKeySize                     : ").append(newRsaKeySize()).append("\n");
+        b.append("automaticActivateDecryption       : ").append(automaticActivateDecryptionKeyPassword() != null).append("\n");
+        b.append("privateKeyStorageType             : ").append(privateKeyStorageType()).append("\n");
+        return b.toString();
     }
 
 }

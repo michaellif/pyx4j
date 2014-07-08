@@ -20,8 +20,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.server.TaskRunner;
@@ -56,23 +59,31 @@ public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer
         return TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<Integer>() {
             @Override
             public Integer call() {
-                int count = 0;
+                final AtomicInteger count = new AtomicInteger(0);
                 {
                     EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
                     criteria.eq(criteria.proto().publicKey(), fromPublicKeyKey);
                     ICursorIterator<CustomerCreditCheckReport> cursor = Persistence.service().query(null, criteria, AttachLevel.Attached);
                     try {
                         while (cursor.hasNext()) {
-                            CustomerCreditCheckReport report = cursor.next();
-                            byte[] decryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(fromPublicKeyKey, report.data().getValue());
-                            byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(toPublicKeyKey, decryptedData);
+                            final CustomerCreditCheckReport report = cursor.next();
 
-                            report.publicKey().setValue(toPublicKeyKey);
-                            report.data().setValue(encryptedData);
-                            Persistence.service().persist(report);
-                            Persistence.service().commit();
-                            count++;
-                            progress.addAndGet(1);
+                            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                                @Override
+                                public Void execute() {
+                                    byte[] decryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(fromPublicKeyKey,
+                                            report.data().getValue());
+                                    byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(toPublicKeyKey, decryptedData);
+
+                                    report.publicKey().setValue(toPublicKeyKey);
+                                    report.data().setValue(encryptedData);
+                                    Persistence.service().persist(report);
+                                    count.incrementAndGet();
+                                    progress.addAndGet(1);
+                                    return null;
+                                }
+                            });
+
                         }
                     } finally {
                         cursor.close();
@@ -85,22 +96,28 @@ public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer
                     ICursorIterator<CustomerCreditCheckReportNoBackup> cursor = Persistence.service().query(null, criteria, AttachLevel.Attached);
                     try {
                         while (cursor.hasNext()) {
-                            CustomerCreditCheckReportNoBackup report = cursor.next();
-                            byte[] decryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(fromPublicKeyKey, report.data().getValue());
-                            byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(toPublicKeyKey, decryptedData);
+                            final CustomerCreditCheckReportNoBackup report = cursor.next();
+                            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                                @Override
+                                public Void execute() {
+                                    byte[] decryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(fromPublicKeyKey,
+                                            report.data().getValue());
+                                    byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(toPublicKeyKey, decryptedData);
 
-                            report.publicKey().setValue(toPublicKeyKey);
-                            report.data().setValue(encryptedData);
-                            Persistence.service().persist(report);
-                            Persistence.service().commit();
-                            count++;
-                            progress.addAndGet(1);
+                                    report.publicKey().setValue(toPublicKeyKey);
+                                    report.data().setValue(encryptedData);
+                                    Persistence.service().persist(report);
+                                    count.incrementAndGet();
+                                    progress.addAndGet(1);
+                                    return null;
+                                }
+                            });
                         }
                     } finally {
                         cursor.close();
                     }
                 }
-                return count;
+                return count.get();
             }
         });
     }

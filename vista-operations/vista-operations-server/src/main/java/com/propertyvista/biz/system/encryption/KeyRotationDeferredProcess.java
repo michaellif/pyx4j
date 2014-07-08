@@ -13,12 +13,12 @@
  */
 package com.propertyvista.biz.system.encryption;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 class KeyRotationDeferredProcess extends AbstractDeferredProcess {
@@ -29,32 +29,28 @@ class KeyRotationDeferredProcess extends AbstractDeferredProcess {
 
     Key toPublicKeyKey;
 
-    private final AtomicInteger progress;
-
-    private final int maximum;
-
     KeyRotationDeferredProcess(int total, Key fromPublicKeyKey, Key toPublicKeyKey) {
         this.fromPublicKeyKey = fromPublicKeyKey;
         this.toPublicKeyKey = toPublicKeyKey;
-        maximum = total;
-        progress = new AtomicInteger();
-        progress.set(0);
+        progress.progressMaximum.set(total);
 
     }
 
     @Override
     public void execute() {
-        Persistence.service().startTransaction();
-        ServerSideFactory.create(EncryptedStorageFacade.class).keyRotationProcess(progress, fromPublicKeyKey, toPublicKeyKey);
-        completed = true;
-    }
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
-    @Override
-    public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse status = super.status();
-        status.setProgress(progress.get());
-        status.setProgressMaximum(maximum);
-        return status;
+            @Override
+            public Void execute() {
+
+                ServerSideFactory.create(EncryptedStorageFacade.class).keyRotationProcess(progress.progress, fromPublicKeyKey, toPublicKeyKey);
+
+                completed = true;
+
+                return null;
+            }
+
+        });
     }
 
 }

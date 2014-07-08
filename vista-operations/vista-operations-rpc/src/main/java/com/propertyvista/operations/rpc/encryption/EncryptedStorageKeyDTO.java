@@ -39,4 +39,6 @@ public interface EncryptedStorageKeyDTO extends IEntity {
     @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> expired();
 
+    IPrimitive<String> details();
+
 }

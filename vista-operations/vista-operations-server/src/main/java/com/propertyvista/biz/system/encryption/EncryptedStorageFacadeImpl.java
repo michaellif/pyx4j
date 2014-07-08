@@ -24,7 +24,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -156,7 +158,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
                 password.append(Integer.toHexString(random.nextInt()));
             }
 
-            SecretKey symmetricKey = createAESSecretKey(password.toString());
+            SecretKey symmetricKey = createAESSecretKey(publicKey.algorithmsVersion().getValue(), password.toString());
             Cipher symmetricCipher = createAESCipher();
             symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
 
@@ -214,9 +216,9 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         return Cipher.getInstance("RSA/ECB/PKCS1Padding");
     }
 
-    private static SecretKey createAESSecretKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static SecretKey createAESSecretKey(int algorithmsVersion, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKey secret;
-        if (getEncryptedStorageConfiguration().rsaKeysize() > 2048) {
+        if (algorithmsVersion > 2) {
             // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
             // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -290,6 +292,24 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             keyDto.decryptionEnabled().setValue(activeKeys.get(publicKey.getPrimaryKey()) != null);
 
             keyDto.recordsCount().setValue(countRecords(publicKey.getPrimaryKey()));
+
+            String details = "Algorithms V" + publicKey.algorithmsVersion().getStringView();
+
+            try {
+                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKey.keyData().getValue());
+                PublicKey key = keyFactory.generatePublic(publicKeySpec);
+                details += ", " + key.getAlgorithm();
+                if (key instanceof RSAPublicKey) {
+                    int len = ((RSAPublicKey) key).getModulus().bitLength();
+                    details += " " + len;
+                }
+            } catch (GeneralSecurityException e) {
+                log.error("read key info error", e);
+                keyDto.details().setValue(e.getMessage());
+            }
+
+            keyDto.details().setValue(details);
 
             infoDto.keys().add(keyDto);
         }
@@ -486,10 +506,16 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     private Key generateKey(char[] password, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
         final EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
         publicKey.name().setValue(new SimpleDateFormat("yyyy-MM-dd_HHmm").format(new Date()));
-        publicKey.algorithmsVersion().setValue(1);
+        int rsaKeysize = getEncryptedStorageConfiguration().newRsaKeySize();
+        if (getEncryptedStorageConfiguration().newRsaKeySize() > 2048) {
+            // need unlimited strength jurisdiction policy
+            publicKey.algorithmsVersion().setValue(2);
+        } else {
+            publicKey.algorithmsVersion().setValue(1);
+        }
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(getEncryptedStorageConfiguration().rsaKeysize());
+            generator.initialize(rsaKeysize);
 
             KeyPair keyPair = generator.genKeyPair();
             publicKey.keyData().setValue(keyPair.getPublic().getEncoded());
@@ -529,7 +555,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     static EncryptedStorageConfiguration getEncryptedStorageConfiguration() {
-        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration();
+        return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getEncryptedStorageConfiguration();
     }
 
     private PrivateKeyStorage getPrivateKeyStorage() {

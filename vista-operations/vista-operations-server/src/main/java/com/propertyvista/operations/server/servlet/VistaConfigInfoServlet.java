@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.server.services;
+package com.propertyvista.operations.server.servlet;
 
 import java.io.IOException;
 
@@ -80,6 +80,9 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
                 .append("\n");
 
         b.append("  EquifaxInterfaceConfiguration         :\n      ").append(conf.getEquifaxInterfaceConfiguration().toString().replaceAll("\n", "\n      "))
+                .append("\n");
+
+        b.append("  EncryptedStorageConfiguration         :\n      ").append(conf.getEncryptedStorageConfiguration().toString().replaceAll("\n", "\n      "))
                 .append("\n");
 
         return b.toString();

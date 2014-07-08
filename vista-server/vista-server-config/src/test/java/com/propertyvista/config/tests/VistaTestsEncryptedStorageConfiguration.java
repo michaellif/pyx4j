@@ -22,7 +22,7 @@ import com.propertyvista.config.EncryptedStorageConfiguration;
 public class VistaTestsEncryptedStorageConfiguration implements EncryptedStorageConfiguration {
 
     @Override
-    public int rsaKeysize() {
+    public int newRsaKeySize() {
         return 2048;
     }
 

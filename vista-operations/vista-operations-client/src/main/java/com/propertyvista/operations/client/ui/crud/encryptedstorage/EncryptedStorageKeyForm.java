@@ -81,7 +81,8 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
         super.onValueSet(populate);
         makeCurrent.setEnabled(!getValue().isCurrent().getValue(false));
         decryptOnOff.setCaption(!getValue().decryptionEnabled().getValue(false) ? i18n.tr("Activate Decryption") : i18n.tr("Disable Decryption"));
-        startKeyRotation.setEnabled(!getValue().isCurrent().getValue(false) && getValue().decryptionEnabled().getValue(false));
+        startKeyRotation.setEnabled(!getValue().isCurrent().getValue(false) && getValue().decryptionEnabled().getValue(false)
+                && getValue().recordsCount().getValue() > 0);
     }
 
     private Widget makeStatusPanel() {
@@ -95,6 +96,8 @@ public class EncryptedStorageKeyForm extends CForm<EncryptedStorageKeyDTO> {
         statusPanel.setWidget(++row, 1, inject(proto().recordsCount(), new FieldDecoratorBuilder().build()));
         statusPanel.setWidget(++row, 1, inject(proto().created(), new FieldDecoratorBuilder().build()));
         statusPanel.setWidget(++row, 1, inject(proto().expired(), new FieldDecoratorBuilder().build()));
+
+        statusPanel.setWidget(++row, 0, inject(proto().details(), new FieldDecoratorBuilder().build()));
         return statusPanel;
     }
 
