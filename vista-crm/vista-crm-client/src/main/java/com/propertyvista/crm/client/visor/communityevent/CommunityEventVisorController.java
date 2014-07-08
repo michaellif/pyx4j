@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
@@ -29,8 +28,6 @@ import com.propertyvista.domain.property.asset.CommunityEvent;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class CommunityEventVisorController extends AbstractVisorController {
-
-    private static final I18n i18n = I18n.get(CommunityEventVisorController.class);
 
     private final CommunityEventCrudService service;
 

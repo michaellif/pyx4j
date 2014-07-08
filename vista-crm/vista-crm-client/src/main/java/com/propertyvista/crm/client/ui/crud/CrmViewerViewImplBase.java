@@ -82,9 +82,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             @SuppressWarnings("unchecked")
             @Override
             public void execute() {
-                if (!isVisorShown()) {
-                    ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show();
-                }
+                ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show();
             }
         })).asWidget());
 

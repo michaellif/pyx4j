@@ -53,9 +53,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
             dashboardsMenu.addItem(dashboard.name().getValue(), new Command() {
                 @Override
                 public void execute() {
-                    if (!isVisorShown()) {
-                        ((ComplexViewerView.Presenter) getPresenter()).getDashboardController(dashboard, getForm().getValue().buildings()).show();
-                    }
+                    ((ComplexViewerView.Presenter) getPresenter()).getDashboardController(dashboard, getForm().getValue().buildings()).show();
                 }
             });
         }

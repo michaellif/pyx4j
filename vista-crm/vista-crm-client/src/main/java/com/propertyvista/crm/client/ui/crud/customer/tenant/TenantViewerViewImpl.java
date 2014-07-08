@@ -65,9 +65,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         maintenanceView = new SecureMenuItem(i18n.tr("Maintenance Requests"), new Command() {
             @Override
             public void execute() {
-                if (!isVisorShown()) {
-                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
-                }
+                ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
             }
         }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class));
         addView(maintenanceView);

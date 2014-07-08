@@ -123,18 +123,14 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         addAction(new SecureMenuItem(i18n.tr("Maintenance Requests"), new Command() {
             @Override
             public void execute() {
-                if (!isVisorShown()) {
-                    ((BuildingViewerPresenter) getPresenter()).getMaintenanceRequestVisorController().show();
-                }
+                ((BuildingViewerPresenter) getPresenter()).getMaintenanceRequestVisorController().show();
             }
         }, DataModelPermission.permissionRead(MaintenanceRequestDTO.class)));
 
         addAction(new SecureMenuItem(i18n.tr("Community Events"), new Command() {
             @Override
             public void execute() {
-                if (!isVisorShown()) {
-                    ((BuildingViewerPresenter) getPresenter()).getCommunityEventVisorController().show();
-                }
+                ((BuildingViewerPresenter) getPresenter()).getCommunityEventVisorController().show();
             }
         }, new ActionPermission(CommunityEvents.class)));
 
@@ -246,9 +242,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                 public void execute() {
                     List<Building> buildingsFilter = new ArrayList<Building>();
                     buildingsFilter.add(getForm().getValue());
-                    if (!isVisorShown()) {
-                        ((BuildingViewerView.BuildingViewerPresenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show();
-                    }
+                    ((BuildingViewerView.BuildingViewerPresenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show();
+
                 }
 
             });
