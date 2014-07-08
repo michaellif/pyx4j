@@ -44,7 +44,7 @@ import com.pyx4j.entity.core.Path;
  * 
  * bind() function should be implemented to map members that needs to be copied of one class to another.
  */
-public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
+public abstract class SimpleEntityBinder<BO extends IEntity, TO extends IEntity> implements IEntityBinder<BO, TO> {
 
     protected Class<BO> boClass;
 
@@ -67,9 +67,9 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         Path boMemberPath;
 
         @SuppressWarnings("rawtypes")
-        EntityBinder binder;
+        SimpleEntityBinder binder;
 
-        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") EntityBinder binder) {
+        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") SimpleEntityBinder binder) {
             toMemberPath = dtoMember.getPath();
             boMemberPath = dboMember.getPath();
             this.binder = binder;
@@ -77,20 +77,30 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
 
     }
 
-    protected EntityBinder(Class<BO> boClass, Class<TO> toClass) {
+    protected SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass) {
         this(boClass, toClass, true);
     }
 
     /**
      * Allow to skip automatic copy of PK, Used to allow duplicated in XML
      */
-    protected EntityBinder(Class<BO> boClass, Class<TO> toClass, boolean copyPrimaryKey) {
+    protected SimpleEntityBinder(Class<BO> boClass, Class<TO> toClass, boolean copyPrimaryKey) {
         this.boClass = boClass;
         this.toClass = toClass;
         this.copyPrimaryKey = copyPrimaryKey;
 
         boProto = EntityFactory.getEntityPrototype(boClass);
         toProto = EntityFactory.getEntityPrototype(toClass);
+    }
+
+    @Override
+    public final Class<BO> boClass() {
+        return boClass;
+    }
+
+    @Override
+    public final Class<TO> toClass() {
+        return toClass;
     }
 
     protected abstract void bind();
@@ -129,11 +139,11 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         addBinding(new Binding(toMember, boMember, null));
     }
 
-    protected final <TBO extends IEntity, TTO extends IEntity> void bind(TTO toMember, TBO boMember, EntityBinder<TBO, TTO> binder) {
+    protected final <TBO extends IEntity, TTO extends IEntity> void bind(TTO toMember, TBO boMember, SimpleEntityBinder<TBO, TTO> binder) {
         addBinding(new Binding(toMember, boMember, binder));
     }
 
-    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(IList<TDTO> toMember, IList<TDBO> boMember, EntityBinder<TDBO, TDTO> binder) {
+    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(IList<TDTO> toMember, IList<TDBO> boMember, SimpleEntityBinder<TDBO, TDTO> binder) {
         addBinding(new Binding(toMember, boMember, binder));
     }
 
@@ -154,7 +164,8 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         }
     }
 
-    public Path getBoundDboMemberPath(Path toMemberPath) {
+    @Override
+    public Path getBoundBOMemberPath(Path toMemberPath) {
         init();
         Binding b = bindingByTOMemberPath.get(toMemberPath);
         if (b != null) {
@@ -179,6 +190,7 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         return null;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public TO createTO(BO bo) {
         TO to;
@@ -187,7 +199,8 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         } else if (toClass.equals(boClass)) {
             to = (TO) EntityFactory.create((Class<IEntity>) bo.getObjectClass());
         } else {
-            throw new Error("polymorphic TO binding not implemented");
+            throw new Error("Polymorphic TO binding of instance " + bo.getInstanceValueClass().getSimpleName() + "/" + boClass.getSimpleName()
+                    + " not implemented");
         }
         if (copyPrimaryKey) {
             to.setPrimaryKey(bo.getPrimaryKey());
@@ -200,6 +213,7 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         return false;
     }
 
+    @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyBOtoTO(BO bo, TO to) {
         init();
@@ -257,6 +271,7 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         }
     }
 
+    @Override
     public BO createBO(TO to) {
         BO dbo = EntityFactory.create(boClass);
         if (copyPrimaryKey) {
@@ -266,6 +281,7 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
         return dbo;
     }
 
+    @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void copyTOtoBO(TO to, BO bo) {
         init();

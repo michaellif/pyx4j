@@ -31,6 +31,7 @@ import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.shared.utils.IEntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -46,6 +47,10 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     protected AbstractCrudServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
         super(boClass, toClass);
+    }
+
+    protected AbstractCrudServiceDtoImpl(IEntityBinder<BO, TO> binder) {
+        super(binder);
     }
 
     /**
@@ -119,7 +124,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
         if (bo != null) {
             retrievedSingle(bo, retrieveTarget);
         }
-        TO to = createTO(bo);
+        TO to = binder.createTO(bo);
         enhanceRetrieved(bo, to, retrieveTarget);
         to.setPrimaryKey(getTOKey(bo, to));
         callback.onSuccess(to);
@@ -136,7 +141,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     public final void create(AsyncCallback<Key> callback, TO to) {
         if (TODO_DataModelPermissionEnable)
             SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
-        BO bo = createBO(to);
+        BO bo = binder.createBO(to);
         create(bo, to);
         Persistence.service().commit();
         callback.onSuccess(getTOKey(bo, to));
@@ -156,7 +161,7 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
             SecurityController.assertPermission(DataModelPermission.permissionUpdate(toClass));
         BO bo = retrieveForSave(to);
         retrievedSingle(bo, null);
-        copyTOtoBO(to, bo);
+        binder.copyTOtoBO(to, bo);
         save(bo, to);
         Persistence.service().commit();
         callback.onSuccess(getTOKey(bo, to));

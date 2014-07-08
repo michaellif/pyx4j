@@ -30,9 +30,4 @@ public class OneToOneCrudServiceImpl extends AbstractCrudServiceImpl<OneToOneRea
         super(OneToOneReadOwner.class);
     }
 
-    @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
 }

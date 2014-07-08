@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Nov 5, 2011
+ * Created on Jul 7, 2014
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.server;
+package com.pyx4j.entity.shared.utils;
 
 import com.pyx4j.entity.core.IEntity;
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.utils.IEntityBinder;
 
-public abstract class AbstractCrudServiceImpl<E extends IEntity> extends AbstractCrudServiceDtoImpl<E, E> implements AbstractCrudService<E> {
+public class CompleteEntityBinder<BO extends IEntity, TO extends IEntity> extends SimpleEntityBinder<BO, TO> {
 
-    public AbstractCrudServiceImpl(Class<E> entityClass) {
-        super(entityClass, entityClass);
+    public CompleteEntityBinder(Class<BO> boClass, Class<TO> toClass) {
+        super(boClass, toClass);
     }
 
-    protected AbstractCrudServiceImpl(IEntityBinder<E, E> binder) {
-        super(binder);
+    @Override
+    protected void bind() {
+        bindCompleteObject();
     }
+
 }

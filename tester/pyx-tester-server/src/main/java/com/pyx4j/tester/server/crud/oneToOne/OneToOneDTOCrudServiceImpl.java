@@ -31,9 +31,4 @@ public class OneToOneDTOCrudServiceImpl extends AbstractCrudServiceDtoImpl<OneTo
         super(OneToOneReadOwner.class, OneToOneReadOwnerDTO.class);
     }
 
-    @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
 }

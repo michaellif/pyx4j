@@ -27,7 +27,7 @@ import org.junit.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
@@ -36,7 +36,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntityDTO;
 
 public class EntityDtoBinderTest extends InitializerTestBase {
 
-    private class SimpleEntityDtoBinder extends EntityBinder<Employee, Employee> {
+    private class SimpleEntityDtoBinder extends SimpleEntityBinder<Employee, Employee> {
 
         protected SimpleEntityDtoBinder() {
             super(Employee.class, Employee.class);
@@ -121,7 +121,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
     }
 
-    private class PolymorphicEntityDtoBinder extends EntityBinder<ReferenceEntityDTO, ReferenceEntity> {
+    private class PolymorphicEntityDtoBinder extends SimpleEntityBinder<ReferenceEntityDTO, ReferenceEntity> {
 
         protected PolymorphicEntityDtoBinder() {
             super(ReferenceEntityDTO.class, ReferenceEntity.class);

@@ -39,13 +39,48 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.CompleteEntityBinder;
+import com.pyx4j.entity.shared.utils.IEntityBinder;
 import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends EntityBinder<BO, TO> implements AbstractListService<TO> {
+public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> implements AbstractListService<TO> {
+
+    protected Class<BO> boClass;
+
+    protected Class<TO> toClass;
+
+    protected final BO boProto;
+
+    protected final TO toProto;
+
+    protected final IEntityBinder<BO, TO> binder;
 
     protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
-        super(boClass, toClass);
+        this(new CompleteEntityBinder<BO, TO>(boClass, toClass) {
+
+            @Override
+            protected boolean retriveDetachedMember(IEntity boMember) {
+                return Persistence.service().retrieve(boMember);
+            }
+        });
+    }
+
+    protected AbstractListServiceDtoImpl(IEntityBinder<BO, TO> binder) {
+        this.boClass = binder.boClass();
+        this.toClass = binder.toClass();
+        boProto = EntityFactory.getEntityPrototype(boClass);
+        toProto = EntityFactory.getEntityPrototype(toClass);
+        this.binder = binder;
+    }
+
+    @Deprecated
+    protected void bind() {
+
+    }
+
+    @Deprecated
+    protected void bindCompleteObject() {
+
     }
 
     /**
@@ -87,11 +122,6 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected void retrievedForList(BO bo) {
     }
 
-    @Override
-    protected boolean retriveDetachedMember(IEntity boMember) {
-        return Persistence.service().retrieve(boMember);
-    }
-
     protected Path convertPropertyDTOPathToDBOPath(String path, BO boProto, TO toProto) {
         throw new Error("Unsupported query property path " + path);
     }
@@ -110,7 +140,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected Criterion convertCriterion(EntityListCriteria<BO> criteria, Criterion cr) {
         if (cr instanceof PropertyCriterion) {
             PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-            Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
+            Path path = binder.getBoundBOMemberPath(new Path(propertyCriterion.getPropertyPath()));
             if (path == null) {
                 path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
@@ -132,7 +162,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected Serializable convertValue(EntityListCriteria<BO> criteria, PropertyCriterion propertyCriterion) {
         Serializable value = propertyCriterion.getValue();
         if (value instanceof Path) {
-            Path path = getBoundDboMemberPath((Path) value);
+            Path path = binder.getBoundBOMemberPath((Path) value);
             if (path == null) {
                 path = convertPropertyDTOPathToDBOPath(value.toString(), boProto, toProto);
             }
@@ -150,7 +180,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         }
         if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
             for (Sort s : toCriteria.getSorts()) {
-                Path path = getBoundDboMemberPath(new Path(s.getPropertyPath()));
+                Path path = binder.getBoundBOMemberPath(new Path(s.getPropertyPath()));
                 if (path == null) {
                     path = convertPropertyDTOPathToDBOPath(s.getPropertyPath(), boCriteria.proto(), toCriteria.proto());
                 }
@@ -185,7 +215,7 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
         result.setTotalRows(dbResults.getTotalRows());
         for (BO bo : dbResults.getData()) {
             retrievedForList(bo);
-            TO dto = createTO(bo);
+            TO dto = binder.createTO(bo);
             enhanceListRetrieved(bo, dto);
             result.getData().add(dto);
         }

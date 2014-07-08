@@ -32,6 +32,7 @@ import com.pyx4j.entity.core.IVersionedEntity;
 import com.pyx4j.entity.core.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.utils.IEntityBinder;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
@@ -46,6 +47,10 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
 
     protected AbstractVersionedCrudServiceDtoImpl(Class<E> entityClass, Class<TO> dtoClass) {
         super(entityClass, dtoClass);
+    }
+
+    protected AbstractVersionedCrudServiceDtoImpl(IEntityBinder<E, TO> binder) {
+        super(binder);
     }
 
     @Override
