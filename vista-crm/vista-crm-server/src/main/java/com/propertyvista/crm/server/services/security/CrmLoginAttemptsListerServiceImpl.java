@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -38,7 +38,7 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
 
     private static final I18n i18n = I18n.get(CrmLoginAttemptsListerServiceImpl.class);
 
-    private static class Binder extends SimpleEntityBinder<AuditRecord, LoginAttemptDTO> {
+    private static class Binder extends CrudEntityBinder<AuditRecord, LoginAttemptDTO> {
 
         protected Binder() {
             super(AuditRecord.class, LoginAttemptDTO.class);

@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.core.criterion.OrCriterion;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 /**
  * Utility class for converting DTO search/sorting criteria to DBO
@@ -42,7 +42,7 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
     /**
      * Creates a mapper from {@link entity DTO binder}
      */
-    public static PropertyMapper makeMapper(SimpleEntityBinder<?, ?> dtoBinder) {
+    public static PropertyMapper makeMapper(CrudEntityBinder<?, ?> dtoBinder) {
         return new DtoBinderMapper(dtoBinder);
     }
 
@@ -128,9 +128,9 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
 
     private static class DtoBinderMapper implements PropertyMapper {
 
-        private final SimpleEntityBinder<?, ?> binder;
+        private final CrudEntityBinder<?, ?> binder;
 
-        public DtoBinderMapper(SimpleEntityBinder<?, ?> binder) {
+        public DtoBinderMapper(CrudEntityBinder<?, ?> binder) {
             this.binder = binder;
         }
 

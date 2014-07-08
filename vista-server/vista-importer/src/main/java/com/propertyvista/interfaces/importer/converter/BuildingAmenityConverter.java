@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.interfaces.importer.model.BuildingAmenityIO;
 
-public class BuildingAmenityConverter extends SimpleEntityBinder<BuildingAmenity, BuildingAmenityIO> {
+public class BuildingAmenityConverter extends CrudEntityBinder<BuildingAmenity, BuildingAmenityIO> {
 
     public BuildingAmenityConverter() {
         super(BuildingAmenity.class, BuildingAmenityIO.class, false);

@@ -25,7 +25,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -199,7 +199,7 @@ public class PreauthorizedPaymentsCommons {
         }
     }
 
-    private static class PapConverter extends SimpleEntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> {
+    private static class PapConverter extends CrudEntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> {
 
         protected PapConverter() {
             super(AutopayAgreement.class, PreauthorizedPaymentDTO.class);

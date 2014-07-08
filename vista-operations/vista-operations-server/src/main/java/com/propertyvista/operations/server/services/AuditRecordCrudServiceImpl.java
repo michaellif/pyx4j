@@ -17,8 +17,8 @@ import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.system.VistaContext;
 import com.propertyvista.domain.security.common.AbstractUser;
@@ -31,7 +31,7 @@ import com.propertyvista.server.TaskRunner;
 public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordOperationsDTO> implements AuditRecordCrudService {
 
     public AuditRecordCrudServiceImpl() {
-        super(new SimpleEntityBinder<AuditRecord, AuditRecordOperationsDTO>(AuditRecord.class, AuditRecordOperationsDTO.class) {
+        super(new CrudEntityBinder<AuditRecord, AuditRecordOperationsDTO>(AuditRecord.class, AuditRecordOperationsDTO.class) {
             @Override
             protected void bind() {
                 bind(toProto.remoteAddr(), boProto.remoteAddr());

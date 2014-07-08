@@ -24,7 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.DepositSlipCheckDetailsRecordDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
@@ -36,7 +36,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class MoneyInBatchCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentPostingBatch, MoneyInBatchDTO> implements MoneyInBatchCrudService {
 
-    private static class Binder extends SimpleEntityBinder<PaymentPostingBatch, MoneyInBatchDTO> {
+    private static class Binder extends CrudEntityBinder<PaymentPostingBatch, MoneyInBatchDTO> {
 
         protected Binder() {
             super(PaymentPostingBatch.class, MoneyInBatchDTO.class);

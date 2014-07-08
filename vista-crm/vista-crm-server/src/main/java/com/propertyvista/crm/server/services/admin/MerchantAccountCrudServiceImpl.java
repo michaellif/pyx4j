@@ -19,8 +19,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -37,7 +37,7 @@ import com.propertyvista.server.TaskRunner;
 
 public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<MerchantAccount> implements MerchantAccountCrudService {
 
-    private static class Binder extends SimpleEntityBinder<MerchantAccount, MerchantAccount> {
+    private static class Binder extends CrudEntityBinder<MerchantAccount, MerchantAccount> {
 
         protected Binder() {
             super(MerchantAccount.class, MerchantAccount.class);

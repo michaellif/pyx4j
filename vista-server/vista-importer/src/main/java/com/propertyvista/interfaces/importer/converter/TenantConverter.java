@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.interfaces.importer.model.TenantIO;
 
-public class TenantConverter extends SimpleEntityBinder<LeaseTermTenant, TenantIO> {
+public class TenantConverter extends CrudEntityBinder<LeaseTermTenant, TenantIO> {
 
     public TenantConverter() {
         super(LeaseTermTenant.class, TenantIO.class, false);

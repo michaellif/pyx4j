@@ -20,7 +20,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseAgingBuckets, DelinquentLeaseDTO> implements DelinquentLeaseListService {
 
-    private static class Binder extends SimpleEntityBinder<LeaseAgingBuckets, DelinquentLeaseDTO> {
+    private static class Binder extends CrudEntityBinder<LeaseAgingBuckets, DelinquentLeaseDTO> {
 
         protected Binder() {
             super(LeaseAgingBuckets.class, DelinquentLeaseDTO.class);

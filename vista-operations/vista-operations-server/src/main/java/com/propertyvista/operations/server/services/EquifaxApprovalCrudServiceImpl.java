@@ -20,8 +20,8 @@ import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.pmc.Pmc;
@@ -32,7 +32,7 @@ import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 public class EquifaxApprovalCrudServiceImpl extends AbstractCrudServiceDtoImpl<PmcEquifaxInfo, EquifaxSetupRequestDTO> implements EquifaxApprovalCrudService {
 
     public EquifaxApprovalCrudServiceImpl() {
-        super(new SimpleEntityBinder<PmcEquifaxInfo, EquifaxSetupRequestDTO>(PmcEquifaxInfo.class, EquifaxSetupRequestDTO.class) {
+        super(new CrudEntityBinder<PmcEquifaxInfo, EquifaxSetupRequestDTO>(PmcEquifaxInfo.class, EquifaxSetupRequestDTO.class) {
 
             @Override
             protected void bind() {

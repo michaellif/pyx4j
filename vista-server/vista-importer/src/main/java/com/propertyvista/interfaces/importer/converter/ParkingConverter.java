@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
 
-public class ParkingConverter extends SimpleEntityBinder<Parking, ParkingIO> {
+public class ParkingConverter extends CrudEntityBinder<Parking, ParkingIO> {
 
     public ParkingConverter() {
         super(Parking.class, ParkingIO.class, false);

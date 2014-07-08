@@ -28,7 +28,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.crm.rpc.dto.gadgets.UnitAvailabilityStatusDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
@@ -52,7 +52,7 @@ public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDt
     // TODO not a good thing but i'm afraid there was no other choice
     private LogicalDate asOfDate;
 
-    private static class Binder extends SimpleEntityBinder<UnitAvailabilityStatus, UnitAvailabilityStatusDTO> {
+    private static class Binder extends CrudEntityBinder<UnitAvailabilityStatus, UnitAvailabilityStatusDTO> {
 
         protected Binder() {
             super(UnitAvailabilityStatus.class, UnitAvailabilityStatusDTO.class);

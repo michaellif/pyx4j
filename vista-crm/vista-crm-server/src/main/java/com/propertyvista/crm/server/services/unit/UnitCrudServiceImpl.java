@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -40,7 +40,7 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
-    private static class Binder extends SimpleEntityBinder<AptUnit, AptUnitDTO> {
+    private static class Binder extends CrudEntityBinder<AptUnit, AptUnitDTO> {
 
         protected Binder() {
             super(AptUnit.class, AptUnitDTO.class);

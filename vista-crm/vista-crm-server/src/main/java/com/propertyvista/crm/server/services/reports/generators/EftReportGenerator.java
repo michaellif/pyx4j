@@ -30,7 +30,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
@@ -59,12 +59,12 @@ public class EftReportGenerator implements ReportExporter {
 
     private volatile ReportProgressStatusHolderExectutionMonitorAdapter reportProgressStatusHolder;
 
-    private final SimpleEntityBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
+    private final CrudEntityBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
 
     private BuildingsCriteriaNormalizer buildingCriteriaNormalizer;
 
     public EftReportGenerator() {
-        dtoBinder = new SimpleEntityBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
+        dtoBinder = new CrudEntityBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
 
             @Override
             protected void bind() {

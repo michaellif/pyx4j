@@ -23,7 +23,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.services.customer.screening.LeaseParticipantScreeningVersionService;
@@ -37,7 +37,7 @@ import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceIm
 public class LeaseParticipantScreeningVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<CustomerScreeningV, LeaseParticipantScreeningTOV>
         implements LeaseParticipantScreeningVersionService {
 
-    private static class Binder extends SimpleEntityBinder<CustomerScreeningV, LeaseParticipantScreeningTOV> {
+    private static class Binder extends CrudEntityBinder<CustomerScreeningV, LeaseParticipantScreeningTOV> {
 
         protected Binder() {
             super(CustomerScreeningV.class, LeaseParticipantScreeningTOV.class);

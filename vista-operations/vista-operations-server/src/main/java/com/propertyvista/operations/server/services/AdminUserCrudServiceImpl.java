@@ -11,9 +11,9 @@ package com.propertyvista.operations.server.services;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDiff;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.system.AuditFacade;
@@ -25,7 +25,7 @@ import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserCrudService {
 
     public AdminUserCrudServiceImpl() {
-        super(new SimpleEntityBinder<OperationsUserCredential, OperationsUserDTO>(OperationsUserCredential.class, OperationsUserDTO.class) {
+        super(new CrudEntityBinder<OperationsUserCredential, OperationsUserDTO>(OperationsUserCredential.class, OperationsUserDTO.class) {
 
             @Override
             protected void bind() {

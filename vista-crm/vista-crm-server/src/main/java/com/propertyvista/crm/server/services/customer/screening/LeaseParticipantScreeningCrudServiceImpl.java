@@ -21,7 +21,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
@@ -36,7 +36,7 @@ import com.propertyvista.misc.VistaTODO;
 public class LeaseParticipantScreeningCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<CustomerScreening, LeaseParticipantScreeningTO> implements
         LeaseParticipantScreeningCrudService {
 
-    private static class Binder extends SimpleEntityBinder<CustomerScreening, LeaseParticipantScreeningTO> {
+    private static class Binder extends CrudEntityBinder<CustomerScreening, LeaseParticipantScreeningTO> {
 
         protected Binder() {
             super(CustomerScreening.class, LeaseParticipantScreeningTO.class);

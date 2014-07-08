@@ -15,7 +15,7 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
@@ -24,7 +24,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements
         PaymentRecordsGadgetListService {
 
-    private static class Binder extends SimpleEntityBinder<PaymentRecord, PaymentRecordForReportDTO> {
+    private static class Binder extends CrudEntityBinder<PaymentRecord, PaymentRecordForReportDTO> {
 
         protected Binder() {
             super(PaymentRecord.class, PaymentRecordForReportDTO.class);

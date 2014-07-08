@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -35,7 +35,7 @@ import com.propertyvista.server.common.util.AddressRetriever;
 public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodWizardService {
 
     public PaymentMethodWizardServiceImpl() {
-        super(new SimpleEntityBinder<LeasePaymentMethod, PaymentMethodDTO>(LeasePaymentMethod.class, PaymentMethodDTO.class) {
+        super(new CrudEntityBinder<LeasePaymentMethod, PaymentMethodDTO>(LeasePaymentMethod.class, PaymentMethodDTO.class) {
 
             @Override
             protected void bind() {

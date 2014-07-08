@@ -19,8 +19,8 @@ import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.system.VistaContext;
@@ -31,7 +31,7 @@ import com.propertyvista.operations.rpc.services.AdminUserService;
 public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserService {
 
     public AdminUserServiceImpl() {
-        super(new SimpleEntityBinder<OperationsUserCredential, OperationsUserDTO>(OperationsUserCredential.class, OperationsUserDTO.class) {
+        super(new CrudEntityBinder<OperationsUserCredential, OperationsUserDTO>(OperationsUserCredential.class, OperationsUserDTO.class) {
 
             @Override
             protected void bind() {

@@ -32,7 +32,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
@@ -46,7 +46,7 @@ import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
-public class MediaConverter extends SimpleEntityBinder<MediaFile, MediaIO> {
+public class MediaConverter extends CrudEntityBinder<MediaFile, MediaIO> {
 
     private final static Logger log = LoggerFactory.getLogger(MediaConverter.class);
 

@@ -18,7 +18,7 @@ import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.crm.rpc.services.building.LandlordCrudService;
 import com.propertyvista.domain.property.Landlord;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.LandlordDTO;
 
 public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord, LandlordDTO> implements LandlordCrudService {
 
-    private static class BuildingBinder extends SimpleEntityBinder<Building, Building> {
+    private static class BuildingBinder extends CrudEntityBinder<Building, Building> {
 
         protected BuildingBinder() {
             super(Building.class, Building.class);
@@ -42,7 +42,7 @@ public class LandlordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Landlord
 
     }
 
-    private static class Binder extends SimpleEntityBinder<Landlord, LandlordDTO> {
+    private static class Binder extends CrudEntityBinder<Landlord, LandlordDTO> {
 
         protected Binder() {
             super(Landlord.class, LandlordDTO.class);

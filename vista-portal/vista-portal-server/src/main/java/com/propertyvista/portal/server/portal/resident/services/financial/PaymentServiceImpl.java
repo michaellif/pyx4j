@@ -24,8 +24,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -57,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void retrievePayment(AsyncCallback<PaymentRecordDTO> callback, PaymentRecord itemId) {
         PaymentRecord dbo = Persistence.secureRetrieve(PaymentRecord.class, itemId.getPrimaryKey());
-        PaymentRecordDTO dto = new SimpleEntityBinder<PaymentRecord, PaymentRecordDTO>(PaymentRecord.class, PaymentRecordDTO.class) {
+        PaymentRecordDTO dto = new CrudEntityBinder<PaymentRecord, PaymentRecordDTO>(PaymentRecord.class, PaymentRecordDTO.class) {
             @Override
             protected void bind() {
                 bindCompleteObject();
@@ -218,7 +218,7 @@ public class PaymentServiceImpl implements PaymentService {
         return result;
     }
 
-    private class PaymentMethodDtoBinder extends SimpleEntityBinder<LeasePaymentMethod, PaymentMethodDTO> {
+    private class PaymentMethodDtoBinder extends CrudEntityBinder<LeasePaymentMethod, PaymentMethodDTO> {
 
         protected PaymentMethodDtoBinder() {
             super(LeasePaymentMethod.class, PaymentMethodDTO.class);
@@ -257,7 +257,7 @@ public class PaymentServiceImpl implements PaymentService {
         return currentAutoPayments;
     }
 
-    private class AutoPayDtoBinder extends SimpleEntityBinder<AutopayAgreement, AutoPayDTO> {
+    private class AutoPayDtoBinder extends CrudEntityBinder<AutopayAgreement, AutoPayDTO> {
 
         protected AutoPayDtoBinder() {
             super(AutopayAgreement.class, AutoPayDTO.class);

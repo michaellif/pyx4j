@@ -13,13 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.domain.contact.InternationalAddress;
 import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.interfaces.importer.model.AddressSimpleIO;
 
-public class AddressSimpleConverter extends SimpleEntityBinder<InternationalAddress, AddressSimpleIO> {
+public class AddressSimpleConverter extends CrudEntityBinder<InternationalAddress, AddressSimpleIO> {
 
     public AddressSimpleConverter() {
         super(InternationalAddress.class, AddressSimpleIO.class, false);

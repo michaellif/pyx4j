@@ -19,7 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeasesFromLeadListService;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class LeasesFromLeadListServiceImpl extends AbstractListServiceDtoImpl<Lead, Lead> implements LeasesFromLeadListService {
 
-    private static class Binder extends SimpleEntityBinder<Lead, Lead> {
+    private static class Binder extends CrudEntityBinder<Lead, Lead> {
 
         protected Binder() {
             super(Lead.class, Lead.class);

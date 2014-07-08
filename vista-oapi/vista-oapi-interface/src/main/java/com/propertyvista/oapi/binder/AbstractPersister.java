@@ -15,10 +15,10 @@ package com.propertyvista.oapi.binder;
 
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
 
-public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> extends SimpleEntityBinder<E, DTO> {
+public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> extends CrudEntityBinder<E, DTO> {
 
     protected AbstractPersister(Class<E> dboClass, Class<DTO> dtoClass) {
         super(dboClass, dtoClass);

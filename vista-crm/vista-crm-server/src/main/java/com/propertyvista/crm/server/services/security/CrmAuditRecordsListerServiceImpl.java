@@ -22,7 +22,7 @@ import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.SimpleEntityBinder;
+import com.pyx4j.entity.server.CrudEntityBinder;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.VistaContext;
@@ -34,7 +34,7 @@ import com.propertyvista.server.TaskRunner;
 
 public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl<AuditRecord, AuditRecordDTO> implements CrmAuditRecordsListerService {
 
-    private static class Binder extends SimpleEntityBinder<AuditRecord, AuditRecordDTO> {
+    private static class Binder extends CrudEntityBinder<AuditRecord, AuditRecordDTO> {
 
         protected Binder() {
             super(AuditRecord.class, AuditRecordDTO.class);
