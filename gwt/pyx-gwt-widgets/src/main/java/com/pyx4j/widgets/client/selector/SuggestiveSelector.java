@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
@@ -41,6 +40,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -196,7 +196,7 @@ public class SuggestiveSelector<DataType> implements IsWidget {
             }
         }, ClickEvent.getType());
 
-        asWidget().sinkEvents(Event.CLICK);
+        asWidget().sinkEvents(Event.ONCLICK);
     }
 
     public void setInput(String input) {
