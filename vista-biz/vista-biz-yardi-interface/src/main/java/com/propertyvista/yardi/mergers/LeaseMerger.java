@@ -28,7 +28,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IPrimitive;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -196,24 +198,21 @@ public class LeaseMerger {
     }
 
     public Lease updateUnit(AptUnit unit, Lease lease, boolean move) {
-        // process old term:
+        // mark old term:
         lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
         lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
-        LeaseTerm prevTerm = ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        Persistence.service().merge(lease.currentTerm());
 
         // set new term:
-        lease.currentTerm().set(ServerSideFactory.create(LeaseFacade.class).createOffer(lease, unit, LeaseTerm.Type.FixedEx));
+        lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
         lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
-        if (!move) {
-            lease.currentTerm().termFrom().setValue(prevTerm.termFrom().getValue());
-            lease.currentTerm().termTo().setValue(prevTerm.termTo().getValue());
-            lease.currentTerm().version().leaseProducts().set(prevTerm.version().leaseProducts().duplicate());
-        }
-        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
+        lease.currentTerm().lease().set(lease);
 
         // update lease unit:
-        ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
-        return ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        ServerSideFactory.create(LeaseFacade.class).setUnit(lease.currentTerm(), unit);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+        return lease;
     }
 
     // internals
