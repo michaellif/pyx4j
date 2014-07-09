@@ -196,7 +196,7 @@ public class YardiLeaseProcessor {
                 newItem.uid().setValue(uid);
             }
 
-            newItems.add(createBillableItem(tr.getCharge().getDetail(), newItem));
+            newItems.add(fillBillableItem(tr.getCharge().getDetail(), newItem));
         }
 
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease, executionMonitor);
@@ -222,11 +222,8 @@ public class YardiLeaseProcessor {
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO)) < 0) {
             log.info("      Terminating billable items for lease {} ", lease.leaseId().getStringView());
 
-            // set service charge to zero
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
-            // remove features
             lease.currentTerm().version().leaseProducts().featureItems().clear();
-            // finalize
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             log.debug("        >> Finalizing lease! <<");
 
@@ -523,7 +520,7 @@ public class YardiLeaseProcessor {
         return unit;
     }
 
-    private BillableItem createBillableItem(ChargeDetail detail, BillableItem newItem) {
+    private BillableItem fillBillableItem(ChargeDetail detail, BillableItem newItem) {
 
         newItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
         newItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
@@ -605,12 +602,11 @@ public class YardiLeaseProcessor {
         yardiLease.setExpectedMoveOutDate(SystemDateManager.getDate());
         yardiLease.setActualMoveOut(SystemDateManager.getDate());
 
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-
         completeLease(lease, yardiLease);
     }
 
     private static Lease completeLease(Lease lease, YardiLease yardiLease) {
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         if (lease.completion().isNull()) {
             ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, SystemDateManager.getLogicalDate(),
                     getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
