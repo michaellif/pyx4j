@@ -84,6 +84,81 @@ SET search_path = '_admin_';
                                             ADD COLUMN business_address_street_name VARCHAR(500),
                                             ADD COLUMN business_address_street_number VARCHAR(500),
                                             ADD COLUMN business_address_suite_number VARCHAR(500);
+                                            
+        -- card_transaction_record
+        
+        ALTER TABLE card_transaction_record ADD COLUMN pmc BIGINT;
+        
+        -- cards_reconciliation_file
+        
+        CREATE TABLE cards_reconciliation_file 
+        (
+            id                      BIGINT              NOT NULL,
+            file_name               VARCHAR(500),
+            remote_file_date        TIMESTAMP,
+            received                TIMESTAMP,
+                CONSTRAINT cards_reconciliation_file_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE cards_reconciliation_file OWNER TO vista;
+        
+        -- cards_reconciliation_record
+        
+        CREATE TABLE cards_reconciliation_record
+        (
+            id                      BIGINT              NOT NULL,
+            date                    DATE,
+            merchant_id             VARCHAR(500),
+            merchant_terminal_id    VARCHAR(500),
+            merchant_account        BIGINT,
+            convenience_fee_account BOOLEAN,
+            status                  VARCHAR(50),
+            total_deposit           NUMERIC(18,2),
+            total_fee               NUMERIC(18,2),
+            visa_deposit            NUMERIC(18,2),
+            visa_fee                NUMERIC(18,2),
+            mastercard_deposit      NUMERIC(18,2),
+            mastercard_fee          NUMERIC(18,2),
+            file_merchant_total     BIGINT,
+            file_card_total         BIGINT,
+                CONSTRAINT cards_reconciliation_record_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE cards_reconciliation_record OWNER TO vista;
+        
+        
+        -- cards_reconciliation_record$adjustments
+        
+        CREATE TABLE cards_reconciliation_record$adjustments
+        (
+            id                      BIGINT              NOT NULL,
+            owner                   BIGINT,
+            value                   BIGINT,
+                CONSTRAINT cards_reconciliation_record$adjustments_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE cards_reconciliation_record$adjustments OWNER TO vista;
+        
+        -- dev_card_service_simulation_reconciliation_record
+        
+        CREATE TABLE dev_card_service_simulation_reconciliation_record
+        (
+            id                      BIGINT              NOT NULL,
+            file_id                 VARCHAR(500),
+            date                    DATE,
+            merchant                BIGINT,
+            total_deposit           NUMERIC(18,2),
+            total_fee               NUMERIC(18,2),
+            visa_transactions       INT,
+            visa_deposit            NUMERIC(18,2),
+            visa_fee                NUMERIC(18,2),
+            mastercard_transactions INT,
+            mastercard_deposit      NUMERIC(18,2),
+            mastercard_fee          NUMERIC(18,2),
+                CONSTRAINT dev_card_service_simulation_reconciliation_record_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE dev_card_service_simulation_reconciliation_record OWNER TO vista;
         
         -- dev_equifax_simulator_config
         
@@ -167,6 +242,24 @@ SET search_path = '_admin_';
         **/
         
        
+        -- foreign keys
+        
+        ALTER TABLE card_transaction_record ADD CONSTRAINT card_transaction_record_pmc_fk FOREIGN KEY(pmc) 
+            REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE cards_reconciliation_record ADD CONSTRAINT cards_reconciliation_record_file_card_total_fk 
+            FOREIGN KEY(file_card_total) REFERENCES cards_reconciliation_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE cards_reconciliation_record ADD CONSTRAINT cards_reconciliation_record_file_merchant_total_fk FOREIGN KEY(file_merchant_total) 
+            REFERENCES cards_reconciliation_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE cards_reconciliation_record ADD CONSTRAINT cards_reconciliation_record_merchant_account_fk FOREIGN KEY(merchant_account) 
+            REFERENCES admin_pmc_merchant_account_index(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE cards_reconciliation_record$adjustments ADD CONSTRAINT cards_reconciliation_record$adjustments_owner_fk FOREIGN KEY(owner) 
+            REFERENCES cards_reconciliation_record(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE cards_reconciliation_record$chargebacks ADD CONSTRAINT cards_reconciliation_record$chargebacks_owner_fk FOREIGN KEY(owner) 
+            REFERENCES cards_reconciliation_record(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE dev_card_service_simulation_reconciliation_record ADD CONSTRAINT dev_card_service_simulation_reconciliation_record_merchant_fk FOREIGN KEY(merchant) 
+            REFERENCES dev_card_service_simulation_merchant_account(id)  DEFERRABLE INITIALLY DEFERRED;
+
+       
         -- check constraints
         
         ALTER TABLE business_information ADD CONSTRAINT business_information_business_address_country_e_ck 
@@ -195,7 +288,10 @@ SET search_path = '_admin_';
                         'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 
                         'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
                         'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
-                        
+
+    ALTER TABLE cards_reconciliation_record ADD CONSTRAINT cards_reconciliation_record_status_e_ck 
+        CHECK ((status) IN ('Processed', 'Received'));
+        
     ALTER TABLE personal_information ADD CONSTRAINT personal_information_personal_address_country_e_ck 
         CHECK ((personal_address_country) IN ('Afghanistan', 'AlandIslands', 'Albania', 'Algeria', 'AmericanSamoa', 'Andorra', 'Angola', 'Anguilla', 
                         'Antarctica', 'Antigua', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 
@@ -220,8 +316,7 @@ SET search_path = '_admin_';
                         'Thailand', 'TimorLeste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad', 'Tunisia', 'Turkey', 'Turkmenistan', 'TurksCaicos', 'Tuvalu', 
                         'Uganda', 'Ukraine', 'UnitedArabEmirates', 'UnitedKingdom', 'UnitedStates', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican', 
                         'Venezuela', 'VietNam', 'VirginIslands', 'VirginIslandsGB', 'WallisFutuna', 'WesternSahara', 'Yemen', 'Zambia', 'Zimbabwe'));
-
-        
+                        
     ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
         CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'ilsEmailFeed', 'ilsUpdate', 
         'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess', 
@@ -241,7 +336,12 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
-       CREATE INDEX direct_debit_record_pmc_processing_status_idx ON direct_debit_record USING btree(pmc, processing_status);
+        CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_conv_fee_idx ON admin_pmc_merchant_account_index USING btree (terminal_id_conv_fee);
+        CREATE UNIQUE INDEX admin_pmc_merchant_account_index_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (terminal_id);
+        CREATE INDEX cards_reconciliation_record$adjustments_owner_idx ON cards_reconciliation_record$adjustments USING btree (owner);
+        CREATE INDEX cards_reconciliation_record$chargebacks_owner_idx ON cards_reconciliation_record$chargebacks USING btree (owner);
+        CREATE INDEX cards_reconciliation_record_merchant_account_idx ON cards_reconciliation_record USING btree (merchant_account);
+        CREATE INDEX direct_debit_record_pmc_processing_status_idx ON direct_debit_record USING btree(pmc, processing_status);
 
 COMMIT;
 
