@@ -173,10 +173,12 @@ class CaledonReport {
 
     static void completeStatsReport(ReportTableFormatter formater) {
         List<String> emails = new ArrayList<String>();
-        // mail to domain will not be sent in test env
-        emails.add("kevin.bullock@caledoncard.com");
         if (VistaDeployment.isVistaProduction()) {
+            // mail to domain will not be sent in test env
+            emails.add("kevin.bullock@caledoncard.com");
             emails.add("vista-operations-stats@propertyvista.com");
+        } else {
+            emails.add("test-emails@propertyvista.be");
         }
 
         MailMessage m = new MailMessage();

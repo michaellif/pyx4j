@@ -114,6 +114,8 @@ public enum PmcProcessType implements Serializable {
 
     tenantSureTransactionReports(PmcProcessOptions.RunForDay),
 
+    tenantSureBusinessReport,
+
     @Translate("ILS Vendor Update")
     ilsUpdate,
 

@@ -387,7 +387,7 @@ class VistaBusinessStatsReport {
         } else if (VistaDeployment.isVistaProduction()) {
             emails.add("vista-operations-stats@propertyvista.com");
         } else {
-            emails.add("vista-operations-stats@pyx4j.com");
+            emails.add("test-emails@propertyvista.be");
         }
 
         MailMessage m = new MailMessage();

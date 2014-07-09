@@ -17,6 +17,7 @@ import com.propertyvista.domain.financial.CaledonFundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.server.jobs.insurance.PaymentsTenantSureProcess;
+import com.propertyvista.server.jobs.insurance.TenantSureBusinessReportProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureCancellationProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureReportsProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureTransactionsReportProcess;
@@ -112,6 +113,8 @@ public class PmcProcessFactory {
             return new TenantSureTransactionsReportProcess();
         case tenantSureCancellation:
             return new TenantSureCancellationProcess();
+        case tenantSureBusinessReport:
+            return new TenantSureBusinessReportProcess();
 
 // Misc:
         case vistaBusinessReport:

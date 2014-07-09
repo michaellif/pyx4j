@@ -37,6 +37,7 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.insurance.tenantsure.reports.InsuranceStatusReport;
 import com.propertyvista.biz.tenant.insurance.tenantsure.reports.ReportFileCreatorImpl;
+import com.propertyvista.biz.tenant.insurance.tenantsure.reports.TenantSureBusinessReport;
 import com.propertyvista.biz.tenant.insurance.tenantsure.reports.TransactionsReport;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
@@ -174,19 +175,19 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public ReportTableFormatter startReport() {
+    public ReportTableFormatter startInsuranceStatusReport() {
         ReportTableFormatter tableFormatter = new ReportTableCSVFormatter();
         new InsuranceStatusReport().start(tableFormatter);
         return tableFormatter;
     }
 
     @Override
-    public void processReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formater) {
+    public void processInsuranceStatusReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formater) {
         new InsuranceStatusReport().processReport(executionMonitor, date, formater);
     }
 
     @Override
-    public void completeReport(ReportTableFormatter formatter, Date date) {
+    public void completeInsuranceStatusReport(ReportTableFormatter formatter, Date date) {
         File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
         File dirReports = new File(sftpDir, "reports");
         new InsuranceStatusReport().complete(new ReportFileCreatorImpl(SimpleMessageFormat.format("subscribers-{0,date,yyyyMMdd}.csv", date), dirReports),
@@ -222,6 +223,21 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         gracePeriodEnd.setTime(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         gracePeriodEnd.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);
         return new LogicalDate(gracePeriodEnd.getTime());
+    }
+
+    @Override
+    public ReportTableFormatter startTenantSureBusinessReport() {
+        return new TenantSureBusinessReport().start();
+    }
+
+    @Override
+    public void processTenantSureBusinessReportPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter) {
+        new TenantSureBusinessReport().processReport(executionMonitor, formatter);
+    }
+
+    @Override
+    public void completeTenantSureBusinessReport(ReportTableFormatter formatter) {
+        new TenantSureBusinessReport().completeReport(formatter);
     }
 
 }

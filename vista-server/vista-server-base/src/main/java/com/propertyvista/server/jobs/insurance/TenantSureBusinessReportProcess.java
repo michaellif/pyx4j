@@ -1,38 +1,36 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-27
+ * Created on Jul 9, 2014
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.server.jobs.insurance;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 
-public class TenantSureReportsProcess implements PmcProcess {
+public class TenantSureBusinessReportProcess implements PmcProcess {
 
     protected ReportTableFormatter formatter;
 
-    public TenantSureReportsProcess() {
+    public TenantSureBusinessReportProcess() {
     }
 
     @Override
     public boolean start(PmcProcessContext context) {
-        formatter = ServerSideFactory.create(TenantSureProcessFacade.class).startInsuranceStatusReport();
+        formatter = ServerSideFactory.create(TenantSureProcessFacade.class).startTenantSureBusinessReport();
         return true;
     }
 
@@ -43,12 +41,11 @@ public class TenantSureReportsProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).processInsuranceStatusReportPmc(context.getExecutionMonitor(),
-                DateUtils.daysAdd(new LogicalDate(context.getForDate()), -1), formatter);
+        ServerSideFactory.create(TenantSureProcessFacade.class).processTenantSureBusinessReportPmc(context.getExecutionMonitor(), formatter);
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).completeInsuranceStatusReport(formatter, DateUtils.daysAdd(new LogicalDate(context.getForDate()), -1));
+        ServerSideFactory.create(TenantSureProcessFacade.class).completeTenantSureBusinessReport(formatter);
     }
 }

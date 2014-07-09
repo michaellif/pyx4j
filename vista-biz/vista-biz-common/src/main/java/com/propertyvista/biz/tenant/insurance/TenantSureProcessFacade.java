@@ -31,16 +31,28 @@ public interface TenantSureProcessFacade {
 
     void processCancellations(ExecutionMonitor executionMonitor, LogicalDate dueDate);
 
-    ReportTableFormatter startReport();
+    // --
 
-    void processReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formater);
+    ReportTableFormatter startInsuranceStatusReport();
 
-    void completeReport(ReportTableFormatter formater, Date date);
+    void processInsuranceStatusReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formater);
+
+    void completeInsuranceStatusReport(ReportTableFormatter formater, Date date);
+
+    // --
 
     ReportTableFormatter startTransactionsReport();
 
     void processTransactionsReport(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formatter);
 
     void completeTransactionsReport(ReportTableFormatter formatter, Date date);
+
+    // --
+
+    ReportTableFormatter startTenantSureBusinessReport();
+
+    void processTenantSureBusinessReportPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formater);
+
+    void completeTenantSureBusinessReport(ReportTableFormatter formater);
 
 }
