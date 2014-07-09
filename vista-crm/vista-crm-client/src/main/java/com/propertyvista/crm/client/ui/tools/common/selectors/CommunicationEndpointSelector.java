@@ -13,10 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
-import java.text.ParseException;
-
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 
 import com.propertyvista.dto.CommunicationEndpointDTO;
@@ -29,12 +26,6 @@ public class CommunicationEndpointSelector extends SuggestiveSelector<Communicat
             public String format(CommunicationEndpointDTO value) {
                 return value.name().getValue();
             }
-        }, new IParser<CommunicationEndpointDTO>() {
-            @Override
-            public CommunicationEndpointDTO parse(String string) throws ParseException {
-                return null;
-            }
-        }, new CommunicationEndpointForSelectionCell(), new CommunicationEndpointSuggestionsProvider(), true, false);
+        }, new CommunicationEndpointSuggestionsProvider(), new CommunicationEndpointForSelectionCell(), true);
     }
-
 }

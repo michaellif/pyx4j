@@ -634,7 +634,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             }
         }
 
-        private Widget createCommunicationEndpointSelector() {
+        private IsWidget createCommunicationEndpointSelector() {
             return communicationEndpointSelector = new CommunicationEndpointSelector() {//@formatter:off
                 @Override protected void onItemAdded(CommunicationEndpointDTO item) {
                     super.onItemAdded(item);

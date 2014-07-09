@@ -19,7 +19,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder;
@@ -72,7 +71,8 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
     }
 
     public int getRequiredHeight() {
-        return TOP_ROW_HEIGHT + Math.max(portfolioSelector.getElement().getScrollHeight(), buildingSelector.getElement().getScrollHeight());
+        return TOP_ROW_HEIGHT
+                + Math.max(portfolioSelector.asWidget().getElement().getScrollHeight(), buildingSelector.asWidget().getElement().getScrollHeight());
     }
 
     @Override
@@ -81,11 +81,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
         setTextBoxHeightFieldsHack();
     }
 
-    protected void onSuperSelectorResized() {
-
-    }
-
-    private Widget createPortfolioSelector() {
+    private IsWidget createPortfolioSelector() {
         return portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
                 super.onItemAdded(item);
@@ -100,14 +96,10 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
             }
             
-            @Override protected void onRedraw() {
-                super.onRedraw();
-                MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
-            }
         };//@formatter:on
     }
 
-    private Widget createBuildingSelector() {
+    private IsWidget createBuildingSelector() {
         return buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
                 super.onItemAdded(item);
@@ -120,10 +112,7 @@ public class MoneyInCandidateSearchCriteriaForm extends CForm<MoneyInCandidateSe
                 searchCriteria.buildings().remove(item);
                 MoneyInCandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
             }
-            @Override protected void onRedraw() {
-                super.onRedraw();
-                MoneyInCandidateSearchCriteriaForm.this.onSuperSelectorResized();
-            }
+
         };//@formatter:on
     }
 

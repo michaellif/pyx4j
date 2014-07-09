@@ -13,10 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
-import java.text.ParseException;
-
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 
 import com.propertyvista.crm.rpc.dto.selections.PortfolioForSelectionDTO;
@@ -29,12 +26,7 @@ public class PortfolioSelector extends SuggestiveSelector<PortfolioForSelectionD
             public String format(PortfolioForSelectionDTO value) {
                 return value.name().getValue();
             }
-        }, new IParser<PortfolioForSelectionDTO>() {
-            @Override
-            public PortfolioForSelectionDTO parse(String string) throws ParseException {
-                return null;
-            }
-        }, new PortfolioForSelectionCell(), new PortfolioSuggestionsProvider(), true, false);
+        }, new PortfolioSuggestionsProvider(), new PortfolioForSelectionCell(), true);
     }
 
 }

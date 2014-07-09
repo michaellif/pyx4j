@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CForm;
@@ -115,16 +114,12 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
         updateComponentsVisibility();
     }
 
-    protected void onSuperSelectorResized() {
-
-    }
-
     private void updateComponentsVisibility() {
         policyErrorsLabel.setVisible(!CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
         searchCriteriaPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
     }
 
-    private Widget createPortfolioSelector() {
+    private IsWidget createPortfolioSelector() {
         return portfolioSelector = new PortfolioSelector() {//@formatter:off
             @Override protected void onItemAdded(PortfolioForSelectionDTO item) {
                 super.onItemAdded(item);
@@ -139,14 +134,10 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
                 N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);            
             }
             
-            @Override protected void onRedraw() {
-                super.onRedraw();
-                N4CandidateSearchCriteriaForm.this.onSuperSelectorResized();
-            }
         };//@formatter:on
     }
 
-    private Widget createBuildingSelector() {
+    private IsWidget createBuildingSelector() {
         return buildingSelector = new BuildingSelector() {//@formatter:off
             @Override protected void onItemAdded(BuildingForSelectionDTO item) {
                 super.onItemAdded(item);
@@ -158,10 +149,6 @@ public class N4CandidateSearchCriteriaForm extends CForm<N4CandidateSearchCriter
                 N4CandidateSearchCriteriaDTO  searchCriteria = N4CandidateSearchCriteriaForm.this.getValue();
                 searchCriteria.buildings().remove(item);
                 N4CandidateSearchCriteriaForm.this.setValue(searchCriteria, true, false);
-            }
-            @Override protected void onRedraw() {
-                super.onRedraw();
-                N4CandidateSearchCriteriaForm.this.onSuperSelectorResized();
             }
         };//@formatter:on
     }

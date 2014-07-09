@@ -13,10 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.selectors;
 
-import java.text.ParseException;
-
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.widgets.client.selector.SuggestiveSelector;
 
 import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
@@ -33,12 +30,7 @@ public class BuildingSelector extends SuggestiveSelector<BuildingForSelectionDTO
                     return value.propertyCode().getValue();
                 }
             }
-        }, new IParser<BuildingForSelectionDTO>() {
-            @Override
-            public BuildingForSelectionDTO parse(String string) throws ParseException {
-                return null;
-            }
-        }, new BuildingForSelectionCell(), new BuildingSuggestionsProvider(), true, true);
+        }, new BuildingSuggestionsProvider(), new BuildingForSelectionCell(), true);
     }
 
 }
