@@ -76,7 +76,7 @@ public class YardiProductCatalogProcessor {
 
         updateEligibilityMatrixes(building.productCatalog());
 
-        String msg = SimpleMessageFormat.format("Process Catalog for Building {0}", building.getStringView());
+        String msg = SimpleMessageFormat.format("Processed Catalog for Building {0}", building.getStringView());
         executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
         log.info(">> " + msg);
     }
@@ -99,7 +99,7 @@ public class YardiProductCatalogProcessor {
 
         replaceOriginalDraftServices(building.productCatalog(), updatedServices);
 
-        String msg = SimpleMessageFormat.format("Update Units for Building {0}", building.getStringView());
+        String msg = SimpleMessageFormat.format("Updated Units for Building {0}", building.getStringView());
         executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
         log.info(">> " + msg);
     }
@@ -121,7 +121,7 @@ public class YardiProductCatalogProcessor {
             }
         }
 
-        String msg = SimpleMessageFormat.format("Persist Catalog for Building {0}", building.getStringView());
+        String msg = SimpleMessageFormat.format("Persisted Catalog for Building {0}", building.getStringView());
         executionMonitor.addInfoEvent("YardiProductCatalogProcessor", msg);
         log.info(">> " + msg);
     }
@@ -179,9 +179,6 @@ public class YardiProductCatalogProcessor {
         if (!isAnyServicePresent(catalog)) {
             ARCode arCode = getServiceArCode();
             assert (arCode != null);
-
-            log.info("    Service arCode: {}", arCode.getStringView());
-            executionMonitor.addInfoEvent("YardiProductCatalogProcessor", arCode.getStringView());
 
             RentableItemType itemType = new RentableItemType();
             itemType.setRent("0.00");
