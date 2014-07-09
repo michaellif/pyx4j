@@ -20,16 +20,15 @@
  */
 package com.pyx4j.widgets.client.selector;
 
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.google.gwt.cell.client.Cell;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -42,20 +41,17 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.touch.client.Point;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AbstractDataProvider;
 
 import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.css.IStyleName;
 
-public class SuggestiveSelector<DataType> extends Composite {
+public class SuggestiveSelector<DataType> implements IsWidget {
 
     public static abstract class SuggestionsProvider<DataType> extends AbstractDataProvider<DataType> {
 
@@ -73,15 +69,15 @@ public class SuggestiveSelector<DataType> extends Composite {
 
     private final static int POPUP_HIDE_DELAY = 400;
 
-    final static int DEFAULT_SUGGE_DELAY = 100;
+    private final static int DEFAULT_SUGGE_DELAY = 100;
+
+    private final FlowPanel panel;
 
     final SuggestionsProvider<DataType> suggestionsProvider;
 
     final Cell<DataType> cell;
 
     SuggestionsPopup<DataType> popup;
-
-    private int popupDelay;
 
     private final boolean alwaysSuggest;
 
@@ -95,45 +91,30 @@ public class SuggestiveSelector<DataType> extends Composite {
 
     private final List<SelectedItemHolder<DataType>> selectedWidgets;
 
-    private final int minInputBoxWidth = 50;
-
     private final IFormatter<DataType, String> format;
-
-    private final IParser<DataType> parser;
-
-    private final boolean allowSame;
-
-    private final boolean pageData;
 
     private boolean isFocused;
 
-    private FlowPanel containerBox;
+    private final FlowPanel containerBox;
 
-    private boolean inlineInput;
-
-    private boolean isReadOnly;
+    private boolean isReadOnly = false;
 
     /**
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
      * item.
      */
-    public SuggestiveSelector(IFormatter<DataType, String> format, IParser<DataType> parser, SuggestionsProvider<DataType> suggestionsProvider,
-            Cell<DataType> cell, boolean allowSame, boolean inlineInput, boolean alwaysSuggest, boolean pageData) {
+    public SuggestiveSelector(IFormatter<DataType, String> format, SuggestionsProvider<DataType> suggestionsProvider, Cell<DataType> cell, boolean alwaysSuggest) {
 
         this.format = format;
-        this.parser = parser;
 
-        this.allowSame = allowSame;
-        this.inlineInput = inlineInput;
-        this.pageData = pageData;
-        this.isReadOnly = false;
-
-        FlowPanel panel = new FlowPanel();
+        panel = new FlowPanel();
+        panel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
         panel.setStyleName(Styles.SuperSelectorStyle.name());
 
         inputTextBox = new TextBox();
         inputTextBox.getElement().getStyle().setDisplay(Display.BLOCK);
         inputTextBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+        inputTextBox.setWidth("100px");
 
         inputTextBox.addKeyDownHandler(new KeyDownHandler() {
             @Override
@@ -165,61 +146,37 @@ public class SuggestiveSelector<DataType> extends Composite {
             @Override
             public void onBlur(BlurEvent event) {
                 SuggestiveSelector.this.isFocused = false;
-                if (!SuggestiveSelector.this.inlineInput) {
-                    if (!selectedWidgets.isEmpty()) {
-                        inputTextBox.getElement().getStyle().setDisplay(Display.NONE);
-                        adjustInnerWidgetSizes();
-                    }
-                }
                 SuggestiveSelector.this.onBlur();
             }
         });
 
         selectedItemsContainerPanel = new FlowPanel();
-        selectedItemsContainerPanel.addDomHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (!SuggestiveSelector.this.inlineInput) {
-                    inputTextBox.getElement().getStyle().setDisplay(Display.BLOCK);
-                    inputTextBox.setFocus(true);
-                    adjustInnerWidgetSizes();
-                }
-            }
-        }, ClickEvent.getType());
-        selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-        selectedItemsContainerPanel.getElement().getStyle().setBorderWidth(0, Unit.PX);
 
         // this 'container box' is used to calculate client width of the panel that does not include padding
-        if (inlineInput) {
-            containerBox = new FlowPanel();
-            containerBox.getElement().getStyle().setWidth(100, Unit.PCT);
-            containerBox.getElement().getStyle().setHeight(100, Unit.PCT);
-            containerBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
-            containerBox.getElement().getStyle().setBorderWidth(0, Unit.PX);
-            containerBox.getElement().getStyle().setPadding(0, Unit.PX);
-            containerBox.getElement().getStyle().setMargin(0, Unit.PX);
-            panel.add(containerBox);
 
-            selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.INLINE);
-            containerBox.add(selectedItemsContainerPanel);
+        containerBox = new FlowPanel();
+        containerBox.getElement().getStyle().setWidth(100, Unit.PCT);
+        containerBox.getElement().getStyle().setHeight(100, Unit.PCT);
+        containerBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+        containerBox.getElement().getStyle().setBorderWidth(0, Unit.PX);
+        containerBox.getElement().getStyle().setPadding(0, Unit.PX);
+        containerBox.getElement().getStyle().setMargin(0, Unit.PX);
+        panel.add(containerBox);
 
-            inputTextBox.getElement().getStyle().setDisplay(Display.INLINE);
-            containerBox.add(inputTextBox);
-        } else {
-            inputTextBox.setWidth("100%");
-            inputTextBox.getElement().getStyle().setMarginBottom(2, Unit.PX);
-            panel.add(inputTextBox);
-            panel.add(selectedItemsContainerPanel);
-        }
+        selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.INLINE);
+        selectedItemsContainerPanel.getElement().getStyle().setBorderWidth(0, Unit.PX);
+        containerBox.add(selectedItemsContainerPanel);
 
-        initWidget(panel);
+        inputTextBox.getElement().getStyle().setDisplay(Display.INLINE);
+        containerBox.add(inputTextBox);
+
         selectedWidgets = new LinkedList<SelectedItemHolder<DataType>>();
 
         this.alwaysSuggest = alwaysSuggest;
         this.cell = cell;
         this.suggestionsProvider = suggestionsProvider;
 
-        addDomHandler(new KeyDownHandler() {
+        asWidget().addDomHandler(new KeyDownHandler() {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (SuggestiveSelector.this.popup != null) {
@@ -231,11 +188,15 @@ public class SuggestiveSelector<DataType> extends Composite {
                 }
             }
         }, KeyDownEvent.getType());
-    }
 
-    public SuggestiveSelector(IFormatter<DataType, String> format, IParser<DataType> parser, Cell<DataType> cell,
-            SuggestionsProvider<DataType> suggestionsProvider, boolean alwaysSuggest, boolean pageData) {
-        this(format, parser, suggestionsProvider, cell, false, true, alwaysSuggest, pageData);
+        asWidget().addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                inputTextBox.setFocus(true);
+            }
+        }, ClickEvent.getType());
+
+        asWidget().sinkEvents(Event.CLICK);
     }
 
     public void setInput(String input) {
@@ -272,15 +233,16 @@ public class SuggestiveSelector<DataType> extends Composite {
         if (item == null) {
             return;
         }
-        if (!allowSame && getSelectedItems().contains(item)) {
+        if (getSelectedItems().contains(item)) {
             return;
         }
 
         SelectedItemHolder<DataType> w = new SelectedItemHolder<DataType>(this.format, this, item, readOnly);
         selectedWidgets.add(w);
         selectedItemsContainerPanel.add(w);
-
-        adjustInnerWidgetSizes();
+        if (popup != null) {
+            popup.showRelativeTo(this.asWidget());
+        }
     }
 
     public final void removeItem(DataType item) {
@@ -296,10 +258,6 @@ public class SuggestiveSelector<DataType> extends Composite {
             selectedItemsContainerPanel.remove(itemContainerWidget);
         }
 
-        if (!inlineInput && selectedWidgets.isEmpty()) {
-            inputTextBox.getElement().getStyle().setDisplay(Display.BLOCK);
-        }
-        adjustInnerWidgetSizes();
         onItemRemoved(item);
     }
 
@@ -318,8 +276,6 @@ public class SuggestiveSelector<DataType> extends Composite {
     protected void onAddItemRequest() {
         if (this.popup != null) {
             addItem(this.popup.getSelectedItem());
-        } else {
-            addItemFromInputBox();
         }
     }
 
@@ -333,7 +289,7 @@ public class SuggestiveSelector<DataType> extends Composite {
                 onSuggestionCriteriaChange(newInput);
             }
         };
-        this.popupTimer.schedule(this.popupDelay);
+        this.popupTimer.schedule(SuggestiveSelector.DEFAULT_SUGGE_DELAY);
     }
 
     /**
@@ -389,13 +345,9 @@ public class SuggestiveSelector<DataType> extends Composite {
             return;
         }
         if (popup == null) {
-            popup = new SuggestionsPopup<DataType>(this, pageData);
-            popup.setPopupPositionAndShow(new PositionCallback() {
-                @Override
-                public void setPosition(int offsetWidth, int offsetHeight) {
-                    repostitionPopup();
-                }
-            });
+            popup = new SuggestionsPopup<DataType>(this);
+            popup.setWidth(this.asWidget().getOffsetWidth() + "px");
+            popup.showRelativeTo(this.asWidget());
         }
     }
 
@@ -405,30 +357,8 @@ public class SuggestiveSelector<DataType> extends Composite {
         }
     }
 
-    private void repostitionPopup() {
-        Point p = getPopupPostion();
-        popup.setPopupPosition((int) p.getX(), (int) p.getY());
-    }
-
-    private Point getPopupPostion() {
-        Element parent = this.getElement();
-        popup.setWidth("" + (parent.getAbsoluteRight() - parent.getAbsoluteLeft()) + "px");
-        final int left = parent.getAbsoluteLeft();
-        final int top = parent.getAbsoluteBottom() + 1;
-        return new Point(left, top);
-    }
-
     protected boolean isFocused() {
         return isFocused;
-    }
-
-    private void addItemFromInputBox() {
-        try {
-            addItem(parser.parse(inputTextBox.getText()));
-            inputTextBox.setText("");
-        } catch (ParseException e) {
-            // TODO deal with this (i.e. render a popup or something like that
-        }
     }
 
     private void removeLastItem() {
@@ -437,59 +367,9 @@ public class SuggestiveSelector<DataType> extends Composite {
         }
     }
 
-    private void adjustInnerWidgetSizes() {
-        if (inlineInput) {
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                @Override
-                public void execute() {
-                    int maxRowWidth = containerBox.getElement().getClientWidth();
-                    int rowWidth = 0;
-                    for (SelectedItemHolder<DataType> w : selectedWidgets) {
-                        rowWidth += w.getElement().getOffsetWidth();
-                        if (rowWidth > maxRowWidth) {
-                            rowWidth = w.getElement().getOffsetWidth();
-                        }
-                    }
-                    int proposedInputWidth = maxRowWidth - rowWidth;
-                    int effectiveInputWidth = (proposedInputWidth < minInputBoxWidth ? maxRowWidth : proposedInputWidth) - 2;
-                    inputTextBox.getElement().getStyle().setWidth(effectiveInputWidth, Unit.PX);
-                    if (SuggestiveSelector.this.isAttached()) {
-                        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                            @Override
-                            public void execute() {
-                                onRedraw();
-                            }
-                        });
-                    }
-                }
-
-            });
-        } else {
-            if (SuggestiveSelector.this.isAttached()) {
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        onRedraw();
-                    }
-                });
-            }
-        }
-    }
-
     @Override
-    protected void onAttach() {
-        super.onAttach();
-        adjustInnerWidgetSizes();
-    }
-
-    protected void onRedraw() {
-        if (this.popup != null) {
-            repostitionPopup();
-        }
-    }
-
-    public void setSuggestionDelay(int coundownMillis) {
-        this.popupDelay = coundownMillis;
+    public Widget asWidget() {
+        return panel;
     }
 
 }

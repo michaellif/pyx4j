@@ -55,11 +55,10 @@ public class SuggestionsPopup<DataType> extends PopupPanel {
 
     int selectedIndex;
 
-    public SuggestionsPopup(SuggestiveSelector<DataType> superSuggestiveSelector, boolean pageData) {
+    public SuggestionsPopup(SuggestiveSelector<DataType> superSuggestiveSelector) {
         super(false);
         parentSelector = superSuggestiveSelector;
         selectedIndex = -1;
-        parentSelector.setSuggestionDelay(SuggestiveSelector.DEFAULT_SUGGE_DELAY);
 
         VerticalPanel panel = new VerticalPanel();
         panel.setStyleName(Styles.SuggestionsPopup.name());
@@ -103,14 +102,6 @@ public class SuggestionsPopup<DataType> extends PopupPanel {
         });
         parentSelector.suggestionsProvider.addDataDisplay(suggestionList);
         panel.add(suggestionList);
-        if (pageData) {
-            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-            pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-            pager.setDisplay(suggestionList);
-
-            panel.add(pager);
-            panel.setCellHorizontalAlignment(pager, HasHorizontalAlignment.ALIGN_CENTER);
-        }
         setWidget(panel);
     }
 
