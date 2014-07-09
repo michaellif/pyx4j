@@ -194,7 +194,6 @@ public class LeadForm extends CrmEntityForm<Lead> {
                     // building columns
                     new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().building().complex(), false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().propertyManager(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().name(), true).title(i18n.tr("Building")).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().type(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().info().shape(), false).build(),

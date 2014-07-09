@@ -13,10 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components;
 
-import com.pyx4j.commons.IFormatter;
-import com.pyx4j.commons.IParser;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.core.IObject;
 import com.pyx4j.entity.core.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.BaseEditableComponentFactory;
@@ -24,7 +21,6 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CKeyField;
 import com.pyx4j.forms.client.ui.CSignature;
 
-import com.propertyvista.domain.ref.ISOCountry;
 import com.propertyvista.domain.security.CustomerSignature;
 
 public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
@@ -36,21 +32,6 @@ public class VistaEditorsComponentFactory extends BaseEditableComponentFactory {
             return new CKeyField();
         } else if (mm.getValueClass().equals(CustomerSignature.class)) {
             return new CSignature(mm.getCaption());
-        } else if (member.getValueClass().equals(ISOCountry.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
-            final CountrySuggestBox comp = new CountrySuggestBox();
-            comp.setFormatter(new IFormatter<ISOCountry, String>() {
-                @Override
-                public String format(ISOCountry value) {
-                    return value.name;
-                }
-            });
-            comp.setParser(new IParser<ISOCountry>() {
-                @Override
-                public ISOCountry parse(String string) {
-                    return ISOCountry.forName(string);
-                }
-            });
-            return comp;
         } else {
             return super.create(member);
         }

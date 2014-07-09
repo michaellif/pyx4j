@@ -25,6 +25,4 @@ public interface PmcExportDownloadDTO extends IEntity {
 
     IPrimitive<Boolean> exportImages();
 
-    IPrimitive<String> propertyManager();
-
 }

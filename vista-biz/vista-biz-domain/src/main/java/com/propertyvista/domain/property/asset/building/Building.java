@@ -20,8 +20,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -30,7 +28,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -56,8 +53,6 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.Landlord;
-import com.propertyvista.domain.property.PropertyManager;
-import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Elevator;
@@ -106,10 +101,6 @@ public interface Building extends PolicyNode, HasNotesAndAttachments, Communicat
     @NotNull
     @MemberColumn(notNull = true)
     IPrimitive<Boolean> suspended();
-
-    @Editor(type = EditorType.suggest)
-    @Reference(adapter = PropertyManagerReferenceAdapter.class)
-    PropertyManager propertyManager();
 
     @Detached
     Landlord landlord();

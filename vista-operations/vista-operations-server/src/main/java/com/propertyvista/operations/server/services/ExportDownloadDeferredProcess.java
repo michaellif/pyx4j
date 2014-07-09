@@ -87,9 +87,6 @@ public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
             ImportIO importIO = EntityFactory.create(ImportIO.class);
             EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
 
-            if (!request.propertyManager().isNull()) {
-                buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyManager().name(), request.propertyManager()));
-            }
             buildingCriteria.asc(buildingCriteria.proto().propertyCode());
 
             maximum = Persistence.service().count(buildingCriteria);

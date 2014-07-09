@@ -35,7 +35,6 @@ public final class AvailabilityReportTableColumnsHolder {
                 (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.building().externalId()).build(),
                 (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.building().info().name()).title(i18n.tr("Building Name")).build(),
                 (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.building().info().address()).build(),
-                (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.building().propertyManager().name()).title(i18n.tr("Property Manager")).build(),
                 (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
                 (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
                 (MemberColumnDescriptor) new MemberColumnDescriptor.Builder(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),

@@ -46,8 +46,6 @@ public class BuildingConverter extends CrudEntityBinder<Building, BuildingIO> {
         bind(toProto.addressCoordinates(), boProto.info().location());
         bind(toProto.website(), boProto.contacts().website());
 
-        bind(toProto.propertyManager(), boProto.propertyManager().name());
-
         bind(toProto.complexName(), boProto.complex().name());
         bind(toProto.complexPrimary(), boProto.complexPrimary());
 

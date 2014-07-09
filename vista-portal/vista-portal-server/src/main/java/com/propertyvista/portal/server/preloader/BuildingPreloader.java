@@ -137,9 +137,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 complexesWithBuildings.add(complex);
             }
 
-            // TODO Need to be saving PropertyProfile, PetCharge
-            building.propertyManager().set(DataGenerator.random(managements)); // temporary for Starlight!..
-
             // Service Catalog:
 
             ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);

@@ -51,7 +51,6 @@ public class BuildingListerGadget extends GadgetInstanceBase<BuildingListerGadge
         DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.complex()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto.propertyCode()).build(),
-                new MemberColumnDescriptor.Builder(proto.propertyManager()).build(),
                 new MemberColumnDescriptor.Builder(proto.marketing().name()).title(i18n.ntr("Marketing Name")).build(),
                 new MemberColumnDescriptor.Builder(proto.info().name()).build(),
                 new MemberColumnDescriptor.Builder(proto.info().type()).build(),

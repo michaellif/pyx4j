@@ -207,7 +207,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         formPanel.append(Location.Left, proto().info().type()).decorate().componentWidth(120);
         formPanel.append(Location.Right, proto().info().residentialStoreys()).decorate().componentWidth(50);
 
-        formPanel.append(Location.Left, proto().propertyManager()).decorate();
         formPanel.append(Location.Right, proto().externalId()).decorate().componentWidth(150);
 
         if (isEditable()) {

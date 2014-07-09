@@ -65,7 +65,6 @@ public class UnitAvailabilityStatusListServiceImpl extends AbstractListServiceDt
             bind(toProto.externalId(), boProto.building().externalId());
             bind(toProto.buildingName(), boProto.building().info().name());
             bind(toProto.address(), boProto.building().info().address());
-            bind(toProto.propertyManager(), boProto.building().propertyManager().name());
             bind(toProto.complex(), boProto.building().complex().name());
             bind(toProto.unit(), boProto.unit().info().number());
             bind(toProto.floorplanName(), boProto.floorplan().name());

@@ -91,7 +91,6 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             building.externalId().setValue(status.building().externalId().getValue());
             building.info().name().setValue(status.building().info().name().getValue());
             building.info().address().setValue(status.building().info().address().getValue());
-            building.propertyManager().name().setValue(status.building().propertyManager().name().getValue());
             building.complex().name().setValue(status.building().complex().name().getValue());
             status.building().set(building);
 
