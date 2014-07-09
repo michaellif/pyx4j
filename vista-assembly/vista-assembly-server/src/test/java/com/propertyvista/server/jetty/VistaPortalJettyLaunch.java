@@ -13,8 +13,6 @@
  */
 package com.propertyvista.server.jetty;
 
-import javax.servlet.ServletContainerInitializer;
-
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.MetaInfConfiguration;
@@ -74,17 +72,13 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
     @Override
     protected void configure(WebAppContext webAppContext) {
         // Prevent WSServletContainerInitializer invocation.  The same was as done in tomcat
-        AnnotationConfiguration annotationConfiguration = new AnnotationConfiguration() {
-            @Override
-            public boolean isFromExcludedJar(WebAppContext context, ServletContainerInitializer service) throws Exception {
-                return !(service instanceof VistaWebApplicationInitializer);
-            }
-        };
+        webAppContext.setAttribute(AnnotationConfiguration.SERVLET_CONTAINER_INITIALIZER_ORDER, VistaWebApplicationInitializer.class.getName());
+
         webAppContext.setConfigurations(new Configuration[] { new WebInfConfiguration(), //
                 new WebXmlConfiguration(), //
                 new MetaInfConfiguration(), // 
                 //new FragmentConfiguration(), // 
-                annotationConfiguration //
+                new AnnotationConfiguration() //
                 });
     }
 }
