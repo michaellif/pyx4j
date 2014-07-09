@@ -73,10 +73,6 @@ public interface EntityI extends IEntity {
 
     IPrimitive<Enum1> enumBox();
 
-    @Editor(type = EditorType.suggest)
-    @NotNull
-    IPrimitive<String> suggest();
-
     IPrimitive<Date> datePicker();
 
     @Editor(type = EditorType.monthyearpicker)

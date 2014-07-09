@@ -32,7 +32,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.PersonalIdentityFormatter;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
-import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityListBox;
@@ -43,10 +42,9 @@ import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 import com.pyx4j.forms.client.ui.CSignature;
-import com.pyx4j.forms.client.ui.CSuggestStringBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.ui.panels.DualColumnFluidPanel.Location;
+import com.pyx4j.forms.client.ui.panels.FormPanel;
 import com.pyx4j.forms.client.validators.AbstractComponentValidator;
 import com.pyx4j.forms.client.validators.BasicValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -125,10 +123,6 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         for (int i = 0; i < 200; i++) {
             options.add("string" + i);
         }
-
-        CAbstractSuggestBox<String> box = new CSuggestStringBox();
-        box.setOptions(options);
-        formPanel.append(Location.Right, proto().suggest(), box).decorate();
 
         formPanel.append(Location.Left, proto().datePicker()).decorate();
 

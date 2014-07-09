@@ -62,12 +62,6 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
                     }
                     return comp;
                 }
-            case suggest:
-                if (mm.isEntity()) {
-                    return new CEntitySuggestBox(mm.getObjectClass());
-                } else {
-                    return new CSuggestStringBox();
-                }
             case captcha:
                 return new CCaptcha();
             case monthyearpicker:

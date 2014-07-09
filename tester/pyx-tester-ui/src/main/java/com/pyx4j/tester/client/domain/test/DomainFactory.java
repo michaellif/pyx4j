@@ -55,8 +55,6 @@ public class DomainFactory {
 
     private static String pwdvalues[] = { "Password 0", "Password 1", "Password 2", "Password 3" };
 
-    private static String suggestvalues[] = { "Saggest Value 0", "Saggest Value 1", "Saggest Value 2", "Saggest Value 3" };
-
     private static Date datevalues[] = { new Date("1/1/2000"), new Date("1/1/2010"), new Date("1/1/2011"), new Date("3/1/2012") };
 
     private static Time timevalues[] = { new Time(3, 20, 15), new Time(11, 59, 59), new Time(13, 13, 13), new Time(19, 20, 21) };
@@ -128,8 +126,6 @@ public class DomainFactory {
         retVal.enumBox().setValue(enumvalues[pos]);
 
         retVal.textArea().setValue(opttxtvalues[pos]);
-
-        retVal.suggest().setValue(suggestvalues[pos]);
 
         retVal.datePicker().setValue(datevalues[pos]);
 
