@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 
 public class Utils {
@@ -34,7 +33,6 @@ public class Utils {
         labelHolder.add(label);
         labelHolder.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator.name());
         labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
-        Cursor.setDefault(label.getElement());
 
         return labelHolder;
     }

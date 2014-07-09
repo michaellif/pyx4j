@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 import com.pyx4j.commons.IFormatter;
 import com.pyx4j.commons.IParser;
-import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
+import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.NSuggestBox;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
-public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuildingDTO> {
+public class BuildingSuggestBox extends CSuggestBox<SelfRegistrationBuildingDTO> {
 
     public BuildingSuggestBox() {
         setFormatter(new BuildingSuggestFormatter());
