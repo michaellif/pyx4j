@@ -15,12 +15,22 @@ package com.propertyvista.eft.mock.cards;
 
 import static com.propertyvista.eft.mock.cards.PaymentResponseHelper.createResponse;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.gwt.server.DateUtils;
+
+import com.propertyvista.biz.system.SftpTransportConnectionException;
+import com.propertyvista.eft.caledoncards.reports.simulator.CardReconciliationSimulationManager;
+import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
 import com.propertyvista.operations.domain.eft.cards.to.Merchant;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentInstrument;
@@ -80,9 +90,9 @@ class PCIMock {
         if (account == null) {
             return createResponse("1101", "TOKEN NOT FOUND");
         } else {
-            if (account.sale(request.amount().getValue(), request.referenceNumber().getValue())) {
+            if (account.sale(merchant.terminalID().getValue(), request.amount().getValue(), request.referenceNumber().getValue())) {
                 if (convenienceFee) {
-                    account.sale(request.convenienceFee().getValue(), request.convenienceFeeReferenceNumber().getValue());
+                    account.sale(null, request.convenienceFee().getValue(), request.convenienceFeeReferenceNumber().getValue());
                     ConvenienceFeeMock.instance().addFee(request);
                 }
                 accountsByTransaction.put(request.referenceNumber().getValue(), account);
@@ -114,7 +124,7 @@ class PCIMock {
         if (account == null) {
             return createResponse("1016", "COMPLETION NO MATCH");
         } else {
-            if (account.completion(request.amount().getValue(), request.referenceNumber().getValue())) {
+            if (account.completion(merchant.terminalID().getValue(), request.amount().getValue(), request.referenceNumber().getValue())) {
                 accountsByTransaction.put(request.referenceNumber().getValue(), account);
                 return createResponse("0000", "OK");
             } else {
@@ -149,4 +159,16 @@ class PCIMock {
         }
     }
 
+    public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
+        LogicalDate transactionsDate = DateUtils.daysAdd(SystemDateManager.getLogicalDate(), -1);
+        List<CardServiceSimulationTransaction> transactions = new ArrayList<>();
+        for (CardAccountMock account : accountsByInstrument.values()) {
+            for (CardTransactionMock transactionMock : account.transactions.values()) {
+                if (transactionMock.date.equals(transactionsDate)) {
+                    transactions.add(SimulationBridge.toSimulation(account, transactionMock));
+                }
+            }
+        }
+        return new CardReconciliationSimulationManager().createReport(transactions);
+    }
 }

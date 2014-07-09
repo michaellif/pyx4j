@@ -36,7 +36,7 @@ class CardAccountMock {
         this.ccinfo = ccinfo;
     }
 
-    boolean sale(BigDecimal amount, String referenceNumber) {
+    boolean sale(String terminalID, BigDecimal amount, String referenceNumber) {
         if (transactions.containsKey(referenceNumber)) {
             throw new Error("Duplicate transaction " + referenceNumber);
         }
@@ -46,6 +46,7 @@ class CardAccountMock {
         } else {
             balance = newBalance;
             CardTransactionMock t = new CardTransactionMock();
+            t.terminalID = terminalID;
             t.amount = amount;
             t.status = TransactionStatus.compleated;
             transactions.put(referenceNumber, t);
@@ -66,8 +67,8 @@ class CardAccountMock {
         }
     }
 
-    boolean completion(BigDecimal amount, String referenceNumber) {
-        if (sale(amount, referenceNumber)) {
+    boolean completion(String terminalID, BigDecimal amount, String referenceNumber) {
+        if (sale(terminalID, amount, referenceNumber)) {
             reserved = reserved.subtract(amount);
             return true;
         } else {

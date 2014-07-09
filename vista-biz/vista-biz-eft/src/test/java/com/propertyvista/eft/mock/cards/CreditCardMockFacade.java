@@ -15,12 +15,16 @@ package com.propertyvista.eft.mock.cards;
 
 import java.math.BigDecimal;
 
+import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 
 public interface CreditCardMockFacade {
 
     public BigDecimal getAccountBalance(AbstractPaymentMethod paymentMethod);
 
     public BigDecimal getConvenienceFeeBalance();
+
+    public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException;
 
 }

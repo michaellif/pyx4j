@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import com.propertyvista.biz.financial.payment.AutoPayLeaseActivationInternalTest;
+import com.propertyvista.biz.financial.payment.CardsReconciliationTest;
 import com.propertyvista.biz.financial.payment.CreditCardPaymentTest;
 import com.propertyvista.biz.financial.payment.FundsTransferProcessErrorRecoveryTest;
 import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
@@ -34,6 +35,7 @@ import com.propertyvista.biz.financial.payment.PreauthorizedPaymentCyclesTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, //
         CreditCardPaymentTest.class, //
+        CardsReconciliationTest.class, //
         PaymentMethodPersistenceCardsTest.class, //
         PadTransactionUtilsTest.class, //
         PaymentAcceptanceUtilsTest.class, //

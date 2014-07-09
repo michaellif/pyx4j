@@ -30,11 +30,6 @@ public class CardServiceSimulationReconciliationCrudServiceImpl extends Abstract
     }
 
     @Override
-    protected void bind() {
-        bindCompleteObject();
-    }
-
-    @Override
     public void createCardsReconciliationReport(AsyncCallback<String> callback, CardServiceSimulationReconciliationCreateTO to) {
         callback.onSuccess(new CardReconciliationSimulationManager().createReports(to.fromDate().getValue(), to.toDate().getValue()));
     }

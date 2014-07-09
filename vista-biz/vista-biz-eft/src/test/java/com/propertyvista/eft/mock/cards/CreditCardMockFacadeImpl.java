@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.core.EntityFactory;
 
+import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.cards.to.PaymentInstrument;
 import com.propertyvista.operations.domain.eft.cards.to.TokenPaymentInstrument;
 
@@ -40,6 +42,11 @@ public class CreditCardMockFacadeImpl implements CreditCardMockFacade {
     public BigDecimal getAccountBalance(AbstractPaymentMethod paymentMethod) {
         CardAccountMock account = PCIMock.instance().getAccount(createPaymentInstrument(paymentMethod.details().<CreditCardInfo> cast()));
         return account.balance;
+    }
+
+    @Override
+    public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
+        return PCIMock.instance().receiveCardsReconciliationFiles(cardsReconciliationId);
     }
 
 }

@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +52,7 @@ import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationCardT
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationCardTotalRecord.CardTotalRecordType;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerchantTotalRecord;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationMerchantTotalRecord.MerchantTotalRecordType;
+import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 
 public class CardReconciliationSimulationManager {
 
@@ -66,9 +66,25 @@ public class CardReconciliationSimulationManager {
         criteria.ge(criteria.proto().transactionDate(), from);
         criteria.lt(criteria.proto().transactionDate(), DateUtils.addDays(to, +1));
 
-        final Map<String, CardServiceSimulationReconciliationRecord> records = new HashMap<>();
+        final Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(Persistence.service().query(criteria));
 
-        for (CardServiceSimulationTransaction transaction : Persistence.service().query(criteria)) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                createReportFiles(records);
+                Persistence.service().persist(records);
+                return null;
+            }
+        });
+
+        return "Created " + records.size() + " record(s)";
+
+    }
+
+    private Collection<CardServiceSimulationReconciliationRecord> createReconciliationRecord(List<CardServiceSimulationTransaction> transactions) {
+        final Map<String, CardServiceSimulationReconciliationRecord> records = new HashMap<>();
+        for (CardServiceSimulationTransaction transaction : transactions) {
             CardServiceSimulationReconciliationRecord record = records.get(key(transaction));
             if (record == null) {
                 record = createReportRecord(transaction.transactionDate().getValue(), transaction.merchant());
@@ -76,19 +92,13 @@ public class CardReconciliationSimulationManager {
             }
             addTransaction(record, transaction);
         }
+        return records.values();
+    }
 
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+    public CardsReconciliationTO createReport(List<CardServiceSimulationTransaction> transactions) {
+        final Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(transactions);
 
-            @Override
-            public Void execute() {
-                createReportFiles(records.values());
-                Persistence.service().persist(records.values());
-                return null;
-            }
-        });
-
-        return "Created " + records.values().size() + " record(s)";
-
+        return null;
     }
 
     private String key(CardServiceSimulationTransaction transaction) {
@@ -139,9 +149,59 @@ public class CardReconciliationSimulationManager {
         }
     }
 
+    private CardsReconciliationTO createReconciliationTO(Collection<CardServiceSimulationReconciliationRecord> records) {
+        CardsReconciliationTO to = EntityFactory.create(CardsReconciliationTO.class);
+        for (CardServiceSimulationReconciliationRecord record : records) {
+
+            {
+                CardsReconciliationMerchantTotalRecord merchantTotal = createMerchantTotal(record);
+                merchantTotal.type().setValue(MerchantTotalRecordType.Deposit);
+                merchantTotal.credit().setValue(record.totalDeposit().getValue());
+                to.merchantTotals().add(merchantTotal);
+            }
+
+            if (record.totalFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                CardsReconciliationMerchantTotalRecord merchantTotal = createMerchantTotal(record);
+                merchantTotal.type().setValue(MerchantTotalRecordType.Fees);
+                merchantTotal.debit().setValue(record.totalDeposit().getValue());
+                to.merchantTotals().add(merchantTotal);
+            }
+
+            if (record.visaTransactions().getValue() > 0) {
+                {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.VisaDeposit);
+                    cardTotal.credit().setValue(record.visaDeposit().getValue());
+                    to.cardTotals().add(cardTotal);
+                }
+                if (record.visaFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.VisaFees);
+                    cardTotal.debit().setValue(record.visaFee().getValue());
+                    to.cardTotals().add(cardTotal);
+                }
+            }
+
+            if (record.mastercardTransactions().getValue() > 0) {
+                {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.MastercardDeposit);
+                    cardTotal.credit().setValue(record.mastercardDeposit().getValue());
+                    to.cardTotals().add(cardTotal);
+                }
+                if (record.mastercardFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
+                    cardTotal.type().setValue(CardTotalRecordType.MastercardFees);
+                    cardTotal.debit().setValue(record.mastercardFee().getValue());
+                    to.cardTotals().add(cardTotal);
+                }
+            }
+
+        }
+        return to;
+    }
+
     private void createReportFiles(Collection<CardServiceSimulationReconciliationRecord> records) {
-        List<CardsReconciliationMerchantTotalRecord> merchantTotals = new ArrayList<>();
-        List<CardsReconciliationCardTotalRecord> cardTotals = new ArrayList<>();
 
         String fileId = new SimpleDateFormat("yyyMMdd").format(new Date());
         int fileNo = 1;
@@ -157,58 +217,15 @@ public class CardReconciliationSimulationManager {
 
         for (CardServiceSimulationReconciliationRecord record : records) {
             record.fileId().setValue(fileId);
-
-            {
-                CardsReconciliationMerchantTotalRecord merchantTotal = createMerchantTotal(record);
-                merchantTotal.type().setValue(MerchantTotalRecordType.Deposit);
-                merchantTotal.credit().setValue(record.totalDeposit().getValue());
-                merchantTotals.add(merchantTotal);
-            }
-
-            if (record.totalFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
-                CardsReconciliationMerchantTotalRecord merchantTotal = createMerchantTotal(record);
-                merchantTotal.type().setValue(MerchantTotalRecordType.Fees);
-                merchantTotal.debit().setValue(record.totalDeposit().getValue());
-                merchantTotals.add(merchantTotal);
-            }
-
-            if (record.visaTransactions().getValue() > 0) {
-                {
-                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
-                    cardTotal.type().setValue(CardTotalRecordType.VisaDeposit);
-                    cardTotal.credit().setValue(record.visaDeposit().getValue());
-                    cardTotals.add(cardTotal);
-                }
-                if (record.visaFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
-                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
-                    cardTotal.type().setValue(CardTotalRecordType.VisaFees);
-                    cardTotal.debit().setValue(record.visaFee().getValue());
-                    cardTotals.add(cardTotal);
-                }
-            }
-
-            if (record.mastercardTransactions().getValue() > 0) {
-                {
-                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
-                    cardTotal.type().setValue(CardTotalRecordType.MastercardDeposit);
-                    cardTotal.credit().setValue(record.mastercardDeposit().getValue());
-                    cardTotals.add(cardTotal);
-                }
-                if (record.mastercardFee().getValue().compareTo(BigDecimal.ZERO) != 0) {
-                    CardsReconciliationCardTotalRecord cardTotal = createCardTotal(record);
-                    cardTotal.type().setValue(CardTotalRecordType.MastercardFees);
-                    cardTotal.debit().setValue(record.mastercardFee().getValue());
-                    cardTotals.add(cardTotal);
-                }
-            }
-
         }
+
+        CardsReconciliationTO to = createReconciliationTO(records);
 
         String cardsReconciliationId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
                 .getCardsReconciliationId();
 
-        createMerchantTotalsFile(cardsReconciliationId, fileId, merchantTotals);
-        createCardTotalsFile(cardsReconciliationId, fileId, cardTotals);
+        createMerchantTotalsFile(cardsReconciliationId, fileId, to.merchantTotals());
+        createCardTotalsFile(cardsReconciliationId, fileId, to.cardTotals());
     }
 
     private CardsReconciliationMerchantTotalRecord createMerchantTotal(CardServiceSimulationReconciliationRecord record) {

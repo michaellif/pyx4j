@@ -15,6 +15,9 @@ package com.propertyvista.eft.mock.cards;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
+
 class CardTransactionMock {
 
     public enum TransactionStatus {
@@ -27,7 +30,15 @@ class CardTransactionMock {
 
     }
 
+    LogicalDate date;
+
+    String terminalID;
+
     BigDecimal amount;
 
     TransactionStatus status;
+
+    CardTransactionMock() {
+        date = SystemDateManager.getLogicalDate();
+    }
 }

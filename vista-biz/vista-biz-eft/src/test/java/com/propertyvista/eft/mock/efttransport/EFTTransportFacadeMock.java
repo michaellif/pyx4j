@@ -15,10 +15,13 @@ package com.propertyvista.eft.mock.efttransport;
 
 import java.util.Collection;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.biz.system.eft.FileCreationException;
 import com.propertyvista.domain.financial.CaledonFundsTransferType;
+import com.propertyvista.eft.mock.cards.CreditCardMockFacade;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsReconciliationFile;
 import com.propertyvista.operations.domain.eft.caledoneft.FundsTransferFile;
 import com.propertyvista.operations.domain.eft.caledoneft.to.FundsTransferAckFile;
@@ -53,14 +56,11 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
 
     @Override
     public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
-        // TODO Auto-generated method stub
-        return null;
+        return ServerSideFactory.create(CreditCardMockFacade.class).receiveCardsReconciliationFiles(cardsReconciliationId);
     }
 
     @Override
     public void confirmReceivedCardsReconciliationFiles(Collection<String> fileNames, boolean protocolErrorFlag) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
