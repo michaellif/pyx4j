@@ -52,7 +52,7 @@ import com.pyx4j.forms.client.validators.IValidator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText,
+public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText,
         AsyncOptionsReadyCallback<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntitySuggestBox.class);

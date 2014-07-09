@@ -32,7 +32,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.SuggestOracle;
 
 public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements WatermarkComponent, ITextWidget {
 
@@ -42,8 +42,8 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
 
     private TextWatermark watermark;
 
-    public SuggestBox() {
-        super(new MultiWordSuggestOracle(), new TextBox());
+    public SuggestBox(SuggestOracle suggestOracle) {
+        super(suggestOracle, new TextBox());
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
         addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
     }

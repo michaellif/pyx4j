@@ -34,9 +34,7 @@ import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -53,9 +51,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.domain.test.EntityI.Enum1;
-import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityV;
-import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
@@ -73,28 +69,6 @@ public class EntityIFormWithoutLists extends CForm<EntityI> {
         FormPanel formPanel = new FormPanel(this);
 
         formPanel.h1(i18n.tr("Main Form"));
-
-        // list box
-        CEntityListBox<EntityIII> listBox = new CEntityListBox<EntityIII>(SelectionMode.SINGLE_PANEL);
-        EntityIII e1 = EntityFactory.create(EntityIII.class);
-        e1.stringMember().setValue("OneOneOneOneOneOneOneOneOneOneOneOne");
-        e1.integerMember().setValue(1);
-        EntityIII e2 = EntityFactory.create(EntityIII.class);
-        e2.stringMember().setValue("Two");
-        e2.integerMember().setValue(2);
-        EntityIII e3 = EntityFactory.create(EntityIII.class);
-        e3.stringMember().setValue("Three");
-        e3.integerMember().setValue(3);
-        listBox.setOptions(Arrays.asList(e1, e2, e3));
-        listBox.setDecorator(new FormDecoratorBuilder().build());
-
-        formPanel.append(Location.Left, proto().entityIIIList(), listBox);
-
-        CEntityListBox<EntityIII> setBox = new CEntityListBox<EntityIII>(SelectionMode.TWO_PANEL);
-        setBox.setOptions(Arrays.asList(e1, e2, e3));
-        setBox.setDecorator(new FormDecoratorBuilder().build());
-
-        formPanel.append(Location.Left, proto().entityIIIList2(), setBox);
 
         // Personal Identity
         formPanel.append(Location.Left, proto().personalId(),

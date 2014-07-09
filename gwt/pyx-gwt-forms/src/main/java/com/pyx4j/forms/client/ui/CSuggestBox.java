@@ -30,11 +30,11 @@ import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 
-public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
+public class CSuggestBox<E> extends CTextFieldBase<E, NSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 
     private List<E> options = new ArrayList<E>();
 
-    public CAbstractSuggestBox() {
+    public CSuggestBox() {
         super();
 
         NSuggestBox<E> nativeTextField = new NSuggestBox<E>(this);

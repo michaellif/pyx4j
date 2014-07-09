@@ -57,7 +57,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.INativeField;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.FieldDecorator.Builder.LabelPosition;
@@ -131,7 +130,6 @@ public class FieldDecorator extends FlowPanel implements IFieldDecorator, ILayou
         label = new Label();
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.setStyleName(WidgetDecoratorLabel.name());
-        Cursor.setDefault(label.getElement());
 
         infoImageHolder = new SimplePanel();
         infoImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

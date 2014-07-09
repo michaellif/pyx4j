@@ -26,15 +26,18 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 
 import com.pyx4j.widgets.client.SuggestBox;
 
-public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSuggestBox<E>> {
+public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CSuggestBox<E>> {
 
-    public NSuggestBox(final CAbstractSuggestBox<E> cSuggestBox) {
+    private final MultiWordSuggestOracle suggestOracle;
+
+    public NSuggestBox(final CSuggestBox<E> cSuggestBox) {
         super(cSuggestBox);
+        suggestOracle = new MultiWordSuggestOracle();
     }
 
     @Override
     protected SuggestBox createEditor() {
-        return new SuggestBox();
+        return new SuggestBox(suggestOracle);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -51,14 +54,14 @@ public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSugge
         refreshOptions();
     }
 
-    public void refreshOptions() {
+    void refreshOptions() {
 
         if (!isViewable()) {
             E currentSelection = getCComponent().getValue();
-            ((MultiWordSuggestOracle) getEditor().getSuggestOracle()).clear();
+            suggestOracle.clear();
             if (getCComponent().getOptions() != null) {
                 for (E option : getCComponent().getOptions()) {
-                    ((MultiWordSuggestOracle) getEditor().getSuggestOracle()).add(getCComponent().getOptionName(option));
+                    suggestOracle.add(getCComponent().getOptionName(option));
                 }
             }
             getCComponent().setValue(currentSelection);
