@@ -559,9 +559,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             List<Lease> activeLeases = getActiveLeases(yardiInterfaceId, propertyCode);
             for (final RTCustomer rtCustomer : YardiLeaseProcessor.sortRtCustomers(property.getRTCustomer())) {
-                String leaseId = rtCustomer.getCustomerID();
-
-                removeLease(activeLeases, leaseId);
+                removeLease(activeLeases, rtCustomer.getCustomerID());
 
                 try {
                     importLease(yardiInterfaceId, propertyCode, rtCustomer, executionMonitor);
@@ -793,7 +791,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-
         }
         log.info("LeaseCharges: import complete.");
 
@@ -801,15 +798,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             log.info("LeaseCharges: terminating not-received charges started.");
             // handle all non-processed leases
             for (String propertyCode : notProcessedLeases.keySet()) {
-                for (Lease leaseId : notProcessedLeases.get(propertyCode)) {
+                for (Lease lease : notProcessedLeases.get(propertyCode)) {
                     // Do not remove lease charges from submitted lease applications
-                    if (leaseId.status().getValue() == Lease.Status.Approved) {
+                    if (lease.status().getValue() == Lease.Status.Approved) {
                         continue;
                     }
                     try {
-                        terminateLeaseCharges(leaseId, executionMonitor);
+                        terminateLeaseCharges(lease, executionMonitor);
                     } catch (Throwable t) {
-                        String msg = SimpleMessageFormat.format("Lease {0}", leaseId);
+                        String msg = SimpleMessageFormat.format("Lease {0}", lease);
                         executionMonitor.addErredEvent("Lease", msg, t);
                         log.warn(msg, t);
                     }
@@ -846,15 +843,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return true;
     }
 
-    // create new term with no features and set service charge = 0
-    private void terminateLeaseCharges(final Lease leaseId, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+    // create new term version with no features and set service charge = 0
+    private void terminateLeaseCharges(final Lease lease, final ExecutionMonitor executionMonitor) throws YardiServiceException {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
                 // expire current billable items
-                if (new YardiLeaseProcessor(executionMonitor).expireLeaseProducts(leaseId)) {
-                    Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
-                    String msg = SimpleMessageFormat.format("charges expired for lease {0} ({1})", leaseId.leaseId(), leaseId.unit().building().propertyCode()
+                if (new YardiLeaseProcessor(executionMonitor).expireLeaseProducts(lease)) {
+                    Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
+                    String msg = SimpleMessageFormat.format("charges expired for lease {0} ({1})", lease.leaseId(), lease.unit().building().propertyCode()
                             .getValue());
                     log.info(msg);
                     if (executionMonitor != null) {
@@ -1023,6 +1020,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         if (leaseId != null) {
             Iterator<Lease> it = leases.iterator();
             while (it.hasNext()) {
+//                if (YardiLeaseProcessor.getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
                 if (leaseId.equals(it.next().leaseId().getValue())) {
                     it.remove();
                     return true;

@@ -236,6 +236,14 @@ public class YardiLeaseProcessor {
     // Some public utils:
     //
 
+    public static String getLeaseID(String leaseId) {
+        return leaseId.toLowerCase();
+    }
+
+    public static String getLeaseID(RTCustomer rtCustomer) {
+        return getLeaseID(rtCustomer.getCustomerID());
+    }
+
     public static boolean isEligibleForProcessing(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
         // @formatter:off
@@ -244,10 +252,6 @@ public class YardiLeaseProcessor {
                info.equals(Customerinfo.FORMER_RESIDENT)  ||
                info.equals(Customerinfo.FUTURE_RESIDENT);
         // @formatter:on
-    }
-
-    public static String getLeaseID(RTCustomer rtCustomer) {
-        return rtCustomer.getCustomerID().toLowerCase();
     }
 
     public static boolean isCurrentLease(RTCustomer rtCustomer, YardiLease yardiLease) {
