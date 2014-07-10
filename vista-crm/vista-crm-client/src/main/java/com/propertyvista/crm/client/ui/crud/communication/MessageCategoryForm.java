@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.communication;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -35,6 +38,10 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
 
     private final IsWidget mainTab;
 
+    private EmployeeFolder dispatcherFolder;
+
+    private Widget dispatcherHeader;
+
     public MessageCategoryForm(IForm<MessageCategory> view) {
         super(MessageCategory.class, view);
 
@@ -48,13 +55,22 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
         FormPanel formPanel = new FormPanel(this);
         formPanel.append(Location.Left, proto().topic()).decorate();
         formPanel.append(Location.Left, proto().category(), new CLabel<MessageGroupCategory>()).decorate();
-        formPanel.h1(i18n.tr("Message Category Dispatchers"));
-        formPanel.append(Location.Left, proto().dispatchers(), new EmployeeFolder(this, new ParentEmployeeGetter() {
+
+        dispatcherHeader = formPanel.h1(i18n.tr("Message Category Dispatchers"));
+        formPanel.append(Location.Left, proto().dispatchers(), dispatcherFolder = new EmployeeFolder(this, new ParentEmployeeGetter() {
             @Override
             public Key getParentId() {
                 return (getValue() != null ? getValue().getPrimaryKey() : null);
             }
         }));
+
+        get(proto().category()).addValueChangeHandler(new ValueChangeHandler<MessageGroupCategory>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<MessageGroupCategory> event) {
+                setDispatchersVisability(event.getValue());
+            }
+        });
+
         formPanel.h1(i18n.tr("User Roles allowed to see the category messages"));
         formPanel.append(Location.Left, proto().roles(), new CrmRoleFolder(this));
         return formPanel;
@@ -68,5 +84,13 @@ public class MessageCategoryForm extends CrmEntityForm<MessageCategory> {
         if (se == null) {
             return;
         }
+
+        setDispatchersVisability(se.category().getValue());
+    }
+
+    private void setDispatchersVisability(MessageGroupCategory value) {
+        boolean showDispatchers = !MessageGroupCategory.Custom.equals(value);
+        dispatcherFolder.setVisible(showDispatchers);
+        dispatcherHeader.setVisible(showDispatchers);
     }
 }
