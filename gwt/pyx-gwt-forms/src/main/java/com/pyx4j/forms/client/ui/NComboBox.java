@@ -26,6 +26,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
@@ -198,6 +199,14 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
         return this.value;
     }
 
+    /*
+     * This is a highly educated hack around a very sophisticated asynchronous implementation of IE <select> element,
+     * that likes from time to time to set it's initial selectedIndex value to 0 (first option) instead of -1.
+     * The main idea below is to avoid multiple value changes and only apply the last one at the end of the execution
+     * loop. And this is where Scheduler#scheduleDeferred() method comes to play.
+     * However... for some unknown reason this is still not enough, and only added internal Timer loop seems to finally
+     * help... Amen!
+     */
     private void setSelectedValue(E value) {
         this.value = value;
         if (!deferredSetSelectedStarted) {
@@ -205,8 +214,13 @@ public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> im
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    deferredSetSelectedStarted = false;
-                    getEditor().setSelectedIndex(getNativeOptionIndex(NComboBox.this.value));
+                    new Timer() {
+                        @Override
+                        public void run() {
+                            getEditor().setSelectedIndex(getNativeOptionIndex(NComboBox.this.value));
+                            deferredSetSelectedStarted = false;
+                        }
+                    }.schedule(0);
                 }
             });
         }
