@@ -152,8 +152,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     if (!meta.rootCategory().isNull()) {
                         MaintenanceRequestForm.this.categoryMetaCache.put(buildingCode, meta);
                     }
-                    MaintenanceRequestForm.this.meta = meta;
-                    initSelectors();
+                    initSelectors(meta);
                 }
             };
             if (getParentView() instanceof IEditor) {
@@ -162,8 +161,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
             }
         } else {
-            this.meta = meta;
-            initSelectors();
+            initSelectors(meta);
         }
     }
 
@@ -398,10 +396,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         return panel;
     }
 
-    private void initSelectors() {
-        if (meta == null || meta.isNull()) {
+    private void initSelectors(MaintenanceRequestMetadata meta) {
+        if (meta == null || meta.isNull() || meta.equals(this.meta)) {
             return;
         }
+
+        this.meta = meta;
 
         prioritySelector.setOptions(meta.priorities());
 
@@ -455,9 +455,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
-        // to support yardi mode with multiple interfaces
-        ensureBuilding();
-
         get(proto().reportedDate()).setEditable(mr.id().isNull());
 
         get(proto().submitted()).setVisible(!mr.submitted().isNull());
@@ -477,7 +474,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         unitSelector.setVisible(mr.reportedForOwnUnit().getValue(false));
         unitAccessPanel.setVisible(mr.reportedForOwnUnit().getValue(false));
         accessPanel.setVisible(mr.permissionToEnter().getValue(false) && getValue().reportedForOwnUnit().getValue(false));
-        setMaintenanceRequestCategoryMeta();
+
+        // to support yardi mode with multiple interfaces; will also call setMaintenanceRequestCategoryMeta()
+        ensureBuilding();
     }
 
     class BuildingSelector extends CEntitySelectorHyperlink<Building> {
