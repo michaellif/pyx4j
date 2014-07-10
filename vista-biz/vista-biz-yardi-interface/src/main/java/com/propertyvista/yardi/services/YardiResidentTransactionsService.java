@@ -244,6 +244,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
         executionMonitor.addProcessedEvent("Import LeaseCharges");
+
+        try {
+            YardiLeaseProcessor.getInstance(executionMonitor).finalize();
+        } catch (Throwable e) {
+            log.error("YardiLeaseProcessor.finalize() error {}", e.getMessage());
+        }
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {
@@ -488,6 +494,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 
+        try {
+            YardiLeaseProcessor.getInstance(executionMonitor).finalize();
+        } catch (Throwable e) {
+            log.error("YardiLeaseProcessor.finalize() error {}", e.getMessage());
+        }
+
         log.info("Update completed.");
     }
 
@@ -705,7 +717,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 @Override
                 public Void execute() throws YardiServiceException {
 
-                    new YardiLeaseProcessor(executionMonitor).processLease(rtCustomer, yardiInterfaceId, propertyCode);
+                    YardiLeaseProcessor.getInstance(executionMonitor).processLease(rtCustomer, yardiInterfaceId, propertyCode);
                     new YardiLeaseFinancialProcessor(executionMonitor).processLease(rtCustomer, yardiInterfaceId);
 
                     return null;
@@ -825,7 +837,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
         // grab customerId from the first available ChargeDetail element
         String customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
-        final Lease lease = new YardiLeaseProcessor(executionMonitor).findLease(yardiInterfaceId, propertyCode, customerId);
+        final Lease lease = YardiLeaseProcessor.getInstance(executionMonitor).findLease(yardiInterfaceId, propertyCode, customerId);
         if (lease == null) {
             throw new YardiServiceException(i18n.tr("Lease not found for customer: {0} on interface {1}", customerId, yardiInterfaceId));
         }
@@ -835,7 +847,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Void execute() throws YardiServiceException {
                 // create/update billable items
-                new YardiLeaseProcessor(executionMonitor).updateLeaseProducts(rtCustomer.getRTServiceTransactions().getTransactions(), lease);
+                YardiLeaseProcessor.getInstance(executionMonitor).updateLeaseProducts(rtCustomer.getRTServiceTransactions().getTransactions(), lease);
                 return null;
             }
         });
@@ -848,8 +860,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                // expire current billable items
-                if (new YardiLeaseProcessor(executionMonitor).expireLeaseProducts(lease)) {
+                if (YardiLeaseProcessor.getInstance(executionMonitor).expireLeaseProducts(lease)) {
                     Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
                     String msg = SimpleMessageFormat.format("charges expired for lease {0} ({1})", lease.leaseId(), lease.unit().building().propertyCode()
                             .getValue());

@@ -52,7 +52,7 @@ public class YardiARFacadeImpl extends AbstractYardiFacadeImpl implements YardiA
 
     @Override
     public void setLeaseChargesComaptibleIds(Lease lease) {
-        new YardiLeaseProcessor(new ExecutionMonitor()).setLeaseChargesComaptibleIds(lease);
+        YardiLeaseProcessor.setLeaseChargesComaptibleIds(lease);
     }
 
     @Override

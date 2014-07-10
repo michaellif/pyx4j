@@ -46,13 +46,17 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.dev.EntityFileLogger;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
@@ -77,11 +81,44 @@ public class YardiLeaseProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
-    private final ExecutionMonitor executionMonitor;
+    private static class SingletonHolder {
+        public static final YardiLeaseProcessor INSTANCE = new YardiLeaseProcessor();
+    }
 
-    public YardiLeaseProcessor(ExecutionMonitor executionMonitor) {
-        this.executionMonitor = executionMonitor;
+    private final Set<Lease> leasesToFinalize = new HashSet<>();
+
+    private ExecutionMonitor executionMonitor;
+
+    private YardiLeaseProcessor() {
+    }
+
+    // Public interface:
+
+    public static YardiLeaseProcessor getInstance(ExecutionMonitor executionMonitor) {
         assert (executionMonitor != null);
+        SingletonHolder.INSTANCE.executionMonitor = executionMonitor;
+        return SingletonHolder.INSTANCE;
+    }
+
+    @Override
+    public void finalize() throws Throwable {
+        log.info(">>>>>> YardiLeaseProcessor.finalize() <<<<<< ");
+
+        if (!leasesToFinalize.isEmpty()) {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+                @Override
+                public Void execute() throws YardiServiceException {
+                    for (Lease lease : leasesToFinalize) {
+                        lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
+                        log.info(">>>> Lease {} finalization", lease.leaseId().getStringView());
+                        ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+                    }
+                    return null;
+                }
+            });
+
+            leasesToFinalize.clear();
+        }
     }
 
     public Lease findLease(Key yardiInterfaceId, String propertyCode, String customerId) {
@@ -103,35 +140,6 @@ public class YardiLeaseProcessor {
         } else {
             log.info("      = Creating new lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
             return createLease(yardiInterfaceId, propertyCode, rtCustomer);
-        }
-    }
-
-    public void setLeaseChargesComaptibleIds(Lease lease) {
-        List<BillableItem> allBillableItems = new ArrayList<>();
-        allBillableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
-        for (BillableItem bi : lease.currentTerm().version().leaseProducts().featureItems()) {
-            allBillableItems.add(bi);
-        }
-
-        Map<String, Integer> chargeCodeItemsCount = new HashMap<>();
-
-        for (BillableItem bi : allBillableItems) {
-            String chargeCode;
-
-            Validate.isTrue(bi.item().product().holder().code().yardiChargeCodes().size() > 0, "yardiChargeCodes are not mapped to product {0}", bi.item()
-                    .product().holder());
-
-            chargeCode = bi.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue();
-
-            Integer chargeCodeItemNo = chargeCodeItemsCount.get(chargeCode);
-            if (chargeCodeItemNo == null) {
-                chargeCodeItemNo = 1;
-            } else {
-                chargeCodeItemNo = chargeCodeItemNo + 1;
-            }
-            chargeCodeItemsCount.put(chargeCode, chargeCodeItemNo);
-
-            bi.uid().setValue(billableItemUid(chargeCode, chargeCodeItemNo));
         }
     }
 
@@ -201,8 +209,7 @@ public class YardiLeaseProcessor {
 
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease, executionMonitor);
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
-            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.debug("        >> Finalizing lease! <<");
+            finalizeLease(lease);
 
             if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
                 Persistence.ensureRetrieve(leaseId.unit().building(), AttachLevel.Attached);
@@ -224,8 +231,7 @@ public class YardiLeaseProcessor {
 
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
-            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.debug("        >> Finalizing lease! <<");
+            finalizeLease(lease);
 
             return true;
         }
@@ -333,8 +339,41 @@ public class YardiLeaseProcessor {
         return rtCustomers;
     }
 
+    //
+    // Some public utils:
+    //
+
+    public static void setLeaseChargesComaptibleIds(Lease lease) {
+        List<BillableItem> allBillableItems = new ArrayList<>();
+        allBillableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        for (BillableItem bi : lease.currentTerm().version().leaseProducts().featureItems()) {
+            allBillableItems.add(bi);
+        }
+
+        Map<String, Integer> chargeCodeItemsCount = new HashMap<>();
+
+        for (BillableItem bi : allBillableItems) {
+            String chargeCode;
+
+            Validate.isTrue(bi.item().product().holder().code().yardiChargeCodes().size() > 0, "yardiChargeCodes are not mapped to product {0}", bi.item()
+                    .product().holder());
+
+            chargeCode = bi.item().product().holder().code().yardiChargeCodes().get(0).yardiChargeCode().getValue();
+
+            Integer chargeCodeItemNo = chargeCodeItemsCount.get(chargeCode);
+            if (chargeCodeItemNo == null) {
+                chargeCodeItemNo = 1;
+            } else {
+                chargeCodeItemNo = chargeCodeItemNo + 1;
+            }
+            chargeCodeItemsCount.put(chargeCode, chargeCodeItemNo);
+
+            bi.uid().setValue(billableItemUid(chargeCode, chargeCodeItemNo));
+        }
+    }
+
     // @see function in migration PadProcessorInformation.billableItemId  that use the same value
-    public String billableItemUid(String chargeCode, int chargeCodeItemNo) {
+    public static String billableItemUid(String chargeCode, int chargeCodeItemNo) {
         return chargeCode + ":" + chargeCodeItemNo;
     }
 
@@ -475,7 +514,7 @@ public class YardiLeaseProcessor {
             // persist: 
 
             if (toPersist) {
-                lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+                lease = finalizeLease(lease);
                 log.info("        Lease term changes have been processed successfully (set log level to DEBUG to see more details)");
             } else {
                 log.info("        No lease term changes detected");
@@ -627,5 +666,11 @@ public class YardiLeaseProcessor {
         log.info("        Cancel Lease Completion");
         Persistence.service().retrieve(lease);
         return lease;
+    }
+
+    private Lease finalizeLease(Lease lease) {
+        Lease toBefinalized = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        leasesToFinalize.add(toBefinalized.<Lease> createIdentityStub());
+        return toBefinalized;
     }
 }
