@@ -20,6 +20,7 @@
  */
 package com.propertyvista.test.integration;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +30,8 @@ import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import junit.framework.AssertionFailedError;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -176,6 +179,17 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
 
     public void assertEquals(String message, String expected, LogicalDate actual) {
         assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
+    }
+
+    protected void assertEquals(String message, BigDecimal expected, BigDecimal actual) {
+        if ((expected == null) && (actual == null)) {
+            return;
+        }
+        if ((expected != null) && (expected.compareTo(actual) == 0)) {
+            return;
+        } else {
+            throw new AssertionFailedError(format(message, expected, actual));
+        }
     }
 
     protected void setBillingBatchProcess() {

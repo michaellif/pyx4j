@@ -30,8 +30,8 @@ import com.propertyvista.biz.system.eft.EFTTransportFacade;
 import com.propertyvista.domain.financial.CardsAggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.eft.mock.cards.CreditCardPaymentProcessorFacadeMock;
 import com.propertyvista.eft.mock.efttransport.EFTTransportFacadeMock;
@@ -68,22 +68,18 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
 
     }
 
-    public void testSuccessfulCardPayment() throws Exception {
-
-    }
-
-    public void TODO_testSuccessfulCardPayment() throws Exception {
+    public void testSingleCardPayment() throws Exception {
         setSysDate("2011-04-01");
 
-        LeasePaymentMethod paymentMethod = customerDataModel.addPaymentMethod(customer, getBuilding(), PaymentType.CreditCard);
+        LeasePaymentMethod paymentMethodVisa = customerDataModel.addPaymentMethodCard(customer, getBuilding(), CreditCardType.Visa);
         Persistence.service().commit();
-        PaymentRecord paymentRecord;
+        PaymentRecord paymentRecordVista;
         // Make a payment
         {
-            paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
+            paymentRecordVista = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethodVisa, "100");
             Persistence.service().commit();
 
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
+            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordVista, null);
             Persistence.service().commit();
 
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
@@ -92,11 +88,63 @@ public class CardsReconciliationTest extends LeaseFinancialTestBase {
         setSysDate("2011-04-02");
         SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null);
 
+        Persistence.service().retrieve(paymentMethodVisa);
+
         {
             EntityQueryCriteria<CardsAggregatedTransfer> criteria = EntityQueryCriteria.create(CardsAggregatedTransfer.class);
             CardsAggregatedTransfer at = Persistence.service().retrieve(criteria);
             Assert.assertNotNull("AggregatedTransfer created", at);
-            Assert.assertEquals("AggregatedTransfer amounts", paymentRecord.amount().getValue(), at.grossPaymentAmount().getValue());
+            assertEquals("AggregatedTransfer amounts", paymentRecordVista.amount().getValue(), at.grossPaymentAmount().getValue());
+
+            assertEquals("Visa amounts", paymentRecordVista.amount().getValue(), at.visaDeposit().getValue());
+        }
+
+    }
+
+    public void testMultipleCardPayment() throws Exception {
+        setSysDate("2011-05-01");
+
+        LeasePaymentMethod paymentMethodVisa = customerDataModel.addPaymentMethodCard(customer, getBuilding(), CreditCardType.Visa);
+        LeasePaymentMethod paymentMethodMC = customerDataModel.addPaymentMethodCard(customer, getBuilding(), CreditCardType.MasterCard);
+        Persistence.service().commit();
+        PaymentRecord paymentRecordVista;
+        PaymentRecord paymentRecordMC;
+        // Make a payment
+        {
+            paymentRecordVista = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethodVisa, "100");
+            Persistence.service().commit();
+
+            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordVista, null);
+            Persistence.service().commit();
+
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        }
+
+        {
+            paymentRecordMC = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethodMC, "248.10");
+            Persistence.service().commit();
+
+            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecordMC, null);
+            Persistence.service().commit();
+
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        }
+
+        setSysDate("2011-05-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsReceiveCardsReconciliation, (Date) null);
+
+        Persistence.service().retrieve(paymentMethodVisa);
+        Persistence.service().retrieve(paymentRecordMC);
+
+        {
+            EntityQueryCriteria<CardsAggregatedTransfer> criteria = EntityQueryCriteria.create(CardsAggregatedTransfer.class);
+            CardsAggregatedTransfer at = Persistence.service().retrieve(criteria);
+            Assert.assertNotNull("AggregatedTransfer created", at);
+            assertEquals("AggregatedTransfer amounts", //
+                    paymentRecordVista.amount().getValue().add(paymentRecordMC.amount().getValue()), at.grossPaymentAmount().getValue());
+
+            assertEquals("Visa amounts", paymentRecordVista.amount().getValue(), at.visaDeposit().getValue());
+            assertEquals("MasterCard amounts", paymentRecordMC.amount().getValue(), at.mastercardDeposit().getValue());
         }
 
     }

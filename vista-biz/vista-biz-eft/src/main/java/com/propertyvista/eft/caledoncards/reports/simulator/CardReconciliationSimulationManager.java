@@ -96,9 +96,8 @@ public class CardReconciliationSimulationManager {
     }
 
     public CardsReconciliationTO createReport(List<CardServiceSimulationTransaction> transactions) {
-        final Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(transactions);
-
-        return null;
+        Collection<CardServiceSimulationReconciliationRecord> records = createReconciliationRecord(transactions);
+        return createReconciliationTO(records);
     }
 
     private String key(CardServiceSimulationTransaction transaction) {

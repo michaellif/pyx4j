@@ -40,8 +40,6 @@ public class CardsAggregatedTransferForm extends CForm<CardsAggregatedTransfer> 
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Dual, proto().cardsReconciliationRecordKey()).decorate().componentWidth(120);
-
         formPanel.append(Location.Left, proto().visaDeposit()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().visaFee()).decorate().componentWidth(120);
 

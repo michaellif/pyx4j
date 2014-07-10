@@ -41,4 +41,9 @@ class CardTransactionMock {
     CardTransactionMock() {
         date = SystemDateManager.getLogicalDate();
     }
+
+    @Override
+    public String toString() {
+        return "CardTransactionMock " + status + "; amount=" + amount;
+    }
 }

@@ -17,10 +17,14 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.unit.shared.UniqueInteger;
+
 import com.propertyvista.eft.mock.cards.CardTransactionMock.TransactionStatus;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
 
 class CardAccountMock {
+
+    final String number;
 
     CreditCardPaymentInstrument ccinfo;
 
@@ -30,9 +34,10 @@ class CardAccountMock {
 
     BigDecimal reserved = BigDecimal.ZERO;
 
-    Map<String, CardTransactionMock> transactions = new HashMap<String, CardTransactionMock>();
+    Map<String, CardTransactionMock> transactions = new HashMap<>();
 
     CardAccountMock(CreditCardPaymentInstrument ccinfo) {
+        this.number = UniqueInteger.getInstance("CardAccountMock").nextAsString();
         this.ccinfo = ccinfo;
     }
 
@@ -86,5 +91,10 @@ class CardAccountMock {
             t.status = TransactionStatus.voided;
             return true;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "CardAccountMock #" + number + " " + ccinfo.cardType().getValue() + "; balance=" + balance + "; transactions=" + transactions.size();
     }
 }

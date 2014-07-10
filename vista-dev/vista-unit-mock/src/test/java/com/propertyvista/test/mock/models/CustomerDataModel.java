@@ -81,10 +81,14 @@ public class CustomerDataModel extends MockDataModel<Customer> {
     }
 
     public LeasePaymentMethod addPaymentMethod(Customer customer, Building building, PaymentType type) {
-        return createPaymentMethod(customer, building, type);
+        return createPaymentMethod(customer, building, type, null);
     }
 
-    private LeasePaymentMethod createPaymentMethod(Customer customer, Building building, PaymentType type) {
+    public LeasePaymentMethod addPaymentMethodCard(Customer customer, Building building, CreditCardType creditCardType) {
+        return createPaymentMethod(customer, building, PaymentType.CreditCard, creditCardType);
+    }
+
+    private LeasePaymentMethod createPaymentMethod(Customer customer, Building building, PaymentType type, CreditCardType creditCardType) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
         paymentMethod.customer().set(customer);
         paymentMethod.type().setValue(type);
@@ -99,7 +103,7 @@ public class CustomerDataModel extends MockDataModel<Customer> {
             break;
         case CreditCard: {
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
-            setCreditCardDetails(details);
+            setCreditCardDetails(details, creditCardType);
             paymentMethod.details().set(details);
         }
             break;
@@ -118,7 +122,7 @@ public class CustomerDataModel extends MockDataModel<Customer> {
             setEcheckInfoDetails((EcheckInfo) paymentMethod.details().cast());
             break;
         case CreditCard:
-            setCreditCardDetails((CreditCardInfo) paymentMethod.details().cast());
+            setCreditCardDetails((CreditCardInfo) paymentMethod.details().cast(), null);
             break;
         default:
             throw new IllegalArgumentException();
@@ -142,8 +146,12 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         details.accountNo().newNumber().setValue(Integer.toString(DataGenerator.randomInt(99999)) + Integer.toString(DataGenerator.randomInt(999999)));
     }
 
-    private void setCreditCardDetails(CreditCardInfo details) {
-        details.cardType().setValue(CreditCardType.Visa);
+    private void setCreditCardDetails(CreditCardInfo details, CreditCardType creditCardType) {
+        if (creditCardType == null) {
+            details.cardType().setValue(CreditCardType.Visa);
+        } else {
+            details.cardType().setValue(creditCardType);
+        }
         details.card().newNumber().setValue(CreditCardNumberGenerator.generateCardNumber(details.cardType().getValue()));
         details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
     }

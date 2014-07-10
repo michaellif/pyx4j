@@ -40,8 +40,6 @@ public class EftAggregatedTransferForm extends CForm<EftAggregatedTransfer> {
     protected IsWidget createContent() {
         FormPanel formPanel = new FormPanel(this);
 
-        formPanel.append(Location.Dual, proto().padReconciliationSummaryKey()).decorate().componentWidth(120);
-
         formPanel.append(Location.Left, proto().rejectItemsAmount()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().rejectItemsFee()).decorate().componentWidth(120);
         formPanel.append(Location.Left, proto().rejectItemsCount()).decorate().componentWidth(60);

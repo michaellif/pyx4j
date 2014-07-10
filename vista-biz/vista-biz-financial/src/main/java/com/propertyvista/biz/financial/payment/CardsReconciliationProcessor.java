@@ -126,14 +126,14 @@ class CardsReconciliationProcessor {
         }
         at.grossPaymentCount().setValue(0);
         at.grossPaymentAmount().setValue(BigDecimal.ZERO);
-        at.netAmount().setValue(reconciliationRecord.totalDeposit().getValue());
-        at.grossPaymentFee().setValue(reconciliationRecord.totalFee().getValue());
+        at.netAmount().setValue(reconciliationRecord.totalDeposit().getValue(BigDecimal.ZERO));
+        at.grossPaymentFee().setValue(reconciliationRecord.totalFee().getValue(BigDecimal.ZERO));
         // all card type details
 
-        at.visaDeposit().setValue(reconciliationRecord.visaDeposit().getValue());
-        at.visaFee().setValue(reconciliationRecord.visaFee().getValue());
-        at.mastercardDeposit().setValue(reconciliationRecord.mastercardDeposit().getValue());
-        at.mastercardFee().setValue(reconciliationRecord.mastercardFee().getValue());
+        at.visaDeposit().setValue(reconciliationRecord.visaDeposit().getValue(BigDecimal.ZERO));
+        at.visaFee().setValue(reconciliationRecord.visaFee().getValue(BigDecimal.ZERO));
+        at.mastercardDeposit().setValue(reconciliationRecord.mastercardDeposit().getValue(BigDecimal.ZERO));
+        at.mastercardFee().setValue(reconciliationRecord.mastercardFee().getValue(BigDecimal.ZERO));
 
         Persistence.service().persist(at);
 

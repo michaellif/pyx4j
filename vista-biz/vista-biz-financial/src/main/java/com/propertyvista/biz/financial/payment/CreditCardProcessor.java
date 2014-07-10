@@ -119,6 +119,7 @@ class CreditCardProcessor {
         }
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
         ccInfo.securityCode().setValue(cc.securityCode().getValue());
+        ccInfo.cardType().setValue(cc.cardType().getValue());
 
         // Remove transient data
         cc.securityCode().setValue(null);

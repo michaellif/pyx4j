@@ -26,9 +26,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.unit.shared.UniqueInteger;
 
 import com.propertyvista.biz.system.SftpTransportConnectionException;
 import com.propertyvista.eft.caledoncards.reports.simulator.CardReconciliationSimulationManager;
+import com.propertyvista.eft.mock.cards.CardTransactionMock.TransactionStatus;
 import com.propertyvista.operations.domain.eft.cards.simulator.CardServiceSimulationTransaction;
 import com.propertyvista.operations.domain.eft.cards.to.CardsReconciliationTO;
 import com.propertyvista.operations.domain.eft.cards.to.CreditCardPaymentInstrument;
@@ -50,9 +52,11 @@ class PCIMock {
         return SingletonHolder.INSTANCE;
     }
 
-    private final Map<String, CardAccountMock> accountsByInstrument = new HashMap<String, CardAccountMock>();
+    private final List<CardAccountMock> accounts = new ArrayList<>();
 
-    private final Map<String, CardAccountMock> accountsByTransaction = new HashMap<String, CardAccountMock>();
+    private final Map<String, CardAccountMock> accountsByInstrument = new HashMap<>();
+
+    private final Map<String, CardAccountMock> accountsByTransaction = new HashMap<>();
 
     private PCIMock() {
     }
@@ -65,6 +69,7 @@ class PCIMock {
             CardAccountMock account = accountsByInstrument.get("C" + ccinfo.creditCardNumber().getValue());
             if (account == null) {
                 account = new CardAccountMock(ccinfo);
+                accounts.add(account);
                 accountsByInstrument.put("C" + ccinfo.creditCardNumber().getValue(), account);
             }
             return account;
@@ -162,13 +167,19 @@ class PCIMock {
     public CardsReconciliationTO receiveCardsReconciliationFiles(String cardsReconciliationId) throws SftpTransportConnectionException {
         LogicalDate transactionsDate = DateUtils.daysAdd(SystemDateManager.getLogicalDate(), -1);
         List<CardServiceSimulationTransaction> transactions = new ArrayList<>();
-        for (CardAccountMock account : accountsByInstrument.values()) {
+        for (CardAccountMock account : accounts) {
             for (CardTransactionMock transactionMock : account.transactions.values()) {
-                if (transactionMock.date.equals(transactionsDate)) {
+                if (transactionMock.date.equals(transactionsDate) && transactionMock.status == TransactionStatus.compleated) {
                     transactions.add(SimulationBridge.toSimulation(account, transactionMock));
                 }
             }
         }
-        return new CardReconciliationSimulationManager().createReport(transactions);
+        CardsReconciliationTO to = new CardReconciliationSimulationManager().createReport(transactions);
+
+        to.fileNameMerchantTotal().setValue(UniqueInteger.getInstance("CardsReconciliationFile").nextAsString());
+        to.fileNameCardTotal().setValue(to.fileNameMerchantTotal().getValue());
+        to.remoteFileDateCardTotal().setValue(SystemDateManager.getDate());
+        to.remoteFileDateMerchantTotal().setValue(SystemDateManager.getDate());
+        return to;
     }
 }
