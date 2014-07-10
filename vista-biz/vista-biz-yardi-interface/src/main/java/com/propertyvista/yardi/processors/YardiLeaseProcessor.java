@@ -102,7 +102,7 @@ public class YardiLeaseProcessor {
 
     @Override
     public void finalize() throws Throwable {
-        log.info(">>>>>> YardiLeaseProcessor.finalize() <<<<<< ");
+        log.debug(">>>>>> YardiLeaseProcessor.finalize() <<<<<< ");
 
         if (!leasesToFinalize.isEmpty()) {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
@@ -110,7 +110,7 @@ public class YardiLeaseProcessor {
                 public Void execute() throws YardiServiceException {
                     for (Lease lease : leasesToFinalize) {
                         lease = ServerSideFactory.create(LeaseFacade.class).load(lease, true);
-                        log.info(">>>> Lease {} finalization", lease.leaseId().getStringView());
+                        log.debug(">>>> Lease {} finalization", lease.leaseId().getStringView());
                         ServerSideFactory.create(LeaseFacade.class).finalize(lease);
                     }
                     return null;
@@ -135,17 +135,17 @@ public class YardiLeaseProcessor {
     public Lease processLease(RTCustomer rtCustomer, Key yardiInterfaceId, String propertyCode) {
         Lease existingLease = findLease(yardiInterfaceId, propertyCode, getLeaseID(rtCustomer));
         if (existingLease != null) {
-            log.info("      = Updating lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
+            log.debug("      = Updating lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
             return updateLease(rtCustomer, yardiInterfaceId, propertyCode, existingLease);
         } else {
-            log.info("      = Creating new lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
+            log.debug("      = Creating new lease {} {}", yardiInterfaceId, getLeaseID(rtCustomer));
             return createLease(yardiInterfaceId, propertyCode, rtCustomer);
         }
     }
 
     public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
-        log.info("        = Updating billable items for lease: {} ", lease.leaseId().getStringView());
+        log.debug("        = Updating billable items for lease: {} ", lease.leaseId().getStringView());
         List<BillableItem> newItems = new ArrayList<BillableItem>();
 
         // Ensure all items are uniquely identified by the order in YArdi
@@ -216,7 +216,7 @@ public class YardiLeaseProcessor {
                 String msg = SimpleMessageFormat.format("charges changed for lease {0} ({1})", leaseId.leaseId(), leaseId.unit().building().propertyCode()
                         .getValue());
 
-                log.info(msg);
+                log.debug(msg);
                 executionMonitor.addInfoEvent("chargesChanged", msg);
             }
         }
@@ -227,7 +227,7 @@ public class YardiLeaseProcessor {
     public boolean expireLeaseProducts(Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO)) < 0) {
-            log.info("      Terminating billable items for lease {} ", lease.leaseId().getStringView());
+            log.debug("      Terminating billable items for lease {} ", lease.leaseId().getStringView());
 
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
             lease.currentTerm().version().leaseProducts().featureItems().clear();
@@ -515,9 +515,9 @@ public class YardiLeaseProcessor {
 
             if (toPersist) {
                 lease = finalizeLease(lease);
-                log.info("        Lease term changes have been processed successfully (set log level to DEBUG to see more details)");
+                log.debug("        Lease term changes have been processed successfully (set log level to DEBUG to see more details)");
             } else {
-                log.info("        No lease term changes detected");
+                log.debug("        No lease term changes detected");
             }
         } finally {
             if (!ok) {
@@ -620,7 +620,7 @@ public class YardiLeaseProcessor {
 
     private static Lease activateLease(Lease lease) {
         ServerSideFactory.create(LeaseFacade.class).activate(lease);
-        log.info("        Activate Lease");
+        log.debug("        Activate Lease");
         Persistence.service().retrieve(lease);
         return lease;
     }
@@ -628,14 +628,14 @@ public class YardiLeaseProcessor {
     private static Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, SystemDateManager.getLogicalDate(),
                 getLogicalDate(yardiLease.getExpectedMoveOutDate()), null);
-        log.info("        Set NOTICE");
+        log.debug("        Set NOTICE");
         Persistence.service().retrieve(lease);
         return lease;
     }
 
     private static Lease cancelMarkLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi notice rollback!");
-        log.info("        Cancel NOTICE");
+        log.debug("        Cancel NOTICE");
         Persistence.service().retrieve(lease);
         return lease;
     }
@@ -656,14 +656,14 @@ public class YardiLeaseProcessor {
         }
 
         ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
-        log.info("        Complete Lease");
+        log.debug("        Complete Lease");
         Persistence.service().retrieve(lease);
         return lease;
     }
 
     private static Lease cancelLeaseCompletion(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi move out rollback!");
-        log.info("        Cancel Lease Completion");
+        log.debug("        Cancel Lease Completion");
         Persistence.service().retrieve(lease);
         return lease;
     }
