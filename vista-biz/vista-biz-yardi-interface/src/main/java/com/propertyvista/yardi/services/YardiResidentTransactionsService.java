@@ -1031,8 +1031,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         if (leaseId != null) {
             Iterator<Lease> it = leases.iterator();
             while (it.hasNext()) {
-//                if (YardiLeaseProcessor.getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
-                if (leaseId.equals(it.next().leaseId().getValue())) {
+                if (YardiLeaseProcessor.getLeaseID(leaseId).equals(it.next().leaseId().getValue())) {
                     it.remove();
                     return true;
                 }
