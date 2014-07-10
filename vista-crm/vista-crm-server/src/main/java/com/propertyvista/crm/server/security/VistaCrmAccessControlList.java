@@ -202,6 +202,7 @@ import com.propertyvista.crm.server.security.access.LeaseParticipantDatasetAcces
 import com.propertyvista.crm.server.security.access.LeaseTermParticipantDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.MaintenanceRequestDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.MessageAccessRule;
+import com.propertyvista.crm.server.security.access.MessageCategoryAccessRule;
 import com.propertyvista.crm.server.security.access.N4LegalLetterDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.PaymentRecordDatasetAccessRule;
 import com.propertyvista.crm.server.security.access.UnitAvailabilityStatusDatasetAccessRule;
@@ -481,7 +482,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         // - Communication
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageCategoryCrudService.class));
-        grant(VistaBasicBehavior.CRM, new EntityPermission(MessageCategory.class, EntityPermission.READ));
+        grant(VistaBasicBehavior.CRM, new MessageCategoryAccessRule(), MessageCategory.class);
         grant(VistaCrmBehavior.MessageGroup_OLD, new EntityPermission(MessageCategory.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(SystemEndpoint.class, EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MessageCrudService.class));

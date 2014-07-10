@@ -68,7 +68,8 @@ public class MessageCategoryCrudServiceImpl extends AbstractCrudServiceImpl<Mess
         if (!MessageGroupCategory.Custom.equals(group.category().getValue())) {
             throw new Error("Cannot delete predefined message group");
         }
-        super.delete(group);
+        group.deleted().setValue(true);
+        Persistence.service().persist(group);
 
     }
 }

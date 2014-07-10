@@ -64,6 +64,9 @@ public interface MessageCategory extends IEntity {
     IPrimitive<MessageGroupCategory> category();
 
     @NotNull
+    IPrimitive<Boolean> deleted();
+
+    @NotNull
     @Detached
     @MemberColumn(name = "dispatchers")
     IList<Employee> dispatchers();
