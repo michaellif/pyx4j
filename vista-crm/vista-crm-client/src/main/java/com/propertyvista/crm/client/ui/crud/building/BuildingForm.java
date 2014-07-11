@@ -69,6 +69,7 @@ import com.propertyvista.crm.client.ui.crud.building.MarketingEditor.MarketingCo
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.marketing.MarketingContactEmail;
@@ -180,6 +181,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
+        get(proto().merchantAccount()).setEditable(SecurityController.check(DataModelPermission.permissionUpdate(BuildingMerchantAccount.class)));
 
         ilsEmailProfilePanel.setVisible(getValue() != null && getValue().ilsEmailConfigured().getValue(false));
     }

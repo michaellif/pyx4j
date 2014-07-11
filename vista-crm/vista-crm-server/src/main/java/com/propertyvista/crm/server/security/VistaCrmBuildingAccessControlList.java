@@ -33,6 +33,7 @@ import com.pyx4j.security.server.UIAclBuilder;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.building.ac.CommunityEvents;
 import com.propertyvista.crm.rpc.services.building.ac.ImportExport;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
@@ -110,6 +111,7 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingAdministrator, entities, ALL);
             grant(BuildingLeasing, entities, READ);
         }
+
         //H  "floorplans/marketing, marketing"
         grant(BuildingBasic, Marketing.class, READ);
         grant(BuildingFinancial, Marketing.class, READ);
@@ -150,6 +152,9 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
         grant(BuildingFinancial, BuildingFinancial.class, READ);
         grant(BuildingAccounting, BuildingFinancial.class, READ);
         grant(BuildingAdministrator, BuildingFinancial.class, ALL);
+
+        grant(BuildingAccounting, BuildingMerchantAccount.class, READ | UPDATE);
+        grant(BuildingAdministrator, BuildingMerchantAccount.class, READ | UPDATE);
         // see also VistaCrmFinancialAccessControlList  FinancialFull
 
         //billing cycles
