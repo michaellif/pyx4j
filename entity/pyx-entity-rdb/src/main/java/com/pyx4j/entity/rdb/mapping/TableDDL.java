@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.core.ICollection;
@@ -49,16 +50,24 @@ class TableDDL {
 
     private static class IndexColumnDef {
 
-        String position;
+        final String position;
 
-        boolean ignoreCase;
+        final String positionSorting;
 
-        MemberOperationsMeta member;
+        final boolean ignoreCase;
 
-        public IndexColumnDef(String position, boolean ignoreCase, MemberOperationsMeta member) {
+        final MemberOperationsMeta member;
+
+        public IndexColumnDef(String position, int secondaryColumnNumber, boolean ignoreCase, MemberOperationsMeta member) {
             this.position = position;
             this.ignoreCase = ignoreCase;
             this.member = member;
+            this.positionSorting = position + secondaryColumnNumber;
+        }
+
+        @Override
+        public String toString() {
+            return member.getMemberName();
         }
     }
 
@@ -71,6 +80,11 @@ class TableDDL {
         boolean uniqueConstraint;
 
         Map<String, IndexColumnDef> columns = new HashMap<String, IndexColumnDef>();
+
+        @Override
+        public String toString() {
+            return debugInfo();
+        }
 
         public String debugInfo() {
             StringBuilder b = new StringBuilder();
@@ -115,6 +129,7 @@ class TableDDL {
         List<IndexDef> indexes = new Vector<IndexDef>();
 
         for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
+            int secondaryColumnNumber = 0;
             for (String sqlName : member.getValueAdapter().getColumnNames(member.sqlName())) {
                 sql.append(", ");
                 sql.append(sqlName).append(' ');
@@ -123,8 +138,9 @@ class TableDDL {
                     sql.append(" NOT NULL ");
                 }
                 if (member.getMemberMeta().isIndexed()) {
-                    addIndexDef(indexes, member, sqlName, member.getMemberMeta().getAnnotation(Indexed.class));
+                    addIndexDef(indexes, member, sqlName, secondaryColumnNumber, member.getMemberMeta().getAnnotation(Indexed.class));
                 }
+                secondaryColumnNumber++;
             }
         }
 
@@ -324,7 +340,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    private static void addIndexDef(List<IndexDef> indexes, MemberOperationsMeta member, String sqlName, Indexed indexedAnnotation) {
+    private static void addIndexDef(List<IndexDef> indexes, MemberOperationsMeta member, String sqlName, int secondaryColumnNumber, Indexed indexedAnnotation) {
         if ((indexedAnnotation.group() != null) && (indexedAnnotation.group().length > 0)) {
             nextGroup: for (String group : indexedAnnotation.group()) {
                 // find index of the same group
@@ -338,7 +354,7 @@ class TableDDL {
 
                     for (IndexDef other : indexes) {
                         if (group.equals(other.group)) {
-                            other.columns.put(sqlName, new IndexColumnDef(position, indexedAnnotation.ignoreCase(), member));
+                            other.columns.put(sqlName, new IndexColumnDef(position, secondaryColumnNumber, indexedAnnotation.ignoreCase(), member));
                             if (indexedAnnotation.uniqueConstraint()) {
                                 other.uniqueConstraint = true;
                             }
@@ -350,14 +366,14 @@ class TableDDL {
                 def.name = indexedAnnotation.name();
                 def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
                 def.group = group;
-                def.columns.put(sqlName, new IndexColumnDef(position, indexedAnnotation.ignoreCase(), member));
+                def.columns.put(sqlName, new IndexColumnDef(position, secondaryColumnNumber, indexedAnnotation.ignoreCase(), member));
                 indexes.add(def);
             }
         } else {
             IndexDef def = new IndexDef();
             def.name = indexedAnnotation.name();
             def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
-            def.columns.put(sqlName, new IndexColumnDef("", indexedAnnotation.ignoreCase(), member));
+            def.columns.put(sqlName, new IndexColumnDef("", secondaryColumnNumber, indexedAnnotation.ignoreCase(), member));
             indexes.add(def);
         }
 
@@ -366,11 +382,24 @@ class TableDDL {
     private static String createIndexSql(Dialect dialect, TableModel tableModel, final IndexDef indexDef) {
         List<String> columnsSorted = new Vector<String>();
         columnsSorted.addAll(indexDef.columns.keySet());
+
+        if (ApplicationMode.isDevelopment()) {
+            Map<String, IndexColumnDef> positions = new HashMap<>();
+            for (IndexColumnDef def : indexDef.columns.values()) {
+                if (positions.containsKey(def.positionSorting)) {
+                    throw new Error("@Index declaration error on table '" + tableModel.entityMeta().getEntityClass().getSimpleName() + "' duplicate position '"
+                            + def.position + "' on column '" + def.member.getMemberName() + "'" //
+                            + " and column '" + positions.get(def.positionSorting).member.getMemberName() + "'");
+                }
+                positions.put(def.positionSorting, def);
+            }
+        }
+
         Collections.sort(columnsSorted, new Comparator<String>() {
 
             @Override
             public int compare(String o1, String o2) {
-                return indexDef.columns.get(o1).position.compareTo(indexDef.columns.get(o2).position);
+                return indexDef.columns.get(o1).positionSorting.compareTo(indexDef.columns.get(o2).positionSorting);
             }
         });
 
