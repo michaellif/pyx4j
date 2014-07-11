@@ -20,7 +20,12 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.IEntity;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.system.eft.CreditCardPaymentProcessorFacade;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -29,6 +34,8 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyReport;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.eft.mock.cards.CreditCardPaymentProcessorFacadeMock;
@@ -56,6 +63,18 @@ public class InsuranceTestBase extends IntegrationTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                List<Class<? extends IEntity>> classes = new ArrayList<Class<? extends IEntity>>();
+                classes.add(TenantSureInsurancePolicy.class);
+                classes.add(TenantSureInsurancePolicyReport.class);
+                ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
+                return null;
+            }
+        });
+
         registerFacadeMock(CreditCardPaymentProcessorFacade.class, CreditCardPaymentProcessorFacadeMock.class);
         CreditCardPaymentProcessorFacadeMock.init();
 

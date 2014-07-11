@@ -29,13 +29,16 @@ import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuot
 
 public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
 
+    private final boolean delay = false;
+
     @Override
     public String createClient(Tenant tenant, String name, String phone) {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new Error(e);
+        if (delay) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
         }
         return "MockupTSClient-" + RandomStringUtils.randomAlphanumeric(10);
     }
@@ -54,11 +57,12 @@ public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
         quote.quoteId().setValue("MockupTSQuote-" + RandomStringUtils.randomAlphanumeric(10));
         quote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new Error(e);
+        if (delay) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
         }
         return quote;
 
@@ -66,11 +70,12 @@ public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
 
     @Override
     public String bindQuote(String quoteId) {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new Error(e);
+        if (delay) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
         }
         return "MockupTSCert-" + RandomStringUtils.randomAlphanumeric(10);
     }

@@ -54,6 +54,7 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
 
         InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
+        Persistence.service().commit();
 
         TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(TenantSureInsurancePolicy.class, //
                 ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
@@ -94,6 +95,7 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
 
         InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
+        Persistence.service().commit();
 
         TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(TenantSureInsurancePolicy.class, //
                 ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
