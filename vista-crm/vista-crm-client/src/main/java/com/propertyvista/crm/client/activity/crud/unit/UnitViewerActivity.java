@@ -18,15 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -40,7 +41,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements UnitViewerView.Presenter {
@@ -56,10 +56,10 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     public UnitViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
 
-        unitItemsLister = new ListerController<AptUnitItem>(((UnitViewerView) getView()).getUnitItemsListerView(),
+        unitItemsLister = ListerControllerFactory.create(((UnitViewerView) getView()).getUnitItemsListerView(),
                 GWT.<UnitItemCrudService> create(UnitItemCrudService.class), AptUnitItem.class);
 
-        occupanciesLister = new ListerController<AptUnitOccupancySegment>(((UnitViewerView) getView()).getOccupanciesListerView(),
+        occupanciesLister = ListerControllerFactory.create(((UnitViewerView) getView()).getOccupanciesListerView(),
                 GWT.<UnitOccupancyCrudService> create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
 
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
@@ -114,7 +114,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
     @Override
     public boolean canEdit() {
-        return SecurityController.check(VistaCrmBehavior.PropertyManagement_OLD);
+        return SecurityController.check(DataModelPermission.permissionUpdate(AptUnitDTO.class));
     }
 
     @Override

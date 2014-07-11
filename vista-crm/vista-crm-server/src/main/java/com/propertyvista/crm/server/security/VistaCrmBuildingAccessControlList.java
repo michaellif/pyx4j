@@ -41,6 +41,8 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.BuildingAddOns;
 import com.propertyvista.domain.property.asset.building.BuildingFinancial;
 import com.propertyvista.domain.property.asset.building.BuildingMechanical;
+import com.propertyvista.domain.property.asset.unit.AptUnitItem;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -57,7 +59,7 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
     VistaCrmBuildingAccessControlList() {
         //F general, details, units, add-ons, PC, contacts
         {
-            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class, AptUnitDTO.class,//
+            List<Class<? extends IEntity>> entities = entities(BuildingDTO.class,//
                     Product.class, Service.class, Feature.class, Concession.class);
 
             grant(BuildingBasic, entities, READ);
@@ -96,6 +98,18 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingLeasing, entities, READ);
         }
 
+        // units
+        {
+            List<Class<? extends IEntity>> entities = entities(AptUnitDTO.class, AptUnitItem.class, AptUnitOccupancySegment.class);
+            grant(BuildingBasic, entities, READ);
+            grant(BuildingFinancial, entities, READ);
+            grant(BuildingAccounting, entities, READ);
+            grant(BuildingProperty, entities, READ);
+            grant(BuildingMarketing, entities, ALL);
+            grant(BuildingMechanicals, entities, READ);
+            grant(BuildingAdministrator, entities, ALL);
+            grant(BuildingLeasing, entities, READ);
+        }
         //H  "floorplans/marketing, marketing"
         grant(BuildingBasic, Marketing.class, READ);
         grant(BuildingFinancial, Marketing.class, READ);

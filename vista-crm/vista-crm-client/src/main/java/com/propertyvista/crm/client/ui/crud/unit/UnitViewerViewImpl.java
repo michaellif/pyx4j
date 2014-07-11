@@ -18,9 +18,11 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button.SecureMenuItem;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 import com.pyx4j.widgets.client.dialog.OkOption;
@@ -34,6 +36,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
@@ -86,7 +90,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
+        scopeAction = new SecureMenuItem(i18n.tr("Scope..."), new Command() {
             @Override
             public void execute() {
                 Lease lease = getForm().getValue().lease();
@@ -102,21 +106,20 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                     new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate).show();
                 }
             }
-        });
-
+        }, DataModelPermission.permissionUpdate(AptUnitOccupancySegment.class));
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(scopeAction);
         }
 
-        makePendingAction = new MenuItem(i18n.tr("Make Pending..."), new Command() {
+        makePendingAction = new SecureMenuItem(i18n.tr("Make Pending..."), new Command() {
             @Override
             public void execute() {
                 new MakePendingDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) getPresenter(), minMakePendingStartDay,
                         maxMakePendingStartDay) {
                 }.show();
             }
-        });
+        }, DataModelPermission.permissionUpdate(AptUnitOccupancySegment.class));
         makePendingAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(makePendingAction);
@@ -132,7 +135,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             addAction(yardiImporttAvailability);
         }
 
-        existingLeaseAction = new MenuItem(i18n.tr("Create Current Lease..."), new Command() {
+        existingLeaseAction = new SecureMenuItem(i18n.tr("Create Current Lease..."), new Command() {
             @Override
             public void execute() {
                 if (getForm().getValue().isPresentInCatalog().getValue(false)) {
@@ -141,17 +144,17 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                     MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));
                 }
             }
-        });
+        }, DataModelPermission.permissionCreate(LeaseDTO.class));
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(existingLeaseAction);
         }
 
-        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+        maintenanceAction = new SecureMenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
                 ((UnitViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
-        });
+        }, DataModelPermission.permissionCreate(MaintenanceRequestDTO.class));
         addAction(maintenanceAction);
     }
 

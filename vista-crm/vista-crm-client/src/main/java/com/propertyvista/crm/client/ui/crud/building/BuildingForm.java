@@ -88,6 +88,7 @@ import com.propertyvista.domain.property.asset.building.BuildingMechanical;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
+import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -99,7 +100,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private final Tab floorplansTab, mechanicalsTab, addOnsTab, financialTab, billingCyclesTab;
 
-    private Tab catalogTab = null;
+    private Tab unitsTab, catalogTab;
 
     private FormPanel ilsEmailProfilePanel;
 
@@ -114,7 +115,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 floorplansTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(),
                         i18n.tr("Floorplans")), !isEditable());
 
-        setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units")),
+        setTabEnabled(unitsTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units")),
                 !isEditable());
 
         setTabEnabled(mechanicalsTab = addTab(createMachanicalsTab(), i18n.tr("Mechanicals")), !isEditable());
@@ -162,6 +163,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
 
         floorplansTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(FloorplanDTO.class)));
+
+        unitsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(AptUnitDTO.class)));
 
         mechanicalsTab.setTabVisible(SecurityController.check(DataModelPermission.permissionRead(BuildingMechanical.class)));
 
