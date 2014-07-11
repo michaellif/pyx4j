@@ -92,7 +92,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     @Override
     public void processCancellations(ExecutionMonitor executionMonitor, LogicalDate dueDate) {
 
-        log.info("processing TenantSure cancellations requested by tenant");
+        log.info("processing TenantSure cancellations requested by tenant; expiryDate before {}", dueDate);
 
         {
             EntityQueryCriteria<TenantSureInsurancePolicy> byTenantCancellationsCriteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);

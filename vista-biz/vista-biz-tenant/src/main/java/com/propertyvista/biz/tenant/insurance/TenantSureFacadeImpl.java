@@ -390,6 +390,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
 
         TenantSureInsurancePolicyDTO status = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
+        status.setPrimaryKey(insuranceTenantSure.getPrimaryKey());
         status.certificate().insuranceCertificateNumber().setValue(insuranceTenantSure.certificate().insuranceCertificateNumber().getValue());
         status.certificate().expiryDate().setValue(insuranceTenantSure.certificate().expiryDate().getValue());
         status.certificate().inceptionDate().setValue(insuranceTenantSure.certificate().inceptionDate().getValue());

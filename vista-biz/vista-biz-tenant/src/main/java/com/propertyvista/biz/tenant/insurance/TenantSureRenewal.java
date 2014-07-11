@@ -47,7 +47,8 @@ class TenantSureRenewal {
 
     private void processRenewalOffer(ExecutionMonitor executionMonitor, LogicalDate runDate) {
         LogicalDate renewalAniversary = new LogicalDate(DateUtils.addDays(DateUtils.addYears(runDate, -1), 30)); //30 before year
-        log.debug("run Renewal for {}", renewalAniversary);
+        log.info("processing TenantSure Renewal offers for inceptionDate before {}", renewalAniversary);
+
         EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
         criteria.le(criteria.proto().certificate().inceptionDate(), renewalAniversary);
         criteria.eq(criteria.proto().status(), TenantSureStatus.Active);
@@ -98,7 +99,7 @@ class TenantSureRenewal {
         newTenantSurePolicy.renewalOf().set(originalInsurancePolicy);
         Persistence.service().persist(newTenantSurePolicy);
 
-        log.debug("Renewal for {} created {}", originalInsurancePolicy.certificate().insuranceCertificateNumber(), newTenantSurePolicy.quoteId());
+        log.info("Renewal for {} created {}", originalInsurancePolicy.certificate().insuranceCertificateNumber(), newTenantSurePolicy.quoteId());
 
         Persistence.ensureRetrieve(newTenantSurePolicy.tenant(), AttachLevel.Attached);
 
@@ -118,7 +119,7 @@ class TenantSureRenewal {
     }
 
     private void processBuyRenewal(ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        log.debug("run Buy Renewal for {}", runDate);
+        log.info("processing TenantSure Buy Renewal for inceptionDate before {}", runDate);
         EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
         criteria.le(criteria.proto().certificate().inceptionDate(), runDate);
         criteria.eq(criteria.proto().status(), TenantSureStatus.Draft);
@@ -152,7 +153,7 @@ class TenantSureRenewal {
 
     private void buyRenewalInsurance(TenantSureInsurancePolicy insurancePolicy) {
         Persistence.ensureRetrieve(insurancePolicy.renewalOf(), AttachLevel.Attached);
-        log.debug("buy Renewal for {}, quoteId {} Participant Id {}", insurancePolicy.renewalOf().certificate().insuranceCertificateNumber(),
+        log.info("buy Renewal for {}, quoteId {} Participant Id {}", insurancePolicy.renewalOf().certificate().insuranceCertificateNumber(),
                 insurancePolicy.quoteId(), insurancePolicy.client().tenant().participantId());
         ServerSideFactory.create(TenantSureFacade.class).buyInsurance(insurancePolicy);
 

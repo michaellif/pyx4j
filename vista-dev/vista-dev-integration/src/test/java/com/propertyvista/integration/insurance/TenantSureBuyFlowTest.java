@@ -139,4 +139,115 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
                 .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
                 .lastRecordTransactionDate("2011-03-21");
     }
+
+    public void testTenantSureNoRenewal() throws Exception {
+        setSysDate("2011-01-05");
+
+        TenantSureCoverageDTO quotationRequest = EntityFactory.create(TenantSureCoverageDTO.class);
+        quotationRequest.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
+        quotationRequest.inceptionDate().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-05")));
+
+        TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest, getLease()._applicant());
+
+        InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
+        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
+        Persistence.service().commit();
+
+        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(TenantSureInsurancePolicy.class, //
+                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
+
+        assertEquals("paymentDay", 5, tenantSurePolicy.paymentDay().getValue().intValue());
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(1) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordPaymentDue("2011-01-05") //
+                .lastRecordTransactionDate("2011-01-05");
+
+        advanceSysDate("2011-02-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(2) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordPaymentDue("2011-02-05") //
+                .lastRecordTransactionDate("2011-02-06");
+
+        advanceSysDate("2011-03-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(3) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordPaymentDue("2011-03-05") //
+                .lastRecordTransactionDate("2011-03-06");
+
+        advanceSysDate("2011-04-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(4) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-04-06");
+
+        advanceSysDate("2011-05-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(5) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-05-06");
+
+        advanceSysDate("2011-06-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(6) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-06-06");
+
+        advanceSysDate("2011-07-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(7) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-07-06");
+
+        advanceSysDate("2011-08-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(8) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-08-06");
+
+        advanceSysDate("2011-09-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(9) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-09-06");
+
+        advanceSysDate("2011-10-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(10) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-10-06");
+
+        advanceSysDate("2011-11-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(11) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-11-06");
+
+        advanceSysDate("2011-12-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(12) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-12-06");
+
+        advanceSysDate("2012-02-07");
+
+        new TenantSureTransactionTester(tenantSurePolicy)//
+                .count(12) //    
+                .lastRecordStatus(TenantSureTransaction.TransactionStatus.Cleared) //
+                .lastRecordTransactionDate("2011-12-06");
+    }
 }
