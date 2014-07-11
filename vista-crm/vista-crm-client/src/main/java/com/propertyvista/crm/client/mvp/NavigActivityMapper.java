@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,10 +24,12 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.activity.NavigActivity;
 import com.propertyvista.crm.client.activity.NavigSettingsActivity;
+import com.propertyvista.crm.client.event.BoardUpdateEvent;
+import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
-public class NavigActivityMapper implements ActivityMapper {
+public class NavigActivityMapper implements ActivityMapper, BoardUpdateHandler {
 
     private static NavigActivity navigActivity;
 
@@ -41,6 +43,15 @@ public class NavigActivityMapper implements ActivityMapper {
                 navigSettingsActivity = null;
             }
         });
+
+        AppSite.getEventBus().addHandler(BoardUpdateEvent.getType(), this);
+    }
+
+    @Override
+    public void onBoardUpdate(BoardUpdateEvent event) {
+        if (navigActivity != null) {
+            navigActivity.onBoardUpdate(event);
+        }
     }
 
     @Override

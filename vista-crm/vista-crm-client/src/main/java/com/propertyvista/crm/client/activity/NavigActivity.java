@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,23 +33,28 @@ import com.propertyvista.common.client.ClientLocaleUtils;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
-import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigView.NavigPresenter;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class NavigActivity extends AbstractActivity implements NavigPresenter, BoardUpdateHandler {
+public class NavigActivity extends AbstractActivity implements NavigPresenter {
 
     private final NavigView view;
 
     private DashboardMetadataCrudService dashboardMetadataCrudService;
 
+    private MessageCategoryCrudService messageCategoryCrudService;
+
     private boolean isDashboardFolderUpdateRequired;
 
-    private static Key previousUserPk;
+    private boolean isCommunicationFolderUpdateRequired;
+
+    private Key previousUserPk;
 
     private Place place;
 
@@ -60,7 +65,6 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        eventBus.addHandler(BoardUpdateEvent.getType(), this);
         panel.setWidget(view);
         obtainAvailableLocales();
     }
@@ -68,13 +72,15 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
     public void withPlace(Place place) {
         this.place = place;
         Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
-        isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
+        isCommunicationFolderUpdateRequired = isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null
+                || !previousUserPk.equals(currentUserPk);
         previousUserPk = currentUserPk;
 
         dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
-
+        messageCategoryCrudService = GWT.<MessageCategoryCrudService> create(MessageCategoryCrudService.class);
         view.updateUserName(ClientContext.getUserVisit().getName());
         updateDashboardItems();
+        updateMessageCategoryItems();
 
         if (place instanceof AppPlace) {
             view.select((AppPlace) place);
@@ -99,12 +105,17 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
                 });
             }
         });
+        previousUserPk = null;
     }
 
-    @Override
     public void onBoardUpdate(BoardUpdateEvent event) {
-        isDashboardFolderUpdateRequired = true;
-        updateDashboardItems();
+        if (DashboardMetadata.class.equals(event.getTargetEntityType())) {
+            isDashboardFolderUpdateRequired = true;
+            updateDashboardItems();
+        } else if (MessageCategory.class.equals(event.getTargetEntityType())) {
+            isCommunicationFolderUpdateRequired = true;
+            updateMessageCategoryItems();
+        }
     }
 
     private void updateDashboardItems() {
@@ -118,6 +129,21 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter, B
                 }
 
             }, EntityListCriteria.create(DashboardMetadata.class));
+        }
+
+    }
+
+    private void updateMessageCategoryItems() {
+        if (isCommunicationFolderUpdateRequired) {
+            messageCategoryCrudService.list(new DefaultAsyncCallback<EntitySearchResult<MessageCategory>>() {
+
+                @Override
+                public void onSuccess(EntitySearchResult<MessageCategory> result) {
+                    view.updateCommunicationGroups(result.getData());
+                    isCommunicationFolderUpdateRequired = false;
+                }
+
+            }, EntityListCriteria.create(MessageCategory.class));
         }
 
     }

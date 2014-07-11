@@ -43,6 +43,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.dto.financial.moneyin.batch.MoneyInBatchDTO;
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.EftAggregatedTransfer;
@@ -70,6 +71,13 @@ public class NavigViewImpl extends Composite implements NavigView {
         }
     };
 
+    private static final Comparator<MessageCategory> ORDER_CATEGORY_BY_NAME = new Comparator<MessageCategory>() {
+        @Override
+        public int compare(MessageCategory e1, MessageCategory e2) {
+            return e1.topic().getValue().toLowerCase().compareTo(e2.topic().getValue().toLowerCase());
+        }
+    };
+
     private NavigPresenter presenter;
 
     private final SideMenu menu;
@@ -85,6 +93,8 @@ public class NavigViewImpl extends Composite implements NavigView {
     private SideMenuAppPlaceItem systemDashboard;
 
     private SideMenuList customDashboards;
+
+    private SideMenuList communicationGroups;
 
     private LayoutType layoutType;
 
@@ -201,7 +211,8 @@ public class NavigViewImpl extends Composite implements NavigView {
             SideMenuList list = new SideMenuList();
             root.addMenuItem(new SideMenuItem(list, i18n.tr("Finance"), CrmImages.INSTANCE.financeIcon()));
 
-            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), DataModelPermission.permissionRead(EftAggregatedTransfer.class)));
+            list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AggregatedTransfer(), DataModelPermission
+                    .permissionRead(EftAggregatedTransfer.class)));
 
             if (SecurityController.check(VistaCrmBehavior.BuildingFinancial_OLD)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Finance.AutoPay()));
@@ -226,6 +237,8 @@ public class NavigViewImpl extends Composite implements NavigView {
             }
             if (SecurityController.check(VistaBasicBehavior.CRM)) {
                 list.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message()));
+                communicationGroups = new SideMenuList();
+                list.addMenuItem(new SideMenuItem(communicationGroups, i18n.tr("Groups"), null));
             }
         }
 
@@ -270,6 +283,19 @@ public class NavigViewImpl extends Composite implements NavigView {
         Collections.sort(metadataList, ORDER_BY_NAME);
         for (DashboardMetadata metadata : metadataList) {
             customDashboards.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Dashboard.View().formPlace(metadata.getPrimaryKey()), metadata.name()
+                    .getStringView(), null));
+        }
+    }
+
+    @Override
+    public void updateCommunicationGroups(Vector<MessageCategory> metadataList) {
+        if (!SecurityController.check(VistaBasicBehavior.CRM)) {
+            return;
+        }
+        communicationGroups.clear();
+        Collections.sort(metadataList, ORDER_CATEGORY_BY_NAME);
+        for (MessageCategory metadata : metadataList) {
+            communicationGroups.addMenuItem(new SideMenuAppPlaceItem(new CrmSiteMap.Communication.Message(metadata).formListerPlace(), metadata.topic()
                     .getStringView(), null));
         }
     }

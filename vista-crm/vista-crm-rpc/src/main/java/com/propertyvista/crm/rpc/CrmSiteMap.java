@@ -22,6 +22,7 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
+import com.propertyvista.domain.communication.MessageCategory;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
@@ -601,18 +602,28 @@ public class CrmSiteMap implements SiteMap {
     // Communication Started --------------
     @PlaceProperties(navigLabel = "Communication")
     public static class Communication extends AppPlace {
-        @PlaceProperties(navigLabel = "Communication")
+        @PlaceProperties(navigLabel = "Messages")
         public static class Message extends CrmCrudAppPlace {
+            private MessageCategory source;
+
             private String forwardText;
 
             private String forwardSubject;
 
-            public Message(String forwardSubject, String forwardText) {
-                this.forwardText = forwardText;
-                this.forwardSubject = forwardSubject;
+            public Message(MessageCategory source) {
+                this.source = source;
             }
 
             public Message() {
+            }
+
+            public MessageCategory getMessageCategory() {
+                return source;
+            }
+
+            public Message(String forwardSubject, String forwardText) {
+                this.forwardText = forwardText;
+                this.forwardSubject = forwardSubject;
             }
 
             public String getForwardText() {
@@ -623,6 +634,7 @@ public class CrmSiteMap implements SiteMap {
                 return forwardSubject;
             }
         }
+
     }
 
     // Communication Ended --------------

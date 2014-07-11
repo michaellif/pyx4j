@@ -16,11 +16,14 @@ package com.propertyvista.crm.client.activity.crud.communication;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.crud.communication.MessageCategoryListerView;
 import com.propertyvista.crm.rpc.services.MessageCategoryCrudService;
 import com.propertyvista.domain.communication.MessageCategory;
@@ -38,4 +41,12 @@ public class MessageCategoryListerActivity extends AbstractListerActivity<Messag
         return SecurityController.check(VistaCrmBehavior.Maintenance_OLD);
     }
 
+    @Override
+    protected void onDeleted(Key itemID, boolean isSuccessful) {
+        super.onDeleted(itemID, isSuccessful);
+        if (isSuccessful) {
+            AppSite.instance();
+            AppSite.getEventBus().fireEvent(new BoardUpdateEvent(MessageCategory.class));
+        }
+    }
 }

@@ -30,8 +30,8 @@ public class MessageLister extends AbstractLister<MessageDTO> {
 
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors()));
 
-        getDataTablePanel().setFilteringEnabled(true);
-        getDataTablePanel().getFilterButton().setTextLabel(i18n.tr("Select Communication Topic"));
+        getDataTablePanel().setFilteringEnabled(false);
+        //getDataTablePanel().getFilterButton().setTextLabel(i18n.tr("Select Communication Topic"));
         // No filtering work for it
         getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
     }
