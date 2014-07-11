@@ -54,7 +54,7 @@ public final class InsuranceCertificateComparator implements Comparator<Insuranc
             return value;
         }
 
-        value = CompareHelper.compareTo(o1.expiryDate().getValue(), o1.expiryDate().getValue());
+        value = CompareHelper.compareTo(o2.expiryDate().getValue(), o1.expiryDate().getValue(), false);
         if (value != 0) {
             return value;
         }

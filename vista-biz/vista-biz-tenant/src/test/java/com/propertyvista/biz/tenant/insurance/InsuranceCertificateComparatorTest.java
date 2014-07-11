@@ -37,6 +37,8 @@ public class InsuranceCertificateComparatorTest {
 
     private long keyCounter;
 
+    private final boolean debugSort = false;
+
     @Before
     public void setUp() {
         keyCounter = 0L;
@@ -166,5 +168,10 @@ public class InsuranceCertificateComparatorTest {
 
     private void sort(Tenant tenantInContext, List<InsuranceCertificate<?>> list) {
         java.util.Collections.sort(list, new InsuranceCertificateComparator(tenantInContext));
+        if (debugSort) {
+            for (InsuranceCertificate<?> c : list) {
+                System.out.println(c.getInstanceValueClass().getSimpleName() + " expiryDate:" + c.expiryDate().getValue());
+            }
+        }
     }
 }

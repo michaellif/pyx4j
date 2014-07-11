@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -160,6 +161,7 @@ class TenantSurePayments {
             }
 
         }
+        LogicalDate renewalYearlyAniversaryCutOff = new LogicalDate(DateUtils.addYears(dueDate, -1));
 
         EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
         OrCriterion or = criteria.or();
@@ -168,6 +170,9 @@ class TenantSurePayments {
         criteria.eq(criteria.proto().status(), TenantSureStatus.Active);
         criteria.in(criteria.proto().paymentDay(), paymentDays);
         criteria.lt(criteria.proto().certificate().inceptionDate(), dueDate);
+        // No more then Year Old!
+        criteria.gt(criteria.proto().certificate().inceptionDate(), renewalYearlyAniversaryCutOff);
+
         ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (iterator.hasNext()) {
