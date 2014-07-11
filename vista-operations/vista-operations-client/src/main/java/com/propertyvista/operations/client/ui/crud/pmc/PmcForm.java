@@ -219,28 +219,26 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         formPanel.append(Location.Dual, proto().equifaxFee(), new EquifaxFeeQuoteForm(false));
 
         formPanel.h1(i18n.tr("Equifax"));
-        formPanel.append(Location.Left, proto().equifaxInfo().status()).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().status()).decorate().componentWidth(200);
 
-        formPanel.append(Location.Right, proto().equifaxInfo().equifaxSignUpFee()).decorate();
-        get(proto().equifaxInfo().equifaxSignUpFee()).setViewable(true);
+        formPanel.append(Location.Right, proto().equifaxInfo().equifaxSignUpFee(), new CLabel<>()).decorate();
 
-        formPanel.append(Location.Left, proto().equifaxInfo().reportType()).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().reportType()).decorate().componentWidth(200);
 
-        formPanel.append(Location.Right, proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).decorate();
-        get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
+        formPanel.append(Location.Right, proto().equifaxInfo().equifaxPerApplicantCreditCheckFee(), new CLabel<>()).decorate();
 
         CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         memberNumber.setFormatter(new PasswordIdentityFormat());
         memberNumber.setParser(new PasswordIdentityParser(memberNumber));
-        formPanel.append(Location.Left, proto().equifaxInfo().memberNumber(), memberNumber).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().memberNumber(), memberNumber).decorate().componentWidth(200);
 
         CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         securityCode.setFormatter(new PasswordIdentityFormat());
         securityCode.setParser(new PasswordIdentityParser(securityCode));
-        formPanel.append(Location.Left, proto().equifaxInfo().securityCode(), securityCode).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().securityCode(), securityCode).decorate().componentWidth(200);
 
-        formPanel.append(Location.Left, proto().equifaxInfo().customerCode()).decorate();
-        formPanel.append(Location.Left, proto().equifaxInfo().customerReferenceNumber()).decorate();
+        formPanel.append(Location.Left, proto().equifaxInfo().customerCode()).decorate().componentWidth(200);
+        formPanel.append(Location.Left, proto().equifaxInfo().customerReferenceNumber()).decorate().componentWidth(200);
 
         approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
         approvalLink.addClickHandler(new ClickHandler() {
