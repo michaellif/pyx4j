@@ -43,6 +43,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -189,6 +190,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     @Override
     public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
         MailMessage m = MessageTemplatesTenantSure.createTenantSurePaymentsResumedEmail();
+        m.setTo(tenantEmail);
+        Mail.queue(m, null, getTenantSureConfig());
+    }
+
+    @Override
+    public void sendTenantSureRenewalEmail(String tenantEmail, TenantSureInsurancePolicy policy) {
+        MailMessage m = MessageTemplatesTenantSure.createTenantSureRenewalEmail(policy);
         m.setTo(tenantEmail);
         Mail.queue(m, null, getTenantSureConfig());
     }

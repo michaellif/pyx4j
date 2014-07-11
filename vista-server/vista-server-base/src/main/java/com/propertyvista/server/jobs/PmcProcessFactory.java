@@ -19,6 +19,7 @@ import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.server.jobs.insurance.PaymentsTenantSureProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureBusinessReportProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureCancellationProcess;
+import com.propertyvista.server.jobs.insurance.TenantSureRenewalProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureReportsProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureTransactionsReportProcess;
 
@@ -113,6 +114,8 @@ public class PmcProcessFactory {
             return new TenantSureTransactionsReportProcess();
         case tenantSureCancellation:
             return new TenantSureCancellationProcess();
+        case tenantSureRenewal:
+            return new TenantSureRenewalProcess();
         case tenantSureBusinessReport:
             return new TenantSureBusinessReportProcess();
 

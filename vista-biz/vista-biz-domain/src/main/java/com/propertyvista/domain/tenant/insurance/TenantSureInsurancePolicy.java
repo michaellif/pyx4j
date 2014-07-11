@@ -17,9 +17,12 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -64,7 +67,9 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
 
         CancelledByTenant,
 
-        CancelledByTenantSure;
+        CancelledByTenantSure,
+
+        Renewed;
     }
 
     @ReadOnly
@@ -132,6 +137,17 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<TenantSureTransaction> transactions();
+
+    interface RenewalOfColumnId extends ColumnId {
+    }
+
+    @JoinColumn(RenewalOfColumnId.class)
+    @Detached(level = AttachLevel.IdOnly)
+    TenantSureInsurancePolicy renewalOf();
+
+    @JoinTable(value = TenantSureInsurancePolicy.class, mappedBy = RenewalOfColumnId.class)
+    @Detached(level = AttachLevel.Detached)
+    TenantSureInsurancePolicy renewal();
 
     @Owned
     @Detached

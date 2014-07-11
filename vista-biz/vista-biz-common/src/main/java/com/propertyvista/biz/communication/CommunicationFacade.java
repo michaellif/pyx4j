@@ -27,6 +27,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -70,6 +71,8 @@ public interface CommunicationFacade {
     void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);
 
     void sendTenantSurePaymentsResumedEmail(String tenantEmail);
+
+    void sendTenantSureRenewalEmail(String tenantEmail, TenantSureInsurancePolicy policy);
 
     void sendPaymentRejectedNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF);
 

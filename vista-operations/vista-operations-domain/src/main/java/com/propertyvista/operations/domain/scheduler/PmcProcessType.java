@@ -110,6 +110,8 @@ public enum PmcProcessType implements Serializable {
 
     tenantSureCancellation, // Vlad & Artyom
 
+    tenantSureRenewal(PmcProcessOptions.RunForDay), // Vlad
+
     tenantSureReports,
 
     tenantSureTransactionReports(PmcProcessOptions.RunForDay),

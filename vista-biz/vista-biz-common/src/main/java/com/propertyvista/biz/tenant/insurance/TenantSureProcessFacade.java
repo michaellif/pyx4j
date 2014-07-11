@@ -31,6 +31,8 @@ public interface TenantSureProcessFacade {
 
     void processCancellations(ExecutionMonitor executionMonitor, LogicalDate dueDate);
 
+    void processRenewal(ExecutionMonitor executionMonitor, LogicalDate dueDate);
+
     // --
 
     ReportTableFormatter startInsuranceStatusReport();

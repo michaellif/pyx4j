@@ -26,6 +26,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
 class MessageTemplatesTenantSure {
@@ -62,6 +63,32 @@ class MessageTemplatesTenantSure {
         email.setSubject(i18n.tr("Payment Processing Resumed"));
 
         MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-payments-resumed.html");
+
+        email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
+        return email;
+    }
+
+    public static MailMessage createTenantSureRenewalEmail(TenantSureInsurancePolicy policy) {
+        MailMessage email = new MailMessage();
+        email.setSender(getTenantSureSender());
+        email.setSubject(i18n.tr("RENEWAL OF TENANTSURE RENTERS INSURANCE"));
+
+        MessageTemplate template = new MessageTemplate("email/tenantsure/tenantsure-renewal-notice.html");
+
+        DateFormat dateFormat = new SimpleDateFormat(i18n.tr("yyyy-MM-dd"));
+
+        template.variable("${certificateNumber}", policy.renewalOf().certificate().insuranceCertificateNumber().getValue());
+        template.variable("${inceptionDate}", dateFormat.format(policy.certificate().inceptionDate().getValue()));
+
+        template.variable("${annualPremium}", policy.annualPremium().getValue());
+        template.variable("${underwriterFee}", policy.underwriterFee().getValue());
+        template.variable("${brokerFee}", policy.brokerFee().getValue());
+        template.variable("${totalAnnualTax}", policy.totalAnnualTax().getValue());
+        template.variable("${totalMonthlyPayable}", policy.totalMonthlyPayable().getValue());
+        template.variable("${totalFirstPayable}", policy.totalFirstPayable().getValue());
+
+        template.variable("${portalLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
+                ResidentPortalSiteMap.ResidentServices.class));
 
         email.setHtmlBody(template.getWrappedBody(wrapperTextResourceName));
         return email;

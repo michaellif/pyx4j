@@ -160,6 +160,11 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
+    public void processRenewal(ExecutionMonitor executionMonitor, LogicalDate dueDate) {
+        new TenantSureRenewal().processRenewal(executionMonitor, dueDate);
+    }
+
+    @Override
     public void processPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate) {
         TenantSurePayments.processPayments(executionMonitor, dueDate);
     }
