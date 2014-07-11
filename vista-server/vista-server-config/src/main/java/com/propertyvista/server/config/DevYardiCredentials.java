@@ -41,14 +41,22 @@ public class DevYardiCredentials {
                 "vista_dev" //
         ),
 
-        hostedNew(//
+        hosted6008(//
                 "prvista2", //
                 "https://www.iyardiasp.com/8223third_17", //
                 "propertyvistadb", //
                 "52673", //
                 "aspdb04", //
                 "afqoml_live" //
+        ),
 
+        hosted7S(//
+                "prvista2", //
+                "https://www.iyardiasp.com/8223thirdparty708dev", //
+                "propertyvistadb", //
+                "52673", //
+                "SDB17\\SQL2k8_R2", //
+                "afqoml_70intl" //
         ),
 
         prod(//
@@ -59,7 +67,6 @@ public class DevYardiCredentials {
                 "file://yardi-starlight-prod-credentials.properties", //
                 "SLDB02", //
                 "starlight" //
-
         ),
 
         sterlingTest(//
@@ -69,7 +76,6 @@ public class DevYardiCredentials {
                 "file://yardi-sterling-test-credentials.properties", //
                 "skyardidb", //
                 "Sandbox_020614" //
-
         );
 
         final String propertyListCodes;

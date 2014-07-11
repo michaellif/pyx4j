@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -98,6 +99,12 @@ public class YardiNewGuestWorkflowTest {
 
     private static PmcYardiCredential yc;
 
+    private static String AGENT = "Property Vista-ILS";
+
+    private static String SOURCE = "ILS";
+
+    private static String[] appFeeCodes = new String[] { "deposit", "pet" };
+
     static {
         ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
@@ -105,10 +112,6 @@ public class YardiNewGuestWorkflowTest {
         stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         yc = getTestPmcYardiCredential();
     }
-
-    private static final String AGENT = "Property Vista";
-
-    private static final String SOURCE = "ILS";
 
     private static YardiGuestProcessor guestProcessor;
 
@@ -143,12 +146,12 @@ public class YardiNewGuestWorkflowTest {
             }
 
             if (agentName == null) {
-                System.out.println("Marketing Agent 'Property Vista' is not configured. Exit.");
+                System.out.println("Marketing Agent '" + AGENT + "' is not configured. Exit.");
                 return;
             }
 
             if (sourceName == null) {
-                System.out.println("Marketing Source 'ILS' is not configured. Exit.");
+                System.out.println("Marketing Source '" + SOURCE + "' is not configured. Exit.");
                 return;
             }
 
@@ -257,19 +260,17 @@ public class YardiNewGuestWorkflowTest {
     }
 
     static void importApplication(Prospect guest) {
-        String typeStr = readLine("Add Deposit Amount: ");
-        BigDecimal amount = null;
-        try {
-            amount = new BigDecimal(typeStr);
-            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-                System.out.println("Invalid amount: '" + amount + "' - Exit.");
-                return;
+        AccountingData charges = new AccountingData();
+        ChargeSet chargeSet = new ChargeSet();
+        Charge charge = null;
+        printIds(Arrays.asList(appFeeCodes), "Application Fee Codes");
+        do {
+            String[] feeInfo = readLine("Add Fee (code, amount, desc): ").split(",");
+            if ((charge = getAppFee(feeInfo)) != null) {
+                chargeSet.getCharge().add(charge);
+                System.out.println("Fee added!");
             }
-            amount.setScale(2);
-        } catch (Throwable t) {
-            System.out.println("Invalid amount: '" + amount + "' - Exit.");
-            return;
-        }
+        } while (charge != null);
         try {
             LeaseApplication app = new LeaseApplication();
             Tenant tenant = new Tenant();
@@ -288,37 +289,19 @@ public class YardiNewGuestWorkflowTest {
                     break;
                 }
             }
+            // tenant
             NameType guestName = guest.getCustomers().getCustomer().get(0).getName();
             Name name = new Name();
             name.setFirstName(guestName.getFirstName());
             name.setLastName(guestName.getLastName());
             tenant.setName(name);
-            AccountingData charges = new AccountingData();
-            ChargeSet chargeSet = new ChargeSet();
-            chargeSet.setFrequency(Frequency.ONE_TIME);
+            app.getTenant().add(tenant);
+            // charges
             chargeSet.setStart(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
             chargeSet.setEnd(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
-            Charge charge = new Charge();
-            com.yardi.entity.leaseapp30.Identification chargeId = new com.yardi.entity.leaseapp30.Identification();
-            if (false) {
-                // deposit
-                charge.setChargeType(ChargeType.SECURITY_DEPOSIT);
-                charge.setLabel("deposit"); // charge code
-                chargeId.setIDValue("0");
-                chargeId.setOrganizationName("Move-In Security Deposit");
-            } else {
-                // app fee
-                charge.setChargeType(ChargeType.APPLICATION_FEE);
-                charge.setLabel("fees");
-                chargeId.setIDValue("");
-                chargeId.setOrganizationName("Application Processing Fee");
-            }
-            charge.getIdentification().add(chargeId);
-            charge.setAmount(amount.toPlainString());
-            chargeSet.getCharge().add(charge);
+            chargeSet.setFrequency(Frequency.ONE_TIME);
             charges.getChargeSet().add(chargeSet);
             tenant.setAccountingData(charges);
-            app.getTenant().add(tenant);
             // add lease
             LALease lease = new LALease();
             lease.getIdentification().add(tenant.getIdentification().get(0));
@@ -360,12 +343,23 @@ public class YardiNewGuestWorkflowTest {
 
     static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-        cr.propertyListCodes().setValue("prvista2");
-        cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
-        cr.username().setValue("propertyvistadb");
-        cr.password().number().setValue("52673");
-        cr.serverName().setValue("aspdb04");
-        cr.database().setValue("afqoml_live");
+        if (true) {
+            cr.propertyListCodes().setValue("prvista2");
+            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirdparty708dev");
+            cr.username().setValue("propertyvistadb");
+            cr.password().number().setValue("52673");
+            cr.serverName().setValue("SDB17\\SQL2k8_R2");
+            cr.database().setValue("afqoml_70intl");
+            AGENT = "Twf Zwjesf";
+            SOURCE = "Drive by";
+        } else {
+            cr.propertyListCodes().setValue("prvista2");
+            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
+            cr.username().setValue("propertyvistadb");
+            cr.password().number().setValue("52673");
+            cr.serverName().setValue("aspdb04");
+            cr.database().setValue("afqoml_live");
+        }
         cr.platform().setValue(PmcYardiCredential.Platform.SQL);
         return cr;
     }
@@ -482,6 +476,32 @@ public class YardiNewGuestWorkflowTest {
                 updateGuest(guest);
             }
         } while (type != null);
+    }
+
+    static Charge getAppFee(String[] feeInfo) {
+        if (feeInfo.length != 3) {
+            return null;
+        }
+        try {
+            BigDecimal amount = new BigDecimal(feeInfo[1].trim());
+            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+                System.out.println("ERROR: invalid amount: " + feeInfo[1].trim());
+                return null;
+            }
+            amount.setScale(2);
+            Charge charge = new Charge();
+            com.yardi.entity.leaseapp30.Identification chargeId = new com.yardi.entity.leaseapp30.Identification();
+            charge.setChargeType(ChargeType.APPLICATION_FEE);
+            charge.setLabel(feeInfo[0].trim());
+            chargeId.setIDValue("0");
+            chargeId.setOrganizationName(feeInfo[2].trim());
+            charge.getIdentification().add(chargeId);
+            charge.setAmount(amount.toPlainString());
+            return charge;
+        } catch (Throwable t) {
+            System.out.println(t.getMessage());
+        }
+        return null;
     }
 
     static void printIds(Collection<?> ids, String prompt) {
