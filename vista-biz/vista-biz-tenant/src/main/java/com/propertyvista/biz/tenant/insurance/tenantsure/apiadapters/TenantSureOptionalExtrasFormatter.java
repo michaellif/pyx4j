@@ -21,13 +21,18 @@ public class TenantSureOptionalExtrasFormatter implements ITenantSureOptionalExt
 
     @Override
     public String formatOptionalExtras(TenantSureCoverageDTO coverageRequest, Tenant tenant) {
+
+        if (!coverageRequest.numberOfPreviousClaims().isNull()) {
+            coverageRequest.previousClaims().setValue(coverageRequest.numberOfPreviousClaims().getValue().numericValue());
+        }
+
         StringBuilder optionalExtras = new StringBuilder();
 
         optionalExtras.append(format("MonthlyRevenue", tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()
                 .toPlainString()));
         optionalExtras.append(format("Deductible", TenantSureDeductibleOption.deductibleOf(coverageRequest.deductible().getValue()).amount().toPlainString()));
         optionalExtras.append(format("Smoker", String.valueOf(coverageRequest.smoker().getValue(false))));
-        optionalExtras.append(format("Claims", String.valueOf(String.valueOf(coverageRequest.numberOfPreviousClaims().getValue().numericValue()))));
+        optionalExtras.append(format("Claims", String.valueOf(coverageRequest.previousClaims().getValue())));
         optionalExtras.append(format("Alarm", String.valueOf(tenant.lease().unit().building().info().hasFireAlarm().getValue(false))));
         optionalExtras.append(format("Sprinklers", String.valueOf(tenant.lease().unit().building().info().hasSprinklers().getValue(false))));
         optionalExtras.append(format("BCEQ", String.valueOf(tenant.lease().unit().building().info().hasEarthquakes().getValue(false))));

@@ -150,6 +150,9 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     TenantSureInsurancePolicy renewal();
 
     @Owned
+    TenantSureCoverage coverage();
+
+    @Owned
     @Detached
     @NotNull
     @Caption(name = "I agree to the Terms")

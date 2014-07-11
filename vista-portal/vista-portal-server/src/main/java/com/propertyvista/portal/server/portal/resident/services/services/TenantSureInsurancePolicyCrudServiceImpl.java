@@ -34,7 +34,9 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.ISignature.SignatureFormat;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -224,30 +226,35 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     }
 
     @Override
-    public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO policyDto) {
+    public void create(final AsyncCallback<Key> callback, final TenantSureInsurancePolicyDTO policyDto) {
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().getValue(false)) {
             throw new TenantSureOnMaintenanceException();
         }
 
         policyDto.paymentMethod().tenant().set(ResidentPortalContext.getTenant());
 
-        // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
-        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//@formatter:off
-                policyDto.paymentMethod(),
-                ResidentPortalContext.getTenant().<Tenant> createIdentityStub()
-        );//@formatter:on
+        new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() throws RuntimeException {
+
+                // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
+
+                ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//
+                        policyDto.paymentMethod(), //
+                        ResidentPortalContext.getTenant().<Tenant> createIdentityStub());
+
+                return null;
+            }
+        });
 
         TenantSureQuoteDTO quote = ServerSideQuteStorage.get(policyDto.quote().quoteId().getValue());
         if (quote == null) {
             throw new Error("The requested quote " + policyDto.quote().getValue() + " was not found in client's context");
         }
-        Key key = ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
-                quote,
-                ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
-                policyDto.tenantSureCoverageRequest().tenantName().getValue(),
-                policyDto.tenantSureCoverageRequest().tenantPhone().getValue(),
-                policyDto.personalDisclaimerSignature()
-        );//@formatter:on
+        Key key = ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//
+                quote, //
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub(), //
+                policyDto.personalDisclaimerSignature());
 
         ServerSideQuteStorage.clear();
 

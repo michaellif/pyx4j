@@ -83,6 +83,8 @@ public class TenantSureCoverageRequestAdapter {
         optionQuote.setPolicyPeriod("12M");
         optionQuote.setOptionalExtras(new TenantSureOptionalExtrasFormatter().formatOptionalExtras(coverageRequest, tenantSureClient.tenant()));
 
+        optionQuote.setExpiringPolicyNumber(coverageRequest.renewalOfPolicyNumber().getValue());
+
         // quote from the CFC-API doc:
         // Pass a blank string.
         // This field is reserved for a future date where we may offer the ability for clients to supply discount codes or similar.

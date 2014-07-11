@@ -15,11 +15,14 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.util.Comparator;
 
+import com.pyx4j.commons.CompareHelper;
+
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public final class InsuranceCertificateComparator implements Comparator<InsuranceCertificate> {
+public final class InsuranceCertificateComparator implements Comparator<InsuranceCertificate<?>> {
+
     private final Tenant tenantId;
 
     InsuranceCertificateComparator(Tenant tenantId) {
@@ -27,7 +30,7 @@ public final class InsuranceCertificateComparator implements Comparator<Insuranc
     }
 
     @Override
-    public int compare(InsuranceCertificate o1, InsuranceCertificate o2) {
+    public int compare(InsuranceCertificate<?> o1, InsuranceCertificate<?> o2) {
         int value = 0;
         if ((o1.insurancePolicy().tenant().equals(tenantId)) && !(o2.insurancePolicy().tenant().equals(tenantId))) {
             value = -1;
@@ -51,11 +54,11 @@ public final class InsuranceCertificateComparator implements Comparator<Insuranc
             return value;
         }
 
-        value = o1.expiryDate().getValue() == null ? -1 : -(((Comparable) o1.expiryDate().getValue()).compareTo(o2.expiryDate().getValue()));
+        value = CompareHelper.compareTo(o1.expiryDate().getValue(), o1.expiryDate().getValue());
         if (value != 0) {
             return value;
         }
 
-        return -(((Comparable) o1.liabilityCoverage().getValue()).compareTo(o2.liabilityCoverage().getValue()));
+        return -((o1.liabilityCoverage().getValue()).compareTo(o2.liabilityCoverage().getValue()));
     }
 }

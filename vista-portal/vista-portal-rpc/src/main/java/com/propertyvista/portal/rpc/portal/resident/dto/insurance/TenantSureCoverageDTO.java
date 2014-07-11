@@ -22,16 +22,16 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.tenant.insurance.TenantSureCoverage;
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 
 @Transient
-public interface TenantSureCoverageDTO extends IEntity {
+public interface TenantSureCoverageDTO extends TenantSureCoverage {
 
     @I18n
     public enum PreviousClaims {
@@ -68,6 +68,11 @@ public interface TenantSureCoverageDTO extends IEntity {
     }
 
     @NotNull
+    IPrimitive<LogicalDate> inceptionDate();
+
+    // -- Personal & Contact Information
+
+    @NotNull
     @Caption(name = "Name")
     IPrimitive<String> tenantName();
 
@@ -75,6 +80,8 @@ public interface TenantSureCoverageDTO extends IEntity {
     @Editor(type = EditorType.phone)
     @Caption(name = "Phone")
     IPrimitive<String> tenantPhone();
+
+    // -- Coverage
 
     @Format("#,##0")
     @Editor(type = EditorType.money)
@@ -90,20 +97,15 @@ public interface TenantSureCoverageDTO extends IEntity {
     @NotNull
     IPrimitive<BigDecimal> deductible();
 
-    @NotNull
-    IPrimitive<LogicalDate> inceptionDate();
-
     // these are statement of fact questions
     @NotNull
     @Caption(name = "Number of previous claims")
     IPrimitive<PreviousClaims> numberOfPreviousClaims();
 
-    @Caption(name = "Is any tenant a smoker?")
-    @NotNull
-    IPrimitive<Boolean> smoker();
-
     @Caption
     @NotNull
     IPrimitive<TenantSurePaymentSchedule> paymentSchedule();
+
+    IPrimitive<String> renewalOfPolicyNumber();
 
 }

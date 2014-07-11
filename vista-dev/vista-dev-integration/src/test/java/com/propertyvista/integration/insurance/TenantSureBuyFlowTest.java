@@ -55,10 +55,8 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
         InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
 
-        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(
-                TenantSureInsurancePolicy.class, //
-                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), "Bob", "1234567",
-                        EntityFactory.create(CustomerSignature.class)));
+        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(TenantSureInsurancePolicy.class, //
+                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
 
         assertEquals("paymentDay", 5, tenantSurePolicy.paymentDay().getValue().intValue());
 
@@ -97,10 +95,8 @@ public class TenantSureBuyFlowTest extends InsuranceTestBase {
         InsurancePaymentMethod paymentMethod = createInsurancePaymentMethod(getLease()._applicant());
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod, getLease()._applicant());
 
-        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(
-                TenantSureInsurancePolicy.class, //
-                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), "Bob", "1234567",
-                        EntityFactory.create(CustomerSignature.class)));
+        TenantSureInsurancePolicy tenantSurePolicy = Persistence.service().retrieve(TenantSureInsurancePolicy.class, //
+                ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, getLease()._applicant(), EntityFactory.create(CustomerSignature.class)));
 
         assertEquals("paymentDay", 20, tenantSurePolicy.paymentDay().getValue().intValue());
 

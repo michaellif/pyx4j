@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.server.Executable;
@@ -26,18 +28,28 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.CancellationType;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 
 class TenantSureRenewal {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureRenewal.class);
 
     public void processRenewal(ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        LogicalDate renewalAniversary = new LogicalDate(DateUtils.addYears(runDate, -1));
+        processRenewalOffer(executionMonitor, runDate);
+        processBuyRenewal(executionMonitor, runDate);
+    }
+
+    private void processRenewalOffer(ExecutionMonitor executionMonitor, LogicalDate runDate) {
+        LogicalDate renewalAniversary = new LogicalDate(DateUtils.addDays(DateUtils.addYears(runDate, -1), 30)); //30 before year
         log.debug("run Renewal for {}", renewalAniversary);
         EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
-        criteria.ge(criteria.proto().certificate().inceptionDate(), renewalAniversary);
+        criteria.le(criteria.proto().certificate().inceptionDate(), renewalAniversary);
         criteria.eq(criteria.proto().status(), TenantSureStatus.Active);
         criteria.notExists(criteria.proto().renewal());
         ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
@@ -49,16 +61,16 @@ class TenantSureRenewal {
                     new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                         @Override
                         public Void execute() throws RuntimeException {
-                            renew(ts);
+                            createRenewOffer(ts);
                             return null;
                         }
                     });
 
-                    executionMonitor.addProcessedEvent("Renewal", "Participant Id " + ts.client().tenant().participantId().getValue() + "; Policy ID = "
+                    executionMonitor.addProcessedEvent("RenewalOffer", "Participant Id " + ts.client().tenant().participantId().getValue() + "; Policy ID = "
                             + ts.id().getValue() + "; Cert. Number = " + certificateNumber);
                 } catch (Throwable e) {
-                    log.error("failed to Renew TenatSure insurance certificate: (#{}) {}", certificateNumber, ts.client().tenant().participantId(), e);
-                    executionMonitor.addErredEvent("Renewal", "Participant Id " + ts.client().tenant().participantId().getValue() + "Policy ID = "
+                    log.error("failed to Renew Offer TenatSure insurance certificate: (#{}) {}", certificateNumber, ts.client().tenant().participantId(), e);
+                    executionMonitor.addErredEvent("RenewalOffer", "Participant Id " + ts.client().tenant().participantId().getValue() + "Policy ID = "
                             + ts.id().getValue() + "; Cert. Number = " + certificateNumber, e);
                 }
             }
@@ -67,7 +79,87 @@ class TenantSureRenewal {
         }
     }
 
-    private void renew(TenantSureInsurancePolicy originalInsurancePolicy) {
-        // TODO Auto-generated method stub
+    private void createRenewOffer(TenantSureInsurancePolicy originalInsurancePolicy) {
+        log.debug("create Renewal for {} Participant Id {}", originalInsurancePolicy.certificate().insuranceCertificateNumber(), originalInsurancePolicy
+                .client().tenant().participantId());
+
+        TenantSureCoverageDTO quotationRequest = restoreCoverage(originalInsurancePolicy);
+        quotationRequest.inceptionDate().setValue(new LogicalDate(DateUtils.addYears(originalInsurancePolicy.certificate().inceptionDate().getValue(), 1)));
+
+        quotationRequest.renewalOfPolicyNumber().setValue(originalInsurancePolicy.certificate().insuranceCertificateNumber().getValue());
+
+        TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest, originalInsurancePolicy.tenant());
+        if (!quote.specialQuote().isNull()) {
+            log.debug("unable to renew {}", quote.specialQuote());
+            return;
+        }
+        TenantSureInsurancePolicy newTenantSurePolicy = ServerSideFactory.create(TenantSureFacade.class).createDraftPolicy(quote,
+                originalInsurancePolicy.tenant());
+        newTenantSurePolicy.renewalOf().set(originalInsurancePolicy);
+        Persistence.service().persist(newTenantSurePolicy);
+
+        log.debug("Renewal for {} created {}", originalInsurancePolicy.certificate().insuranceCertificateNumber(), newTenantSurePolicy.quoteId());
+
+        Persistence.ensureRetrieve(newTenantSurePolicy.tenant(), AttachLevel.Attached);
+
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantSureRenewalEmail(newTenantSurePolicy.tenant().customer().person().email().getValue(),
+                newTenantSurePolicy);
+    }
+
+    private TenantSureCoverageDTO restoreCoverage(TenantSureInsurancePolicy originalInsurancePolicy) {
+        TenantSureCoverageDTO quotationRequest = originalInsurancePolicy.coverage().duplicate(TenantSureCoverageDTO.class);
+        quotationRequest.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
+
+        quotationRequest.contentsCoverage().setValue(originalInsurancePolicy.contentsCoverage().getValue());
+        quotationRequest.deductible().setValue(originalInsurancePolicy.deductible().getValue());
+        quotationRequest.personalLiabilityCoverage().setValue(originalInsurancePolicy.certificate().liabilityCoverage().getValue());
+        return quotationRequest;
+
+    }
+
+    private void processBuyRenewal(ExecutionMonitor executionMonitor, LogicalDate runDate) {
+        log.debug("run Buy Renewal for {}", runDate);
+        EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
+        criteria.le(criteria.proto().certificate().inceptionDate(), runDate);
+        criteria.eq(criteria.proto().status(), TenantSureStatus.Draft);
+        criteria.eq(criteria.proto().renewalOf().status(), TenantSureStatus.Active);
+        ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        try {
+            while (iterator.hasNext()) {
+                final TenantSureInsurancePolicy ts = iterator.next();
+                String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
+                try {
+                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() throws RuntimeException {
+                            buyRenewalInsurance(ts);
+                            return null;
+                        }
+                    });
+
+                    executionMonitor.addProcessedEvent("RenewalBuy", "Participant Id " + ts.client().tenant().participantId().getValue() + "; Policy ID = "
+                            + ts.id().getValue() + "; Cert. Number = " + certificateNumber);
+                } catch (Throwable e) {
+                    log.error("failed to Buy Renewal of TenatSure insurance certificate: (#{}) {}", certificateNumber, ts.client().tenant().participantId(), e);
+                    executionMonitor.addErredEvent("RenewalBuy", "Participant Id " + ts.client().tenant().participantId().getValue() + "Policy ID = "
+                            + ts.id().getValue() + "; Cert. Number = " + certificateNumber, e);
+                }
+            }
+        } finally {
+            iterator.close();
+        }
+    }
+
+    private void buyRenewalInsurance(TenantSureInsurancePolicy insurancePolicy) {
+        Persistence.ensureRetrieve(insurancePolicy.renewalOf(), AttachLevel.Attached);
+        log.debug("buy Renewal for {}, quoteId {} Participant Id {}", insurancePolicy.renewalOf().certificate().insuranceCertificateNumber(),
+                insurancePolicy.quoteId(), insurancePolicy.client().tenant().participantId());
+        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(insurancePolicy);
+
+        insurancePolicy.renewalOf().status().setValue(TenantSureStatus.Cancelled);
+        insurancePolicy.renewalOf().cancellation().setValue(CancellationType.Renewed);
+        insurancePolicy.renewalOf().cancellationDate().setValue(SystemDateManager.getLogicalDate());
+        insurancePolicy.renewalOf().certificate().expiryDate().setValue(insurancePolicy.certificate().inceptionDate().getValue());
+        Persistence.service().persist(insurancePolicy.renewalOf());
     }
 }
