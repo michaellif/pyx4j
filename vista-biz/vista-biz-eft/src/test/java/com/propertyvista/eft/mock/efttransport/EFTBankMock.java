@@ -71,6 +71,15 @@ class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     private final List<DirectDebitRecord> scheduledBmoRecords = new ArrayList<DirectDebitRecord>();
 
+    void reset() {
+        receivedPadFile.clear();
+        unprocessedRecords.clear();
+        reconciliationRecords.clear();
+        scheduledBmoRecords.clear();
+        acknowledgment.reset();
+        reconciliation.reset();
+    }
+
     void receivedPadFile(FundsTransferFile padFile) throws SftpTransportConnectionException, FileCreationException {
         if (connectionErrorEnabled) {
             throw new SftpTransportConnectionException("Connection error Mock", null);

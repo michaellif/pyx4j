@@ -41,6 +41,10 @@ class EFTBankMockReconciliation implements ScheduledResponseReconciliation.Handl
         MockEventBus.addHandler(ScheduledResponseReconciliation.class, this);
     }
 
+    void reset() {
+        transactionsScheduled.clear();
+    }
+
     @Override
     public void scheduleTransactionReconciliationResponse(ScheduledResponseReconciliation event) {
         log.debug("schedule transaction reject in Reconciliation for transactionId:{}", event.transactionId);

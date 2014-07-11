@@ -32,7 +32,7 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
 
     public static void init() {
         // Initialize listeners
-        EFTBankMock.instance();
+        EFTBankMock.instance().reset();
     }
 
     @Override

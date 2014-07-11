@@ -45,6 +45,11 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
         MockEventBus.addHandler(ScheduledResponseAckMerchant.class, this);
     }
 
+    void reset() {
+        transactionsScheduled.clear();
+        merchantScheduled.clear();
+    }
+
     @Override
     public void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAckTransaction event) {
         log.debug("schedule transaction reject in acknowledgment for transactionId:{}", event.transactionId);
@@ -124,4 +129,5 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
         }
         return ackFile;
     }
+
 }

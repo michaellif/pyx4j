@@ -29,7 +29,7 @@ public class CreditCardPaymentProcessorFacadeMock implements CreditCardPaymentPr
 
     public static void init() {
         // Initialize listeners
-        PCIMock.instance();
+        PCIMock.instance().reset();
     }
 
     @Override

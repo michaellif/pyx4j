@@ -61,6 +61,12 @@ class PCIMock {
     private PCIMock() {
     }
 
+    void reset() {
+        accounts.clear();
+        accountsByInstrument.clear();
+        accountsByTransaction.clear();
+    }
+
     CardAccountMock getAccount(PaymentInstrument paymentInstrument) {
         if (paymentInstrument.isInstanceOf(TokenPaymentInstrument.class)) {
             return accountsByInstrument.get("T" + paymentInstrument.<TokenPaymentInstrument> cast().code().getValue());
