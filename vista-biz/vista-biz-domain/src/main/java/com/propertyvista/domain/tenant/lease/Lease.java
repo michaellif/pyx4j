@@ -193,7 +193,7 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
     @NotNull
     @ToString(index = 0)
     @Length(14)
-    @Indexed(uniqueConstraint = true, ignoreCase = true, group = { "c,2" })
+    @Indexed(uniqueConstraint = true, ignoreCase = true, group = { "c,1" })
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> leaseId();
 
