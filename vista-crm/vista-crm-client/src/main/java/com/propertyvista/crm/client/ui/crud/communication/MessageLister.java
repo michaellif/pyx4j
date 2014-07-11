@@ -48,6 +48,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
                 new MemberColumnDescriptor.Builder(proto.date()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.subject()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.topic(), false).searchable(true).build(),
+                new MemberColumnDescriptor.Builder(proto.topic().category(), false).searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto.allowedReply()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.status()).searchable(false).build() };
       //@formatter:on

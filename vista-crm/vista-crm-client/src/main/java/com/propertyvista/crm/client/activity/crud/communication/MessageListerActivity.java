@@ -26,6 +26,8 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.communication.MessageListerView;
 import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MessageDTO;
 
@@ -44,7 +46,12 @@ public class MessageListerActivity extends AbstractListerActivity<MessageDTO> {
     @Override
     protected void parseExternalFilters(AppPlace place, Class<MessageDTO> entityClass, EntityFiltersBuilder<MessageDTO> filters) {
         super.parseExternalFilters(place, entityClass, filters);
-        filters.eq(filters.proto().topic(), ((Message) place).getMessageCategory());
+        MessageCategory mc = ((Message) place).getMessageCategory();
+        if (mc == null) {
+            filters.eq(filters.proto().topic().category(), MessageGroupCategory.Custom);
+        } else {
+            filters.eq(filters.proto().topic(), mc);
+        }
 
     }
 }

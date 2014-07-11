@@ -64,6 +64,9 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         if (path.equals(toProto.topic().getPath().toString())) {
             return boProto.thread().topic().getPath();
         }
+        if (path.equals(toProto.topic().category().getPath().toString())) {
+            return boProto.thread().topic().category().getPath();
+        }
         if (path.equals(toProto.content().$().recipients().$().isRead().getPath().toString()) || path.equals(toProto.isRead().getPath().toString())) {
             return boProto.recipients().$().isRead().getPath();
         }
