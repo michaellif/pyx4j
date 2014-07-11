@@ -14,12 +14,17 @@
 package com.propertyvista.crm.client.ui.crud.communication;
 
 import com.pyx4j.entity.core.EntityFactory;
+import com.pyx4j.entity.core.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.rpc.CrmSiteMap.Communication.Message;
+import com.propertyvista.domain.communication.MessageCategory;
+import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.dto.MessageDTO;
 
 public class MessageLister extends AbstractLister<MessageDTO> {
@@ -31,8 +36,7 @@ public class MessageLister extends AbstractLister<MessageDTO> {
         setDataTableModel(new DataTableModel<MessageDTO>(createColumnDescriptors()));
 
         getDataTablePanel().setFilteringEnabled(false);
-        //getDataTablePanel().getFilterButton().setTextLabel(i18n.tr("Select Communication Topic"));
-        // No filtering work for it
+        // No sorting work for it
         getDataTablePanel().getDataTable().setHasColumnClickSorting(false);
     }
 
@@ -54,4 +58,16 @@ public class MessageLister extends AbstractLister<MessageDTO> {
       //@formatter:on
     }
 
+    @Override
+    protected EntityListCriteria<MessageDTO> updateCriteria(EntityListCriteria<MessageDTO> criteria) {
+        com.pyx4j.site.client.ui.prime.IPrimePane.Presenter p = getPresenter();
+        AppPlace place = p.getPlace();
+        MessageCategory mc = ((Message) place).getMessageCategory();
+        if (mc == null) {
+            criteria.eq(criteria.proto().topic().category(), MessageGroupCategory.Custom);
+        } else {
+            criteria.eq(criteria.proto().topic(), mc);
+        }
+        return super.updateCriteria(criteria);
+    }
 }
