@@ -578,7 +578,7 @@ public abstract class CComponent<SELF_TYPE extends CComponent<SELF_TYPE, DATA_TY
     }
 
     public boolean isValueEmpty() {
-        return getValue() == null;
+        return getValue() == null || (getValue() instanceof IEntity && ((IEntity) getValue()).isNull());
     }
 
     public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
