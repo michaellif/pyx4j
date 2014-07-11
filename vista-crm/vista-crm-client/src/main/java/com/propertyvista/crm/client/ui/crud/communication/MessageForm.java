@@ -411,36 +411,6 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
             communicationEndpointSelector.addItem(proto);
         }
 
-        private String buildForwardText(MessageDTO currentMessage) {
-            if (currentMessage == null) {
-                return null;
-            }
-            StringBuffer bodyText = new StringBuffer();
-            StringBuffer buffer = null;
-            new StringBuffer();
-            for (CommunicationEndpointDTO recipient : currentMessage.to()) {
-                if (buffer == null) {
-                    buffer = new StringBuffer();
-                } else {
-                    buffer.append(", ");
-                }
-                buffer.append(recipient.name().getValue());
-            }
-
-            bodyText.append("\nFrom: ");
-            bodyText.append(currentMessage.sender().name().getValue());
-            bodyText.append("\nDate: ");
-            bodyText.append(currentMessage.date().getStringView());
-            bodyText.append("\nSubject: ");
-            bodyText.append(currentMessage.subject().getValue());
-            bodyText.append("\nTo: ");
-            bodyText.append(buffer.toString());
-            bodyText.append("\n\nFw:\n");
-            bodyText.append(currentMessage.text().getValue());
-
-            return bodyText.toString();
-        }
-
         private MessageDTO getCurrent() {
             CFolderItem<MessageDTO> current = (CFolderItem<MessageDTO>) getParent();
             return current.getValue();
@@ -522,9 +492,7 @@ public class MessageForm extends CrmEntityForm<MessageDTO> {
                         MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true));
                     } else {
                         MessageDTO currentMessage = getCurrent();
-                        String forwardSubject = currentMessage == null ? null : "\nFw:\n" + currentMessage.subject().getValue();
-                        String forwardText = buildForwardText(currentMessage);
-                        CrudAppPlace place = new CrmSiteMap.Communication.Message(forwardSubject, forwardText);
+                        CrudAppPlace place = new CrmSiteMap.Communication.Message(currentMessage);
                         place.setType(Type.editor);
                         AppSite.getPlaceController().goTo(place);
                     }

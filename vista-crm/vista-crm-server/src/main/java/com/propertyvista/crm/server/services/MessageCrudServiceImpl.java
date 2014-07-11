@@ -34,6 +34,7 @@ import com.pyx4j.entity.core.criterion.PropertyCriterion;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
 import com.propertyvista.biz.communication.CommunicationMessageFacade;
 import com.propertyvista.crm.rpc.services.MessageCrudService;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.communication.CommunicationThread;
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
 import com.propertyvista.domain.communication.DeliveryHandle;
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.domain.communication.MessageAttachment;
 import com.propertyvista.domain.communication.MessageCategory.MessageGroupCategory;
 import com.propertyvista.domain.communication.SystemEndpoint.SystemEndpointName;
 import com.propertyvista.domain.company.Employee;
@@ -115,12 +117,76 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         dto.sender().set((ServerSideFactory.create(CommunicationMessageFacade.class).generateEndpointDTO(CrmAppContext.getCurrentUser())));
 
         if (initializationData instanceof MessageInitializationData) {
-            dto.text().set(((MessageInitializationData) initializationData).initalizedText());
-            dto.subject().set(((MessageInitializationData) initializationData).initalizedSubject());
-        }
+            MessageInitializationData data = (MessageInitializationData) initializationData;
+            if (data.forwardedMessage() != null && !data.forwardedMessage().isNull()) {
+                MessageDTO forwardedMessage = data.forwardedMessage();
+                if (forwardedMessage != null) {
+                    dto.subject().setValue(buildForwardSubject(forwardedMessage));
+                    dto.text().setValue(buildForwardText(forwardedMessage));
+                    dto.hasAttachments().set(forwardedMessage.hasAttachments());
 
+                    if (forwardedMessage.hasAttachments().getValue(false).booleanValue()) {
+                        for (MessageAttachment fromAtt : forwardedMessage.attachments()) {
+                            MessageAttachment toAtt = EntityFactory.create(MessageAttachment.class);
+                            toAtt.description().set(fromAtt.description());
+                            toAtt.file().set(fromAtt.file());
+                            FileUploadRegistry.register(fromAtt.file());
+                            dto.attachments().add(toAtt);
+                        }
+                    }
+                }
+            }
+        }
         return dto;
 
+    }
+
+    private String buildForwardSubject(MessageDTO currentMessage) {
+        if (currentMessage == null || currentMessage.thread() == null || currentMessage.thread().subject() == null) {
+            return null;
+        }
+
+        String result = currentMessage.thread().subject().getValue() == null ? "" : currentMessage.thread().subject().getValue();
+        if (result.startsWith("Fwd: ")) {
+            return result;
+        }
+
+        if (result.startsWith("Re: ")) {
+            result = result.substring(3);
+        }
+
+        return "Fwd: " + result;
+    }
+
+    private String buildForwardText(MessageDTO currentMessage) {
+        if (currentMessage == null) {
+            return null;
+        }
+        StringBuffer bodyText = new StringBuffer();
+        StringBuffer buffer = null;
+        new StringBuffer();
+        for (CommunicationEndpointDTO recipient : currentMessage.to()) {
+            if (buffer == null) {
+                buffer = new StringBuffer();
+            } else {
+                buffer.append(", ");
+            }
+            buffer.append(recipient.name().getValue());
+        }
+
+        bodyText.append("\n---------- Forwarded message ----------");
+        bodyText.append("\nFrom: ");
+        bodyText.append(currentMessage.sender().name().getValue());
+        bodyText.append("\nDate: ");
+        bodyText.append(currentMessage.date().getStringView());
+        bodyText.append("\nSubject: ");
+        bodyText.append(currentMessage.subject().getValue());
+        bodyText.append("\nTo: ");
+        bodyText.append(buffer.toString());
+        bodyText.append("\n\nFwd:\n");
+        bodyText.append(currentMessage.text().getValue());
+
+        return bodyText.toString();
     }
 
     @Override
@@ -331,6 +397,7 @@ public class MessageCrudServiceImpl extends AbstractCrudServiceDtoImpl<Message, 
         messageDTO.thread().setAttachLevel(AttachLevel.Attached);
         messageDTO.thread().set(m.thread());
         messageDTO.attachments().set(m.attachments());
+        messageDTO.hasAttachments().setValue(m.attachments().size() > 0);
         messageDTO.highImportance().set(m.highImportance());
         messageDTO.sender().setAttachLevel(AttachLevel.Attached);
         messageDTO.sender().set((communicationFacade.generateEndpointDTO(m.sender())));

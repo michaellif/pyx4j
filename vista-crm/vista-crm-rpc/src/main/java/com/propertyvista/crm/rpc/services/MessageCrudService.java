@@ -16,7 +16,6 @@ package com.propertyvista.crm.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.core.IPrimitive;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.communication.CommunicationThread.ThreadStatus;
@@ -32,8 +31,6 @@ public interface MessageCrudService extends AbstractCrudService<MessageDTO> {
     @Transient
     public static interface MessageInitializationData extends InitializationData {
 
-        IPrimitive<String> initalizedText();
-
-        IPrimitive<String> initalizedSubject();
+        MessageDTO forwardedMessage();
     }
 }

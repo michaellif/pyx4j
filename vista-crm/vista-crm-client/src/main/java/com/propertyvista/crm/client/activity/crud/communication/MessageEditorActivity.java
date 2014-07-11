@@ -46,8 +46,7 @@ public class MessageEditorActivity extends CrmEditorActivity<MessageDTO> impleme
     @Override
     protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         MessageInitializationData initData = EntityFactory.create(MessageInitializationData.class);
-        initData.initalizedText().setValue(place.getForwardText());
-        initData.initalizedSubject().setValue(place.getForwardSubject());
+        initData.forwardedMessage().set(place.getForwardedMessage());
         callback.onSuccess(initData);
     }
 }

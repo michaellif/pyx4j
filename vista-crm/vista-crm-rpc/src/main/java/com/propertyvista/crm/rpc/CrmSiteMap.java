@@ -29,6 +29,7 @@ import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
+import com.propertyvista.dto.MessageDTO;
 
 public class CrmSiteMap implements SiteMap {
 
@@ -604,34 +605,27 @@ public class CrmSiteMap implements SiteMap {
     public static class Communication extends AppPlace {
         @PlaceProperties(navigLabel = "Messages")
         public static class Message extends CrmCrudAppPlace {
-            private MessageCategory source;
+            private MessageCategory filterByCategory;
 
-            private String forwardText;
-
-            private String forwardSubject;
-
-            public Message(MessageCategory source) {
-                this.source = source;
-            }
+            private MessageDTO forwardedMessage;
 
             public Message() {
             }
 
+            public Message(MessageCategory filterByCategory) {
+                this.filterByCategory = filterByCategory;
+            }
+
             public MessageCategory getMessageCategory() {
-                return source;
+                return filterByCategory;
             }
 
-            public Message(String forwardSubject, String forwardText) {
-                this.forwardText = forwardText;
-                this.forwardSubject = forwardSubject;
+            public Message(MessageDTO forwardedMessage) {
+                this.forwardedMessage = forwardedMessage;
             }
 
-            public String getForwardText() {
-                return forwardText;
-            }
-
-            public String getForwardSubject() {
-                return forwardSubject;
+            public MessageDTO getForwardedMessage() {
+                return forwardedMessage;
             }
         }
 

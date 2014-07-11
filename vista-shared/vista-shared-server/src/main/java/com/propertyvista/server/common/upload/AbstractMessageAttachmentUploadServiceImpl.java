@@ -26,7 +26,6 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.blob.MessageAttachmentBlob;
-import com.propertyvista.domain.blob.MaintenanceRequestPictureBlob;
 
 public class AbstractMessageAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, MessageAttachmentBlob> {
     public AbstractMessageAttachmentUploadServiceImpl() {
@@ -39,12 +38,12 @@ public class AbstractMessageAttachmentUploadServiceImpl extends AbstractUploadSe
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(MaintenanceRequestPictureBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(MessageAttachmentBlob.class).data().getMeta().getLength();
     }
 
     @Override
     public String getUploadFileTypeName() {
-        return i18n.tr("Maintenance Request Picture");
+        return i18n.tr("Message Attachment");
     }
 
     @Override
