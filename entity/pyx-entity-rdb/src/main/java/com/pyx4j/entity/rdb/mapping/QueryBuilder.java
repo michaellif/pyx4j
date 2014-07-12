@@ -334,7 +334,6 @@ public class QueryBuilder<T extends IEntity> {
                 sqlOperator = " != ? ";
                 break;
             case IN:
-                criterionSql.append(" IN (");
                 Collection<?> items;
                 if (bindHolder.bindValue.getClass().isArray()) {
                     items = Arrays.asList((Object[]) bindHolder.bindValue);
@@ -343,21 +342,49 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     throw new RuntimeException("Unsupported Type for IN " + bindHolder.bindValue.getClass().getName());
                 }
-                boolean first = true;
-                for (Object item : items) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        criterionSql.append(",");
-                    }
-                    criterionSql.append(" ? ");
+                if (items.isEmpty()) {
+                    criterionSql.append(" FALSE ");
+                } else {
+                    criterionSql.append(" IN (");
+                    boolean first = true;
+                    ValueBindAdapter itemsAdapter = bindHolder.adapter;
+                    BindHolder secondColumnBindHolder = null;
+                    for (Object item : items) {
+                        if (first) {
 
-                    BindHolder itemBindHolder = new BindHolder();
-                    itemBindHolder.adapter = bindHolder.adapter;
-                    itemBindHolder.bindValue = item;
-                    bindParams.add(itemBindHolder);
+                            if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
+                                // Replace the adapter for values.
+                                itemsAdapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
+
+                                // Prepare  Discriminator parameter
+                                // TODO make a better access to DiscriminatorQueryValueBindAdapter
+                                IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
+
+                                secondColumnBindHolder = new BindHolder();
+                                secondColumnBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
+                                        propertyCriterion.getRestriction(), entityProto);
+
+                                secondColumnBindHolder.bindValue = entityProto;
+                            }
+
+                            first = false;
+                        } else {
+                            criterionSql.append(",");
+                        }
+                        criterionSql.append(" ? ");
+
+                        BindHolder itemBindHolder = new BindHolder();
+                        itemBindHolder.adapter = itemsAdapter;
+                        itemBindHolder.bindValue = item;
+                        bindParams.add(itemBindHolder);
+                    }
+                    criterionSql.append(")");
+
+                    if (secondColumnBindHolder != null) {
+                        criterionSql.append(" AND ").append(secondPersistenceName).append(" = ? ");
+                        bindParams.add(secondColumnBindHolder);
+                    }
                 }
-                criterionSql.append(")");
                 return;
             case RDB_LIKE:
                 if (bindHolder.bindValue != null) {

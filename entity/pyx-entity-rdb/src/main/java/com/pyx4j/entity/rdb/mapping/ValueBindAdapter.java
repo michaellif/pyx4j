@@ -28,6 +28,9 @@ import com.pyx4j.entity.rdb.PersistenceContext;
 
 public interface ValueBindAdapter {
 
+    /**
+     * The oder defines the order of columns in index.
+     */
     List<String> getColumnNames(String memberSqlName);
 
     int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException;

@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.entity.core.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.rdb.PersistenceContext;
@@ -42,10 +42,7 @@ class ValueAdapterGeoPoint implements ValueAdapter {
 
     @Override
     public List<String> getColumnNames(String memberSqlName) {
-        List<String> columnNames = new Vector<String>();
-        columnNames.add(memberSqlName + "_lat");
-        columnNames.add(memberSqlName + "_lng");
-        return columnNames;
+        return Arrays.asList(memberSqlName + "_lat", memberSqlName + "_lng");
     }
 
     @Override

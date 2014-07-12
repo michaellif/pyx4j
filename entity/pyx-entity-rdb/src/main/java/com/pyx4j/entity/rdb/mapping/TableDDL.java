@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,11 +49,11 @@ import com.pyx4j.entity.server.AdapterFactory;
 
 class TableDDL {
 
-    private static class IndexColumnDef {
+    private static class IndexColumnDef implements Comparable<IndexColumnDef> {
 
         final String position;
 
-        final String positionSorting;
+        final int secondaryColumnNumber;
 
         final boolean ignoreCase;
 
@@ -60,14 +61,28 @@ class TableDDL {
 
         public IndexColumnDef(String position, int secondaryColumnNumber, boolean ignoreCase, MemberOperationsMeta member) {
             this.position = position;
+            this.secondaryColumnNumber = secondaryColumnNumber;
             this.ignoreCase = ignoreCase;
             this.member = member;
-            this.positionSorting = position + secondaryColumnNumber;
         }
 
         @Override
         public String toString() {
             return member.getMemberName();
+        }
+
+        @Override
+        public int compareTo(IndexColumnDef o) {
+            int compare = this.position.compareTo(o.position);
+            if (compare != 0) {
+                return compare;
+            } else {
+                return Integer.valueOf(this.secondaryColumnNumber).compareTo(Integer.valueOf(o.secondaryColumnNumber));
+            }
+        }
+
+        String getPositionSorting() {
+            return position + "~" + secondaryColumnNumber;
         }
     }
 
@@ -79,7 +94,8 @@ class TableDDL {
 
         boolean uniqueConstraint;
 
-        Map<String, IndexColumnDef> columns = new HashMap<String, IndexColumnDef>();
+        // Sported by insertion-order
+        Map<String, IndexColumnDef> columns = new LinkedHashMap<>();
 
         @Override
         public String toString() {
@@ -386,12 +402,12 @@ class TableDDL {
         if (ApplicationMode.isDevelopment()) {
             Map<String, IndexColumnDef> positions = new HashMap<>();
             for (IndexColumnDef def : indexDef.columns.values()) {
-                if (positions.containsKey(def.positionSorting)) {
+                if (positions.containsKey(def.getPositionSorting())) {
                     throw new Error("@Index declaration error on table '" + tableModel.entityMeta().getEntityClass().getSimpleName() + "' duplicate position '"
                             + def.position + "' on column '" + def.member.getMemberName() + "'" //
-                            + " and column '" + positions.get(def.positionSorting).member.getMemberName() + "'");
+                            + " and column '" + positions.get(def.getPositionSorting()).member.getMemberName() + "'");
                 }
-                positions.put(def.positionSorting, def);
+                positions.put(def.getPositionSorting(), def);
             }
         }
 
@@ -399,7 +415,7 @@ class TableDDL {
 
             @Override
             public int compare(String o1, String o2) {
-                return indexDef.columns.get(o1).positionSorting.compareTo(indexDef.columns.get(o2).positionSorting);
+                return indexDef.columns.get(o1).compareTo(indexDef.columns.get(o2));
             }
         });
 
