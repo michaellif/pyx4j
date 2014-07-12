@@ -349,6 +349,7 @@ public class QueryBuilder<T extends IEntity> {
                 if (items.isEmpty()) {
                     criterionSql.append(" FALSE ");
                 } else {
+                    criterionSql.append(" IN (");
                     boolean first = true;
                     ValueBindAdapter itemsAdapter = bindHolder.adapter;
                     BindHolder secondColumnBindHolder = null;
@@ -369,8 +370,6 @@ public class QueryBuilder<T extends IEntity> {
 
                                 secondColumnBindHolder.bindValue = entityProto;
                             }
-
-                            criterionSql.append(" IN (");
 
                             first = false;
                         } else {
