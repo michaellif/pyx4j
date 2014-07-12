@@ -24,12 +24,12 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
@@ -103,10 +103,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     @Override
     public List<String> getColumnNames(String memberSqlName) {
-        List<String> columnNames = new Vector<String>();
-        columnNames.add(getDiscriminatorColumnName(memberSqlName));
-        columnNames.add(memberSqlName);
-        return columnNames;
+        return Arrays.asList(memberSqlName, getDiscriminatorColumnName(memberSqlName));
     }
 
     @Override
@@ -133,14 +130,14 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         IEntity childEntity = (IEntity) value;
         Key primaryKey = childEntity.getPrimaryKey();
         if (primaryKey == null) {
-            stmt.setNull(parameterIndex, sqlTypeDiscriminator);
-            stmt.setNull(parameterIndex + 1, sqlTypeKey);
+            stmt.setNull(parameterIndex, sqlTypeKey);
+            stmt.setNull(parameterIndex + 1, sqlTypeDiscriminator);
         } else {
             assert impClasses.containsValue(childEntity.getInstanceValueClass()) : "Unexpected class " + childEntity.getInstanceValueClass() + "\n"
                     + impClasses.values() + "\n" + value;
             DiscriminatorValue discriminator = childEntity.getInstanceValueClass().getAnnotation(DiscriminatorValue.class);
-            stmt.setString(parameterIndex, discriminator.value());
-            stmt.setLong(parameterIndex + 1, primaryKey.asLong());
+            stmt.setLong(parameterIndex, primaryKey.asLong());
+            stmt.setString(parameterIndex + 1, discriminator.value());
         }
         return 2;
     }
@@ -180,9 +177,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
         @Override
         public List<String> getColumnNames(String memberSqlName) {
-            List<String> columnNames = new Vector<String>();
-            columnNames.add(memberSqlName + discriminatorColumnNameSufix);
-            return columnNames;
+            return Arrays.asList(memberSqlName + discriminatorColumnNameSufix);
         }
     }
 

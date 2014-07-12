@@ -350,27 +350,24 @@ public class QueryBuilder<T extends IEntity> {
                     criterionSql.append(" FALSE ");
                 } else {
                     boolean first = true;
+                    ValueBindAdapter itemsAdapter = bindHolder.adapter;
+                    BindHolder secondColumnBindHolder = null;
                     for (Object item : items) {
                         if (first) {
 
                             if (bindHolder.adapter instanceof ValueAdapterEntityPolymorphic) {
-                                // Add Discriminator parameter
-                                criterionSql.append(" = ? ");
+                                // Replace the adapter for values.
+                                itemsAdapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
 
+                                // Prepare  Discriminator parameter
                                 // TODO make a better access to DiscriminatorQueryValueBindAdapter
                                 IEntity entityProto = EntityFactory.getEntityPrototype(((IEntity) item).getInstanceValueClass());
 
-                                BindHolder itemBindHolder = new BindHolder();
-                                itemBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
+                                secondColumnBindHolder = new BindHolder();
+                                secondColumnBindHolder.adapter = ((ValueAdapterEntityPolymorphic) bindHolder.adapter).getQueryValueBindAdapter(
                                         propertyCriterion.getRestriction(), entityProto);
 
-                                itemBindHolder.bindValue = entityProto;
-                                bindParams.add(itemBindHolder);
-
-                                criterionSql.append(" AND ").append(secondPersistenceName);
-
-                                // Replace the adapter for values.
-                                bindHolder.adapter = new ValueAdapterEntity.QueryByEntityValueBindAdapter(dialect.getTargetSqlType(Long.class));
+                                secondColumnBindHolder.bindValue = entityProto;
                             }
 
                             criterionSql.append(" IN (");
@@ -382,11 +379,16 @@ public class QueryBuilder<T extends IEntity> {
                         criterionSql.append(" ? ");
 
                         BindHolder itemBindHolder = new BindHolder();
-                        itemBindHolder.adapter = bindHolder.adapter;
+                        itemBindHolder.adapter = itemsAdapter;
                         itemBindHolder.bindValue = item;
                         bindParams.add(itemBindHolder);
                     }
                     criterionSql.append(")");
+
+                    if (secondColumnBindHolder != null) {
+                        criterionSql.append(" AND ").append(secondPersistenceName).append(" = ? ");
+                        bindParams.add(secondColumnBindHolder);
+                    }
                 }
                 return;
             case RDB_LIKE:

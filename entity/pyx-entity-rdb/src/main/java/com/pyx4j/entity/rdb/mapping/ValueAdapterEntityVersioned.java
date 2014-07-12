@@ -24,10 +24,10 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.core.EntityFactory;
@@ -55,10 +55,7 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
 
     @Override
     public List<String> getColumnNames(String memberSqlName) {
-        List<String> columnNames = new Vector<String>();
-        columnNames.add(memberSqlName);
-        columnNames.add(memberSqlName + FOR_DATE_COLUNM_NAME_SUFIX);
-        return columnNames;
+        return Arrays.asList(memberSqlName, memberSqlName + FOR_DATE_COLUNM_NAME_SUFIX);
     }
 
     @Override
@@ -129,9 +126,7 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
 
                 @Override
                 public List<String> getColumnNames(String memberSqlName) {
-                    List<String> columnNames = new Vector<String>();
-                    columnNames.add(memberSqlName);
-                    return columnNames;
+                    return Arrays.asList(memberSqlName);
                 }
 
                 @Override
