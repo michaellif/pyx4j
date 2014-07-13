@@ -118,6 +118,12 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
         }
     }
 
+    public static void registerUserActivity() {
+        if (instance != null) {
+            instance.lastActivity = System.currentTimeMillis();
+        }
+    }
+
     protected SessionMonitor() {
         RPCManager.addRPCStatusChangeHandler(this);
         if (HTML5Storage.isSupported()) {
