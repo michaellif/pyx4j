@@ -392,6 +392,11 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        return method.isAnnotationPresent(annotationClass);
+    }
+
+    @Override
     public String getFormat() {
         Format formatAnnotation = method.getAnnotation(Format.class);
         if (formatAnnotation != null) {
@@ -440,11 +445,6 @@ public class MemberMetaImpl implements MemberMeta {
     public List<Validator> getValidators() {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass) {
-        return method.isAnnotationPresent(annotationClass);
     }
 
     @Override

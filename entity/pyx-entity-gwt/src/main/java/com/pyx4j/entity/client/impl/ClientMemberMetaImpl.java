@@ -227,6 +227,22 @@ public class ClientMemberMetaImpl implements MemberMeta {
         throw new UnsupportedOperationException();
     }
 
+    public void addAnnotation(Class<? extends Annotation> annotationClass) {
+        if (annotations == null) {
+            annotations = new HashSet<Class<?>>();
+        }
+        annotations.add(annotationClass);
+    }
+
+    @Override
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        if (annotations == null) {
+            return false;
+        } else {
+            return annotations.contains(annotationClass);
+        }
+    }
+
     @Override
     public String getFormat() {
         return data.format;
@@ -260,22 +276,6 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     public void setEditorType(EditorType editorType) {
         this.editorType = editorType;
-    }
-
-    public void addValidatorAnnotation(Class<? extends Annotation> annotationClass) {
-        if (annotations == null) {
-            annotations = new HashSet<Class<?>>();
-        }
-        annotations.add(annotationClass);
-    }
-
-    @Override
-    public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass) {
-        if (annotations == null) {
-            return false;
-        } else {
-            return annotations.contains(annotationClass);
-        }
     }
 
 }

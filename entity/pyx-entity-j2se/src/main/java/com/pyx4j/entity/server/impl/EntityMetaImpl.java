@@ -289,6 +289,12 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public MemberMeta getMemberMeta(String memberName) {
         MemberMeta memberMeta = membersMeta.get(memberName);
         if (memberMeta == null) {
@@ -478,5 +484,4 @@ public class EntityMetaImpl implements EntityMeta {
     public String toString() {
         return "EntityMeta " + entityClass.getSimpleName();
     }
-
 }

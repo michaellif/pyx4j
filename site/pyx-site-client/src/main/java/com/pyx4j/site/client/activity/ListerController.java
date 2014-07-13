@@ -25,13 +25,17 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.SecurityEnabled;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.criterion.Criterion;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
@@ -186,7 +190,11 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
      */
     @Override
     public boolean canCreateNewItem() {
-        return true;
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            return SecurityController.check(DataModelPermission.permissionCreate(getEntityClass()));
+        } else {
+            return true;
+        }
     }
 
     @Override

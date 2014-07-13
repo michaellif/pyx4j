@@ -266,7 +266,7 @@ public class EntityPojoWrapperGenerator {
                     } else if (memberMeta.getObjectClassType() == ObjectClassType.PrimitiveSet) {
                         addAnnotationValue(memberGet, XmlElementWrapper.class, "name", memberName);
                         addXmlElementsAnnotationValue(memberGet, "item", null);
-                    } else if (memberMeta.isValidatorAnnotationPresent(NotNull.class)) {
+                    } else if (memberMeta.isAnnotationPresent(NotNull.class)) {
                         addAnnotationValue(memberGet, XmlElement.class, "required", true);
                     }
                 }

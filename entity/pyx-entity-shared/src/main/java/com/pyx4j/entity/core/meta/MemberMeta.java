@@ -142,8 +142,17 @@ public interface MemberMeta {
      * 
      * Returns this element's annotation for the specified type if such an annotation is
      * present, else null.
+     * 
+     * in GWT use isAnnotationPresent
      */
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
+
+    /**
+     * @param annotationClass
+     *            that was marked with GwtAnnotation
+     * @return true if Entity was Annotated with this annotation
+     */
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass);
 
     /**
      * @see com.pyx4j.entity.annotations.Format
@@ -159,7 +168,5 @@ public interface MemberMeta {
     public EditorType getEditorType();
 
     public List<Validator> getValidators();
-
-    public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass);
 
 }

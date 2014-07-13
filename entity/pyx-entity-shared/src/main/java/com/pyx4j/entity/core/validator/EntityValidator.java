@@ -70,10 +70,10 @@ public class EntityValidator {
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             IObject<?> member = entity.getMember(memberName);
-            if ((memberMeta.isValidatorAnnotationPresent(NotNull.class)) && (member.isNull())) {
+            if ((memberMeta.isAnnotationPresent(NotNull.class)) && (member.isNull())) {
                 throw new RuntimeException(i18n.tr("{0} is required", formatter.format(entity, member)));
             }
-            if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
+            if (memberMeta.isAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
                 String value = (String) member.getValue();
                 if ((value != null) && (value.length() > memberMeta.getLength())) {
                     throw new RuntimeException(i18n.tr("Length of member {0} is greater then required", formatter.format(entity, member)));
@@ -100,7 +100,7 @@ public class EntityValidator {
             switch (member.getMeta().getObjectClassType()) {
             case Entity:
                 if (member.isNull()) {
-                    if ((member.getMeta().isValidatorAnnotationPresent(NotNull.class))) {
+                    if ((member.getMeta().isAnnotationPresent(NotNull.class))) {
                         throw new RuntimeException(i18n.tr("{0} is required", formatter.format(entity, member)));
                     }
                 } else {

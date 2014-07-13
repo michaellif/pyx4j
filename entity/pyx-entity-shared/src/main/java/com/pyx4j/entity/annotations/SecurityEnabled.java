@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,31 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Jul 12, 2014
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations.validator;
+package com.pyx4j.entity.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.annotations.GwtAnnotation;
-
 /**
+ * Marked for RPC Services and UI that DataModelPermission should be checked when accessing this entity.
  * 
- * This does not add NOT NULL CONSTRAINT to database.
- * Use @MemberColumn(notNull = true)
- * 
- * TODO rename this to mandatory.
- * 
+ * N.B. annotation is inherited by implementing interfaces.
  */
-@Target({ ElementType.METHOD })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @GwtAnnotation
-public @interface NotNull {
+public @interface SecurityEnabled {
 
-    String message() default "";
 }

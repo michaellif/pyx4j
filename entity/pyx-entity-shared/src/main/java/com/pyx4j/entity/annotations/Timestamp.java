@@ -30,8 +30,9 @@ import java.lang.annotation.Target;
  * 
  * Single member of each type is supported in Entity.
  */
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@GwtAnnotation
 public @interface Timestamp {
 
     public enum Update {

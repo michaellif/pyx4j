@@ -91,7 +91,7 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
                 }
             }
 
-            if (column.getObject().getMeta().isValidatorAnnotationPresent(NotNull.class)) {
+            if (column.getObject().getMeta().isAnnotationPresent(NotNull.class)) {
                 Image mandatoryImage = new Image();
                 mandatoryImage.setResource(ImageFactory.getImages().mandatory());
                 mandatoryImage.setTitle("This field is mandatory");

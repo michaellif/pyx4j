@@ -46,21 +46,18 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.GwtAnnotation;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
 import com.pyx4j.entity.client.impl.MemberMetaData;
@@ -258,6 +255,16 @@ public class EntityMetaWriter {
         writer.print("}");
 
         writer.println(");");
+
+        for (Annotation annotation : interfaceType.getAnnotations()) {
+            if (annotation.getClass().isAnnotationPresent(GwtAnnotation.class)) {
+                writer.print("super.addAnnotation(");
+                writer.print(annotation.getClass().getName());
+                writer.print(".class");
+                writer.println(");");
+            }
+        }
+
         writer.outdent();
         writer.println("}");
 
@@ -275,18 +282,6 @@ public class EntityMetaWriter {
 
         writer.outdent();
         return validationErrors;
-    }
-
-    static boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {
-        if (method.isAnnotationPresent(annotationClass)) {
-            writer.print("mm.addValidatorAnnotation(");
-            writer.print(annotationClass.getName());
-            writer.print(".class");
-            writer.println(");");
-            return true;
-        } else {
-            return false;
-        }
     }
 
     static Map<String, MemberMetaData> defaultMembers = new HashMap<String, MemberMetaData>();
@@ -479,22 +474,13 @@ public class EntityMetaWriter {
 
             String useDefaultData = selectDefaultData(data);
 
-            boolean requireAdditionalData = (method.isAnnotationPresent(Editor.class))
-                    || (method.isAnnotationPresent(NotNull.class))
-                    || (method.isAnnotationPresent(Pattern.class) || (method.isAnnotationPresent(ReadOnly.class)) || (method
-                            .isAnnotationPresent(Timestamp.class)));
-
             /// Write implementation
             //writer.println("if (\"" + method.getName() + "\".equals(memberName)) {");
             writer.println("if (memberName.equals(\"" + method.getName() + "\")) {");
             writer.indent();
 
-            if (requireAdditionalData) {
-                writer.print(ClientMemberMetaImpl.class.getSimpleName());
-                writer.print(" mm = new ");
-            } else {
-                writer.print("return new ");
-            }
+            writer.print(ClientMemberMetaImpl.class.getSimpleName());
+            writer.print(" mm = new ");
 
             writer.print(ClientMemberMetaImpl.class.getSimpleName());
             writer.print("(");
@@ -523,21 +509,23 @@ public class EntityMetaWriter {
             writer.println(");");
             writer.outdent();
 
-            if (requireAdditionalData) {
-                if (method.isAnnotationPresent(Editor.class)) {
-                    writer.print("mm.setEditorType(");
-                    writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
-                    writer.print(method.getAnnotation(Editor.class).type().name());
+            if (method.isAnnotationPresent(Editor.class)) {
+                writer.print("mm.setEditorType(");
+                writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
+                writer.print(method.getAnnotation(Editor.class).type().name());
+                writer.println(");");
+            }
+
+            for (Annotation annotation : method.getAnnotations()) {
+                if (annotation.getClass().isAnnotationPresent(GwtAnnotation.class)) {
+                    writer.print("mm.addAnnotation(");
+                    writer.print(annotation.getClass().getName());
+                    writer.print(".class");
                     writer.println(");");
                 }
-
-                addValidatorAnnotation(writer, method, NotNull.class);
-                addValidatorAnnotation(writer, method, Pattern.class);
-                addValidatorAnnotation(writer, method, ReadOnly.class);
-                addValidatorAnnotation(writer, method, Timestamp.class);
-
-                writer.println("return mm;");
             }
+
+            writer.println("return mm;");
 
             writer.outdent();
             writer.println("}");

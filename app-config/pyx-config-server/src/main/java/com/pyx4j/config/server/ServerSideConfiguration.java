@@ -159,6 +159,10 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    public boolean strictDataModelPermissions() {
+        return false;
+    }
+
     /**
      * Default is Allow All Access Control List
      */

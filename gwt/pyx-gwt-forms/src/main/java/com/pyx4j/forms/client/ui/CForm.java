@@ -174,7 +174,7 @@ public abstract class CForm<E extends IEntity> extends CContainer<CForm<E>, E, I
         if (path != null) {
             IObject<?> member = proto().getMember(path);
             MemberMeta mm = member.getMeta();
-            if (mm.isValidatorAnnotationPresent(NotNull.class)) {
+            if (mm.isAnnotationPresent(NotNull.class)) {
                 component.setMandatory(true);
             }
             if (component instanceof CTextComponent) {

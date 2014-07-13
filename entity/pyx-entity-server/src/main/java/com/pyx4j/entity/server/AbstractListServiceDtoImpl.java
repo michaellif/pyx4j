@@ -27,6 +27,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.core.Path;
@@ -53,6 +54,8 @@ public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends 
     protected final TO toProto;
 
     protected final EntityBinder<BO, TO> binder;
+
+    protected final boolean strictDataModelPermissions = ServerSideConfiguration.instance().strictDataModelPermissions();
 
     protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
         this(new CrudEntityBinder<BO, TO>(boClass, toClass) {

@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.entity.core.AttachLevel;
 import com.pyx4j.entity.core.EntityFactory;
@@ -71,6 +73,8 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     private final List<String> businessEqualMemberNames;
 
     private final String nullString;
+
+    private Set<Class<?>> annotations;
 
     public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, Class<? extends IEntity> expandedFromClass, String captionNL, String caption,
             String description, String watermark, boolean persistenceTransient, boolean rpcTransient, String toStringFormat, String nullString,
@@ -143,6 +147,22 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
         throw new UnsupportedOperationException();
+    }
+
+    public void addAnnotation(Class<? extends Annotation> annotationClass) {
+        if (annotations == null) {
+            annotations = new HashSet<Class<?>>();
+        }
+        annotations.add(annotationClass);
+    }
+
+    @Override
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        if (annotations == null) {
+            return false;
+        } else {
+            return annotations.contains(annotationClass);
+        }
     }
 
     @Override

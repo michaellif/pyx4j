@@ -92,8 +92,17 @@ public interface EntityMeta {
      * 
      * Returns this element's annotation for the specified type if such an annotation is
      * present, else null.
+     * 
+     * in GWT (or on server) use isAnnotationPresent
      */
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
+
+    /**
+     * @param annotationClass
+     *            that was marked with GwtAnnotation
+     * @return true if Entity was Annotated with this annotation
+     */
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass);
 
     public List<String> getMemberNames();
 

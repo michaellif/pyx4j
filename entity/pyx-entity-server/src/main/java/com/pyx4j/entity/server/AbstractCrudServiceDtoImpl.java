@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.SecurityEnabled;
 import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -42,8 +43,6 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     private static final Logger log = LoggerFactory.getLogger(AbstractCrudServiceDtoImpl.class);
 
     private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
-
-    private final boolean TODO_DataModelPermissionEnable = false;
 
     protected AbstractCrudServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
         super(boClass, toClass);
@@ -80,8 +79,9 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
     }
 
     protected TO init(InitializationData initializationData) {
-        if (TODO_DataModelPermissionEnable)
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
+        }
         return EntityFactory.create(toClass);
     }
 
@@ -118,8 +118,9 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public final void retrieve(AsyncCallback<TO> callback, Key toId, RetrieveTarget retrieveTarget) {
-        if (TODO_DataModelPermissionEnable)
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionRead(toClass));
+        }
         BO bo = retrieve(getBOKey(EntityFactory.createIdentityStub(toClass, toId)), retrieveTarget);
         if (bo != null) {
             retrievedSingle(bo, retrieveTarget);
@@ -132,15 +133,17 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public final void init(AsyncCallback<TO> callback, InitializationData initializationData) {
-        if (TODO_DataModelPermissionEnable)
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(EntityPermission.permissionCreate(boClass));
+        }
         callback.onSuccess(init(initializationData));
     }
 
     @Override
     public final void create(AsyncCallback<Key> callback, TO to) {
-        if (TODO_DataModelPermissionEnable)
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionCreate(toClass));
+        }
         BO bo = binder.createBO(to);
         create(bo, to);
         Persistence.service().commit();
@@ -157,8 +160,9 @@ public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends 
 
     @Override
     public final void save(AsyncCallback<Key> callback, TO to) {
-        if (TODO_DataModelPermissionEnable)
+        if (strictDataModelPermissions || toProto.getEntityMeta().isAnnotationPresent(SecurityEnabled.class)) {
             SecurityController.assertPermission(DataModelPermission.permissionUpdate(toClass));
+        }
         BO bo = retrieveForSave(to);
         retrievedSingle(bo, null);
         binder.copyTOtoBO(to, bo);

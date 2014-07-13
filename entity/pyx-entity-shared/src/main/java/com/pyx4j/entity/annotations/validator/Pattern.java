@@ -25,8 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.METHOD })
+import com.pyx4j.entity.annotations.GwtAnnotation;
+
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@GwtAnnotation
 public @interface Pattern {
 
     /** regular expression */
