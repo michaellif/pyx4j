@@ -17,8 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
@@ -35,8 +33,4 @@ public class ComplexListerActivity extends AbstractListerActivity<ComplexDTO> {
                 .create(ComplexCrudService.class), ComplexDTO.class);
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.check(DataModelPermission.permissionCreate(ComplexDTO.class));
-    }
 }
