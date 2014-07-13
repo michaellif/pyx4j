@@ -22,6 +22,9 @@ package com.pyx4j.entity.rebind;
 
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -257,9 +260,21 @@ public class EntityMetaWriter {
         writer.println(");");
 
         for (Annotation annotation : interfaceType.getAnnotations()) {
-            if (annotation.getClass().isAnnotationPresent(GwtAnnotation.class)) {
+            InvocationHandler h = Proxy.getInvocationHandler(annotation);
+            // This is com.google.gwt.dev.javac.AnnotationProxyFactory.AnnotationProxyInvocationHandler
+            Class<?> annotationClass;
+            try {
+                Field annotationClassFiled = h.getClass().getDeclaredField("annotationClass");
+                if (!annotationClassFiled.isAccessible()) {
+                    annotationClassFiled.setAccessible(true);
+                }
+                annotationClass = (Class<?>) annotationClassFiled.get(h);
+            } catch (Exception e) {
+                throw new Error("GWT implementation changed", e);
+            }
+            if (annotationClass.isAnnotationPresent(GwtAnnotation.class)) {
                 writer.print("super.addAnnotation(");
-                writer.print(annotation.getClass().getName());
+                writer.print(annotationClass.getName());
                 writer.print(".class");
                 writer.println(");");
             }
