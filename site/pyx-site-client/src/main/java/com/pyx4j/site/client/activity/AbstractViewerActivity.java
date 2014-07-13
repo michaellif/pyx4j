@@ -53,14 +53,6 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     private int tabIndex;
 
-    /**
-     * @deprecated Use constructor with entityClass
-     */
-    @Deprecated
-    public AbstractViewerActivity(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
-        this(null, place, view, service);
-    }
-
     public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
