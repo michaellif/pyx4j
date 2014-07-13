@@ -31,10 +31,9 @@ import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanEditorActivity extends CrmEditorActivity<FloorplanDTO> implements FloorplanEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public FloorplanEditorActivity(CrudAppPlace place) {
-        super(FloorplanDTO.class, place, CrmSite.getViewFactory().getView(FloorplanEditorView.class),
-                (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
+        super(FloorplanDTO.class, place, CrmSite.getViewFactory().getView(FloorplanEditorView.class), GWT
+                .<AbstractCrudService<FloorplanDTO>> create(FloorplanCrudService.class));
     }
 
     @Override

@@ -26,9 +26,8 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentEditorActivity extends CrmEditorActivity<Appointment> {
 
-    @SuppressWarnings("unchecked")
     public AppointmentEditorActivity(CrudAppPlace place) {
-        super(Appointment.class, place, CrmSite.getViewFactory().getView(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT
-                        .create(AppointmentCrudService.class));
+        super(Appointment.class, place, CrmSite.getViewFactory().getView(AppointmentEditorView.class), GWT
+                .<AbstractCrudService<Appointment>> create(AppointmentCrudService.class));
     }
 }

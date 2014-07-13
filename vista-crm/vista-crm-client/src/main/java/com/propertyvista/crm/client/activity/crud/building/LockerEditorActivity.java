@@ -26,9 +26,7 @@ import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerEditorActivity extends CrmEditorActivity<Locker> {
 
-    @SuppressWarnings("unchecked")
     public LockerEditorActivity(CrudAppPlace place) {
-        super(Locker.class,  place, CrmSite.getViewFactory().getView(LockerEditorView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class));
-
+        super(Locker.class, place, CrmSite.getViewFactory().getView(LockerEditorView.class), GWT.<AbstractCrudService<Locker>> create(LockerCrudService.class));
     }
 }

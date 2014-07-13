@@ -26,8 +26,7 @@ import com.propertyvista.dto.RoofDTO;
 
 public class RoofEditorActivity extends CrmEditorActivity<RoofDTO> {
 
-    @SuppressWarnings("unchecked")
     public RoofEditorActivity(CrudAppPlace place) {
-        super(RoofDTO.class,  place, CrmSite.getViewFactory().getView(RoofEditorView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
+        super(RoofDTO.class, place, CrmSite.getViewFactory().getView(RoofEditorView.class), GWT.<AbstractCrudService<RoofDTO>> create(RoofCrudService.class));
     }
 }

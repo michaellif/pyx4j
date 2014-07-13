@@ -28,9 +28,8 @@ import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadEditorActivity extends CrmEditorActivity<Lead> implements LeadEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public LeadEditorActivity(CrudAppPlace place) {
-        super(Lead.class, place, CrmSite.getViewFactory().getView(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
+        super(Lead.class, place, CrmSite.getViewFactory().getView(LeadEditorView.class), GWT.<AbstractCrudService<Lead>> create(LeadCrudService.class));
     }
 
     @Override

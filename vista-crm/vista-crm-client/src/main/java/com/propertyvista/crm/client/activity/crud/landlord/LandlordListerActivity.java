@@ -17,10 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.landlord.LandlordListerView;
@@ -29,14 +26,9 @@ import com.propertyvista.dto.LandlordDTO;
 
 public class LandlordListerActivity extends AbstractListerActivity<LandlordDTO> {
 
-    @SuppressWarnings("unchecked")
     public LandlordListerActivity(Place place) {
-        super(LandlordDTO.class, place, (ILister<LandlordDTO>) CrmSite.getViewFactory().getView(LandlordListerView.class), (AbstractCrudService<LandlordDTO>) GWT
-                        .create(LandlordCrudService.class));
+        super(LandlordDTO.class, place, CrmSite.getViewFactory().getView(LandlordListerView.class), GWT
+                .<AbstractCrudService<LandlordDTO>> create(LandlordCrudService.class));
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.check(DataModelPermission.permissionCreate(LandlordDTO.class));
-    }
 }

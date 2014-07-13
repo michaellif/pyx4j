@@ -17,8 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,14 +26,9 @@ import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 
 public class EmployeeListerActivity extends AbstractListerActivity<EmployeeDTO> {
 
-    @SuppressWarnings("unchecked")
     public EmployeeListerActivity(Place place) {
-        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeListerView.class),
-                (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class));
+        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeListerView.class), GWT
+                .<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.check(DataModelPermission.permissionCreate(EmployeeDTO.class));
-    }
 }

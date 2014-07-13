@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,14 +26,9 @@ import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
 
-    @SuppressWarnings("unchecked")
     public BoilerViewerActivity(CrudAppPlace place) {
-        super(BoilerDTO.class, place, CrmSite.getViewFactory().getView(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT
-                .create(BoilerCrudService.class));
+        super(BoilerDTO.class, place, CrmSite.getViewFactory().getView(BoilerViewerView.class), GWT
+                .<AbstractCrudService<BoilerDTO>> create(BoilerCrudService.class));
     }
 
-    @Override
-    public boolean canEdit() {
-        return SecurityController.check(DataModelPermission.permissionUpdate(BoilerDTO.class));
-    }
 }

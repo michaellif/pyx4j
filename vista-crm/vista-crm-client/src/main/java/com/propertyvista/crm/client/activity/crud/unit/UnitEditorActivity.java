@@ -26,8 +26,8 @@ import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorActivity extends CrmEditorActivity<AptUnitDTO> implements UnitEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public UnitEditorActivity(CrudAppPlace place) {
-        super(AptUnitDTO.class,  place, CrmSite.getViewFactory().getView(UnitEditorView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
+        super(AptUnitDTO.class, place, CrmSite.getViewFactory().getView(UnitEditorView.class), GWT
+                .<AbstractCrudService<AptUnitDTO>> create(UnitCrudService.class));
     }
 }

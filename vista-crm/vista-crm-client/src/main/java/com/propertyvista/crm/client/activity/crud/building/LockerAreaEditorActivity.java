@@ -26,9 +26,8 @@ import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorActivity extends CrmEditorActivity<LockerAreaDTO> implements LockerAreaEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public LockerAreaEditorActivity(CrudAppPlace place) {
-        super(LockerAreaDTO.class, place, CrmSite.getViewFactory().getView(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT
-                        .create(LockerAreaCrudService.class));
+        super(LockerAreaDTO.class, place, CrmSite.getViewFactory().getView(LockerAreaEditorView.class), GWT
+                .<AbstractCrudService<LockerAreaDTO>> create(LockerAreaCrudService.class));
     }
 }

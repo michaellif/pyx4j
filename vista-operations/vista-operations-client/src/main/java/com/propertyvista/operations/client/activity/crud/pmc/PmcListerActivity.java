@@ -34,10 +34,8 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
 
     private static final I18n i18n = I18n.get(PmcListerActivity.class);
 
-    @SuppressWarnings("unchecked")
     public PmcListerActivity(Place place) {
-        super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcListerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
-
+        super(PmcDTO.class, place, OperationsSite.getViewFactory().getView(PmcListerView.class), GWT.<AbstractCrudService<PmcDTO>> create(PmcCrudService.class));
     }
 
     @Override

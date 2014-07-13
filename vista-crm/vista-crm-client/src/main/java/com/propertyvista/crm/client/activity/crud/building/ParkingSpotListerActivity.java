@@ -26,9 +26,8 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingSpotListerActivity extends AbstractListerActivity<ParkingSpot> {
 
-    @SuppressWarnings("unchecked")
     public ParkingSpotListerActivity(Place place) {
-        super(ParkingSpot.class,  place, CrmSite.getViewFactory().getView(ParkingSpotListerView.class),
-                (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class));
+        super(ParkingSpot.class, place, CrmSite.getViewFactory().getView(ParkingSpotListerView.class), GWT
+                .<AbstractCrudService<ParkingSpot>> create(ParkingSpotCrudService.class));
     }
 }

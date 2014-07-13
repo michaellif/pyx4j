@@ -26,10 +26,8 @@ import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorActivity extends CrmEditorActivity<ComplexDTO> implements ComplexEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public ComplexEditorActivity(CrudAppPlace place) {
-        super(ComplexDTO.class, place, CrmSite.getViewFactory().getView(ComplexEditorView.class),
-                (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
-
+        super(ComplexDTO.class, place, CrmSite.getViewFactory().getView(ComplexEditorView.class), GWT
+                .<AbstractCrudService<ComplexDTO>> create(ComplexCrudService.class));
     }
 }

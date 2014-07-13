@@ -29,10 +29,9 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeEditorActivity extends CrmEditorActivity<EmployeeDTO> implements EmployeeEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public EmployeeEditorActivity(CrudAppPlace place) {
-        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeEditorView.class),
-                (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class));
+        super(EmployeeDTO.class, place, CrmSite.getViewFactory().getView(EmployeeEditorView.class), GWT
+                .<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
     }
 
     @Override

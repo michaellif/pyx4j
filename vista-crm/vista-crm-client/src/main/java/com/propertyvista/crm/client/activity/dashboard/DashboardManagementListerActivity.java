@@ -29,11 +29,9 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementListerActivity extends AbstractListerActivity<DashboardMetadata> {
 
-    @SuppressWarnings("unchecked")
     public DashboardManagementListerActivity(Place place) {
-        super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementListerView.class), (AbstractCrudService<DashboardMetadata>) GWT
-                        .create(DashboardMetadataCrudService.class));
-
+        super(DashboardMetadata.class, place, CrmSite.getViewFactory().getView(DashboardManagementListerView.class), GWT
+                .<AbstractCrudService<DashboardMetadata>> create(DashboardMetadataCrudService.class));
     }
 
     @Override

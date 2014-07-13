@@ -26,8 +26,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadListerActivity extends AbstractListerActivity<Lead> {
 
-    @SuppressWarnings("unchecked")
     public LeadListerActivity(Place place) {
-        super(Lead.class,  place, CrmSite.getViewFactory().getView(LeadListerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
+        super(Lead.class, place, CrmSite.getViewFactory().getView(LeadListerView.class), GWT.<AbstractCrudService<Lead>> create(LeadCrudService.class));
     }
 }

@@ -26,9 +26,8 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 
 public class UnitOccupancyEditorActivity extends CrmEditorActivity<AptUnitOccupancySegment> {
 
-    @SuppressWarnings("unchecked")
     public UnitOccupancyEditorActivity(CrudAppPlace place) {
-        super(AptUnitOccupancySegment.class,  place, CrmSite.getViewFactory().getView(UnitOccupancyEditorView.class), (AbstractCrudService<AptUnitOccupancySegment>) GWT
-                        .create(UnitOccupancyCrudService.class));
+        super(AptUnitOccupancySegment.class, place, CrmSite.getViewFactory().getView(UnitOccupancyEditorView.class), GWT
+                .<AbstractCrudService<AptUnitOccupancySegment>> create(UnitOccupancyCrudService.class));
     }
 }

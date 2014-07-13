@@ -59,10 +59,9 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     private BigDecimal creditCheckAmount;
 
-    @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
-        super(LeaseApplicationDTO.class, place, CrmSite.getViewFactory().getView(LeaseApplicationViewerView.class),
-                (AbstractCrudService<LeaseApplicationDTO>) GWT.create(LeaseApplicationViewerCrudService.class));
+        super(LeaseApplicationDTO.class, place, CrmSite.getViewFactory().getView(LeaseApplicationViewerView.class), GWT
+                .<AbstractCrudService<LeaseApplicationDTO>> create(LeaseApplicationViewerCrudService.class));
     }
 
     @Override

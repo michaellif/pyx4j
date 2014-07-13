@@ -26,9 +26,8 @@ import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorEditorActivity extends CrmEditorActivity<ElevatorDTO> {
 
-    @SuppressWarnings("unchecked")
     public ElevatorEditorActivity(CrudAppPlace place) {
-        super(ElevatorDTO.class,  place, CrmSite.getViewFactory().getView(ElevatorEditorView.class),
-                (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class));
+        super(ElevatorDTO.class, place, CrmSite.getViewFactory().getView(ElevatorEditorView.class), GWT
+                .<AbstractCrudService<ElevatorDTO>> create(ElevatorCrudService.class));
     }
 }

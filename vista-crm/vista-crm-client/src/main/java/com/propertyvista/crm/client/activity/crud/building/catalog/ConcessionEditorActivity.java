@@ -26,10 +26,9 @@ import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionEditorActivity extends CrmEditorActivity<Concession> {
 
-    @SuppressWarnings("unchecked")
     public ConcessionEditorActivity(CrudAppPlace place) {
-        super(Concession.class,  place, CrmSite.getViewFactory().getView(ConcessionEditorView.class),
-                (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class));
+        super(Concession.class, place, CrmSite.getViewFactory().getView(ConcessionEditorView.class), GWT
+                .<AbstractCrudService<Concession>> create(ConcessionCrudService.class));
     }
 
 }

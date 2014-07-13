@@ -17,8 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.security.DataModelPermission;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,14 +26,9 @@ import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioListerActivity extends AbstractListerActivity<Portfolio> {
 
-    @SuppressWarnings("unchecked")
     public PortfolioListerActivity(Place place) {
-        super(Portfolio.class, place, CrmSite.getViewFactory().getView(PortfolioListerView.class),
-                (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
+        super(Portfolio.class, place, CrmSite.getViewFactory().getView(PortfolioListerView.class), GWT
+                .<AbstractCrudService<Portfolio>> create(PortfolioCrudService.class));
     }
 
-    @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.check(DataModelPermission.permissionCreate(Portfolio.class));
-    }
 }

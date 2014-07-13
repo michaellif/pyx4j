@@ -26,9 +26,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
 public class UnitItemEditorActivity extends CrmEditorActivity<AptUnitItem> {
 
-    @SuppressWarnings("unchecked")
     public UnitItemEditorActivity(CrudAppPlace place) {
-        super(AptUnitItem.class,  place, CrmSite.getViewFactory().getView(UnitItemEditorView.class),
-                (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class));
+        super(AptUnitItem.class, place, CrmSite.getViewFactory().getView(UnitItemEditorView.class), GWT
+                .<AbstractCrudService<AptUnitItem>> create(UnitItemCrudService.class));
     }
 }

@@ -26,9 +26,9 @@ import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorActivity extends CrmEditorActivity<Feature> {
 
-    @SuppressWarnings("unchecked")
     public FeatureEditorActivity(CrudAppPlace place) {
-        super(Feature.class,  place, CrmSite.getViewFactory().getView(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
+        super(Feature.class, place, CrmSite.getViewFactory().getView(FeatureEditorView.class), GWT
+                .<AbstractCrudService<Feature>> create(FeatureCrudService.class));
     }
 
 }
