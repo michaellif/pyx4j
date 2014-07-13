@@ -26,16 +26,22 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.SecurityEnabled;
+import com.pyx4j.entity.core.EntityFactory;
 import com.pyx4j.entity.core.IEntity;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.security.DataModelPermission;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
+
+    protected final Class<E> entityClass;
 
     private final IViewer<E> view;
 
@@ -47,11 +53,20 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     private int tabIndex;
 
+    /**
+     * @deprecated Use constructor with entityClass
+     */
+    @Deprecated
     public AbstractViewerActivity(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
+        this(null, place, view, service);
+    }
+
+    public AbstractViewerActivity(Class<E> entityClass, CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
 
+        this.entityClass = entityClass;
         this.place = place;
         this.view = view;
         this.service = service;
@@ -78,6 +93,10 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     public AbstractCrudService<E> getService() {
         return service;
+    }
+
+    public Class<E> getEntityClass() {
+        return entityClass;
     }
 
     public Key getEntityId() {
@@ -154,7 +173,16 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
 
     @Override
     public boolean canEdit() {
-        return true;
+        // TODO remove this if.
+        if (getEntityClass() == null) {
+            return true;
+        }
+
+        if (EntityFactory.getEntityMeta(getEntityClass()).isAnnotationPresent(SecurityEnabled.class)) {
+            return SecurityController.check(DataModelPermission.permissionUpdate(getEntityClass()));
+        } else {
+            return true;
+        }
     }
 
     @Override
