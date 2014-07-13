@@ -71,7 +71,7 @@ public abstract class EntitySelectorTableVisorController<E extends IEntity> exte
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptySet());
 
         lister = new SelectEntityLister(entityClass, isVersioned);
-        listerController = new ListerController<E>(lister, getSelectService(), entityClass);
+        listerController = new ListerController<E>(entityClass, lister, getSelectService());
 
         // add control buttons
         btnOk = new Button(i18n.tr("OK"), new Command() {

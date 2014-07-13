@@ -57,11 +57,11 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
 
     private Class<? extends IEntity> parentClass;
 
-    public ListerController(ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
+    public ListerController(Class<E> entityClass, ILister<E> view, AbstractListService<E> service) {
         // development correctness checks:
+        assert (entityClass != null);
         assert (view != null);
         assert (service != null);
-        assert (entityClass != null);
 
         this.parentId = null;
         this.view = view;

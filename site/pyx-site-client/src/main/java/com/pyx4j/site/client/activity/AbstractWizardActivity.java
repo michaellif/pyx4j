@@ -50,11 +50,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractWizardActivity(Class<E> entityClass, CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
+        assert (entityClass != null);
         assert (view != null);
         assert (service != null);
-        assert (entityClass != null);
 
         this.place = place;
         this.view = view;

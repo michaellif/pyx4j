@@ -45,8 +45,8 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
 
     private boolean populateOnStart = true;
 
-    public AbstractListerActivity(Place place, ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
-        super(view, service, entityClass);
+    public AbstractListerActivity(Class<E> entityClass, Place place, ILister<E> view, AbstractListService<E> service) {
+        super(entityClass, view, service);
 
         this.place = (AppPlace) place;
 

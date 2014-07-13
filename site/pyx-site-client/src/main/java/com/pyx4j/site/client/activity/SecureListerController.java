@@ -28,8 +28,8 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 public class SecureListerController<E extends IEntity> extends ListerController<E> {
 
-    public SecureListerController(ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
-        super(view, service, entityClass);
+    public SecureListerController(Class<E> entityClass, ILister<E> view, AbstractListService<E> service) {
+        super(entityClass, view, service);
     }
 
     @Override

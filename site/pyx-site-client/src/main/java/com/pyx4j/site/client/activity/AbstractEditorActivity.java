@@ -64,7 +64,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
 
     private boolean mayStop;
 
-    public AbstractEditorActivity(CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractEditorActivity(Class<E> entityClass, CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
