@@ -86,7 +86,7 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingLeasing, entities, READ | UPDATE);
         }
 
-        //G floorplans/general
+        // floorplans
         {
             List<Class<? extends IEntity>> entities = entities(FloorplanDTO.class);
             grant(BuildingBasic, entities, READ);
@@ -105,22 +105,12 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingBasic, entities, READ);
             grant(BuildingFinancial, entities, READ);
             grant(BuildingAccounting, entities, READ);
-            grant(BuildingProperty, entities, READ);
+            grant(BuildingProperty, entities, ALL);
             grant(BuildingMarketing, entities, ALL);
             grant(BuildingMechanicals, entities, READ);
             grant(BuildingAdministrator, entities, ALL);
             grant(BuildingLeasing, entities, READ);
         }
-
-        //H  "floorplans/marketing, marketing"
-        grant(BuildingBasic, Marketing.class, READ);
-        grant(BuildingFinancial, Marketing.class, READ);
-        grant(BuildingAccounting, Marketing.class, READ);
-        grant(BuildingProperty, Marketing.class, READ);
-        grant(BuildingMarketing, Marketing.class, ALL);
-        grant(BuildingMechanicals, Marketing.class, READ);
-        grant(BuildingAdministrator, Marketing.class, ALL);
-        grant(BuildingLeasing, Marketing.class, READ);
 
         // mechanical
         {
@@ -147,6 +137,16 @@ class VistaCrmBuildingAccessControlList extends UIAclBuilder {
             grant(BuildingAdministrator, entities, ALL);
             grant(BuildingLeasing, entities, READ);
         }
+
+        // marketing
+        grant(BuildingBasic, Marketing.class, READ);
+        grant(BuildingFinancial, Marketing.class, READ);
+        grant(BuildingAccounting, Marketing.class, READ);
+        grant(BuildingProperty, Marketing.class, READ);
+        grant(BuildingMarketing, Marketing.class, ALL);
+        grant(BuildingMechanicals, Marketing.class, READ);
+        grant(BuildingAdministrator, Marketing.class, ALL);
+        grant(BuildingLeasing, Marketing.class, READ);
 
         //financial
         grant(BuildingFinancial, BuildingFinancial.class, READ);
